@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "bg_tileset.h": "c",
+        "level018.h": "c",
+        "the_castel.h": "c",
+        "sprt_player.h": "c"
+    }
+}
