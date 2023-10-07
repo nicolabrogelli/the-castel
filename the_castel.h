@@ -8,7 +8,7 @@
 #define TILE_START_POS 		127
 #define TILE_STAR_POS_ENEMY 124
 
-#define MAX_ENEMY 5;
+
 
 
 

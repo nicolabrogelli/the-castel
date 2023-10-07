@@ -753,6 +753,7 @@ bool State_Initialize()
 	//  Character - indirizzo della truruttura che rappresenta il nemico
 	InitCharacter(&g_Enemy, 1);
 
+
 	// Funzione: DrawLevel
 	// Inizzializza il livello di gioco
 	//
