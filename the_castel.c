@@ -16,6 +16,7 @@
 #include "math.h"
 #include "debug.h"
 #include "string.h"
+#include "input.h"
 #include "version.h"
 
 //=============================================================================
@@ -33,6 +34,8 @@
 #define FORCE 20
 #define GRAVITY 1
 #define GROUND 192
+#define JOY_PORT_1	0b00000011
+#define JOY_PORT_2	0b01001100
 
 //
 enum INPUT_ACTION
@@ -42,7 +45,6 @@ enum INPUT_ACTION
 	INPUT_JUMP = 0b00000100,
 	INPUT_GET = 0b00001000,
 };
-
 
 // Gameplay character stricture
 struct Character
@@ -73,7 +75,10 @@ void InitCharacter(struct Character *ply, u8 id);
 void UpdateCharacter(struct Character *ply);
 void UpdateCharacterEnemy(struct Character *ply);
 void VDP_LoadSpritePattern16_VSym(const u8 *src, u8 index, u8 count);
-
+bool isMoveRight(u8 row8);
+bool isMoveLeft(u8 row8);
+bool isMoveJump(u8 row8);
+bool isInteractObject(u8 row8);
 
 //.............................................................................
 // Player 1 data
@@ -83,13 +88,13 @@ void VDP_LoadSpritePattern16_VSym(const u8 *src, u8 index, u8 count);
 // So, on the 3 layers, only two are visible at a given frame. The blinking of the first two black layers is done to create shaded colors.
 // The counterpart is the flickering effect. The character white color comes from the background and is not in a sprite.
 const Game_Sprite g_PlayerSpriteLayers[] =
-{
-  //	Sprite ID
-  //    |   Offset X 
-  //    |   |  Offset Y 
-  //    |   |  |  Pattern offset from current animation key
-  //    |   |  |  |   Colore del Layer
-  //    |   |  |  |   |                Layer option
+	{
+		//	Sprite ID
+		//    |   Offset X
+		//    |   |  Offset Y
+		//    |   |  |  Pattern offset from current animation key
+		//    |   |  |  |   Colore del Layer
+		//    |   |  |  |   |                Layer option
 		{0, 0, 0, 0, COLOR_BLACK, PAWN_SPRITE_EVEN},
 		{0, 0, 0, 12, COLOR_BLACK, PAWN_SPRITE_ODD},
 		{0, 0, 0, 4, COLOR_WHITE, 0},
@@ -174,12 +179,12 @@ const Game_Frame g_EnemyFramesIdle[] =
 // Ogni riga descrive una parte dell'animazione
 const Game_Frame g_EnemyFramesMove[] =
 	{
-/* 		{MOVE_ENEMY_FRAME_7, 4, NULL},
-		{MOVE_ENEMY_FRAME_8, 4, NULL},
-		{MOVE_ENEMY_FRAME_9, 4, NULL},
-		{MOVE_ENEMY_FRAME_10, 4, NULL}, */
+		/* 		{MOVE_ENEMY_FRAME_7, 4, NULL},
+				{MOVE_ENEMY_FRAME_8, 4, NULL},
+				{MOVE_ENEMY_FRAME_9, 4, NULL},
+				{MOVE_ENEMY_FRAME_10, 4, NULL}, */
 		{IDLE_ENEMY_FRAME_12, 10, NULL},
-		{IDLE_ENEMY_FRAME_11, 10, NULL},		
+		{IDLE_ENEMY_FRAME_11, 10, NULL},
 };
 
 // Animazione Jump
@@ -231,7 +236,7 @@ struct LevelDefinition
 	const u8 *Layout; /** Layout della stanza */
 	const c8 *Name;	  /** Nome della stanza */
 	u8 NextLvlIdx;	  /** Livello successivo */
-	u8 PrevLvIdx;     /** Livello precedente */
+	u8 PrevLvIdx;	  /** Livello precedente */
 };
 
 // Elenco delle stanze e delle loro caratteristiche
@@ -366,9 +371,8 @@ void SetColorTiles()
 bool Interact(u8 x, u8 y)
 {
 	u8 tile = getTile(x, y);
-	
+
 	DEBUG_LOGNUM("Intercat", tile);
-	
 
 	switch (tile)
 	{
@@ -381,7 +385,7 @@ bool Interact(u8 x, u8 y)
 	case TILE_DOOR:
 		Print_DrawTextAt(0, 23, "                            ");
 		Print_DrawTextAt(0, 23, "PORTA!!");
-		//DrawLevel();
+		// DrawLevel();
 		return FALSE;
 	case TILE_KEY3:
 		Print_DrawTextAt(0, 23, "                            ");
@@ -390,8 +394,6 @@ bool Interact(u8 x, u8 y)
 	}
 	return FALSE;
 }
-
-
 
 /**
  * @brief Si disegna il livello di gioco
@@ -524,11 +526,12 @@ void UpdateCharacter(struct Character *ply)
 
 		// TODO: imposta direzione destra
 		//		 solo se è impostata la direzione sinistra
-		if(prevDirection != INPUT_RIGHT) {
+		if (prevDirection != INPUT_RIGHT)
+		{
 			prevDirection = INPUT_RIGHT;
-			VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_1, 4 * 4 * 0, 4 * 4 * 2);  
-			VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_4, 4 * 4 * 2, 4 * 4 * 3);  
-			VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_9, 4 * 4 * 5, 4 * 4 * 2); 
+			VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_1, 4 * 4 * 0, 4 * 4 * 2);
+			VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_4, 4 * 4 * 2, 4 * 4 * 3);
+			VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_9, 4 * 4 * 5, 4 * 4 * 2);
 		}
 	}
 	else if (ply->Input & INPUT_LEFT)
@@ -538,11 +541,12 @@ void UpdateCharacter(struct Character *ply)
 
 		// TODO: imposta direzione sinistra, solo se
 		//		 è impostata la direzione destra
-		if(prevDirection != INPUT_LEFT) {
+		if (prevDirection != INPUT_LEFT)
+		{
 			prevDirection = INPUT_LEFT;
 			VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_1, 4 * 4 * 0, 4 * 4 * 2);
 			VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_4, 4 * 4 * 2, 4 * 4 * 3);
-			VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_9, 4 * 4 * 5, 4 * 4 * 2); 
+			VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_9, 4 * 4 * 5, 4 * 4 * 2);
 		}
 	}
 	else
@@ -581,7 +585,6 @@ void UpdateCharacter(struct Character *ply)
 	GamePawn_SetAction(pawn, act);
 	GamePawn_SetMovement(pawn, ply->DX, ply->DY);
 	GamePawn_Update(pawn);
-
 }
 
 /**
@@ -602,7 +605,7 @@ void UpdateCharacterEnemy(struct Character *ply)
 	else if (ply->Input & INPUT_LEFT)
 	{
 		ply->DX--;
-		ply->bMoving = TRUE;	
+		ply->bMoving = TRUE;
 	}
 	else
 		ply->bMoving = FALSE;
@@ -620,7 +623,6 @@ void UpdateCharacterEnemy(struct Character *ply)
 		ply->VelocityY = FORCE;
 	}
 
-
 	// Update player animation & physics
 	u8 act = ACTION_IDLE;
 	if (ply->bInAir && (ply->VelocityY >= 0))
@@ -634,9 +636,7 @@ void UpdateCharacterEnemy(struct Character *ply)
 	GamePawn_SetAction(pawn, act);
 	GamePawn_SetMovement(pawn, ply->DX, ply->DY);
 	GamePawn_Update(pawn);
-
 }
-
 
 /**
  * @brief VDP_LoadSpritePattern16_VSym
@@ -716,10 +716,9 @@ bool State_Initialize()
 
 	// TDOD: sprite Player , direzone sx
 	//                           Source data                      SprtID     Num
-/*  	VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_1, 4 * 4 * 0, 4 * 4 * 2);
-	VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_4, 4 * 4 * 2, 4 * 4 * 3);
-	VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_9, 4 * 4 * 5, 4 * 4 * 2);  */
-
+	/*  	VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_1, 4 * 4 * 0, 4 * 4 * 2);
+		VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_4, 4 * 4 * 2, 4 * 4 * 3);
+		VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_9, 4 * 4 * 5, 4 * 4 * 2);  */
 
 	// Function: VDP_LoadSpritePattern
 	// Carica i dati dei modelli di sprite nella VRAM. [MSX1/2/2+/TR]
@@ -732,9 +731,9 @@ bool State_Initialize()
 	// Sprite Pattern Table = 0x3800
 	// TDOD: sprite Enemy
 	//                    Source data                      SprtID      Num
-/* 	VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_1, 4 * 4 * 7, 4 * 4 * 2);  
-	VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_4, 4 * 4 * 9, 4 * 4 * 3);  
-	VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_9, 4 * 4 * 12, 4 * 4 * 2);  */
+	/* 	VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_1, 4 * 4 * 7, 4 * 4 * 2);
+		VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_4, 4 * 4 * 9, 4 * 4 * 3);
+		VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_9, 4 * 4 * 12, 4 * 4 * 2);  */
 
 	VDP_WriteVRAM_16K(g_DataSprtLayer, g_SpritePatternLow, sizeof(g_DataSprtLayer));
 
@@ -753,7 +752,6 @@ bool State_Initialize()
 	//  Character - indirizzo della truruttura che rappresenta il nemico
 	InitCharacter(&g_Enemy, 1);
 
-
 	// Funzione: DrawLevel
 	// Inizzializza il livello di gioco
 	//
@@ -766,7 +764,6 @@ bool State_Initialize()
 	Game_SetState(State_Game);
 	return FALSE; // Frame finished
 }
-
 
 /**
  * @brief Aggirona lo stato del giocatore e dei nemici
@@ -803,37 +800,38 @@ bool State_Game()
 	//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 	UpdateCharacterEnemy(&g_Enemy);
 
-	//Print_DrawTextAt(0,23,&g_Player.Pawn.PhysicsState);
+	// Print_DrawTextAt(0,23,&g_Player.Pawn.PhysicsState);
 
 	// Aggiurnamento input da tastiera
 	u8 row3 = Keyboard_Read(3);
 	u8 row8 = Keyboard_Read(8);
 
-
-
 	g_Player.Input = 0;
-	if (IS_KEY_PRESSED(row8, KEY_RIGHT)) {
+	if (isMoveRight(row8))
+	{
 		g_Player.Input |= INPUT_RIGHT;
 	}
-	if (IS_KEY_PRESSED(row8, KEY_LEFT)) {
+	if (isMoveLeft(row8)) {
 		g_Player.Input |= INPUT_LEFT;
 	}
-	if (IS_KEY_PRESSED(row8, KEY_UP))
+	if(isMoveJump(row8)) {
 		g_Player.Input |= INPUT_JUMP;
-	if (IS_KEY_PRESSED(row8, KEY_SPACE))
+	}
+	if(isInteractObject(row8)) {
 		g_Player.Input |= INPUT_GET;
+	}
 
-/* 		u8 frameCounter = 0;
-		if (frameCounter % 4 == 0)
-		{
-			g_Enemy.Input |= INPUT_RIGHT;
-			UpdateCharacterEnemy(&g_Enemy);
-		}
-		frameCounter++; */
-		
+
+	/* 		u8 frameCounter = 0;
+			if (frameCounter % 4 == 0)
+			{
+				g_Enemy.Input |= INPUT_RIGHT;
+				UpdateCharacterEnemy(&g_Enemy);
+			}
+			frameCounter++; */
 
 	// TODO: questa parte di codice dovrà poi essere sostituita
-	//		 con un automatismo che permetta di far muovere lo 
+	//		 con un automatismo che permetta di far muovere lo
 	//	     sprite del nemico
 	g_Enemy.Input = 0;
 	if (IS_KEY_PRESSED(row3, KEY_D))
@@ -843,22 +841,90 @@ bool State_Game()
 	if (IS_KEY_PRESSED(row3, KEY_F))
 		g_Enemy.Input |= INPUT_JUMP;
 
-
-
 	g_PrevRow3 = row3;
 	g_PrevRow8 = row8;
 
 	if (Keyboard_IsKeyPressed(KEY_ESC))
 		Game_Exit();
 
-	return TRUE; 
+	return TRUE;
+}
+
+//=============================================================================
+// GESTIONE DELLA TATIERA E JOY
+//=============================================================================
+
+/**
+ * @brief Aggiorna la direzione del Player
+ * @param u8 row8 
+ * @return bool TRUE se il tasto RIGHT o il joy è nella direzione destra
+*/
+bool isMoveRight(u8 row8)
+{
+	bool isRight = FALSE;
+	if (IS_KEY_PRESSED(row8, KEY_RIGHT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_RIGHT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_RIGHT))
+	{
+		g_Player.Input |= INPUT_RIGHT;
+		isRight = TRUE;
+	}
+
+	return isRight;
+}
+
+/**
+ * @brief Aggiorna la direzione del Player
+ * @param u8 row8 
+ * @return bool TRUE se il tasto LEFT o il joy è nella direzione sinistra
+*/
+bool isMoveLeft(u8 row8)
+{
+	bool isLeft = FALSE;
+	if (IS_KEY_PRESSED(row8, KEY_LEFT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_LEFT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_LEFT))
+	{
+		g_Player.Input |= INPUT_LEFT;
+		isLeft = TRUE;
+	}
+
+	return isLeft;
+}
+
+/**
+ * @brief Aggiorna la direzione del Player
+ * @param u8 row8 
+ * @return bool TRUE se il tasto UP o il pulsante A è stato premuto
+*/
+bool isMoveJump(u8 row8) {
+	bool isJump = FALSE;
+	if (IS_KEY_PRESSED(row8, KEY_UP) || (Joystick_IsButtonPressed(JOY_PORT_1,JOY_INPUT_TRIGGER_A) ) || (Joystick_IsButtonPressed(JOY_PORT_2,JOY_INPUT_TRIGGER_A)))
+	{
+		g_Player.Input |= INPUT_JUMP;
+		isJump = TRUE;
+	}
+
+	return isJump;
+}
+
+/**
+ * @brief Aggiorna la direzione del Player
+ * @param u8 row8 
+ * @return bool TRUE se il tasto SPACE o il pulsante B è stato premuto
+*/
+bool isInteractObject(u8 row8) {
+	bool isGet = FALSE;
+	if (IS_KEY_PRESSED(row8, KEY_SPACE) || (Joystick_IsButtonPressed(JOY_PORT_1,JOY_INPUT_TRIGGER_B) ) || (Joystick_IsButtonPressed(JOY_PORT_2,JOY_INPUT_TRIGGER_B)))
+	{
+		g_Player.Input |= INPUT_GET;
+		isGet = TRUE;
+	}
+
+	return isGet;
 }
 
 //-----------------------------------------------------------------------------
 //
 bool State_Pause()
 {
-	return TRUE; 
+	return TRUE;
 }
 
 //=============================================================================
@@ -892,5 +958,3 @@ void main()
 
 	Bios_Exit(0);
 }
-
-
