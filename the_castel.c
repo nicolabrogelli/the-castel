@@ -714,27 +714,24 @@ bool State_Initialize()
 	//	Dimensione dello sprite 16x16
 	VDP_SetSpriteFlag(VDP_SPRITE_SIZE_16);
 
-	// TDOD: sprite Player , direzone sx
-	//                           Source data                      SprtID     Num
-	/*  	VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_1, 4 * 4 * 0, 4 * 4 * 2);
-		VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_4, 4 * 4 * 2, 4 * 4 * 3);
-		VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_9, 4 * 4 * 5, 4 * 4 * 2);  */
 
-	// Function: VDP_LoadSpritePattern
-	// Carica i dati dei modelli di sprite nella VRAM. [MSX1/2/2+/TR]
+	// Funzione: VDP_WriteVRAM_16K
+	// Scrivere dati dalla RAM alla VRAM. [MSX1/2/2+/TR]
 	//
 	// Parametri:
-	//   addr  - Indirizzo di origine per i modelli di sprite (in RAM/ROM).
-	//   index - Indice del primo modello di sprite VRAM da copiare (in modalità 16x16, si possono usare solo multipli di 4).
-	//   count - Numero di modelli da copiare (la modalità 8x8 usa 1 per ogni forma di sprite, mentre la modalità 16x16 ne usa 4).
+	//   src   - Indirizzo dei dati sorgente nella RAM
+	//   dest  - Indirizzo di destianzione nella VRAM (indirizzo a 14 bit per 16KB VRAM)
+	//   count - Numero di byte da copiare nella VRAM. Nota: Un valore 0 significa 65536
 	//
-	// Sprite Pattern Table = 0x3800
-	// TDOD: sprite Enemy
-	//                    Source data                      SprtID      Num
-	/* 	VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_1, 4 * 4 * 7, 4 * 4 * 2);
-		VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_4, 4 * 4 * 9, 4 * 4 * 3);
-		VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_9, 4 * 4 * 12, 4 * 4 * 2);  */
-
+	// Nota:
+	//    Ad ogni iterazione copia una riga del livello di gioco per, per chiarezza riporto i vari parametri utilizzati dalla funzione
+	//	  perchè g_Levels[levelIdx].Layout + g_Levels[levelIdx].Width * riga scarta la parte già copiata in precedentza e lascia tutto
+	//    il resto del livello.
+	//
+	//    src   - g_Levels[levelIdx].Layout + g_Levels[levelIdx].Width * riga
+	//    dest  - g_ScreenLayoutLow + (32 * (riga + g_Levels[levelIdx].Y)) + (g_Levels[levelIdx].X)
+	//    count - g_Levels[levelIdx].Width il numero di byte da copiare
+	//
 	VDP_WriteVRAM_16K(g_DataSprtLayer, g_SpritePatternLow, sizeof(g_DataSprtLayer));
 
 	// Funzione: InitCharacter
@@ -850,6 +847,15 @@ bool State_Game()
 	return TRUE;
 }
 
+
+/**
+ * 
+*/
+bool State_Pause()
+{
+	return TRUE;
+}
+
 //=============================================================================
 // GESTIONE DELLA TATIERA E JOY
 //=============================================================================
@@ -920,12 +926,6 @@ bool isInteractObject(u8 row8) {
 	return isGet;
 }
 
-//-----------------------------------------------------------------------------
-//
-bool State_Pause()
-{
-	return TRUE;
-}
 
 //=============================================================================
 // MAIN LOOP

@@ -9,7 +9,7 @@
 clear
 
 if type -P node; then
-	node ../../engine/script/js/build.js projname=$1 target=$2
+	node ../MSXgl/engine/script/js/build.js target=$1
 else
-	../../tools/build/Node/node ../../engine/script/js/build.js projname=$1 target=$2
+	../../tools/build/Node/node .../MSXgl/engine/script/js/build.js target=$1
 fi
