@@ -6,3 +6,5 @@ Thanks.
 Impostazioni del progetto. Prima di scaricare il gioco creare una cartella dove dovrà essere copiata la libreia MSXgl, allo stesso livello di questa cartella
 clonare il progetto. Una volta completata l'operazione sarà possibile effettuare la build. Se riscontrate problemi in fase di compilazioni, effettuate una
 segbalazione e provvedeò a dare assistenza.
+
+Nicola

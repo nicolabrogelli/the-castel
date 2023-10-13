@@ -58,7 +58,9 @@ struct Character
 	Game_Pawn Pawn;
 };
 
-// Prototypes
+//=============================================================================
+// PROTOTIPI DELLE FUNZIONI
+//=============================================================================
 bool State_Initialize();
 bool State_Game();
 bool State_Pause();
