@@ -31,7 +31,6 @@
 #include "data/level/level003.h"
 #include "data/level/level018.h"
 
-
 //=============================================================================
 // DEFINES
 //=============================================================================
@@ -200,14 +199,15 @@ struct LevelDefinition
 	const c8 *Name;	  /** Nome della stanza */
 	u8 NextLvlIdx;	  /** Livello successivo */
 	u8 PrevLvIdx;	  /** Livello precedente */
+	u8 enemyNumber;	  /** Numero dei nemici per livello */
 };
 
 // Elenco delle stanze e delle loro caratteristiche
 const struct LevelDefinition g_Levels[] = {
-	{(32 - LEVEL001_WIDTH) / 2, (24 - LEVEL001_HEIGHT) / 2, LEVEL001_WIDTH, LEVEL001_HEIGHT, g_Level001, "Livello 1", 1, 1},
-	{(32 - LEVEL002_WIDTH) / 2, (24 - LEVEL002_HEIGHT) / 2, LEVEL002_WIDTH, LEVEL002_HEIGHT, g_Level002, "Livello 2", 2, 1},
-	{(32 - LEVEL003_WIDTH) / 2, (24 - LEVEL003_HEIGHT) / 2, LEVEL003_WIDTH, LEVEL003_HEIGHT, g_Level003, "Livello 3", 3, 1},
-	{(32 - LEVEL018_WIDTH) / 2, (24 - LEVEL018_HEIGHT) / 2, LEVEL018_WIDTH, LEVEL018_HEIGHT, g_Level018, "Livello 18", 4, 1},
+	{(32 - LEVEL001_WIDTH) / 2, (24 - LEVEL001_HEIGHT) / 2, LEVEL001_WIDTH, LEVEL001_HEIGHT, g_Level001, "Livello 1", 1, 1, 2},
+	{(32 - LEVEL002_WIDTH) / 2, (24 - LEVEL002_HEIGHT) / 2, LEVEL002_WIDTH, LEVEL002_HEIGHT, g_Level002, "Livello 2", 2, 1, 1},
+	{(32 - LEVEL003_WIDTH) / 2, (24 - LEVEL003_HEIGHT) / 2, LEVEL003_WIDTH, LEVEL003_HEIGHT, g_Level003, "Livello 3", 3, 1, 2},
+	{(32 - LEVEL018_WIDTH) / 2, (24 - LEVEL018_HEIGHT) / 2, LEVEL018_WIDTH, LEVEL018_HEIGHT, g_Level018, "Livello 18", 4, 1, 1},
 };
 
 //=============================================================================
@@ -355,8 +355,6 @@ void DrawLevel(u8 levelIdx)
 	g_CurrRoomIdx = levelIdx;
 	g_PawnCount = 0;
 
-	// g_CurrLevelIdx = levelIdx;
-
 	// Riempire l'area VRAM con un valore dato [MSX1/2/2+/TR]
 	//
 	// Parametri:
@@ -422,6 +420,7 @@ void DrawLevel(u8 levelIdx)
 				{
 					if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * (riga - 1) + colonna] != TILE_STAR_POS_ENEMY)
 					{
+
 						u8 x = g_Levels[levelIdx].X + colonna;
 						u8 y = g_Levels[levelIdx].Y + riga;
 
@@ -456,6 +455,11 @@ void DrawLevel(u8 levelIdx)
 				}
 			}
 		}
+	}
+
+	for (u8 i = g_PawnCount; i < MAX_ENEMY; ++i)
+	{
+		VDP_HideSprite(6 + i);
 	}
 }
 
@@ -562,7 +566,7 @@ void UpdateCharacter(struct Character *ply)
 void UpdateEnemy()
 {
 
-	for (u8 nEnemy = 0; nEnemy < MAX_ENEMY; nEnemy++)
+	for (u8 nEnemy = 0; nEnemy < g_Levels[g_CurrRoomIdx].enemyNumber; nEnemy++)
 	{
 		struct CharacterEnemy *enemy = &g_Enemy[nEnemy];
 
