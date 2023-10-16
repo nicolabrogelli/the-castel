@@ -1,14 +1,15 @@
 #define EMPTY_ITEM 		  	0
+#define TILE_EMPTY 		  	0
 #define TILE_DOOR1 		 	70
 #define TILE_DOOR           74
+#define TILE_DOOR_PREV      71
 #define TILE_HEART          79 
 #define TILE_KEY3           98
-
-#define TILE_EMPTY 		  	0
+#define TILE_MONEY          99
 #define TILE_START_POS 		127
 #define TILE_STAR_POS_ENEMY 124
 
-#define MAX_ENEMY 4
+#define MAX_ENEMY 2
 
 
 

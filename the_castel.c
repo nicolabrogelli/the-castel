@@ -95,6 +95,7 @@ bool isMoveJump(u8 row8);
 bool isInteractObject(u8 row8);
 bool PhysicsCollisionEnemy(u8 x, u8 y);
 void ReadInoutControl();
+bool GetMoney(u8 x, u8 y);
 
 //.............................................................................
 // Player 1 data
@@ -178,13 +179,12 @@ const Game_Action g_PlayerAnimActions[] =
 struct Character g_Player;
 struct CharacterEnemy g_Enemy[MAX_ENEMY];
 
-// bool g_bFlicker = TRUE;
-u8 g_PrevRow3 = 0xFF;
 u8 g_PrevRow8 = 0xFF;
 u8 g_PawnCount = 0;
 u8 prevDirection = 0;
 u8 frameCounter = 0;
 u8 g_CurrRoomIdx = 0;
+u8 numCollision = 0;
 
 /** \struct
 	struct: Struttura che rappresenta la stanza
@@ -204,8 +204,8 @@ struct LevelDefinition
 
 // Elenco delle stanze e delle loro caratteristiche
 const struct LevelDefinition g_Levels[] = {
-	{(32 - LEVEL001_WIDTH) / 2, (24 - LEVEL001_HEIGHT) / 2, LEVEL001_WIDTH, LEVEL001_HEIGHT, g_Level001, "Livello 1", 1, 1, 2},
-	{(32 - LEVEL002_WIDTH) / 2, (24 - LEVEL002_HEIGHT) / 2, LEVEL002_WIDTH, LEVEL002_HEIGHT, g_Level002, "Livello 2", 2, 1, 1},
+	{(32 - LEVEL001_WIDTH) / 2, (24 - LEVEL001_HEIGHT) / 2, LEVEL001_WIDTH, LEVEL001_HEIGHT, g_Level001, "Livello 1", 1, 0, 2},
+	{(32 - LEVEL002_WIDTH) / 2, (24 - LEVEL002_HEIGHT) / 2, LEVEL002_WIDTH, LEVEL002_HEIGHT, g_Level002, "Livello 2", 2, 0, 1},
 	{(32 - LEVEL003_WIDTH) / 2, (24 - LEVEL003_HEIGHT) / 2, LEVEL003_WIDTH, LEVEL003_HEIGHT, g_Level003, "Livello 3", 3, 1, 2},
 	{(32 - LEVEL018_WIDTH) / 2, (24 - LEVEL018_HEIGHT) / 2, LEVEL018_WIDTH, LEVEL018_HEIGHT, g_Level018, "Livello 18", 4, 1, 1},
 };
@@ -287,6 +287,7 @@ void PhysicsEventPlayer(u8 event, u8 tile)
  */
 bool PhysicsCollision(u8 tile)
 {
+	//DEBUG_LOGNUM("PhysicsCollision", tile);
 	return (tile > 100);
 }
 
@@ -302,13 +303,37 @@ bool PhysicsCollisionEnemy(u8 x, u8 y)
 }
 
 /**
+ * @brief Gestisce una probabile collisione tra il Player e uno dei nemici a schermo
+ * @param void
+ * @return void
+*/
+bool PhysicsCollisionPlayerAndEnemy() {
+
+/* 	
+	// TODO: Vedere come è possibile implementarla
+	struct Character* ply;
+	Game_Pawn* plyPawn = &ply->Pawn;
+
+	// Persemplificare utilizzo un solo nemico nel livello
+	struct CharacterEnemy *enemy = &g_Enemy[0]; // g_PawnCount
+
+	// DEBUG
+	if((enemy->X == plyPawn->PositionX) && (enemy->Y - 1 == plyPawn->Position)) {
+		VDP_SetColor(COLOR_DARK_RED);
+	}
+	else
+		VDP_SetColor(COLOR_BLACK); */
+
+}
+
+/**
  * @brief Imposta i colori delle tiles
  * @param void
  * @return void
  */
 void SetColorTiles()
 {
-	VDP_FillVRAM_16K(0x60, g_ScreenColorLow + 9, 1);  // ROSSO CHIARO
+	VDP_FillVRAM_16K(0x60, g_ScreenColorLow + 8, 2);  // ROSSO CHIARO
 	VDP_FillVRAM_16K(0xA0, g_ScreenColorLow + 12, 1); // GIALLO SCURO
 	VDP_FillVRAM_16K(0xE0, g_ScreenColorLow + 18, 1); // GRIGIO
 }
@@ -338,9 +363,28 @@ bool Interact(u8 x, u8 y)
 		Print_DrawTextAt(0, 23, "PORTA!!");
 		DrawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
 		return FALSE;
+	case TILE_DOOR_PREV:
+		DrawLevel(g_Levels[g_CurrRoomIdx].PrevLvIdx);
+		return false;
 	case TILE_KEY3:
 		Print_DrawTextAt(0, 23, "                            ");
 		Print_DrawTextAt(0, 23, "CHIAVE!!");
+		return TRUE;
+	}
+	return FALSE;
+}
+
+/**
+ * @brief Routine per raccogliere le monete
+*/
+bool GetMoney(u8 x, u8 y)
+{
+	u8 tile = getTile(x, y);
+
+	switch (tile)
+	{
+	case TILE_MONEY:
+		setTile(x, y, EMPTY_ITEM);
 		return TRUE;
 	}
 	return FALSE;
@@ -457,6 +501,7 @@ void DrawLevel(u8 levelIdx)
 		}
 	}
 
+	// Nasconde gli sprite
 	for (u8 i = g_PawnCount; i < MAX_ENEMY; ++i)
 	{
 		VDP_HideSprite(6 + i);
@@ -502,6 +547,14 @@ void UpdateCharacter(struct Character *ply)
 		if (prevDirection != INPUT_RIGHT)
 		{
 			prevDirection = INPUT_RIGHT;
+
+			// Funzione: VDP_LoadSpritePattern
+			// Carica lo sprite nella VRAM. [MSX1/2/2+/TR]
+			//
+			// Parametri:
+			//   addr  - Indirizzo dello sprite patterns (in RAM/ROM).
+			//   index - Indice del primo modello di sprite VRAM da copiare (in modalità 16x16, si possono usare solo multipli di 4).
+			//   count -Numero di patterns to copy (in modalità 16x16, si possono usare solo multipli di 4).
 			VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_1, 4 * 4 * 0, 4 * 4 * 2);
 			VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_4, 4 * 4 * 2, 4 * 4 * 3);
 			VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_9, 4 * 4 * 5, 4 * 4 * 2);
@@ -511,12 +564,11 @@ void UpdateCharacter(struct Character *ply)
 	{
 		ply->DX--;
 		ply->bMoving = TRUE;
-
-		// TODO: imposta direzione sinistra, solo se
-		//		 è impostata la direzione destra
 		if (prevDirection != INPUT_LEFT)
 		{
 			prevDirection = INPUT_LEFT;
+
+			// TODO: Impiega troppo tempo per eseguire queste tre operazioni!!!
 			VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_1, 4 * 4 * 0, 4 * 4 * 2);
 			VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_4, 4 * 4 * 2, 4 * 4 * 3);
 			VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_9, 4 * 4 * 5, 4 * 4 * 2);
@@ -539,11 +591,16 @@ void UpdateCharacter(struct Character *ply)
 	}
 	else if (ply->Input & INPUT_GET)
 	{
+		// Valuta se è possibile effettuare una interazione
 		if (Interact(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) || Interact(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4))
 		{
 			// TODO: vediamo!
 		}
 	}
+
+	// Valuta se è presente una manota ed eventualmente la raccoglie
+	GetMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) || GetMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4);
+
 
 	// Update player animation & physics
 	u8 act = ACTION_IDLE;
@@ -748,11 +805,13 @@ bool State_Game()
 	// Aggiurnamento input da tastiera
 	ReadInoutControl();
 
-	// TODO: Aggiornamento della posizione dei nemici, da migliorare!!!
+	// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
+	PhysicsCollisionPlayerAndEnemy();
 
+	// TODO: Aggiornamento della posizione dei nemici, da migliorare!!!
 	if (frameCounter % 2 == 0)
 	{
-		UpdateEnemy();
+		UpdateEnemy();		
 	}
 	frameCounter++;
 
