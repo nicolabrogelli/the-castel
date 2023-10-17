@@ -99,6 +99,12 @@ bool physicsCollisionEnemy(u8 x, u8 y);
 void readInoutControl();
 bool getMoney(u8 x, u8 y);
 void updateScore();
+void initInventory();
+bool addItemToInventory(u8 item);
+bool hasItemInInventory(u8 item);
+bool removeItemFromInventory(u8 item);
+void displayItemToInventory();
+void reorganizeInventory();
 
 //.............................................................................
 // Player 1 data
@@ -188,6 +194,7 @@ u8 g_PrevDirection = 0;
 u8 g_FrameCounter = 0;
 u8 g_CurrRoomIdx = 0;
 c8 g_StrBuffer[16];
+unsigned char g_Inventory[MAX_ITEM_INVENTORY] = {0, 0, 0, 0, 0};
 
 
 
@@ -214,6 +221,121 @@ const struct LevelDefinition g_Levels[] = {
 	{(32 - LEVEL003_WIDTH) / 2, (24 - LEVEL003_HEIGHT) / 2, LEVEL003_WIDTH, LEVEL003_HEIGHT, g_Level003, "Livello 3", 3, 1, 2},
 	{(32 - LEVEL018_WIDTH) / 2, (24 - LEVEL018_HEIGHT) / 2, LEVEL018_WIDTH, LEVEL018_HEIGHT, g_Level018, "Livello 18", 4, 1, 1},
 };
+
+//.............................................................................
+// FUNZIONI PER LA GESTIONE DELL'INVENTARIO
+//.............................................................................
+
+/**
+ * @brief Inizializzazione dell'inventario
+ * @param void
+ * @return void
+*/
+void initInventory()
+{
+	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
+	{
+		g_Inventory[i] = EMPTY_ITEM;
+	}
+}
+
+/**
+ * @brief Aggiunta di un oggetto all'inventario
+ * @param u8 item Oggetto da inserire nell'inventario
+ * @return bool TRUE se l'oggetto è inserito nell'inventario
+*/
+bool addItemToInventory(u8 item)
+{
+	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
+	{
+		if (g_Inventory[i] == EMPTY_ITEM)
+		{
+			g_Inventory[i] = item;
+			setTile(8 + i * 16, (u8)(192 - 8), item);
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+/**
+ * @brief Verificare la presenza di un oggetto nell'inventario
+ * @param u8 item Oggetto da verificare 
+ * @return bool TRUE se l'oggetto è nell'inventario
+*/
+bool hasItemInInventory(u8 item)
+{
+	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
+	{
+		if (g_Inventory[i] == item)
+		{
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+/**
+ * @brief Rimuove un oggetto dall'inventario
+ * @param u8 item Oggetto da rimuovere 
+ * @return bool TRUE se l'oggetto è stato rimosso
+*/
+bool removeItemFromInventory(u8 item)
+{
+	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
+	{
+		if (g_Inventory[i] == item)
+		{
+			g_Inventory[i] = EMPTY_ITEM;
+			setTile(8 + i * 16, (u8)(192 - 8), 0);
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+/**
+ * @brief Visualizza tutti gli elementi dell'inventario
+ * @param void
+ * @return void
+*/
+void displayItemToInventory()
+{
+	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
+	{			
+		setTile(8 + i * 16, (u8)(192 - 8), g_Inventory[i]);			
+	}
+}
+
+/**
+ * @brief Riorganizza l'inventario
+ * @param void
+ * @return void
+*/
+void reorganizeInventory() {
+	unsigned char inventory[MAX_ITEM_INVENTORY];
+
+	// TODO: da ottimizzare !!!!
+	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
+	{
+		inventory[i] = EMPTY_ITEM;
+	}
+
+	// Crea una copia dell'inventario
+	for(u8 i=0; i < MAX_ITEM_INVENTORY; i++) {
+		if(g_Inventory[i] != EMPTY_ITEM)
+			inventory[i] = g_Inventory[i];
+	}
+
+	// Svuota l'inventario
+	initInventory();
+
+	// Riempie l'inventario
+	for(u8 i=0; i < MAX_ITEM_INVENTORY; i++) {
+		if(inventory[i] != EMPTY_ITEM)
+			addItemToInventory(inventory[i]);
+	}
+}
 
 //=============================================================================
 // FUNZIONI DI LIBRERIA PER LA GESTIONE DELLE TILES
@@ -340,7 +462,7 @@ void setColorTiles()
 {
 	VDP_FillVRAM_16K(0x60, g_ScreenColorLow + 8, 2);  // ROSSO CHIARO
 	VDP_FillVRAM_16K(0xA0, g_ScreenColorLow + 12, 1); // GIALLO SCURO
-	VDP_FillVRAM_16K(0xE0, g_ScreenColorLow + 18, 1); // GRIGIO
+	VDP_FillVRAM_16K(0xE0, g_ScreenColorLow + 18, 2); // GRIGIO
 }
 
 /**
@@ -363,13 +485,30 @@ bool interact(u8 x, u8 y)
 		g_Player.Life++;
 		return TRUE;
 	case TILE_DOOR1:
-	case TILE_DOOR:
-		drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
+		if(hasItemInInventory(TILE_KEY1)) {
+			removeItemFromInventory(TILE_KEY1);
+			drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
+		}	
+	case TILE_DOOR2:
+		if(hasItemInInventory(TILE_KEY2)) {
+			removeItemFromInventory(TILE_KEY2);
+			drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
+		}
+	case TILE_DOOR3:
+		if(hasItemInInventory(TILE_KEY3)) {
+			removeItemFromInventory(TILE_KEY3);
+			reorganizeInventory();
+			drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
+		}
 		return FALSE;
 	case TILE_DOOR_PREV:
 		drawLevel(g_Levels[g_CurrRoomIdx].PrevLvIdx);
 		return false;
+	case TILE_KEY1:
+	case TILE_KEY2:
 	case TILE_KEY3:
+		setTile(x, y, EMPTY_ITEM);
+		addItemToInventory(tile);
 		return TRUE;
 	case TILE_BLOCK_TEST:
 		// TODO: Fare attenzione che il blocco che andiamo a spostare non vada sopra altri oggetti
@@ -558,6 +697,8 @@ void drawLevel(u8 levelIdx)
 	}
 
 	updateScore();
+
+	displayItemToInventory();
 }
 
 /**
@@ -824,6 +965,10 @@ bool State_Initialize()
 	//  Character - indirizzo della truruttura che rappresenta il giocatore
 	//  id del giorcatore
 	initCharacter(&g_Player, 0);
+
+	// Funzione: initInventory
+	// Inizializza l'inventario
+	initInventory();
 
 	// Funzione: DrawLevel
 	// Inizzializza il livello di gioco
