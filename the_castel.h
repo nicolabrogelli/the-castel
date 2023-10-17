@@ -8,6 +8,7 @@
 #define TILE_MONEY          99
 #define TILE_START_POS 		127
 #define TILE_STAR_POS_ENEMY 124
+#define TILE_BLOCK_TEST     144
 
 #define MAX_ENEMY 2
 
