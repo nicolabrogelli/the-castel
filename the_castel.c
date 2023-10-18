@@ -105,6 +105,10 @@ bool hasItemInInventory(u8 item);
 bool removeItemFromInventory(u8 item);
 void displayItemToInventory();
 void reorganizeInventory();
+void initLife();
+bool addLife();
+void displayLife();
+bool removeLife();
 
 //.............................................................................
 // Player 1 data
@@ -195,6 +199,7 @@ u8 g_FrameCounter = 0;
 u8 g_CurrRoomIdx = 0;
 c8 g_StrBuffer[16];
 unsigned char g_Inventory[MAX_ITEM_INVENTORY] = {0, 0, 0, 0, 0};
+unsigned char g_Lives[MAX_LIVES] = {0, 0, 0};
 
 
 
@@ -221,6 +226,72 @@ const struct LevelDefinition g_Levels[] = {
 	{(32 - LEVEL003_WIDTH) / 2, (24 - LEVEL003_HEIGHT) / 2, LEVEL003_WIDTH, LEVEL003_HEIGHT, g_Level003, "Livello 3", 3, 1, 2},
 	{(32 - LEVEL018_WIDTH) / 2, (24 - LEVEL018_HEIGHT) / 2, LEVEL018_WIDTH, LEVEL018_HEIGHT, g_Level018, "Livello 18", 4, 1, 1},
 };
+
+//.............................................................................
+// FUNZIONI PER LA GESTIONE DELLE VITE
+//.............................................................................
+
+/**
+ * @brief Inizializza le vite
+ * @param void
+ * @return void
+*/
+void initLife() {
+	g_Player.Life = MAX_LIVES;
+
+	for(u8 i = 0; i < MAX_LIVES; i++)
+		g_Lives[i] = TILE_HEART;
+}
+
+/**
+ * @brief Aggiunta di una vita
+ * @param void
+ * @return bool TRUE se è stata aggiunta una vita
+*/
+bool addLife()
+{
+	for (u8 i = 0; i < MAX_LIVES; i++)
+	{
+		if (g_Lives[i] == EMPTY_ITEM)
+		{
+			g_Lives[i] = TILE_HEART;
+			setTile(220 + i * 16, (u8)(4), TILE_HEART);
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+/**
+ * @brief Rimuove una vita
+ * @param void
+ * @return void
+*/
+bool removeLife() {
+	for (u8 i = 0; i < MAX_LIVES; i++)
+	{
+		if (g_Lives[i] == TILE_HEART)
+		{
+			g_Lives[i] = EMPTY_ITEM;
+			setTile(8 + i * 16, (u8)(4), 0);
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+/**
+ * @brief Visualizza tutte le vite disponibili
+ * @param void
+ * @return void
+*/
+void displayLife()
+{
+	for (u8 i = 0; i < MAX_LIVES; i++)
+	{			
+		setTile(220 + i * 16, (u8)(4), g_Lives[i]);			
+	}
+}
 
 //.............................................................................
 // FUNZIONI PER LA GESTIONE DELL'INVENTARIO
@@ -251,7 +322,7 @@ bool addItemToInventory(u8 item)
 		if (g_Inventory[i] == EMPTY_ITEM)
 		{
 			g_Inventory[i] = item;
-			setTile(8 + i * 16, (u8)(192 - 8), item);
+			setTile(8 + i * 16, (u8)(192 - 16), item);
 			return TRUE;
 		}
 	}
@@ -287,7 +358,7 @@ bool removeItemFromInventory(u8 item)
 		if (g_Inventory[i] == item)
 		{
 			g_Inventory[i] = EMPTY_ITEM;
-			setTile(8 + i * 16, (u8)(192 - 8), 0);
+			setTile(8 + i * 16, (u8)(192 - 16), 0);
 			return TRUE;
 		}
 	}
@@ -303,7 +374,7 @@ void displayItemToInventory()
 {
 	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
 	{			
-		setTile(8 + i * 16, (u8)(192 - 8), g_Inventory[i]);			
+		setTile(8 + i * 16, (u8)(192 - 16), g_Inventory[i]);			
 	}
 }
 
@@ -315,11 +386,7 @@ void displayItemToInventory()
 void reorganizeInventory() {
 	unsigned char inventory[MAX_ITEM_INVENTORY];
 
-	// TODO: da ottimizzare !!!!
-	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
-	{
-		inventory[i] = EMPTY_ITEM;
-	}
+	Mem_Set(EMPTY_ITEM, inventory, (5 * sizeof(inventory[0])));
 
 	// Crea una copia dell'inventario
 	for(u8 i=0; i < MAX_ITEM_INVENTORY; i++) {
@@ -328,13 +395,15 @@ void reorganizeInventory() {
 	}
 
 	// Svuota l'inventario
-	initInventory();
+	Mem_Set(EMPTY_ITEM, g_Inventory, (5 * sizeof(g_Inventory[0])));
 
 	// Riempie l'inventario
 	for(u8 i=0; i < MAX_ITEM_INVENTORY; i++) {
 		if(inventory[i] != EMPTY_ITEM)
 			addItemToInventory(inventory[i]);
 	}
+
+
 }
 
 //=============================================================================
@@ -480,9 +549,11 @@ bool interact(u8 x, u8 y)
 	switch (tile)
 	{
 	case TILE_HEART:
-		setTile(x, y, EMPTY_ITEM);
-		if(g_Player.Life < 9)
-		g_Player.Life++;
+		if(g_Player.Life < MAX_LIVES) {
+			setTile(x, y, EMPTY_ITEM);
+			g_Player.Life++;
+			addLife();
+		}
 		return TRUE;
 	case TILE_DOOR1:
 		if(hasItemInInventory(TILE_KEY1)) {
@@ -574,9 +645,9 @@ void updateScore()
 	// Stampa il punteggio
 	Print_SetPosition(22, 0);
 	Print_DrawText("LIFE:");
-	String_Format(g_StrBuffer, "%01i",  g_Player.Life);
+	/* String_Format(g_StrBuffer, "%01i",  g_Player.Life);
 	Print_SetPosition(27, 0);
-	Print_DrawText(g_StrBuffer);
+	Print_DrawText(g_StrBuffer); */
 }
 
 /**
@@ -699,6 +770,7 @@ void drawLevel(u8 levelIdx)
 	updateScore();
 
 	displayItemToInventory();
+	displayLife();
 }
 
 /**
@@ -969,6 +1041,10 @@ bool State_Initialize()
 	// Funzione: initInventory
 	// Inizializza l'inventario
 	initInventory();
+
+	initLife();
+	
+
 
 	// Funzione: DrawLevel
 	// Inizzializza il livello di gioco

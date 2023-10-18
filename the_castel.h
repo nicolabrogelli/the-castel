@@ -15,6 +15,7 @@
 
 #define MAX_ENEMY 2
 #define MAX_ITEM_INVENTORY 5
+#define MAX_LIVES          3
 
 
 #define FRAME_1 128
