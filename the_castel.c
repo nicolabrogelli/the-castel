@@ -19,6 +19,7 @@
 #include "input.h"
 #include "version.h"
 
+
 //=============================================================================
 // INCLUDES PERSONALIZZATI
 //=============================================================================
@@ -109,6 +110,7 @@ void initLife();
 bool addLife();
 void displayLife();
 bool removeLife();
+bool physicsCollisionPlayerAndEnemy(struct Character *ply);
 
 //.............................................................................
 // Player 1 data
@@ -227,9 +229,10 @@ const struct LevelDefinition g_Levels[] = {
 	{(32 - LEVEL018_WIDTH) / 2, (24 - LEVEL018_HEIGHT) / 2, LEVEL018_WIDTH, LEVEL018_HEIGHT, g_Level018, "Livello 18", 4, 1, 1},
 };
 
-//.............................................................................
+
+//=============================================================================
 // FUNZIONI PER LA GESTIONE DELLE VITE
-//.............................................................................
+//=============================================================================
 
 /**
  * @brief Inizializza le vite
@@ -273,7 +276,8 @@ bool removeLife() {
 		if (g_Lives[i] == TILE_HEART)
 		{
 			g_Lives[i] = EMPTY_ITEM;
-			setTile(8 + i * 16, (u8)(4), 0);
+			setTile(220 + i * 16, (u8)(4), 0);
+			g_Player.Life--;
 			return TRUE;
 		}
 	}
@@ -293,9 +297,9 @@ void displayLife()
 	}
 }
 
-//.............................................................................
+//=============================================================================
 // FUNZIONI PER LA GESTIONE DELL'INVENTARIO
-//.............................................................................
+//=============================================================================
 
 /**
  * @brief Inizializzazione dell'inventario
@@ -503,23 +507,31 @@ bool physicsCollisionEnemy(u8 x, u8 y)
  * @param void
  * @return void
 */
-bool physicsCollisionPlayerAndEnemy() {
+bool physicsCollisionPlayerAndEnemy(struct Character *ply) {
 
-/* 	
-	// TODO: Vedere come è possibile implementarla
-	struct Character* ply;
-	Game_Pawn* plyPawn = &ply->Pawn;
+	Game_Pawn *pawn = &ply->Pawn;
 
-	// Persemplificare utilizzo un solo nemico nel livello
-	struct CharacterEnemy *enemy = &g_Enemy[0]; // g_PawnCount
+	for (u8 nEnemy = 0; nEnemy < g_Levels[g_CurrRoomIdx].enemyNumber; nEnemy++)
+	{
+		struct CharacterEnemy *enemy = &g_Enemy[nEnemy];
 
-	// DEBUG
-	if((enemy->X == plyPawn->PositionX) && (enemy->Y - 1 == plyPawn->Position)) {
-		VDP_SetColor(COLOR_DARK_RED);
+		i8 dx = enemy->X - pawn->PositionX;
+		i8 dy = enemy->Y - pawn->PositionY;
+
+		u16 sqrtDist = (dx*dx) + (dy*dy);
+		if(sqrtDist < 13*13)
+		{
+			//removeLife();
+			//displayLife();
+			VDP_SetColor(COLOR_DARK_RED);
+			//return TRUE;
+		}
+		else {
+			VDP_SetColor(COLOR_BLACK);
+			//return FALSE;
+		}
+	
 	}
-	else
-		VDP_SetColor(COLOR_BLACK); */
-
 }
 
 /**
@@ -1042,9 +1054,16 @@ bool State_Initialize()
 	// Inizializza l'inventario
 	initInventory();
 
+	// Funzione: initLife
+	// Inizializza le vite del giocatore
 	initLife();
 	
-
+	// TODO: Quando importo le funzionalità della libreria clock
+	//		 viene gnerato un errore del tipo ?ASlink-Warning-Undefined Global
+	//       chiedere se è possibili utilizzarle su msx 1
+	// Funzione: rtcInizialize
+	// Inizializza il modulo RTC
+	//rtcInizialize();
 
 	// Funzione: DrawLevel
 	// Inizzializza il livello di gioco
@@ -1084,13 +1103,15 @@ bool State_Game()
 	// Aggiurnamento input da tastiera
 	readInoutControl();
 
-	// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
-	physicsCollisionPlayerAndEnemy();
+
 
 	// TODO: Aggiornamento della posizione dei nemici, da migliorare!!!
 	if (g_FrameCounter % 2 == 0)
 	{
-		updateEnemy();		
+		updateEnemy();	
+
+		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
+		physicsCollisionPlayerAndEnemy(&g_Player);	
 	}
 	g_FrameCounter++;
 
