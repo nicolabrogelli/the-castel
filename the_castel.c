@@ -111,6 +111,7 @@ bool addLife();
 void displayLife();
 bool removeLife();
 bool physicsCollisionPlayerAndEnemy(struct Character *ply);
+void replacementItemInLevel(u8 x, u8 y, u8 tile);
 
 //.............................................................................
 // Player 1 data
@@ -214,7 +215,8 @@ struct LevelDefinition
 	u8 Y;			  /** Coordinata Y della stanza */
 	u8 Width;		  /** Larghezza della stanza*/
 	u8 Height;		  /** Altezza della stanza */
-	const u8 *Layout; /** Layout della stanza */
+	//const u8 *Layout; /** Layout della stanza */
+	u8 *Layout; /** Layout della stanza */
 	const c8 *Name;	  /** Nome della stanza */
 	u8 NextLvlIdx;	  /** Livello successivo */
 	u8 PrevLvIdx;	  /** Livello precedente */
@@ -567,29 +569,49 @@ bool interact(u8 x, u8 y)
 			addLife();
 		}
 		return TRUE;
+	case TILE_DOOR0:
+		//Print_DrawIntAt(20, 18,g_Levels[g_CurrRoomIdx].NextLvlIdx);
+		drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
+		return TRUE;
 	case TILE_DOOR1:
 		if(hasItemInInventory(TILE_KEY1)) {
 			removeItemFromInventory(TILE_KEY1);
+			replacementItemInLevel(x, y, TILE_DOOR0);			
 			drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
 		}	
+		return TRUE;
 	case TILE_DOOR2:
 		if(hasItemInInventory(TILE_KEY2)) {
 			removeItemFromInventory(TILE_KEY2);
+			replacementItemInLevel(x, y, TILE_DOOR0);			
 			drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
 		}
+		return TRUE;
 	case TILE_DOOR3:
 		if(hasItemInInventory(TILE_KEY3)) {
 			removeItemFromInventory(TILE_KEY3);
 			reorganizeInventory();
+			replacementItemInLevel(x, y, TILE_DOOR0);			
 			drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
 		}
-		return FALSE;
+		return TRUE;
 	case TILE_DOOR_PREV:
 		drawLevel(g_Levels[g_CurrRoomIdx].PrevLvIdx);
 		return false;
 	case TILE_KEY1:
 	case TILE_KEY2:
 	case TILE_KEY3:
+/* 		Print_DrawIntAt(20, 18,x);
+		Print_DrawIntAt(20, 19,(x/8));
+		Print_DrawIntAt(20, 20,y);
+		Print_DrawIntAt(20, 21,((y/8)*32));
+		Print_DrawIntAt(20, 22,((y/8)*32) + (x/8));
+		Print_DrawIntAt(20, 23,pos); */
+
+		// Modifico al volo il livello di gioco, cosi non sono costretto 
+		// a creare una cache dei livelli.
+		replacementItemInLevel(x, y, EMPTY_ITEM);
+
 		setTile(x, y, EMPTY_ITEM);
 		addItemToInventory(tile);
 		return TRUE;
@@ -623,10 +645,14 @@ bool interact(u8 x, u8 y)
 bool getMoney(u8 x, u8 y)
 {
 	u8 tile = getTile(x, y);
-
+	
 	switch (tile)
 	{
 	case TILE_MONEY:
+		// Modifico al volo il livello di gioco, cosi non sono costretto 
+		// a creare una cache dei livelli.
+		replacementItemInLevel(x, y, EMPTY_ITEM);
+
 		setTile(x, y, EMPTY_ITEM);
 		g_Player.Score++;
 		updateScore();
@@ -661,6 +687,13 @@ void updateScore()
 	Print_SetPosition(27, 0);
 	Print_DrawText(g_StrBuffer); */
 }
+
+void replacementItemInLevel(u8 x, u8 y, u8 tile) {	
+	u16 pos =  ((y/8)*32) + (x/8); 
+	g_Levels[g_CurrRoomIdx].Layout[pos] = tile;
+}
+
+
 
 /**
  * @brief Si disegna il livello di gioco

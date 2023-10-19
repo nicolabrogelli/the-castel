@@ -1,5 +1,6 @@
 #define EMPTY_ITEM 		  	0
 #define TILE_EMPTY 		  	0
+#define TILE_DOOR0          68
 #define TILE_DOOR1          69
 #define TILE_DOOR2 		 	70
 #define TILE_DOOR3          74
