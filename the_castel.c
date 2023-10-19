@@ -1108,9 +1108,16 @@ bool State_Game()
 	// TODO: Aggiornamento della posizione dei nemici, da migliorare!!!
 	if (g_FrameCounter % 2 == 0)
 	{
+		// Funzione: updateEnemy
+		// Aggiorna il rendering dei nemici.
 		updateEnemy();	
 
 		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
+		// Funzione: physicsCollisionPlayerAndEnemy
+		// Gestisce la collisione tra il pedone e i vari nemici
+		//
+		// Parametri:
+		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 		physicsCollisionPlayerAndEnemy(&g_Player);	
 	}
 	g_FrameCounter++;
