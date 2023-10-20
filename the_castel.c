@@ -564,6 +564,7 @@ bool interact(u8 x, u8 y)
 	{
 	case TILE_HEART:
 		if(g_Player.Life < MAX_LIVES) {
+			replacementItemInLevel(x, y, EMPTY_ITEM);
 			setTile(x, y, EMPTY_ITEM);
 			g_Player.Life++;
 			addLife();
@@ -688,6 +689,13 @@ void updateScore()
 	Print_DrawText(g_StrBuffer); */
 }
 
+/**
+ * @brief Sostituisce la tile nell'array del livello partendo dalle coordinate
+ * @param u8 x Coordinata X
+ * @param u8 y Coordinata y
+ * @param u8 tile Tile da inserire nell'arrya
+ * @return void
+*/
 void replacementItemInLevel(u8 x, u8 y, u8 tile) {	
 	u16 pos =  ((y/8)*32) + (x/8); 
 	g_Levels[g_CurrRoomIdx].Layout[pos] = tile;
