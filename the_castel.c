@@ -19,7 +19,6 @@
 #include "input.h"
 #include "version.h"
 
-
 //=============================================================================
 // INCLUDES PERSONALIZZATI
 //=============================================================================
@@ -60,7 +59,7 @@ struct Character
 	i8 DX;
 	i8 DY;
 	u8 Input;
-	u8 Score;	
+	u8 Score;
 	u8 Life;
 	Game_Pawn Pawn;
 };
@@ -97,7 +96,7 @@ bool isMoveLeft(u8 row8);
 bool isMoveJump(u8 row8);
 bool isInteractObject(u8 row8);
 bool physicsCollisionEnemy(u8 x, u8 y);
-void readInoutControl();
+void readInputControl();
 bool getMoney(u8 x, u8 y);
 void updateScore();
 void initInventory();
@@ -110,7 +109,7 @@ void initLife();
 bool addLife();
 void displayLife();
 bool removeLife();
-bool physicsCollisionPlayerAndEnemy(struct Character *ply);
+void physicsCollisionPlayerAndEnemy(struct Character *ply);
 void replacementItemInLevel(u8 x, u8 y, u8 tile);
 
 //.............................................................................
@@ -199,28 +198,31 @@ u8 g_PrevRow8 = 0xFF;
 u8 g_PawnCount = 0;
 u8 g_PrevDirection = 0;
 u8 g_FrameCounter = 0;
+u8 g_ReverseCount = 0;
 u8 g_CurrRoomIdx = 0;
 c8 g_StrBuffer[16];
+
+u8 g_VBlank = 0;
+u8 g_Frame = 0;
+
 unsigned char g_Inventory[MAX_ITEM_INVENTORY] = {0, 0, 0, 0, 0};
 unsigned char g_Lives[MAX_LIVES] = {0, 0, 0};
-
-
 
 /** \struct
 	struct: Struttura che rappresenta la stanza
 */
 struct LevelDefinition
 {
-	u8 X;			  /** Coordinata Y della stanza */
-	u8 Y;			  /** Coordinata Y della stanza */
-	u8 Width;		  /** Larghezza della stanza*/
-	u8 Height;		  /** Altezza della stanza */
-	//const u8 *Layout; /** Layout della stanza */
-	u8 *Layout; /** Layout della stanza */
-	const c8 *Name;	  /** Nome della stanza */
-	u8 NextLvlIdx;	  /** Livello successivo */
-	u8 PrevLvIdx;	  /** Livello precedente */
-	u8 enemyNumber;	  /** Numero dei nemici per livello */
+	u8 X;	   /** Coordinata Y della stanza */
+	u8 Y;	   /** Coordinata Y della stanza */
+	u8 Width;  /** Larghezza della stanza*/
+	u8 Height; /** Altezza della stanza */
+	// const u8 *Layout; /** Layout della stanza */
+	u8 *Layout;		/** Layout della stanza */
+	const c8 *Name; /** Nome della stanza */
+	u8 NextLvlIdx;	/** Livello successivo */
+	u8 PrevLvIdx;	/** Livello precedente */
+	u8 enemyNumber; /** Numero dei nemici per livello */
 };
 
 // Elenco delle stanze e delle loro caratteristiche
@@ -231,7 +233,6 @@ const struct LevelDefinition g_Levels[] = {
 	{(32 - LEVEL018_WIDTH) / 2, (24 - LEVEL018_HEIGHT) / 2, LEVEL018_WIDTH, LEVEL018_HEIGHT, g_Level018, "Livello 18", 4, 1, 1},
 };
 
-
 //=============================================================================
 // FUNZIONI PER LA GESTIONE DELLE VITE
 //=============================================================================
@@ -240,11 +241,12 @@ const struct LevelDefinition g_Levels[] = {
  * @brief Inizializza le vite
  * @param void
  * @return void
-*/
-void initLife() {
+ */
+void initLife()
+{
 	g_Player.Life = MAX_LIVES;
 
-	for(u8 i = 0; i < MAX_LIVES; i++)
+	for (u8 i = 0; i < MAX_LIVES; i++)
 		g_Lives[i] = TILE_HEART;
 }
 
@@ -252,7 +254,7 @@ void initLife() {
  * @brief Aggiunta di una vita
  * @param void
  * @return bool TRUE se è stata aggiunta una vita
-*/
+ */
 bool addLife()
 {
 	for (u8 i = 0; i < MAX_LIVES; i++)
@@ -271,8 +273,10 @@ bool addLife()
  * @brief Rimuove una vita
  * @param void
  * @return void
-*/
-bool removeLife() {
+ */
+bool removeLife()
+{
+		//for (u8 i = MAX_LIVES - 1; i >= 0; i--)
 	for (u8 i = 0; i < MAX_LIVES; i++)
 	{
 		if (g_Lives[i] == TILE_HEART)
@@ -290,12 +294,12 @@ bool removeLife() {
  * @brief Visualizza tutte le vite disponibili
  * @param void
  * @return void
-*/
+ */
 void displayLife()
 {
 	for (u8 i = 0; i < MAX_LIVES; i++)
-	{			
-		setTile(220 + i * 16, (u8)(4), g_Lives[i]);			
+	{
+		setTile(220 + i * 16, (u8)(4), g_Lives[i]);
 	}
 }
 
@@ -307,7 +311,7 @@ void displayLife()
  * @brief Inizializzazione dell'inventario
  * @param void
  * @return void
-*/
+ */
 void initInventory()
 {
 	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
@@ -320,7 +324,7 @@ void initInventory()
  * @brief Aggiunta di un oggetto all'inventario
  * @param u8 item Oggetto da inserire nell'inventario
  * @return bool TRUE se l'oggetto è inserito nell'inventario
-*/
+ */
 bool addItemToInventory(u8 item)
 {
 	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
@@ -337,9 +341,9 @@ bool addItemToInventory(u8 item)
 
 /**
  * @brief Verificare la presenza di un oggetto nell'inventario
- * @param u8 item Oggetto da verificare 
+ * @param u8 item Oggetto da verificare
  * @return bool TRUE se l'oggetto è nell'inventario
-*/
+ */
 bool hasItemInInventory(u8 item)
 {
 	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
@@ -354,9 +358,9 @@ bool hasItemInInventory(u8 item)
 
 /**
  * @brief Rimuove un oggetto dall'inventario
- * @param u8 item Oggetto da rimuovere 
+ * @param u8 item Oggetto da rimuovere
  * @return bool TRUE se l'oggetto è stato rimosso
-*/
+ */
 bool removeItemFromInventory(u8 item)
 {
 	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
@@ -375,12 +379,12 @@ bool removeItemFromInventory(u8 item)
  * @brief Visualizza tutti gli elementi dell'inventario
  * @param void
  * @return void
-*/
+ */
 void displayItemToInventory()
 {
 	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
-	{			
-		setTile(8 + i * 16, (u8)(192 - 16), g_Inventory[i]);			
+	{
+		setTile(8 + i * 16, (u8)(192 - 16), g_Inventory[i]);
 	}
 }
 
@@ -388,15 +392,17 @@ void displayItemToInventory()
  * @brief Riorganizza l'inventario
  * @param void
  * @return void
-*/
-void reorganizeInventory() {
+ */
+void reorganizeInventory()
+{
 	unsigned char inventory[MAX_ITEM_INVENTORY];
 
 	Mem_Set(EMPTY_ITEM, inventory, (5 * sizeof(inventory[0])));
 
 	// Crea una copia dell'inventario
-	for(u8 i=0; i < MAX_ITEM_INVENTORY; i++) {
-		if(g_Inventory[i] != EMPTY_ITEM)
+	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
+	{
+		if (g_Inventory[i] != EMPTY_ITEM)
 			inventory[i] = g_Inventory[i];
 	}
 
@@ -404,12 +410,11 @@ void reorganizeInventory() {
 	Mem_Set(EMPTY_ITEM, g_Inventory, (5 * sizeof(g_Inventory[0])));
 
 	// Riempie l'inventario
-	for(u8 i=0; i < MAX_ITEM_INVENTORY; i++) {
-		if(inventory[i] != EMPTY_ITEM)
+	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
+	{
+		if (inventory[i] != EMPTY_ITEM)
 			addItemToInventory(inventory[i]);
 	}
-
-
 }
 
 //=============================================================================
@@ -489,7 +494,7 @@ void physicsEventPlayer(u8 event, u8 tile)
  */
 bool physicsCollision(u8 tile)
 {
-	//DEBUG_LOGNUM("PhysicsCollision", tile);
+	// DEBUG_LOGNUM("PhysicsCollision", tile);
 	return (tile > 100);
 }
 
@@ -508,31 +513,40 @@ bool physicsCollisionEnemy(u8 x, u8 y)
  * @brief Gestisce una probabile collisione tra il Player e uno dei nemici a schermo
  * @param void
  * @return void
-*/
-bool physicsCollisionPlayerAndEnemy(struct Character *ply) {
+ */
+void physicsCollisionPlayerAndEnemy(struct Character *ply)
+{
 
-	Game_Pawn *pawn = &ply->Pawn;
+/* 	String_Format(g_StrBuffer, "%03i", g_FrameCounter);
+	Print_SetPosition(20, 18);
+	Print_DrawText(g_StrBuffer); */
 
-	for (u8 nEnemy = 0; nEnemy < g_Levels[g_CurrRoomIdx].enemyNumber; nEnemy++)
+	if (g_ReverseCount > 0)
+		g_ReverseCount--;
+	else
 	{
-		struct CharacterEnemy *enemy = &g_Enemy[nEnemy];
+		Game_Pawn *pawn = &ply->Pawn;
 
-		i8 dx = enemy->X - pawn->PositionX;
-		i8 dy = enemy->Y - pawn->PositionY;
-
-		u16 sqrtDist = (dx*dx) + (dy*dy);
-		if(sqrtDist < 13*13)
+		for (u8 nEnemy = 0; nEnemy < g_Levels[g_CurrRoomIdx].enemyNumber; nEnemy++)
 		{
-			//removeLife();
-			//displayLife();
-			VDP_SetColor(COLOR_DARK_RED);
-			//return TRUE;
+			struct CharacterEnemy *enemy = &g_Enemy[nEnemy];
+
+			i8 dx = enemy->X - pawn->PositionX;
+			i8 dy = enemy->Y - pawn->PositionY;
+
+			u16 sqrtDist = (dx * dx) + (dy * dy);
+			if (sqrtDist < 13 * 13)
+			{
+				g_ReverseCount = 30;
+				removeLife();
+				displayLife();
+				//VDP_SetColor(COLOR_DARK_RED);
+			}
+			else
+			{
+				VDP_SetColor(COLOR_BLACK);
+			}
 		}
-		else {
-			VDP_SetColor(COLOR_BLACK);
-			//return FALSE;
-		}
-	
 	}
 }
 
@@ -563,7 +577,8 @@ bool interact(u8 x, u8 y)
 	switch (tile)
 	{
 	case TILE_HEART:
-		if(g_Player.Life < MAX_LIVES) {
+		if (g_Player.Life < MAX_LIVES)
+		{
 			replacementItemInLevel(x, y, EMPTY_ITEM);
 			setTile(x, y, EMPTY_ITEM);
 			g_Player.Life++;
@@ -571,28 +586,30 @@ bool interact(u8 x, u8 y)
 		}
 		return TRUE;
 	case TILE_DOOR0:
-		//Print_DrawIntAt(20, 18,g_Levels[g_CurrRoomIdx].NextLvlIdx);
 		drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
 		return TRUE;
 	case TILE_DOOR1:
-		if(hasItemInInventory(TILE_KEY1)) {
+		if (hasItemInInventory(TILE_KEY1))
+		{
 			removeItemFromInventory(TILE_KEY1);
-			replacementItemInLevel(x, y, TILE_DOOR0);			
+			replacementItemInLevel(x, y, TILE_DOOR0);
 			drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
-		}	
+		}
 		return TRUE;
 	case TILE_DOOR2:
-		if(hasItemInInventory(TILE_KEY2)) {
+		if (hasItemInInventory(TILE_KEY2))
+		{
 			removeItemFromInventory(TILE_KEY2);
-			replacementItemInLevel(x, y, TILE_DOOR0);			
+			replacementItemInLevel(x, y, TILE_DOOR0);
 			drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
 		}
 		return TRUE;
 	case TILE_DOOR3:
-		if(hasItemInInventory(TILE_KEY3)) {
+		if (hasItemInInventory(TILE_KEY3))
+		{
 			removeItemFromInventory(TILE_KEY3);
 			reorganizeInventory();
-			replacementItemInLevel(x, y, TILE_DOOR0);			
+			replacementItemInLevel(x, y, TILE_DOOR0);
 			drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
 		}
 		return TRUE;
@@ -602,14 +619,14 @@ bool interact(u8 x, u8 y)
 	case TILE_KEY1:
 	case TILE_KEY2:
 	case TILE_KEY3:
-/* 		Print_DrawIntAt(20, 18,x);
-		Print_DrawIntAt(20, 19,(x/8));
-		Print_DrawIntAt(20, 20,y);
-		Print_DrawIntAt(20, 21,((y/8)*32));
-		Print_DrawIntAt(20, 22,((y/8)*32) + (x/8));
-		Print_DrawIntAt(20, 23,pos); */
+		/* 		Print_DrawIntAt(20, 18,x);
+				Print_DrawIntAt(20, 19,(x/8));
+				Print_DrawIntAt(20, 20,y);
+				Print_DrawIntAt(20, 21,((y/8)*32));
+				Print_DrawIntAt(20, 22,((y/8)*32) + (x/8));
+				Print_DrawIntAt(20, 23,pos); */
 
-		// Modifico al volo il livello di gioco, cosi non sono costretto 
+		// Modifico al volo il livello di gioco, cosi non sono costretto
 		// a creare una cache dei livelli.
 		replacementItemInLevel(x, y, EMPTY_ITEM);
 
@@ -620,37 +637,43 @@ bool interact(u8 x, u8 y)
 		// TODO: Fare attenzione che il blocco che andiamo a spostare non vada sopra altri oggetti
 		//       inoltre si deve gestire anche la spinta che va verso sinistra.
 		Print_DrawTextAt(0, 23, "                            ");
-		Print_DrawIntAt(0, 23,x);
-		if(g_PrevDirection == INPUT_RIGHT)
-			if(getTile(x + 9, y) == 0) {
+		Print_DrawIntAt(0, 23, x);
+		if (g_PrevDirection == INPUT_RIGHT)
+			if (getTile(x + 9, y) == 0)
+			{
 				setTile(x, y, EMPTY_ITEM);
 				setTile(x + 9, y, TILE_BLOCK_TEST);
 			}
-		else if(g_PrevDirection == INPUT_LEFT) {
-			if(getTile(x, y) == 0) {
-				setTile(x, y, EMPTY_ITEM);
-				setTile(x, y, TILE_BLOCK_TEST);
+			else if (g_PrevDirection == INPUT_LEFT)
+			{
+				if (getTile(x, y) == 0)
+				{
+					setTile(x, y, EMPTY_ITEM);
+					setTile(x, y, TILE_BLOCK_TEST);
+				}
 			}
-		}
 		return TRUE;
 	}
 
 	updateScore();
-	
+
 	return FALSE;
 }
 
 /**
  * @brief Routine per raccogliere le monete
-*/
+ * @param u8 x Coordinata X
+ * @param u8 y Coordinata Y
+ * @return TRUE se è stata raccolta una moneta
+ */
 bool getMoney(u8 x, u8 y)
 {
 	u8 tile = getTile(x, y);
-	
+
 	switch (tile)
 	{
 	case TILE_MONEY:
-		// Modifico al volo il livello di gioco, cosi non sono costretto 
+		// Modifico al volo il livello di gioco, cosi non sono costretto
 		// a creare una cache dei livelli.
 		replacementItemInLevel(x, y, EMPTY_ITEM);
 
@@ -664,20 +687,22 @@ bool getMoney(u8 x, u8 y)
 
 /**
  * @brief Aggiorna il punteggio
-*/
+ * @param void
+ * @return void
+ */
 void updateScore()
 {
 	// Stampa il livello di gioco
 	Print_SetPosition(0, 0);
 	Print_DrawText("LEVEL:");
-	String_Format(g_StrBuffer, "%02i",  g_CurrRoomIdx);
+	String_Format(g_StrBuffer, "%02i", g_CurrRoomIdx);
 	Print_SetPosition(6, 0);
 	Print_DrawText(g_StrBuffer);
 
 	// Stampa il punteggio
 	Print_SetPosition(10, 0);
 	Print_DrawText("SCORE:");
-	String_Format(g_StrBuffer, "%04i",  g_Player.Score);
+	String_Format(g_StrBuffer, "%04i", g_Player.Score);
 	Print_SetPosition(16, 0);
 	Print_DrawText(g_StrBuffer);
 
@@ -695,17 +720,17 @@ void updateScore()
  * @param u8 y Coordinata y
  * @param u8 tile Tile da inserire nell'arrya
  * @return void
-*/
-void replacementItemInLevel(u8 x, u8 y, u8 tile) {	
-	u16 pos =  ((y/8)*32) + (x/8); 
+ */
+void replacementItemInLevel(u8 x, u8 y, u8 tile)
+{
+	u16 pos = ((y / 8) * 32) + (x / 8);
 	g_Levels[g_CurrRoomIdx].Layout[pos] = tile;
 }
-
-
 
 /**
  * @brief Si disegna il livello di gioco
  * @param u8 levelIdx Indice del livello da visualizzare
+ * @return void
  */
 void drawLevel(u8 levelIdx)
 {
@@ -830,6 +855,7 @@ void drawLevel(u8 levelIdx)
  * @brief Inizializza il pawn
  * @param struct Character *ply
  * @param u8 id - id del
+ * @return void
  */
 void initCharacter(struct Character *ply, u8 id)
 {
@@ -848,6 +874,7 @@ void initCharacter(struct Character *ply, u8 id)
 /**
  * @brief Aggiorna il pawn
  * @param struct Character *ply
+ * @return void
  */
 void updateCharacter(struct Character *ply)
 {
@@ -911,12 +938,12 @@ void updateCharacter(struct Character *ply)
 	else if (ply->Input & INPUT_GET)
 	{
 		// Valuta se è possibile effettuare una interazione
-		if (interact(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12)  || 
-			interact(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4)   ||
-			interact(g_Player.Pawn.PositionX + 16, g_Player.Pawn.PositionY + 12) || 
-			interact(g_Player.Pawn.PositionX + 16, g_Player.Pawn.PositionY + 4)  ||
-			interact(g_Player.Pawn.PositionX , g_Player.Pawn.PositionY + 12) || 
-			interact(g_Player.Pawn.PositionX , g_Player.Pawn.PositionY + 4))
+		if (interact(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) ||
+			interact(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4) ||
+			interact(g_Player.Pawn.PositionX + 16, g_Player.Pawn.PositionY + 12) ||
+			interact(g_Player.Pawn.PositionX + 16, g_Player.Pawn.PositionY + 4) ||
+			interact(g_Player.Pawn.PositionX, g_Player.Pawn.PositionY + 12) ||
+			interact(g_Player.Pawn.PositionX, g_Player.Pawn.PositionY + 4))
 		{
 			// TODO: vediamo!
 		}
@@ -924,7 +951,6 @@ void updateCharacter(struct Character *ply)
 
 	// Valuta se è presente una manota ed eventualmente la raccoglie
 	getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) || getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4);
-
 
 	// Update player animation & physics
 	u8 act = ACTION_IDLE;
@@ -943,6 +969,8 @@ void updateCharacter(struct Character *ply)
 
 /**
  * @brief Aggiorna la posizione dei nemici
+ * @param void
+ * @return void
  */
 void updateEnemy()
 {
@@ -990,6 +1018,10 @@ void updateEnemy()
 
 /**
  * @brief VDP_LoadSpritePattern16_VSym
+ * @param u8 src Indirizzo dello sprite pattern
+ * @param u8 index Indice del primo modello di sprite VRAM da copiare (in modalità 16x16, si possono usare solo multipli di 4).
+ * @param u8 count Numero di patterns to copy (in modalità 16x16, si possono usare solo multipli di 4).
+ * @return void
  */
 void VDP_LoadSpritePattern16_VSym(const u8 *src, u8 index, u8 count)
 {
@@ -1098,13 +1130,13 @@ bool State_Initialize()
 	// Funzione: initLife
 	// Inizializza le vite del giocatore
 	initLife();
-	
+
 	// TODO: Quando importo le funzionalità della libreria clock
 	//		 viene gnerato un errore del tipo ?ASlink-Warning-Undefined Global
 	//       chiedere se è possibili utilizzarle su msx 1
 	// Funzione: rtcInizialize
 	// Inizializza il modulo RTC
-	//rtcInizialize();
+	// rtcInizialize();
 
 	// Funzione: DrawLevel
 	// Inizzializza il livello di gioco
@@ -1140,18 +1172,16 @@ bool State_Game()
 	//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 	updateCharacter(&g_Player);
 
-	// Funzione: ReadInoutControl
+	// Funzione: ReadInputControl
 	// Aggiurnamento input da tastiera
-	readInoutControl();
+	readInputControl();
 
-
-
-	// TODO: Aggiornamento della posizione dei nemici, da migliorare!!!
+	// TODO: Aggiornamento della posizione dei nemici, da migliorare!!! g_FrameCounter
 	if (g_FrameCounter % 2 == 0)
 	{
 		// Funzione: updateEnemy
 		// Aggiorna il rendering dei nemici.
-		updateEnemy();	
+		updateEnemy();
 
 		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
 		// Funzione: physicsCollisionPlayerAndEnemy
@@ -1159,7 +1189,7 @@ bool State_Game()
 		//
 		// Parametri:
 		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
-		physicsCollisionPlayerAndEnemy(&g_Player);	
+		physicsCollisionPlayerAndEnemy(&g_Player);
 	}
 	g_FrameCounter++;
 
@@ -1181,7 +1211,12 @@ bool State_Pause()
 // GESTIONE DELLA TATIERA E JOY
 //=============================================================================
 
-void readInoutControl()
+/**
+ * @brief Si effettua la lettura della tastiera
+ * @param void
+ * @return void
+ */
+void readInputControl()
 {
 	u8 row8 = Keyboard_Read(8);
 
