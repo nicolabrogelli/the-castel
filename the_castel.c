@@ -111,6 +111,7 @@ void displayLife();
 bool removeLife();
 void physicsCollisionPlayerAndEnemy(struct Character *ply);
 void replacementItemInLevel(u8 x, u8 y, u8 tile);
+void changeLevel(u8 x, u8 y, u8 key, u8 door);
 
 //.............................................................................
 // Player 1 data
@@ -200,10 +201,7 @@ u8 g_PrevDirection = 0;
 u8 g_FrameCounter = 0;
 u8 g_ReverseCount = 0;
 u8 g_CurrRoomIdx = 0;
-c8 g_StrBuffer[16];
 
-u8 g_VBlank = 0;
-u8 g_Frame = 0;
 
 unsigned char g_Inventory[MAX_ITEM_INVENTORY] = {0, 0, 0, 0, 0};
 unsigned char g_Lives[MAX_LIVES] = {0, 0, 0};
@@ -230,7 +228,7 @@ const struct LevelDefinition g_Levels[] = {
 	{(32 - LEVEL001_WIDTH) / 2, (24 - LEVEL001_HEIGHT) / 2, LEVEL001_WIDTH, LEVEL001_HEIGHT, g_Level001, "Livello 1", 1, 0, 2},
 	{(32 - LEVEL002_WIDTH) / 2, (24 - LEVEL002_HEIGHT) / 2, LEVEL002_WIDTH, LEVEL002_HEIGHT, g_Level002, "Livello 2", 2, 0, 1},
 	{(32 - LEVEL003_WIDTH) / 2, (24 - LEVEL003_HEIGHT) / 2, LEVEL003_WIDTH, LEVEL003_HEIGHT, g_Level003, "Livello 3", 3, 1, 2},
-	{(32 - LEVEL018_WIDTH) / 2, (24 - LEVEL018_HEIGHT) / 2, LEVEL018_WIDTH, LEVEL018_HEIGHT, g_Level018, "Livello 18", 4, 1, 1},
+	{(32 - LEVEL018_WIDTH) / 2, (24 - LEVEL018_HEIGHT) / 2, LEVEL018_WIDTH, LEVEL018_HEIGHT, g_Level018, "Livello 18", 4, 1, 2},
 };
 
 //=============================================================================
@@ -276,9 +274,10 @@ bool addLife()
  */
 bool removeLife()
 {
-		//for (u8 i = MAX_LIVES - 1; i >= 0; i--)
+	//for (u8 i = (MAX_LIVES - 1); i >= 0; i--)		
 	for (u8 i = 0; i < MAX_LIVES; i++)
 	{
+		//Print_DrawIntAt(23, 18, i);
 		if (g_Lives[i] == TILE_HEART)
 		{
 			g_Lives[i] = EMPTY_ITEM;
@@ -516,11 +515,6 @@ bool physicsCollisionEnemy(u8 x, u8 y)
  */
 void physicsCollisionPlayerAndEnemy(struct Character *ply)
 {
-
-/* 	String_Format(g_StrBuffer, "%03i", g_FrameCounter);
-	Print_SetPosition(20, 18);
-	Print_DrawText(g_StrBuffer); */
-
 	if (g_ReverseCount > 0)
 		g_ReverseCount--;
 	else
@@ -538,8 +532,8 @@ void physicsCollisionPlayerAndEnemy(struct Character *ply)
 			if (sqrtDist < 13 * 13)
 			{
 				g_ReverseCount = 30;
-				removeLife();
-				displayLife();
+				if(removeLife() == TRUE)
+					displayLife();
 				//VDP_SetColor(COLOR_DARK_RED);
 			}
 			else
@@ -591,26 +585,19 @@ bool interact(u8 x, u8 y)
 	case TILE_DOOR1:
 		if (hasItemInInventory(TILE_KEY1))
 		{
-			removeItemFromInventory(TILE_KEY1);
-			replacementItemInLevel(x, y, TILE_DOOR0);
-			drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
+			changeLevel(x, y, TILE_KEY1, TILE_DOOR1);
 		}
 		return TRUE;
 	case TILE_DOOR2:
 		if (hasItemInInventory(TILE_KEY2))
 		{
-			removeItemFromInventory(TILE_KEY2);
-			replacementItemInLevel(x, y, TILE_DOOR0);
-			drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
+			changeLevel(x, y, TILE_KEY2, TILE_DOOR2);
 		}
 		return TRUE;
 	case TILE_DOOR3:
 		if (hasItemInInventory(TILE_KEY3))
 		{
-			removeItemFromInventory(TILE_KEY3);
-			reorganizeInventory();
-			replacementItemInLevel(x, y, TILE_DOOR0);
-			drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
+			changeLevel(x, y, TILE_KEY3, TILE_DOOR0);
 		}
 		return TRUE;
 	case TILE_DOOR_PREV:
@@ -661,6 +648,21 @@ bool interact(u8 x, u8 y)
 }
 
 /**
+ * @brief Effettua il cambio di livello
+ * @param u8 x Coordinata x
+ * @param u8 y Coordinata y
+ * @param u8 key Tile della chiave
+ * @param u8 door Tile della porta
+ * @return void
+*/
+void changeLevel(u8 x, u8 y, u8 key, u8 door) {
+	removeItemFromInventory(key);
+	reorganizeInventory();
+	replacementItemInLevel(x, y, door);
+	drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
+}
+
+/**
  * @brief Routine per raccogliere le monete
  * @param u8 x Coordinata X
  * @param u8 y Coordinata Y
@@ -692,26 +694,26 @@ bool getMoney(u8 x, u8 y)
  */
 void updateScore()
 {
+	c8 StrLevel[16];
+	c8 StrScore[16];
+
 	// Stampa il livello di gioco
 	Print_SetPosition(0, 0);
 	Print_DrawText("LEVEL:");
-	String_Format(g_StrBuffer, "%02i", g_CurrRoomIdx);
+	String_Format(StrLevel, "%02i", g_CurrRoomIdx);
 	Print_SetPosition(6, 0);
-	Print_DrawText(g_StrBuffer);
+	Print_DrawText(StrLevel);
 
 	// Stampa il punteggio
 	Print_SetPosition(10, 0);
 	Print_DrawText("SCORE:");
-	String_Format(g_StrBuffer, "%04i", g_Player.Score);
+	String_Format(StrScore, "%04i", g_Player.Score);
 	Print_SetPosition(16, 0);
-	Print_DrawText(g_StrBuffer);
+	Print_DrawText(StrScore);
 
 	// Stampa il punteggio
 	Print_SetPosition(22, 0);
 	Print_DrawText("LIFE:");
-	/* String_Format(g_StrBuffer, "%01i",  g_Player.Life);
-	Print_SetPosition(27, 0);
-	Print_DrawText(g_StrBuffer); */
 }
 
 /**
@@ -937,20 +939,34 @@ void updateCharacter(struct Character *ply)
 	}
 	else if (ply->Input & INPUT_GET)
 	{
-		// Valuta se è possibile effettuare una interazione
-		if (interact(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) ||
-			interact(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4) ||
+		// TODO:  Da ottimizzare		
+		// Attenzione l'aggiunta dell'iterazione crea dei rallentamenti al gioco
+		// 1) Il primo rigo si utilizza nteagire com gli elementi che is trovano sul piano di gioco
+		// 2) La seconda riga si utilizza per inteagire com gli elementi che is trovano una tile sopra il piano di gioco
+		// 3,4,5,6) Sono solamente per test, non devono essere abilitate per il momento
+
+		if (interact(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) /*||
+			interact(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4)  ||
 			interact(g_Player.Pawn.PositionX + 16, g_Player.Pawn.PositionY + 12) ||
 			interact(g_Player.Pawn.PositionX + 16, g_Player.Pawn.PositionY + 4) ||
 			interact(g_Player.Pawn.PositionX, g_Player.Pawn.PositionY + 12) ||
-			interact(g_Player.Pawn.PositionX, g_Player.Pawn.PositionY + 4))
+			interact(g_Player.Pawn.PositionX, g_Player.Pawn.PositionY + 4) */
+			)
 		{
-			// TODO: vediamo!
+			// TODO: non faccio nulla!
 		}
 	}
 
 	// Valuta se è presente una manota ed eventualmente la raccoglie
-	getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) || getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4);
+	// TODO: Da ottimizzare
+	// Attenzione l'aggiunta dell'iterazione crea dei rallentamenti al gioco
+	// 1) La prima parte si utilizza per inteagire com gli elementi che is trovano una tile sopra il piano di gioco
+	// 2) La seconda parte si utilizza nteagire com gli elementi che is trovano sul piano di gioco
+	if(getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) ||
+	   getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4)
+	) {
+		// TODO: non faccio nulla!
+	}
 
 	// Update player animation & physics
 	u8 act = ACTION_IDLE;
