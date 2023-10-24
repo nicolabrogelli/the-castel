@@ -92,7 +92,7 @@ Target = "ROM_32K";
 //   - VBLANK     V-blank handler
 //   - VHBLANK    V-blank and h-blank handler (V9938 or V9958)
 //   - V9990      v-blank, h-blank and command end handler (V9990)
-// CustomISR = "VBLANK";
+//CustomISR = "VBLANK";
 
 //-- Use automatic banked call and trampoline functions (boolean). For mapped ROM
 // BankedCall = 0;
