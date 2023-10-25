@@ -29,7 +29,8 @@
 #include "data/level/level001.h"
 #include "data/level/level002.h"
 #include "data/level/level003.h"
-#include "data/level/level018.h"
+#include "data/level/level004.h"
+#include "data/level/level005.h"
 
 //=============================================================================
 // DEFINES
@@ -109,6 +110,7 @@ void initLife();
 bool addLife();
 void displayLife();
 bool removeLife();
+void reorganizeLife();
 void physicsCollisionPlayerAndEnemy(struct Character *ply);
 void replacementItemInLevel(u8 x, u8 y, u8 tile);
 void changeLevel(u8 x, u8 y, u8 key, u8 door);
@@ -228,7 +230,8 @@ const struct LevelDefinition g_Levels[] = {
 	{(32 - LEVEL001_WIDTH) / 2, (24 - LEVEL001_HEIGHT) / 2, LEVEL001_WIDTH, LEVEL001_HEIGHT, g_Level001, "Livello 1", 1, 0, 2},
 	{(32 - LEVEL002_WIDTH) / 2, (24 - LEVEL002_HEIGHT) / 2, LEVEL002_WIDTH, LEVEL002_HEIGHT, g_Level002, "Livello 2", 2, 0, 1},
 	{(32 - LEVEL003_WIDTH) / 2, (24 - LEVEL003_HEIGHT) / 2, LEVEL003_WIDTH, LEVEL003_HEIGHT, g_Level003, "Livello 3", 3, 1, 2},
-	{(32 - LEVEL018_WIDTH) / 2, (24 - LEVEL018_HEIGHT) / 2, LEVEL018_WIDTH, LEVEL018_HEIGHT, g_Level018, "Livello 18", 4, 1, 2},
+	{(32 - LEVEL004_WIDTH) / 2, (24 - LEVEL004_HEIGHT) / 2, LEVEL004_WIDTH, LEVEL004_HEIGHT, g_Level004, "Livello 4", 4, 0, 2},
+	{(32 - LEVEL005_WIDTH) / 2, (24 - LEVEL004_HEIGHT) / 2, LEVEL005_WIDTH, LEVEL005_HEIGHT, g_Level005, "Livello 5", 4, 1, 2},
 };
 
 //=============================================================================
@@ -288,6 +291,36 @@ bool removeLife()
 	}
 	return FALSE;
 }
+
+/**
+ * @brief Riorganizza le vite
+ * @param none
+ * @return void
+*/
+void reorganizeLife() {
+	unsigned char life[MAX_LIVES];
+
+	Mem_Set(EMPTY_ITEM, life, (3 * sizeof(life[0])));
+
+	// Crea una copia delle vite
+	for (u8 i = 0; i < MAX_LIVES; i++)
+	{
+		if (g_Lives[i] != EMPTY_ITEM)
+			life[i] = g_Lives[i];
+	}
+
+	// Svuota le vite
+	Mem_Set(EMPTY_ITEM, g_Lives, (3 * sizeof(g_Lives[0])));
+
+	// Riempie le vite
+	for (u8 i = 0; i < MAX_LIVES; i++)
+	{
+		if (life[i] != EMPTY_ITEM)
+			addLife();
+	}
+}
+
+
 
 /**
  * @brief Visualizza tutte le vite disponibili
@@ -532,8 +565,10 @@ void physicsCollisionPlayerAndEnemy(struct Character *ply)
 			if (sqrtDist < 13 * 13)
 			{
 				g_ReverseCount = 30;
-				if(removeLife() == TRUE)
+				if(removeLife() == TRUE) {
+					reorganizeLife();
 					displayLife();
+				}
 				//VDP_SetColor(COLOR_DARK_RED);
 			}
 			else
@@ -585,13 +620,13 @@ bool interact(u8 x, u8 y)
 	case TILE_DOOR1:
 		if (hasItemInInventory(TILE_KEY1))
 		{
-			changeLevel(x, y, TILE_KEY1, TILE_DOOR1);
+			changeLevel(x, y, TILE_KEY1, TILE_DOOR0);
 		}
 		return TRUE;
 	case TILE_DOOR2:
 		if (hasItemInInventory(TILE_KEY2))
 		{
-			changeLevel(x, y, TILE_KEY2, TILE_DOOR2);
+			changeLevel(x, y, TILE_KEY2, TILE_DOOR0);
 		}
 		return TRUE;
 	case TILE_DOOR3:
@@ -700,7 +735,7 @@ void updateScore()
 	// Stampa il livello di gioco
 	Print_SetPosition(0, 0);
 	Print_DrawText("LEVEL:");
-	String_Format(StrLevel, "%02i", g_CurrRoomIdx);
+	String_Format(StrLevel, "%02i", g_CurrRoomIdx + 1);
 	Print_SetPosition(6, 0);
 	Print_DrawText(StrLevel);
 
