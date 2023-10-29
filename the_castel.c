@@ -24,7 +24,12 @@
 //=============================================================================
 #include "the_castel.h"
 #include "data/bg_tileset.h"
+
+#if CAVALIERE
 #include "data/sprt_player.h"
+#else
+#include "data/sprt_player_alt.h"
+#endif
 
 #include "data/level/level001.h"
 #include "data/level/level002.h"
@@ -147,15 +152,25 @@ const Game_Frame g_PlayerFramesIdle[] =
 		{IDLE_PLAYER_FRAME_2, 24, NULL},
 };
 
+#if CAVALIERE
 // Animazione Move
 // Ogni riga descrive una parte dell'animazione
 const Game_Frame g_PlayerFramesMove[] =
 	{
-		{MOVE_PLAYER_FRAME_0, 4, NULL},
-		{MOVE_PLAYER_FRAME_1, 4, NULL},
-		{MOVE_PLAYER_FRAME_2, 4, NULL},
-		{MOVE_PLAYER_FRAME_3, 4, NULL},
+		{MOVE_PLAYER_FRAME_0, 10, NULL},
+		{MOVE_PLAYER_FRAME_1, 10, NULL},  
+		//{MOVE_PLAYER_FRAME_2, 4, NULL},
+		//{MOVE_PLAYER_FRAME_3, 4, NULL},  RIVEDERE
 };
+#else
+const Game_Frame g_PlayerFramesMove[] =
+	{
+		{MOVE_PLAYER_FRAME_0, 4, NULL},
+		{MOVE_PLAYER_FRAME_1, 4, NULL}, 
+		{MOVE_PLAYER_FRAME_2, 4, NULL},
+		{MOVE_PLAYER_FRAME_3, 4, NULL},  
+	};
+#endif
 
 // Animazione Jump
 // Ogni riga descrive una parte dell'animazione
@@ -203,7 +218,6 @@ u8 g_PrevDirection = 0;
 u8 g_FrameCounter = 0;
 u8 g_ReverseCount = 0;
 u8 g_CurrRoomIdx = 0;
-
 
 unsigned char g_Inventory[MAX_ITEM_INVENTORY] = {0, 0, 0, 0, 0};
 unsigned char g_Lives[MAX_LIVES] = {0, 0, 0};
@@ -277,10 +291,10 @@ bool addLife()
  */
 bool removeLife()
 {
-	//for (u8 i = (MAX_LIVES - 1); i >= 0; i--)		
+	// for (u8 i = (MAX_LIVES - 1); i >= 0; i--)
 	for (u8 i = 0; i < MAX_LIVES; i++)
 	{
-		//Print_DrawIntAt(23, 18, i);
+		// Print_DrawIntAt(23, 18, i);
 		if (g_Lives[i] == TILE_HEART)
 		{
 			g_Lives[i] = EMPTY_ITEM;
@@ -296,8 +310,9 @@ bool removeLife()
  * @brief Riorganizza le vite
  * @param none
  * @return void
-*/
-void reorganizeLife() {
+ */
+void reorganizeLife()
+{
 	unsigned char life[MAX_LIVES];
 
 	Mem_Set(EMPTY_ITEM, life, (3 * sizeof(life[0])));
@@ -319,8 +334,6 @@ void reorganizeLife() {
 			addLife();
 	}
 }
-
-
 
 /**
  * @brief Visualizza tutte le vite disponibili
@@ -565,11 +578,12 @@ void physicsCollisionPlayerAndEnemy(struct Character *ply)
 			if (sqrtDist < 13 * 13)
 			{
 				g_ReverseCount = 30;
-				if(removeLife() == TRUE) {
+				if (removeLife() == TRUE)
+				{
 					reorganizeLife();
 					displayLife();
 				}
-				//VDP_SetColor(COLOR_DARK_RED);
+				// VDP_SetColor(COLOR_DARK_RED);
 			}
 			else
 			{
@@ -586,7 +600,7 @@ void physicsCollisionPlayerAndEnemy(struct Character *ply)
  */
 void setColorTiles()
 {
-	VDP_FillVRAM_16K(0x60, g_ScreenColorLow + 8, 2);  // ROSSO CHIARO
+	VDP_FillVRAM_16K(0X80, g_ScreenColorLow + 8, 2);  // VERDE 0XC0 - ROSSO CHIARO 0x60
 	VDP_FillVRAM_16K(0xA0, g_ScreenColorLow + 12, 1); // GIALLO SCURO
 	VDP_FillVRAM_16K(0xE0, g_ScreenColorLow + 18, 2); // GRIGIO
 }
@@ -689,8 +703,9 @@ bool interact(u8 x, u8 y)
  * @param u8 key Tile della chiave
  * @param u8 door Tile della porta
  * @return void
-*/
-void changeLevel(u8 x, u8 y, u8 key, u8 door) {
+ */
+void changeLevel(u8 x, u8 y, u8 key, u8 door)
+{
 	removeItemFromInventory(key);
 	reorganizeInventory();
 	replacementItemInLevel(x, y, door);
@@ -930,16 +945,17 @@ void updateCharacter(struct Character *ply)
 		{
 			g_PrevDirection = INPUT_RIGHT;
 
-			// Funzione: VDP_LoadSpritePattern
-			// Carica lo sprite nella VRAM. [MSX1/2/2+/TR]
-			//
-			// Parametri:
-			//   addr  - Indirizzo dello sprite patterns (in RAM/ROM).
-			//   index - Indice del primo modello di sprite VRAM da copiare (in modalità 16x16, si possono usare solo multipli di 4).
-			//   count - Numero di patterns to copy (in modalità 16x16, si possono usare solo multipli di 4).
+#if CAVALIERE
+			// TODO: Impiega troppo tempo per eseguire queste tre operazioni!!!
+			// TODO: Vedere se reimplementare
+			VDP_LoadSpritePattern16_VSym(g_DataSprtLayer, 4 * 4 * 0, 4 * 4 * 2);			
+			//VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_4, 4 * 4 * 2, 4 * 4 * 3);
+			//VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_9, 4 * 4 * 5, 4 * 4 * 2);
+#else
 			VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_1, 4 * 4 * 0, 4 * 4 * 2);
 			VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_4, 4 * 4 * 2, 4 * 4 * 3);
 			VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_9, 4 * 4 * 5, 4 * 4 * 2);
+#endif
 		}
 	}
 	else if (ply->Input & INPUT_LEFT)
@@ -951,10 +967,24 @@ void updateCharacter(struct Character *ply)
 		{
 			g_PrevDirection = INPUT_LEFT;
 
-			// TODO: Impiega troppo tempo per eseguire queste tre operazioni!!!
-			VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_1, 4 * 4 * 0, 4 * 4 * 2);
+#if CAVALIERE
+			// Funzione: VDP_LoadSpritePattern
+			// Carica lo sprite nella VRAM. [MSX1/2/2+/TR]
+			//
+			// Parametri:
+			//   addr  - Indirizzo dello sprite patterns (in RAM/ROM).
+			//   index - Indice del primo modello di sprite VRAM da copiare (in modalità 16x16, si possono usare solo multipli di 4).
+			//   count - Numero di patterns to copy (in modalità 16x16, si possono usare solo multipli di 4).
+			VDP_LoadSpritePattern(g_DataSprtLayer, 4 * 4 * 0, 4 * 4 * 2);
+			//VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_4, 4 * 4 * 2, 4 * 4 * 3);
+			//VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_9, 4 * 4 * 5, 4 * 4 * 2);
+#else
+			// TODO: Vedere se reimplementare
+			VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_1, 4 * 4 * 0, 4 * 4 * 2);			
 			VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_4, 4 * 4 * 2, 4 * 4 * 3);
 			VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_9, 4 * 4 * 5, 4 * 4 * 2);
+
+#endif
 		}
 	}
 	else
@@ -974,7 +1004,7 @@ void updateCharacter(struct Character *ply)
 	}
 	else if (ply->Input & INPUT_GET)
 	{
-		// TODO:  Da ottimizzare		
+		// TODO:  Da ottimizzare
 		// Attenzione l'aggiunta dell'iterazione crea dei rallentamenti al gioco
 		// 1) Il primo rigo si utilizza nteagire com gli elementi che is trovano sul piano di gioco
 		// 2) La seconda riga si utilizza per inteagire com gli elementi che is trovano una tile sopra il piano di gioco
@@ -986,7 +1016,7 @@ void updateCharacter(struct Character *ply)
 			interact(g_Player.Pawn.PositionX + 16, g_Player.Pawn.PositionY + 4) ||
 			interact(g_Player.Pawn.PositionX, g_Player.Pawn.PositionY + 12) ||
 			interact(g_Player.Pawn.PositionX, g_Player.Pawn.PositionY + 4) */
-			)
+		)
 		{
 			// TODO: non faccio nulla!
 		}
@@ -997,9 +1027,9 @@ void updateCharacter(struct Character *ply)
 	// Attenzione l'aggiunta dell'iterazione crea dei rallentamenti al gioco
 	// 1) La prima parte si utilizza per inteagire com gli elementi che is trovano una tile sopra il piano di gioco
 	// 2) La seconda parte si utilizza nteagire com gli elementi che is trovano sul piano di gioco
-	if(getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) ||
-	   getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4)
-	) {
+	if (getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) ||
+		getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4))
+	{
 		// TODO: non faccio nulla!
 	}
 

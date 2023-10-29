@@ -1,3 +1,8 @@
+
+
+#define CAVALIERE           1
+
+
 #define EMPTY_ITEM 		  	0
 #define TILE_EMPTY 		  	0
 #define TILE_DOOR0          68
