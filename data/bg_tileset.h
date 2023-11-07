@@ -1147,7 +1147,7 @@ const unsigned char g_DataBackground[] =
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
-// Sprite[123] (offset:984)
+// Sprite[123] (offset:984) // NON MODIFICARE
 	0xFF, /* ######## */ 
 	0x81, /* #......# */ 
 	0xBF, /* #.###### */ 
@@ -1156,7 +1156,7 @@ const unsigned char g_DataBackground[] =
 	0xBF, /* #.###### */ 
 	0x81, /* #......# */ 
 	0xFF, /* ######## */ 
-// Sprite[124] (offset:992)
+// Sprite[124] (offset:992) // NON MODIFICARE
 	0xFF, /* ######## */ 
 	0x81, /* #......# */ 
 	0xBF, /* #.###### */ 
@@ -1165,7 +1165,7 @@ const unsigned char g_DataBackground[] =
 	0xBF, /* #.###### */ 
 	0xBF, /* #.###### */ 
 	0xFF, /* ######## */ 
-// Sprite[125] (offset:1000)
+// Sprite[125] (offset:1000) // NON MODIFICARE
 	0xFF, /* ######## */ 
 	0xC3, /* ##....## */ 
 	0x87, /* #....### */ 
@@ -1174,7 +1174,7 @@ const unsigned char g_DataBackground[] =
 	0x87, /* #....### */ 
 	0xC3, /* ##....## */ 
 	0xFF, /* ######## */ 
-// Sprite[126] (offset:1008)
+// Sprite[126] (offset:1008) // NON MODIFICARE
 	0xC3, /* ##....## */ 
 	0xB9, /* #.###..# */ 
 	0xA1, /* #.#....# */ 
@@ -1183,7 +1183,7 @@ const unsigned char g_DataBackground[] =
 	0xE7, /* ###..### */ 
 	0xFF, /* ######## */ 
 	0xE7, /* ###..### */ 
-// Sprite[127] (offset:1016)
+// Sprite[127] (offset:1016) // NON MODIFICARE
 	0xFF, /* ######## */ 
 	0x83, /* #.....## */ 
 	0x81, /* #......# */ 
@@ -1201,15 +1201,15 @@ const unsigned char g_DataBackground[] =
 	0x00, /* #......# */ 
 	0x00, /* ######## */ 
 	0x00, /* ######## */ 
-// Sprite[129] (offset:1032)
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */  
+// Sprite[129] (offset:1032) // NON MODIFICARE
+	0xFF, /* ######## */ 
+	0x83, /* #.....## */ 
+	0x81, /* #......# */ 
+	0x99, /* #..##..# */ 
+	0x83, /* #.....## */ 
+	0x97, /* #..#.### */ 
+	0x9B, /* #..##.## */ 
+	0xFF, /* ######## */ 
 // Sprite[130] (offset:1040)
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
