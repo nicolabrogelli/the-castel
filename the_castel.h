@@ -18,10 +18,12 @@
 #define TILE_STAR_POS_ENEMY 124
 #define TILE_START_POS 		127
 #define TILE_POS_GHOST      128
+#define TILE_POS_SPIDER     129
 #define TILE_BLOCK_TEST     144
 
 #define MAX_ENEMY          3
 #define MAX_GHOST          3
+#define MAX_SPIDER         3
 #define MAX_SLIDING_PLATFORM 3
 #define MAX_ITEM_INVENTORY 5
 #define MAX_LIVES          3
