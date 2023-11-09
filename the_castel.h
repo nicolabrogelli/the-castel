@@ -1,5 +1,3 @@
-
-
 #define CAVALIERE           1
 
 
@@ -11,6 +9,7 @@
 #define TILE_DOOR3          74
 #define TILE_DOOR_PREV      71
 #define TILE_HEART          79 
+#define TILE_AMPHORA        95
 #define TILE_KEY1           96
 #define TILE_KEY2           97
 #define TILE_KEY3           98

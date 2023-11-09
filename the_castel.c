@@ -39,9 +39,7 @@
 #include "data/level/level004.h"
 #include "data/level/level005.h"
 #include "data/level/level006.h"
-
-#include "font/font_mgl_sample6.h"
-#include "font/font_mgl_sample8.h"
+#include "data/level/level007.h"
 
 //=============================================================================
 // DEFINES
@@ -52,9 +50,6 @@
 #define GROUND 192
 #define JOY_PORT_1 0b00000011
 #define JOY_PORT_2 0b01001100
-
-#define MSX_GL6 "\x01\x02\x03\x04\x05\x06"
-#define MSX_GL8 "\x02\x03\x04\x05"
 
 //
 enum INPUT_ACTION
@@ -86,74 +81,6 @@ struct CharacterEnemy
 	i8 VelocityY;
 	u8 State;
 	int Direction;
-};
-
-// Index of all menu pages
-enum MENU_PAGES
-{
-	MENU_MAIN = 0, // Main page
-	MENU_OPTION,   // Options page
-	MENU_ALIGN,	   // Align page
-	MENU_MAX,	   // Number of menu
-};
-
-// Prototype of functions used by the menu entries
-const c8 *MenuAction_Screen(u8 op, i8 value);
-const c8 *MenuAction_Start(u8 op, i8 value);
-
-typedef struct
-{
-	const c8 *Name;
-	u8 Mode;
-	u8 Width;
-	const u8 *Font;
-	const c8 *Title;
-	u8 Color;
-} ModeInfo;
-
-// Entries description for the Main menu
-const MenuItem g_MenuMain[] =
-	{
-		{"Start", MENU_ITEM_ACTION, MenuAction_Start, 1}, // Entry to start a game (will trigger MenuAction_Start with value equal to '1')
-		{"Options", MENU_ITEM_GOTO, NULL, MENU_OPTION},	  // Entry to go to Option menu page
-		{"Align", MENU_ITEM_GOTO, NULL, MENU_ALIGN},	  // Entry to go to Align menu page
-		{NULL, MENU_ITEM_EMPTY, NULL, 0},				  // Blank entry to create a gap
-		{"Exit", MENU_ITEM_ACTION, MenuAction_Start, 0},  // Entry to exit the game (will trigger MenuAction_Start with value equal to '0')
-};
-
-// Entries description for the Option menu
-MenuItem g_MenuOption[] =
-	{
-		{"Mode", MENU_ITEM_ACTION, MenuAction_Screen, 0}, // Entry to change the screen mode (will trigger MenuAction_Screen)
-		{"Integer", MENU_ITEM_INT, &g_Integer, 0},		  // Entry to edit an integer
-		{"Boolean", MENU_ITEM_BOOL, &g_Boolean, 0},		  // Entry to edit a boolean
-		{NULL, MENU_ITEM_EMPTY, NULL, 0},				  // Blank entry to create a gap
-		{"Back", MENU_ITEM_GOTO, NULL, MENU_MAIN},		  // Entry to go back to the main menu
-};
-
-// Entries description for the Align menu
-MenuItem g_MenuAlign[] =
-	{
-		{"Left", MENU_ITEM_TEXT + MENU_ITEM_ALIGN_LEFT, NULL, 0},	  // Entry display a text aligned to left
-		{"Center", MENU_ITEM_TEXT + MENU_ITEM_ALIGN_CENTER, NULL, 0}, // Entry display a text aligned to center
-		{"Right", MENU_ITEM_TEXT + MENU_ITEM_ALIGN_RIGHT, NULL, 0},	  // Entry display a text aligned to right
-		{NULL, MENU_ITEM_EMPTY, NULL, 0},							  // Blank entry to create a gap
-		{"Back", MENU_ITEM_GOTO, NULL, MENU_MAIN},					  // Entry to go back to the main menu
-};
-
-// List of all menus
-const Menu g_Menus[MENU_MAX] =
-	{
-		{"Main", g_MenuMain, numberof(g_MenuMain), NULL},		 // MENU_MAIN
-		{"Options", g_MenuOption, numberof(g_MenuOption), NULL}, // MENU_OPTION
-		{"Align", g_MenuAlign, numberof(g_MenuAlign), NULL},	 // MENU_ALIGN
-};
-
-const ModeInfo g_ModeInfos[] =
-	{
-		{"Screen 0 (T1)", VDP_MODE_SCREEN0, 40, g_Font_MGL_Sample6, MSX_GL6 " Menu Sample", COLOR_DARK_BLUE},
-		{"Screen 1 (G1)", VDP_MODE_SCREEN1, 32, g_Font_MGL_Sample8, MSX_GL8 " Menu Sample", COLOR_DARK_GREEN},
-		{"Screen 2 (G2)", VDP_MODE_SCREEN2, 32, g_Font_MGL_Sample8, MSX_GL8 " Menu Sample", COLOR_DARK_RED},
 };
 
 //=============================================================================
@@ -201,16 +128,13 @@ void physicsCollisionPlayerAndGhost(struct Character *ply);
 void updateSpider();
 void physicsCollisionPlayerAndSpider(struct Character *ply);
 
-void SetupScreen();
-bool State_PrepareMenu();
-
 //.............................................................................
 // Player 1 data
 
-// Player's sprite layers
-// This character is made by 3 layers (3 sprites) but the first two are special: One is only visible on even frames while the second only on odd frames.
-// So, on the 3 layers, only two are visible at a given frame. The blinking of the first two black layers is done to create shaded colors.
-// The counterpart is the flickering effect. The character white color comes from the background and is not in a sprite.
+// Livelli dello Sprite del giocatore
+// TQuesto personaggio è composto da 3 livelli (3 sprite), ma i primi due sono speciali: Uno è visibile solo nei fotogrammi pari, mentre il secondo solo nei fotogrammi dispari.
+// Quindi, dei tre livelli, solo due sono visibili in un determinato fotogramma. Il lampeggiamento dei primi due livelli neri viene effettuato per creare colori sfumati.
+// La controparte è l'effetto sfarfallio. Il colore bianco del carattere proviene dallo sfondo e non è presente in uno sprite.
 const Game_Sprite g_PlayerSpriteLayers[] =
 	{
 		//	Sprite ID
@@ -309,11 +233,6 @@ u8 g_GhostCount = 0;
 u8 g_SpiderCount = 0;
 bool g_PresentPlatform = FALSE;
 
-bool g_Exit = FALSE;
-u8 g_ScreenId = 0;
-u8 g_Integer = 0;
-bool g_Boolean = TRUE;
-
 unsigned char g_Inventory[MAX_ITEM_INVENTORY] = {0, 0, 0, 0, 0};
 unsigned char g_Lives[MAX_LIVES] = {0, 0, 0};
 
@@ -344,103 +263,8 @@ const struct LevelDefinition g_Levels[] = {
 	{(32 - LEVEL004_WIDTH) / 2, (24 - LEVEL004_HEIGHT) / 2, LEVEL004_WIDTH, LEVEL004_HEIGHT, g_Level004, "Livello 4", 4, 0, 2, 0, 0},
 	{(32 - LEVEL005_WIDTH) / 2, (24 - LEVEL005_HEIGHT) / 2, LEVEL005_WIDTH, LEVEL005_HEIGHT, g_Level005, "Livello 5", 5, 1, 2, 0, 0},
 	{(32 - LEVEL006_WIDTH) / 2, (24 - LEVEL006_HEIGHT) / 2, LEVEL006_WIDTH, LEVEL006_HEIGHT, g_Level006, "Livello 6", 6, 0, 1, 1, 1},
+	{(32 - LEVEL007_WIDTH) / 2, (24 - LEVEL007_HEIGHT) / 2, LEVEL007_WIDTH, LEVEL007_HEIGHT, g_Level007, "Livello 7", 7, 0, 0, 0, 2},
 };
-
-//=============================================================================
-// FUNZIONI MENU
-//=============================================================================
-
-/**
- * @brief
- * @param u8 op
- * @param i8 value
- * @return NULL
-*/
-const c8 *MenuAction_Screen(u8 op, i8 value)
-{
-	value;
-	switch (op) // 'op' represents the operation performed on the menu entry when this function is called.
-	{
-	case MENU_ACTION_GET: // Recovers the value of the input to be displayed.
-		return g_ModeInfos[g_ScreenId].Name;
-
-	case MENU_ACTION_SET: // Manages trigger button pressing
-	case MENU_ACTION_INC: // Manages right direction pressing
-		g_ScreenId = (g_ScreenId + 1) % numberof(g_ModeInfos);
-		SetupScreen();
-		break;
-
-	case MENU_ACTION_DEC: // Manages left direction pressing
-		g_ScreenId = (g_ScreenId + numberof(g_ModeInfos) - 1) % numberof(g_ModeInfos);
-		SetupScreen();
-		break;
-	}
-
-	return NULL;
-}
-
-/**
- * @brief
- * @param u8 op
- * @param i8 value
- * @return NULL
-*/
-const c8 *MenuAction_Start(u8 op, i8 value)
-{
-	if (op == MENU_ACTION_SET) // Manages trigger button pressing
-	{
-		switch (value) // 'value' is defined in the menu entries table (so the same callback function can be called several times with different values)
-		{
-		case 0: // Exit value
-			// g_Exit = TRUE;
-			State_PrepareMenu();
-			break;
-
-		case 1: // Game start value
-			// Funzione: Game_SetState
-			// Impostare lo stato successivo (la modifica sarà effettiva al prossimo aggiornamento dello stato)
-			//
-			// Parametri:
-			//   state - Il uovo stato del gioco
-			Game_SetState(State_Initialize);
-
-			// Funzione: Game_MainLoop
-			// Loop del gioco
-			//
-			// Parametri:
-			//   screenMode - La modalità dello schermo da selezionare all'avvio del gioco. Vedere VDP_MODE
-			Game_MainLoop(VDP_MODE_GRAPHIC1);
-			break;
-		}
-	}
-	return NULL;
-}
-
-/**
- * @brief
- * @return void
-*/
-void SetupScreen()
-{
-	const ModeInfo *info = &g_ModeInfos[g_ScreenId];
-
-	// Initialize screen mode
-	VDP_SetColor(info->Color); // Change background color
-	VDP_SetMode(info->Mode);   // Set screen mode
-	VDP_ClearVRAM();		   // Clean the whole VRAM
-
-	// Initialize font
-	Print_SetTextFont(info->Font, 1);		  // Set font characters
-	Print_SetColor(COLOR_WHITE, info->Color); // Set font color
-
-	// Header text
-	Print_DrawTextAt(0, 0, info->Title);
-	Print_DrawLineH(0, 1, info->Width);
-
-	// Force menu redraw
-	Menu_SetDirty();				  // Force current page to be redrawn
-	Menu_SetScreenWidth(info->Width); // Set the current screen width (need MENU_SCREEN_WIDTH to be set to MENU_VARIABLE)
-}
 
 //=============================================================================
 // FUNZIONI PER LA GESTIONE DELLE VITE
@@ -481,11 +305,15 @@ bool addLife()
 /**
  * @brief Rimuove una vita
  * @param void
- * @return void
+ * @return bool TRUE se è stata rimossa una vita
  */
 bool removeLife()
 {
-	// for (u8 i = (MAX_LIVES - 1); i >= 0; i--)
+	if (hasItemInInventory(TILE_AMPHORA)) {
+		removeItemFromInventory(TILE_AMPHORA);
+		return FALSE;
+	}
+	
 	for (u8 i = 0; i < MAX_LIVES; i++)
 	{
 		// Print_DrawIntAt(23, 18, i);
@@ -497,6 +325,7 @@ bool removeLife()
 			return TRUE;
 		}
 	}
+
 	return FALSE;
 }
 
@@ -826,7 +655,6 @@ void physicsCollisionPlayerAndGhost(struct Character *ply)
 	}
 }
 
-
 /**
  * @brief Gestisce una probabile collisione tra il Player e uno dei fantasmi
  * @param void
@@ -866,7 +694,6 @@ void physicsCollisionPlayerAndSpider(struct Character *ply)
 	}
 }
 
-
 /**
  * @brief Imposta i colori delle tiles
  * @param void
@@ -883,7 +710,7 @@ void setColorTiles()
  * @brief Interagisce in una determinata posizione
  * @param u8 x Coordinata x
  * @param u8 y Coordinata y
- * @return
+ * @return bool TRUE se si compie una azione
  */
 bool interact(u8 x, u8 y)
 {
@@ -929,6 +756,7 @@ bool interact(u8 x, u8 y)
 	case TILE_KEY1:
 	case TILE_KEY2:
 	case TILE_KEY3:
+	case TILE_AMPHORA:
 		/* 		Print_DrawIntAt(20, 18,x);
 				Print_DrawIntAt(20, 19,(x/8));
 				Print_DrawIntAt(20, 20,y);
@@ -1285,7 +1113,7 @@ void drawLevel(u8 levelIdx)
 /**
  * @brief Inizializza il pawn
  * @param struct Character *ply
- * @param u8 id - id del
+ * @param u8 id Numero del Player
  * @return void
  */
 void initCharacter(struct Character *ply, u8 id)
@@ -1547,7 +1375,6 @@ void updateGhost()
 	}
 }
 
-
 /**
  * @brief Aggiorna la posizione dei nemici
  * @param void
@@ -1597,7 +1424,6 @@ void updateSpider()
 	}
 }
 
-
 /**
  * @brief VDP_LoadSpritePattern16_VSym
  * @param u8 src Indirizzo dello sprite pattern
@@ -1623,7 +1449,7 @@ void VDP_LoadSpritePattern16_VSym(const u8 *src, u8 index, u8 count)
 /**
  * @brief Inizializza lo stato del gioco
  * @param void
- * @return void
+ * @return bool è sempre FALSE
  */
 bool State_Initialize()
 {
@@ -1740,6 +1566,8 @@ bool State_Initialize()
  */
 bool State_Game()
 {
+	// WaitVBlank();
+
 	// Funzione: GamePawn_Draw
 	// Aggiorna il rendering del pedone. Deve essere richiamato una volta per fotogramma.
 	//
@@ -1801,25 +1629,10 @@ bool State_Game()
 	return TRUE;
 }
 
-bool State_PrepareMenu()
-{
-	SetupScreen();
-
-	Menu_Initialize(g_Menus); // Initialize the menu
-	Menu_DrawPage(MENU_MAIN); // Display the first page
-
-	while (!g_Exit)
-	{
-		// Wait for screen synchronization (50 or 60 Hz)
-		Halt();
-		Menu_Update();
-	}
-
-	return TRUE;
-}
-
 /**
- *
+ * @brief Stato di pausa del gioco
+ * @param void
+ * @return bool è sempre TRUE
  */
 bool State_Pause()
 {
@@ -1929,6 +1742,34 @@ bool isInteractObject(u8 row8)
 }
 
 //=============================================================================
+// HELPER FUNCTION
+//=============================================================================
+
+/*
+void VBlankHook();
+void WaitVBlank();
+
+u8 g_VBlank = 0;
+u8 g_FrameVBlank = 0;
+
+void VBlankHook()
+{
+	g_VBlank = 1;
+}
+
+void WaitVBlank()
+{
+	while(g_VBlank == 0) {
+		Print_DrawIntAt(20,18, g_VBlank);
+	}
+	g_VBlank = 0;
+	g_FrameVBlank++;
+
+	Print_DrawIntAt(20,19, g_VBlank);
+}
+ */
+
+//=============================================================================
 // MAIN LOOP
 //=============================================================================
 
@@ -1937,17 +1778,10 @@ void main()
 	DEBUG_INIT();
 	DEBUG_LOG("Start debug session!");
 
-	/*  	SetupScreen();
-
-		Menu_Initialize(g_Menus); // Initialize the menu
-		Menu_DrawPage(MENU_MAIN); // Display the first page
-
-		while (!g_Exit)
-		{
-			// Wait for screen synchronization (50 or 60 Hz)
-			Halt();
-			Menu_Update();
-		} */
+	// TODO: Vedere se necessario altrimenti eliminare questa riga
+	//		 e le funzioni VBlankHook e WaitBlank con le relative variabili
+	// VDP_EnableVBlank(TRUE);
+	// Bios_SetHookCallback(H_TIMI, VBlankHook); */
 
 	// Funzione: Game_SetState
 	// Impostare lo stato successivo (la modifica sarà effettiva al prossimo aggiornamento dello stato)
