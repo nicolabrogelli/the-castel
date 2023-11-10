@@ -127,6 +127,12 @@ void updateGhost();
 void physicsCollisionPlayerAndGhost(struct Character *ply);
 void updateSpider();
 void physicsCollisionPlayerAndSpider(struct Character *ply);
+void updateBat();
+void physicsCollisionPlayerAndBat(struct Character *ply);
+bool isUnderTheWater(u8 x, u8 y);
+void genericControl();
+
+void callBackVSync();
 
 //.............................................................................
 // Player 1 data
@@ -221,6 +227,7 @@ struct Character g_Player;
 struct CharacterEnemy g_Enemy[MAX_ENEMY];
 struct CharacterEnemy g_Ghost[MAX_GHOST];
 struct CharacterEnemy g_Spider[MAX_SPIDER];
+struct CharacterEnemy g_Bat[MAX_BAT];
 
 u8 g_PrevRow8 = 0xFF;
 u8 g_PawnCount = 0;
@@ -231,6 +238,8 @@ u8 g_CurrRoomIdx = 0;
 u8 g_SladePlatformCount = 0;
 u8 g_GhostCount = 0;
 u8 g_SpiderCount = 0;
+u8 g_BatCount = 0;
+u8 g_ImmunityCount = 0;
 bool g_PresentPlatform = FALSE;
 
 unsigned char g_Inventory[MAX_ITEM_INVENTORY] = {0, 0, 0, 0, 0};
@@ -253,17 +262,18 @@ struct LevelDefinition
 	u8 SkeletonNumber; /** Numero dei nemici per livello */
 	u8 GhostNumber;	   /** Numero di fantasmi per livello */
 	u8 SpiderNumber;   /** Numero di ragni per lovello */
+	u8 BatNumber;      /** Numero di pipistrelli per livello */
 };
 
 // Elenco delle stanze e delle loro caratteristiche
 const struct LevelDefinition g_Levels[] = {
-	{(32 - LEVEL001_WIDTH) / 2, (24 - LEVEL001_HEIGHT) / 2, LEVEL001_WIDTH, LEVEL001_HEIGHT, g_Level001, "Livello 1", 1, 0, 2, 0, 0},
-	{(32 - LEVEL002_WIDTH) / 2, (24 - LEVEL002_HEIGHT) / 2, LEVEL002_WIDTH, LEVEL002_HEIGHT, g_Level002, "Livello 2", 2, 0, 0, 1, 0},
-	{(32 - LEVEL003_WIDTH) / 2, (24 - LEVEL003_HEIGHT) / 2, LEVEL003_WIDTH, LEVEL003_HEIGHT, g_Level003, "Livello 3", 3, 1, 2, 0, 0},
-	{(32 - LEVEL004_WIDTH) / 2, (24 - LEVEL004_HEIGHT) / 2, LEVEL004_WIDTH, LEVEL004_HEIGHT, g_Level004, "Livello 4", 4, 0, 2, 0, 0},
-	{(32 - LEVEL005_WIDTH) / 2, (24 - LEVEL005_HEIGHT) / 2, LEVEL005_WIDTH, LEVEL005_HEIGHT, g_Level005, "Livello 5", 5, 1, 2, 0, 0},
-	{(32 - LEVEL006_WIDTH) / 2, (24 - LEVEL006_HEIGHT) / 2, LEVEL006_WIDTH, LEVEL006_HEIGHT, g_Level006, "Livello 6", 6, 0, 1, 1, 1},
-	{(32 - LEVEL007_WIDTH) / 2, (24 - LEVEL007_HEIGHT) / 2, LEVEL007_WIDTH, LEVEL007_HEIGHT, g_Level007, "Livello 7", 7, 0, 0, 0, 2},
+	{(32 - LEVEL001_WIDTH) / 2, (24 - LEVEL001_HEIGHT) / 2, LEVEL001_WIDTH, LEVEL001_HEIGHT, g_Level001, "Livello 1", 1, 0, 2, 0, 0, 0},
+	{(32 - LEVEL002_WIDTH) / 2, (24 - LEVEL002_HEIGHT) / 2, LEVEL002_WIDTH, LEVEL002_HEIGHT, g_Level002, "Livello 2", 2, 0, 0, 1, 0, 0},
+	{(32 - LEVEL003_WIDTH) / 2, (24 - LEVEL003_HEIGHT) / 2, LEVEL003_WIDTH, LEVEL003_HEIGHT, g_Level003, "Livello 3", 3, 1, 2, 0, 0, 0},
+	{(32 - LEVEL004_WIDTH) / 2, (24 - LEVEL004_HEIGHT) / 2, LEVEL004_WIDTH, LEVEL004_HEIGHT, g_Level004, "Livello 4", 4, 0, 2, 0, 0, 0},
+	{(32 - LEVEL005_WIDTH) / 2, (24 - LEVEL005_HEIGHT) / 2, LEVEL005_WIDTH, LEVEL005_HEIGHT, g_Level005, "Livello 5", 5, 1, 2, 0, 0, 0},
+	{(32 - LEVEL006_WIDTH) / 2, (24 - LEVEL006_HEIGHT) / 2, LEVEL006_WIDTH, LEVEL006_HEIGHT, g_Level006, "Livello 6", 6, 0, 1, 1, 1, 0},
+	{(32 - LEVEL007_WIDTH) / 2, (24 - LEVEL007_HEIGHT) / 2, LEVEL007_WIDTH, LEVEL007_HEIGHT, g_Level007, "Livello 7", 7, 0, 0, 0, 0, 2},
 };
 
 //=============================================================================
@@ -309,11 +319,19 @@ bool addLife()
  */
 bool removeLife()
 {
-	if (hasItemInInventory(TILE_AMPHORA)) {
-		removeItemFromInventory(TILE_AMPHORA);
+	if (hasItemInInventory(TILE_AMPHORA))
+	{
+		if (g_ImmunityCount < IMMUNITY)
+		{
+			g_ImmunityCount++;
+		}
+		else
+		{
+			removeItemFromInventory(TILE_AMPHORA);
+		}
 		return FALSE;
 	}
-	
+
 	for (u8 i = 0; i < MAX_LIVES; i++)
 	{
 		// Print_DrawIntAt(23, 18, i);
@@ -694,6 +712,57 @@ void physicsCollisionPlayerAndSpider(struct Character *ply)
 	}
 }
 
+
+/**
+ * @brief Gestisce una probabile collisione tra il Player e uno dei pipistrelli
+ * @param void
+ * @return void
+ */
+void physicsCollisionPlayerAndBat(struct Character *ply)
+{
+	if (g_ReverseCount > 0)
+		g_ReverseCount--;
+	else
+	{
+		Game_Pawn *pawn = &ply->Pawn;
+
+		for (u8 nEnemy = 0; nEnemy < g_Levels[g_CurrRoomIdx].BatNumber; nEnemy++)
+		{
+			struct CharacterEnemy *enemy = &g_Bat[nEnemy];
+
+			i8 dx = enemy->X - pawn->PositionX;
+			i8 dy = enemy->Y - pawn->PositionY;
+
+			u16 sqrtDist = (dx * dx) + (dy * dy);
+			if (sqrtDist < 13 * 13)
+			{
+				g_ReverseCount = 30;
+				if (removeLife() == TRUE)
+				{
+					reorganizeLife();
+					displayLife();
+				}
+				// VDP_SetColor(COLOR_DARK_RED);
+			}
+			else
+			{
+				VDP_SetColor(COLOR_BLACK);
+			}
+		}
+	}
+}
+
+/**
+ * @brief Controlla che il player non sia sommerso dall'acqua
+ * @param u8 x Coordinata x
+ * @param u8 y Coordinata y
+ * @return TRUE se è sotto l'acqua
+ */
+bool isUnderTheWater(u8 x, u8 y)
+{
+	return (getTile(x, y) == 80);
+}
+
 /**
  * @brief Imposta i colori delle tiles
  * @param void
@@ -701,7 +770,8 @@ void physicsCollisionPlayerAndSpider(struct Character *ply)
  */
 void setColorTiles()
 {
-	VDP_FillVRAM_16K(0X80, g_ScreenColorLow + 8, 2);  // VERDE 0XC0 - ROSSO CHIARO 0x60
+	VDP_FillVRAM_16K(0X80, g_ScreenColorLow + 8, 2); // VERDE 0XC0 - ROSSO CHIARO 0x60
+	VDP_FillVRAM_16K(0x70, g_ScreenColorLow + 10, 1);
 	VDP_FillVRAM_16K(0xA0, g_ScreenColorLow + 12, 1); // GIALLO SCURO
 	VDP_FillVRAM_16K(0xE0, g_ScreenColorLow + 18, 2); // GRIGIO
 }
@@ -892,6 +962,7 @@ void drawLevel(u8 levelIdx)
 	g_PawnCount = 0;
 	g_GhostCount = 0;
 	g_SpiderCount = 0;
+	g_BatCount = 0;
 	g_SladePlatformCount = 0;
 
 	// Riempire l'area VRAM con un valore dato [MSX1/2/2+/TR]
@@ -1083,6 +1154,51 @@ void drawLevel(u8 levelIdx)
 					}
 				}
 			}
+			else if ((tile == TILE_POS_BAT) && (g_Levels[levelIdx].BatNumber < MAX_BAT)) // Rilevamento della posizione iniziale del nemico
+			{
+				if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * riga + colonna - 1] != TILE_POS_BAT)
+				{
+					if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * (riga - 1) + colonna] != TILE_POS_BAT)
+					{
+						// TODO: Posiziona lo sprite della Slied Platform nell'livello di gioco
+						//		 C'è un bug da risolvere, la slide si presenta anche nei livelli
+						//		 dove non risulta configurata.
+						// 		 Per aggiungerla ad un livello è necessario inserire la tile 128
+						//		 e le tile 100 per dare il range di escursione
+
+						u8 x = g_Levels[levelIdx].X + colonna;
+						u8 y = g_Levels[levelIdx].Y + riga;
+
+						// Funzione: VDP_SetSpriteSM1
+						// Impostare l'attributo sprite per la modalità Sprite 1. [MSX1/2/2+/TR]
+						//
+						// Parametri:
+						//   index - Indice dello sprite nella tabella degli attributi
+						//   x     - Coordinata iniziale X dello schermo
+						//   y     - Coordinata iniziale Y dello schermo
+						//   shape - Indice del modello di sprite (in modalità 16x16, è possibile utilizzare solo multipli di 4)
+						//   color - Colore dello sprite (LSB 4 bit) + flag EC opzionale (VDP_SPRITE_EC)
+						VDP_SetSpriteSM1(20 + g_BatCount, x, y, 204, COLOR_WHITE);
+
+						// Funzione: VDP_SetSpritePosition
+						// Aggiorna la posizione dello sprite. [MSX1/2/2+/TR]
+						//
+						// Parametri:
+						//   index - Indice dello sprite nella tabella degli attributi.
+						//   x     - Coordinata X iniziale dello schermo.
+						//   y     - Coordinata Y iniziale dello schermo.
+						VDP_SetSpritePosition(20 + g_BatCount, x * 8, (y - 1) * 8);
+
+						struct CharacterEnemy *bat = &g_Bat[g_BatCount];
+						bat->X = x * 8;
+						bat->Y = (y - 1) * 8;
+						bat->Direction = -1;
+
+						setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
+						g_BatCount++;
+					}
+				}
+			}
 		}
 	}
 
@@ -1100,6 +1216,11 @@ void drawLevel(u8 levelIdx)
 	for (u8 i = g_SpiderCount; i < MAX_SPIDER; ++i)
 	{
 		VDP_HideSprite(15 + i);
+	}
+
+	for (u8 i = g_BatCount; i < MAX_BAT; ++i)
+	{
+		VDP_HideSprite(20 + i);
 	}
 
 	// VDP_HideSpriteFrom(6 + g_PawnCount);
@@ -1228,39 +1349,6 @@ void updateCharacter(struct Character *ply)
 			// TODO: non faccio nulla!
 		}
 	}
-
-	// Valuta se è presente una manota ed eventualmente la raccoglie
-	// TODO: Da ottimizzare
-	// Attenzione l'aggiunta dell'iterazione crea dei rallentamenti al gioco
-	// 1) La prima parte si utilizza per inteagire com gli elementi che is trovano una tile sopra il piano di gioco
-	// 2) La seconda parte si utilizza nteagire com gli elementi che is trovano sul piano di gioco
-	if (getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) ||
-		getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4))
-	{
-		// TODO: non faccio nulla!
-	}
-
-	// TODO: Dovremmo verificare se il Player è sulla piattaforma
-	//       ma sono presenti dei BUG!!!
-	//
-	/*
-		c8 StrDebug[16];
-		Print_SetPosition(20,18);
-		String_Format(StrDebug, "%04i", g_Player.Pawn.PositionY);
-		Print_DrawText(StrDebug);
-		Print_SetPosition(20,19);
-		String_Format(StrDebug, "%04i", g_platform.Y - 14);
-		Print_DrawText(StrDebug);
-
-		if ((g_Player.Pawn.PositionY > g_platform.Y - 14) && ((g_Player.Pawn.PositionX < g_platform.X - 8) || (g_Player.Pawn.PositionX > g_Player.Pawn.PositionX + 8)))
-		{
-			// TDODO: vedere cosa fare
-		}
-		else {
-			//g_Player.Pawn.PositionX = g_platform.X - 8;
-			g_Player.Pawn.PositionY = g_platform.Y - 14;
-		}
-	 */
 
 	// Update player animation & physics
 	u8 act = ACTION_IDLE;
@@ -1424,6 +1512,83 @@ void updateSpider()
 	}
 }
 
+
+/**
+ * @brief Aggiorna la posizione dei nemici
+ * @param void
+ * @return void
+ */
+void updateBat()
+{
+
+	for (u8 nEnemy = 0; nEnemy < g_Levels[g_CurrRoomIdx].BatNumber; nEnemy++)
+	{
+		struct CharacterEnemy *enemy = &g_Bat[nEnemy];
+
+		if (!physicsCollisionEnemy(enemy->X + 7, enemy->Y) == 1)
+		{
+			if (enemy->Direction < 0)
+			{
+				enemy->X--;
+			}
+			else
+			{
+				enemy->X++;
+			}
+		}
+		else
+		{
+			enemy->Direction *= -1;
+			if (enemy->Direction < 0)
+			{
+				enemy->X--;
+			}
+			else
+			{
+				enemy->X++;
+			}
+		}
+
+		// Funzione: VDP_SetSpritePosition
+		// Aggiorna la posizione dello sprite. [MSX1/2/2+/TR]
+		//
+		// Parametri:
+		//   index - Indice dello sprite nella tabella degli attributi.
+		//   x     - Coordinata X iniziale dello schermo.
+		//   y     - Coordinata Y iniziale dello schermo.
+		VDP_SetSpritePosition(20 + nEnemy, enemy->X, enemy->Y);
+
+		enemy = null;
+	}
+}
+
+/**
+ * @brief Raggruppo una serie di fuznioni
+ * @param void
+ * @return void
+ */
+void genericControl()
+{
+	// Verifica se in player è sommerso dall'acqua
+	if (isUnderTheWater(g_Player.Pawn.PositionX, g_Player.Pawn.PositionY))
+	{
+		VDP_SetColor(COLOR_DARK_RED);
+	}
+	else
+		VDP_SetColor(COLOR_BLACK);
+
+	// Valuta se è presente una manota ed eventualmente la raccoglie
+	// TODO: Da ottimizzare
+	// Attenzione l'aggiunta dell'iterazione crea dei rallentamenti al gioco
+	// 1) La prima parte si utilizza per inteagire com gli elementi che is trovano una tile sopra il piano di gioco
+	// 2) La seconda parte si utilizza nteagire com gli elementi che is trovano sul piano di gioco
+	if (getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) ||
+		getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4))
+	{
+		// TODO: non faccio nulla!
+	}
+}
+
 /**
  * @brief VDP_LoadSpritePattern16_VSym
  * @param u8 src Indirizzo dello sprite pattern
@@ -1566,7 +1731,13 @@ bool State_Initialize()
  */
 bool State_Game()
 {
-	// WaitVBlank();
+	// TODO: Con la funzione Game_WaitSync il gioco sull'emulatore sembra molto rallentato
+	//		 Si può comunque tornare alla versione precednte commentando la funzione
+	//		 e ripristinando if (g_FrameCounter % 2 == 0)
+
+	// Funzione: Game_WaitVSync
+	// Attende la sincronizzazione verticale
+	// Game_WaitVSync();
 
 	// Funzione: GamePawn_Draw
 	// Aggiorna il rendering del pedone. Deve essere richiamato una volta per fotogramma.
@@ -1581,6 +1752,12 @@ bool State_Game()
 	// Parametri:
 	//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 	updateCharacter(&g_Player);
+
+	// Funzione geericControl()
+	// Eseguo qui i seguenti controlli, per evitare di rendere meno leggibile il codice
+	// a) Verifico se il Giocatore si trova sotto l'acqu
+	// b) Se ci sono delle monete che il giocatore può raccogliere lo fa
+	genericControl();
 
 	// Funzione: ReadInputControl
 	// Aggiurnamento input da tastiera
@@ -1620,6 +1797,17 @@ bool State_Game()
 		// Parametri:
 		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 		physicsCollisionPlayerAndSpider(&g_Player);
+
+		updateBat();
+
+		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
+		// Funzione: physicsCollisionPlayerAndGhost
+		// Gestisce la collisione tra il pedone e i vari nemici
+		//
+		// Parametri:
+		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
+		physicsCollisionPlayerAndBat(&g_Player);
+
 	}
 	g_FrameCounter++;
 
@@ -1742,34 +1930,6 @@ bool isInteractObject(u8 row8)
 }
 
 //=============================================================================
-// HELPER FUNCTION
-//=============================================================================
-
-/*
-void VBlankHook();
-void WaitVBlank();
-
-u8 g_VBlank = 0;
-u8 g_FrameVBlank = 0;
-
-void VBlankHook()
-{
-	g_VBlank = 1;
-}
-
-void WaitVBlank()
-{
-	while(g_VBlank == 0) {
-		Print_DrawIntAt(20,18, g_VBlank);
-	}
-	g_VBlank = 0;
-	g_FrameVBlank++;
-
-	Print_DrawIntAt(20,19, g_VBlank);
-}
- */
-
-//=============================================================================
 // MAIN LOOP
 //=============================================================================
 
@@ -1777,11 +1937,6 @@ void main()
 {
 	DEBUG_INIT();
 	DEBUG_LOG("Start debug session!");
-
-	// TODO: Vedere se necessario altrimenti eliminare questa riga
-	//		 e le funzioni VBlankHook e WaitBlank con le relative variabili
-	// VDP_EnableVBlank(TRUE);
-	// Bios_SetHookCallback(H_TIMI, VBlankHook); */
 
 	// Funzione: Game_SetState
 	// Impostare lo stato successivo (la modifica sarà effettiva al prossimo aggiornamento dello stato)
