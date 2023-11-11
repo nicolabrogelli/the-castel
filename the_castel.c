@@ -18,7 +18,7 @@
 #include "debug.h"
 #include "string.h"
 #include "input.h"
-#include "sprite_tool.h"
+#include "sprite_fx.h"
 #include "version.h"
 
 //=============================================================================
@@ -240,6 +240,10 @@ u8 g_GhostCount = 0;
 u8 g_SpiderCount = 0;
 u8 g_BatCount = 0;
 u8 g_ImmunityCount = 0;
+u8 g_SecondCounter = 0;
+u8 g_Frame = 0;
+u8 g_DelayRemoveLife = 0;
+bool IsUnderWater = FALSE;
 bool g_PresentPlatform = FALSE;
 
 unsigned char g_Inventory[MAX_ITEM_INVENTORY] = {0, 0, 0, 0, 0};
@@ -262,7 +266,7 @@ struct LevelDefinition
 	u8 SkeletonNumber; /** Numero dei nemici per livello */
 	u8 GhostNumber;	   /** Numero di fantasmi per livello */
 	u8 SpiderNumber;   /** Numero di ragni per lovello */
-	u8 BatNumber;      /** Numero di pipistrelli per livello */
+	u8 BatNumber;	   /** Numero di pipistrelli per livello */
 };
 
 // Elenco delle stanze e delle loro caratteristiche
@@ -270,9 +274,9 @@ const struct LevelDefinition g_Levels[] = {
 	{(32 - LEVEL001_WIDTH) / 2, (24 - LEVEL001_HEIGHT) / 2, LEVEL001_WIDTH, LEVEL001_HEIGHT, g_Level001, "Livello 1", 1, 0, 2, 0, 0, 0},
 	{(32 - LEVEL002_WIDTH) / 2, (24 - LEVEL002_HEIGHT) / 2, LEVEL002_WIDTH, LEVEL002_HEIGHT, g_Level002, "Livello 2", 2, 0, 0, 1, 0, 0},
 	{(32 - LEVEL003_WIDTH) / 2, (24 - LEVEL003_HEIGHT) / 2, LEVEL003_WIDTH, LEVEL003_HEIGHT, g_Level003, "Livello 3", 3, 1, 2, 0, 0, 0},
-	{(32 - LEVEL004_WIDTH) / 2, (24 - LEVEL004_HEIGHT) / 2, LEVEL004_WIDTH, LEVEL004_HEIGHT, g_Level004, "Livello 4", 4, 0, 2, 0, 0, 0},
-	{(32 - LEVEL005_WIDTH) / 2, (24 - LEVEL005_HEIGHT) / 2, LEVEL005_WIDTH, LEVEL005_HEIGHT, g_Level005, "Livello 5", 5, 1, 2, 0, 0, 0},
-	{(32 - LEVEL006_WIDTH) / 2, (24 - LEVEL006_HEIGHT) / 2, LEVEL006_WIDTH, LEVEL006_HEIGHT, g_Level006, "Livello 6", 6, 0, 1, 1, 1, 0},
+	{(32 - LEVEL004_WIDTH) / 2, (24 - LEVEL004_HEIGHT) / 2, LEVEL004_WIDTH, LEVEL004_HEIGHT, g_Level004, "Livello 4", 4, 2, 2, 0, 0, 0},
+	{(32 - LEVEL005_WIDTH) / 2, (24 - LEVEL005_HEIGHT) / 2, LEVEL005_WIDTH, LEVEL005_HEIGHT, g_Level005, "Livello 5", 5, 3, 2, 0, 0, 0},
+	{(32 - LEVEL006_WIDTH) / 2, (24 - LEVEL006_HEIGHT) / 2, LEVEL006_WIDTH, LEVEL006_HEIGHT, g_Level006, "Livello 6", 6, 4, 1, 1, 1, 0},
 	{(32 - LEVEL007_WIDTH) / 2, (24 - LEVEL007_HEIGHT) / 2, LEVEL007_WIDTH, LEVEL007_HEIGHT, g_Level007, "Livello 7", 7, 0, 0, 0, 0, 2},
 };
 
@@ -712,7 +716,6 @@ void physicsCollisionPlayerAndSpider(struct Character *ply)
 	}
 }
 
-
 /**
  * @brief Gestisce una probabile collisione tra il Player e uno dei pipistrelli
  * @param void
@@ -964,6 +967,7 @@ void drawLevel(u8 levelIdx)
 	g_SpiderCount = 0;
 	g_BatCount = 0;
 	g_SladePlatformCount = 0;
+	g_SecondCounter = 0;
 
 	// Riempire l'area VRAM con un valore dato [MSX1/2/2+/TR]
 	//
@@ -1512,7 +1516,6 @@ void updateSpider()
 	}
 }
 
-
 /**
  * @brief Aggiorna la posizione dei nemici
  * @param void
@@ -1572,10 +1575,33 @@ void genericControl()
 	// Verifica se in player è sommerso dall'acqua
 	if (isUnderTheWater(g_Player.Pawn.PositionX, g_Player.Pawn.PositionY))
 	{
-		VDP_SetColor(COLOR_DARK_RED);
+		if (IsUnderWater)
+		{
+			if ((g_SecondCounter - g_DelayRemoveLife) > 3)
+			{
+				if (removeLife() == TRUE)
+				{
+					reorganizeLife();
+					displayLife();
+
+					IsUnderWater = FALSE;
+				}
+			}
+		}
+		else
+		{
+			g_DelayRemoveLife = g_SecondCounter;
+			IsUnderWater = TRUE;
+		}
+
+		//VDP_SetColor(COLOR_DARK_RED);
 	}
 	else
+	{
 		VDP_SetColor(COLOR_BLACK);
+		IsUnderWater = FALSE; // Non siamo più in collisione
+		g_DelayRemoveLife = 0; // Azzera il tempo dopo il quale si va a rimuovere una vita
+	}
 
 	// Valuta se è presente una manota ed eventualmente la raccoglie
 	// TODO: Da ottimizzare
@@ -1764,6 +1790,17 @@ bool State_Game()
 	readInputControl();
 
 	// TODO: Aggiornamento della posizione dei nemici, da migliorare!!! g_FrameCounter
+	if (g_Frame == 50)
+	{
+		g_SecondCounter++;
+		g_Frame = 0;
+/* 
+		Print_SetPosition(20, 18);
+		c8 StrFrame[16];
+		String_Format(StrFrame, "%03i", g_SecondCounter);
+		Print_DrawText(StrFrame); */
+	}
+
 	if (g_FrameCounter % 2 == 0)
 	{
 		// Funzione: updateSkeleton
@@ -1807,9 +1844,9 @@ bool State_Game()
 		// Parametri:
 		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 		physicsCollisionPlayerAndBat(&g_Player);
-
 	}
 	g_FrameCounter++;
+	g_Frame++;
 
 	if (Keyboard_IsKeyPressed(KEY_ESC))
 		Game_Exit();
