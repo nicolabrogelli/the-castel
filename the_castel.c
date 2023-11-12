@@ -19,6 +19,9 @@
 #include "string.h"
 #include "input.h"
 #include "sprite_fx.h"
+#include "pt3/pt3_player.h"
+#include "pt3/pt3_notetable2.h"
+#include "ayfx/ayfx_player.h"
 #include "version.h"
 
 //=============================================================================
@@ -26,6 +29,7 @@
 //=============================================================================
 #include "the_castel.h"
 #include "data/bg_tileset.h"
+#include "data/ayfx/ayfx_bank.h"
 
 #if CAVALIERE
 #include "data/sprt_player.h"
@@ -132,6 +136,11 @@ void physicsCollisionPlayerAndBat(struct Character *ply);
 bool isUnderTheWater(u8 x, u8 y);
 void genericControl();
 
+void inizializePT3();
+void inizializeAYFX();
+
+void PlayBankSFX(u8 id, u8 prio);
+void ChannelSFX(u8 chan);
 void callBackVSync();
 
 //.............................................................................
@@ -245,6 +254,7 @@ u8 g_Frame = 0;
 u8 g_DelayRemoveLife = 0;
 bool IsUnderWater = FALSE;
 bool g_PresentPlatform = FALSE;
+u8 g_BankFXNum = 0;
 
 unsigned char g_Inventory[MAX_ITEM_INVENTORY] = {0, 0, 0, 0, 0};
 unsigned char g_Lives[MAX_LIVES] = {0, 0, 0};
@@ -627,6 +637,8 @@ void physicsCollisionPlayerAndEnemy(struct Character *ply)
 				{
 					reorganizeLife();
 					displayLife();
+
+					PlayBankSFX(9, 0);
 				}
 				// VDP_SetColor(COLOR_DARK_RED);
 			}
@@ -666,6 +678,8 @@ void physicsCollisionPlayerAndGhost(struct Character *ply)
 				{
 					reorganizeLife();
 					displayLife();
+
+					PlayBankSFX(9, 0);
 				}
 				// VDP_SetColor(COLOR_DARK_RED);
 			}
@@ -705,6 +719,8 @@ void physicsCollisionPlayerAndSpider(struct Character *ply)
 				{
 					reorganizeLife();
 					displayLife();
+
+					PlayBankSFX(9, 0);
 				}
 				// VDP_SetColor(COLOR_DARK_RED);
 			}
@@ -744,6 +760,8 @@ void physicsCollisionPlayerAndBat(struct Character *ply)
 				{
 					reorganizeLife();
 					displayLife();
+
+					PlayBankSFX(9, 0);
 				}
 				// VDP_SetColor(COLOR_DARK_RED);
 			}
@@ -800,30 +818,37 @@ bool interact(u8 x, u8 y)
 			setTile(x, y, EMPTY_ITEM);
 			g_Player.Life++;
 			addLife();
+
+			PlayBankSFX(10, 0);
 		}
 		return TRUE;
 	case TILE_DOOR0:
+		//PlayBankSFX(1, 0);
 		drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
 		return TRUE;
 	case TILE_DOOR1:
 		if (hasItemInInventory(TILE_KEY1))
 		{
+			//PlayBankSFX(1, 0);
 			changeLevel(x, y, TILE_KEY1, TILE_DOOR0);
 		}
 		return TRUE;
 	case TILE_DOOR2:
 		if (hasItemInInventory(TILE_KEY2))
 		{
+			//PlayBankSFX(1, 0);
 			changeLevel(x, y, TILE_KEY2, TILE_DOOR0);
 		}
 		return TRUE;
 	case TILE_DOOR3:
 		if (hasItemInInventory(TILE_KEY3))
 		{
+			//PlayBankSFX(1, 0);
 			changeLevel(x, y, TILE_KEY3, TILE_DOOR0);
 		}
 		return TRUE;
 	case TILE_DOOR_PREV:
+		//PlayBankSFX(1, 0);
 		drawLevel(g_Levels[g_CurrRoomIdx].PrevLvIdx);
 		return false;
 	case TILE_KEY1:
@@ -843,6 +868,9 @@ bool interact(u8 x, u8 y)
 
 		setTile(x, y, EMPTY_ITEM);
 		addItemToInventory(tile);
+
+		PlayBankSFX(5, 0);
+
 		return TRUE;
 	case TILE_BLOCK_TEST:
 		// TODO: Fare attenzione che il blocco che andiamo a spostare non vada sopra altri oggetti
@@ -907,6 +935,9 @@ bool getMoney(u8 x, u8 y)
 		setTile(x, y, EMPTY_ITEM);
 		g_Player.Score++;
 		updateScore();
+
+		PlayBankSFX(11, 15);
+
 		return TRUE;
 	}
 	return FALSE;
@@ -1584,6 +1615,8 @@ void genericControl()
 					reorganizeLife();
 					displayLife();
 
+					PlayBankSFX(9, 0);
+
 					IsUnderWater = FALSE;
 				}
 			}
@@ -1594,12 +1627,12 @@ void genericControl()
 			IsUnderWater = TRUE;
 		}
 
-		//VDP_SetColor(COLOR_DARK_RED);
+		// VDP_SetColor(COLOR_DARK_RED);
 	}
 	else
 	{
 		VDP_SetColor(COLOR_BLACK);
-		IsUnderWater = FALSE; // Non siamo più in collisione
+		IsUnderWater = FALSE;  // Non siamo più in collisione
 		g_DelayRemoveLife = 0; // Azzera il tempo dopo il quale si va a rimuovere una vita
 	}
 
@@ -1644,6 +1677,14 @@ void VDP_LoadSpritePattern16_VSym(const u8 *src, u8 index, u8 count)
  */
 bool State_Initialize()
 {
+
+	inizializePT3();
+
+	inizializeAYFX();
+
+	ChannelSFX(PSG_CHANNEL_A);
+	PlayBankSFX(0, 0);
+
 	// Funzione: VDP_EnableDisplay
 	// Abilita/disabilita la visualizzazione dello schermo (registro 1). [MSX1/2/2+/TR]
 	//
@@ -1757,6 +1798,11 @@ bool State_Initialize()
  */
 bool State_Game()
 {
+	Halt();
+	PT3_Decode();	 // Update data to write to the PSG regiters from the music
+	ayFX_Update();	 // Overwrite PSG registers data for the SFX
+	PT3_UpdatePSG(); // Update PSG registers
+
 	// TODO: Con la funzione Game_WaitSync il gioco sull'emulatore sembra molto rallentato
 	//		 Si può comunque tornare alla versione precednte commentando la funzione
 	//		 e ripristinando if (g_FrameCounter % 2 == 0)
@@ -1794,11 +1840,11 @@ bool State_Game()
 	{
 		g_SecondCounter++;
 		g_Frame = 0;
-/* 
-		Print_SetPosition(20, 18);
-		c8 StrFrame[16];
-		String_Format(StrFrame, "%03i", g_SecondCounter);
-		Print_DrawText(StrFrame); */
+		/*
+				Print_SetPosition(20, 18);
+				c8 StrFrame[16];
+				String_Format(StrFrame, "%03i", g_SecondCounter);
+				Print_DrawText(StrFrame); */
 	}
 
 	if (g_FrameCounter % 2 == 0)
@@ -1964,6 +2010,45 @@ bool isInteractObject(u8 row8)
 	}
 
 	return isGet;
+}
+
+//=============================================================================
+// MUSICA
+//=============================================================================
+
+/**
+ * @brief Riproduce il suono
+ * @param u8 id
+ * @param u8 prio
+ * @return void
+ */
+void PlayBankSFX(u8 id, u8 prio)
+{
+	ayFX_PlayBank(id, prio); // Riproduzione di un suono ayFX
+}
+
+/**
+ * @brief Seleziona una canale dovs SFX riproduce il suono
+ * @param u8 chan Canale
+ * @return void
+ */
+void ChannelSFX(u8 chan)
+{
+	ayFX_Mute();		   // Arresta la riproduzione dell'audio e disattiva il canale
+	ayFX_SetChannel(chan); // Impostare il canale da utilizzare per la riproduzione del suono
+}
+
+void inizializePT3()
+{
+	PT3_Init();				   // Inizializza il Player PT3
+	PT3_SetNoteTable(PT3_NT2); // Setta la tabella delle note
+}
+
+void inizializeAYFX()
+{
+	ayFX_InitBank(g_ayfx_bank);		// Impostazione del riproduttore ayFX tramite l'array g_ayfx_bank
+	ayFX_SetChannel(PSG_CHANNEL_A); // Impostare il canale da utilizzare per la riproduzione del suono
+	ayFX_SetMode(AYFX_MODE_FIXED);	// Set channel mode
 }
 
 //=============================================================================
