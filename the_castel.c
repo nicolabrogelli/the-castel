@@ -44,6 +44,7 @@
 #include "data/level/level005.h"
 #include "data/level/level006.h"
 #include "data/level/level007.h"
+#include "data/level/level008.h"
 
 //=============================================================================
 // DEFINES
@@ -85,6 +86,7 @@ struct CharacterEnemy
 	i8 VelocityY;
 	u8 State;
 	int Direction;
+	const c8 *TypeEnemy;	
 };
 
 //=============================================================================
@@ -135,6 +137,7 @@ void updateBat();
 void physicsCollisionPlayerAndBat(struct Character *ply);
 bool isUnderTheWater(u8 x, u8 y);
 void genericControl();
+bool collisionCheck(i8 dx, i8 dy);
 
 void inizializePT3();
 void inizializeAYFX();
@@ -142,6 +145,9 @@ void inizializeAYFX();
 void PlayBankSFX(u8 id, u8 prio);
 void ChannelSFX(u8 chan);
 void callBackVSync();
+
+void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct CharacterEnemy *genericEnemy, u8 enemyNumber);
+void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 idFirstSprite);
 
 //.............................................................................
 // Player 1 data
@@ -287,7 +293,8 @@ const struct LevelDefinition g_Levels[] = {
 	{(32 - LEVEL004_WIDTH) / 2, (24 - LEVEL004_HEIGHT) / 2, LEVEL004_WIDTH, LEVEL004_HEIGHT, g_Level004, "Livello 4", 4, 2, 2, 0, 0, 0},
 	{(32 - LEVEL005_WIDTH) / 2, (24 - LEVEL005_HEIGHT) / 2, LEVEL005_WIDTH, LEVEL005_HEIGHT, g_Level005, "Livello 5", 5, 3, 2, 0, 0, 0},
 	{(32 - LEVEL006_WIDTH) / 2, (24 - LEVEL006_HEIGHT) / 2, LEVEL006_WIDTH, LEVEL006_HEIGHT, g_Level006, "Livello 6", 6, 4, 1, 1, 1, 0},
-	{(32 - LEVEL007_WIDTH) / 2, (24 - LEVEL007_HEIGHT) / 2, LEVEL007_WIDTH, LEVEL007_HEIGHT, g_Level007, "Livello 7", 7, 0, 0, 0, 0, 2},
+	{(32 - LEVEL007_WIDTH) / 2, (24 - LEVEL007_HEIGHT) / 2, LEVEL007_WIDTH, LEVEL007_HEIGHT, g_Level007, "Livello 7", 7, 5, 0, 0, 0, 2},
+	{(32 - LEVEL008_WIDTH) / 2, (24 - LEVEL008_HEIGHT) / 2, LEVEL008_WIDTH, LEVEL008_HEIGHT, g_Level008, "Livello 8", 8, 0, 0, 0, 1, 2},
 };
 
 //=============================================================================
@@ -333,6 +340,7 @@ bool addLife()
  */
 bool removeLife()
 {
+	// Controlla se nell'inventario è presente la pozione per l'immunità
 	if (hasItemInInventory(TILE_AMPHORA))
 	{
 		if (g_ImmunityCount < IMMUNITY)
@@ -610,9 +618,41 @@ bool physicsCollisionEnemy(u8 x, u8 y)
 }
 
 /**
+ * @brief Gestisce una probabile collisione tra il Player e un generico nemico
+ * @param void
+ * @return void
+ */
+void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct CharacterEnemy *genericEnemy, u8 enemyNumber)
+{
+	if (g_ReverseCount > 0)
+		g_ReverseCount--;
+	else
+	{
+		Game_Pawn *pawn = &ply->Pawn;
+
+		for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
+		{
+			struct CharacterEnemy *enemy = &genericEnemy[nEnemy];
+
+			i8 dx = enemy->X - pawn->PositionX;
+			i8 dy = enemy->Y - pawn->PositionY;
+
+			if(collisionCheck(dx, dy)) {
+				// TODO: non faccio nulla
+
+				/* Print_DrawTextAt(20,18, enemy->TypeEnemy);
+				Print_DrawIntAt(20,19, g_CurrRoomIdx); */
+			}
+		}
+	}
+}
+
+/**
  * @brief Gestisce una probabile collisione tra il Player e uno degli scheletri
  * @param void
  * @return void
+ * 
+ * @deprecated
  */
 void physicsCollisionPlayerAndEnemy(struct Character *ply)
 {
@@ -629,23 +669,7 @@ void physicsCollisionPlayerAndEnemy(struct Character *ply)
 			i8 dx = enemy->X - pawn->PositionX;
 			i8 dy = enemy->Y - pawn->PositionY;
 
-			u16 sqrtDist = (dx * dx) + (dy * dy);
-			if (sqrtDist < 13 * 13)
-			{
-				g_ReverseCount = 30;
-				if (removeLife() == TRUE)
-				{
-					reorganizeLife();
-					displayLife();
-
-					PlayBankSFX(9, 0);
-				}
-				// VDP_SetColor(COLOR_DARK_RED);
-			}
-			else
-			{
-				VDP_SetColor(COLOR_BLACK);
-			}
+			collisionCheck(dx, dy);
 		}
 	}
 }
@@ -654,6 +678,8 @@ void physicsCollisionPlayerAndEnemy(struct Character *ply)
  * @brief Gestisce una probabile collisione tra il Player e uno dei fantasmi
  * @param void
  * @return void
+ * 
+ * @deprecated
  */
 void physicsCollisionPlayerAndGhost(struct Character *ply)
 {
@@ -670,23 +696,7 @@ void physicsCollisionPlayerAndGhost(struct Character *ply)
 			i8 dx = enemy->X - pawn->PositionX;
 			i8 dy = enemy->Y - pawn->PositionY;
 
-			u16 sqrtDist = (dx * dx) + (dy * dy);
-			if (sqrtDist < 13 * 13)
-			{
-				g_ReverseCount = 30;
-				if (removeLife() == TRUE)
-				{
-					reorganizeLife();
-					displayLife();
-
-					PlayBankSFX(9, 0);
-				}
-				// VDP_SetColor(COLOR_DARK_RED);
-			}
-			else
-			{
-				VDP_SetColor(COLOR_BLACK);
-			}
+			collisionCheck(dx, dy);
 		}
 	}
 }
@@ -695,6 +705,8 @@ void physicsCollisionPlayerAndGhost(struct Character *ply)
  * @brief Gestisce una probabile collisione tra il Player e uno dei fantasmi
  * @param void
  * @return void
+ * 
+ * @deprecated
  */
 void physicsCollisionPlayerAndSpider(struct Character *ply)
 {
@@ -711,23 +723,7 @@ void physicsCollisionPlayerAndSpider(struct Character *ply)
 			i8 dx = enemy->X - pawn->PositionX;
 			i8 dy = enemy->Y - pawn->PositionY;
 
-			u16 sqrtDist = (dx * dx) + (dy * dy);
-			if (sqrtDist < 13 * 13)
-			{
-				g_ReverseCount = 30;
-				if (removeLife() == TRUE)
-				{
-					reorganizeLife();
-					displayLife();
-
-					PlayBankSFX(9, 0);
-				}
-				// VDP_SetColor(COLOR_DARK_RED);
-			}
-			else
-			{
-				VDP_SetColor(COLOR_BLACK);
-			}
+			collisionCheck(dx, dy);
 		}
 	}
 }
@@ -736,6 +732,8 @@ void physicsCollisionPlayerAndSpider(struct Character *ply)
  * @brief Gestisce una probabile collisione tra il Player e uno dei pipistrelli
  * @param void
  * @return void
+ * 
+ * @deprecated
  */
 void physicsCollisionPlayerAndBat(struct Character *ply)
 {
@@ -752,24 +750,39 @@ void physicsCollisionPlayerAndBat(struct Character *ply)
 			i8 dx = enemy->X - pawn->PositionX;
 			i8 dy = enemy->Y - pawn->PositionY;
 
-			u16 sqrtDist = (dx * dx) + (dy * dy);
-			if (sqrtDist < 13 * 13)
-			{
-				g_ReverseCount = 30;
-				if (removeLife() == TRUE)
-				{
-					reorganizeLife();
-					displayLife();
-
-					PlayBankSFX(9, 0);
-				}
-				// VDP_SetColor(COLOR_DARK_RED);
-			}
-			else
-			{
-				VDP_SetColor(COLOR_BLACK);
-			}
+			collisionCheck(dx, dy);
 		}
+	}
+}
+
+/**
+ * @brief Effettua la verifica sulla collisione
+ * @param i8 dx Coordinata X
+ * @param i8 dy Coordinara Y
+ * @return void
+*/
+bool collisionCheck(i8 dx, i8 dy)
+{
+	u16 sqrtDist = (dx * dx) + (dy * dy);
+	if (sqrtDist < 13 * 13)
+	{
+		g_ReverseCount = 30;
+		if (removeLife() == TRUE)
+		{
+			reorganizeLife();
+			displayLife();
+
+			PlayBankSFX(9, 0);
+
+			return TRUE;
+		}
+		// VDP_SetColor(COLOR_DARK_RED);
+	}
+	else
+	{
+		VDP_SetColor(COLOR_BLACK);
+
+		return FALSE;
 	}
 }
 
@@ -823,32 +836,32 @@ bool interact(u8 x, u8 y)
 		}
 		return TRUE;
 	case TILE_DOOR0:
-		//PlayBankSFX(1, 0);
+		// PlayBankSFX(1, 0);
 		drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
 		return TRUE;
 	case TILE_DOOR1:
 		if (hasItemInInventory(TILE_KEY1))
 		{
-			//PlayBankSFX(1, 0);
+			// PlayBankSFX(1, 0);
 			changeLevel(x, y, TILE_KEY1, TILE_DOOR0);
 		}
 		return TRUE;
 	case TILE_DOOR2:
 		if (hasItemInInventory(TILE_KEY2))
 		{
-			//PlayBankSFX(1, 0);
+			// PlayBankSFX(1, 0);
 			changeLevel(x, y, TILE_KEY2, TILE_DOOR0);
 		}
 		return TRUE;
 	case TILE_DOOR3:
 		if (hasItemInInventory(TILE_KEY3))
 		{
-			//PlayBankSFX(1, 0);
+			// PlayBankSFX(1, 0);
 			changeLevel(x, y, TILE_KEY3, TILE_DOOR0);
 		}
 		return TRUE;
 	case TILE_DOOR_PREV:
-		//PlayBankSFX(1, 0);
+		// PlayBankSFX(1, 0);
 		drawLevel(g_Levels[g_CurrRoomIdx].PrevLvIdx);
 		return false;
 	case TILE_KEY1:
@@ -1093,6 +1106,7 @@ void drawLevel(u8 levelIdx)
 						enemy->X = x * 8;
 						enemy->Y = (y - 1) * 8;
 						enemy->Direction = -1;
+						enemy->TypeEnemy = "Sheletor";
 
 						setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
 						g_PawnCount++;
@@ -1138,6 +1152,7 @@ void drawLevel(u8 levelIdx)
 						ghost->X = x * 8;
 						ghost->Y = (y - 1) * 8;
 						ghost->Direction = -1;
+						ghost->TypeEnemy = "Ghost";
 
 						setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
 						g_GhostCount++;
@@ -1183,6 +1198,7 @@ void drawLevel(u8 levelIdx)
 						spider->X = x * 8;
 						spider->Y = (y - 1) * 8;
 						spider->Direction = -1;
+						spider->TypeEnemy = "Spider";
 
 						setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
 						g_SpiderCount++;
@@ -1228,6 +1244,7 @@ void drawLevel(u8 levelIdx)
 						bat->X = x * 8;
 						bat->Y = (y - 1) * 8;
 						bat->Direction = -1;
+						bat->TypeEnemy = "Bat";
 
 						setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
 						g_BatCount++;
@@ -1401,9 +1418,60 @@ void updateCharacter(struct Character *ply)
 }
 
 /**
+ * @brief Aggiorna la posizione di un generico nemico
+ * @param void
+ * @return void
+ */
+void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 idFirstSprite)
+{
+
+	for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
+	{
+		struct CharacterEnemy *enemy = &genericEnemy[nEnemy];
+
+		if (!physicsCollisionEnemy(enemy->X + 7, enemy->Y) == 1)
+		{
+			if (enemy->Direction < 0)
+			{
+				enemy->X--;
+			}
+			else
+			{
+				enemy->X++;
+			}
+		}
+		else
+		{
+			enemy->Direction *= -1;
+			if (enemy->Direction < 0)
+			{
+				enemy->X--;
+			}
+			else
+			{
+				enemy->X++;
+			}
+		}
+
+		// Funzione: VDP_SetSpritePosition
+		// Aggiorna la posizione dello sprite. [MSX1/2/2+/TR]
+		//
+		// Parametri:
+		//   index - Indice dello sprite nella tabella degli attributi.
+		//   x     - Coordinata X iniziale dello schermo.
+		//   y     - Coordinata Y iniziale dello schermo.
+		VDP_SetSpritePosition(idFirstSprite + nEnemy, enemy->X, enemy->Y);
+
+		enemy = null;
+	}
+}
+
+/**
  * @brief Aggiorna la posizione dei nemici
  * @param void
  * @return void
+ * 
+ * @deprecated
  */
 void updateSkeleton()
 {
@@ -1453,6 +1521,8 @@ void updateSkeleton()
  * @brief Aggiorna la posizione dei nemici
  * @param void
  * @return void
+ * 
+ * @deprecated
  */
 void updateGhost()
 {
@@ -1502,6 +1572,8 @@ void updateGhost()
  * @brief Aggiorna la posizione dei nemici
  * @param void
  * @return void
+ * 
+ * @deprecated
  */
 void updateSpider()
 {
@@ -1551,6 +1623,8 @@ void updateSpider()
  * @brief Aggiorna la posizione dei nemici
  * @param void
  * @return void
+ * 
+ * @deprecated
  */
 void updateBat()
 {
@@ -1678,8 +1752,12 @@ void VDP_LoadSpritePattern16_VSym(const u8 *src, u8 index, u8 count)
 bool State_Initialize()
 {
 
+	// Funzione: inizializePT3
+	// Inizializzazione del Player PT3 e della tabella delle note
 	inizializePT3();
 
+	// Funzione: inizializeAYFX
+	// Impostazione del riproduttore ayfx e del canale audio
 	inizializeAYFX();
 
 	ChannelSFX(PSG_CHANNEL_A);
@@ -1798,18 +1876,14 @@ bool State_Initialize()
  */
 bool State_Game()
 {
+	// TODO: Da rivedere la porzione del codice seguente vedere di implemetare la sincronizzazione
+	//		 tramite le funzioni:
+	//		 void Game_SetVSyncCallback(callback cb); // Set the function to be called each frame
+	//		 void Game_WaitVSync(); // Wait V-Synch function
 	Halt();
 	PT3_Decode();	 // Update data to write to the PSG regiters from the music
 	ayFX_Update();	 // Overwrite PSG registers data for the SFX
 	PT3_UpdatePSG(); // Update PSG registers
-
-	// TODO: Con la funzione Game_WaitSync il gioco sull'emulatore sembra molto rallentato
-	//		 Si può comunque tornare alla versione precednte commentando la funzione
-	//		 e ripristinando if (g_FrameCounter % 2 == 0)
-
-	// Funzione: Game_WaitVSync
-	// Attende la sincronizzazione verticale
-	// Game_WaitVSync();
 
 	// Funzione: GamePawn_Draw
 	// Aggiorna il rendering del pedone. Deve essere richiamato una volta per fotogramma.
@@ -1851,7 +1925,8 @@ bool State_Game()
 	{
 		// Funzione: updateSkeleton
 		// Aggiorna il rendering dei nemici.
-		updateSkeleton();
+		//updateSkeleton();
+		updateGenericEnemy(&g_Enemy[0], g_Levels[g_CurrRoomIdx].SkeletonNumber, 6);
 
 		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
 		// Funzione: physicsCollisionPlayerAndEnemy
@@ -1859,19 +1934,13 @@ bool State_Game()
 		//
 		// Parametri:
 		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
-		physicsCollisionPlayerAndEnemy(&g_Player);
-
-		updateGhost();
-
-		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
-		// Funzione: physicsCollisionPlayerAndGhost
-		// Gestisce la collisione tra il pedone e i vari nemici
-		//
-		// Parametri:
-		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
-		physicsCollisionPlayerAndGhost(&g_Player);
-
-		updateSpider();
+		physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Enemy[0], g_Levels[g_CurrRoomIdx].SkeletonNumber);
+		//physicsCollisionPlayerAndEnemy(&g_Player);
+		
+		// Funzione: updateGhost
+		// Aggiorna il rendering dei nemici.
+		//updateGhost();
+		updateGenericEnemy(&g_Ghost[0], g_Levels[g_CurrRoomIdx].GhostNumber, 10);
 
 		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
 		// Funzione: physicsCollisionPlayerAndGhost
@@ -1879,9 +1948,27 @@ bool State_Game()
 		//
 		// Parametri:
 		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
-		physicsCollisionPlayerAndSpider(&g_Player);
+		physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Ghost[0], g_Levels[g_CurrRoomIdx].GhostNumber);
+		//physicsCollisionPlayerAndGhost(&g_Player);		
 
-		updateBat();
+		// Funzione: updateGhost
+		// Aggiorna il rendering dei nemici.
+		//updateSpider();
+		updateGenericEnemy(&g_Spider[0], g_Levels[g_CurrRoomIdx].SpiderNumber, 15);
+
+		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
+		// Funzione: physicsCollisionPlayerAndGhost
+		// Gestisce la collisione tra il pedone e i vari nemici
+		//
+		// Parametri:
+		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
+		physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Spider[0], g_Levels[g_CurrRoomIdx].SpiderNumber);
+		//physicsCollisionPlayerAndSpider(&g_Player);
+
+		// Funzione: updateGhost
+		// Aggiorna il rendering dei nemici.
+		//updateBat();
+		updateGenericEnemy(&g_Bat[0], g_Levels[g_CurrRoomIdx].BatNumber, 20);
 
 		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
 		// Funzione: physicsCollisionPlayerAndGhost
@@ -1890,6 +1977,7 @@ bool State_Game()
 		// Parametri:
 		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 		physicsCollisionPlayerAndBat(&g_Player);
+		
 	}
 	g_FrameCounter++;
 	g_Frame++;
@@ -2038,12 +2126,22 @@ void ChannelSFX(u8 chan)
 	ayFX_SetChannel(chan); // Impostare il canale da utilizzare per la riproduzione del suono
 }
 
+/**
+ * @brief Inizializzaione del Player PT3 e impostazione della tabella delle note
+ * @parm void
+ * @return void
+ */
 void inizializePT3()
 {
 	PT3_Init();				   // Inizializza il Player PT3
 	PT3_SetNoteTable(PT3_NT2); // Setta la tabella delle note
 }
 
+/**
+ * @brief Impostazione del riproduttore ayfx e del canale audio
+ * @param void
+ * @return void
+ */
 void inizializeAYFX()
 {
 	ayFX_InitBank(g_ayfx_bank);		// Impostazione del riproduttore ayFX tramite l'array g_ayfx_bank
@@ -2059,7 +2157,7 @@ void main()
 {
 	DEBUG_INIT();
 	DEBUG_LOG("Start debug session!");
-
+	
 	// Funzione: Game_SetState
 	// Impostare lo stato successivo (la modifica sarà effettiva al prossimo aggiornamento dello stato)
 	//
