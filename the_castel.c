@@ -86,7 +86,7 @@ struct CharacterEnemy
 	i8 VelocityY;
 	u8 State;
 	int Direction;
-	const c8 *TypeEnemy;	
+	const c8 *TypeEnemy;
 };
 
 //=============================================================================
@@ -126,6 +126,7 @@ bool addLife();
 void displayLife();
 bool removeLife();
 void reorganizeLife();
+bool hasLives();
 void physicsCollisionPlayerAndEnemy(struct Character *ply);
 void replacementItemInLevel(u8 x, u8 y, u8 tile);
 void changeLevel(u8 x, u8 y, u8 key, u8 door);
@@ -356,7 +357,7 @@ bool removeLife()
 
 	for (u8 i = 0; i < MAX_LIVES; i++)
 	{
-		// Print_DrawIntAt(23, 18, i);
+
 		if (g_Lives[i] == TILE_HEART)
 		{
 			g_Lives[i] = EMPTY_ITEM;
@@ -396,6 +397,21 @@ void reorganizeLife()
 		if (life[i] != EMPTY_ITEM)
 			addLife();
 	}
+}
+
+/**
+ * @brief COntrolla se ci sono ancora vite disponibili
+ */
+bool hasLives()
+{
+	for (u8 i = 0; i < MAX_LIVES; i++)
+	{
+		if (g_Lives[i] == TILE_HEART)
+		{
+			return TRUE;
+		}
+	}
+	return FALSE;
 }
 
 /**
@@ -637,11 +653,9 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
 			i8 dx = enemy->X - pawn->PositionX;
 			i8 dy = enemy->Y - pawn->PositionY;
 
-			if(collisionCheck(dx, dy)) {
+			if (collisionCheck(dx, dy))
+			{
 				// TODO: non faccio nulla
-
-				/* Print_DrawTextAt(20,18, enemy->TypeEnemy);
-				Print_DrawIntAt(20,19, g_CurrRoomIdx); */
 			}
 		}
 	}
@@ -651,7 +665,7 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
  * @brief Gestisce una probabile collisione tra il Player e uno degli scheletri
  * @param void
  * @return void
- * 
+ *
  * @deprecated
  */
 void physicsCollisionPlayerAndEnemy(struct Character *ply)
@@ -678,7 +692,7 @@ void physicsCollisionPlayerAndEnemy(struct Character *ply)
  * @brief Gestisce una probabile collisione tra il Player e uno dei fantasmi
  * @param void
  * @return void
- * 
+ *
  * @deprecated
  */
 void physicsCollisionPlayerAndGhost(struct Character *ply)
@@ -705,7 +719,7 @@ void physicsCollisionPlayerAndGhost(struct Character *ply)
  * @brief Gestisce una probabile collisione tra il Player e uno dei fantasmi
  * @param void
  * @return void
- * 
+ *
  * @deprecated
  */
 void physicsCollisionPlayerAndSpider(struct Character *ply)
@@ -732,7 +746,7 @@ void physicsCollisionPlayerAndSpider(struct Character *ply)
  * @brief Gestisce una probabile collisione tra il Player e uno dei pipistrelli
  * @param void
  * @return void
- * 
+ *
  * @deprecated
  */
 void physicsCollisionPlayerAndBat(struct Character *ply)
@@ -760,13 +774,13 @@ void physicsCollisionPlayerAndBat(struct Character *ply)
  * @param i8 dx Coordinata X
  * @param i8 dy Coordinara Y
  * @return void
-*/
+ */
 bool collisionCheck(i8 dx, i8 dy)
 {
 	u16 sqrtDist = (dx * dx) + (dy * dy);
 	if (sqrtDist < 13 * 13)
 	{
-		g_ReverseCount = 30;
+		g_ReverseCount = 60;
 		if (removeLife() == TRUE)
 		{
 			reorganizeLife();
@@ -775,6 +789,10 @@ bool collisionCheck(i8 dx, i8 dy)
 			PlayBankSFX(9, 0);
 
 			return TRUE;
+		}
+		else 
+		{
+			
 		}
 		// VDP_SetColor(COLOR_DARK_RED);
 	}
@@ -1470,7 +1488,7 @@ void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 
  * @brief Aggiorna la posizione dei nemici
  * @param void
  * @return void
- * 
+ *
  * @deprecated
  */
 void updateSkeleton()
@@ -1521,7 +1539,7 @@ void updateSkeleton()
  * @brief Aggiorna la posizione dei nemici
  * @param void
  * @return void
- * 
+ *
  * @deprecated
  */
 void updateGhost()
@@ -1572,7 +1590,7 @@ void updateGhost()
  * @brief Aggiorna la posizione dei nemici
  * @param void
  * @return void
- * 
+ *
  * @deprecated
  */
 void updateSpider()
@@ -1623,7 +1641,7 @@ void updateSpider()
  * @brief Aggiorna la posizione dei nemici
  * @param void
  * @return void
- * 
+ *
  * @deprecated
  */
 void updateBat()
@@ -1925,7 +1943,7 @@ bool State_Game()
 	{
 		// Funzione: updateSkeleton
 		// Aggiorna il rendering dei nemici.
-		//updateSkeleton();
+		// updateSkeleton();
 		updateGenericEnemy(&g_Enemy[0], g_Levels[g_CurrRoomIdx].SkeletonNumber, 6);
 
 		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
@@ -1935,11 +1953,11 @@ bool State_Game()
 		// Parametri:
 		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 		physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Enemy[0], g_Levels[g_CurrRoomIdx].SkeletonNumber);
-		//physicsCollisionPlayerAndEnemy(&g_Player);
-		
+		// physicsCollisionPlayerAndEnemy(&g_Player);
+
 		// Funzione: updateGhost
 		// Aggiorna il rendering dei nemici.
-		//updateGhost();
+		// updateGhost();
 		updateGenericEnemy(&g_Ghost[0], g_Levels[g_CurrRoomIdx].GhostNumber, 10);
 
 		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
@@ -1949,11 +1967,11 @@ bool State_Game()
 		// Parametri:
 		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 		physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Ghost[0], g_Levels[g_CurrRoomIdx].GhostNumber);
-		//physicsCollisionPlayerAndGhost(&g_Player);		
+		// physicsCollisionPlayerAndGhost(&g_Player);
 
 		// Funzione: updateGhost
 		// Aggiorna il rendering dei nemici.
-		//updateSpider();
+		// updateSpider();
 		updateGenericEnemy(&g_Spider[0], g_Levels[g_CurrRoomIdx].SpiderNumber, 15);
 
 		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
@@ -1963,11 +1981,11 @@ bool State_Game()
 		// Parametri:
 		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 		physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Spider[0], g_Levels[g_CurrRoomIdx].SpiderNumber);
-		//physicsCollisionPlayerAndSpider(&g_Player);
+		// physicsCollisionPlayerAndSpider(&g_Player);
 
 		// Funzione: updateGhost
 		// Aggiorna il rendering dei nemici.
-		//updateBat();
+		// updateBat();
 		updateGenericEnemy(&g_Bat[0], g_Levels[g_CurrRoomIdx].BatNumber, 20);
 
 		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
@@ -1977,7 +1995,6 @@ bool State_Game()
 		// Parametri:
 		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 		physicsCollisionPlayerAndBat(&g_Player);
-		
 	}
 	g_FrameCounter++;
 	g_Frame++;
@@ -2157,7 +2174,7 @@ void main()
 {
 	DEBUG_INIT();
 	DEBUG_LOG("Start debug session!");
-	
+
 	// Funzione: Game_SetState
 	// Impostare lo stato successivo (la modifica sarà effettiva al prossimo aggiornamento dello stato)
 	//
