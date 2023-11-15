@@ -18,7 +18,6 @@
 #include "debug.h"
 #include "string.h"
 #include "input.h"
-#include "sprite_fx.h"
 #include "pt3/pt3_player.h"
 #include "pt3/pt3_notetable2.h"
 #include "ayfx/ayfx_player.h"
@@ -31,11 +30,7 @@
 #include "data/bg_tileset.h"
 #include "data/ayfx/ayfx_bank.h"
 
-#if CAVALIERE
 #include "data/sprt_player.h"
-#else
-#include "data/sprt_player_alt.h"
-#endif
 
 #include "data/level/level001.h"
 #include "data/level/level002.h"
@@ -45,6 +40,9 @@
 #include "data/level/level006.h"
 #include "data/level/level007.h"
 #include "data/level/level008.h"
+#include "data/level/level011.h"
+
+// #include "data/level/backuplevel001.h"
 
 //=============================================================================
 // DEFINES
@@ -95,6 +93,7 @@ struct CharacterEnemy
 bool State_Initialize();
 bool State_Game();
 bool State_Pause();
+bool State_Preset();
 
 u8 getTile(u8 x, u8 y);
 void setTile(u8 x, u8 y, u8 tile);
@@ -105,7 +104,6 @@ bool interact(u8 x, u8 y);
 void drawLevel(u8 levelIdx);
 void initCharacter(struct Character *ply, u8 id);
 void updateCharacter(struct Character *ply);
-void updateSkeleton();
 void VDP_LoadSpritePattern16_VSym(const u8 *src, u8 index, u8 count);
 bool isMoveRight(u8 row8);
 bool isMoveLeft(u8 row8);
@@ -130,25 +128,21 @@ bool hasLives();
 void physicsCollisionPlayerAndEnemy(struct Character *ply);
 void replacementItemInLevel(u8 x, u8 y, u8 tile);
 void changeLevel(u8 x, u8 y, u8 key, u8 door);
-void updateGhost();
-void physicsCollisionPlayerAndGhost(struct Character *ply);
-void updateSpider();
-void physicsCollisionPlayerAndSpider(struct Character *ply);
-void updateBat();
-void physicsCollisionPlayerAndBat(struct Character *ply);
 bool isUnderTheWater(u8 x, u8 y);
 void genericControl();
 bool collisionCheck(i8 dx, i8 dy);
-
 void inizializePT3();
 void inizializeAYFX();
-
 void PlayBankSFX(u8 id, u8 prio);
 void ChannelSFX(u8 chan);
-void callBackVSync();
-
 void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct CharacterEnemy *genericEnemy, u8 enemyNumber);
 void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 idFirstSprite);
+void copyLevel(unsigned char *arr1, unsigned char *arr2, int size);
+void backupLevel();
+void restoreLevel();
+void hideSprite(u8 count, u8 maxElement, u8 baseSprite);
+void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape);
+void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 enemyCount, char *type);
 
 //.............................................................................
 // Player 1 data
@@ -182,7 +176,6 @@ const Game_Frame g_PlayerFramesIdle[] =
 		{IDLE_PLAYER_FRAME_2, 24, NULL},
 };
 
-#if CAVALIERE
 // Animazione Move
 // Ogni riga descrive una parte dell'animazione
 const Game_Frame g_PlayerFramesMove[] =
@@ -192,15 +185,6 @@ const Game_Frame g_PlayerFramesMove[] =
 		//{MOVE_PLAYER_FRAME_2, 4, NULL},
 		//{MOVE_PLAYER_FRAME_3, 4, NULL},  RIVEDERE
 };
-#else
-const Game_Frame g_PlayerFramesMove[] =
-	{
-		{MOVE_PLAYER_FRAME_0, 4, NULL},
-		{MOVE_PLAYER_FRAME_1, 4, NULL},
-		{MOVE_PLAYER_FRAME_2, 4, NULL},
-		{MOVE_PLAYER_FRAME_3, 4, NULL},
-};
-#endif
 
 // Animazione Jump
 // Ogni riga descrive una parte dell'animazione
@@ -265,6 +249,18 @@ u8 g_BankFXNum = 0;
 
 unsigned char g_Inventory[MAX_ITEM_INVENTORY] = {0, 0, 0, 0, 0};
 unsigned char g_Lives[MAX_LIVES] = {0, 0, 0};
+
+#define SIZE_LEVEL 768;
+/*
+unsigned char g_backupLevel001[768];
+unsigned char g_backupLevel002[768];
+unsigned char g_backupLevel003[768];
+unsigned char g_backupLevel004[768];
+unsigned char g_backupLevel005[768];
+unsigned char g_backupLevel006[768];
+unsigned char g_backupLevel007[768];
+unsigned char g_backupLevel008[768];
+*/
 
 /** \struct
 	struct: Struttura che rappresenta la stanza
@@ -662,114 +658,6 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
 }
 
 /**
- * @brief Gestisce una probabile collisione tra il Player e uno degli scheletri
- * @param void
- * @return void
- *
- * @deprecated
- */
-void physicsCollisionPlayerAndEnemy(struct Character *ply)
-{
-	if (g_ReverseCount > 0)
-		g_ReverseCount--;
-	else
-	{
-		Game_Pawn *pawn = &ply->Pawn;
-
-		for (u8 nEnemy = 0; nEnemy < g_Levels[g_CurrRoomIdx].SkeletonNumber; nEnemy++)
-		{
-			struct CharacterEnemy *enemy = &g_Enemy[nEnemy];
-
-			i8 dx = enemy->X - pawn->PositionX;
-			i8 dy = enemy->Y - pawn->PositionY;
-
-			collisionCheck(dx, dy);
-		}
-	}
-}
-
-/**
- * @brief Gestisce una probabile collisione tra il Player e uno dei fantasmi
- * @param void
- * @return void
- *
- * @deprecated
- */
-void physicsCollisionPlayerAndGhost(struct Character *ply)
-{
-	if (g_ReverseCount > 0)
-		g_ReverseCount--;
-	else
-	{
-		Game_Pawn *pawn = &ply->Pawn;
-
-		for (u8 nEnemy = 0; nEnemy < g_Levels[g_CurrRoomIdx].GhostNumber; nEnemy++)
-		{
-			struct CharacterEnemy *enemy = &g_Ghost[nEnemy];
-
-			i8 dx = enemy->X - pawn->PositionX;
-			i8 dy = enemy->Y - pawn->PositionY;
-
-			collisionCheck(dx, dy);
-		}
-	}
-}
-
-/**
- * @brief Gestisce una probabile collisione tra il Player e uno dei fantasmi
- * @param void
- * @return void
- *
- * @deprecated
- */
-void physicsCollisionPlayerAndSpider(struct Character *ply)
-{
-	if (g_ReverseCount > 0)
-		g_ReverseCount--;
-	else
-	{
-		Game_Pawn *pawn = &ply->Pawn;
-
-		for (u8 nEnemy = 0; nEnemy < g_Levels[g_CurrRoomIdx].SpiderNumber; nEnemy++)
-		{
-			struct CharacterEnemy *enemy = &g_Spider[nEnemy];
-
-			i8 dx = enemy->X - pawn->PositionX;
-			i8 dy = enemy->Y - pawn->PositionY;
-
-			collisionCheck(dx, dy);
-		}
-	}
-}
-
-/**
- * @brief Gestisce una probabile collisione tra il Player e uno dei pipistrelli
- * @param void
- * @return void
- *
- * @deprecated
- */
-void physicsCollisionPlayerAndBat(struct Character *ply)
-{
-	if (g_ReverseCount > 0)
-		g_ReverseCount--;
-	else
-	{
-		Game_Pawn *pawn = &ply->Pawn;
-
-		for (u8 nEnemy = 0; nEnemy < g_Levels[g_CurrRoomIdx].BatNumber; nEnemy++)
-		{
-			struct CharacterEnemy *enemy = &g_Bat[nEnemy];
-
-			i8 dx = enemy->X - pawn->PositionX;
-			i8 dy = enemy->Y - pawn->PositionY;
-
-			collisionCheck(dx, dy);
-		}
-	}
-}
-
-/**
  * @brief Effettua la verifica sulla collisione
  * @param i8 dx Coordinata X
  * @param i8 dy Coordinara Y
@@ -790,9 +678,10 @@ bool collisionCheck(i8 dx, i8 dy)
 
 			return TRUE;
 		}
-		else 
+		else
 		{
-			
+			/* 			if (!hasLives())
+							Game_SetState(State_Preset); */
 		}
 		// VDP_SetColor(COLOR_DARK_RED);
 	}
@@ -1100,31 +989,9 @@ void drawLevel(u8 levelIdx)
 						u8 x = g_Levels[levelIdx].X + colonna;
 						u8 y = g_Levels[levelIdx].Y + riga;
 
-						// Funzione: VDP_SetSpriteSM1
-						// Impostare l'attributo sprite per la modalità Sprite 1. [MSX1/2/2+/TR]
-						//
-						// Parametri:
-						//   index - Indice dello sprite nella tabella degli attributi
-						//   x     - Coordinata iniziale X dello schermo
-						//   y     - Coordinata iniziale Y dello schermo
-						//   shape - Indice del modello di sprite (in modalità 16x16, è possibile utilizzare solo multipli di 4)
-						//   color - Colore dello sprite (LSB 4 bit) + flag EC opzionale (VDP_SPRITE_EC)
-						VDP_SetSpriteSM1(6 + g_PawnCount, x, y, 196, COLOR_WHITE);
+						managementSprite(x, y, 6, g_PawnCount, 196);
 
-						// Funzione: VDP_SetSpritePosition
-						// Aggiorna la posizione dello sprite. [MSX1/2/2+/TR]
-						//
-						// Parametri:
-						//   index - Indice dello sprite nella tabella degli attributi.
-						//   x     - Coordinata X iniziale dello schermo.
-						//   y     - Coordinata Y iniziale dello schermo.
-						VDP_SetSpritePosition(6 + g_PawnCount, x * 8, (y - 1) * 8);
-
-						struct CharacterEnemy *enemy = &g_Enemy[g_PawnCount];
-						enemy->X = x * 8;
-						enemy->Y = (y - 1) * 8;
-						enemy->Direction = -1;
-						enemy->TypeEnemy = "Sheletor";
+						spritePosition(x, y, &g_Enemy[0], g_PawnCount, "Sheletor");
 
 						setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
 						g_PawnCount++;
@@ -1146,32 +1013,10 @@ void drawLevel(u8 levelIdx)
 						u8 x = g_Levels[levelIdx].X + colonna;
 						u8 y = g_Levels[levelIdx].Y + riga;
 
-						// Funzione: VDP_SetSpriteSM1
-						// Impostare l'attributo sprite per la modalità Sprite 1. [MSX1/2/2+/TR]
-						//
-						// Parametri:
-						//   index - Indice dello sprite nella tabella degli attributi
-						//   x     - Coordinata iniziale X dello schermo
-						//   y     - Coordinata iniziale Y dello schermo
-						//   shape - Indice del modello di sprite (in modalità 16x16, è possibile utilizzare solo multipli di 4)
-						//   color - Colore dello sprite (LSB 4 bit) + flag EC opzionale (VDP_SPRITE_EC)
-						VDP_SetSpriteSM1(10 + g_GhostCount, x, y, 200, COLOR_WHITE);
+						managementSprite(x, y, 10, g_GhostCount, 200);
 
-						// Funzione: VDP_SetSpritePosition
-						// Aggiorna la posizione dello sprite. [MSX1/2/2+/TR]
-						//
-						// Parametri:
-						//   index - Indice dello sprite nella tabella degli attributi.
-						//   x     - Coordinata X iniziale dello schermo.
-						//   y     - Coordinata Y iniziale dello schermo.
-						VDP_SetSpritePosition(10 + g_GhostCount, x * 8, (y - 1) * 8);
-
-						struct CharacterEnemy *ghost = &g_Ghost[g_GhostCount];
-						ghost->X = x * 8;
-						ghost->Y = (y - 1) * 8;
-						ghost->Direction = -1;
-						ghost->TypeEnemy = "Ghost";
-
+						spritePosition(x, y, &g_Ghost[0], g_GhostCount, "Ghost");
+						
 						setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
 						g_GhostCount++;
 					}
@@ -1192,31 +1037,9 @@ void drawLevel(u8 levelIdx)
 						u8 x = g_Levels[levelIdx].X + colonna;
 						u8 y = g_Levels[levelIdx].Y + riga;
 
-						// Funzione: VDP_SetSpriteSM1
-						// Impostare l'attributo sprite per la modalità Sprite 1. [MSX1/2/2+/TR]
-						//
-						// Parametri:
-						//   index - Indice dello sprite nella tabella degli attributi
-						//   x     - Coordinata iniziale X dello schermo
-						//   y     - Coordinata iniziale Y dello schermo
-						//   shape - Indice del modello di sprite (in modalità 16x16, è possibile utilizzare solo multipli di 4)
-						//   color - Colore dello sprite (LSB 4 bit) + flag EC opzionale (VDP_SPRITE_EC)
-						VDP_SetSpriteSM1(15 + g_SpiderCount, x, y, 192, COLOR_WHITE);
+						managementSprite(x, y, 15, g_SpiderCount, 192);
 
-						// Funzione: VDP_SetSpritePosition
-						// Aggiorna la posizione dello sprite. [MSX1/2/2+/TR]
-						//
-						// Parametri:
-						//   index - Indice dello sprite nella tabella degli attributi.
-						//   x     - Coordinata X iniziale dello schermo.
-						//   y     - Coordinata Y iniziale dello schermo.
-						VDP_SetSpritePosition(15 + g_SpiderCount, x * 8, (y - 1) * 8);
-
-						struct CharacterEnemy *spider = &g_Spider[g_SpiderCount];
-						spider->X = x * 8;
-						spider->Y = (y - 1) * 8;
-						spider->Direction = -1;
-						spider->TypeEnemy = "Spider";
+						spritePosition(x, y, &g_Spider[0], g_SpiderCount, "Spider");
 
 						setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
 						g_SpiderCount++;
@@ -1238,31 +1061,9 @@ void drawLevel(u8 levelIdx)
 						u8 x = g_Levels[levelIdx].X + colonna;
 						u8 y = g_Levels[levelIdx].Y + riga;
 
-						// Funzione: VDP_SetSpriteSM1
-						// Impostare l'attributo sprite per la modalità Sprite 1. [MSX1/2/2+/TR]
-						//
-						// Parametri:
-						//   index - Indice dello sprite nella tabella degli attributi
-						//   x     - Coordinata iniziale X dello schermo
-						//   y     - Coordinata iniziale Y dello schermo
-						//   shape - Indice del modello di sprite (in modalità 16x16, è possibile utilizzare solo multipli di 4)
-						//   color - Colore dello sprite (LSB 4 bit) + flag EC opzionale (VDP_SPRITE_EC)
-						VDP_SetSpriteSM1(20 + g_BatCount, x, y, 204, COLOR_WHITE);
+						managementSprite(x, y, 20, g_BatCount, 204);
 
-						// Funzione: VDP_SetSpritePosition
-						// Aggiorna la posizione dello sprite. [MSX1/2/2+/TR]
-						//
-						// Parametri:
-						//   index - Indice dello sprite nella tabella degli attributi.
-						//   x     - Coordinata X iniziale dello schermo.
-						//   y     - Coordinata Y iniziale dello schermo.
-						VDP_SetSpritePosition(20 + g_BatCount, x * 8, (y - 1) * 8);
-
-						struct CharacterEnemy *bat = &g_Bat[g_BatCount];
-						bat->X = x * 8;
-						bat->Y = (y - 1) * 8;
-						bat->Direction = -1;
-						bat->TypeEnemy = "Bat";
+						spritePosition(x, y, &g_Bat[0], g_BatCount, "Bat");
 
 						setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
 						g_BatCount++;
@@ -1272,33 +1073,69 @@ void drawLevel(u8 levelIdx)
 		}
 	}
 
-	// Nasconde gli sprite dei nemici
-	for (u8 i = g_PawnCount; i < MAX_ENEMY; ++i)
-	{
-		VDP_HideSprite(6 + i);
-	}
-
-	for (u8 i = g_GhostCount; i < MAX_GHOST; ++i)
-	{
-		VDP_HideSprite(10 + i);
-	}
-
-	for (u8 i = g_SpiderCount; i < MAX_SPIDER; ++i)
-	{
-		VDP_HideSprite(15 + i);
-	}
-
-	for (u8 i = g_BatCount; i < MAX_BAT; ++i)
-	{
-		VDP_HideSprite(20 + i);
-	}
-
-	// VDP_HideSpriteFrom(6 + g_PawnCount);
+	hideSprite(g_PawnCount, MAX_ENEMY, 6);
+	hideSprite(g_GhostCount, MAX_GHOST, 10);
+	hideSprite(g_SpiderCount, MAX_SPIDER, 15);
+	hideSprite(g_BatCount, MAX_BAT, 20);
 
 	updateScore();
 
 	displayItemToInventory();
 	displayLife();
+}
+
+void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 enemyCount, char *type)
+{
+	struct CharacterEnemy *generic = &genericEnemy[enemyCount];
+	generic->X = x * 8;
+	generic->Y = (y - 1) * 8;
+	generic->Direction = -1;
+	generic->TypeEnemy = type;
+}
+
+/**
+ * @brief Nasconde gli sprites
+ * @param u8 count
+ * @param u8 maxElement numero massimo di sprite
+ * @param u8 baseSprite Indice base nella tabella degli sprite
+ */
+void hideSprite(u8 count, u8 maxElement, u8 baseSprite)
+{
+	for (u8 i = count; i < maxElement; ++i)
+	{
+		VDP_HideSprite(baseSprite + i);
+	}
+}
+
+/**
+ * @brief Setta lo sprite e lo posiziona
+ * @param u8 x Coordinata x
+ * @param u8 y Coordinata y
+ * @param u8 baseSprite Indice base nella tabella degli sprite
+ * @param u6 enemyCount Numero dei nemici
+ * @param u8 indexShape indice della figura
+ */
+void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape)
+{
+	// Funzione: VDP_SetSpriteSM1
+	// Impostare l'attributo sprite per la modalità Sprite 1. [MSX1/2/2+/TR]
+	//
+	// Parametri:
+	//   index - Indice dello sprite nella tabella degli attributi
+	//   x     - Coordinata iniziale X dello schermo
+	//   y     - Coordinata iniziale Y dello schermo
+	//   shape - Indice del modello di sprite (in modalità 16x16, è possibile utilizzare solo multipli di 4)
+	//   color - Colore dello sprite (LSB 4 bit) + flag EC opzionale (VDP_SPRITE_EC)
+	VDP_SetSpriteSM1(baseSprite + enemyCount, x, y, indexShape, COLOR_WHITE);
+
+	// Funzione: VDP_SetSpritePosition
+	// Aggiorna la posizione dello sprite. [MSX1/2/2+/TR]
+	//
+	// Parametri:
+	//   index - Indice dello sprite nella tabella degli attributi.
+	//   x     - Coordinata X iniziale dello schermo.
+	//   y     - Coordinata Y iniziale dello schermo.
+	VDP_SetSpritePosition(baseSprite + enemyCount, x * 8, (y - 1) * 8);
 }
 
 /**
@@ -1343,17 +1180,11 @@ void updateCharacter(struct Character *ply)
 		{
 			g_PrevDirection = INPUT_RIGHT;
 
-#if CAVALIERE
 			// TODO: Impiega troppo tempo per eseguire queste tre operazioni!!!
 			// TODO: Vedere se reimplementare
 			VDP_LoadSpritePattern16_VSym(g_DataSprtLayer, 4 * 4 * 0, 4 * 4 * 2);
 			// VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_4, 4 * 4 * 2, 4 * 4 * 3);
 			// VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_9, 4 * 4 * 5, 4 * 4 * 2);
-#else
-			VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_1, 4 * 4 * 0, 4 * 4 * 2);
-			VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_4, 4 * 4 * 2, 4 * 4 * 3);
-			VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_9, 4 * 4 * 5, 4 * 4 * 2);
-#endif
 		}
 	}
 	else if (ply->Input & INPUT_LEFT)
@@ -1365,7 +1196,6 @@ void updateCharacter(struct Character *ply)
 		{
 			g_PrevDirection = INPUT_LEFT;
 
-#if CAVALIERE
 			// Funzione: VDP_LoadSpritePattern
 			// Carica lo sprite nella VRAM. [MSX1/2/2+/TR]
 			//
@@ -1376,13 +1206,6 @@ void updateCharacter(struct Character *ply)
 			VDP_LoadSpritePattern(g_DataSprtLayer, 4 * 4 * 0, 4 * 4 * 2);
 			// VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_4, 4 * 4 * 2, 4 * 4 * 3);
 			// VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_9, 4 * 4 * 5, 4 * 4 * 2);
-#else
-			// TODO: Vedere se reimplementare
-			VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_1, 4 * 4 * 0, 4 * 4 * 2);
-			VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_4, 4 * 4 * 2, 4 * 4 * 3);
-			VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_9, 4 * 4 * 5, 4 * 4 * 2);
-
-#endif
 		}
 	}
 	else
@@ -1485,210 +1308,6 @@ void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 
 }
 
 /**
- * @brief Aggiorna la posizione dei nemici
- * @param void
- * @return void
- *
- * @deprecated
- */
-void updateSkeleton()
-{
-
-	for (u8 nEnemy = 0; nEnemy < g_Levels[g_CurrRoomIdx].SkeletonNumber; nEnemy++)
-	{
-		struct CharacterEnemy *enemy = &g_Enemy[nEnemy];
-
-		if (!physicsCollisionEnemy(enemy->X + 7, enemy->Y) == 1)
-		{
-			if (enemy->Direction < 0)
-			{
-				enemy->X--;
-			}
-			else
-			{
-				enemy->X++;
-			}
-		}
-		else
-		{
-			enemy->Direction *= -1;
-			if (enemy->Direction < 0)
-			{
-				enemy->X--;
-			}
-			else
-			{
-				enemy->X++;
-			}
-		}
-
-		// Funzione: VDP_SetSpritePosition
-		// Aggiorna la posizione dello sprite. [MSX1/2/2+/TR]
-		//
-		// Parametri:
-		//   index - Indice dello sprite nella tabella degli attributi.
-		//   x     - Coordinata X iniziale dello schermo.
-		//   y     - Coordinata Y iniziale dello schermo.
-		VDP_SetSpritePosition(6 + nEnemy, enemy->X, enemy->Y);
-
-		enemy = null;
-	}
-}
-
-/**
- * @brief Aggiorna la posizione dei nemici
- * @param void
- * @return void
- *
- * @deprecated
- */
-void updateGhost()
-{
-
-	for (u8 nEnemy = 0; nEnemy < g_Levels[g_CurrRoomIdx].GhostNumber; nEnemy++)
-	{
-		struct CharacterEnemy *enemy = &g_Ghost[nEnemy];
-
-		if (!physicsCollisionEnemy(enemy->X + 7, enemy->Y) == 1)
-		{
-			if (enemy->Direction < 0)
-			{
-				enemy->X--;
-			}
-			else
-			{
-				enemy->X++;
-			}
-		}
-		else
-		{
-			enemy->Direction *= -1;
-			if (enemy->Direction < 0)
-			{
-				enemy->X--;
-			}
-			else
-			{
-				enemy->X++;
-			}
-		}
-
-		// Funzione: VDP_SetSpritePosition
-		// Aggiorna la posizione dello sprite. [MSX1/2/2+/TR]
-		//
-		// Parametri:
-		//   index - Indice dello sprite nella tabella degli attributi.
-		//   x     - Coordinata X iniziale dello schermo.
-		//   y     - Coordinata Y iniziale dello schermo.
-		VDP_SetSpritePosition(10 + nEnemy, enemy->X, enemy->Y);
-
-		enemy = null;
-	}
-}
-
-/**
- * @brief Aggiorna la posizione dei nemici
- * @param void
- * @return void
- *
- * @deprecated
- */
-void updateSpider()
-{
-
-	for (u8 nEnemy = 0; nEnemy < g_Levels[g_CurrRoomIdx].SpiderNumber; nEnemy++)
-	{
-		struct CharacterEnemy *enemy = &g_Spider[nEnemy];
-
-		if (!physicsCollisionEnemy(enemy->X + 7, enemy->Y) == 1)
-		{
-			if (enemy->Direction < 0)
-			{
-				enemy->X--;
-			}
-			else
-			{
-				enemy->X++;
-			}
-		}
-		else
-		{
-			enemy->Direction *= -1;
-			if (enemy->Direction < 0)
-			{
-				enemy->X--;
-			}
-			else
-			{
-				enemy->X++;
-			}
-		}
-
-		// Funzione: VDP_SetSpritePosition
-		// Aggiorna la posizione dello sprite. [MSX1/2/2+/TR]
-		//
-		// Parametri:
-		//   index - Indice dello sprite nella tabella degli attributi.
-		//   x     - Coordinata X iniziale dello schermo.
-		//   y     - Coordinata Y iniziale dello schermo.
-		VDP_SetSpritePosition(15 + nEnemy, enemy->X, enemy->Y);
-
-		enemy = null;
-	}
-}
-
-/**
- * @brief Aggiorna la posizione dei nemici
- * @param void
- * @return void
- *
- * @deprecated
- */
-void updateBat()
-{
-
-	for (u8 nEnemy = 0; nEnemy < g_Levels[g_CurrRoomIdx].BatNumber; nEnemy++)
-	{
-		struct CharacterEnemy *enemy = &g_Bat[nEnemy];
-
-		if (!physicsCollisionEnemy(enemy->X + 7, enemy->Y) == 1)
-		{
-			if (enemy->Direction < 0)
-			{
-				enemy->X--;
-			}
-			else
-			{
-				enemy->X++;
-			}
-		}
-		else
-		{
-			enemy->Direction *= -1;
-			if (enemy->Direction < 0)
-			{
-				enemy->X--;
-			}
-			else
-			{
-				enemy->X++;
-			}
-		}
-
-		// Funzione: VDP_SetSpritePosition
-		// Aggiorna la posizione dello sprite. [MSX1/2/2+/TR]
-		//
-		// Parametri:
-		//   index - Indice dello sprite nella tabella degli attributi.
-		//   x     - Coordinata X iniziale dello schermo.
-		//   y     - Coordinata Y iniziale dello schermo.
-		VDP_SetSpritePosition(20 + nEnemy, enemy->X, enemy->Y);
-
-		enemy = null;
-	}
-}
-
-/**
  * @brief Raggruppo una serie di fuznioni
  * @param void
  * @return void
@@ -1769,6 +1388,9 @@ void VDP_LoadSpritePattern16_VSym(const u8 *src, u8 index, u8 count)
  */
 bool State_Initialize()
 {
+	// Funzione:
+	// Effettua il backup dei livelli di gioco, cosi da permettere il restore al termine della partita
+	backupLevel();
 
 	// Funzione: inizializePT3
 	// Inizializzazione del Player PT3 e della tabella delle note
@@ -1851,39 +1473,8 @@ bool State_Initialize()
 	//
 	VDP_WriteVRAM_16K(g_DataSprtLayer, g_SpritePatternLow, sizeof(g_DataSprtLayer));
 
-	// Funzione: InitCharacter
-	// Inizzializza lo sprite del giocatore
-	//
-	// Parametri:
-	//  Character - indirizzo della truruttura che rappresenta il giocatore
-	//  id del giorcatore
-	initCharacter(&g_Player, 0);
+	Game_SetState(State_Preset);
 
-	// Funzione: initInventory
-	// Inizializza l'inventario
-	initInventory();
-
-	// Funzione: initLife
-	// Inizializza le vite del giocatore
-	initLife();
-
-	// TODO: Quando importo le funzionalità della libreria clock
-	//		 viene gnerato un errore del tipo ?ASlink-Warning-Undefined Global
-	//       chiedere se è possibili utilizzarle su msx 1
-	// Funzione: rtcInizialize
-	// Inizializza il modulo RTC
-	// rtcInizialize();
-
-	// Funzione: DrawLevel
-	// Inizzializza il livello di gioco
-	//
-	// Parametri:
-	//  u8 levelIdx - rappresenta l'id del livello
-	drawLevel(0);
-
-	VDP_EnableDisplay(TRUE);
-
-	Game_SetState(State_Game);
 	return FALSE; // Frame finished
 }
 
@@ -1943,7 +1534,6 @@ bool State_Game()
 	{
 		// Funzione: updateSkeleton
 		// Aggiorna il rendering dei nemici.
-		// updateSkeleton();
 		updateGenericEnemy(&g_Enemy[0], g_Levels[g_CurrRoomIdx].SkeletonNumber, 6);
 
 		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
@@ -1953,11 +1543,9 @@ bool State_Game()
 		// Parametri:
 		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 		physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Enemy[0], g_Levels[g_CurrRoomIdx].SkeletonNumber);
-		// physicsCollisionPlayerAndEnemy(&g_Player);
 
 		// Funzione: updateGhost
 		// Aggiorna il rendering dei nemici.
-		// updateGhost();
 		updateGenericEnemy(&g_Ghost[0], g_Levels[g_CurrRoomIdx].GhostNumber, 10);
 
 		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
@@ -1967,11 +1555,9 @@ bool State_Game()
 		// Parametri:
 		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 		physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Ghost[0], g_Levels[g_CurrRoomIdx].GhostNumber);
-		// physicsCollisionPlayerAndGhost(&g_Player);
 
 		// Funzione: updateGhost
 		// Aggiorna il rendering dei nemici.
-		// updateSpider();
 		updateGenericEnemy(&g_Spider[0], g_Levels[g_CurrRoomIdx].SpiderNumber, 15);
 
 		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
@@ -1981,11 +1567,9 @@ bool State_Game()
 		// Parametri:
 		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 		physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Spider[0], g_Levels[g_CurrRoomIdx].SpiderNumber);
-		// physicsCollisionPlayerAndSpider(&g_Player);
 
 		// Funzione: updateGhost
 		// Aggiorna il rendering dei nemici.
-		// updateBat();
 		updateGenericEnemy(&g_Bat[0], g_Levels[g_CurrRoomIdx].BatNumber, 20);
 
 		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
@@ -1994,13 +1578,61 @@ bool State_Game()
 		//
 		// Parametri:
 		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
-		physicsCollisionPlayerAndBat(&g_Player);
+		physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Bat[0], g_Levels[g_CurrRoomIdx].BatNumber);
 	}
 	g_FrameCounter++;
 	g_Frame++;
 
 	if (Keyboard_IsKeyPressed(KEY_ESC))
 		Game_Exit();
+
+	return TRUE;
+}
+
+/**
+ * @brief Effettua il presete del gioco
+ * @param void
+ * @return void
+ */
+bool State_Preset()
+{
+
+	/*  	u16 sizeLevel = sizeof(g_Level001) / sizeof(g_Level001[0]);
+		copyLevel(&g_Level003[0], &g_Level001[0], sizeLevel);
+	 */
+	// Funzione: InitCharacter
+	// Inizzializza lo sprite del giocatore
+	//
+	// Parametri:
+	//  Character - indirizzo della truruttura che rappresenta il giocatore
+	//  id del giorcatore
+	initCharacter(&g_Player, 0);
+
+	// Funzione: initInventory
+	// Inizializza l'inventario
+	initInventory();
+
+	// Funzione: initLife
+	// Inizializza le vite del giocatore
+	initLife();
+
+	// TODO: Quando importo le funzionalità della libreria clock
+	//		 viene gnerato un errore del tipo ?ASlink-Warning-Undefined Global
+	//       chiedere se è possibili utilizzarle su msx 1
+	// Funzione: rtcInizialize
+	// Inizializza il modulo RTC
+	// rtcInizialize();
+
+	// Funzione: DrawLevel
+	// Inizzializza il livello di gioco
+	//
+	// Parametri:
+	//  u8 levelIdx - rappresenta l'id del livello
+	drawLevel(0);
+
+	VDP_EnableDisplay(TRUE);
+
+	Game_SetState(State_Game);
 
 	return TRUE;
 }
@@ -2164,6 +1796,88 @@ void inizializeAYFX()
 	ayFX_InitBank(g_ayfx_bank);		// Impostazione del riproduttore ayFX tramite l'array g_ayfx_bank
 	ayFX_SetChannel(PSG_CHANNEL_A); // Impostare il canale da utilizzare per la riproduzione del suono
 	ayFX_SetMode(AYFX_MODE_FIXED);	// Set channel mode
+}
+
+/**
+ * @brief Effettua il backup dei livelli di gioco
+ * @param void
+ * @return void
+ */
+void backupLevel()
+{
+	/*
+	u16 sizeLevel = sizeof(g_Level001) / sizeof(g_Level001[0]);
+	copyLevel(&g_Level001[0], &g_backupLevel001[0], sizeLevel);
+
+	sizeLevel = sizeof(g_Level002) / sizeof(g_Level002[0]);
+	copyLevel(&g_Level002[0], &g_backupLevel002[0], sizeLevel);
+
+	sizeLevel = sizeof(g_Level003) / sizeof(g_Level003[0]);
+	copyLevel(&g_Level003[0], &g_backupLevel003[0], sizeLevel);
+
+	sizeLevel = sizeof(g_Level004) / sizeof(g_Level004[0]);
+	copyLevel(&g_Level004[0], &g_backupLevel004[0], sizeLevel);
+
+	sizeLevel = sizeof(g_Level005) / sizeof(g_Level005[0]);
+	copyLevel(&g_Level005[0], &g_backupLevel005[0], sizeLevel);
+
+	sizeLevel = sizeof(g_Level006) / sizeof(g_Level006[0]);
+	copyLevel(&g_Level006[0], &g_backupLevel006[0], sizeLevel);
+
+	sizeLevel = sizeof(g_Level007) / sizeof(g_Level007[0]);
+	copyLevel(&g_Level007[0], &g_backupLevel007[0], sizeLevel);
+
+	sizeLevel = sizeof(g_Level008) / sizeof(g_Level008[0]);
+	copyLevel(&g_Level008[0], &g_backupLevel008[0], sizeLevel);
+	*/
+}
+
+/**
+ * @brief Effettua il restore dei livelli di gioco
+ * @param void
+ * @return void
+ */
+void restoreLevel()
+{
+	/*
+	u16 sizeLevel = sizeof(g_Level001) / sizeof(g_Level001[0]);
+	copyLevel(&g_backupLevel001[0], &g_Level001[0], sizeLevel);
+
+	sizeLevel = sizeof(g_Level002) / sizeof(g_Level002[0]);
+	copyLevel(&g_backupLevel002[0], &g_Level002[0], sizeLevel);
+
+	sizeLevel = sizeof(g_Level003) / sizeof(g_Level003[0]);
+	copyLevel(&g_backupLevel003[0], &g_Level003[0], sizeLevel);
+
+	sizeLevel = sizeof(g_Level004) / sizeof(g_Level004[0]);
+	copyLevel(&g_backupLevel004[0], &g_Level004[0], sizeLevel);
+
+	sizeLevel = sizeof(g_Level005) / sizeof(g_Level005[0]);
+	copyLevel(&g_backupLevel005[0], &g_Level005[0], sizeLevel);
+
+	sizeLevel = sizeof(g_Level006) / sizeof(g_Level006[0]);
+	copyLevel(&g_backupLevel006[0], &g_Level006[0], sizeLevel);
+
+	sizeLevel = sizeof(g_Level007) / sizeof(g_Level007[0]);
+	copyLevel(&g_backupLevel007[0], &g_Level007[0], sizeLevel);
+
+	sizeLevel = sizeof(g_Level008) / sizeof(g_Level008[0]);
+	copyLevel(&g_backupLevel008[0], &g_Level008[0], sizeLevel);
+	*/
+}
+
+/**
+ * @brief effettua la copia di un array
+ * @param unsigned char *source Sorgente
+ * @param unsigned char *dest Destinazione
+ * @return void
+ */
+void copyLevel(unsigned char *source, unsigned char *dest, int size)
+{
+	for (int i = 0; i < size; i++)
+	{
+		*(dest + i) = *(source + i);
+	}
 }
 
 //=============================================================================
