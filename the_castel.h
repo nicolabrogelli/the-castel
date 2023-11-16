@@ -76,3 +76,10 @@
 
 
 #define JUMP_ENEMY_FRAME_11 4*16+7*16
+
+
+extern unsigned char g_Level001[];
+extern unsigned char g_Level018[];
+
+#define LEVEL001_WIDTH 32
+#define LEVEL001_HEIGHT 24

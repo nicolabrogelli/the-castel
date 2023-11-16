@@ -32,7 +32,7 @@
 
 #include "data/sprt_player.h"
 
-#include "data/level/level001.h"
+//#include "data/level/level001.h"
 #include "data/level/level002.h"
 #include "data/level/level003.h"
 #include "data/level/level004.h"
@@ -619,7 +619,7 @@ bool physicsCollision(u8 tile)
 }
 
 /**
- * @brief Si intercetta la collisione di un nemico
+ * @brief Si intercetta la collisione di un nemico con una tiles
  * @param u8 x asse X
  * @param u8 y asse y
  * @return TRUE se si verifica la collisione
@@ -1016,7 +1016,7 @@ void drawLevel(u8 levelIdx)
 						managementSprite(x, y, 10, g_GhostCount, 200);
 
 						spritePosition(x, y, &g_Ghost[0], g_GhostCount, "Ghost");
-						
+
 						setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
 						g_GhostCount++;
 					}
@@ -1879,6 +1879,11 @@ void copyLevel(unsigned char *source, unsigned char *dest, int size)
 		*(dest + i) = *(source + i);
 	}
 }
+
+//=============================================================================
+// HELPER
+//=============================================================================
+
 
 //=============================================================================
 // MAIN LOOP
