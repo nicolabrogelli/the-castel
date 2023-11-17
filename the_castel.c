@@ -81,6 +81,7 @@ struct CharacterEnemy
 bool State_Initialize();
 bool State_Game();
 bool State_Pause();
+bool State_GameOver();
 bool State_Preset();
 
 u8 getTile(u8 x, u8 y);
@@ -129,7 +130,7 @@ void restoreLevel();
 void hideSprite(u8 count, u8 maxElement, u8 baseSprite);
 void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape);
 void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 enemyCount, char *type);
-void adjustLevel(unsigned char* level, u16 sizeLevel);
+void adjustLevel(unsigned char *level, u16 sizeLevel);
 
 //.............................................................................
 // Player 1 data
@@ -269,6 +270,7 @@ const struct LevelDefinition g_Levels[] = {
 	{(32 - LEVEL006_WIDTH) / 2, (24 - LEVEL006_HEIGHT) / 2, LEVEL006_WIDTH, LEVEL006_HEIGHT, g_Level006, "Livello 6", 6, 4, 1, 1, 1, 0},
 	{(32 - LEVEL007_WIDTH) / 2, (24 - LEVEL007_HEIGHT) / 2, LEVEL007_WIDTH, LEVEL007_HEIGHT, g_Level007, "Livello 7", 7, 5, 0, 0, 0, 2},
 	{(32 - LEVEL008_WIDTH) / 2, (24 - LEVEL008_HEIGHT) / 2, LEVEL008_WIDTH, LEVEL008_HEIGHT, g_Level008, "Livello 8", 8, 0, 0, 0, 1, 2},
+	{(32 - LEVEL099_WIDTH) / 2, (24 - LEVEL099_HEIGHT) / 2, LEVEL099_WIDTH, LEVEL099_HEIGHT, g_Level099, "Livello 8", 8, 0, 0, 0, 1, 2},
 };
 
 //=============================================================================
@@ -657,8 +659,9 @@ bool collisionCheck(i8 dx, i8 dy)
 		}
 		else
 		{
-			if (!hasLives()) {
-				Game_SetState(State_Preset);
+			if (!hasLives())
+			{
+				Game_SetState(State_GameOver);				
 			}
 		}
 		// VDP_SetColor(COLOR_DARK_RED);
@@ -707,7 +710,7 @@ bool interact(u8 x, u8 y)
 
 	DEBUG_LOGNUM("Intercat", tile);
 
-	// TODO: Ottimizzare il case!! 
+	// TODO: Ottimizzare il case!!
 	switch (tile)
 	{
 	case TILE_HEART:
@@ -763,7 +766,7 @@ bool interact(u8 x, u8 y)
 
 		PlayBankSFX(5, 0);
 
-		return TRUE;	
+		return TRUE;
 	case TILE_KEY2:
 		// Modifico al volo il livello di gioco, cosi non sono costretto
 		// a creare una cache dei livelli.
@@ -774,7 +777,7 @@ bool interact(u8 x, u8 y)
 
 		PlayBankSFX(5, 0);
 
-		return TRUE;	
+		return TRUE;
 	case TILE_KEY3:
 		// Modifico al volo il livello di gioco, cosi non sono costretto
 		// a creare una cache dei livelli.
@@ -785,7 +788,7 @@ bool interact(u8 x, u8 y)
 
 		PlayBankSFX(5, 0);
 
-		return TRUE;	
+		return TRUE;
 	case TILE_AMPHORA:
 		// Modifico al volo il livello di gioco, cosi non sono costretto
 		// a creare una cache dei livelli.
@@ -856,7 +859,7 @@ bool getMoney(u8 x, u8 y)
 		// Modifico al volo il livello di gioco, cosi non sono costretto
 		// a creare una cache dei livelli.
 		replacementItemInLevel(x, y, TILE_MASK_MONEY); // EMPTY_ITEM
-		setTile(x, y, EMPTY_ITEM);				  // EMPTY_ITEM
+		setTile(x, y, EMPTY_ITEM);					   // EMPTY_ITEM
 
 		g_Player.Score++;
 		updateScore();
@@ -908,11 +911,11 @@ void replacementItemInLevel(u8 x, u8 y, u8 tile)
 {
 	u16 pos = ((y / 8) * 32) + (x / 8);
 
-	//Print_DrawIntAt(20,17,g_Levels[g_CurrRoomIdx].Layout[pos]);
+	// Print_DrawIntAt(20,17,g_Levels[g_CurrRoomIdx].Layout[pos]);
 	g_Levels[g_CurrRoomIdx].Layout[pos] = tile;
 
-	//Print_DrawIntAt(20,18,tile);
-	//Print_DrawIntAt(20,19,g_Levels[g_CurrRoomIdx].Layout[pos]);
+	// Print_DrawIntAt(20,18,tile);
+	// Print_DrawIntAt(20,19,g_Levels[g_CurrRoomIdx].Layout[pos]);
 }
 
 /**
@@ -1652,6 +1655,64 @@ bool State_Pause()
 	return TRUE;
 }
 
+/**
+ * @brief Stato di fine partita del gioco
+ * @param void
+ * @return bool Sempre a TRUE
+ */
+bool State_GameOver()
+{
+	VDP_HideAllSprites();
+
+	// Riempire l'area VRAM con un valore dato [MSX1/2/2+/TR]
+	//
+	// Parametri:
+	//   value	- Valore del Byte da copiare nella VRAM
+	//   dest	- Indirizzo di destinazione della VRAM  (indirizzo a 14 bit per 16 KB di VRAM)
+	//   count	- Numero di Byte da copiare nella VRAN
+	//
+	// Nota:
+	//   Puliza dello schermo
+
+	VDP_FillVRAM_16K(0, g_ScreenLayoutLow, 32 * 24);
+
+	// Disegnare il livello riga per riga
+	for (u8 riga = 0; riga < g_Levels[8].Height; ++riga)
+	{
+		// Funzione: VDP_WriteVRAM_16K
+		// Scrivere dati dalla RAM alla VRAM. [MSX1/2/2+/TR]
+		//
+		// Parametri:
+		//   src   - Indirizzo dei dati sorgente nella RAM
+		//   dest  - Indirizzo di destianzione nella VRAM (indirizzo a 14 bit per 16KB VRAM)
+		//   count - Numero di byte da copiare nella VRAM. Nota: Un valore 0 significa 65536
+		//
+		// Nota:
+		//    Ad ogni iterazione copia una riga del livello di gioco per, per chiarezza riporto i vari parametri utilizzati dalla funzione
+		//	  perchè g_Levels[levelIdx].Layout + g_Levels[levelIdx].Width * riga scarta la parte già copiata in precedentza e lascia tutto
+		//    il resto del livello.
+		//
+		//    src   - g_Levels[levelIdx].Layout + g_Levels[levelIdx].Width * riga
+		//    dest  - g_ScreenLayoutLow + (32 * (riga + g_Levels[levelIdx].Y)) + (g_Levels[levelIdx].X)
+		//    count - g_Levels[levelIdx].Width il numero di byte da copiare
+		//
+		// Attenzione alla prima iterazione viene preso tutto il layout , ma visto che la massima lunghezza della copia è espressa da g_Levels[levelIdx].Width
+		// viene copiata solamente la proma riga. Nelle iterazioni successive, il valore di riga incrementa e di conseguenza viene scartata la porzione del layout
+		// precedente (di dimesnione g_Levels[levelIdx].Width), e quindi viene copiata la parte che ci interessa. Tutto questo fino a che non si è completata
+		// la copia.
+		VDP_WriteVRAM_16K(g_Levels[8].Layout + g_Levels[8].Width * riga,
+						  g_ScreenLayoutLow + (32 * (riga + g_Levels[8].Y)) + (g_Levels[8].X), g_Levels[8].Width);
+	}
+
+	// Attende la pressione di un tasto
+	while (Keyboard_Read(8) != 255)
+	{
+		Game_SetState(State_Preset);			
+	}
+	
+	return TRUE;
+}
+
 //=============================================================================
 // GESTIONE DELLA TATIERA E JOY
 //=============================================================================
@@ -1819,28 +1880,36 @@ void restoreLevel()
 	adjustLevel(&g_Level006[0], LEVEL006_WIDTH * LEVEL006_HEIGHT);
 	adjustLevel(&g_Level007[0], LEVEL007_WIDTH * LEVEL007_HEIGHT);
 	adjustLevel(&g_Level008[0], LEVEL008_WIDTH * LEVEL008_HEIGHT);
-
-
-} 
+}
 
 /**
  * @brief Ripristina i livelli di gioco
  * @param unsigned char *level Livello di gioco
  * @param u16 sizeLevel Dimensione del livello di gioco
  * @return void
-*/
-void adjustLevel(unsigned char *level, u16 sizeLevel) {
+ */
+void adjustLevel(unsigned char *level, u16 sizeLevel)
+{
 	for (u16 i = 0; i < sizeLevel; i++)
 	{
-		if (level[i] == TILE_MASK_MONEY ) 	level[i] = TILE_MONEY;		// Ripristina la moneta nel livello
-		if (level[i] == TILE_MASK_KEY3 ) 	level[i] = TILE_KEY3;		// Ripristina la chiave nel livello
-		if (level[i] == TILE_MASK_KEY2 ) 	level[i] = TILE_KEY2;		// Ripristina la chiave nel livello
-		if (level[i] == TILE_MASK_KEY1 ) 	level[i] = TILE_KEY1;		// Ripristina la chiave nel livello
-		if (level[i] == TILE_MASK_AMPHORA ) level[i] = TILE_AMPHORA;	// Ripristina l'ampolla nel livello
-		if (level[i] == TILE_MASK_HEART ) 	level[i] = TILE_HEART;		// Ripristina il quore nel livello
-		if (level[i] == TILE_MASK_DOOR1 ) 	level[i] = TILE_DOOR1;		// Ripristina la door 1
-		if (level[i] == TILE_MASK_DOOR2 ) 	level[i] = TILE_DOOR2;		// Ripristina la door 2
-		if (level[i] == TILE_MASK_DOOR3 ) 	level[i] = TILE_DOOR3;		// Ripristina la door 3
+		if (level[i] == TILE_MASK_MONEY)
+			level[i] = TILE_MONEY; // Ripristina la moneta nel livello
+		if (level[i] == TILE_MASK_KEY3)
+			level[i] = TILE_KEY3; // Ripristina la chiave nel livello
+		if (level[i] == TILE_MASK_KEY2)
+			level[i] = TILE_KEY2; // Ripristina la chiave nel livello
+		if (level[i] == TILE_MASK_KEY1)
+			level[i] = TILE_KEY1; // Ripristina la chiave nel livello
+		if (level[i] == TILE_MASK_AMPHORA)
+			level[i] = TILE_AMPHORA; // Ripristina l'ampolla nel livello
+		if (level[i] == TILE_MASK_HEART)
+			level[i] = TILE_HEART; // Ripristina il quore nel livello
+		if (level[i] == TILE_MASK_DOOR1)
+			level[i] = TILE_DOOR1; // Ripristina la door 1
+		if (level[i] == TILE_MASK_DOOR2)
+			level[i] = TILE_DOOR2; // Ripristina la door 2
+		if (level[i] == TILE_MASK_DOOR3)
+			level[i] = TILE_DOOR3; // Ripristina la door 3
 	}
 }
 

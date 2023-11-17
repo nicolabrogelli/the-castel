@@ -96,6 +96,7 @@ extern unsigned char g_Level006[];
 extern unsigned char g_Level007[];
 extern unsigned char g_Level008[];
 extern unsigned char g_Level018[];
+extern unsigned char g_Level099[];
 
 #define LEVEL001_WIDTH 32
 #define LEVEL001_HEIGHT 24
@@ -115,3 +116,5 @@ extern unsigned char g_Level018[];
 #define LEVEL008_HEIGHT 24
 #define LEVEL018_WIDTH 32
 #define LEVEL018_HEIGHT 24
+#define LEVEL099_WIDTH 9
+#define LEVEL099_HEIGHT 1
