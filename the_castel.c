@@ -32,18 +32,6 @@
 
 #include "data/sprt_player.h"
 
-//#include "data/level/level001.h"
-#include "data/level/level002.h"
-#include "data/level/level003.h"
-#include "data/level/level004.h"
-#include "data/level/level005.h"
-#include "data/level/level006.h"
-#include "data/level/level007.h"
-#include "data/level/level008.h"
-#include "data/level/level011.h"
-
-// #include "data/level/backuplevel001.h"
-
 //=============================================================================
 // DEFINES
 //=============================================================================
@@ -137,12 +125,11 @@ void PlayBankSFX(u8 id, u8 prio);
 void ChannelSFX(u8 chan);
 void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct CharacterEnemy *genericEnemy, u8 enemyNumber);
 void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 idFirstSprite);
-void copyLevel(unsigned char *arr1, unsigned char *arr2, int size);
-void backupLevel();
 void restoreLevel();
 void hideSprite(u8 count, u8 maxElement, u8 baseSprite);
 void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape);
 void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 enemyCount, char *type);
+void adjustLevel(unsigned char* level, u16 sizeLevel);
 
 //.............................................................................
 // Player 1 data
@@ -251,16 +238,6 @@ unsigned char g_Inventory[MAX_ITEM_INVENTORY] = {0, 0, 0, 0, 0};
 unsigned char g_Lives[MAX_LIVES] = {0, 0, 0};
 
 #define SIZE_LEVEL 768;
-/*
-unsigned char g_backupLevel001[768];
-unsigned char g_backupLevel002[768];
-unsigned char g_backupLevel003[768];
-unsigned char g_backupLevel004[768];
-unsigned char g_backupLevel005[768];
-unsigned char g_backupLevel006[768];
-unsigned char g_backupLevel007[768];
-unsigned char g_backupLevel008[768];
-*/
 
 /** \struct
 	struct: Struttura che rappresenta la stanza
@@ -615,7 +592,7 @@ void physicsEventPlayer(u8 event, u8 tile)
 bool physicsCollision(u8 tile)
 {
 	// DEBUG_LOGNUM("PhysicsCollision", tile);
-	return (tile > 100);
+	return (tile > 100 && tile < 184);
 }
 
 /**
@@ -680,8 +657,9 @@ bool collisionCheck(i8 dx, i8 dy)
 		}
 		else
 		{
-			/* 			if (!hasLives())
-							Game_SetState(State_Preset); */
+			if (!hasLives()) {
+				Game_SetState(State_Preset);
+			}
 		}
 		// VDP_SetColor(COLOR_DARK_RED);
 	}
@@ -729,12 +707,13 @@ bool interact(u8 x, u8 y)
 
 	DEBUG_LOGNUM("Intercat", tile);
 
+	// TODO: Ottimizzare il case!! 
 	switch (tile)
 	{
 	case TILE_HEART:
 		if (g_Player.Life < MAX_LIVES)
 		{
-			replacementItemInLevel(x, y, EMPTY_ITEM);
+			replacementItemInLevel(x, y, TILE_MASK_HEART); // EMPTY_ITEM
 			setTile(x, y, EMPTY_ITEM);
 			g_Player.Life++;
 			addLife();
@@ -743,6 +722,9 @@ bool interact(u8 x, u8 y)
 		}
 		return TRUE;
 	case TILE_DOOR0:
+	case TILE_MASK_DOOR1:
+	case TILE_MASK_DOOR2:
+	case TILE_MASK_DOOR3:
 		// PlayBankSFX(1, 0);
 		drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
 		return TRUE;
@@ -764,7 +746,7 @@ bool interact(u8 x, u8 y)
 		if (hasItemInInventory(TILE_KEY3))
 		{
 			// PlayBankSFX(1, 0);
-			changeLevel(x, y, TILE_KEY3, TILE_DOOR0);
+			changeLevel(x, y, TILE_KEY3, TILE_MASK_DOOR3);
 		}
 		return TRUE;
 	case TILE_DOOR_PREV:
@@ -772,21 +754,44 @@ bool interact(u8 x, u8 y)
 		drawLevel(g_Levels[g_CurrRoomIdx].PrevLvIdx);
 		return false;
 	case TILE_KEY1:
-	case TILE_KEY2:
-	case TILE_KEY3:
-	case TILE_AMPHORA:
-		/* 		Print_DrawIntAt(20, 18,x);
-				Print_DrawIntAt(20, 19,(x/8));
-				Print_DrawIntAt(20, 20,y);
-				Print_DrawIntAt(20, 21,((y/8)*32));
-				Print_DrawIntAt(20, 22,((y/8)*32) + (x/8));
-				Print_DrawIntAt(20, 23,pos); */
-
 		// Modifico al volo il livello di gioco, cosi non sono costretto
 		// a creare una cache dei livelli.
-		replacementItemInLevel(x, y, EMPTY_ITEM);
+		replacementItemInLevel(x, y, TILE_MASK_KEY1); // EMPTY_ITEM
 
-		setTile(x, y, EMPTY_ITEM);
+		setTile(x, y, EMPTY_ITEM); // EMPTY_ITEM
+		addItemToInventory(tile);
+
+		PlayBankSFX(5, 0);
+
+		return TRUE;	
+	case TILE_KEY2:
+		// Modifico al volo il livello di gioco, cosi non sono costretto
+		// a creare una cache dei livelli.
+		replacementItemInLevel(x, y, TILE_MASK_KEY2); // EMPTY_ITEM
+
+		setTile(x, y, EMPTY_ITEM); // EMPTY_ITEM
+		addItemToInventory(tile);
+
+		PlayBankSFX(5, 0);
+
+		return TRUE;	
+	case TILE_KEY3:
+		// Modifico al volo il livello di gioco, cosi non sono costretto
+		// a creare una cache dei livelli.
+		replacementItemInLevel(x, y, TILE_MASK_KEY3); // EMPTY_ITEM
+
+		setTile(x, y, EMPTY_ITEM); // EMPTY_ITEM
+		addItemToInventory(tile);
+
+		PlayBankSFX(5, 0);
+
+		return TRUE;	
+	case TILE_AMPHORA:
+		// Modifico al volo il livello di gioco, cosi non sono costretto
+		// a creare una cache dei livelli.
+		replacementItemInLevel(x, y, TILE_MASK_AMPHORA); // EMPTY_ITEM
+
+		setTile(x, y, EMPTY_ITEM); // EMPTY_ITEM
 		addItemToInventory(tile);
 
 		PlayBankSFX(5, 0);
@@ -850,9 +855,9 @@ bool getMoney(u8 x, u8 y)
 	case TILE_MONEY:
 		// Modifico al volo il livello di gioco, cosi non sono costretto
 		// a creare una cache dei livelli.
-		replacementItemInLevel(x, y, EMPTY_ITEM);
+		replacementItemInLevel(x, y, TILE_MASK_MONEY); // EMPTY_ITEM
+		setTile(x, y, EMPTY_ITEM);				  // EMPTY_ITEM
 
-		setTile(x, y, EMPTY_ITEM);
 		g_Player.Score++;
 		updateScore();
 
@@ -902,7 +907,12 @@ void updateScore()
 void replacementItemInLevel(u8 x, u8 y, u8 tile)
 {
 	u16 pos = ((y / 8) * 32) + (x / 8);
+
+	//Print_DrawIntAt(20,17,g_Levels[g_CurrRoomIdx].Layout[pos]);
 	g_Levels[g_CurrRoomIdx].Layout[pos] = tile;
+
+	//Print_DrawIntAt(20,18,tile);
+	//Print_DrawIntAt(20,19,g_Levels[g_CurrRoomIdx].Layout[pos]);
 }
 
 /**
@@ -1388,10 +1398,6 @@ void VDP_LoadSpritePattern16_VSym(const u8 *src, u8 index, u8 count)
  */
 bool State_Initialize()
 {
-	// Funzione:
-	// Effettua il backup dei livelli di gioco, cosi da permettere il restore al termine della partita
-	backupLevel();
-
 	// Funzione: inizializePT3
 	// Inizializzazione del Player PT3 e della tabella delle note
 	inizializePT3();
@@ -1597,9 +1603,8 @@ bool State_Game()
 bool State_Preset()
 {
 
-	/*  	u16 sizeLevel = sizeof(g_Level001) / sizeof(g_Level001[0]);
-		copyLevel(&g_Level003[0], &g_Level001[0], sizeLevel);
-	 */
+	restoreLevel();
+
 	// Funzione: InitCharacter
 	// Inizzializza lo sprite del giocatore
 	//
@@ -1799,91 +1804,45 @@ void inizializeAYFX()
 }
 
 /**
- * @brief Effettua il backup dei livelli di gioco
- * @param void
- * @return void
- */
-void backupLevel()
-{
-	/*
-	u16 sizeLevel = sizeof(g_Level001) / sizeof(g_Level001[0]);
-	copyLevel(&g_Level001[0], &g_backupLevel001[0], sizeLevel);
-
-	sizeLevel = sizeof(g_Level002) / sizeof(g_Level002[0]);
-	copyLevel(&g_Level002[0], &g_backupLevel002[0], sizeLevel);
-
-	sizeLevel = sizeof(g_Level003) / sizeof(g_Level003[0]);
-	copyLevel(&g_Level003[0], &g_backupLevel003[0], sizeLevel);
-
-	sizeLevel = sizeof(g_Level004) / sizeof(g_Level004[0]);
-	copyLevel(&g_Level004[0], &g_backupLevel004[0], sizeLevel);
-
-	sizeLevel = sizeof(g_Level005) / sizeof(g_Level005[0]);
-	copyLevel(&g_Level005[0], &g_backupLevel005[0], sizeLevel);
-
-	sizeLevel = sizeof(g_Level006) / sizeof(g_Level006[0]);
-	copyLevel(&g_Level006[0], &g_backupLevel006[0], sizeLevel);
-
-	sizeLevel = sizeof(g_Level007) / sizeof(g_Level007[0]);
-	copyLevel(&g_Level007[0], &g_backupLevel007[0], sizeLevel);
-
-	sizeLevel = sizeof(g_Level008) / sizeof(g_Level008[0]);
-	copyLevel(&g_Level008[0], &g_backupLevel008[0], sizeLevel);
-	*/
-}
-
-/**
  * @brief Effettua il restore dei livelli di gioco
  * @param void
  * @return void
  */
 void restoreLevel()
 {
-	/*
-	u16 sizeLevel = sizeof(g_Level001) / sizeof(g_Level001[0]);
-	copyLevel(&g_backupLevel001[0], &g_Level001[0], sizeLevel);
+	// Ripristi ilivelli di gioco
+	adjustLevel(&g_Level001[0], LEVEL001_WIDTH * LEVEL001_HEIGHT);
+	adjustLevel(&g_Level002[0], LEVEL002_WIDTH * LEVEL002_HEIGHT);
+	adjustLevel(&g_Level003[0], LEVEL003_WIDTH * LEVEL003_HEIGHT);
+	adjustLevel(&g_Level004[0], LEVEL004_WIDTH * LEVEL004_HEIGHT);
+	adjustLevel(&g_Level005[0], LEVEL005_WIDTH * LEVEL005_HEIGHT);
+	adjustLevel(&g_Level006[0], LEVEL006_WIDTH * LEVEL006_HEIGHT);
+	adjustLevel(&g_Level007[0], LEVEL007_WIDTH * LEVEL007_HEIGHT);
+	adjustLevel(&g_Level008[0], LEVEL008_WIDTH * LEVEL008_HEIGHT);
 
-	sizeLevel = sizeof(g_Level002) / sizeof(g_Level002[0]);
-	copyLevel(&g_backupLevel002[0], &g_Level002[0], sizeLevel);
 
-	sizeLevel = sizeof(g_Level003) / sizeof(g_Level003[0]);
-	copyLevel(&g_backupLevel003[0], &g_Level003[0], sizeLevel);
-
-	sizeLevel = sizeof(g_Level004) / sizeof(g_Level004[0]);
-	copyLevel(&g_backupLevel004[0], &g_Level004[0], sizeLevel);
-
-	sizeLevel = sizeof(g_Level005) / sizeof(g_Level005[0]);
-	copyLevel(&g_backupLevel005[0], &g_Level005[0], sizeLevel);
-
-	sizeLevel = sizeof(g_Level006) / sizeof(g_Level006[0]);
-	copyLevel(&g_backupLevel006[0], &g_Level006[0], sizeLevel);
-
-	sizeLevel = sizeof(g_Level007) / sizeof(g_Level007[0]);
-	copyLevel(&g_backupLevel007[0], &g_Level007[0], sizeLevel);
-
-	sizeLevel = sizeof(g_Level008) / sizeof(g_Level008[0]);
-	copyLevel(&g_backupLevel008[0], &g_Level008[0], sizeLevel);
-	*/
-}
+} 
 
 /**
- * @brief effettua la copia di un array
- * @param unsigned char *source Sorgente
- * @param unsigned char *dest Destinazione
+ * @brief Ripristina i livelli di gioco
+ * @param unsigned char *level Livello di gioco
+ * @param u16 sizeLevel Dimensione del livello di gioco
  * @return void
- */
-void copyLevel(unsigned char *source, unsigned char *dest, int size)
-{
-	for (int i = 0; i < size; i++)
+*/
+void adjustLevel(unsigned char *level, u16 sizeLevel) {
+	for (u16 i = 0; i < sizeLevel; i++)
 	{
-		*(dest + i) = *(source + i);
+		if (level[i] == TILE_MASK_MONEY ) 	level[i] = TILE_MONEY;		// Ripristina la moneta nel livello
+		if (level[i] == TILE_MASK_KEY3 ) 	level[i] = TILE_KEY3;		// Ripristina la chiave nel livello
+		if (level[i] == TILE_MASK_KEY2 ) 	level[i] = TILE_KEY2;		// Ripristina la chiave nel livello
+		if (level[i] == TILE_MASK_KEY1 ) 	level[i] = TILE_KEY1;		// Ripristina la chiave nel livello
+		if (level[i] == TILE_MASK_AMPHORA ) level[i] = TILE_AMPHORA;	// Ripristina l'ampolla nel livello
+		if (level[i] == TILE_MASK_HEART ) 	level[i] = TILE_HEART;		// Ripristina il quore nel livello
+		if (level[i] == TILE_MASK_DOOR1 ) 	level[i] = TILE_DOOR1;		// Ripristina la door 1
+		if (level[i] == TILE_MASK_DOOR2 ) 	level[i] = TILE_DOOR2;		// Ripristina la door 2
+		if (level[i] == TILE_MASK_DOOR3 ) 	level[i] = TILE_DOOR3;		// Ripristina la door 3
 	}
 }
-
-//=============================================================================
-// HELPER
-//=============================================================================
-
 
 //=============================================================================
 // MAIN LOOP

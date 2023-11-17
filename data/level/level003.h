@@ -25,5 +25,5 @@ unsigned char g_Level003[] = {
 	151, 146, 147, 149, 151, 149, 145, 149, 152, 149, 153, 149, 154, 149, 148, 149, 146, 147, 149, 151, 149, 145,   0,   0,   0,   0,   0,   0, 180, 181, 182, 183,		
 };
 
-#define LEVEL003_WIDTH 32
-#define LEVEL003_HEIGHT 24
+/* #define LEVEL003_WIDTH 32
+#define LEVEL003_HEIGHT 24 */

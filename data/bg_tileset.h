@@ -622,34 +622,7 @@ const unsigned char g_DataBackground[] =
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
-// Sprite[65] (offset:520)
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-// Sprite[66] (offset:528)
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-// Sprite[67] (offset:536)
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-// Sprite[68] (offset:544) // NON MODIFICARE
+// Sprite[65] (offset:520) // MASK DOOR 1
 	0xAE, /* ........ */ 
 	0xA2, /* ........ */ 
 	0xBE, /* #.#####. */ 
@@ -658,7 +631,7 @@ const unsigned char g_DataBackground[] =
 	0xBF, /* #.###### */ 
 	0xBF, /* #.###### */ 
 	0xBF, /* #.###### */ 
-// Sprite[69] (offset:552) // NON MODIFICARE
+// Sprite[66] (offset:528) // MASK DOOR 2
 	0xAE, /* ........ */ 
 	0xA2, /* ........ */ 
 	0xBE, /* #.#####. */ 
@@ -667,7 +640,7 @@ const unsigned char g_DataBackground[] =
 	0xBF, /* #.###### */ 
 	0xBF, /* #.###### */ 
 	0xBF, /* #.###### */ 
-// Sprite[70] (offset:560) // NON MODIFICARE
+// Sprite[67] (offset:536) // MASK DOOR 3
 	0xAE, /* ........ */ 
 	0xA2, /* ........ */ 
 	0xBE, /* #.#####. */ 
@@ -676,7 +649,34 @@ const unsigned char g_DataBackground[] =
 	0xBF, /* #.###### */ 
 	0xBF, /* #.###### */ 
 	0xBF, /* #.###### */ 
-// Sprite[71] (offset:568) // NON MODIFICARE
+// Sprite[68] (offset:544) // PADLOCK KEY 0
+	0xAE, /* ........ */ 
+	0xA2, /* ........ */ 
+	0xBE, /* #.#####. */ 
+	0xBF, /* #.###### */ 
+	0xBF, /* #.###### */ 
+	0xBF, /* #.###### */ 
+	0xBF, /* #.###### */ 
+	0xBF, /* #.###### */ 
+// Sprite[69] (offset:552) // PADLOCK KEY 1
+	0xAE, /* ........ */ 
+	0xA2, /* ........ */ 
+	0xBE, /* #.#####. */ 
+	0xBF, /* #.###### */ 
+	0xBF, /* #.###### */ 
+	0xBF, /* #.###### */ 
+	0xBF, /* #.###### */ 
+	0xBF, /* #.###### */ 
+// Sprite[70] (offset:560) // PADLOCK KEY 2
+	0xAE, /* ........ */ 
+	0xA2, /* ........ */ 
+	0xBE, /* #.#####. */ 
+	0xBF, /* #.###### */ 
+	0xBF, /* #.###### */ 
+	0xBF, /* #.###### */ 
+	0xBF, /* #.###### */ 
+	0xBF, /* #.###### */ 
+// Sprite[71] (offset:568) // DOOR PREV
 	0xAE, /* ........ */ 
 	0xA2, /* ........ */ 
 	0xBE, /* #.#####. */ 
@@ -703,7 +703,7 @@ const unsigned char g_DataBackground[] =
 	0xFD, /* ######.# */ 
 	0xFD, /* ######.# */ 
 	0xFD, /* ######.# */ 
-// Sprite[74] (offset:592) // NON MODIFICARE
+// Sprite[74] (offset:592) // PADLOCK KEY 3
 	0xAE, /* ........ */ 
 	0xA2, /* ........ */ 
 	0xBE, /* #.#####. */ 
@@ -748,7 +748,7 @@ const unsigned char g_DataBackground[] =
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
-// Sprite[79] (offset:632) // NON MODIFICARE
+// Sprite[79] (offset:632) // HEART
 	0x00, /* ........ */ 
 	0x6C, /* .##.##.. */ 
 	0x92, /* #..#..#. */ 
@@ -856,7 +856,7 @@ const unsigned char g_DataBackground[] =
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
-// Sprite[91] (offset:728)
+// Sprite[91] (offset:728) // WINDOWS BLOCK 1
 	0x01, /* .......# */ 
 	0x06, /* .....##. */ 
 	0x0C, /* ....##.. */ 
@@ -865,7 +865,7 @@ const unsigned char g_DataBackground[] =
 	0x10, /* ...#.... */ 
 	0x10, /* ...#.... */ 
 	0x10, /* ...#.... */ 
-// Sprite[92] (offset:736)
+// Sprite[92] (offset:736) // WINDOWS BLOCK 2
 	0x80, /* #....... */ 
 	0x60, /* .##..... */ 
 	0x30, /* ..##.... */ 
@@ -874,7 +874,7 @@ const unsigned char g_DataBackground[] =
 	0x08, /* ....#... */ 
 	0x08, /* ....#... */ 
 	0x08, /* ....#... */ 
-// Sprite[93] (offset:744)
+// Sprite[93] (offset:744) // WINDOWS BLOCK 3
 	0x10, /* ...#.... */ 
 	0x10, /* ...#.... */ 
 	0x10, /* ...#.... */ 
@@ -883,7 +883,7 @@ const unsigned char g_DataBackground[] =
 	0x10, /* ...#.... */ 
 	0x1F, /* ...##### */ 
 	0x00, /* ........ */ 
-// Sprite[94] (offset:752)
+// Sprite[94] (offset:752) // WINDOWS BLOCK 4
 	0x08, /* ....#... */ 
 	0x08, /* ....#... */ 
 	0x08, /* ....#... */ 
@@ -892,7 +892,7 @@ const unsigned char g_DataBackground[] =
 	0x08, /* ....#... */ 
 	0xF8, /* #####... */ 
 	0x00, /* ........ */ 
-// Sprite[95] (offset:760) // NON MODIFICARE
+// Sprite[95] (offset:760) // AMPHORA
 	0x3C, /* ..####.. */ 
 	0x18, /* ...##... */ 
 	0x18, /* ...##... */ 
@@ -901,7 +901,7 @@ const unsigned char g_DataBackground[] =
 	0xFF, /* ######## */ 
 	0xFF, /* ######## */ 
 	0x7E, /* .######. */  
-// Sprite[96] (offset:768) // NON MODIFICARE
+// Sprite[96] (offset:768) // KEY 1
 	0x18, /* ...##... */ 
 	0x10, /* ...#.... */ 
 	0x10, /* ...#.... */ 
@@ -910,7 +910,7 @@ const unsigned char g_DataBackground[] =
 	0x38, /* ..###... */ 
 	0x28, /* ..#.#... */ 
 	0x38, /* ..###... */ 
-// Sprite[97] (offset:776) // NON MODIFICARE
+// Sprite[97] (offset:776) // KEY 2
 	0x18, /* ...##... */ 
 	0x10, /* ...#.... */ 
 	0x18, /* ...##... */ 
@@ -919,7 +919,7 @@ const unsigned char g_DataBackground[] =
 	0x38, /* ..###... */ 
 	0x28, /* ..#.#... */ 
 	0x38, /* ..###... */ 
-// Sprite[98] (offset:784) // NON MODIFICARE
+// Sprite[98] (offset:784) // KEY 3
 	0x1C, /* ...###.. */ 
 	0x18, /* ...##... */ 
 	0x18, /* ...##... */ 
@@ -928,7 +928,7 @@ const unsigned char g_DataBackground[] =
 	0x38, /* ..###... */ 
 	0x28, /* ..#.#... */ 
 	0x38, /* ..###... */ 
-// Sprite[99] (offset:792) // NON MODIFICARE
+// Sprite[99] (offset:792) // MONEY
 	0x18, /* ...##... */ 
 	0x3C, /* ..####.. */ 
 	0x7E, /* .######. */ 
@@ -1153,7 +1153,7 @@ const unsigned char g_DataBackground[] =
 	0xBF, /* #.###### */ 
 	0x81, /* #......# */ 
 	0xFF, /* ######## */ 
-// Sprite[124] (offset:992) // NON MODIFICARE
+// Sprite[124] (offset:992) // START POSITIONE SHELETOR
 	0xFF, /* ######## */ 
 	0x81, /* #......# */ 
 	0xBF, /* #.###### */ 
@@ -1180,7 +1180,7 @@ const unsigned char g_DataBackground[] =
 	0xE7, /* ###..### */ 
 	0xFF, /* ######## */ 
 	0xE7, /* ###..### */ 
-// Sprite[127] (offset:1016) // NON MODIFICARE
+// Sprite[127] (offset:1016) // START POSITION PLAYER
 	0xFF, /* ######## */ 
 	0x83, /* #.....## */ 
 	0x81, /* #......# */ 
@@ -1189,7 +1189,7 @@ const unsigned char g_DataBackground[] =
 	0x9F, /* #..##### */ 
 	0x9F, /* #..##### */ 
 	0xFF, /* ######## */ 
-// Sprite[128] (offset:1024) // NON MODIFICARE
+// Sprite[128] (offset:1024) // START POSITION GHOST
 	0x00, /* ######## */ 
 	0x00, /* #......# */ 
 	0x00, /* #..##### */ 
@@ -1198,7 +1198,7 @@ const unsigned char g_DataBackground[] =
 	0x00, /* #......# */ 
 	0x00, /* ######## */ 
 	0x00, /* ######## */ 
-// Sprite[129] (offset:1032) // NON MODIFICARE
+// Sprite[129] (offset:1032) // START POSITION SPIEDER
 	0xFF, /* ######## */ 
 	0x83, /* #.....## */ 
 	0x81, /* #......# */ 
@@ -1207,7 +1207,7 @@ const unsigned char g_DataBackground[] =
 	0x97, /* #..#.### */ 
 	0x9B, /* #..##.## */ 
 	0xFF, /* ######## */ 
-// Sprite[130] (offset:1040) // NON MODIFICARE
+// Sprite[130] (offset:1040) // STRAT POSITION BAT
 	0xFF, /* ######## */ 
 	0xFF, /* ######## */ 
 	0xFF, /* ######## */ 
@@ -1324,7 +1324,7 @@ const unsigned char g_DataBackground[] =
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
-// Sprite[143] (offset:1144) // NON MODIFICARE
+// Sprite[143] (offset:1144) // BLOCK FOR TEST
 	0xFF, /* ######## */ 
 	0xFF, /* ######## */ 
 	0xFF, /* ######## */ 
@@ -1693,7 +1693,7 @@ const unsigned char g_DataBackground[] =
 	0x6D, /* .##.##.# */ 
 	0x01, /* .......# */ 
 	0xFF, /* ######## */ 
-// Sprite[184] (offset:1472)
+// Sprite[184] (offset:1472)// NON MODIFICARE
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
@@ -1702,7 +1702,7 @@ const unsigned char g_DataBackground[] =
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
-// Sprite[185] (offset:1480)
+// Sprite[185] (offset:1480)// NON MODIFICARE
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
@@ -1711,7 +1711,7 @@ const unsigned char g_DataBackground[] =
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
-// Sprite[186] (offset:1488)
+// Sprite[186] (offset:1488)// NON MODIFICARE
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
@@ -1720,7 +1720,7 @@ const unsigned char g_DataBackground[] =
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
-// Sprite[187] (offset:1496)
+// Sprite[187] (offset:1496) // MASK HERAT
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
@@ -1729,7 +1729,7 @@ const unsigned char g_DataBackground[] =
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
-// Sprite[188] (offset:1504)
+// Sprite[188] (offset:1504) // MASK AMPHORA
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
@@ -1738,7 +1738,7 @@ const unsigned char g_DataBackground[] =
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
-// Sprite[189] (offset:1512)
+// Sprite[189] (offset:1512) // MASK KEY 1
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
@@ -1747,7 +1747,7 @@ const unsigned char g_DataBackground[] =
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
-// Sprite[190] (offset:1520)
+// Sprite[190] (offset:1520) // MASK KEY 2
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
@@ -1756,16 +1756,16 @@ const unsigned char g_DataBackground[] =
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
-// Sprite[191] (offset:1528)
-	0x00, /* ........ */ 
-	0x00, /* ........ */ 
-	0xFF, /* ........ */ 
-	0xFF, /* ........ */ 
-	0xFF, /* ........ */ 
+// Sprite[191] (offset:1528) // MASK KEY 3
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
-// Sprite[192] (offset:1536)
+	0x00, /* ........ */ 
+	0x00, /* ........ */ 
+	0x00, /* ........ */ 
+	0x00, /* ........ */ 
+	0x00, /* ........ */ 
+// Sprite[192] (offset:1536) // MASK MONEY
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 
 	0x00, /* ........ */ 

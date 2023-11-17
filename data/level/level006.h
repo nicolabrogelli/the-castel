@@ -26,5 +26,5 @@ unsigned char g_Level006[] = {
 
 };
 
-#define LEVEL006_WIDTH 32
-#define LEVEL006_HEIGHT 24
+/* #define LEVEL006_WIDTH 32
+#define LEVEL006_HEIGHT 24 */
