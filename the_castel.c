@@ -270,7 +270,8 @@ const struct LevelDefinition g_Levels[] = {
 	{(32 - LEVEL006_WIDTH) / 2, (24 - LEVEL006_HEIGHT) / 2, LEVEL006_WIDTH, LEVEL006_HEIGHT, g_Level006, "Livello 6", 6, 4, 1, 1, 1, 0},
 	{(32 - LEVEL007_WIDTH) / 2, (24 - LEVEL007_HEIGHT) / 2, LEVEL007_WIDTH, LEVEL007_HEIGHT, g_Level007, "Livello 7", 7, 5, 0, 0, 0, 2},
 	{(32 - LEVEL008_WIDTH) / 2, (24 - LEVEL008_HEIGHT) / 2, LEVEL008_WIDTH, LEVEL008_HEIGHT, g_Level008, "Livello 8", 8, 6, 0, 0, 1, 2},
-	{(32 - LEVEL009_WIDTH) / 2, (24 - LEVEL009_HEIGHT) / 2, LEVEL009_WIDTH, LEVEL009_HEIGHT, g_Level009, "Livello 9", 9, 0, 1, 0, 0, 2},
+	{(32 - LEVEL009_WIDTH) / 2, (24 - LEVEL009_HEIGHT) / 2, LEVEL009_WIDTH, LEVEL009_HEIGHT, g_Level009, "Livello 9", 9, 7, 1, 0, 0, 2},
+	{(32 - LEVEL010_WIDTH) / 2, (24 - LEVEL010_HEIGHT) / 2, LEVEL010_WIDTH, LEVEL010_HEIGHT, g_Level010, "Livello 10", 0, 0, 2, 0, 0, 1},
 	{(32 - LEVEL099_WIDTH) / 2, (24 - LEVEL099_HEIGHT) / 2, LEVEL099_WIDTH, LEVEL099_HEIGHT, g_Level099, "Game Over", 8, 0, 0, 0, 1, 2},
 };
 
@@ -1888,6 +1889,7 @@ void restoreLevel()
 	adjustLevel(&g_Level007[0], LEVEL007_WIDTH * LEVEL007_HEIGHT);
 	adjustLevel(&g_Level008[0], LEVEL008_WIDTH * LEVEL008_HEIGHT);
 	adjustLevel(&g_Level009[0], LEVEL009_WIDTH * LEVEL009_HEIGHT);
+	adjustLevel(&g_Level010[0], LEVEL010_WIDTH * LEVEL010_HEIGHT);
 }
 
 /**

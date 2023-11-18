@@ -39,7 +39,7 @@
 #define MAX_LIVES             3
 #define IMMUNITY              3
 
-#define GAME_OVER             9
+#define GAME_OVER            10
 
 #define FRAME_1             128
 #define FRAME_4             512
@@ -98,6 +98,7 @@ extern unsigned char g_Level006[];
 extern unsigned char g_Level007[];
 extern unsigned char g_Level008[];
 extern unsigned char g_Level009[];
+extern unsigned char g_Level010[];
 extern unsigned char g_Level018[];
 extern unsigned char g_Level099[];
 
@@ -118,9 +119,9 @@ extern unsigned char g_Level099[];
 #define LEVEL008_WIDTH 32
 #define LEVEL008_HEIGHT 24
 #define LEVEL009_WIDTH 32
-#define LEVEL009_HEIGHT 19
-
-
+#define LEVEL009_HEIGHT 24
+#define LEVEL010_WIDTH 32
+#define LEVEL010_HEIGHT 24
 #define LEVEL018_WIDTH 32
 #define LEVEL018_HEIGHT 24
 #define LEVEL099_WIDTH 9
