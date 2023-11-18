@@ -742,14 +742,14 @@ bool interact(u8 x, u8 y)
 		if (hasItemInInventory(TILE_KEY1))
 		{
 			// PlayBankSFX(1, 0);
-			changeLevel(x, y, TILE_KEY1, TILE_DOOR0);
+			changeLevel(x, y, TILE_KEY1, TILE_MASK_DOOR1);
 		}
 		return TRUE;
 	case TILE_DOOR2:
 		if (hasItemInInventory(TILE_KEY2))
 		{
 			// PlayBankSFX(1, 0);
-			changeLevel(x, y, TILE_KEY2, TILE_DOOR0);
+			changeLevel(x, y, TILE_KEY2, TILE_MASK_DOOR2);
 		}
 		return TRUE;
 	case TILE_DOOR3:
@@ -1887,6 +1887,7 @@ void restoreLevel()
 	adjustLevel(&g_Level006[0], LEVEL006_WIDTH * LEVEL006_HEIGHT);
 	adjustLevel(&g_Level007[0], LEVEL007_WIDTH * LEVEL007_HEIGHT);
 	adjustLevel(&g_Level008[0], LEVEL008_WIDTH * LEVEL008_HEIGHT);
+	adjustLevel(&g_Level009[0], LEVEL009_WIDTH * LEVEL009_HEIGHT);
 }
 
 /**
@@ -1899,24 +1900,15 @@ void adjustLevel(unsigned char *level, u16 sizeLevel)
 {
 	for (u16 i = 0; i < sizeLevel; i++)
 	{
-		if (level[i] == TILE_MASK_MONEY)
-			level[i] = TILE_MONEY; // Ripristina la moneta nel livello
-		if (level[i] == TILE_MASK_KEY3)
-			level[i] = TILE_KEY3; // Ripristina la chiave nel livello
-		if (level[i] == TILE_MASK_KEY2)
-			level[i] = TILE_KEY2; // Ripristina la chiave nel livello
-		if (level[i] == TILE_MASK_KEY1)
-			level[i] = TILE_KEY1; // Ripristina la chiave nel livello
-		if (level[i] == TILE_MASK_AMPHORA)
-			level[i] = TILE_AMPHORA; // Ripristina l'ampolla nel livello
-		if (level[i] == TILE_MASK_HEART)
-			level[i] = TILE_HEART; // Ripristina il quore nel livello
-		if (level[i] == TILE_MASK_DOOR1)
-			level[i] = TILE_DOOR1; // Ripristina la door 1
-		if (level[i] == TILE_MASK_DOOR2)
-			level[i] = TILE_DOOR2; // Ripristina la door 2
-		if (level[i] == TILE_MASK_DOOR3)
-			level[i] = TILE_DOOR3; // Ripristina la door 3
+		if (level[i] == TILE_MASK_MONEY) { level[i] = TILE_MONEY; } // Ripristina la moneta nel livello 
+		if (level[i] == TILE_MASK_KEY3)  { level[i] = TILE_KEY3;  } // Ripristina la chiave nel livello
+		if (level[i] == TILE_MASK_KEY2)  { level[i] = TILE_KEY2;  } // Ripristina la chiave nel livello
+		if (level[i] == TILE_MASK_KEY1)  { level[i] = TILE_KEY1;  } // Ripristina la chiave nel livello
+		if (level[i] == TILE_MASK_AMPHORA) { level[i] = TILE_AMPHORA; } // Ripristina l'ampolla nel livello
+		if (level[i] == TILE_MASK_HEART) { level[i] = TILE_HEART; } // Ripristina il quore nel livello
+		if (level[i] == TILE_MASK_DOOR1) { level[i] = TILE_DOOR1; } // Ripristina la door 1
+		if (level[i] == TILE_MASK_DOOR2) { level[i] = TILE_DOOR2; } // Ripristina la door 2
+		if (level[i] == TILE_MASK_DOOR3) { level[i] = TILE_DOOR3; } // Ripristina la door 3
 	}
 }
 
