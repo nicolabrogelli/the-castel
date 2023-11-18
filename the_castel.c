@@ -265,12 +265,13 @@ const struct LevelDefinition g_Levels[] = {
 	{(32 - LEVEL001_WIDTH) / 2, (24 - LEVEL001_HEIGHT) / 2, LEVEL001_WIDTH, LEVEL001_HEIGHT, g_Level001, "Livello 1", 1, 0, 2, 0, 0, 0},
 	{(32 - LEVEL002_WIDTH) / 2, (24 - LEVEL002_HEIGHT) / 2, LEVEL002_WIDTH, LEVEL002_HEIGHT, g_Level002, "Livello 2", 2, 0, 0, 1, 0, 0},
 	{(32 - LEVEL003_WIDTH) / 2, (24 - LEVEL003_HEIGHT) / 2, LEVEL003_WIDTH, LEVEL003_HEIGHT, g_Level003, "Livello 3", 3, 1, 2, 0, 0, 0},
-	{(32 - LEVEL004_WIDTH) / 2, (24 - LEVEL004_HEIGHT) / 2, LEVEL004_WIDTH, LEVEL004_HEIGHT, g_Level004, "Livello 4", 4, 2, 2, 0, 0, 0},
+	{(32 - LEVEL004_WIDTH) / 2, (24 - LEVEL004_HEIGHT) / 2, LEVEL004_WIDTH, LEVEL004_HEIGHT, g_Level004, "Livello 4", 4, 2, 2, 0, 0, 1},
 	{(32 - LEVEL005_WIDTH) / 2, (24 - LEVEL005_HEIGHT) / 2, LEVEL005_WIDTH, LEVEL005_HEIGHT, g_Level005, "Livello 5", 5, 3, 2, 0, 0, 0},
 	{(32 - LEVEL006_WIDTH) / 2, (24 - LEVEL006_HEIGHT) / 2, LEVEL006_WIDTH, LEVEL006_HEIGHT, g_Level006, "Livello 6", 6, 4, 1, 1, 1, 0},
 	{(32 - LEVEL007_WIDTH) / 2, (24 - LEVEL007_HEIGHT) / 2, LEVEL007_WIDTH, LEVEL007_HEIGHT, g_Level007, "Livello 7", 7, 5, 0, 0, 0, 2},
-	{(32 - LEVEL008_WIDTH) / 2, (24 - LEVEL008_HEIGHT) / 2, LEVEL008_WIDTH, LEVEL008_HEIGHT, g_Level008, "Livello 8", 8, 0, 0, 0, 1, 2},
-	{(32 - LEVEL099_WIDTH) / 2, (24 - LEVEL099_HEIGHT) / 2, LEVEL099_WIDTH, LEVEL099_HEIGHT, g_Level099, "Livello 8", 8, 0, 0, 0, 1, 2},
+	{(32 - LEVEL008_WIDTH) / 2, (24 - LEVEL008_HEIGHT) / 2, LEVEL008_WIDTH, LEVEL008_HEIGHT, g_Level008, "Livello 8", 8, 6, 0, 0, 1, 2},
+	{(32 - LEVEL009_WIDTH) / 2, (24 - LEVEL009_HEIGHT) / 2, LEVEL009_WIDTH, LEVEL009_HEIGHT, g_Level009, "Livello 9", 9, 0, 1, 0, 0, 2},
+	{(32 - LEVEL099_WIDTH) / 2, (24 - LEVEL099_HEIGHT) / 2, LEVEL099_WIDTH, LEVEL099_HEIGHT, g_Level099, "Game Over", 8, 0, 0, 0, 1, 2},
 };
 
 //=============================================================================
@@ -661,6 +662,12 @@ bool collisionCheck(i8 dx, i8 dy)
 		{
 			if (!hasLives())
 			{
+				//Ferma qualsiasi riproduzione audio
+				ayFX_Mute();
+				ayFX_Update();	 
+				PT3_Mute(PT3_STATE_MUTE_A, TRUE);
+				PT3_UpdatePSG();
+
 				Game_SetState(State_GameOver);				
 			}
 		}
@@ -1677,7 +1684,7 @@ bool State_GameOver()
 	VDP_FillVRAM_16K(0, g_ScreenLayoutLow, 32 * 24);
 
 	// Disegnare il livello riga per riga
-	for (u8 riga = 0; riga < g_Levels[8].Height; ++riga)
+	for (u8 riga = 0; riga < g_Levels[GAME_OVER].Height; ++riga)
 	{
 		// Funzione: VDP_WriteVRAM_16K
 		// Scrivere dati dalla RAM alla VRAM. [MSX1/2/2+/TR]
@@ -1700,8 +1707,8 @@ bool State_GameOver()
 		// viene copiata solamente la proma riga. Nelle iterazioni successive, il valore di riga incrementa e di conseguenza viene scartata la porzione del layout
 		// precedente (di dimesnione g_Levels[levelIdx].Width), e quindi viene copiata la parte che ci interessa. Tutto questo fino a che non si è completata
 		// la copia.
-		VDP_WriteVRAM_16K(g_Levels[8].Layout + g_Levels[8].Width * riga,
-						  g_ScreenLayoutLow + (32 * (riga + g_Levels[8].Y)) + (g_Levels[8].X), g_Levels[8].Width);
+		VDP_WriteVRAM_16K(g_Levels[GAME_OVER].Layout + g_Levels[GAME_OVER].Width * riga,
+						  g_ScreenLayoutLow + (32 * (riga + g_Levels[GAME_OVER].Y)) + (g_Levels[GAME_OVER].X), g_Levels[GAME_OVER].Width);
 	}
 
 	// Attende la pressione di un tasto

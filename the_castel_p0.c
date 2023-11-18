@@ -6,6 +6,7 @@
 #include "data/level/level006.h"
 #include "data/level/level007.h"
 #include "data/level/level008.h"
+#include "data/level/level009.h"
 #include "data/level/level011.h"
 #include "data/level/level018.h"
 #include "data/level/level099.h"
