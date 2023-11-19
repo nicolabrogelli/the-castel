@@ -21,13 +21,15 @@
 #include "pt3/pt3_player.h"
 #include "pt3/pt3_notetable2.h"
 #include "ayfx/ayfx_player.h"
+#include "compress/pletter.h"
 #include "version.h"
 
 //=============================================================================
 // INCLUDES PERSONALIZZATI
 //=============================================================================
 #include "the_castel.h"
-#include "data/bg_tileset.h"
+//#include "data/bg_tileset.h"
+#include "data/tiles.h"
 #include "data/ayfx/ayfx_bank.h"
 
 #include "data/sprt_player.h"
@@ -131,6 +133,7 @@ void hideSprite(u8 count, u8 maxElement, u8 baseSprite);
 void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape);
 void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 enemyCount, char *type);
 void adjustLevel(unsigned char *level, u16 sizeLevel);
+void VDP_LoadPattern_GM1_Pletter(const u8* src, u8 offset);
 
 //.............................................................................
 // Player 1 data
@@ -1446,7 +1449,9 @@ bool State_Initialize()
 	//
 	// Nota:
 	//    Effettua la copia dei tiles contenuti in g_DataBackground (definiti nel file bg_tileset.h) nella VRAM a partire dall'indirizzo 0x0000
-	VDP_WriteVRAM_16K(g_DataBackground, g_ScreenPatternLow, sizeof(g_DataBackground));
+	//VDP_WriteVRAM_16K(g_DataBackground, g_ScreenPatternLow, sizeof(g_DataBackground));
+
+	VDP_LoadPattern_GM1_Pletter(g_DataBackground, 0);
 
 	// Inizializza i caratteri personalizzati
 	Print_SetMode(PRINT_MODE_TEXT);
@@ -1914,6 +1919,18 @@ void adjustLevel(unsigned char *level, u16 sizeLevel)
 	}
 }
 
+//=============================================================================
+// PLETTER
+//=============================================================================
+void VDP_LoadPattern_GM1_Pletter(const u8* src, u8 offset)
+{
+	u16 dst = g_ScreenPatternLow + (offset * 8);
+	Pletter_UnpackToVRAM(src, dst);
+	/* dst += 0x800;
+	Pletter_UnpackToVRAM(src, dst);
+	dst += 0x800;
+	Pletter_UnpackToVRAM(src, dst); */
+}
 //=============================================================================
 // MAIN LOOP
 //=============================================================================
