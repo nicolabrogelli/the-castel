@@ -28,11 +28,10 @@
 // INCLUDES PERSONALIZZATI
 //=============================================================================
 #include "the_castel.h"
-//#include "data/bg_tileset.h"
 #include "data/tiles.h"
 #include "data/ayfx/ayfx_bank.h"
-
 #include "data/sprt_player.h"
+//#include "data/sprites.h"
 
 //=============================================================================
 // DEFINES
@@ -139,7 +138,7 @@ void VDP_LoadPattern_GM1_Pletter(const u8* src, u8 offset);
 // Player 1 data
 
 // Livelli dello Sprite del giocatore
-// TQuesto personaggio è composto da 3 livelli (3 sprite), ma i primi due sono speciali: Uno è visibile solo nei fotogrammi pari, mentre il secondo solo nei fotogrammi dispari.
+// Questo personaggio è composto da 3 livelli (3 sprite), ma i primi due sono speciali: Uno è visibile solo nei fotogrammi pari, mentre il secondo solo nei fotogrammi dispari.
 // Quindi, dei tre livelli, solo due sono visibili in un determinato fotogramma. Il lampeggiamento dei primi due livelli neri viene effettuato per creare colori sfumati.
 // La controparte è l'effetto sfarfallio. Il colore bianco del carattere proviene dallo sfondo e non è presente in uno sprite.
 const Game_Sprite g_PlayerSpriteLayers[] =
@@ -1206,7 +1205,7 @@ void updateCharacter(struct Character *ply)
 
 			// TODO: Impiega troppo tempo per eseguire queste tre operazioni!!!
 			// TODO: Vedere se reimplementare
-			VDP_LoadSpritePattern16_VSym(g_DataSprtLayer, 4 * 4 * 0, 4 * 4 * 2);
+			VDP_LoadSpritePattern16_VSym(g_DataSprtLayer, 4 * 4 * 0, 4 * 4 * 2); // 4 * 4 * 2
 			// VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_4, 4 * 4 * 2, 4 * 4 * 3);
 			// VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_9, 4 * 4 * 5, 4 * 4 * 2);
 		}
@@ -1227,7 +1226,7 @@ void updateCharacter(struct Character *ply)
 			//   addr  - Indirizzo dello sprite patterns (in RAM/ROM).
 			//   index - Indice del primo modello di sprite VRAM da copiare (in modalità 16x16, si possono usare solo multipli di 4).
 			//   count - Numero di patterns to copy (in modalità 16x16, si possono usare solo multipli di 4).
-			VDP_LoadSpritePattern(g_DataSprtLayer, 4 * 4 * 0, 4 * 4 * 2);
+			VDP_LoadSpritePattern(g_DataSprtLayer, 4 * 4 * 0, 4 * 4 * 2); // 4 * 4 * 2
 			// VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_4, 4 * 4 * 2, 4 * 4 * 3);
 			// VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_9, 4 * 4 * 5, 4 * 4 * 2);
 		}
@@ -1449,8 +1448,6 @@ bool State_Initialize()
 	//
 	// Nota:
 	//    Effettua la copia dei tiles contenuti in g_DataBackground (definiti nel file bg_tileset.h) nella VRAM a partire dall'indirizzo 0x0000
-	//VDP_WriteVRAM_16K(g_DataBackground, g_ScreenPatternLow, sizeof(g_DataBackground));
-
 	VDP_LoadPattern_GM1_Pletter(g_DataBackground, 0);
 
 	// Inizializza i caratteri personalizzati
@@ -1494,6 +1491,7 @@ bool State_Initialize()
 	//    count - g_Levels[levelIdx].Width il numero di byte da copiare
 	//
 	VDP_WriteVRAM_16K(g_DataSprtLayer, g_SpritePatternLow, sizeof(g_DataSprtLayer));
+	//Pletter_UnpackToVRAM(g_DataSprtLayer, g_SpritePatternLow);
 
 	Game_SetState(State_Preset);
 
