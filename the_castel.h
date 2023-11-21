@@ -1,4 +1,4 @@
-#define CAVALIERE             1
+#define COMPRESSO             1
 
 
 #define EMPTY_ITEM 		  	  0
@@ -55,6 +55,8 @@
 #define MOVE_PLAYER_FRAME_3 3*16
 #define MOVE_PLAYER_FRAME_4 4*16
 #define MOVE_PLAYER_FRAME_5 5*16
+
+#define MOVE_PLAYER_FRAME_7 7*16
 
 // DEFINIZIONE DEI FRAME PER FALL DEL PLAYER
 #define FALL_PLAYER_FRAME_6 6*16

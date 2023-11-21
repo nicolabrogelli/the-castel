@@ -44,7 +44,7 @@ ProjModules = [ ProjName ];
 // ProjSegments = "";
 
 //-- List of library modules to build (array)
-LibModules = [ "compress/pletter", "system", "bios",  "vdp", "print", "input", "memory", "game", "game_pawn", "math", "string", "game_pawn", "game_menu",  "pt3/pt3_player", "ayfx/ayfx_player"];
+LibModules = [ "compress/pletter", "system", "bios",  "vdp", "print", "input", "memory", "game", "game_pawn", "string", "game_pawn", "game_menu",  "pt3/pt3_player", "ayfx/ayfx_player"];
 //LibModules = [ "compress/pletter", "arkos/akg_player", "game_menu", "device/ninjatap", "fsm", "vdp", "input", "memory", "math", "print" ];
 
 //-- Additional sources to be compiled and linked with the project (array)

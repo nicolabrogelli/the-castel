@@ -14,7 +14,6 @@
 #include "game.h"
 #include "game_pawn.h"
 #include "game_menu.h"
-#include "math.h"
 #include "debug.h"
 #include "string.h"
 #include "input.h"
@@ -30,8 +29,7 @@
 #include "the_castel.h"
 #include "data/tiles.h"
 #include "data/ayfx/ayfx_bank.h"
-#include "data/sprt_player.h"
-//#include "data/sprites.h"
+#include "data/sprites.h"
 
 //=============================================================================
 // DEFINES
@@ -94,7 +92,7 @@ bool interact(u8 x, u8 y);
 void drawLevel(u8 levelIdx);
 void initCharacter(struct Character *ply, u8 id);
 void updateCharacter(struct Character *ply);
-void VDP_LoadSpritePattern16_VSym(const u8 *src, u8 index, u8 count);
+
 bool isMoveRight(u8 row8);
 bool isMoveLeft(u8 row8);
 bool isMoveJump(u8 row8);
@@ -132,7 +130,7 @@ void hideSprite(u8 count, u8 maxElement, u8 baseSprite);
 void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape);
 void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 enemyCount, char *type);
 void adjustLevel(unsigned char *level, u16 sizeLevel);
-void VDP_LoadPattern_GM1_Pletter(const u8* src, u8 offset);
+void VDP_LoadPattern_GM1_Pletter(const u8 *src, u8 offset);
 
 //.............................................................................
 // Player 1 data
@@ -141,6 +139,7 @@ void VDP_LoadPattern_GM1_Pletter(const u8* src, u8 offset);
 // Questo personaggio è composto da 3 livelli (3 sprite), ma i primi due sono speciali: Uno è visibile solo nei fotogrammi pari, mentre il secondo solo nei fotogrammi dispari.
 // Quindi, dei tre livelli, solo due sono visibili in un determinato fotogramma. Il lampeggiamento dei primi due livelli neri viene effettuato per creare colori sfumati.
 // La controparte è l'effetto sfarfallio. Il colore bianco del carattere proviene dallo sfondo e non è presente in uno sprite.
+
 const Game_Sprite g_PlayerSpriteLayers[] =
 	{
 		//	Sprite ID
@@ -149,8 +148,8 @@ const Game_Sprite g_PlayerSpriteLayers[] =
 		//    |   |  |  Pattern offset from current animation key
 		//    |   |  |  |   Colore del Layer
 		//    |   |  |  |   |                Layer option
-		{0, 0, 0, 0, COLOR_BLACK, PAWN_SPRITE_EVEN},
-		{0, 0, 0, 12, COLOR_BLACK, PAWN_SPRITE_ODD},
+		/* 		{0, 0, 0, 0, COLOR_BLACK, PAWN_SPRITE_EVEN},
+				{0, 0, 0, 12, COLOR_BLACK, PAWN_SPRITE_ODD}, */
 		{0, 0, 0, 4, COLOR_WHITE, 0},
 		{4, 0, 0, 8, COLOR_DARK_RED, 0},
 };
@@ -168,12 +167,22 @@ const Game_Frame g_PlayerFramesIdle[] =
 
 // Animazione Move
 // Ogni riga descrive una parte dell'animazione
+
 const Game_Frame g_PlayerFramesMove[] =
 	{
-		{MOVE_PLAYER_FRAME_0, 10, NULL},
-		{MOVE_PLAYER_FRAME_1, 10, NULL},
-		//{MOVE_PLAYER_FRAME_2, 4, NULL},
-		//{MOVE_PLAYER_FRAME_3, 4, NULL},  RIVEDERE
+
+		//{MOVE_PLAYER_FRAME_4, 10, NULL},
+		{MOVE_PLAYER_FRAME_3, 10, NULL},
+		//{MOVE_PLAYER_FRAME_7, 10, NULL},
+
+};
+
+const Game_Frame g_PlayerFramesMoveRight[] =
+	{
+
+		//{MOVE_PLAYER_FRAME_4, 10, NULL},
+		{MOVE_PLAYER_FRAME_7, 10, NULL},
+
 };
 
 // Animazione Jump
@@ -197,6 +206,7 @@ enum ANIM_ACTION_ID
 	ACTION_MOVE,
 	ACTION_JUMP,
 	ACTION_FALL,
+	ACTION_MOVE_RIGHT
 };
 
 // Lista delle possibii azioni del Pawn
@@ -207,6 +217,7 @@ const Game_Action g_PlayerAnimActions[] =
 		{g_PlayerFramesMove, numberof(g_PlayerFramesMove), TRUE, TRUE},
 		{g_PlayerFramesJump, numberof(g_PlayerFramesJump), TRUE, TRUE},
 		{g_PlayerFramesFall, numberof(g_PlayerFramesFall), TRUE, TRUE},
+		{g_PlayerFramesMoveRight, numberof(g_PlayerFramesMoveRight), TRUE, TRUE},
 };
 
 //=============================================================================
@@ -665,13 +676,13 @@ bool collisionCheck(i8 dx, i8 dy)
 		{
 			if (!hasLives())
 			{
-				//Ferma qualsiasi riproduzione audio
+				// Ferma qualsiasi riproduzione audio
 				ayFX_Mute();
-				ayFX_Update();	 
+				ayFX_Update();
 				PT3_Mute(PT3_STATE_MUTE_A, TRUE);
 				PT3_UpdatePSG();
 
-				Game_SetState(State_GameOver);				
+				Game_SetState(State_GameOver);
 			}
 		}
 		// VDP_SetColor(COLOR_DARK_RED);
@@ -1189,6 +1200,7 @@ void initCharacter(struct Character *ply, u8 id)
 void updateCharacter(struct Character *ply)
 {
 	// Update movement
+	u8 dir = 0;
 	ply->DX = 0;
 	ply->DY = 0;
 
@@ -1196,40 +1208,13 @@ void updateCharacter(struct Character *ply)
 	{
 		ply->DX++;
 		ply->bMoving = TRUE;
-
-		// TODO: imposta direzione destra
-		//		 solo se è impostata la direzione sinistra
-		if (g_PrevDirection != INPUT_RIGHT)
-		{
-			g_PrevDirection = INPUT_RIGHT;
-
-			// TODO: Impiega troppo tempo per eseguire queste tre operazioni!!!
-			// TODO: Vedere se reimplementare
-			VDP_LoadSpritePattern16_VSym(g_DataSprtLayer, 4 * 4 * 0, 4 * 4 * 2); // 4 * 4 * 2
-			// VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_4, 4 * 4 * 2, 4 * 4 * 3);
-			// VDP_LoadSpritePattern16_VSym(g_DataSprtLayer + FRAME_9, 4 * 4 * 5, 4 * 4 * 2);
-		}
+		dir = 1;
 	}
 	else if (ply->Input & INPUT_LEFT)
 	{
 		ply->DX--;
 		ply->bMoving = TRUE;
-
-		if (g_PrevDirection != INPUT_LEFT)
-		{
-			g_PrevDirection = INPUT_LEFT;
-
-			// Funzione: VDP_LoadSpritePattern
-			// Carica lo sprite nella VRAM. [MSX1/2/2+/TR]
-			//
-			// Parametri:
-			//   addr  - Indirizzo dello sprite patterns (in RAM/ROM).
-			//   index - Indice del primo modello di sprite VRAM da copiare (in modalità 16x16, si possono usare solo multipli di 4).
-			//   count - Numero di patterns to copy (in modalità 16x16, si possono usare solo multipli di 4).
-			VDP_LoadSpritePattern(g_DataSprtLayer, 4 * 4 * 0, 4 * 4 * 2); // 4 * 4 * 2
-			// VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_4, 4 * 4 * 2, 4 * 4 * 3);
-			// VDP_LoadSpritePattern(g_DataSprtLayer + FRAME_9, 4 * 4 * 5, 4 * 4 * 2);
-		}
+		dir = 0;
 	}
 	else
 		ply->bMoving = FALSE;
@@ -1273,7 +1258,14 @@ void updateCharacter(struct Character *ply)
 	else if (ply->bInAir)
 		act = ACTION_FALL;
 	else if (ply->bMoving)
-		act = ACTION_MOVE;
+	{
+		if (dir == 1)
+		{
+			act = ACTION_MOVE_RIGHT;
+		}
+		else if (dir == 0)
+			act = ACTION_MOVE;
+	}
 
 	Game_Pawn *pawn = &ply->Pawn;
 	GamePawn_SetAction(pawn, act);
@@ -1383,28 +1375,6 @@ void genericControl()
 }
 
 /**
- * @brief VDP_LoadSpritePattern16_VSym
- * @param u8 src Indirizzo dello sprite pattern
- * @param u8 index Indice del primo modello di sprite VRAM da copiare (in modalità 16x16, si possono usare solo multipli di 4).
- * @param u8 count Numero di patterns to copy (in modalità 16x16, si possono usare solo multipli di 4).
- * @return void
- */
-void VDP_LoadSpritePattern16_VSym(const u8 *src, u8 index, u8 count)
-{
-	u16 dest = g_SpritePatternLow + (index * 8);
-	for (u16 i = 0; i < count * 8; i++)
-	{
-		u8 val = Math_Flip(*src++);
-		u16 addr = dest++;
-		if (i & 0x10) // Spostamento ogni 16 byte per capovolgere i 4 blocchi dello sprite 16x16
-			addr -= 16;
-		else
-			addr += 16;
-		VDP_Poke_16K(val, addr);
-	}
-}
-
-/**
  * @brief Inizializza lo stato del gioco
  * @param void
  * @return bool è sempre FALSE
@@ -1490,8 +1460,8 @@ bool State_Initialize()
 	//    dest  - g_ScreenLayoutLow + (32 * (riga + g_Levels[levelIdx].Y)) + (g_Levels[levelIdx].X)
 	//    count - g_Levels[levelIdx].Width il numero di byte da copiare
 	//
-	VDP_WriteVRAM_16K(g_DataSprtLayer, g_SpritePatternLow, sizeof(g_DataSprtLayer));
-	//Pletter_UnpackToVRAM(g_DataSprtLayer, g_SpritePatternLow);
+
+	Pletter_UnpackToVRAM(g_DataSprtLayer, g_SpritePatternLow);
 
 	Game_SetState(State_Preset);
 
@@ -1718,9 +1688,9 @@ bool State_GameOver()
 	// Attende la pressione di un tasto
 	while (Keyboard_Read(8) != 255)
 	{
-		Game_SetState(State_Preset);			
+		Game_SetState(State_Preset);
 	}
-	
+
 	return TRUE;
 }
 
@@ -1905,22 +1875,49 @@ void adjustLevel(unsigned char *level, u16 sizeLevel)
 {
 	for (u16 i = 0; i < sizeLevel; i++)
 	{
-		if (level[i] == TILE_MASK_MONEY) { level[i] = TILE_MONEY; } // Ripristina la moneta nel livello 
-		if (level[i] == TILE_MASK_KEY3)  { level[i] = TILE_KEY3;  } // Ripristina la chiave nel livello
-		if (level[i] == TILE_MASK_KEY2)  { level[i] = TILE_KEY2;  } // Ripristina la chiave nel livello
-		if (level[i] == TILE_MASK_KEY1)  { level[i] = TILE_KEY1;  } // Ripristina la chiave nel livello
-		if (level[i] == TILE_MASK_AMPHORA) { level[i] = TILE_AMPHORA; } // Ripristina l'ampolla nel livello
-		if (level[i] == TILE_MASK_HEART) { level[i] = TILE_HEART; } // Ripristina il quore nel livello
-		if (level[i] == TILE_MASK_DOOR1) { level[i] = TILE_DOOR1; } // Ripristina la door 1
-		if (level[i] == TILE_MASK_DOOR2) { level[i] = TILE_DOOR2; } // Ripristina la door 2
-		if (level[i] == TILE_MASK_DOOR3) { level[i] = TILE_DOOR3; } // Ripristina la door 3
+		if (level[i] == TILE_MASK_MONEY)
+		{
+			level[i] = TILE_MONEY;
+		} // Ripristina la moneta nel livello
+		if (level[i] == TILE_MASK_KEY3)
+		{
+			level[i] = TILE_KEY3;
+		} // Ripristina la chiave nel livello
+		if (level[i] == TILE_MASK_KEY2)
+		{
+			level[i] = TILE_KEY2;
+		} // Ripristina la chiave nel livello
+		if (level[i] == TILE_MASK_KEY1)
+		{
+			level[i] = TILE_KEY1;
+		} // Ripristina la chiave nel livello
+		if (level[i] == TILE_MASK_AMPHORA)
+		{
+			level[i] = TILE_AMPHORA;
+		} // Ripristina l'ampolla nel livello
+		if (level[i] == TILE_MASK_HEART)
+		{
+			level[i] = TILE_HEART;
+		} // Ripristina il quore nel livello
+		if (level[i] == TILE_MASK_DOOR1)
+		{
+			level[i] = TILE_DOOR1;
+		} // Ripristina la door 1
+		if (level[i] == TILE_MASK_DOOR2)
+		{
+			level[i] = TILE_DOOR2;
+		} // Ripristina la door 2
+		if (level[i] == TILE_MASK_DOOR3)
+		{
+			level[i] = TILE_DOOR3;
+		} // Ripristina la door 3
 	}
 }
 
 //=============================================================================
 // PLETTER
 //=============================================================================
-void VDP_LoadPattern_GM1_Pletter(const u8* src, u8 offset)
+void VDP_LoadPattern_GM1_Pletter(const u8 *src, u8 offset)
 {
 	u16 dst = g_ScreenPatternLow + (offset * 8);
 	Pletter_UnpackToVRAM(src, dst);
