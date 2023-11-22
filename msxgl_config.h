@@ -80,10 +80,10 @@
 #define VDP_UNIT					VDP_UNIT_U8
 
 // VDP screen modes (additionnal limitations come from the selected MSX_VERSION)
-#define VDP_USE_MODE_T1				TRUE	// MSX1		Screen 0 Width 40
-#define VDP_USE_MODE_MC				TRUE	// MSX1		Screen 3
-#define VDP_USE_MODE_G1				TRUE	// MSX1		Screen 1
-#define VDP_USE_MODE_G2				TRUE	// MSX1		Screen 2
+#define VDP_USE_MODE_T1				FALSE	// MSX1		Screen 0 Width 40  TRUE
+#define VDP_USE_MODE_MC				FALSE	// MSX1		Screen 3           TRUE
+#define VDP_USE_MODE_G1				TRUE	// MSX1		Screen 1           TRUE
+#define VDP_USE_MODE_G2				FALSE	// MSX1		Screen 2           TRUE
 #define VDP_USE_MODE_T2				FALSE	// MSX2		Screen 0 Width 80
 #define VDP_USE_MODE_G3				FALSE	// MSX2		Screen 4
 #define VDP_USE_MODE_G4				FALSE	// MSX2		Screen 5
@@ -221,8 +221,12 @@
 // - GAMEPAWN_BORDER_UP
 // - GAMEPAWN_BORDER_RIGHT
 // - GAMEPAWN_BORDER_LEFT
-#define GAMEPAWN_BORDER_EVENT		(GAMEPAWN_BORDER_DOWN|GAMEPAWN_BORDER_LEFT|GAMEPAWN_BORDER_RIGHT)
-#define GAMEPAWN_BORDER_BLOCK		(GAMEPAWN_BORDER_UP|GAMEPAWN_BORDER_DOWN|GAMEPAWN_BORDER_LEFT|GAMEPAWN_BORDER_RIGHT)
+//#define GAMEPAWN_BORDER_EVENT		(GAMEPAWN_BORDER_DOWN|GAMEPAWN_BORDER_LEFT|GAMEPAWN_BORDER_RIGHT)
+//#define GAMEPAWN_BORDER_BLOCK		(GAMEPAWN_BORDER_UP|GAMEPAWN_BORDER_DOWN|GAMEPAWN_BORDER_LEFT|GAMEPAWN_BORDER_RIGHT)
+
+#define GAMEPAWN_BORDER_EVENT		(GAMEPAWN_BORDER_DOWN|GAMEPAWN_BORDER_RIGHT|GAMEPAWN_BORDER_LEFT)
+#define GAMEPAWN_BORDER_BLOCK		(GAMEPAWN_BORDER_UP)
+
 // Top/bottom border position (in pixel)
 #define GAMEPAWN_BORDER_MIN_Y		0
 #define GAMEPAWN_BORDER_MAX_Y		184
@@ -232,29 +236,37 @@
 // GAME MENU MODULE
 //-----------------------------------------------------------------------------
 
+
 #define MENU_USE_DEFAULT_CALLBACK	TRUE	// Use default input/print callback
-#define MENU_SCREEN_WIDTH			32		// Screen width
-#define MENU_CLEAR					0		// Clear character
-#define MENU_POS_X					4		// Frame position X
-#define MENU_POS_Y					11		// Frame position Y
-#define MENU_WIDTH					24		// Frame width
-#define MENU_HEIGHT					8		// Frame height
-#define MENU_CHAR_CURSOR			'@'		// Cursor charactter
-#define MENU_CHAR_TRUE				'O'		// True charactter
-#define MENU_CHAR_FALSE				'X'		// False charactter
-#define MENU_CHAR_LEFT				'<'		// Left edit charactter
-#define MENU_CHAR_RIGHT				'>'		// Right edit charactter
+#define MENU_SCREEN_WIDTH			MENU_VARIABLE		// Screen width
+											
+#define MENU_FRAME_X				0		// Frame position X
+#define MENU_FRAME_Y				6		// Frame position Y
+#define MENU_FRAME_WIDTH			32		// Frame width
+#define MENU_FRAME_HEIGHT			8		// Frame height
+#define MENU_CHAR_CLEAR				'\0'	// Clear character
+#define MENU_CHAR_CURSOR			'@'		// Cursor character
+#define MENU_CHAR_TRUE				'O'		// True character
+#define MENU_CHAR_FALSE				'X'		// False character
+#define MENU_CHAR_LEFT				'<'		// Left edit character
+#define MENU_CHAR_RIGHT				'>'		// Right edit character
+#define MENU_TITLE_X				4		// Title position X
+#define MENU_TITLE_Y				6		// Title position Y
+#define MENU_ITEM_X					6		// Item label X position
+#define MENU_ITEM_Y					8		// Item label X position
+#define MENU_ITEM_X_GOTO			6		// Goto type item label X position
+#define MENU_ITEM_ALIGN				MENU_ITEM_ALIGN_LEFT // Item label alignment
+#define MENU_ITEM_ALIGN_GOTO		MENU_ITEM_ALIGN_LEFT // Goto type item label alignment
+#define MENU_VALUE_X				14		// Item value X position
 // Type of cursor
 // - MENU_CURSOR_MODE_NONE			No cursor
 // - MENU_CURSOR_MODE_CHAR			Character cursor
 // - MENU_CURSOR_MODE_SPRT			Sprite cursor
 #define MENU_CURSOR_MODE			MENU_CURSOR_MODE_CHAR
-#define MENU_CURSOR_OFFSET			(-1)	// Cursor X position offset
-#define MENU_ITEM_X					6		// Item label X position
-#define MENU_ITEM_X_GOTO			6		// Goto type item label X position
-#define MENU_ITEM_ALIGN				MENU_ITEM_ALIGN_LEFT // Item label alignment
-#define MENU_ITEM_ALIGN_GOTO		MENU_ITEM_ALIGN_LEFT // Goto type item label alignment
-#define MENU_VALUE_X				13		// Item value X position
+#define MENU_CURSOR_OFFSET			(-2)	// Cursor X position offset
+												   
+																
+			
 
 //-----------------------------------------------------------------------------
 // STRING MODULE

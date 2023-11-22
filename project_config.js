@@ -44,7 +44,8 @@ ProjModules = [ ProjName ];
 // ProjSegments = "";
 
 //-- List of library modules to build (array)
-LibModules = [ "system", "bios", "vdp", "print", "input", "memory", "game", "game_pawn", "math", "string" ];
+LibModules = [ "compress/pletter", "system", "bios",  "vdp", "print", "input", "memory", "game", "game_pawn", "string", "game_pawn", "game_menu",  "pt3/pt3_player", "ayfx/ayfx_player"];
+//LibModules = [ "compress/pletter", "arkos/akg_player", "game_menu", "device/ninjatap", "fsm", "vdp", "input", "memory", "math", "print" ];
 
 //-- Additional sources to be compiled and linked with the project (array)
 // AddSources = [];
@@ -77,28 +78,28 @@ Machine = "1";
 //   - ROM_KONAMI_SCC   .rom    128KB ROM using Konami SCC mapper (8KB segments)
 //   - DOS1             .com    MSX-DOS 1 program (0100h~) No direct acces to Main-ROM
 //   - DOS2             .com    MSX-DOS 2 program (0100h~) No direct acces to Main-ROM
-Target = "ROM_32K";
+Target = "ROM_48K_ISR";
 
 //-- ROM mapper total size in KB (number). Must be a multiple of 8 or 16 depending on the mapper type (from 64 to 4096)
-// ROMSize = 128;
+//ROMSize = 0; //128;
 
 //-- Postpone the ROM startup to let the other ROMs initialize like Disk controller or Network cartridge (boolean)
-// ROMDelayBoot = false;
+//ROMDelayBoot = false;
 
 //-- Select RAM in slot 0 and install ISR there (boolean). For MSX with at least 64 KB of RAM
-// InstallRAMISR = false;
+//InstallRAMISR = false;
 
 //-- Type of custom ISR to install (string). ISR is install in RAM or ROM depending on Target and InstallRAMISR parameters
 //   - VBLANK     V-blank handler
 //   - VHBLANK    V-blank and h-blank handler (V9938 or V9958)
 //   - V9990      v-blank, h-blank and command end handler (V9990)
-// CustomISR = "VBLANK";
+CustomISR = "VBLANK";
 
 //-- Use automatic banked call and trampoline functions (boolean). For mapped ROM
 // BankedCall = 0;
 
 //-- Overwrite RAM starting address (number). For example. 0xE0000 for 8K RAM machine
-// ForceRamAddr = 0;
+//ForceRamAddr = 0;
 
 // --List of data files to copy to disk (array)
 // DiskFiles = [];
@@ -117,10 +118,10 @@ Target = "ROM_32K";
 AppSignature = true;
 
 //-- Application company (*). Can be 2 character string or 16-bits integer (0~65535)
-AppCompany = "PP";
+AppCompany = "NB";
 
 //-- Application ID. Can be 2 character string or 16-bits integer (0~65535)
-AppID = "EX";
+AppID = "TC";
 
 //-- Application extra data (array). Comma-separated bytes starting with data size
 // AppExtra = [];
@@ -133,7 +134,7 @@ AppID = "EX";
 BuildLibrary = true;
 
 //-- Prepare program for debug (boolean)
-Debug = true;
+Debug = false;
 
 //-- Move debug symbols to deployement folder (boolean)
 DebugSymbols = true;

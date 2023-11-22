@@ -1,0 +1,26 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"msxgl.h": "c",
+			"bios.h": "c",
+			"draw.h": "c",
+			"memory.h": "c",
+			"print.h": "c",
+			"vdp.h": "c",
+			"vdp_reg.h": "c",
+			"*.asm": "c",
+			"compress.h": "c",
+			"clock.h": "c",
+			"math.h": "c",
+			"tiles.h": "c",
+			"ayfx_bank.h": "c",
+			"sprt_player.h": "c"
+		},
+		"emulicious-debugger.emuliciousPath": "C:\\Users\\nicol\\msxgl-workspace\\Emulicious-with-Java64"
+	}
+}
