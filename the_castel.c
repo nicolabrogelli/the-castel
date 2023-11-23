@@ -92,7 +92,6 @@ bool interact(u8 x, u8 y);
 void drawLevel(u8 levelIdx);
 void initCharacter(struct Character *ply, u8 id);
 void updateCharacter(struct Character *ply);
-
 bool isMoveRight(u8 row8);
 bool isMoveLeft(u8 row8);
 bool isMoveJump(u8 row8);
@@ -106,12 +105,10 @@ bool addItemToInventory(u8 item);
 bool hasItemInInventory(u8 item);
 bool removeItemFromInventory(u8 item);
 void displayItemToInventory();
-void reorganizeInventory();
 void initLife();
 bool addLife();
 void displayLife();
 bool removeLife();
-void reorganizeLife();
 bool hasLives();
 void physicsCollisionPlayerAndEnemy(struct Character *ply);
 void replacementItemInLevel(u8 x, u8 y, u8 tile);
@@ -301,8 +298,8 @@ void initLife()
 {
 	g_Player.Life = MAX_LIVES;
 
-	for (u8 i = 0; i < MAX_LIVES; i++)
-		g_Lives[i] = TILE_HEART;
+	// TODO: Ottimizzazione del codice
+	Mem_Set(TILE_HEART, g_Lives, (3 * sizeof(g_Lives[0])));
 }
 
 /**
@@ -345,7 +342,7 @@ bool removeLife()
 		return FALSE;
 	}
 
-	for (u8 i = 0; i < MAX_LIVES; i++)
+	for (i8 i = MAX_LIVES - 1; i >= 0; i--)
 	{
 
 		if (g_Lives[i] == TILE_HEART)
@@ -358,35 +355,6 @@ bool removeLife()
 	}
 
 	return FALSE;
-}
-
-/**
- * @brief Riorganizza le vite
- * @param none
- * @return void
- */
-void reorganizeLife()
-{
-	unsigned char life[MAX_LIVES];
-
-	Mem_Set(EMPTY_ITEM, life, (3 * sizeof(life[0])));
-
-	// Crea una copia delle vite
-	for (u8 i = 0; i < MAX_LIVES; i++)
-	{
-		if (g_Lives[i] != EMPTY_ITEM)
-			life[i] = g_Lives[i];
-	}
-
-	// Svuota le vite
-	Mem_Set(EMPTY_ITEM, g_Lives, (3 * sizeof(g_Lives[0])));
-
-	// Riempie le vite
-	for (u8 i = 0; i < MAX_LIVES; i++)
-	{
-		if (life[i] != EMPTY_ITEM)
-			addLife();
-	}
 }
 
 /**
@@ -428,10 +396,8 @@ void displayLife()
  */
 void initInventory()
 {
-	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
-	{
-		g_Inventory[i] = EMPTY_ITEM;
-	}
+	// TODO: Ottimizzazione del codice
+	Mem_Set(EMPTY_ITEM, g_Inventory, (5 * sizeof(g_Inventory[0])));
 }
 
 /**
@@ -502,35 +468,6 @@ void displayItemToInventory()
 	}
 }
 
-/**
- * @brief Riorganizza l'inventario
- * @param void
- * @return void
- */
-void reorganizeInventory()
-{
-	unsigned char inventory[MAX_ITEM_INVENTORY];
-
-	Mem_Set(EMPTY_ITEM, inventory, (5 * sizeof(inventory[0])));
-
-	// Crea una copia dell'inventario
-	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
-	{
-		if (g_Inventory[i] != EMPTY_ITEM)
-			inventory[i] = g_Inventory[i];
-	}
-
-	// Svuota l'inventario
-	Mem_Set(EMPTY_ITEM, g_Inventory, (5 * sizeof(g_Inventory[0])));
-
-	// Riempie l'inventario
-	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
-	{
-		if (inventory[i] != EMPTY_ITEM)
-			addItemToInventory(inventory[i]);
-	}
-}
-
 //=============================================================================
 // FUNZIONI DI LIBRERIA PER LA GESTIONE DELLE TILES
 //=============================================================================
@@ -543,8 +480,8 @@ void reorganizeInventory()
  */
 u8 getTile(u8 x, u8 y)
 {
-	u8 tile = VDP_Peek_16K(g_ScreenLayoutLow + (y / 8) * 32 + (x / 8));
-	return tile;
+	//u8 tile = VDP_Peek_16K(g_ScreenLayoutLow + (y / 8) * 32 + (x / 8));
+	return VDP_Peek_16K(g_ScreenLayoutLow + (y / 8) * 32 + (x / 8));
 }
 
 /**
@@ -589,12 +526,14 @@ void physicsEventPlayer(u8 event, u8 tile)
 	case PAWN_PHYSICS_BORDER_DOWN: // Handle downward collisions
 	case PAWN_PHYSICS_COL_DOWN:
 		g_Player.bInAir = FALSE;
+
 		break;
 
 	case PAWN_PHYSICS_FALL: // Handle falling
 		if (!g_Player.bInAir)
 		{
 			g_Player.bInAir = TRUE;
+
 			g_Player.VelocityY = 0;
 		}
 		break;
@@ -665,7 +604,6 @@ bool collisionCheck(i8 dx, i8 dy)
 		g_ReverseCount = 60;
 		if (removeLife() == TRUE)
 		{
-			reorganizeLife();
 			displayLife();
 
 			PlayBankSFX(9, 0);
@@ -824,8 +762,9 @@ bool interact(u8 x, u8 y)
 	case TILE_BLOCK_TEST:
 		// TODO: Fare attenzione che il blocco che andiamo a spostare non vada sopra altri oggetti
 		//       inoltre si deve gestire anche la spinta che va verso sinistra.
-		Print_DrawTextAt(0, 23, "                            ");
-		Print_DrawIntAt(0, 23, x);
+		/* 		Print_DrawTextAt(0, 23, "                            ");
+				Print_DrawIntAt(0, 23, x);
+		 */
 		if (g_PrevDirection == INPUT_RIGHT)
 			if (getTile(x + 9, y) == 0)
 			{
@@ -859,7 +798,6 @@ bool interact(u8 x, u8 y)
 void changeLevel(u8 x, u8 y, u8 key, u8 door)
 {
 	removeItemFromInventory(key);
-	reorganizeInventory();
 	replacementItemInLevel(x, y, door);
 	drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
 }
@@ -872,9 +810,9 @@ void changeLevel(u8 x, u8 y, u8 key, u8 door)
  */
 bool getMoney(u8 x, u8 y)
 {
-	u8 tile = getTile(x, y);
+	//u8 tile = getTile(x, y);
 
-	switch (tile)
+	switch (getTile(x, y))
 	{
 	case TILE_MONEY:
 		// Modifico al volo il livello di gioco, cosi non sono costretto
@@ -930,13 +868,8 @@ void updateScore()
  */
 void replacementItemInLevel(u8 x, u8 y, u8 tile)
 {
-	u16 pos = ((y / 8) * 32) + (x / 8);
-
-	// Print_DrawIntAt(20,17,g_Levels[g_CurrRoomIdx].Layout[pos]);
-	g_Levels[g_CurrRoomIdx].Layout[pos] = tile;
-
-	// Print_DrawIntAt(20,18,tile);
-	// Print_DrawIntAt(20,19,g_Levels[g_CurrRoomIdx].Layout[pos]);
+	//u16 pos = ((y / 8) * 32) + (x / 8);
+	g_Levels[g_CurrRoomIdx].Layout[((y / 8) * 32) + (x / 8)] = tile;
 }
 
 /**
@@ -1204,6 +1137,7 @@ void updateCharacter(struct Character *ply)
 	ply->DX = 0;
 	ply->DY = 0;
 
+	// Print_DrawIntAt(20, 18, ply->Input);
 	if (ply->Input & INPUT_RIGHT)
 	{
 		ply->DX++;
@@ -1338,12 +1272,24 @@ void genericControl()
 			{
 				if (removeLife() == TRUE)
 				{
-					reorganizeLife();
 					displayLife();
 
 					PlayBankSFX(9, 0);
 
 					IsUnderWater = FALSE;
+				}
+			}
+			else
+			{
+				if (!hasLives())
+				{
+					// Ferma qualsiasi riproduzione audio
+					ayFX_Mute();
+					ayFX_Update();
+					PT3_Mute(PT3_STATE_MUTE_A, TRUE);
+					PT3_UpdatePSG();
+
+					Game_SetState(State_GameOver);
 				}
 			}
 		}
@@ -1513,11 +1459,6 @@ bool State_Game()
 	{
 		g_SecondCounter++;
 		g_Frame = 0;
-		/*
-				Print_SetPosition(20, 18);
-				c8 StrFrame[16];
-				String_Format(StrFrame, "%03i", g_SecondCounter);
-				Print_DrawText(StrFrame); */
 	}
 
 	if (g_FrameCounter % 2 == 0)
@@ -1919,12 +1860,7 @@ void adjustLevel(unsigned char *level, u16 sizeLevel)
 //=============================================================================
 void VDP_LoadPattern_GM1_Pletter(const u8 *src, u8 offset)
 {
-	u16 dst = g_ScreenPatternLow + (offset * 8);
-	Pletter_UnpackToVRAM(src, dst);
-	/* dst += 0x800;
-	Pletter_UnpackToVRAM(src, dst);
-	dst += 0x800;
-	Pletter_UnpackToVRAM(src, dst); */
+	Pletter_UnpackToVRAM(src,  g_ScreenPatternLow + (offset * 8));
 }
 //=============================================================================
 // MAIN LOOP

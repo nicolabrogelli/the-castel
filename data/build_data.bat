@@ -1,6 +1,10 @@
 @echo off
 setlocal EnableDelayedExpansion
 
+::=============================================================================
+:: DEMO non utilizzare
+::=============================================================================
+
 :: Audio
 set BuildArkos=0
 set BuildTrilo=0
