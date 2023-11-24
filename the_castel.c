@@ -244,6 +244,7 @@ u8 g_DelayRemoveLife = 0;
 bool IsUnderWater = FALSE;
 bool g_PresentPlatform = FALSE;
 u8 g_BankFXNum = 0;
+u8 GAME_OVER  = 0;
 
 unsigned char g_Inventory[MAX_ITEM_INVENTORY] = {0, 0, 0, 0, 0};
 unsigned char g_Lives[MAX_LIVES] = {0, 0, 0};
@@ -281,7 +282,9 @@ const struct LevelDefinition g_Levels[] = {
 	{(32 - LEVEL007_WIDTH) / 2, (24 - LEVEL007_HEIGHT) / 2, LEVEL007_WIDTH, LEVEL007_HEIGHT, g_Level007, "Livello 7", 7, 5, 0, 0, 0, 2},
 	{(32 - LEVEL008_WIDTH) / 2, (24 - LEVEL008_HEIGHT) / 2, LEVEL008_WIDTH, LEVEL008_HEIGHT, g_Level008, "Livello 8", 8, 6, 0, 0, 1, 2},
 	{(32 - LEVEL009_WIDTH) / 2, (24 - LEVEL009_HEIGHT) / 2, LEVEL009_WIDTH, LEVEL009_HEIGHT, g_Level009, "Livello 9", 9, 7, 1, 0, 0, 2},
-	{(32 - LEVEL010_WIDTH) / 2, (24 - LEVEL010_HEIGHT) / 2, LEVEL010_WIDTH, LEVEL010_HEIGHT, g_Level010, "Livello 10", 0, 0, 2, 0, 0, 1},
+	{(32 - LEVEL010_WIDTH) / 2, (24 - LEVEL010_HEIGHT) / 2, LEVEL010_WIDTH, LEVEL010_HEIGHT, g_Level010, "Livello 10", 10, 0, 2, 0, 0, 1},
+	{(32 - LEVEL011_WIDTH) / 2, (24 - LEVEL011_HEIGHT) / 2, LEVEL011_WIDTH, LEVEL011_HEIGHT, g_Level011, "Livello 11", 11, 0, 1, 0, 0, 2},
+	{(32 - LEVEL013_WIDTH) / 2, (24 - LEVEL013_HEIGHT) / 2, LEVEL013_WIDTH, LEVEL013_HEIGHT, g_Level013, "Livello 13", 0, 0, 0, 0, 2, 1},
 	{(32 - LEVEL099_WIDTH) / 2, (24 - LEVEL099_HEIGHT) / 2, LEVEL099_WIDTH, LEVEL099_HEIGHT, g_Level099, "Game Over", 8, 0, 0, 0, 1, 2},
 };
 
@@ -412,7 +415,8 @@ bool addItemToInventory(u8 item)
 		if (g_Inventory[i] == EMPTY_ITEM)
 		{
 			g_Inventory[i] = item;
-			setTile(8 + i * 16, (u8)(192 - 16), item);
+			//setTile(8 + i * 16, (u8)(192 - 16), item);
+			setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, item); 
 			return TRUE;
 		}
 	}
@@ -448,7 +452,8 @@ bool removeItemFromInventory(u8 item)
 		if (g_Inventory[i] == item)
 		{
 			g_Inventory[i] = EMPTY_ITEM;
-			setTile(8 + i * 16, (u8)(192 - 16), 0);
+			//setTile(8 + i * 16, (u8)(192 - 16), 0);
+			setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, 0);			
 			return TRUE;
 		}
 	}
@@ -464,7 +469,8 @@ void displayItemToInventory()
 {
 	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
 	{
-		setTile(8 + i * 16, (u8)(192 - 16), g_Inventory[i]);
+		//setTile(8 + i * 16, (u8)(192 - 16), g_Inventory[i]);
+		setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, g_Inventory[i]);	
 	}
 }
 
@@ -715,6 +721,11 @@ bool interact(u8 x, u8 y)
 		// PlayBankSFX(1, 0);
 		drawLevel(g_Levels[g_CurrRoomIdx].PrevLvIdx);
 		return false;
+	case TILE_DOOR_NEXT:
+		// PlayBankSFX(1, 0);
+		drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
+		return false;
+
 	case TILE_KEY1:
 		// Modifico al volo il livello di gioco, cosi non sono costretto
 		// a creare una cache dei livelli.
@@ -810,8 +821,6 @@ void changeLevel(u8 x, u8 y, u8 key, u8 door)
  */
 bool getMoney(u8 x, u8 y)
 {
-	//u8 tile = getTile(x, y);
-
 	switch (getTile(x, y))
 	{
 	case TILE_MONEY:
@@ -868,7 +877,6 @@ void updateScore()
  */
 void replacementItemInLevel(u8 x, u8 y, u8 tile)
 {
-	//u16 pos = ((y / 8) * 32) + (x / 8);
 	g_Levels[g_CurrRoomIdx].Layout[((y / 8) * 32) + (x / 8)] = tile;
 }
 
@@ -1527,6 +1535,8 @@ bool State_Game()
  */
 bool State_Preset()
 {
+	// 
+	GAME_OVER = sizeof(g_Levels) / sizeof(g_Levels[0]) - 1;
 
 	restoreLevel();
 
@@ -1804,6 +1814,8 @@ void restoreLevel()
 	adjustLevel(&g_Level008[0], LEVEL008_WIDTH * LEVEL008_HEIGHT);
 	adjustLevel(&g_Level009[0], LEVEL009_WIDTH * LEVEL009_HEIGHT);
 	adjustLevel(&g_Level010[0], LEVEL010_WIDTH * LEVEL010_HEIGHT);
+	adjustLevel(&g_Level011[0], LEVEL011_WIDTH * LEVEL011_HEIGHT);
+	adjustLevel(&g_Level013[0], LEVEL013_WIDTH * LEVEL013_HEIGHT);
 }
 
 /**

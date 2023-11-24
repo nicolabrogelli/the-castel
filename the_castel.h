@@ -11,6 +11,7 @@
 #define TILE_DOOR2 		 	 70
 #define TILE_DOOR3           74
 #define TILE_DOOR_PREV       71
+#define TILE_DOOR_NEXT       78
 #define TILE_HEART           79 
 #define TILE_AMPHORA         95
 #define TILE_KEY1            96
@@ -38,8 +39,6 @@
 #define MAX_ITEM_INVENTORY    5
 #define MAX_LIVES             3
 #define IMMUNITY              3
-
-#define GAME_OVER            10
 
 #define FRAME_1             128
 #define FRAME_4             512
@@ -101,6 +100,8 @@ extern unsigned char g_Level007[];
 extern unsigned char g_Level008[];
 extern unsigned char g_Level009[];
 extern unsigned char g_Level010[];
+extern unsigned char g_Level011[];
+extern unsigned char g_Level013[];
 extern unsigned char g_Level018[];
 extern unsigned char g_Level099[];
 
@@ -124,8 +125,38 @@ extern unsigned char g_Level099[];
 #define LEVEL009_HEIGHT 24
 #define LEVEL010_WIDTH 32
 #define LEVEL010_HEIGHT 24
+#define LEVEL011_WIDTH 32
+#define LEVEL011_HEIGHT 24
+#define LEVEL013_WIDTH 21
+#define LEVEL013_HEIGHT 15
 #define LEVEL018_WIDTH 32
 #define LEVEL018_HEIGHT 24
 #define LEVEL099_WIDTH 9
 #define LEVEL099_HEIGHT 1
 
+
+
+// Livelli fake!
+/*
+#include "data/level/level012.h"
+#include "data/level/level013.h"
+#include "data/level/level014.h"
+#include "data/level/level015.h"
+#include "data/level/level016.h"
+#include "data/level/level017.h"
+#include "data/level/level018.h"
+#include "data/level/level019.h"
+#include "data/level/level020.h"
+#include "data/level/level021.h"
+#include "data/level/level022.h"
+#include "data/level/level023.h"
+#include "data/level/level024.h"
+#include "data/level/level025.h"
+#include "data/level/level026.h"
+#include "data/level/level027.h"
+#include "data/level/level028.h"
+#include "data/level/level029.h"
+#include "data/level/level030.h"
+#include "data/level/level031.h"
+#include "data/level/level032.h"
+*/
