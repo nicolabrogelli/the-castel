@@ -13,7 +13,6 @@
 #include "msxgl.h"
 #include "game.h"
 #include "game_pawn.h"
-#include "game_menu.h"
 #include "debug.h"
 #include "string.h"
 #include "input.h"
@@ -128,6 +127,8 @@ void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape);
 void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 enemyCount, char *type);
 void adjustLevel(unsigned char *level, u16 sizeLevel);
 void VDP_LoadPattern_GM1_Pletter(const u8 *src, u8 offset);
+
+void fakeMenu();
 
 //.............................................................................
 // Player 1 data
@@ -244,12 +245,10 @@ u8 g_DelayRemoveLife = 0;
 bool IsUnderWater = FALSE;
 bool g_PresentPlatform = FALSE;
 u8 g_BankFXNum = 0;
-u8 GAME_OVER  = 0;
+u8 GAME_OVER = 0;
 
 unsigned char g_Inventory[MAX_ITEM_INVENTORY] = {0, 0, 0, 0, 0};
 unsigned char g_Lives[MAX_LIVES] = {0, 0, 0};
-
-#define SIZE_LEVEL 768;
 
 /** \struct
 	struct: Struttura che rappresenta la stanza
@@ -285,8 +284,24 @@ const struct LevelDefinition g_Levels[] = {
 	{(32 - LEVEL010_WIDTH) / 2, (24 - LEVEL010_HEIGHT) / 2, LEVEL010_WIDTH, LEVEL010_HEIGHT, g_Level010, "Livello 10", 10, 0, 2, 0, 0, 1},
 	{(32 - LEVEL011_WIDTH) / 2, (24 - LEVEL011_HEIGHT) / 2, LEVEL011_WIDTH, LEVEL011_HEIGHT, g_Level011, "Livello 11", 11, 0, 1, 0, 0, 2},
 	{(32 - LEVEL013_WIDTH) / 2, (24 - LEVEL013_HEIGHT) / 2, LEVEL013_WIDTH, LEVEL013_HEIGHT, g_Level013, "Livello 13", 0, 0, 0, 0, 2, 1},
+	{(32 - LEVEL100_WIDTH) / 2, (24 - LEVEL100_HEIGHT) / 2, LEVEL100_WIDTH, LEVEL100_HEIGHT, g_Level100, "Menu Game", 8, 0, 1, 1, 1, 1},
 	{(32 - LEVEL099_WIDTH) / 2, (24 - LEVEL099_HEIGHT) / 2, LEVEL099_WIDTH, LEVEL099_HEIGHT, g_Level099, "Game Over", 8, 0, 0, 0, 1, 2},
 };
+
+//=============================================================================
+// FUNZIONI PER LA GESTIONE DEL MENU
+//=============================================================================
+
+void fakeMenu()
+{
+
+	drawLevel(12);
+
+	while (Keyboard_Read(0) != 253)
+	{
+
+	}
+}
 
 //=============================================================================
 // FUNZIONI PER LA GESTIONE DELLE VITE
@@ -415,8 +430,8 @@ bool addItemToInventory(u8 item)
 		if (g_Inventory[i] == EMPTY_ITEM)
 		{
 			g_Inventory[i] = item;
-			//setTile(8 + i * 16, (u8)(192 - 16), item);
-			setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, item); 
+			// setTile(8 + i * 16, (u8)(192 - 16), item);
+			setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, item);
 			return TRUE;
 		}
 	}
@@ -452,8 +467,8 @@ bool removeItemFromInventory(u8 item)
 		if (g_Inventory[i] == item)
 		{
 			g_Inventory[i] = EMPTY_ITEM;
-			//setTile(8 + i * 16, (u8)(192 - 16), 0);
-			setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, 0);			
+			// setTile(8 + i * 16, (u8)(192 - 16), 0);
+			setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, 0);
 			return TRUE;
 		}
 	}
@@ -469,8 +484,8 @@ void displayItemToInventory()
 {
 	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
 	{
-		//setTile(8 + i * 16, (u8)(192 - 16), g_Inventory[i]);
-		setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, g_Inventory[i]);	
+		// setTile(8 + i * 16, (u8)(192 - 16), g_Inventory[i]);
+		setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, g_Inventory[i]);
 	}
 }
 
@@ -486,7 +501,7 @@ void displayItemToInventory()
  */
 u8 getTile(u8 x, u8 y)
 {
-	//u8 tile = VDP_Peek_16K(g_ScreenLayoutLow + (y / 8) * 32 + (x / 8));
+	// u8 tile = VDP_Peek_16K(g_ScreenLayoutLow + (y / 8) * 32 + (x / 8));
 	return VDP_Peek_16K(g_ScreenLayoutLow + (y / 8) * 32 + (x / 8));
 }
 
@@ -626,6 +641,7 @@ bool collisionCheck(i8 dx, i8 dy)
 				PT3_Mute(PT3_STATE_MUTE_A, TRUE);
 				PT3_UpdatePSG();
 
+				// DEBUG_LOG("[collisionCheck] - Fine partita chiamo lo stato Game_SetState(State_GameOver)");
 				Game_SetState(State_GameOver);
 			}
 		}
@@ -887,6 +903,8 @@ void replacementItemInLevel(u8 x, u8 y, u8 tile)
  */
 void drawLevel(u8 levelIdx)
 {
+	VDP_EnableDisplay(FALSE);
+
 	g_CurrRoomIdx = levelIdx;
 	g_PawnCount = 0;
 	g_GhostCount = 0;
@@ -1053,10 +1071,20 @@ void drawLevel(u8 levelIdx)
 	hideSprite(g_SpiderCount, MAX_SPIDER, 15);
 	hideSprite(g_BatCount, MAX_BAT, 20);
 
-	updateScore();
+	if (levelIdx == 12 ||
+		levelIdx == 13)
+	{
+		// TODO: non visualizzo i dati del risultato della partita
+	}
+	else
+	{
+		updateScore();
 
-	displayItemToInventory();
-	displayLife();
+		displayItemToInventory();
+		displayLife();
+	}
+
+	VDP_EnableDisplay(TRUE);
 }
 
 void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 enemyCount, char *type)
@@ -1535,8 +1563,12 @@ bool State_Game()
  */
 bool State_Preset()
 {
-	// 
-	GAME_OVER = sizeof(g_Levels) / sizeof(g_Levels[0]) - 1;
+
+	//VDP_EnableDisplay(TRUE);
+	fakeMenu();
+
+	//
+	// GAME_OVER = 12; // sizeof(g_Levels) / sizeof(g_Levels[0]) - 1;
 
 	restoreLevel();
 
@@ -1556,6 +1588,10 @@ bool State_Preset()
 	// Inizializza le vite del giocatore
 	initLife();
 
+	
+
+
+
 	// TODO: Quando importo le funzionalità della libreria clock
 	//		 viene gnerato un errore del tipo ?ASlink-Warning-Undefined Global
 	//       chiedere se è possibili utilizzarle su msx 1
@@ -1568,9 +1604,10 @@ bool State_Preset()
 	//
 	// Parametri:
 	//  u8 levelIdx - rappresenta l'id del livello
+	//VDP_EnableDisplay(FALSE);
 	drawLevel(0);
 
-	VDP_EnableDisplay(TRUE);
+	//VDP_EnableDisplay(TRUE);
 
 	Game_SetState(State_Game);
 
@@ -1596,51 +1633,14 @@ bool State_GameOver()
 {
 	VDP_HideAllSprites();
 
-	// Riempire l'area VRAM con un valore dato [MSX1/2/2+/TR]
-	//
-	// Parametri:
-	//   value	- Valore del Byte da copiare nella VRAM
-	//   dest	- Indirizzo di destinazione della VRAM  (indirizzo a 14 bit per 16 KB di VRAM)
-	//   count	- Numero di Byte da copiare nella VRAN
-	//
-	// Nota:
-	//   Puliza dello schermo
-
-	VDP_FillVRAM_16K(0, g_ScreenLayoutLow, 32 * 24);
-
-	// Disegnare il livello riga per riga
-	for (u8 riga = 0; riga < g_Levels[GAME_OVER].Height; ++riga)
-	{
-		// Funzione: VDP_WriteVRAM_16K
-		// Scrivere dati dalla RAM alla VRAM. [MSX1/2/2+/TR]
-		//
-		// Parametri:
-		//   src   - Indirizzo dei dati sorgente nella RAM
-		//   dest  - Indirizzo di destianzione nella VRAM (indirizzo a 14 bit per 16KB VRAM)
-		//   count - Numero di byte da copiare nella VRAM. Nota: Un valore 0 significa 65536
-		//
-		// Nota:
-		//    Ad ogni iterazione copia una riga del livello di gioco per, per chiarezza riporto i vari parametri utilizzati dalla funzione
-		//	  perchè g_Levels[levelIdx].Layout + g_Levels[levelIdx].Width * riga scarta la parte già copiata in precedentza e lascia tutto
-		//    il resto del livello.
-		//
-		//    src   - g_Levels[levelIdx].Layout + g_Levels[levelIdx].Width * riga
-		//    dest  - g_ScreenLayoutLow + (32 * (riga + g_Levels[levelIdx].Y)) + (g_Levels[levelIdx].X)
-		//    count - g_Levels[levelIdx].Width il numero di byte da copiare
-		//
-		// Attenzione alla prima iterazione viene preso tutto il layout , ma visto che la massima lunghezza della copia è espressa da g_Levels[levelIdx].Width
-		// viene copiata solamente la proma riga. Nelle iterazioni successive, il valore di riga incrementa e di conseguenza viene scartata la porzione del layout
-		// precedente (di dimesnione g_Levels[levelIdx].Width), e quindi viene copiata la parte che ci interessa. Tutto questo fino a che non si è completata
-		// la copia.
-		VDP_WriteVRAM_16K(g_Levels[GAME_OVER].Layout + g_Levels[GAME_OVER].Width * riga,
-						  g_ScreenLayoutLow + (32 * (riga + g_Levels[GAME_OVER].Y)) + (g_Levels[GAME_OVER].X), g_Levels[GAME_OVER].Width);
-	}
-
+	drawLevel(13);
+	
 	// Attende la pressione di un tasto
-	while (Keyboard_Read(8) != 255)
-	{
-		Game_SetState(State_Preset);
+	while (Keyboard_Read(8) == 255)
+	{ /* TODO: non faccio nulla	*/
 	}
+
+	Game_SetState(State_Preset);
 
 	return TRUE;
 }
@@ -1872,7 +1872,7 @@ void adjustLevel(unsigned char *level, u16 sizeLevel)
 //=============================================================================
 void VDP_LoadPattern_GM1_Pletter(const u8 *src, u8 offset)
 {
-	Pletter_UnpackToVRAM(src,  g_ScreenPatternLow + (offset * 8));
+	Pletter_UnpackToVRAM(src, g_ScreenPatternLow + (offset * 8));
 }
 //=============================================================================
 // MAIN LOOP

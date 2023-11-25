@@ -104,6 +104,7 @@ extern unsigned char g_Level011[];
 extern unsigned char g_Level013[];
 extern unsigned char g_Level018[];
 extern unsigned char g_Level099[];
+extern unsigned char g_Level100[];
 
 #define LEVEL001_WIDTH 32
 #define LEVEL001_HEIGHT 24
@@ -131,32 +132,8 @@ extern unsigned char g_Level099[];
 #define LEVEL013_HEIGHT 15
 #define LEVEL018_WIDTH 32
 #define LEVEL018_HEIGHT 24
-#define LEVEL099_WIDTH 9
-#define LEVEL099_HEIGHT 1
 
-
-
-// Livelli fake!
-/*
-#include "data/level/level012.h"
-#include "data/level/level013.h"
-#include "data/level/level014.h"
-#include "data/level/level015.h"
-#include "data/level/level016.h"
-#include "data/level/level017.h"
-#include "data/level/level018.h"
-#include "data/level/level019.h"
-#include "data/level/level020.h"
-#include "data/level/level021.h"
-#include "data/level/level022.h"
-#include "data/level/level023.h"
-#include "data/level/level024.h"
-#include "data/level/level025.h"
-#include "data/level/level026.h"
-#include "data/level/level027.h"
-#include "data/level/level028.h"
-#include "data/level/level029.h"
-#include "data/level/level030.h"
-#include "data/level/level031.h"
-#include "data/level/level032.h"
-*/
+#define LEVEL099_WIDTH 32
+#define LEVEL099_HEIGHT 3
+#define LEVEL100_WIDTH 32
+#define LEVEL100_HEIGHT 11

@@ -10,18 +10,18 @@
 // BUILD STEPS
 //*******************************************************************************
 
-/*  DoClean   = false;	//-- Clear all intermediate files and exit (boolean)
+ DoClean   = false;	//-- Clear all intermediate files and exit (boolean)
  DoCompile = true;	//-- Compile all the project and engine source code (boolean). Generate all REL files
  DoMake    = true;	//-- Link all the project and engine source code (boolean). Merge all REL into one IHX file
  DoPackage = true;	//-- Generate final binary file (boolean). Binarize the IHX file
  DoDeploy  = true;	//-- Gathering of all files necessary for the program to work (boolean). Depends on the type of target
-DoRun     = true;	//-- Start the program automatically at the end of the build (boolean) */
+ DoRun     = true;	//-- Start the program automatically at the end of the build (boolean)
 
 //*****************************************************************************
 // TOOLS SETTINGS
 //*****************************************************************************
 
-//Emulator = 'C:/Users/nicol/msxgl-workspace/openmsx-19.1/openmsx.exe';
+Emulator = 'C:/Users/nicol/msxgl-workspace/openmsx-19.1/openmsx.exe';
 //Emulator = `${ToolsDir}openMSX/openmsx`;
 // Emulator = `${ToolsDir}Emulicious/Emulicious`;
 // Emulator = `${ToolsDir}BlueMSX/blueMSX`;
@@ -44,7 +44,7 @@ ProjModules = [ ProjName ];
 // ProjSegments = "";
 
 //-- List of library modules to build (array)
-LibModules = [ "compress/pletter", "system", "bios",  "vdp", "print", "input", "memory", "game", "game_pawn", "string", "game_pawn", "game_menu",  "pt3/pt3_player", "ayfx/ayfx_player"];
+LibModules = [ "compress/pletter", "system", "bios",  "vdp", "print", "input", "memory", "game", "game_pawn", "string", "game_pawn",  "pt3/pt3_player", "ayfx/ayfx_player"];
 
 //-- Additional sources to be compiled and linked with the project (array)
 // AddSources = [];
@@ -77,16 +77,16 @@ Machine = "1";
 //   - ROM_KONAMI_SCC   .rom    128KB ROM using Konami SCC mapper (8KB segments)
 //   - DOS1             .com    MSX-DOS 1 program (0100h~) No direct acces to Main-ROM
 //   - DOS2             .com    MSX-DOS 2 program (0100h~) No direct acces to Main-ROM
-Target = "ROM_64K_ISR";
+Target = "ROM_48K_ISR";
 
 //-- ROM mapper total size in KB (number). Must be a multiple of 8 or 16 depending on the mapper type (from 64 to 4096)
-//ROMSize = 0; //128;
+// ROMSize = 128;
 
 //-- Postpone the ROM startup to let the other ROMs initialize like Disk controller or Network cartridge (boolean)
-//ROMDelayBoot = false;
+// ROMDelayBoot = false;
 
 //-- Select RAM in slot 0 and install ISR there (boolean). For MSX with at least 64 KB of RAM
-//InstallRAMISR = false;
+// InstallRAMISR = false;
 
 //-- Type of custom ISR to install (string). ISR is install in RAM or ROM depending on Target and InstallRAMISR parameters
 //   - VBLANK     V-blank handler
@@ -98,7 +98,7 @@ CustomISR = "VBLANK";
 // BankedCall = 0;
 
 //-- Overwrite RAM starting address (number). For example. 0xE0000 for 8K RAM machine
-//ForceRamAddr = 0;
+// ForceRamAddr = 0;
 
 // --List of data files to copy to disk (array)
 // DiskFiles = [];
@@ -133,7 +133,7 @@ AppID = "TC";
 BuildLibrary = true;
 
 //-- Prepare program for debug (boolean)
-Debug = false;
+Debug = true;
 
 //-- Move debug symbols to deployement folder (boolean)
 DebugSymbols = true;
