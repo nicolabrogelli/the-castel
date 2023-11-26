@@ -295,7 +295,7 @@ const struct LevelDefinition g_Levels[] = {
 void fakeMenu()
 {
 
-	drawLevel(12);
+	drawLevel((sizeof(g_Levels) / sizeof(g_Levels[0])) - 2); // 12
 
 	while (Keyboard_Read(0) != 253)
 	{
@@ -1633,10 +1633,10 @@ bool State_GameOver()
 {
 	VDP_HideAllSprites();
 
-	drawLevel(13);
+	drawLevel((sizeof(g_Levels) / sizeof(g_Levels[0])) - 1);  // 13
 	
 	// Attende la pressione di un tasto
-	while (Keyboard_Read(8) == 255)
+	while (Keyboard_Read(8) != 254)
 	{ /* TODO: non faccio nulla	*/
 	}
 
@@ -1657,7 +1657,7 @@ bool State_GameOver()
 void readInputControl()
 {
 	u8 row8 = Keyboard_Read(8);
-
+	
 	g_Player.Input = 0;
 	if (isMoveRight(row8))
 	{
