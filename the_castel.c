@@ -130,7 +130,7 @@ void adjustLevel(unsigned char *level, u16 sizeLevel);
 void VDP_LoadPattern_GM1_Pletter(const u8 *src, u8 offset);
 void restorePT3Music();
 void pausePT3Music();
-
+u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, u8 idxSprite, u8 bo,  u8 riga, u8 colonna, u8 levelIdx);
 void fakeMenu();
 
 //.............................................................................
@@ -305,7 +305,6 @@ void fakeMenu()
 	while (Keyboard_Read(0) != 253)
 	{
 	}
-	
 }
 
 //=============================================================================
@@ -982,95 +981,21 @@ void drawLevel(u8 levelIdx)
 			}
 			else if ((tile == TILE_STAR_POS_ENEMY) && (g_PawnCount < MAX_ENEMY)) // Rilevamento della posizione iniziale del nemico
 			{
-				if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * riga + colonna - 1] != TILE_STAR_POS_ENEMY)
-				{
-					if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * (riga - 1) + colonna] != TILE_STAR_POS_ENEMY)
-					{
-
-						u8 x = g_Levels[levelIdx].X + colonna;
-						u8 y = g_Levels[levelIdx].Y + riga;
-
-						managementSprite(x, y, 6, g_PawnCount, 196);
-
-						spritePosition(x, y, &g_Enemy[0], g_PawnCount, "Sheletor");
-
-						setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
-						g_PawnCount++;
-					}
-				}
+				g_PawnCount = positionGenericEnemy(TILE_STAR_POS_ENEMY, g_PawnCount,  &g_Enemy[0], 196, 6, riga, colonna, levelIdx);				
 			}
 			else if ((tile == TILE_POS_GHOST) && (g_Levels[levelIdx].GhostNumber < MAX_GHOST)) // Rilevamento della posizione iniziale del nemico
 			{
-				if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * riga + colonna - 1] != TILE_POS_GHOST)
-				{
-					if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * (riga - 1) + colonna] != TILE_POS_GHOST)
-					{
-						// TODO: Posiziona lo sprite della Slied Platform nell'livello di gioco
-						//		 C'è un bug da risolvere, la slide si presenta anche nei livelli
-						//		 dove non risulta configurata.
-						// 		 Per aggiungerla ad un livello è necessario inserire la tile 128
-						//		 e le tile 100 per dare il range di escursione
+				g_GhostCount = positionGenericEnemy(TILE_POS_GHOST, g_GhostCount,  &g_Ghost[0], 200, 10, riga, colonna, levelIdx);
 
-						u8 x = g_Levels[levelIdx].X + colonna;
-						u8 y = g_Levels[levelIdx].Y + riga;
-
-						managementSprite(x, y, 10, g_GhostCount, 200);
-
-						spritePosition(x, y, &g_Ghost[0], g_GhostCount, "Ghost");
-
-						setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
-						g_GhostCount++;
-					}
-				}
 			}
 			else if ((tile == TILE_POS_SPIDER) && (g_Levels[levelIdx].SpiderNumber < MAX_SPIDER)) // Rilevamento della posizione iniziale del nemico
 			{
-				if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * riga + colonna - 1] != TILE_POS_SPIDER)
-				{
-					if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * (riga - 1) + colonna] != TILE_POS_SPIDER)
-					{
-						// TODO: Posiziona lo sprite della Slied Platform nell'livello di gioco
-						//		 C'è un bug da risolvere, la slide si presenta anche nei livelli
-						//		 dove non risulta configurata.
-						// 		 Per aggiungerla ad un livello è necessario inserire la tile 128
-						//		 e le tile 100 per dare il range di escursione
-
-						u8 x = g_Levels[levelIdx].X + colonna;
-						u8 y = g_Levels[levelIdx].Y + riga;
-
-						managementSprite(x, y, 15, g_SpiderCount, 192);
-
-						spritePosition(x, y, &g_Spider[0], g_SpiderCount, "Spider");
-
-						setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
-						g_SpiderCount++;
-					}
-				}
+				g_SpiderCount = positionGenericEnemy(TILE_POS_SPIDER, g_SpiderCount,  &g_Spider[0], 192, 15, riga, colonna, levelIdx);				
 			}
 			else if ((tile == TILE_POS_BAT) && (g_Levels[levelIdx].BatNumber < MAX_BAT)) // Rilevamento della posizione iniziale del nemico
 			{
-				if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * riga + colonna - 1] != TILE_POS_BAT)
-				{
-					if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * (riga - 1) + colonna] != TILE_POS_BAT)
-					{
-						// TODO: Posiziona lo sprite della Slied Platform nell'livello di gioco
-						//		 C'è un bug da risolvere, la slide si presenta anche nei livelli
-						//		 dove non risulta configurata.
-						// 		 Per aggiungerla ad un livello è necessario inserire la tile 128
-						//		 e le tile 100 per dare il range di escursione
-
-						u8 x = g_Levels[levelIdx].X + colonna;
-						u8 y = g_Levels[levelIdx].Y + riga;
-
-						managementSprite(x, y, 20, g_BatCount, 204);
-
-						spritePosition(x, y, &g_Bat[0], g_BatCount, "Bat");
-
-						setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
-						g_BatCount++;
-					}
-				}
-			}
+				g_BatCount = positionGenericEnemy(TILE_POS_BAT, g_BatCount,  &g_Bat[0], 204, 20, riga, colonna, levelIdx);
+			} 
 		}
 	}
 
@@ -1095,6 +1020,44 @@ void drawLevel(u8 levelIdx)
 	VDP_EnableDisplay(TRUE);
 
 	restorePT3Music();
+}
+
+/**
+ * @brief Posiziona nel livello di gioco un nemico generico
+ * @param u8 TILE_POS_GENERIC_ENEMY tile segnaposto per il posizionamento del nemico
+ * @param u8 enemyCount numero del nemico da posizionare
+ * @param struct CharacterEnemy *enemy nemico da posizinare
+ * @param u8 idxSprite indirizzo delle sprite in memoria
+ * @param u8 u8 bo non mi ricordo :)
+ * @param u8 u8 riga riga del livello
+ * @param u8 colonna colonna del livello
+ * @param u8 levelIdx numero del livello di gioco
+*/
+u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, u8 idxSprite, u8 bo,  u8 riga, u8 colonna, u8 levelIdx)
+{
+	if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * riga + colonna - 1] != TILE_POS_GENERIC_ENEMY)
+	{
+		if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * (riga - 1) + colonna] != TILE_POS_GENERIC_ENEMY)
+		{
+			// TODO: Posiziona lo sprite della Slied Platform nell'livello di gioco
+			//		 C'è un bug da risolvere, la slide si presenta anche nei livelli
+			//		 dove non risulta configurata.
+			// 		 Per aggiungerla ad un livello è necessario inserire la tile 128
+			//		 e le tile 100 per dare il range di escursione
+
+			u8 x = g_Levels[levelIdx].X + colonna;
+			u8 y = g_Levels[levelIdx].Y + riga;
+
+			managementSprite(x, y, bo, enemyCount, idxSprite);
+
+			spritePosition(x, y, &enemy[0], enemyCount, "---");
+
+			setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
+			enemyCount++;
+		}				
+	}
+
+	return enemyCount;
 }
 
 void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 enemyCount, char *type)
@@ -1810,7 +1773,7 @@ void inizializeAYFX()
  * @brief Mette in pausa la musica
  * @param void
  * @return void
-*/
+ */
 void pausePT3Music()
 {
 	PT3_Pause();
@@ -1821,12 +1784,12 @@ void pausePT3Music()
  * @brief Fa ripartire la musica dal punto dove si è interrotta
  * @param void
  * @return void
-*/
-void restorePT3Music() {
+ */
+void restorePT3Music()
+{
 	PT3_Resume();
 	PT3_UpdatePSG();
 }
-
 
 /**
  * @brief Effettua il restore dei livelli di gioco
