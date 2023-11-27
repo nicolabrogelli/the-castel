@@ -28,6 +28,7 @@
 #include "the_castel.h"
 #include "data/tiles.h"
 #include "data/ayfx/ayfx_bank.h"
+#include "data/pt3/data_music.h"
 #include "data/sprites.h"
 
 //=============================================================================
@@ -127,6 +128,8 @@ void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape);
 void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 enemyCount, char *type);
 void adjustLevel(unsigned char *level, u16 sizeLevel);
 void VDP_LoadPattern_GM1_Pletter(const u8 *src, u8 offset);
+void restorePT3Music();
+void pausePT3Music();
 
 void fakeMenu();
 
@@ -247,6 +250,8 @@ bool g_PresentPlatform = FALSE;
 u8 g_BankFXNum = 0;
 u8 GAME_OVER = 0;
 
+u8 g_PlayMusic = FALSE;
+
 unsigned char g_Inventory[MAX_ITEM_INVENTORY] = {0, 0, 0, 0, 0};
 unsigned char g_Lives[MAX_LIVES] = {0, 0, 0};
 
@@ -299,8 +304,8 @@ void fakeMenu()
 
 	while (Keyboard_Read(0) != 253)
 	{
-
 	}
+	
 }
 
 //=============================================================================
@@ -639,6 +644,7 @@ bool collisionCheck(i8 dx, i8 dy)
 				ayFX_Mute();
 				ayFX_Update();
 				PT3_Mute(PT3_STATE_MUTE_A, TRUE);
+				PT3_Pause();
 				PT3_UpdatePSG();
 
 				// DEBUG_LOG("[collisionCheck] - Fine partita chiamo lo stato Game_SetState(State_GameOver)");
@@ -903,6 +909,8 @@ void replacementItemInLevel(u8 x, u8 y, u8 tile)
  */
 void drawLevel(u8 levelIdx)
 {
+	pausePT3Music();
+
 	VDP_EnableDisplay(FALSE);
 
 	g_CurrRoomIdx = levelIdx;
@@ -1085,6 +1093,8 @@ void drawLevel(u8 levelIdx)
 	}
 
 	VDP_EnableDisplay(TRUE);
+
+	restorePT3Music();
 }
 
 void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 enemyCount, char *type)
@@ -1320,9 +1330,11 @@ void genericControl()
 				if (!hasLives())
 				{
 					// Ferma qualsiasi riproduzione audio
+
 					ayFX_Mute();
 					ayFX_Update();
 					PT3_Mute(PT3_STATE_MUTE_A, TRUE);
+					PT3_Pause();
 					PT3_UpdatePSG();
 
 					Game_SetState(State_GameOver);
@@ -1564,7 +1576,7 @@ bool State_Game()
 bool State_Preset()
 {
 
-	//VDP_EnableDisplay(TRUE);
+	// VDP_EnableDisplay(TRUE);
 	fakeMenu();
 
 	//
@@ -1588,10 +1600,6 @@ bool State_Preset()
 	// Inizializza le vite del giocatore
 	initLife();
 
-	
-
-
-
 	// TODO: Quando importo le funzionalità della libreria clock
 	//		 viene gnerato un errore del tipo ?ASlink-Warning-Undefined Global
 	//       chiedere se è possibili utilizzarle su msx 1
@@ -1604,10 +1612,10 @@ bool State_Preset()
 	//
 	// Parametri:
 	//  u8 levelIdx - rappresenta l'id del livello
-	//VDP_EnableDisplay(FALSE);
+	// VDP_EnableDisplay(FALSE);
 	drawLevel(0);
 
-	//VDP_EnableDisplay(TRUE);
+	// VDP_EnableDisplay(TRUE);
 
 	Game_SetState(State_Game);
 
@@ -1633,8 +1641,8 @@ bool State_GameOver()
 {
 	VDP_HideAllSprites();
 
-	drawLevel((sizeof(g_Levels) / sizeof(g_Levels[0])) - 1);  // 13
-	
+	drawLevel((sizeof(g_Levels) / sizeof(g_Levels[0])) - 1); // 13
+
 	// Attende la pressione di un tasto
 	while (Keyboard_Read(8) != 254)
 	{ /* TODO: non faccio nulla	*/
@@ -1657,7 +1665,7 @@ bool State_GameOver()
 void readInputControl()
 {
 	u8 row8 = Keyboard_Read(8);
-	
+
 	g_Player.Input = 0;
 	if (isMoveRight(row8))
 	{
@@ -1782,6 +1790,8 @@ void inizializePT3()
 {
 	PT3_Init();				   // Inizializza il Player PT3
 	PT3_SetNoteTable(PT3_NT2); // Setta la tabella delle note
+	PT3_SetLoop(TRUE);
+	PT3_InitSong(g_DataMusic);
 }
 
 /**
@@ -1795,6 +1805,28 @@ void inizializeAYFX()
 	ayFX_SetChannel(PSG_CHANNEL_A); // Impostare il canale da utilizzare per la riproduzione del suono
 	ayFX_SetMode(AYFX_MODE_FIXED);	// Set channel mode
 }
+
+/**
+ * @brief Mette in pausa la musica
+ * @param void
+ * @return void
+*/
+void pausePT3Music()
+{
+	PT3_Pause();
+	PT3_UpdatePSG();
+}
+
+/**
+ * @brief Fa ripartire la musica dal punto dove si è interrotta
+ * @param void
+ * @return void
+*/
+void restorePT3Music() {
+	PT3_Resume();
+	PT3_UpdatePSG();
+}
+
 
 /**
  * @brief Effettua il restore dei livelli di gioco

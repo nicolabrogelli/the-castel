@@ -1,6 +1,5 @@
 #define COMPRESSO             1
 
-
 #define EMPTY_ITEM 		  	  0
 #define TILE_EMPTY 		  	  0
 #define TILE_MASK_DOOR1      65
