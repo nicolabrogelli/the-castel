@@ -88,51 +88,58 @@
 
 #define JUMP_ENEMY_FRAME_11 4*16+7*16
 
+#include "data/level/level000.h"
+#define LEVEL000_WIDTH 32
+#define LEVEL000_HEIGHT 24
 
 extern unsigned char g_Level001[];
-extern unsigned char g_Level002[];
-extern unsigned char g_Level003[];
-extern unsigned char g_Level004[];
-extern unsigned char g_Level005[];
-extern unsigned char g_Level006[];
-extern unsigned char g_Level007[];
-extern unsigned char g_Level008[];
-extern unsigned char g_Level009[];
-extern unsigned char g_Level010[];
-extern unsigned char g_Level011[];
-extern unsigned char g_Level013[];
-extern unsigned char g_Level018[];
-extern unsigned char g_Level099[];
-extern unsigned char g_Level100[];
-
 #define LEVEL001_WIDTH 32
 #define LEVEL001_HEIGHT 24
+
+extern unsigned char g_Level002[];
 #define LEVEL002_WIDTH 32
 #define LEVEL002_HEIGHT 24
+
+extern unsigned char g_Level003[];
 #define LEVEL003_WIDTH 32
 #define LEVEL003_HEIGHT 24
+
+extern unsigned char g_Level004[];
 #define LEVEL004_WIDTH 32
 #define LEVEL004_HEIGHT 24
-#define LEVEL005_WIDTH 32
-#define LEVEL005_HEIGHT 24
+
+extern unsigned char g_Level006[];
 #define LEVEL006_WIDTH 32
 #define LEVEL006_HEIGHT 24
+
+extern unsigned char g_Level007[];
 #define LEVEL007_WIDTH 32
 #define LEVEL007_HEIGHT 24
+
+extern unsigned char g_Level008[];
 #define LEVEL008_WIDTH 32
 #define LEVEL008_HEIGHT 24
+
+#include "data/level/level009.h"
 #define LEVEL009_WIDTH 32
 #define LEVEL009_HEIGHT 24
+
+extern unsigned char g_Level010[];
 #define LEVEL010_WIDTH 32
 #define LEVEL010_HEIGHT 24
+
+extern unsigned char g_Level011[];
 #define LEVEL011_WIDTH 32
 #define LEVEL011_HEIGHT 24
+
+#include "data/level/level012.h"
+#define LEVEL012_WIDTH 32
+#define LEVEL012_HEIGHT 24
+
+extern unsigned char g_Level013[];
 #define LEVEL013_WIDTH 21
 #define LEVEL013_HEIGHT 15
-#define LEVEL018_WIDTH 32
-#define LEVEL018_HEIGHT 24
 
-#define LEVEL099_WIDTH 32
-#define LEVEL099_HEIGHT 3
-#define LEVEL100_WIDTH 32
-#define LEVEL100_HEIGHT 11
+#include "data/level/level029.h"
+#define LEVEL029_WIDTH 32
+#define LEVEL029_HEIGHT 24

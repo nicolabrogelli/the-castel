@@ -25,7 +25,7 @@
 //=============================================================================
 // INCLUDES PERSONALIZZATI
 //=============================================================================
-#include "the_castel.h"
+#include "the-castel.h"
 #include "data/tiles.h"
 #include "data/ayfx/ayfx_bank.h"
 #include "data/pt3/data_music.h"
@@ -35,7 +35,7 @@
 // DEFINES
 //=============================================================================
 
-#define FORCE 20
+#define FORCE 15
 #define GRAVITY 1
 #define GROUND 192
 #define JOY_PORT_1 0b00000011
@@ -130,7 +130,7 @@ void adjustLevel(unsigned char *level, u16 sizeLevel);
 void VDP_LoadPattern_GM1_Pletter(const u8 *src, u8 offset);
 void restorePT3Music();
 void pausePT3Music();
-u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, u8 idxSprite, u8 bo,  u8 riga, u8 colonna, u8 levelIdx);
+u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, u8 idxSprite, u8 bo, u8 riga, u8 colonna, u8 levelIdx);
 void fakeMenu();
 
 //.............................................................................
@@ -237,7 +237,6 @@ u8 g_PrevDirection = 0;
 u8 g_FrameCounter = 0;
 u8 g_ReverseCount = 0;
 u8 g_CurrRoomIdx = 0;
-u8 g_SladePlatformCount = 0;
 u8 g_GhostCount = 0;
 u8 g_SpiderCount = 0;
 u8 g_BatCount = 0;
@@ -246,11 +245,6 @@ u8 g_SecondCounter = 0;
 u8 g_Frame = 0;
 u8 g_DelayRemoveLife = 0;
 bool IsUnderWater = FALSE;
-bool g_PresentPlatform = FALSE;
-u8 g_BankFXNum = 0;
-u8 GAME_OVER = 0;
-
-u8 g_PlayMusic = FALSE;
 
 unsigned char g_Inventory[MAX_ITEM_INVENTORY] = {0, 0, 0, 0, 0};
 unsigned char g_Lives[MAX_LIVES] = {0, 0, 0};
@@ -277,20 +271,19 @@ struct LevelDefinition
 
 // Elenco delle stanze e delle loro caratteristiche
 const struct LevelDefinition g_Levels[] = {
-	{(32 - LEVEL001_WIDTH) / 2, (24 - LEVEL001_HEIGHT) / 2, LEVEL001_WIDTH, LEVEL001_HEIGHT, g_Level001, "Livello 1", 1, 0, 2, 0, 0, 0},
-	{(32 - LEVEL002_WIDTH) / 2, (24 - LEVEL002_HEIGHT) / 2, LEVEL002_WIDTH, LEVEL002_HEIGHT, g_Level002, "Livello 2", 2, 0, 0, 1, 0, 0},
-	{(32 - LEVEL003_WIDTH) / 2, (24 - LEVEL003_HEIGHT) / 2, LEVEL003_WIDTH, LEVEL003_HEIGHT, g_Level003, "Livello 3", 3, 1, 2, 0, 0, 0},
-	{(32 - LEVEL004_WIDTH) / 2, (24 - LEVEL004_HEIGHT) / 2, LEVEL004_WIDTH, LEVEL004_HEIGHT, g_Level004, "Livello 4", 4, 2, 2, 0, 0, 1},
-	{(32 - LEVEL005_WIDTH) / 2, (24 - LEVEL005_HEIGHT) / 2, LEVEL005_WIDTH, LEVEL005_HEIGHT, g_Level005, "Livello 5", 5, 3, 2, 0, 0, 0},
-	{(32 - LEVEL006_WIDTH) / 2, (24 - LEVEL006_HEIGHT) / 2, LEVEL006_WIDTH, LEVEL006_HEIGHT, g_Level006, "Livello 6", 6, 4, 1, 1, 1, 0},
-	{(32 - LEVEL007_WIDTH) / 2, (24 - LEVEL007_HEIGHT) / 2, LEVEL007_WIDTH, LEVEL007_HEIGHT, g_Level007, "Livello 7", 7, 5, 0, 0, 0, 2},
-	{(32 - LEVEL008_WIDTH) / 2, (24 - LEVEL008_HEIGHT) / 2, LEVEL008_WIDTH, LEVEL008_HEIGHT, g_Level008, "Livello 8", 8, 6, 0, 0, 1, 2},
-	{(32 - LEVEL009_WIDTH) / 2, (24 - LEVEL009_HEIGHT) / 2, LEVEL009_WIDTH, LEVEL009_HEIGHT, g_Level009, "Livello 9", 9, 7, 1, 0, 0, 2},
-	{(32 - LEVEL010_WIDTH) / 2, (24 - LEVEL010_HEIGHT) / 2, LEVEL010_WIDTH, LEVEL010_HEIGHT, g_Level010, "Livello 10", 10, 0, 2, 0, 0, 1},
-	{(32 - LEVEL011_WIDTH) / 2, (24 - LEVEL011_HEIGHT) / 2, LEVEL011_WIDTH, LEVEL011_HEIGHT, g_Level011, "Livello 11", 11, 0, 1, 0, 0, 2},
-	{(32 - LEVEL013_WIDTH) / 2, (24 - LEVEL013_HEIGHT) / 2, LEVEL013_WIDTH, LEVEL013_HEIGHT, g_Level013, "Livello 13", 0, 0, 0, 0, 2, 1},
-	{(32 - LEVEL100_WIDTH) / 2, (24 - LEVEL100_HEIGHT) / 2, LEVEL100_WIDTH, LEVEL100_HEIGHT, g_Level100, "Menu Game", 8, 0, 1, 1, 1, 1},
-	{(32 - LEVEL099_WIDTH) / 2, (24 - LEVEL099_HEIGHT) / 2, LEVEL099_WIDTH, LEVEL099_HEIGHT, g_Level099, "Game Over", 8, 0, 0, 0, 1, 2},
+	{(32 - LEVEL000_WIDTH) / 2, (24 - LEVEL000_HEIGHT) / 2, LEVEL000_WIDTH, LEVEL000_HEIGHT, g_Level000, "Level: 00", 1, 0, 0, 0, 0, 0},
+	{(32 - LEVEL001_WIDTH) / 2, (24 - LEVEL001_HEIGHT) / 2, LEVEL001_WIDTH, LEVEL001_HEIGHT, g_Level001, "Level: 01", 2, 0, 2, 0, 0, 0},
+	{(32 - LEVEL002_WIDTH) / 2, (24 - LEVEL002_HEIGHT) / 2, LEVEL002_WIDTH, LEVEL002_HEIGHT, g_Level002, "Level: 02", 3, 1, 0, 1, 0, 0},
+	{(32 - LEVEL003_WIDTH) / 2, (24 - LEVEL003_HEIGHT) / 2, LEVEL003_WIDTH, LEVEL003_HEIGHT, g_Level003, "Level: 03", 4, 2, 2, 0, 0, 0},
+	{(32 - LEVEL004_WIDTH) / 2, (24 - LEVEL004_HEIGHT) / 2, LEVEL004_WIDTH, LEVEL004_HEIGHT, g_Level004, "Level: 04", 5, 3, 2, 0, 0, 1},
+	{(32 - LEVEL006_WIDTH) / 2, (24 - LEVEL006_HEIGHT) / 2, LEVEL006_WIDTH, LEVEL006_HEIGHT, g_Level006, "Level: 06", 6, 4, 1, 1, 1, 0},
+	{(32 - LEVEL007_WIDTH) / 2, (24 - LEVEL007_HEIGHT) / 2, LEVEL007_WIDTH, LEVEL007_HEIGHT, g_Level007, "Level: 07", 7, 5, 0, 0, 0, 2},
+	{(32 - LEVEL008_WIDTH) / 2, (24 - LEVEL008_HEIGHT) / 2, LEVEL008_WIDTH, LEVEL008_HEIGHT, g_Level008, "Level: 08", 8, 6, 0, 0, 1, 2},
+	{(32 - LEVEL010_WIDTH) / 2, (24 - LEVEL010_HEIGHT) / 2, LEVEL010_WIDTH, LEVEL010_HEIGHT, g_Level010, "Level: 10", 9, 7, 2, 0, 0, 1},
+	{(32 - LEVEL011_WIDTH) / 2, (24 - LEVEL011_HEIGHT) / 2, LEVEL011_WIDTH, LEVEL011_HEIGHT, g_Level011, "Level: 11", 10, 8, 1, 0, 0, 2},
+	{(32 - LEVEL012_WIDTH) / 2, (24 - LEVEL012_HEIGHT) / 2, LEVEL012_WIDTH, LEVEL012_HEIGHT, g_Level012, "Level: 12", 11, 9, 2, 0, 0, 1},
+	{(32 - LEVEL009_WIDTH) / 2, (24 - LEVEL009_HEIGHT) / 2, LEVEL009_WIDTH, LEVEL009_HEIGHT, g_Level009, "Level: 09", 0, 9, 1, 0, 0, 2},
+	{(32 - LEVEL029_WIDTH) / 2, (24 - LEVEL029_HEIGHT) / 2, LEVEL029_WIDTH, LEVEL029_HEIGHT, g_Level029, "GAME OVER", 0, 9, 1, 0, 0, 2},
 };
 
 //=============================================================================
@@ -320,7 +313,6 @@ void initLife()
 {
 	g_Player.Life = MAX_LIVES;
 
-	// TODO: Ottimizzazione del codice
 	Mem_Set(TILE_HEART, g_Lives, (3 * sizeof(g_Lives[0])));
 }
 
@@ -418,7 +410,6 @@ void displayLife()
  */
 void initInventory()
 {
-	// TODO: Ottimizzazione del codice
 	Mem_Set(EMPTY_ITEM, g_Inventory, (5 * sizeof(g_Inventory[0])));
 }
 
@@ -434,7 +425,7 @@ bool addItemToInventory(u8 item)
 		if (g_Inventory[i] == EMPTY_ITEM)
 		{
 			g_Inventory[i] = item;
-			// setTile(8 + i * 16, (u8)(192 - 16), item);
+
 			setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, item);
 			return TRUE;
 		}
@@ -471,7 +462,7 @@ bool removeItemFromInventory(u8 item)
 		if (g_Inventory[i] == item)
 		{
 			g_Inventory[i] = EMPTY_ITEM;
-			// setTile(8 + i * 16, (u8)(192 - 16), 0);
+
 			setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, 0);
 			return TRUE;
 		}
@@ -486,10 +477,16 @@ bool removeItemFromInventory(u8 item)
  */
 void displayItemToInventory()
 {
-	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
+	if (g_CurrRoomIdx == 0 || g_CurrRoomIdx == (sizeof(g_Levels) / sizeof(g_Levels[0])) - 1)
 	{
-		// setTile(8 + i * 16, (u8)(192 - 16), g_Inventory[i]);
-		setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, g_Inventory[i]);
+		// TODO: Non faccio niente
+	}
+	else
+	{
+		for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
+		{
+			setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, g_Inventory[i]);
+		}
 	}
 }
 
@@ -505,7 +502,6 @@ void displayItemToInventory()
  */
 u8 getTile(u8 x, u8 y)
 {
-	// u8 tile = VDP_Peek_16K(g_ScreenLayoutLow + (y / 8) * 32 + (x / 8));
 	return VDP_Peek_16K(g_ScreenLayoutLow + (y / 8) * 32 + (x / 8));
 }
 
@@ -551,7 +547,6 @@ void physicsEventPlayer(u8 event, u8 tile)
 	case PAWN_PHYSICS_BORDER_DOWN: // Handle downward collisions
 	case PAWN_PHYSICS_COL_DOWN:
 		g_Player.bInAir = FALSE;
-
 		break;
 
 	case PAWN_PHYSICS_FALL: // Handle falling
@@ -572,7 +567,6 @@ void physicsEventPlayer(u8 event, u8 tile)
  */
 bool physicsCollision(u8 tile)
 {
-	// DEBUG_LOGNUM("PhysicsCollision", tile);
 	return (tile > 100 && tile < 184);
 }
 
@@ -603,14 +597,7 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
 		for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
 		{
 			struct CharacterEnemy *enemy = &genericEnemy[nEnemy];
-
-			i8 dx = enemy->X - pawn->PositionX;
-			i8 dy = enemy->Y - pawn->PositionY;
-
-			if (collisionCheck(dx, dy))
-			{
-				// TODO: non faccio nulla
-			}
+			collisionCheck(enemy->X - pawn->PositionX, enemy->Y - pawn->PositionY);
 		}
 	}
 }
@@ -623,8 +610,8 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
  */
 bool collisionCheck(i8 dx, i8 dy)
 {
-	u16 sqrtDist = (dx * dx) + (dy * dy);
-	if (sqrtDist < 13 * 13)
+	// u16 sqrtDist = (dx * dx) + (dy * dy);
+	if ((dx * dx) + (dy * dy) < 13 * 13)
 	{
 		g_ReverseCount = 60;
 		if (removeLife() == TRUE)
@@ -867,26 +854,36 @@ bool getMoney(u8 x, u8 y)
  */
 void updateScore()
 {
-	c8 StrLevel[16];
-	c8 StrScore[16];
+	if (g_CurrRoomIdx == 0 /*|| (sizeof(g_Levels) / sizeof(g_Levels[0])) - 1*/)
+	{
+		//Print_DrawIntAt(20,20,(sizeof(g_Levels) / sizeof(g_Levels[0])) - 1);
+		// TODO: non faccio nulla
+	}
+	else
+	{
 
-	// Stampa il livello di gioco
-	Print_SetPosition(0, 0);
-	Print_DrawText("LEVEL:");
-	String_Format(StrLevel, "%02i", g_CurrRoomIdx + 1);
-	Print_SetPosition(6, 0);
-	Print_DrawText(StrLevel);
+		c8 StrFormat[5];
 
-	// Stampa il punteggio
-	Print_SetPosition(10, 0);
-	Print_DrawText("SCORE:");
-	String_Format(StrScore, "%04i", g_Player.Score);
-	Print_SetPosition(16, 0);
-	Print_DrawText(StrScore);
+		// Stampa il livello di gioco
+		Print_SetPosition(0, 0);
+		/*
+	   Print_DrawText("LEVEL:");
+	   String_Format(StrFormat, "%02i", g_CurrRoomIdx + 1);
+	   Print_SetPosition(6, 0);
+	   Print_DrawText(StrFormat); */
+		Print_DrawText(g_Levels[g_CurrRoomIdx].Name);
 
-	// Stampa il punteggio
-	Print_SetPosition(22, 0);
-	Print_DrawText("LIFE:");
+		// Stampa il punteggio
+		Print_SetPosition(10, 0);
+		Print_DrawText("SCORE:");
+		String_Format(StrFormat, "%04i", g_Player.Score);
+		Print_SetPosition(16, 0);
+		Print_DrawText(StrFormat);
+
+		// Stampa il punteggio
+		Print_SetPosition(22, 0);
+		Print_DrawText("LIFE:");
+	}
 }
 
 /**
@@ -917,7 +914,6 @@ void drawLevel(u8 levelIdx)
 	g_GhostCount = 0;
 	g_SpiderCount = 0;
 	g_BatCount = 0;
-	g_SladePlatformCount = 0;
 	g_SecondCounter = 0;
 
 	// Riempire l'area VRAM con un valore dato [MSX1/2/2+/TR]
@@ -981,21 +977,20 @@ void drawLevel(u8 levelIdx)
 			}
 			else if ((tile == TILE_STAR_POS_ENEMY) && (g_PawnCount < MAX_ENEMY)) // Rilevamento della posizione iniziale del nemico
 			{
-				g_PawnCount = positionGenericEnemy(TILE_STAR_POS_ENEMY, g_PawnCount,  &g_Enemy[0], 196, 6, riga, colonna, levelIdx);				
+				g_PawnCount = positionGenericEnemy(TILE_STAR_POS_ENEMY, g_PawnCount, &g_Enemy[0], 196, 6, riga, colonna, levelIdx);
 			}
 			else if ((tile == TILE_POS_GHOST) && (g_Levels[levelIdx].GhostNumber < MAX_GHOST)) // Rilevamento della posizione iniziale del nemico
 			{
-				g_GhostCount = positionGenericEnemy(TILE_POS_GHOST, g_GhostCount,  &g_Ghost[0], 200, 10, riga, colonna, levelIdx);
-
+				g_GhostCount = positionGenericEnemy(TILE_POS_GHOST, g_GhostCount, &g_Ghost[0], 200, 10, riga, colonna, levelIdx);
 			}
 			else if ((tile == TILE_POS_SPIDER) && (g_Levels[levelIdx].SpiderNumber < MAX_SPIDER)) // Rilevamento della posizione iniziale del nemico
 			{
-				g_SpiderCount = positionGenericEnemy(TILE_POS_SPIDER, g_SpiderCount,  &g_Spider[0], 192, 15, riga, colonna, levelIdx);				
+				g_SpiderCount = positionGenericEnemy(TILE_POS_SPIDER, g_SpiderCount, &g_Spider[0], 192, 15, riga, colonna, levelIdx);
 			}
 			else if ((tile == TILE_POS_BAT) && (g_Levels[levelIdx].BatNumber < MAX_BAT)) // Rilevamento della posizione iniziale del nemico
 			{
-				g_BatCount = positionGenericEnemy(TILE_POS_BAT, g_BatCount,  &g_Bat[0], 204, 20, riga, colonna, levelIdx);
-			} 
+				g_BatCount = positionGenericEnemy(TILE_POS_BAT, g_BatCount, &g_Bat[0], 204, 20, riga, colonna, levelIdx);
+			}
 		}
 	}
 
@@ -1004,8 +999,7 @@ void drawLevel(u8 levelIdx)
 	hideSprite(g_SpiderCount, MAX_SPIDER, 15);
 	hideSprite(g_BatCount, MAX_BAT, 20);
 
-	if (levelIdx == 12 ||
-		levelIdx == 13)
+	if (levelIdx == 0)
 	{
 		// TODO: non visualizzo i dati del risultato della partita
 	}
@@ -1032,8 +1026,8 @@ void drawLevel(u8 levelIdx)
  * @param u8 u8 riga riga del livello
  * @param u8 colonna colonna del livello
  * @param u8 levelIdx numero del livello di gioco
-*/
-u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, u8 idxSprite, u8 bo,  u8 riga, u8 colonna, u8 levelIdx)
+ */
+u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, u8 idxSprite, u8 bo, u8 riga, u8 colonna, u8 levelIdx)
 {
 	if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * riga + colonna - 1] != TILE_POS_GENERIC_ENEMY)
 	{
@@ -1054,7 +1048,7 @@ u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct Charact
 
 			setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
 			enemyCount++;
-		}				
+		}
 	}
 
 	return enemyCount;
@@ -1166,6 +1160,7 @@ void updateCharacter(struct Character *ply)
 	{
 		ply->DY -= ply->VelocityY / 4;
 		ply->VelocityY -= GRAVITY;
+
 		if (ply->VelocityY < -FORCE)
 			ply->VelocityY = -FORCE;
 	}
@@ -1525,8 +1520,8 @@ bool State_Game()
 	g_FrameCounter++;
 	g_Frame++;
 
-	if (Keyboard_IsKeyPressed(KEY_ESC))
-		Game_Exit();
+	/* 	if (Keyboard_IsKeyPressed(KEY_ESC))
+			Game_Exit(); */
 
 	return TRUE;
 }
@@ -1538,12 +1533,8 @@ bool State_Game()
  */
 bool State_Preset()
 {
-
-	// VDP_EnableDisplay(TRUE);
-	fakeMenu();
-
-	//
-	// GAME_OVER = 12; // sizeof(g_Levels) / sizeof(g_Levels[0]) - 1;
+	// TODO: eliminato momentaneamente
+	// fakeMenu();
 
 	restoreLevel();
 
@@ -1562,13 +1553,6 @@ bool State_Preset()
 	// Funzione: initLife
 	// Inizializza le vite del giocatore
 	initLife();
-
-	// TODO: Quando importo le funzionalità della libreria clock
-	//		 viene gnerato un errore del tipo ?ASlink-Warning-Undefined Global
-	//       chiedere se è possibili utilizzarle su msx 1
-	// Funzione: rtcInizialize
-	// Inizializza il modulo RTC
-	// rtcInizialize();
 
 	// Funzione: DrawLevel
 	// Inizzializza il livello di gioco
@@ -1602,13 +1586,14 @@ bool State_Pause()
  */
 bool State_GameOver()
 {
+
 	VDP_HideAllSprites();
 
-	drawLevel((sizeof(g_Levels) / sizeof(g_Levels[0])) - 1); // 13
+	drawLevel((sizeof(g_Levels) / sizeof(g_Levels[0])) - 1); // -1
 
 	// Attende la pressione di un tasto
 	while (Keyboard_Read(8) != 254)
-	{ /* TODO: non faccio nulla	*/
+	{
 	}
 
 	Game_SetState(State_Preset);
@@ -1803,14 +1788,12 @@ void restoreLevel()
 	adjustLevel(&g_Level002[0], LEVEL002_WIDTH * LEVEL002_HEIGHT);
 	adjustLevel(&g_Level003[0], LEVEL003_WIDTH * LEVEL003_HEIGHT);
 	adjustLevel(&g_Level004[0], LEVEL004_WIDTH * LEVEL004_HEIGHT);
-	adjustLevel(&g_Level005[0], LEVEL005_WIDTH * LEVEL005_HEIGHT);
 	adjustLevel(&g_Level006[0], LEVEL006_WIDTH * LEVEL006_HEIGHT);
 	adjustLevel(&g_Level007[0], LEVEL007_WIDTH * LEVEL007_HEIGHT);
 	adjustLevel(&g_Level008[0], LEVEL008_WIDTH * LEVEL008_HEIGHT);
-	adjustLevel(&g_Level009[0], LEVEL009_WIDTH * LEVEL009_HEIGHT);
 	adjustLevel(&g_Level010[0], LEVEL010_WIDTH * LEVEL010_HEIGHT);
 	adjustLevel(&g_Level011[0], LEVEL011_WIDTH * LEVEL011_HEIGHT);
-	adjustLevel(&g_Level013[0], LEVEL013_WIDTH * LEVEL013_HEIGHT);
+	adjustLevel(&g_Level012[0], LEVEL012_WIDTH * LEVEL012_HEIGHT);
 }
 
 /**
