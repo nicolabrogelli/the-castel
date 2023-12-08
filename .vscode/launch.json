@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "configurations": [
+
+          {
+            "type": "emulicious-debugger",
+            "request": "launch",
+            "name": "Launch the_castel (Windows)",
+            "program": "${workspaceFolder}/the-castel/emul/rom/the_castel.rom",
+            "preLaunchTask": "build", 
+            "port": 58870,
+            "stopOnEntry": false
+        }
+    ]
+}
