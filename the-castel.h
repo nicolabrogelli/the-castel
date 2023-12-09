@@ -192,6 +192,10 @@
 #define MAX_ITEM_INVENTORY    5
 #define MAX_LIVES             3
 #define IMMUNITY              3
+#define LAST_LEVEL           13
+#define START_GAME            0
+#define GAME_OVER            14
+
 
 #define FRAME_1             128
 #define FRAME_4             512

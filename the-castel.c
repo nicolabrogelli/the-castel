@@ -697,8 +697,7 @@ bool interact(u8 x, u8 y)
 		}
 		return TRUE;
 	case TILE_DOOR2:
-		//Print_DrawIntAt(20, 22, g_CurrRoomIdx);
-		if (g_CurrRoomIdx == 13) //13
+		if (g_CurrRoomIdx == LAST_LEVEL) 
 		{
 			stopMusicPlayback();
 			Game_SetState(State_GameOver);
@@ -907,11 +906,12 @@ bool isDanger(u8 x, u8 y, u8 t)
  */
 void updateScore()
 {
-	if (g_CurrRoomIdx == 0)
+/* 	if (g_CurrRoomIdx == 0)
 	{
 		//  TODO: non faccio nulla
 	}
-	else
+	else */
+	if(g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER)
 	{
 
 		c8 StrFormat[5];
@@ -1852,11 +1852,12 @@ void stopMusicPlayback()
  */
 void restoreLevel()
 {
-/* 	for(u8 i = 1; i <= 13; i++)
+/* 	for(u8 i = 1; i <= 13; i++) {		
 		adjustLevel(g_Levels[i].Layout, g_Levels[i].Width * g_Levels[i].Height);
- */
+	} */
+
 	// Ripristi ilivelli di gioco
-	adjustLevel(&g_Level001[0], LEVEL001_WIDTH * LEVEL001_HEIGHT);
+ 	adjustLevel(&g_Level001[0], LEVEL001_WIDTH * LEVEL001_HEIGHT);
 	adjustLevel(&g_Level002[0], LEVEL002_WIDTH * LEVEL002_HEIGHT);
 	adjustLevel(&g_Level003[0], LEVEL003_WIDTH * LEVEL003_HEIGHT);
 	adjustLevel(&g_Level004[0], LEVEL004_WIDTH * LEVEL004_HEIGHT);
@@ -1867,7 +1868,7 @@ void restoreLevel()
 	adjustLevel(&g_Level010[0], LEVEL010_WIDTH * LEVEL010_HEIGHT);
 	adjustLevel(&g_Level011[0], LEVEL011_WIDTH * LEVEL011_HEIGHT);
 	adjustLevel(&g_Level012[0], LEVEL012_WIDTH * LEVEL012_HEIGHT);
-	adjustLevel(&g_Level013[0], LEVEL013_WIDTH * LEVEL013_HEIGHT);
+	adjustLevel(&g_Level013[0], LEVEL013_WIDTH * LEVEL013_HEIGHT); 
 }
 
 /**
