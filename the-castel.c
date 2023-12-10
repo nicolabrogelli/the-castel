@@ -134,6 +134,7 @@ u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct Charact
 bool isDanger(u8 x, u8 y, u8 t);
 u8 isUnderDunger(u8 x, u8 y);
 void stopMusicPlayback();
+void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask);
 
 //.............................................................................
 // Player 1 data
@@ -314,8 +315,8 @@ bool addLife()
 		if (g_Lives[i] == EMPTY_ITEM)
 		{
 			g_Player.Life++;
-
 			g_Lives[i] = TILE_HEART;
+
 			setTile(220 + i * 16, (u8)(4), TILE_HEART);
 			return TRUE;
 		}
@@ -413,7 +414,6 @@ bool addItemToInventory(u8 item)
 		if (g_Inventory[i] == EMPTY_ITEM)
 		{
 			g_Inventory[i] = item;
-
 			setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, item);
 			return TRUE;
 		}
@@ -465,11 +465,7 @@ bool removeItemFromInventory(u8 item)
  */
 void displayItemToInventory()
 {
-	if (g_CurrRoomIdx == 0 || g_CurrRoomIdx == (sizeof(g_Levels) / sizeof(g_Levels[0])) - 1)
-	{
-		// TODO: Non faccio niente
-	}
-	else
+	if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER)
 	{
 		for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
 		{
@@ -697,7 +693,7 @@ bool interact(u8 x, u8 y)
 		}
 		return TRUE;
 	case TILE_DOOR2:
-		if (g_CurrRoomIdx == LAST_LEVEL) 
+		if (g_CurrRoomIdx == LAST_LEVEL)
 		{
 			stopMusicPlayback();
 			Game_SetState(State_GameOver);
@@ -726,44 +722,35 @@ bool interact(u8 x, u8 y)
 	case TILE_KEY1:
 		// Modifico al volo il livello di gioco, cosi non sono costretto
 		// a creare una cache dei livelli.
-		replacementItemInLevel(x, y, TILE_MASK_KEY1);
-
-		setTile(x, y, EMPTY_ITEM);
-		addItemToInventory(tile);
-
+		replaceAndRemoveItem(x, y, tile, TILE_MASK_KEY1);
 		PlayBankSFX(5, 0);
 
 		return TRUE;
 	case TILE_KEY2:
 		// Modifico al volo il livello di gioco, cosi non sono costretto
 		// a creare una cache dei livelli.
-		replacementItemInLevel(x, y, TILE_MASK_KEY2);
-
-		setTile(x, y, EMPTY_ITEM);
-		addItemToInventory(tile);
-
+		replaceAndRemoveItem(x, y, tile, TILE_MASK_KEY2);
 		PlayBankSFX(5, 0);
 
 		return TRUE;
 	case TILE_KEY3:
 		// Modifico al volo il livello di gioco, cosi non sono costretto
 		// a creare una cache dei livelli.
-		replacementItemInLevel(x, y, TILE_MASK_KEY3);
-
-		setTile(x, y, EMPTY_ITEM);
-		addItemToInventory(tile);
-
+		replaceAndRemoveItem(x, y, tile, TILE_MASK_KEY3);
 		PlayBankSFX(5, 0);
 
 		return TRUE;
 	case TILE_AMPHORA:
 		// Modifico al volo il livello di gioco, cosi non sono costretto
 		// a creare una cache dei livelli.
-		replacementItemInLevel(x, y, TILE_MASK_AMPHORA);
+		replaceAndRemoveItem(x, y, tile, TILE_MASK_AMPHORA);
+		PlayBankSFX(5, 0);
 
-		setTile(x, y, EMPTY_ITEM);
-		addItemToInventory(tile);
-
+		return TRUE;
+	case TILE_CRUCIFIX:
+		// Modifico al volo il livello di gioco, cosi non sono costretto
+		// a creare una cache dei livelli.
+		replaceAndRemoveItem(x, y, tile, TILE_MASK_CRUCIFIX);
 		PlayBankSFX(5, 0);
 
 		return TRUE;
@@ -788,6 +775,21 @@ bool interact(u8 x, u8 y)
 	updateScore();
 
 	return FALSE;
+}
+
+/**
+ * @brief rimuove la tile, sostituendola con una maschera e mette l'oggetto corrspondente nell'inventario.
+ * 		  Questa funzione anche se ridondante mi permette di risparmiare qulache bit :)
+ * @param u8 x Coordinata x
+ * @param u8 y Coordinata y
+ * @param u8 tile Tile da inserire nell'inventario
+ * @param u8 tileMask Maschera per sostituire la tile
+ */
+void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask)
+{
+	replacementItemInLevel(x, y, tileMask);
+	setTile(x, y, EMPTY_ITEM);
+	addItemToInventory(tile);
 }
 
 /**
@@ -906,12 +908,7 @@ bool isDanger(u8 x, u8 y, u8 t)
  */
 void updateScore()
 {
-/* 	if (g_CurrRoomIdx == 0)
-	{
-		//  TODO: non faccio nulla
-	}
-	else */
-	if(g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER)
+	if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER)
 	{
 
 		c8 StrFormat[5];
@@ -1333,18 +1330,6 @@ void genericControl()
 				}
 				else
 				{
-					if (!hasLives())
-					{
-						stopMusicPlayback();
-						Game_SetState(State_GameOver);
-					}
-				}
-			}
-			else
-			{
-				if (!hasLives())
-				{
-					// Ferma qualsiasi riproduzione audio
 					stopMusicPlayback();
 					Game_SetState(State_GameOver);
 				}
@@ -1852,12 +1837,12 @@ void stopMusicPlayback()
  */
 void restoreLevel()
 {
-/* 	for(u8 i = 1; i <= 13; i++) {		
-		adjustLevel(g_Levels[i].Layout, g_Levels[i].Width * g_Levels[i].Height);
-	} */
+	/* 	for(u8 i = 1; i <= 13; i++) {
+			adjustLevel(g_Levels[i].Layout, g_Levels[i].Width * g_Levels[i].Height);
+		} */
 
 	// Ripristi ilivelli di gioco
- 	adjustLevel(&g_Level001[0], LEVEL001_WIDTH * LEVEL001_HEIGHT);
+	adjustLevel(&g_Level001[0], LEVEL001_WIDTH * LEVEL001_HEIGHT);
 	adjustLevel(&g_Level002[0], LEVEL002_WIDTH * LEVEL002_HEIGHT);
 	adjustLevel(&g_Level003[0], LEVEL003_WIDTH * LEVEL003_HEIGHT);
 	adjustLevel(&g_Level004[0], LEVEL004_WIDTH * LEVEL004_HEIGHT);
@@ -1868,7 +1853,7 @@ void restoreLevel()
 	adjustLevel(&g_Level010[0], LEVEL010_WIDTH * LEVEL010_HEIGHT);
 	adjustLevel(&g_Level011[0], LEVEL011_WIDTH * LEVEL011_HEIGHT);
 	adjustLevel(&g_Level012[0], LEVEL012_WIDTH * LEVEL012_HEIGHT);
-	adjustLevel(&g_Level013[0], LEVEL013_WIDTH * LEVEL013_HEIGHT); 
+	adjustLevel(&g_Level013[0], LEVEL013_WIDTH * LEVEL013_HEIGHT);
 }
 
 /**
@@ -1917,6 +1902,10 @@ void adjustLevel(unsigned char *level, u16 sizeLevel)
 		{
 			level[i] = TILE_DOOR3;
 		} // Ripristina la door 3
+		if (level[i] == TILE_MASK_CRUCIFIX)
+		{
+			level[i] = TILE_CRUCIFIX;
+		} // Ripristina la croce
 	}
 }
 

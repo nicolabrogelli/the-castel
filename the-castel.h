@@ -183,6 +183,7 @@
 #define TILE_254_NOT_CHANGE 254
 #define TILE_255_NOT_CHANGE 255
 
+#define TILE_MASK_CRUCIFIX  179
 
 #define MAX_ENEMY             3
 #define MAX_GHOST             3
