@@ -1,0 +1,1938 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 4.2.0 #13081 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module game_pawn
+                                      6 	.optsdcc -mz80
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _Mem_Set
+                                     12 	.globl _VDP_SetSpriteColorSM1
+                                     13 	.globl _VDP_Peek_16K
+                                     14 	.globl _VDP_WriteVRAM_16K
+                                     15 	.globl _g_SLTSL
+                                     16 	.globl _g_GRPACY
+                                     17 	.globl _g_GRPACX
+                                     18 	.globl _g_LOGOPR
+                                     19 	.globl _g_CMASK
+                                     20 	.globl _g_CLOC
+                                     21 	.globl _g_FNKSTR
+                                     22 	.globl _g_ATRBYT
+                                     23 	.globl _g_BDRCLR
+                                     24 	.globl _g_BAKCLR
+                                     25 	.globl _g_FORCLR
+                                     26 	.globl _g_CSRX
+                                     27 	.globl _g_CSRY
+                                     28 	.globl _g_CLIKSW
+                                     29 	.globl _g_MLTPAT
+                                     30 	.globl _g_MLTATR
+                                     31 	.globl _g_MLTCGP
+                                     32 	.globl _g_MLTCOL
+                                     33 	.globl _g_MLTNAM
+                                     34 	.globl _g_GRPPAT
+                                     35 	.globl _g_GRPATR
+                                     36 	.globl _g_GRPCGP
+                                     37 	.globl _g_GRPCOL
+                                     38 	.globl _g_GRPNAM
+                                     39 	.globl _g_T32PAT
+                                     40 	.globl _g_T32ATR
+                                     41 	.globl _g_T32CGP
+                                     42 	.globl _g_T32COL
+                                     43 	.globl _g_T32NAM
+                                     44 	.globl _g_TXTPAT
+                                     45 	.globl _g_TXTATR
+                                     46 	.globl _g_TXTCGP
+                                     47 	.globl _g_TXTCOL
+                                     48 	.globl _g_TXTNAM
+                                     49 	.globl _g_CLMLST
+                                     50 	.globl _g_CRTCNT
+                                     51 	.globl _g_LINLEN
+                                     52 	.globl _g_LINL32
+                                     53 	.globl _g_LINL40
+                                     54 	.globl _g_SVFFFD
+                                     55 	.globl _g_RG27SAV
+                                     56 	.globl _g_RG26SAV
+                                     57 	.globl _g_RG25SAV
+                                     58 	.globl _g_SVFFF8
+                                     59 	.globl _g_MINROM
+                                     60 	.globl _g_RG23SAV
+                                     61 	.globl _g_RG22SAV
+                                     62 	.globl _g_RG21SAV
+                                     63 	.globl _g_RG20SAV
+                                     64 	.globl _g_RG19SAV
+                                     65 	.globl _g_RG18SAV
+                                     66 	.globl _g_RG17SAV
+                                     67 	.globl _g_RG16SAV
+                                     68 	.globl _g_RG15SAV
+                                     69 	.globl _g_RG14SAV
+                                     70 	.globl _g_RG13SAV
+                                     71 	.globl _g_RG12SAV
+                                     72 	.globl _g_RG11SAV
+                                     73 	.globl _g_RG10SAV
+                                     74 	.globl _g_RG09SAV
+                                     75 	.globl _g_RG08SAV
+                                     76 	.globl _g_PROCNM
+                                     77 	.globl _g_SLTWRK
+                                     78 	.globl _g_SLTATR
+                                     79 	.globl _g_SLTTBL
+                                     80 	.globl _g_EXPTBL
+                                     81 	.globl _g_MNROM
+                                     82 	.globl _g_DRWANG
+                                     83 	.globl _g_DRWSCL
+                                     84 	.globl _g_DRWFLG
+                                     85 	.globl _g_GYPOS
+                                     86 	.globl _g_GXPOS
+                                     87 	.globl _g_BRDATR
+                                     88 	.globl _g_CASPRV
+                                     89 	.globl _g_OLDSCR
+                                     90 	.globl _g_SCRMOD
+                                     91 	.globl _g_FLBMEM
+                                     92 	.globl _g_KANAMD
+                                     93 	.globl _g_KANAST
+                                     94 	.globl _g_CAPST
+                                     95 	.globl _g_CSTYLE
+                                     96 	.globl _g_CSRSW
+                                     97 	.globl _g_INSFLG
+                                     98 	.globl _g_ESCCNT
+                                     99 	.globl _g_GRPHED
+                                    100 	.globl _g_WINWID
+                                    101 	.globl _g_LOWLIM
+                                    102 	.globl _g_INTCNT
+                                    103 	.globl _g_INTVAL
+                                    104 	.globl _g_JIFFY
+                                    105 	.globl _g_PADX
+                                    106 	.globl _g_PADY
+                                    107 	.globl _g_INTFLG
+                                    108 	.globl _g_RTYCNT
+                                    109 	.globl _g_TRPTBL
+                                    110 	.globl _g_HIMEM
+                                    111 	.globl _g_BOTTOM
+                                    112 	.globl _g_PATWRK
+                                    113 	.globl _g_LINWRK
+                                    114 	.globl _g_KEYBUF
+                                    115 	.globl _g_NEWKEY
+                                    116 	.globl _g_OLDKEY
+                                    117 	.globl _g_CLIKFL
+                                    118 	.globl _g_ONGSBF
+                                    119 	.globl _g_FNKFLG
+                                    120 	.globl _g_FNKSWI
+                                    121 	.globl _g_CODSAV
+                                    122 	.globl _g_FSTPOS
+                                    123 	.globl _g_LINTTB
+                                    124 	.globl _g_BASROM
+                                    125 	.globl _g_ENSTOP
+                                    126 	.globl _g_VCBC
+                                    127 	.globl _g_VCBB
+                                    128 	.globl _g_VCBA
+                                    129 	.globl _g_PLYCNT
+                                    130 	.globl _g_MUSICF
+                                    131 	.globl _g_QUEUEN
+                                    132 	.globl _g_MCLPTR
+                                    133 	.globl _g_MCLLEN
+                                    134 	.globl _g_SAVVOL
+                                    135 	.globl _g_VOICEN
+                                    136 	.globl _g_SAVSP
+                                    137 	.globl _g_PRSCNT
+                                    138 	.globl _g_LSTMOD
+                                    139 	.globl _g_LSTCOM
+                                    140 	.globl _g_COMMSK
+                                    141 	.globl _g_ESTBLS
+                                    142 	.globl _g_FLAGS
+                                    143 	.globl _g_ERRORS
+                                    144 	.globl _g_DATCNT
+                                    145 	.globl _g_DEVNUM
+                                    146 	.globl _g_OLDINT
+                                    147 	.globl _g_OLDSTT
+                                    148 	.globl _g_MEXBIh
+                                    149 	.globl _g_RSIQLN
+                                    150 	.globl _g_RSFCB
+                                    151 	.globl _g_TOCNT
+                                    152 	.globl _g_RSTMP
+                                    153 	.globl _g_YSAVE
+                                    154 	.globl _g_XSAVE
+                                    155 	.globl _g_NORUSE
+                                    156 	.globl _g_MODE
+                                    157 	.globl _g_ROMA
+                                    158 	.globl _g_CHRCNT
+                                    159 	.globl _g_EXBRSA
+                                    160 	.globl _g_AVCSAV
+                                    161 	.globl _g_ACPAGE
+                                    162 	.globl _g_DPPAGE
+                                    163 	.globl _g_RS2IQ
+                                    164 	.globl _g_VOICCQ
+                                    165 	.globl _g_VOICBQ
+                                    166 	.globl _g_VOICAQ
+                                    167 	.globl _g_QUEBAK
+                                    168 	.globl _g_QUETAB
+                                    169 	.globl _g_ASPCT2
+                                    170 	.globl _g_ASPCT1
+                                    171 	.globl _g_HEADER
+                                    172 	.globl _g_HIGH
+                                    173 	.globl _g_LOW
+                                    174 	.globl _g_CS240
+                                    175 	.globl _g_CS120
+                                    176 	.globl _g_GETPNT
+                                    177 	.globl _g_PUTPNT
+                                    178 	.globl _g_REPCNT
+                                    179 	.globl _g_SCNCNT
+                                    180 	.globl _g_FRCNEW
+                                    181 	.globl _g_QUEUES
+                                    182 	.globl _g_MINUPD
+                                    183 	.globl _g_MAXUPD
+                                    184 	.globl _g_TRGFLG
+                                    185 	.globl _g_STATFL
+                                    186 	.globl _g_RG7SAV
+                                    187 	.globl _g_RG6SAV
+                                    188 	.globl _g_RG5SAV
+                                    189 	.globl _g_RG4SAV
+                                    190 	.globl _g_RG3SAV
+                                    191 	.globl _g_RG2SAV
+                                    192 	.globl _g_RG1SAV
+                                    193 	.globl _g_RG0SAV
+                                    194 	.globl _g_CNSDFG
+                                    195 	.globl _g_USRTAB
+                                    196 	.globl _g_CLPRIM
+                                    197 	.globl _g_WRPRIM
+                                    198 	.globl _g_RDPRIM
+                                    199 	.globl _GamePawn_Initialize
+                                    200 	.globl _GamePawn_SetPosition
+                                    201 	.globl _GamePawn_SetAction
+                                    202 	.globl _GamePawn_Update
+                                    203 	.globl _GamePawn_Draw
+                                    204 	.globl _GamePawn_SetMovement
+                                    205 	.globl _GamePawn_InitializePhysics
+                                    206 ;--------------------------------------------------------
+                                    207 ; special function registers
+                                    208 ;--------------------------------------------------------
+                                    209 ;--------------------------------------------------------
+                                    210 ; ram data
+                                    211 ;--------------------------------------------------------
+                                    212 	.area _DATA
+                           00F3AE   213 _g_LINL40	=	0xf3ae
+                           00F3AF   214 _g_LINL32	=	0xf3af
+                           00F3B0   215 _g_LINLEN	=	0xf3b0
+                           00F3B1   216 _g_CRTCNT	=	0xf3b1
+                           00F3B2   217 _g_CLMLST	=	0xf3b2
+                           00F3B3   218 _g_TXTNAM	=	0xf3b3
+                           00F3B5   219 _g_TXTCOL	=	0xf3b5
+                           00F3B7   220 _g_TXTCGP	=	0xf3b7
+                           00F3B9   221 _g_TXTATR	=	0xf3b9
+                           00F3BB   222 _g_TXTPAT	=	0xf3bb
+                           00F3BD   223 _g_T32NAM	=	0xf3bd
+                           00F3BF   224 _g_T32COL	=	0xf3bf
+                           00F3C1   225 _g_T32CGP	=	0xf3c1
+                           00F3C3   226 _g_T32ATR	=	0xf3c3
+                           00F3C5   227 _g_T32PAT	=	0xf3c5
+                           00F3C7   228 _g_GRPNAM	=	0xf3c7
+                           00F3C9   229 _g_GRPCOL	=	0xf3c9
+                           00F3CB   230 _g_GRPCGP	=	0xf3cb
+                           00F3CD   231 _g_GRPATR	=	0xf3cd
+                           00F3CF   232 _g_GRPPAT	=	0xf3cf
+                           00F3D1   233 _g_MLTNAM	=	0xf3d1
+                           00F3D3   234 _g_MLTCOL	=	0xf3d3
+                           00F3D5   235 _g_MLTCGP	=	0xf3d5
+                           00F3D7   236 _g_MLTATR	=	0xf3d7
+                           00F3D9   237 _g_MLTPAT	=	0xf3d9
+                           00F3DB   238 _g_CLIKSW	=	0xf3db
+                           00F3DC   239 _g_CSRY	=	0xf3dc
+                           00F3DD   240 _g_CSRX	=	0xf3dd
+                           00F3E9   241 _g_FORCLR	=	0xf3e9
+                           00F3EA   242 _g_BAKCLR	=	0xf3ea
+                           00F3EB   243 _g_BDRCLR	=	0xf3eb
+                           00F3F2   244 _g_ATRBYT	=	0xf3f2
+                           00F87F   245 _g_FNKSTR	=	0xf87f
+                           00F92A   246 _g_CLOC	=	0xf92a
+                           00F92C   247 _g_CMASK	=	0xf92c
+                           00FB02   248 _g_LOGOPR	=	0xfb02
+                           00FCB7   249 _g_GRPACX	=	0xfcb7
+                           00FCB9   250 _g_GRPACY	=	0xfcb9
+                           00FFFF   251 _g_SLTSL	=	0xffff
+      000000                        252 _g_Game_DrawY:
+      000000                        253 	.ds 1
+      000001                        254 _g_Game_DrawX:
+      000001                        255 	.ds 1
+      000002                        256 _g_Game_DrawPattern:
+      000002                        257 	.ds 1
+      000003                        258 _g_Pawn:
+      000003                        259 	.ds 2
+      000005                        260 _g_Sprite:
+      000005                        261 	.ds 2
+                                    262 ;--------------------------------------------------------
+                                    263 ; ram data
+                                    264 ;--------------------------------------------------------
+                                    265 	.area _INITIALIZED
+                                    266 ;--------------------------------------------------------
+                                    267 ; absolute external ram data
+                                    268 ;--------------------------------------------------------
+                                    269 	.area _DABS (ABS)
+                                    270 ;--------------------------------------------------------
+                                    271 ; global & static initialisations
+                                    272 ;--------------------------------------------------------
+                                    273 	.area _HOME
+                                    274 	.area _GSINIT
+                                    275 	.area _GSFINAL
+                                    276 	.area _GSINIT
+                                    277 ;--------------------------------------------------------
+                                    278 ; Home
+                                    279 ;--------------------------------------------------------
+                                    280 	.area _HOME
+                                    281 	.area _HOME
+                                    282 ;--------------------------------------------------------
+                                    283 ; code
+                                    284 ;--------------------------------------------------------
+                                    285 	.area _CODE
+                                    286 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:33: void GamePawn_Initialize(Game_Pawn* pawn, const Game_Sprite* sprtList, u8 sprtNum, u8 sprtID, const Game_Action* actList)
+                                    287 ;	---------------------------------
+                                    288 ; Function GamePawn_Initialize
+                                    289 ; ---------------------------------
+      000000                        290 _GamePawn_Initialize::
+      000000 DD E5            [15]  291 	push	ix
+      000002 DD 21 00 00      [14]  292 	ld	ix,#0
+      000006 DD 39            [15]  293 	add	ix,sp
+                                    294 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:38: Mem_Set(0x00, g_Pawn, sizeof(Game_Pawn));
+      000008 22r03r00         [16]  295 	ld	(_g_Pawn), hl
+      00000B D5               [11]  296 	push	de
+      00000C 01 14 00         [10]  297 	ld	bc, #0x0014
+      00000F C5               [11]  298 	push	bc
+      000010 EB               [ 4]  299 	ex	de, hl
+      000011 AF               [ 4]  300 	xor	a, a
+      000012 CDr00r00         [17]  301 	call	_Mem_Set
+      000015 D1               [10]  302 	pop	de
+                                    303 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:39: g_Pawn->SpriteList = sprtList;
+      000016 2Ar03r00         [16]  304 	ld	hl, (_g_Pawn)
+      000019 73               [ 7]  305 	ld	(hl), e
+      00001A 23               [ 6]  306 	inc	hl
+      00001B 72               [ 7]  307 	ld	(hl), d
+                                    308 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:40: g_Pawn->SpriteNum = sprtNum;
+      00001C 2Ar03r00         [16]  309 	ld	hl, (_g_Pawn)
+      00001F 23               [ 6]  310 	inc	hl
+      000020 23               [ 6]  311 	inc	hl
+      000021 DD 7E 04         [19]  312 	ld	a, 4 (ix)
+      000024 77               [ 7]  313 	ld	(hl), a
+                                    314 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:44: g_Pawn->ActionList = actList;
+      000025 2Ar03r00         [16]  315 	ld	hl, (_g_Pawn)
+      000028 23               [ 6]  316 	inc	hl
+      000029 23               [ 6]  317 	inc	hl
+      00002A 23               [ 6]  318 	inc	hl
+      00002B DD 7E 06         [19]  319 	ld	a, 6 (ix)
+      00002E 77               [ 7]  320 	ld	(hl), a
+      00002F 23               [ 6]  321 	inc	hl
+      000030 DD 7E 07         [19]  322 	ld	a, 7 (ix)
+      000033 77               [ 7]  323 	ld	(hl), a
+                                    324 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:47: GamePawn_SetAction(g_Pawn, 0);
+      000034 D5               [11]  325 	push	de
+      000035 AF               [ 4]  326 	xor	a, a
+      000036 F5               [11]  327 	push	af
+      000037 33               [ 6]  328 	inc	sp
+      000038 2Ar03r00         [16]  329 	ld	hl, (_g_Pawn)
+      00003B CDrA1r00         [17]  330 	call	_GamePawn_SetAction
+      00003E D1               [10]  331 	pop	de
+                                    332 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:53: g_Sprite = sprtList;
+      00003F ED 53r05r00      [20]  333 	ld	(_g_Sprite), de
+                                    334 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:54: loop(i, g_Pawn->SpriteNum)
+      000043 0E 00            [ 7]  335 	ld	c, #0x00
+      000045                        336 00103$:
+      000045 2Ar03r00         [16]  337 	ld	hl, (_g_Pawn)
+      000048 23               [ 6]  338 	inc	hl
+      000049 23               [ 6]  339 	inc	hl
+      00004A 46               [ 7]  340 	ld	b, (hl)
+      00004B 79               [ 4]  341 	ld	a, c
+      00004C 90               [ 4]  342 	sub	a, b
+      00004D 30 1E            [12]  343 	jr	NC, 00105$
+                                    344 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:57: u8 sprtIdx = g_Sprite->SpriteID;
+      00004F 2Ar05r00         [16]  345 	ld	hl, (_g_Sprite)
+      000052 46               [ 7]  346 	ld	b, (hl)
+                                    347 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:60: VDP_SetSpriteColorSM1(sprtIdx, g_Sprite->Color);
+      000053 11 04 00         [10]  348 	ld	de, #0x0004
+      000056 19               [11]  349 	add	hl, de
+      000057 6E               [ 7]  350 	ld	l, (hl)
+                                    351 ;	spillPairReg hl
+      000058 C5               [11]  352 	push	bc
+      000059 78               [ 4]  353 	ld	a, b
+      00005A CDr00r00         [17]  354 	call	_VDP_SetSpriteColorSM1
+      00005D C1               [10]  355 	pop	bc
+                                    356 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:70: g_Sprite++;
+      00005E 21r05r00         [10]  357 	ld	hl, #_g_Sprite
+      000061 7E               [ 7]  358 	ld	a, (hl)
+      000062 C6 06            [ 7]  359 	add	a, #0x06
+      000064 77               [ 7]  360 	ld	(hl), a
+      000065 30 02            [12]  361 	jr	NC, 00118$
+      000067 23               [ 6]  362 	inc	hl
+      000068 34               [11]  363 	inc	(hl)
+      000069                        364 00118$:
+                                    365 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:54: loop(i, g_Pawn->SpriteNum)
+      000069 0C               [ 4]  366 	inc	c
+      00006A C3r45r00         [10]  367 	jp	00103$
+      00006D                        368 00105$:
+                                    369 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:73: }
+      00006D DD E1            [14]  370 	pop	ix
+      00006F E1               [10]  371 	pop	hl
+      000070 F1               [10]  372 	pop	af
+      000071 F1               [10]  373 	pop	af
+      000072 E9               [ 4]  374 	jp	(hl)
+                           00F380   375 _g_RDPRIM	=	0xf380
+                           00F385   376 _g_WRPRIM	=	0xf385
+                           00F38C   377 _g_CLPRIM	=	0xf38c
+                           00F39A   378 _g_USRTAB	=	0xf39a
+                           00F3DE   379 _g_CNSDFG	=	0xf3de
+                           00F3DF   380 _g_RG0SAV	=	0xf3df
+                           00F3E0   381 _g_RG1SAV	=	0xf3e0
+                           00F3E1   382 _g_RG2SAV	=	0xf3e1
+                           00F3E2   383 _g_RG3SAV	=	0xf3e2
+                           00F3E3   384 _g_RG4SAV	=	0xf3e3
+                           00F3E4   385 _g_RG5SAV	=	0xf3e4
+                           00F3E5   386 _g_RG6SAV	=	0xf3e5
+                           00F3E6   387 _g_RG7SAV	=	0xf3e6
+                           00F3E7   388 _g_STATFL	=	0xf3e7
+                           00F3E8   389 _g_TRGFLG	=	0xf3e8
+                           00F3EC   390 _g_MAXUPD	=	0xf3ec
+                           00F3EF   391 _g_MINUPD	=	0xf3ef
+                           00F3F3   392 _g_QUEUES	=	0xf3f3
+                           00F3F5   393 _g_FRCNEW	=	0xf3f5
+                           00F3F6   394 _g_SCNCNT	=	0xf3f6
+                           00F3F7   395 _g_REPCNT	=	0xf3f7
+                           00F3F8   396 _g_PUTPNT	=	0xf3f8
+                           00F3FA   397 _g_GETPNT	=	0xf3fa
+                           00F3FC   398 _g_CS120	=	0xf3fc
+                           00F401   399 _g_CS240	=	0xf401
+                           00F406   400 _g_LOW	=	0xf406
+                           00F408   401 _g_HIGH	=	0xf408
+                           00F40A   402 _g_HEADER	=	0xf40a
+                           00F40B   403 _g_ASPCT1	=	0xf40b
+                           00F40D   404 _g_ASPCT2	=	0xf40d
+                           00F959   405 _g_QUETAB	=	0xf959
+                           00F971   406 _g_QUEBAK	=	0xf971
+                           00F975   407 _g_VOICAQ	=	0xf975
+                           00F9F5   408 _g_VOICBQ	=	0xf9f5
+                           00FA75   409 _g_VOICCQ	=	0xfa75
+                           00FAF5   410 _g_RS2IQ	=	0xfaf5
+                           00FAF5   411 _g_DPPAGE	=	0xfaf5
+                           00FAF6   412 _g_ACPAGE	=	0xfaf6
+                           00FAF7   413 _g_AVCSAV	=	0xfaf7
+                           00FAF8   414 _g_EXBRSA	=	0xfaf8
+                           00FAF9   415 _g_CHRCNT	=	0xfaf9
+                           00FAFA   416 _g_ROMA	=	0xfafa
+                           00FAFC   417 _g_MODE	=	0xfafc
+                           00FAFD   418 _g_NORUSE	=	0xfafd
+                           00FAFE   419 _g_XSAVE	=	0xfafe
+                           00FB00   420 _g_YSAVE	=	0xfb00
+                           00FB03   421 _g_RSTMP	=	0xfb03
+                           00FB03   422 _g_TOCNT	=	0xfb03
+                           00FB04   423 _g_RSFCB	=	0xfb04
+                           00FB06   424 _g_RSIQLN	=	0xfb06
+                           00FB07   425 _g_MEXBIh	=	0xfb07
+                           00FB0C   426 _g_OLDSTT	=	0xfb0c
+                           00FB0C   427 _g_OLDINT	=	0xfb0c
+                           00FB16   428 _g_DEVNUM	=	0xfb16
+                           00FB17   429 _g_DATCNT	=	0xfb17
+                           00FB1A   430 _g_ERRORS	=	0xfb1a
+                           00FB1B   431 _g_FLAGS	=	0xfb1b
+                           00FB1C   432 _g_ESTBLS	=	0xfb1c
+                           00FB1D   433 _g_COMMSK	=	0xfb1d
+                           00FB1E   434 _g_LSTCOM	=	0xfb1e
+                           00FB1F   435 _g_LSTMOD	=	0xfb1f
+                           00FB35   436 _g_PRSCNT	=	0xfb35
+                           00FB36   437 _g_SAVSP	=	0xfb36
+                           00FB38   438 _g_VOICEN	=	0xfb38
+                           00FB39   439 _g_SAVVOL	=	0xfb39
+                           00FB3B   440 _g_MCLLEN	=	0xfb3b
+                           00FB3C   441 _g_MCLPTR	=	0xfb3c
+                           00FB3E   442 _g_QUEUEN	=	0xfb3e
+                           00FB3F   443 _g_MUSICF	=	0xfb3f
+                           00FB40   444 _g_PLYCNT	=	0xfb40
+                           00FB41   445 _g_VCBA	=	0xfb41
+                           00FB66   446 _g_VCBB	=	0xfb66
+                           00FB8B   447 _g_VCBC	=	0xfb8b
+                           00FBB0   448 _g_ENSTOP	=	0xfbb0
+                           00FBB1   449 _g_BASROM	=	0xfbb1
+                           00FBB2   450 _g_LINTTB	=	0xfbb2
+                           00FBCA   451 _g_FSTPOS	=	0xfbca
+                           00FBCC   452 _g_CODSAV	=	0xfbcc
+                           00FBCD   453 _g_FNKSWI	=	0xfbcd
+                           00FBCE   454 _g_FNKFLG	=	0xfbce
+                           00FBD8   455 _g_ONGSBF	=	0xfbd8
+                           00FBD9   456 _g_CLIKFL	=	0xfbd9
+                           00FBDA   457 _g_OLDKEY	=	0xfbda
+                           00FBE5   458 _g_NEWKEY	=	0xfbe5
+                           00FBF0   459 _g_KEYBUF	=	0xfbf0
+                           00FC18   460 _g_LINWRK	=	0xfc18
+                           00FC40   461 _g_PATWRK	=	0xfc40
+                           00FC48   462 _g_BOTTOM	=	0xfc48
+                           00FC4A   463 _g_HIMEM	=	0xfc4a
+                           00FC4C   464 _g_TRPTBL	=	0xfc4c
+                           00FC9A   465 _g_RTYCNT	=	0xfc9a
+                           00FC9B   466 _g_INTFLG	=	0xfc9b
+                           00FC9C   467 _g_PADY	=	0xfc9c
+                           00FC9D   468 _g_PADX	=	0xfc9d
+                           00FC9E   469 _g_JIFFY	=	0xfc9e
+                           00FCA0   470 _g_INTVAL	=	0xfca0
+                           00FCA2   471 _g_INTCNT	=	0xfca2
+                           00FCA4   472 _g_LOWLIM	=	0xfca4
+                           00FCA5   473 _g_WINWID	=	0xfca5
+                           00FCA6   474 _g_GRPHED	=	0xfca6
+                           00FCA7   475 _g_ESCCNT	=	0xfca7
+                           00FCA8   476 _g_INSFLG	=	0xfca8
+                           00FCA9   477 _g_CSRSW	=	0xfca9
+                           00FCAA   478 _g_CSTYLE	=	0xfcaa
+                           00FCAB   479 _g_CAPST	=	0xfcab
+                           00FCAC   480 _g_KANAST	=	0xfcac
+                           00FCAD   481 _g_KANAMD	=	0xfcad
+                           00FCAE   482 _g_FLBMEM	=	0xfcae
+                           00FCAF   483 _g_SCRMOD	=	0xfcaf
+                           00FCB0   484 _g_OLDSCR	=	0xfcb0
+                           00FCB1   485 _g_CASPRV	=	0xfcb1
+                           00FCB2   486 _g_BRDATR	=	0xfcb2
+                           00FCB3   487 _g_GXPOS	=	0xfcb3
+                           00FCB5   488 _g_GYPOS	=	0xfcb5
+                           00FCBB   489 _g_DRWFLG	=	0xfcbb
+                           00FCBC   490 _g_DRWSCL	=	0xfcbc
+                           00FCBD   491 _g_DRWANG	=	0xfcbd
+                           00FCC1   492 _g_MNROM	=	0xfcc1
+                           00FCC1   493 _g_EXPTBL	=	0xfcc1
+                           00FCC5   494 _g_SLTTBL	=	0xfcc5
+                           00FCC9   495 _g_SLTATR	=	0xfcc9
+                           00FD09   496 _g_SLTWRK	=	0xfd09
+                           00FD89   497 _g_PROCNM	=	0xfd89
+                           00FFE7   498 _g_RG08SAV	=	0xffe7
+                           00FFE8   499 _g_RG09SAV	=	0xffe8
+                           00FFE9   500 _g_RG10SAV	=	0xffe9
+                           00FFEA   501 _g_RG11SAV	=	0xffea
+                           00FFEB   502 _g_RG12SAV	=	0xffeb
+                           00FFEC   503 _g_RG13SAV	=	0xffec
+                           00FFED   504 _g_RG14SAV	=	0xffed
+                           00FFEE   505 _g_RG15SAV	=	0xffee
+                           00FFEF   506 _g_RG16SAV	=	0xffef
+                           00FFF0   507 _g_RG17SAV	=	0xfff0
+                           00FFF1   508 _g_RG18SAV	=	0xfff1
+                           00FFF2   509 _g_RG19SAV	=	0xfff2
+                           00FFF3   510 _g_RG20SAV	=	0xfff3
+                           00FFF4   511 _g_RG21SAV	=	0xfff4
+                           00FFF5   512 _g_RG22SAV	=	0xfff5
+                           00FFF6   513 _g_RG23SAV	=	0xfff6
+                           00FFF7   514 _g_MINROM	=	0xfff7
+                           00FFF8   515 _g_SVFFF8	=	0xfff8
+                           00FFFA   516 _g_RG25SAV	=	0xfffa
+                           00FFFB   517 _g_RG26SAV	=	0xfffb
+                           00FFFC   518 _g_RG27SAV	=	0xfffc
+                           00FFFD   519 _g_SVFFFD	=	0xfffd
+                                    520 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:77: void GamePawn_SetPosition(Game_Pawn* pawn, u8 x, u8 y)
+                                    521 ;	---------------------------------
+                                    522 ; Function GamePawn_SetPosition
+                                    523 ; ---------------------------------
+      000073                        524 _GamePawn_SetPosition::
+      000073 EB               [ 4]  525 	ex	de, hl
+                                    526 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:79: pawn->PositionX = x;
+      000074 21 05 00         [10]  527 	ld	hl, #0x0005
+      000077 19               [11]  528 	add	hl, de
+      000078 FD 21 02 00      [14]  529 	ld	iy, #2
+      00007C FD 39            [15]  530 	add	iy, sp
+      00007E FD 7E 00         [19]  531 	ld	a, 0 (iy)
+      000081 77               [ 7]  532 	ld	(hl), a
+                                    533 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:80: pawn->PositionY = y;
+      000082 21 06 00         [10]  534 	ld	hl, #0x0006
+      000085 19               [11]  535 	add	hl, de
+      000086 FD 7E 01         [19]  536 	ld	a, 1 (iy)
+      000089 FD 23            [10]  537 	inc	iy
+      00008B 77               [ 7]  538 	ld	(hl), a
+                                    539 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:81: pawn->MoveX = 0;
+      00008C 21 0D 00         [10]  540 	ld	hl, #0x000d
+      00008F 19               [11]  541 	add	hl, de
+      000090 36 00            [10]  542 	ld	(hl), #0x00
+                                    543 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:82: pawn->MoveY = 0;
+      000092 21 0E 00         [10]  544 	ld	hl, #0x000e
+      000095 19               [11]  545 	add	hl, de
+      000096 36 00            [10]  546 	ld	(hl), #0x00
+                                    547 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:83: pawn->Update |= PAWN_UPDATE_POSITION;
+      000098 21 0B 00         [10]  548 	ld	hl, #0x000b
+      00009B 19               [11]  549 	add	hl, de
+      00009C CB C6            [15]  550 	set	0, (hl)
+                                    551 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:84: }
+      00009E E1               [10]  552 	pop	hl
+      00009F F1               [10]  553 	pop	af
+      0000A0 E9               [ 4]  554 	jp	(hl)
+                                    555 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:89: void GamePawn_SetAction(Game_Pawn* pawn, u8 id)
+                                    556 ;	---------------------------------
+                                    557 ; Function GamePawn_SetAction
+                                    558 ; ---------------------------------
+      0000A1                        559 _GamePawn_SetAction::
+      0000A1 3B               [ 6]  560 	dec	sp
+      0000A2 4D               [ 4]  561 	ld	c, l
+      0000A3 44               [ 4]  562 	ld	b, h
+                                    563 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:91: if(pawn->ActionId != id)
+      0000A4 21 07 00         [10]  564 	ld	hl, #0x0007
+      0000A7 09               [11]  565 	add	hl, bc
+      0000A8 EB               [ 4]  566 	ex	de, hl
+      0000A9 1A               [ 7]  567 	ld	a, (de)
+      0000AA FD 21 00 00      [14]  568 	ld	iy, #0
+      0000AE FD 39            [15]  569 	add	iy, sp
+      0000B0 FD 77 00         [19]  570 	ld	0 (iy), a
+      0000B3 FD 7E 03         [19]  571 	ld	a, 3 (iy)
+      0000B6 FD 96 00         [19]  572 	sub	a, 0 (iy)
+      0000B9 28 1D            [12]  573 	jr	Z, 00103$
+                                    574 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:93: pawn->ActionId = id;
+      0000BB FD 7E 03         [19]  575 	ld	a, 3 (iy)
+      0000BE FD 23            [10]  576 	inc	iy
+      0000C0 FD 23            [10]  577 	inc	iy
+      0000C2 FD 23            [10]  578 	inc	iy
+      0000C4 12               [ 7]  579 	ld	(de), a
+                                    580 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:94: pawn->AnimTimer = 0;
+      0000C5 21 0A 00         [10]  581 	ld	hl, #0x000a
+      0000C8 09               [11]  582 	add	hl, bc
+      0000C9 36 00            [10]  583 	ld	(hl), #0x00
+                                    584 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:95: pawn->AnimStep = 0;
+      0000CB 21 09 00         [10]  585 	ld	hl, #0x0009
+      0000CE 09               [11]  586 	add	hl, bc
+      0000CF 36 00            [10]  587 	ld	(hl), #0x00
+                                    588 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:96: pawn->Update |= PAWN_UPDATE_PATTERN;
+      0000D1 21 0B 00         [10]  589 	ld	hl, #0x000b
+      0000D4 09               [11]  590 	add	hl, bc
+      0000D5 CB CE            [15]  591 	set	1, (hl)
+      0000D7 7E               [ 7]  592 	ld	a, (hl)
+      0000D8                        593 00103$:
+                                    594 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:98: }
+      0000D8 33               [ 6]  595 	inc	sp
+      0000D9 E1               [10]  596 	pop	hl
+      0000DA 33               [ 6]  597 	inc	sp
+      0000DB E9               [ 4]  598 	jp	(hl)
+                                    599 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:102: void GamePawn_Update(Game_Pawn* pawn)
+                                    600 ;	---------------------------------
+                                    601 ; Function GamePawn_Update
+                                    602 ; ---------------------------------
+      0000DC                        603 _GamePawn_Update::
+      0000DC DD E5            [15]  604 	push	ix
+      0000DE DD 21 00 00      [14]  605 	ld	ix,#0
+      0000E2 DD 39            [15]  606 	add	ix,sp
+      0000E4 FD 21 F7 FF      [14]  607 	ld	iy, #-9
+      0000E8 FD 39            [15]  608 	add	iy, sp
+      0000EA FD F9            [10]  609 	ld	sp, iy
+      0000EC 22r03r00         [16]  610 	ld	(_g_Pawn), hl
+                                    611 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:105: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
+      0000EF ED 4Br03r00      [20]  612 	ld	bc, (_g_Pawn)
+      0000F3 69               [ 4]  613 	ld	l, c
+                                    614 ;	spillPairReg hl
+                                    615 ;	spillPairReg hl
+      0000F4 60               [ 4]  616 	ld	h, b
+                                    617 ;	spillPairReg hl
+                                    618 ;	spillPairReg hl
+      0000F5 23               [ 6]  619 	inc	hl
+      0000F6 23               [ 6]  620 	inc	hl
+      0000F7 23               [ 6]  621 	inc	hl
+      0000F8 5E               [ 7]  622 	ld	e, (hl)
+      0000F9 23               [ 6]  623 	inc	hl
+      0000FA 56               [ 7]  624 	ld	d, (hl)
+      0000FB C5               [11]  625 	push	bc
+      0000FC FD E1            [14]  626 	pop	iy
+      0000FE FD 6E 07         [19]  627 	ld	l, 7 (iy)
+                                    628 ;	spillPairReg hl
+      000101 26 00            [ 7]  629 	ld	h, #0x00
+                                    630 ;	spillPairReg hl
+                                    631 ;	spillPairReg hl
+      000103 29               [11]  632 	add	hl, hl
+      000104 29               [11]  633 	add	hl, hl
+      000105 19               [11]  634 	add	hl, de
+      000106 DD 75 FB         [19]  635 	ld	-5 (ix), l
+      000109 DD 74 FC         [19]  636 	ld	-4 (ix), h
+                                    637 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:108: if(g_Pawn->AnimTimer >= act->FrameList[g_Pawn->AnimStep].Duration)
+      00010C 21 0A 00         [10]  638 	ld	hl, #0x000a
+      00010F 09               [11]  639 	add	hl, bc
+      000110 EB               [ 4]  640 	ex	de, hl
+      000111 1A               [ 7]  641 	ld	a, (de)
+      000112 DD 77 FD         [19]  642 	ld	-3 (ix), a
+      000115 DD 6E FB         [19]  643 	ld	l, -5 (ix)
+      000118 DD 66 FC         [19]  644 	ld	h, -4 (ix)
+      00011B 7E               [ 7]  645 	ld	a, (hl)
+      00011C DD 77 FE         [19]  646 	ld	-2 (ix), a
+      00011F 23               [ 6]  647 	inc	hl
+      000120 7E               [ 7]  648 	ld	a, (hl)
+      000121 DD 77 FF         [19]  649 	ld	-1 (ix), a
+      000124 21 09 00         [10]  650 	ld	hl, #9
+      000127 09               [11]  651 	add	hl, bc
+      000128 6E               [ 7]  652 	ld	l, (hl)
+                                    653 ;	spillPairReg hl
+      000129 26 00            [ 7]  654 	ld	h, #0x00
+                                    655 ;	spillPairReg hl
+                                    656 ;	spillPairReg hl
+      00012B 29               [11]  657 	add	hl, hl
+      00012C 29               [11]  658 	add	hl, hl
+      00012D DD 4E FE         [19]  659 	ld	c, -2 (ix)
+      000130 DD 46 FF         [19]  660 	ld	b, -1 (ix)
+      000133 09               [11]  661 	add	hl, bc
+      000134 23               [ 6]  662 	inc	hl
+      000135 DD 7E FD         [19]  663 	ld	a,-3 (ix)
+      000138 96               [ 7]  664 	sub	a,(hl)
+      000139 38 17            [12]  665 	jr	C, 00102$
+                                    666 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:110: g_Pawn->AnimTimer = 0;
+      00013B AF               [ 4]  667 	xor	a, a
+      00013C 12               [ 7]  668 	ld	(de), a
+                                    669 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:111: g_Pawn->AnimStep++;
+      00013D 2Ar03r00         [16]  670 	ld	hl, (_g_Pawn)
+      000140 01 09 00         [10]  671 	ld	bc, #0x0009
+      000143 09               [11]  672 	add	hl, bc
+      000144 34               [11]  673 	inc	(hl)
+                                    674 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:105: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
+      000145 ED 4Br03r00      [20]  675 	ld	bc, (_g_Pawn)
+                                    676 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:112: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
+      000149 21 0B 00         [10]  677 	ld	hl, #0x000b
+      00014C 09               [11]  678 	add	hl, bc
+      00014D EB               [ 4]  679 	ex	de, hl
+      00014E 1A               [ 7]  680 	ld	a, (de)
+      00014F CB CF            [ 8]  681 	set	1, a
+      000151 12               [ 7]  682 	ld	(de), a
+      000152                        683 00102$:
+                                    684 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:105: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
+      000152 2Ar03r00         [16]  685 	ld	hl, (_g_Pawn)
+                                    686 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:116: if(g_Pawn->AnimStep >= act->FrameNum)
+      000155 DD 75 FE         [19]  687 	ld	-2 (ix), l
+      000158 DD 74 FF         [19]  688 	ld	-1 (ix), h
+      00015B 01 09 00         [10]  689 	ld	bc,#9
+      00015E 09               [11]  690 	add	hl,bc
+      00015F 7E               [ 7]  691 	ld	a, (hl)
+      000160 DD 6E FB         [19]  692 	ld	l, -5 (ix)
+                                    693 ;	spillPairReg hl
+                                    694 ;	spillPairReg hl
+      000163 DD 66 FC         [19]  695 	ld	h, -4 (ix)
+                                    696 ;	spillPairReg hl
+                                    697 ;	spillPairReg hl
+      000166 23               [ 6]  698 	inc	hl
+      000167 23               [ 6]  699 	inc	hl
+      000168 4E               [ 7]  700 	ld	c, (hl)
+      000169 91               [ 4]  701 	sub	a, c
+      00016A 38 3F            [12]  702 	jr	C, 00107$
+                                    703 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:118: if(act->Loop) // restart action
+      00016C DD 6E FB         [19]  704 	ld	l, -5 (ix)
+                                    705 ;	spillPairReg hl
+                                    706 ;	spillPairReg hl
+      00016F DD 66 FC         [19]  707 	ld	h, -4 (ix)
+                                    708 ;	spillPairReg hl
+                                    709 ;	spillPairReg hl
+      000172 23               [ 6]  710 	inc	hl
+      000173 23               [ 6]  711 	inc	hl
+      000174 23               [ 6]  712 	inc	hl
+      000175 7E               [ 7]  713 	ld	a, (hl)
+      000176 E6 01            [ 7]  714 	and	a,#0x01
+      000178 28 25            [12]  715 	jr	Z, 00104$
+                                    716 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:120: g_Pawn->AnimTimer = 0;
+      00017A DD 6E FE         [19]  717 	ld	l, -2 (ix)
+      00017D DD 66 FF         [19]  718 	ld	h, -1 (ix)
+      000180 11 0A 00         [10]  719 	ld	de, #0x000a
+      000183 19               [11]  720 	add	hl, de
+      000184 36 00            [10]  721 	ld	(hl), #0x00
+                                    722 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:121: g_Pawn->AnimStep = 0;
+      000186 2Ar03r00         [16]  723 	ld	hl, (_g_Pawn)
+      000189 01 09 00         [10]  724 	ld	bc, #0x0009
+      00018C 09               [11]  725 	add	hl, bc
+      00018D 36 00            [10]  726 	ld	(hl), #0x00
+                                    727 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:105: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
+      00018F ED 4Br03r00      [20]  728 	ld	bc, (_g_Pawn)
+                                    729 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:112: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
+      000193 21 0B 00         [10]  730 	ld	hl, #0x000b
+      000196 09               [11]  731 	add	hl, bc
+      000197 EB               [ 4]  732 	ex	de, hl
+                                    733 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:122: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
+      000198 1A               [ 7]  734 	ld	a, (de)
+      000199 CB CF            [ 8]  735 	set	1, a
+      00019B 12               [ 7]  736 	ld	(de), a
+      00019C C3rABr01         [10]  737 	jp	00107$
+      00019F                        738 00104$:
+                                    739 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:126: GamePawn_SetAction(g_Pawn, 0);
+      00019F AF               [ 4]  740 	xor	a, a
+      0001A0 F5               [11]  741 	push	af
+      0001A1 33               [ 6]  742 	inc	sp
+      0001A2 2Ar03r00         [16]  743 	ld	hl, (_g_Pawn)
+      0001A5 CDrA1r00         [17]  744 	call	_GamePawn_SetAction
+                                    745 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:127: return;
+      0001A8 C3rBBr07         [10]  746 	jp	00158$
+      0001AB                        747 00107$:
+                                    748 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:132: const Game_Frame* frame = &act->FrameList[g_Pawn->AnimStep];
+      0001AB DD 6E FB         [19]  749 	ld	l, -5 (ix)
+      0001AE DD 66 FC         [19]  750 	ld	h, -4 (ix)
+      0001B1 4E               [ 7]  751 	ld	c, (hl)
+      0001B2 23               [ 6]  752 	inc	hl
+      0001B3 46               [ 7]  753 	ld	b, (hl)
+      0001B4 FD 2Ar03r00      [20]  754 	ld	iy, (_g_Pawn)
+      0001B8 FD 6E 09         [19]  755 	ld	l, 9 (iy)
+                                    756 ;	spillPairReg hl
+      0001BB 26 00            [ 7]  757 	ld	h, #0x00
+                                    758 ;	spillPairReg hl
+                                    759 ;	spillPairReg hl
+      0001BD 29               [11]  760 	add	hl, hl
+      0001BE 29               [11]  761 	add	hl, hl
+      0001BF 09               [11]  762 	add	hl, bc
+                                    763 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:133: if(frame->Event != 0)
+                                    764 ;	spillPairReg hl
+                                    765 ;	spillPairReg hl
+      0001C0 DD 75 FE         [19]  766 	ld	-2 (ix), l
+      0001C3 DD 74 FF         [19]  767 	ld	-1 (ix), h
+                                    768 ;	spillPairReg hl
+                                    769 ;	spillPairReg hl
+      0001C6 23               [ 6]  770 	inc	hl
+      0001C7 23               [ 6]  771 	inc	hl
+      0001C8 5E               [ 7]  772 	ld	e, (hl)
+      0001C9 23               [ 6]  773 	inc	hl
+      0001CA 56               [ 7]  774 	ld	d, (hl)
+      0001CB 7A               [ 4]  775 	ld	a, d
+      0001CC B3               [ 4]  776 	or	a, e
+      0001CD 28 04            [12]  777 	jr	Z, 00109$
+                                    778 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:134: frame->Event();
+      0001CF EB               [ 4]  779 	ex	de, hl
+      0001D0 CDr00r00         [17]  780 	call	___sdcc_call_hl
+      0001D3                        781 00109$:
+                                    782 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:137: g_Pawn->AnimFrame = frame->Id;
+      0001D3 ED 4Br03r00      [20]  783 	ld	bc, (_g_Pawn)
+      0001D7 21 08 00         [10]  784 	ld	hl, #0x0008
+      0001DA 09               [11]  785 	add	hl, bc
+      0001DB EB               [ 4]  786 	ex	de, hl
+      0001DC DD 6E FE         [19]  787 	ld	l, -2 (ix)
+      0001DF DD 66 FF         [19]  788 	ld	h, -1 (ix)
+      0001E2 7E               [ 7]  789 	ld	a, (hl)
+      0001E3 12               [ 7]  790 	ld	(de), a
+                                    791 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:138: g_Pawn->AnimTimer++;
+      0001E4 2Ar03r00         [16]  792 	ld	hl, (_g_Pawn)
+      0001E7 01 0A 00         [10]  793 	ld	bc, #0x000a
+      0001EA 09               [11]  794 	add	hl, bc
+      0001EB 34               [11]  795 	inc	(hl)
+                                    796 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:139: g_Pawn->Counter++;
+      0001EC 2Ar03r00         [16]  797 	ld	hl, (_g_Pawn)
+      0001EF 01 0C 00         [10]  798 	ld	bc, #0x000c
+      0001F2 09               [11]  799 	add	hl, bc
+      0001F3 34               [11]  800 	inc	(hl)
+                                    801 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:105: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
+      0001F4 2Ar03r00         [16]  802 	ld	hl, (_g_Pawn)
+                                    803 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:142: if(g_Pawn->Update & PAWN_UPDATE_COLLISION)
+      0001F7 DD 75 FB         [19]  804 	ld	-5 (ix), l
+      0001FA DD 74 FC         [19]  805 	ld	-4 (ix), h
+      0001FD 01 0B 00         [10]  806 	ld	bc,#11
+      000200 09               [11]  807 	add	hl,bc
+      000201 CB 66            [12]  808 	bit	4, (hl)
+      000203 CArBBr07         [10]  809 	jp	Z,00158$
+                                    810 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:144: u8 targetX = g_Pawn->PositionX + g_Pawn->MoveX;
+      000206 DD 7E FB         [19]  811 	ld	a, -5 (ix)
+      000209 DD 77 FE         [19]  812 	ld	-2 (ix), a
+      00020C DD 7E FC         [19]  813 	ld	a, -4 (ix)
+      00020F DD 77 FF         [19]  814 	ld	-1 (ix), a
+      000212 DD 6E FE         [19]  815 	ld	l, -2 (ix)
+      000215 DD 66 FF         [19]  816 	ld	h, -1 (ix)
+      000218 11 05 00         [10]  817 	ld	de, #0x0005
+      00021B 19               [11]  818 	add	hl, de
+      00021C 7E               [ 7]  819 	ld	a, (hl)
+      00021D DD 77 FF         [19]  820 	ld	-1 (ix), a
+      000220 DD 7E FB         [19]  821 	ld	a, -5 (ix)
+      000223 DD 77 F9         [19]  822 	ld	-7 (ix), a
+      000226 DD 7E FC         [19]  823 	ld	a, -4 (ix)
+      000229 DD 77 FA         [19]  824 	ld	-6 (ix), a
+      00022C DD 6E F9         [19]  825 	ld	l, -7 (ix)
+      00022F DD 66 FA         [19]  826 	ld	h, -6 (ix)
+      000232 11 0D 00         [10]  827 	ld	de, #0x000d
+      000235 19               [11]  828 	add	hl, de
+      000236 7E               [ 7]  829 	ld	a, (hl)
+      000237 DD 77 FD         [19]  830 	ld	-3 (ix), a
+      00023A DD 7E FF         [19]  831 	ld	a, -1 (ix)
+      00023D DD 86 FD         [19]  832 	add	a, -3 (ix)
+      000240 DD 77 FF         [19]  833 	ld	-1 (ix), a
+      000243 DD 77 F9         [19]  834 	ld	-7 (ix), a
+                                    835 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:145: u8 targetY = g_Pawn->PositionY + g_Pawn->MoveY;
+      000246 DD 7E FB         [19]  836 	ld	a, -5 (ix)
+      000249 DD 77 FE         [19]  837 	ld	-2 (ix), a
+      00024C DD 7E FC         [19]  838 	ld	a, -4 (ix)
+      00024F DD 77 FF         [19]  839 	ld	-1 (ix), a
+      000252 DD 6E FE         [19]  840 	ld	l, -2 (ix)
+      000255 DD 66 FF         [19]  841 	ld	h, -1 (ix)
+      000258 11 06 00         [10]  842 	ld	de, #0x0006
+      00025B 19               [11]  843 	add	hl, de
+      00025C 7E               [ 7]  844 	ld	a, (hl)
+      00025D DD 77 FD         [19]  845 	ld	-3 (ix), a
+      000260 DD 7E FB         [19]  846 	ld	a, -5 (ix)
+      000263 DD 77 F7         [19]  847 	ld	-9 (ix), a
+      000266 DD 7E FC         [19]  848 	ld	a, -4 (ix)
+      000269 DD 77 F8         [19]  849 	ld	-8 (ix), a
+      00026C E1               [10]  850 	pop	hl
+      00026D E5               [11]  851 	push	hl
+      00026E 11 0E 00         [10]  852 	ld	de, #0x000e
+      000271 19               [11]  853 	add	hl, de
+      000272 7E               [ 7]  854 	ld	a, (hl)
+      000273 DD 77 FE         [19]  855 	ld	-2 (ix), a
+      000276 DD 7E FD         [19]  856 	ld	a, -3 (ix)
+      000279 DD 77 FF         [19]  857 	ld	-1 (ix), a
+      00027C DD 86 FE         [19]  858 	add	a, -2 (ix)
+      00027F DD 77 FF         [19]  859 	ld	-1 (ix), a
+      000282 DD 77 FA         [19]  860 	ld	-6 (ix), a
+                                    861 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:149: if(g_Pawn->MoveY > 0)
+      000285 AF               [ 4]  862 	xor	a, a
+      000286 DD 96 FE         [19]  863 	sub	a, -2 (ix)
+      000289 E2r8Er02         [10]  864 	jp	PO, 00343$
+      00028C EE 80            [ 7]  865 	xor	a, #0x80
+      00028E                        866 00343$:
+      00028E F2rD0r03         [10]  867 	jp	P, 00138$
+                                    868 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:152: if(targetY + GET_BOUND_Y >= GAMEPAWN_BORDER_MAX_Y)
+      000291 DD 4E FA         [19]  869 	ld	c, -6 (ix)
+      000294 06 00            [ 7]  870 	ld	b, #0x00
+      000296 21 10 00         [10]  871 	ld	hl, #0x0010
+      000299 09               [11]  872 	add	hl, bc
+      00029A 7D               [ 4]  873 	ld	a, l
+      00029B D6 B8            [ 7]  874 	sub	a, #0xb8
+      00029D 7C               [ 4]  875 	ld	a, h
+      00029E 17               [ 4]  876 	rla
+      00029F 3F               [ 4]  877 	ccf
+      0002A0 1F               [ 4]  878 	rra
+      0002A1 DE 80            [ 7]  879 	sbc	a, #0x80
+      0002A3 38 1A            [12]  880 	jr	C, 00119$
+                                    881 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:155: g_Pawn->PhysicsCB(PAWN_PHYSICS_BORDER_DOWN, 0);
+      0002A5 DD 4E FB         [19]  882 	ld	c, -5 (ix)
+      0002A8 DD 46 FC         [19]  883 	ld	b, -4 (ix)
+      0002AB 21 10 00         [10]  884 	ld	hl, #16
+      0002AE 09               [11]  885 	add	hl, bc
+      0002AF 4E               [ 7]  886 	ld	c, (hl)
+      0002B0 23               [ 6]  887 	inc	hl
+      0002B1 46               [ 7]  888 	ld	b, (hl)
+      0002B2 2E 00            [ 7]  889 	ld	l, #0x00
+                                    890 ;	spillPairReg hl
+                                    891 ;	spillPairReg hl
+      0002B4 3E 05            [ 7]  892 	ld	a, #0x05
+      0002B6 C5               [11]  893 	push	bc
+      0002B7 FD E1            [14]  894 	pop	iy
+      0002B9 CDr00r00         [17]  895 	call	___sdcc_call_iy
+      0002BC C3r05r06         [10]  896 	jp	00140$
+      0002BF                        897 00119$:
+                                    898 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:164: u8 cellY = (targetY + GET_BOUND_Y) / 8;
+      0002BF 5D               [ 4]  899 	ld	e, l
+      0002C0 54               [ 4]  900 	ld	d, h
+      0002C1 CB 7C            [ 8]  901 	bit	7, h
+      0002C3 28 05            [12]  902 	jr	Z, 00160$
+      0002C5 21 17 00         [10]  903 	ld	hl, #0x0017
+      0002C8 09               [11]  904 	add	hl, bc
+      0002C9 EB               [ 4]  905 	ex	de, hl
+      0002CA                        906 00160$:
+      0002CA CB 2A            [ 8]  907 	sra	d
+      0002CC CB 1B            [ 8]  908 	rr	e
+      0002CE CB 2A            [ 8]  909 	sra	d
+      0002D0 CB 1B            [ 8]  910 	rr	e
+      0002D2 CB 2A            [ 8]  911 	sra	d
+      0002D4 CB 1B            [ 8]  912 	rr	e
+      0002D6 DD 73 FC         [19]  913 	ld	-4 (ix), e
+                                    914 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:165: u8 cellX, lastCell = 0xFF;
+      0002D9 DD 36 FD FF      [19]  915 	ld	-3 (ix), #0xff
+                                    916 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:181: cellX = (targetX + (GET_BOUND_X / 4)) / 8;
+      0002DD DD 4E F9         [19]  917 	ld	c, -7 (ix)
+      0002E0 06 00            [ 7]  918 	ld	b, #0x00
+      0002E2 21 04 00         [10]  919 	ld	hl, #0x0004
+      0002E5 09               [11]  920 	add	hl, bc
+      0002E6 DD 75 FE         [19]  921 	ld	-2 (ix), l
+      0002E9 DD 74 FF         [19]  922 	ld	-1 (ix), h
+      0002EC CB 7C            [ 8]  923 	bit	7, h
+      0002EE 28 0A            [12]  924 	jr	Z, 00161$
+      0002F0 21 0B 00         [10]  925 	ld	hl, #0x000b
+      0002F3 09               [11]  926 	add	hl, bc
+      0002F4 DD 75 FE         [19]  927 	ld	-2 (ix), l
+      0002F7 DD 74 FF         [19]  928 	ld	-1 (ix), h
+      0002FA                        929 00161$:
+      0002FA DD 6E FE         [19]  930 	ld	l, -2 (ix)
+                                    931 ;	spillPairReg hl
+                                    932 ;	spillPairReg hl
+      0002FD DD 5E FF         [19]  933 	ld	e, -1 (ix)
+      000300 CB 2B            [ 8]  934 	sra	e
+      000302 CB 1D            [ 8]  935 	rr	l
+      000304 CB 2B            [ 8]  936 	sra	e
+      000306 CB 1D            [ 8]  937 	rr	l
+      000308 CB 2B            [ 8]  938 	sra	e
+      00030A CB 1D            [ 8]  939 	rr	l
+                                    940 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:182: if(cellX != lastCell)
+      00030C 7D               [ 4]  941 	ld	a, l
+      00030D 3C               [ 4]  942 	inc	a
+      00030E 28 54            [12]  943 	jr	Z, 00113$
+                                    944 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:184: lastCell = cellX;
+      000310 DD 75 FD         [19]  945 	ld	-3 (ix), l
+                                    946 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:185: u8 tile = VDP_Peek_16K(g_ScreenLayoutLow + (cellY * 32) + cellX);
+      000313 DD 5E FC         [19]  947 	ld	e, -4 (ix)
+      000316 16 00            [ 7]  948 	ld	d, #0x00
+      000318 EB               [ 4]  949 	ex	de, hl
+      000319 29               [11]  950 	add	hl, hl
+      00031A 29               [11]  951 	add	hl, hl
+      00031B 29               [11]  952 	add	hl, hl
+      00031C 29               [11]  953 	add	hl, hl
+      00031D 29               [11]  954 	add	hl, hl
+      00031E EB               [ 4]  955 	ex	de, hl
+      00031F FD 2Ar00r00      [20]  956 	ld	iy, (_g_ScreenLayoutLow)
+      000323 FD 19            [15]  957 	add	iy, de
+      000325 26 00            [ 7]  958 	ld	h, #0x00
+                                    959 ;	spillPairReg hl
+                                    960 ;	spillPairReg hl
+      000327 FD E5            [15]  961 	push	iy
+      000329 D1               [10]  962 	pop	de
+      00032A 19               [11]  963 	add	hl, de
+      00032B CDr00r00         [17]  964 	call	_VDP_Peek_16K
+      00032E 5F               [ 4]  965 	ld	e, a
+                                    966 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:186: if(g_Pawn->CollisionCB(tile))
+      00032F FD 2Ar03r00      [20]  967 	ld	iy, (_g_Pawn)
+      000333 FD 6E 12         [19]  968 	ld	l, 18 (iy)
+                                    969 ;	spillPairReg hl
+      000336 FD 66 13         [19]  970 	ld	h, 19 (iy)
+                                    971 ;	spillPairReg hl
+      000339 C5               [11]  972 	push	bc
+      00033A D5               [11]  973 	push	de
+      00033B 7B               [ 4]  974 	ld	a, e
+      00033C CDr00r00         [17]  975 	call	___sdcc_call_hl
+      00033F D1               [10]  976 	pop	de
+      000340 C1               [10]  977 	pop	bc
+      000341 B7               [ 4]  978 	or	a, a
+      000342 28 20            [12]  979 	jr	Z, 00113$
+                                    980 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:188: g_Pawn->PhysicsCB(PAWN_PHYSICS_COL_DOWN, tile);
+      000344 2Ar03r00         [16]  981 	ld	hl, (_g_Pawn)
+      000347 01 10 00         [10]  982 	ld	bc, #0x0010
+      00034A 09               [11]  983 	add	hl, bc
+      00034B 4E               [ 7]  984 	ld	c, (hl)
+      00034C 23               [ 6]  985 	inc	hl
+      00034D 46               [ 7]  986 	ld	b, (hl)
+      00034E 6B               [ 4]  987 	ld	l, e
+                                    988 ;	spillPairReg hl
+                                    989 ;	spillPairReg hl
+      00034F AF               [ 4]  990 	xor	a, a
+      000350 C5               [11]  991 	push	bc
+      000351 FD E1            [14]  992 	pop	iy
+      000353 CDr00r00         [17]  993 	call	___sdcc_call_iy
+                                    994 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:189: targetY = (cellY * 8) - GET_BOUND_Y;
+      000356 DD 7E FC         [19]  995 	ld	a, -4 (ix)
+      000359 87               [ 4]  996 	add	a, a
+      00035A 87               [ 4]  997 	add	a, a
+      00035B 87               [ 4]  998 	add	a, a
+      00035C C6 F0            [ 7]  999 	add	a, #0xf0
+      00035E DD 77 FA         [19] 1000 	ld	-6 (ix), a
+                                   1001 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:190: goto skipVertival;
+      000361 C3r05r06         [10] 1002 	jp	00140$
+      000364                       1003 00113$:
+                                   1004 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:209: cellX = (targetX + GET_BOUND_X - (GET_BOUND_X / 4)) / 8;
+      000364 21 0C 00         [10] 1005 	ld	hl, #0x000c
+      000367 09               [11] 1006 	add	hl, bc
+      000368 5D               [ 4] 1007 	ld	e, l
+      000369 54               [ 4] 1008 	ld	d, h
+      00036A CB 7C            [ 8] 1009 	bit	7, h
+      00036C 28 05            [12] 1010 	jr	Z, 00162$
+      00036E 21 13 00         [10] 1011 	ld	hl, #0x0013
+      000371 09               [11] 1012 	add	hl, bc
+      000372 EB               [ 4] 1013 	ex	de, hl
+      000373                       1014 00162$:
+      000373 CB 2A            [ 8] 1015 	sra	d
+      000375 CB 1B            [ 8] 1016 	rr	e
+      000377 CB 2A            [ 8] 1017 	sra	d
+      000379 CB 1B            [ 8] 1018 	rr	e
+      00037B CB 2A            [ 8] 1019 	sra	d
+      00037D CB 1B            [ 8] 1020 	rr	e
+                                   1021 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:210: if(cellX != lastCell)
+      00037F DD 7E FD         [19] 1022 	ld	a, -3 (ix)
+      000382 93               [ 4] 1023 	sub	a, e
+      000383 CAr05r06         [10] 1024 	jp	Z,00140$
+                                   1025 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:213: u8 tile = VDP_Peek_16K(g_ScreenLayoutLow + (cellY * 32) + cellX);
+      000386 DD 6E FC         [19] 1026 	ld	l, -4 (ix)
+                                   1027 ;	spillPairReg hl
+                                   1028 ;	spillPairReg hl
+      000389 26 00            [ 7] 1029 	ld	h, #0x00
+                                   1030 ;	spillPairReg hl
+                                   1031 ;	spillPairReg hl
+      00038B 29               [11] 1032 	add	hl, hl
+      00038C 29               [11] 1033 	add	hl, hl
+      00038D 29               [11] 1034 	add	hl, hl
+      00038E 29               [11] 1035 	add	hl, hl
+      00038F 29               [11] 1036 	add	hl, hl
+      000390 ED 4Br00r00      [20] 1037 	ld	bc, (_g_ScreenLayoutLow)
+      000394 09               [11] 1038 	add	hl, bc
+      000395 16 00            [ 7] 1039 	ld	d, #0x00
+      000397 19               [11] 1040 	add	hl, de
+      000398 CDr00r00         [17] 1041 	call	_VDP_Peek_16K
+      00039B 5F               [ 4] 1042 	ld	e, a
+                                   1043 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:214: if(g_Pawn->CollisionCB(tile))
+      00039C FD 2Ar03r00      [20] 1044 	ld	iy, (_g_Pawn)
+      0003A0 FD 6E 12         [19] 1045 	ld	l, 18 (iy)
+                                   1046 ;	spillPairReg hl
+      0003A3 FD 66 13         [19] 1047 	ld	h, 19 (iy)
+                                   1048 ;	spillPairReg hl
+      0003A6 D5               [11] 1049 	push	de
+      0003A7 7B               [ 4] 1050 	ld	a, e
+      0003A8 CDr00r00         [17] 1051 	call	___sdcc_call_hl
+      0003AB D1               [10] 1052 	pop	de
+      0003AC B7               [ 4] 1053 	or	a, a
+      0003AD CAr05r06         [10] 1054 	jp	Z, 00140$
+                                   1055 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:216: g_Pawn->PhysicsCB(PAWN_PHYSICS_COL_DOWN, tile);
+      0003B0 2Ar03r00         [16] 1056 	ld	hl, (_g_Pawn)
+      0003B3 01 10 00         [10] 1057 	ld	bc, #0x0010
+      0003B6 09               [11] 1058 	add	hl, bc
+      0003B7 4E               [ 7] 1059 	ld	c, (hl)
+      0003B8 23               [ 6] 1060 	inc	hl
+      0003B9 46               [ 7] 1061 	ld	b, (hl)
+      0003BA 6B               [ 4] 1062 	ld	l, e
+                                   1063 ;	spillPairReg hl
+                                   1064 ;	spillPairReg hl
+      0003BB AF               [ 4] 1065 	xor	a, a
+      0003BC C5               [11] 1066 	push	bc
+      0003BD FD E1            [14] 1067 	pop	iy
+      0003BF CDr00r00         [17] 1068 	call	___sdcc_call_iy
+                                   1069 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:217: targetY = (cellY * 8) - GET_BOUND_Y;
+      0003C2 DD 7E FC         [19] 1070 	ld	a, -4 (ix)
+      0003C5 87               [ 4] 1071 	add	a, a
+      0003C6 87               [ 4] 1072 	add	a, a
+      0003C7 87               [ 4] 1073 	add	a, a
+      0003C8 C6 F0            [ 7] 1074 	add	a, #0xf0
+      0003CA DD 77 FA         [19] 1075 	ld	-6 (ix), a
+                                   1076 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:218: goto skipVertival;
+      0003CD C3r05r06         [10] 1077 	jp	00140$
+      0003D0                       1078 00138$:
+                                   1079 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:240: else if(g_Pawn->MoveY < 0)
+      0003D0 DD CB FE 7E      [20] 1080 	bit	7, -2 (ix)
+      0003D4 CAr71r04         [10] 1081 	jp	Z, 00135$
+                                   1082 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:246: if(targetY > g_Pawn->PositionY)
+      0003D7 DD 7E FD         [19] 1083 	ld	a, -3 (ix)
+      0003DA DD 96 FA         [19] 1084 	sub	a, -6 (ix)
+      0003DD 30 07            [12] 1085 	jr	NC, 00124$
+                                   1086 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:253: targetY = GAMEPAWN_BORDER_MIN_Y;
+      0003DF DD 36 FA 00      [19] 1087 	ld	-6 (ix), #0x00
+      0003E3 C3r05r06         [10] 1088 	jp	00140$
+      0003E6                       1089 00124$:
+                                   1090 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:259: u8 cellX = (targetX + (GET_BOUND_X / 2)) / 8;
+      0003E6 DD 4E F9         [19] 1091 	ld	c, -7 (ix)
+      0003E9 06 00            [ 7] 1092 	ld	b, #0x00
+      0003EB 21 08 00         [10] 1093 	ld	hl, #0x0008
+      0003EE 09               [11] 1094 	add	hl, bc
+      0003EF 5D               [ 4] 1095 	ld	e, l
+      0003F0 54               [ 4] 1096 	ld	d, h
+      0003F1 CB 7C            [ 8] 1097 	bit	7, h
+      0003F3 28 05            [12] 1098 	jr	Z, 00163$
+      0003F5 21 0F 00         [10] 1099 	ld	hl, #0x000f
+      0003F8 09               [11] 1100 	add	hl, bc
+      0003F9 EB               [ 4] 1101 	ex	de, hl
+      0003FA                       1102 00163$:
+      0003FA CB 2A            [ 8] 1103 	sra	d
+      0003FC CB 1B            [ 8] 1104 	rr	e
+      0003FE CB 2A            [ 8] 1105 	sra	d
+      000400 CB 1B            [ 8] 1106 	rr	e
+      000402 CB 2A            [ 8] 1107 	sra	d
+      000404 CB 1B            [ 8] 1108 	rr	e
+      000406 DD 73 FF         [19] 1109 	ld	-1 (ix), e
+                                   1110 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:260: u8 cellY = (targetY) / 8;
+      000409 DD 4E FA         [19] 1111 	ld	c, -6 (ix)
+      00040C 06 00            [ 7] 1112 	ld	b, #0x00
+      00040E 69               [ 4] 1113 	ld	l, c
+                                   1114 ;	spillPairReg hl
+                                   1115 ;	spillPairReg hl
+      00040F 60               [ 4] 1116 	ld	h, b
+                                   1117 ;	spillPairReg hl
+                                   1118 ;	spillPairReg hl
+      000410 CB 78            [ 8] 1119 	bit	7, b
+      000412 28 04            [12] 1120 	jr	Z, 00164$
+      000414 21 07 00         [10] 1121 	ld	hl, #0x0007
+      000417 09               [11] 1122 	add	hl, bc
+      000418                       1123 00164$:
+      000418 CB 2C            [ 8] 1124 	sra	h
+      00041A CB 1D            [ 8] 1125 	rr	l
+      00041C CB 2C            [ 8] 1126 	sra	h
+      00041E CB 1D            [ 8] 1127 	rr	l
+      000420 CB 2C            [ 8] 1128 	sra	h
+      000422 CB 1D            [ 8] 1129 	rr	l
+                                   1130 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:261: u8 tile = VDP_Peek_16K(g_ScreenLayoutLow + (cellY * 32) + cellX);
+      000424 4D               [ 4] 1131 	ld	c,l
+                                   1132 ;	spillPairReg hl
+                                   1133 ;	spillPairReg hl
+      000425 26 00            [ 7] 1134 	ld	h, #0x00
+                                   1135 ;	spillPairReg hl
+                                   1136 ;	spillPairReg hl
+      000427 29               [11] 1137 	add	hl, hl
+      000428 29               [11] 1138 	add	hl, hl
+      000429 29               [11] 1139 	add	hl, hl
+      00042A 29               [11] 1140 	add	hl, hl
+      00042B 29               [11] 1141 	add	hl, hl
+      00042C ED 5Br00r00      [20] 1142 	ld	de, (_g_ScreenLayoutLow)
+      000430 19               [11] 1143 	add	hl, de
+      000431 DD 5E FF         [19] 1144 	ld	e, -1 (ix)
+      000434 16 00            [ 7] 1145 	ld	d, #0x00
+      000436 19               [11] 1146 	add	hl, de
+      000437 CDr00r00         [17] 1147 	call	_VDP_Peek_16K
+      00043A 47               [ 4] 1148 	ld	b, a
+                                   1149 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:262: if(g_Pawn->CollisionCB(tile))
+      00043B 2Ar03r00         [16] 1150 	ld	hl, (_g_Pawn)
+      00043E 11 12 00         [10] 1151 	ld	de, #0x0012
+      000441 19               [11] 1152 	add	hl, de
+      000442 5E               [ 7] 1153 	ld	e, (hl)
+      000443 23               [ 6] 1154 	inc	hl
+      000444 56               [ 7] 1155 	ld	d, (hl)
+      000445 C5               [11] 1156 	push	bc
+      000446 78               [ 4] 1157 	ld	a, b
+      000447 EB               [ 4] 1158 	ex	de, hl
+      000448 CDr00r00         [17] 1159 	call	___sdcc_call_hl
+      00044B C1               [10] 1160 	pop	bc
+      00044C B7               [ 4] 1161 	or	a, a
+      00044D CAr05r06         [10] 1162 	jp	Z, 00140$
+                                   1163 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:264: g_Pawn->PhysicsCB(PAWN_PHYSICS_COL_UP, tile);
+      000450 2Ar03r00         [16] 1164 	ld	hl, (_g_Pawn)
+      000453 11 10 00         [10] 1165 	ld	de, #0x0010
+      000456 19               [11] 1166 	add	hl, de
+      000457 5E               [ 7] 1167 	ld	e, (hl)
+      000458 23               [ 6] 1168 	inc	hl
+      000459 56               [ 7] 1169 	ld	d, (hl)
+      00045A C5               [11] 1170 	push	bc
+      00045B 68               [ 4] 1171 	ld	l, b
+                                   1172 ;	spillPairReg hl
+                                   1173 ;	spillPairReg hl
+      00045C 3E 01            [ 7] 1174 	ld	a, #0x01
+      00045E D5               [11] 1175 	push	de
+      00045F FD E1            [14] 1176 	pop	iy
+      000461 CDr00r00         [17] 1177 	call	___sdcc_call_iy
+      000464 C1               [10] 1178 	pop	bc
+                                   1179 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:265: targetY = (cellY * 8) + 8;
+      000465 79               [ 4] 1180 	ld	a, c
+      000466 87               [ 4] 1181 	add	a, a
+      000467 87               [ 4] 1182 	add	a, a
+      000468 87               [ 4] 1183 	add	a, a
+      000469 C6 08            [ 7] 1184 	add	a, #0x08
+      00046B DD 77 FA         [19] 1185 	ld	-6 (ix), a
+      00046E C3r05r06         [10] 1186 	jp	00140$
+      000471                       1187 00135$:
+                                   1188 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:277: u8 tile = 0;
+      000471 DD 36 FB 00      [19] 1189 	ld	-5 (ix), #0x00
+                                   1190 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:278: u8 cellY = (targetY + GET_BOUND_Y) / 8;
+      000475 DD 4E FA         [19] 1191 	ld	c, -6 (ix)
+      000478 06 00            [ 7] 1192 	ld	b, #0x00
+      00047A 21 10 00         [10] 1193 	ld	hl, #0x0010
+      00047D 09               [11] 1194 	add	hl, bc
+      00047E 5D               [ 4] 1195 	ld	e, l
+      00047F 54               [ 4] 1196 	ld	d, h
+      000480 CB 7C            [ 8] 1197 	bit	7, h
+      000482 28 05            [12] 1198 	jr	Z, 00165$
+      000484 21 17 00         [10] 1199 	ld	hl, #0x0017
+      000487 09               [11] 1200 	add	hl, bc
+      000488 EB               [ 4] 1201 	ex	de, hl
+      000489                       1202 00165$:
+      000489 CB 2A            [ 8] 1203 	sra	d
+      00048B CB 1B            [ 8] 1204 	rr	e
+      00048D CB 2A            [ 8] 1205 	sra	d
+      00048F CB 1B            [ 8] 1206 	rr	e
+      000491 CB 2A            [ 8] 1207 	sra	d
+      000493 CB 1B            [ 8] 1208 	rr	e
+      000495 DD 73 FC         [19] 1209 	ld	-4 (ix), e
+                                   1210 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:279: u8 cellX, lastCell = 0xFF;
+      000498 DD 36 FD FF      [19] 1211 	ld	-3 (ix), #0xff
+                                   1212 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:291: cellX = (targetX + (GET_BOUND_X / 4)) / 8;
+      00049C DD 7E F9         [19] 1213 	ld	a, -7 (ix)
+      00049F DD 77 F7         [19] 1214 	ld	-9 (ix), a
+      0004A2 DD 36 F8 00      [19] 1215 	ld	-8 (ix), #0x00
+      0004A6 E1               [10] 1216 	pop	hl
+      0004A7 E5               [11] 1217 	push	hl
+      0004A8 11 04 00         [10] 1218 	ld	de, #0x0004
+      0004AB 19               [11] 1219 	add	hl, de
+      0004AC 4D               [ 4] 1220 	ld	c, l
+      0004AD 44               [ 4] 1221 	ld	b, h
+      0004AE CB 7C            [ 8] 1222 	bit	7, h
+      0004B0 28 0C            [12] 1223 	jr	Z, 00166$
+      0004B2 DD 7E F7         [19] 1224 	ld	a, -9 (ix)
+      0004B5 C6 0B            [ 7] 1225 	add	a, #0x0b
+      0004B7 4F               [ 4] 1226 	ld	c, a
+      0004B8 DD 7E F8         [19] 1227 	ld	a, -8 (ix)
+      0004BB CE 00            [ 7] 1228 	adc	a, #0x00
+      0004BD 47               [ 4] 1229 	ld	b, a
+      0004BE                       1230 00166$:
+      0004BE CB 28            [ 8] 1231 	sra	b
+      0004C0 CB 19            [ 8] 1232 	rr	c
+      0004C2 CB 28            [ 8] 1233 	sra	b
+      0004C4 CB 19            [ 8] 1234 	rr	c
+      0004C6 CB 28            [ 8] 1235 	sra	b
+      0004C8 CB 19            [ 8] 1236 	rr	c
+                                   1237 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:292: if(cellX != lastCell)
+      0004CA 79               [ 4] 1238 	ld	a, c
+      0004CB 3C               [ 4] 1239 	inc	a
+      0004CC 28 30            [12] 1240 	jr	Z, 00129$
+                                   1241 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:294: lastCell = cellX;
+      0004CE DD 71 FD         [19] 1242 	ld	-3 (ix), c
+                                   1243 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:295: tile = VDP_Peek_16K(g_ScreenLayoutLow + (cellY * 32) + cellX);
+      0004D1 DD 6E FC         [19] 1244 	ld	l, -4 (ix)
+                                   1245 ;	spillPairReg hl
+                                   1246 ;	spillPairReg hl
+      0004D4 26 00            [ 7] 1247 	ld	h, #0x00
+                                   1248 ;	spillPairReg hl
+                                   1249 ;	spillPairReg hl
+      0004D6 29               [11] 1250 	add	hl, hl
+      0004D7 29               [11] 1251 	add	hl, hl
+      0004D8 29               [11] 1252 	add	hl, hl
+      0004D9 29               [11] 1253 	add	hl, hl
+      0004DA 29               [11] 1254 	add	hl, hl
+      0004DB ED 5Br00r00      [20] 1255 	ld	de, (_g_ScreenLayoutLow)
+      0004DF 19               [11] 1256 	add	hl, de
+      0004E0 06 00            [ 7] 1257 	ld	b, #0x00
+      0004E2 09               [11] 1258 	add	hl, bc
+      0004E3 CDr00r00         [17] 1259 	call	_VDP_Peek_16K
+      0004E6 DD 77 FB         [19] 1260 	ld	-5 (ix), a
+                                   1261 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:296: if(g_Pawn->CollisionCB(tile))
+      0004E9 2Ar03r00         [16] 1262 	ld	hl, (_g_Pawn)
+      0004EC 11 12 00         [10] 1263 	ld	de, #0x0012
+      0004EF 19               [11] 1264 	add	hl, de
+      0004F0 4E               [ 7] 1265 	ld	c, (hl)
+      0004F1 23               [ 6] 1266 	inc	hl
+      0004F2 66               [ 7] 1267 	ld	h, (hl)
+                                   1268 ;	spillPairReg hl
+      0004F3 DD 7E FB         [19] 1269 	ld	a, -5 (ix)
+      0004F6 69               [ 4] 1270 	ld	l, c
+                                   1271 ;	spillPairReg hl
+                                   1272 ;	spillPairReg hl
+      0004F7 CDr00r00         [17] 1273 	call	___sdcc_call_hl
+      0004FA B7               [ 4] 1274 	or	a, a
+      0004FB C2r05r06         [10] 1275 	jp	NZ, 00140$
+                                   1276 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:297: goto skipVertival;
+      0004FE                       1277 00129$:
+                                   1278 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:311: cellX = (targetX + GET_BOUND_X - (GET_BOUND_X / 4)) / 8;
+      0004FE E1               [10] 1279 	pop	hl
+      0004FF E5               [11] 1280 	push	hl
+      000500 11 0C 00         [10] 1281 	ld	de, #0x000c
+      000503 19               [11] 1282 	add	hl, de
+      000504 DD 75 FE         [19] 1283 	ld	-2 (ix), l
+      000507 DD 74 FF         [19] 1284 	ld	-1 (ix), h
+      00050A CB 7C            [ 8] 1285 	bit	7, h
+      00050C 28 10            [12] 1286 	jr	Z, 00167$
+      00050E DD 7E F7         [19] 1287 	ld	a, -9 (ix)
+      000511 C6 13            [ 7] 1288 	add	a, #0x13
+      000513 DD 77 FE         [19] 1289 	ld	-2 (ix), a
+      000516 DD 7E F8         [19] 1290 	ld	a, -8 (ix)
+      000519 CE 00            [ 7] 1291 	adc	a, #0x00
+      00051B DD 77 FF         [19] 1292 	ld	-1 (ix), a
+      00051E                       1293 00167$:
+      00051E DD CB FF 2E      [23] 1294 	sra	-1 (ix)
+      000522 DD CB FE 1E      [23] 1295 	rr	-2 (ix)
+      000526 DD CB FF 2E      [23] 1296 	sra	-1 (ix)
+      00052A DD CB FE 1E      [23] 1297 	rr	-2 (ix)
+      00052E DD CB FF 2E      [23] 1298 	sra	-1 (ix)
+      000532 DD CB FE 1E      [23] 1299 	rr	-2 (ix)
+      000536 DD 7E FE         [19] 1300 	ld	a, -2 (ix)
+                                   1301 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:312: if(cellX != lastCell)
+      000539 DD 77 FF         [19] 1302 	ld	-1 (ix), a
+      00053C DD 96 FD         [19] 1303 	sub	a, -3 (ix)
+      00053F CArD9r05         [10] 1304 	jp	Z,00133$
+                                   1305 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:315: tile = VDP_Peek_16K(g_ScreenLayoutLow + (cellY * 32) + cellX);
+      000542 DD 7E FC         [19] 1306 	ld	a, -4 (ix)
+      000545 DD 77 FD         [19] 1307 	ld	-3 (ix), a
+      000548 DD 36 FE 00      [19] 1308 	ld	-2 (ix), #0x00
+      00054C 06 05            [ 7] 1309 	ld	b, #0x05
+      00054E                       1310 00348$:
+      00054E DD CB FD 26      [23] 1311 	sla	-3 (ix)
+      000552 DD CB FE 16      [23] 1312 	rl	-2 (ix)
+      000556 10 F6            [13] 1313 	djnz	00348$
+      000558 2Ar00r00         [16] 1314 	ld	hl, (_g_ScreenLayoutLow)
+      00055B E3               [19] 1315 	ex	(sp), hl
+      00055C DD 7E FD         [19] 1316 	ld	a, -3 (ix)
+      00055F DD 77 FB         [19] 1317 	ld	-5 (ix), a
+      000562 DD 7E FE         [19] 1318 	ld	a, -2 (ix)
+      000565 DD 77 FC         [19] 1319 	ld	-4 (ix), a
+      000568 DD 7E FB         [19] 1320 	ld	a, -5 (ix)
+      00056B DD 86 F7         [19] 1321 	add	a, -9 (ix)
+      00056E DD 77 FD         [19] 1322 	ld	-3 (ix), a
+      000571 DD 7E FC         [19] 1323 	ld	a, -4 (ix)
+      000574 DD 8E F8         [19] 1324 	adc	a, -8 (ix)
+      000577 DD 77 FE         [19] 1325 	ld	-2 (ix), a
+      00057A DD 7E FF         [19] 1326 	ld	a, -1 (ix)
+      00057D DD 77 FB         [19] 1327 	ld	-5 (ix), a
+      000580 DD 36 FC 00      [19] 1328 	ld	-4 (ix), #0x00
+      000584 DD 7E FB         [19] 1329 	ld	a, -5 (ix)
+      000587 DD 86 FD         [19] 1330 	add	a, -3 (ix)
+      00058A DD 77 F7         [19] 1331 	ld	-9 (ix), a
+      00058D DD 7E FC         [19] 1332 	ld	a, -4 (ix)
+      000590 DD 8E FE         [19] 1333 	adc	a, -2 (ix)
+      000593 DD 77 F8         [19] 1334 	ld	-8 (ix), a
+      000596 DD 7E F7         [19] 1335 	ld	a, -9 (ix)
+      000599 DD 77 FE         [19] 1336 	ld	-2 (ix), a
+      00059C DD 7E F8         [19] 1337 	ld	a, -8 (ix)
+      00059F DD 77 FF         [19] 1338 	ld	-1 (ix), a
+      0005A2 DD 6E FE         [19] 1339 	ld	l, -2 (ix)
+                                   1340 ;	spillPairReg hl
+                                   1341 ;	spillPairReg hl
+      0005A5 DD 66 FF         [19] 1342 	ld	h, -1 (ix)
+                                   1343 ;	spillPairReg hl
+                                   1344 ;	spillPairReg hl
+      0005A8 CDr00r00         [17] 1345 	call	_VDP_Peek_16K
+      0005AB DD 77 FF         [19] 1346 	ld	-1 (ix), a
+      0005AE DD 77 FB         [19] 1347 	ld	-5 (ix), a
+                                   1348 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:316: if(g_Pawn->CollisionCB(tile))
+      0005B1 2Ar03r00         [16] 1349 	ld	hl, (_g_Pawn)
+      0005B4 DD 75 FE         [19] 1350 	ld	-2 (ix), l
+      0005B7 DD 74 FF         [19] 1351 	ld	-1 (ix), h
+      0005BA 11 12 00         [10] 1352 	ld	de, #0x0012
+      0005BD 19               [11] 1353 	add	hl, de
+      0005BE 7E               [ 7] 1354 	ld	a, (hl)
+      0005BF DD 77 FE         [19] 1355 	ld	-2 (ix), a
+      0005C2 23               [ 6] 1356 	inc	hl
+      0005C3 7E               [ 7] 1357 	ld	a, (hl)
+      0005C4 DD 77 FF         [19] 1358 	ld	-1 (ix), a
+      0005C7 DD 7E FB         [19] 1359 	ld	a, -5 (ix)
+      0005CA DD 6E FE         [19] 1360 	ld	l, -2 (ix)
+                                   1361 ;	spillPairReg hl
+                                   1362 ;	spillPairReg hl
+      0005CD DD 66 FF         [19] 1363 	ld	h, -1 (ix)
+                                   1364 ;	spillPairReg hl
+                                   1365 ;	spillPairReg hl
+      0005D0 CDr00r00         [17] 1366 	call	___sdcc_call_hl
+      0005D3 DD 77 FF         [19] 1367 	ld	-1 (ix), a
+      0005D6 B7               [ 4] 1368 	or	a, a
+      0005D7 20 2C            [12] 1369 	jr	NZ, 00140$
+                                   1370 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:317: goto skipVertival;
+      0005D9                       1371 00133$:
+                                   1372 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:330: g_Pawn->PhysicsCB(PAWN_PHYSICS_FALL, tile);
+      0005D9 2Ar03r00         [16] 1373 	ld	hl, (_g_Pawn)
+      0005DC DD 75 FE         [19] 1374 	ld	-2 (ix), l
+      0005DF DD 74 FF         [19] 1375 	ld	-1 (ix), h
+      0005E2 11 10 00         [10] 1376 	ld	de, #0x0010
+      0005E5 19               [11] 1377 	add	hl, de
+      0005E6 7E               [ 7] 1378 	ld	a, (hl)
+      0005E7 DD 77 FE         [19] 1379 	ld	-2 (ix), a
+      0005EA 23               [ 6] 1380 	inc	hl
+      0005EB 7E               [ 7] 1381 	ld	a, (hl)
+      0005EC DD 77 FF         [19] 1382 	ld	-1 (ix), a
+      0005EF DD 6E FB         [19] 1383 	ld	l, -5 (ix)
+                                   1384 ;	spillPairReg hl
+                                   1385 ;	spillPairReg hl
+      0005F2 3E 04            [ 7] 1386 	ld	a, #0x04
+      0005F4 FD E5            [15] 1387 	push	iy
+      0005F6 E3               [19] 1388 	ex	(sp), hl
+      0005F7 DD 6E FE         [19] 1389 	ld	l, -2 (ix)
+                                   1390 ;	spillPairReg hl
+                                   1391 ;	spillPairReg hl
+      0005FA E3               [19] 1392 	ex	(sp), hl
+      0005FB E3               [19] 1393 	ex	(sp), hl
+      0005FC DD 66 FF         [19] 1394 	ld	h, -1 (ix)
+                                   1395 ;	spillPairReg hl
+                                   1396 ;	spillPairReg hl
+      0005FF E3               [19] 1397 	ex	(sp), hl
+      000600 FD E1            [14] 1398 	pop	iy
+      000602 CDr00r00         [17] 1399 	call	___sdcc_call_iy
+                                   1400 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:333: skipVertival:
+      000605                       1401 00140$:
+                                   1402 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:105: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
+      000605 2Ar03r00         [16] 1403 	ld	hl, (_g_Pawn)
+                                   1404 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:144: u8 targetX = g_Pawn->PositionX + g_Pawn->MoveX;
+      000608 DD 75 FD         [19] 1405 	ld	-3 (ix), l
+      00060B DD 74 FE         [19] 1406 	ld	-2 (ix), h
+                                   1407 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:336: if(g_Pawn->MoveX > 0)
+      00060E 01 0D 00         [10] 1408 	ld	bc,#13
+      000611 09               [11] 1409 	add	hl,bc
+      000612 7E               [ 7] 1410 	ld	a, (hl)
+      000613 DD 77 FF         [19] 1411 	ld	-1 (ix), a
+      000616 AF               [ 4] 1412 	xor	a, a
+      000617 DD 96 FF         [19] 1413 	sub	a, -1 (ix)
+      00061A E2r1Fr06         [10] 1414 	jp	PO, 00349$
+      00061D EE 80            [ 7] 1415 	xor	a, #0x80
+      00061F                       1416 00349$:
+      00061F F2rDBr06         [10] 1417 	jp	P, 00154$
+                                   1418 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:339: if((u8)(targetX + GET_BOUND_X) < g_Pawn->PositionX)
+      000622 DD 7E F9         [19] 1419 	ld	a, -7 (ix)
+      000625 C6 10            [ 7] 1420 	add	a, #0x10
+      000627 DD 4E FD         [19] 1421 	ld	c, -3 (ix)
+      00062A DD 46 FE         [19] 1422 	ld	b, -2 (ix)
+      00062D 21 05 00         [10] 1423 	ld	hl, #5
+      000630 09               [11] 1424 	add	hl, bc
+      000631 4E               [ 7] 1425 	ld	c, (hl)
+      000632 91               [ 4] 1426 	sub	a, c
+      000633 30 1A            [12] 1427 	jr	NC, 00144$
+                                   1428 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:342: g_Pawn->PhysicsCB(PAWN_PHYSICS_BORDER_RIGHT, 0);
+      000635 DD 4E FD         [19] 1429 	ld	c, -3 (ix)
+      000638 DD 46 FE         [19] 1430 	ld	b, -2 (ix)
+      00063B 21 10 00         [10] 1431 	ld	hl, #16
+      00063E 09               [11] 1432 	add	hl, bc
+      00063F 4E               [ 7] 1433 	ld	c, (hl)
+      000640 23               [ 6] 1434 	inc	hl
+      000641 46               [ 7] 1435 	ld	b, (hl)
+      000642 2E 00            [ 7] 1436 	ld	l, #0x00
+                                   1437 ;	spillPairReg hl
+                                   1438 ;	spillPairReg hl
+      000644 3E 07            [ 7] 1439 	ld	a, #0x07
+      000646 C5               [11] 1440 	push	bc
+      000647 FD E1            [14] 1441 	pop	iy
+      000649 CDr00r00         [17] 1442 	call	___sdcc_call_iy
+      00064C C3r8Fr07         [10] 1443 	jp	00155$
+      00064F                       1444 00144$:
+                                   1445 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:351: u8 cellX = (targetX + GET_BOUND_X) / 8;
+      00064F DD 4E F9         [19] 1446 	ld	c, -7 (ix)
+      000652 06 00            [ 7] 1447 	ld	b, #0x00
+      000654 21 10 00         [10] 1448 	ld	hl, #0x0010
+      000657 09               [11] 1449 	add	hl, bc
+      000658 5D               [ 4] 1450 	ld	e, l
+      000659 54               [ 4] 1451 	ld	d, h
+      00065A CB 7C            [ 8] 1452 	bit	7, h
+      00065C 28 05            [12] 1453 	jr	Z, 00168$
+      00065E 21 17 00         [10] 1454 	ld	hl, #0x0017
+      000661 09               [11] 1455 	add	hl, bc
+      000662 EB               [ 4] 1456 	ex	de, hl
+      000663                       1457 00168$:
+      000663 CB 2A            [ 8] 1458 	sra	d
+      000665 CB 1B            [ 8] 1459 	rr	e
+      000667 CB 2A            [ 8] 1460 	sra	d
+      000669 CB 1B            [ 8] 1461 	rr	e
+      00066B CB 2A            [ 8] 1462 	sra	d
+      00066D CB 1B            [ 8] 1463 	rr	e
+      00066F DD 73 FF         [19] 1464 	ld	-1 (ix), e
+                                   1465 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:352: u8 cellY = (targetY + (GET_BOUND_Y / 2)) / 8;
+      000672 DD 4E FA         [19] 1466 	ld	c, -6 (ix)
+      000675 06 00            [ 7] 1467 	ld	b, #0x00
+      000677 21 08 00         [10] 1468 	ld	hl, #0x0008
+      00067A 09               [11] 1469 	add	hl, bc
+                                   1470 ;	spillPairReg hl
+                                   1471 ;	spillPairReg hl
+      00067B 54               [ 4] 1472 	ld	d, h
+                                   1473 ;	spillPairReg hl
+                                   1474 ;	spillPairReg hl
+      00067C CB 7A            [ 8] 1475 	bit	7, d
+      00067E 28 04            [12] 1476 	jr	Z, 00169$
+      000680 21 0F 00         [10] 1477 	ld	hl, #0x000f
+      000683 09               [11] 1478 	add	hl, bc
+      000684                       1479 00169$:
+      000684 CB 2C            [ 8] 1480 	sra	h
+      000686 CB 1D            [ 8] 1481 	rr	l
+      000688 CB 2C            [ 8] 1482 	sra	h
+      00068A CB 1D            [ 8] 1483 	rr	l
+      00068C CB 2C            [ 8] 1484 	sra	h
+      00068E CB 1D            [ 8] 1485 	rr	l
+                                   1486 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:353: u8 tile = VDP_Peek_16K(g_ScreenLayoutLow + (cellY * 32) + cellX);
+      000690 26 00            [ 7] 1487 	ld	h, #0x00
+                                   1488 ;	spillPairReg hl
+                                   1489 ;	spillPairReg hl
+      000692 29               [11] 1490 	add	hl, hl
+      000693 29               [11] 1491 	add	hl, hl
+      000694 29               [11] 1492 	add	hl, hl
+      000695 29               [11] 1493 	add	hl, hl
+      000696 29               [11] 1494 	add	hl, hl
+      000697 ED 4Br00r00      [20] 1495 	ld	bc, (_g_ScreenLayoutLow)
+      00069B 09               [11] 1496 	add	hl, bc
+      00069C DD 4E FF         [19] 1497 	ld	c, -1 (ix)
+      00069F 06 00            [ 7] 1498 	ld	b, #0x00
+      0006A1 09               [11] 1499 	add	hl, bc
+      0006A2 CDr00r00         [17] 1500 	call	_VDP_Peek_16K
+      0006A5 5F               [ 4] 1501 	ld	e, a
+                                   1502 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:354: if(g_Pawn->CollisionCB(tile))
+      0006A6 FD 2Ar03r00      [20] 1503 	ld	iy, (_g_Pawn)
+      0006AA FD 6E 12         [19] 1504 	ld	l, 18 (iy)
+                                   1505 ;	spillPairReg hl
+      0006AD FD 66 13         [19] 1506 	ld	h, 19 (iy)
+                                   1507 ;	spillPairReg hl
+      0006B0 D5               [11] 1508 	push	de
+      0006B1 7B               [ 4] 1509 	ld	a, e
+      0006B2 CDr00r00         [17] 1510 	call	___sdcc_call_hl
+      0006B5 D1               [10] 1511 	pop	de
+      0006B6 B7               [ 4] 1512 	or	a, a
+      0006B7 CAr8Fr07         [10] 1513 	jp	Z, 00155$
+                                   1514 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:356: g_Pawn->PhysicsCB(PAWN_PHYSICS_COL_RIGHT, tile);
+      0006BA 2Ar03r00         [16] 1515 	ld	hl, (_g_Pawn)
+      0006BD 01 10 00         [10] 1516 	ld	bc, #0x0010
+      0006C0 09               [11] 1517 	add	hl, bc
+      0006C1 4E               [ 7] 1518 	ld	c, (hl)
+      0006C2 23               [ 6] 1519 	inc	hl
+      0006C3 46               [ 7] 1520 	ld	b, (hl)
+      0006C4 6B               [ 4] 1521 	ld	l, e
+                                   1522 ;	spillPairReg hl
+                                   1523 ;	spillPairReg hl
+      0006C5 3E 02            [ 7] 1524 	ld	a, #0x02
+      0006C7 C5               [11] 1525 	push	bc
+      0006C8 FD E1            [14] 1526 	pop	iy
+      0006CA CDr00r00         [17] 1527 	call	___sdcc_call_iy
+                                   1528 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:357: targetX = (cellX * 8) - GET_BOUND_X;
+      0006CD DD 7E FF         [19] 1529 	ld	a, -1 (ix)
+      0006D0 87               [ 4] 1530 	add	a, a
+      0006D1 87               [ 4] 1531 	add	a, a
+      0006D2 87               [ 4] 1532 	add	a, a
+      0006D3 C6 F0            [ 7] 1533 	add	a, #0xf0
+      0006D5 DD 77 F9         [19] 1534 	ld	-7 (ix), a
+      0006D8 C3r8Fr07         [10] 1535 	jp	00155$
+      0006DB                       1536 00154$:
+                                   1537 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:363: else if(g_Pawn->MoveX < 0)
+      0006DB DD CB FF 7E      [20] 1538 	bit	7, -1 (ix)
+      0006DF CAr8Fr07         [10] 1539 	jp	Z, 00155$
+                                   1540 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:366: if(targetX > g_Pawn->PositionX)
+      0006E2 DD 4E FD         [19] 1541 	ld	c, -3 (ix)
+      0006E5 DD 46 FE         [19] 1542 	ld	b, -2 (ix)
+      0006E8 21 05 00         [10] 1543 	ld	hl, #5
+      0006EB 09               [11] 1544 	add	hl, bc
+      0006EC 7E               [ 7] 1545 	ld	a, (hl)
+      0006ED DD 96 F9         [19] 1546 	sub	a, -7 (ix)
+      0006F0 30 1A            [12] 1547 	jr	NC, 00149$
+                                   1548 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:369: g_Pawn->PhysicsCB(PAWN_PHYSICS_BORDER_LEFT, 0);
+      0006F2 DD 4E FD         [19] 1549 	ld	c, -3 (ix)
+      0006F5 DD 46 FE         [19] 1550 	ld	b, -2 (ix)
+      0006F8 21 10 00         [10] 1551 	ld	hl, #16
+      0006FB 09               [11] 1552 	add	hl, bc
+      0006FC 4E               [ 7] 1553 	ld	c, (hl)
+      0006FD 23               [ 6] 1554 	inc	hl
+      0006FE 46               [ 7] 1555 	ld	b, (hl)
+      0006FF 2E 00            [ 7] 1556 	ld	l, #0x00
+                                   1557 ;	spillPairReg hl
+                                   1558 ;	spillPairReg hl
+      000701 3E 08            [ 7] 1559 	ld	a, #0x08
+      000703 C5               [11] 1560 	push	bc
+      000704 FD E1            [14] 1561 	pop	iy
+      000706 CDr00r00         [17] 1562 	call	___sdcc_call_iy
+      000709 C3r8Fr07         [10] 1563 	jp	00155$
+      00070C                       1564 00149$:
+                                   1565 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:378: u8 cellX = (targetX) / 8;
+      00070C DD 4E F9         [19] 1566 	ld	c, -7 (ix)
+      00070F 06 00            [ 7] 1567 	ld	b, #0x00
+      000711 69               [ 4] 1568 	ld	l, c
+                                   1569 ;	spillPairReg hl
+                                   1570 ;	spillPairReg hl
+      000712 60               [ 4] 1571 	ld	h, b
+                                   1572 ;	spillPairReg hl
+                                   1573 ;	spillPairReg hl
+      000713 CB 78            [ 8] 1574 	bit	7, b
+      000715 28 04            [12] 1575 	jr	Z, 00170$
+      000717 21 07 00         [10] 1576 	ld	hl, #0x0007
+      00071A 09               [11] 1577 	add	hl, bc
+      00071B                       1578 00170$:
+      00071B CB 2C            [ 8] 1579 	sra	h
+      00071D CB 1D            [ 8] 1580 	rr	l
+      00071F CB 2C            [ 8] 1581 	sra	h
+      000721 CB 1D            [ 8] 1582 	rr	l
+      000723 CB 2C            [ 8] 1583 	sra	h
+      000725 CB 1D            [ 8] 1584 	rr	l
+      000727 DD 75 FF         [19] 1585 	ld	-1 (ix), l
+                                   1586 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:379: u8 cellY = (targetY + (GET_BOUND_Y / 2)) / 8;
+      00072A DD 4E FA         [19] 1587 	ld	c, -6 (ix)
+      00072D 06 00            [ 7] 1588 	ld	b, #0x00
+      00072F 21 08 00         [10] 1589 	ld	hl, #0x0008
+      000732 09               [11] 1590 	add	hl, bc
+                                   1591 ;	spillPairReg hl
+                                   1592 ;	spillPairReg hl
+      000733 54               [ 4] 1593 	ld	d, h
+                                   1594 ;	spillPairReg hl
+                                   1595 ;	spillPairReg hl
+      000734 CB 7A            [ 8] 1596 	bit	7, d
+      000736 28 04            [12] 1597 	jr	Z, 00171$
+      000738 21 0F 00         [10] 1598 	ld	hl, #0x000f
+      00073B 09               [11] 1599 	add	hl, bc
+      00073C                       1600 00171$:
+      00073C CB 2C            [ 8] 1601 	sra	h
+      00073E CB 1D            [ 8] 1602 	rr	l
+      000740 CB 2C            [ 8] 1603 	sra	h
+      000742 CB 1D            [ 8] 1604 	rr	l
+      000744 CB 2C            [ 8] 1605 	sra	h
+      000746 CB 1D            [ 8] 1606 	rr	l
+                                   1607 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:380: u8 tile = VDP_Peek_16K(g_ScreenLayoutLow + (cellY * 32) + cellX);
+      000748 26 00            [ 7] 1608 	ld	h, #0x00
+                                   1609 ;	spillPairReg hl
+                                   1610 ;	spillPairReg hl
+      00074A 29               [11] 1611 	add	hl, hl
+      00074B 29               [11] 1612 	add	hl, hl
+      00074C 29               [11] 1613 	add	hl, hl
+      00074D 29               [11] 1614 	add	hl, hl
+      00074E 29               [11] 1615 	add	hl, hl
+      00074F ED 4Br00r00      [20] 1616 	ld	bc, (_g_ScreenLayoutLow)
+      000753 09               [11] 1617 	add	hl, bc
+      000754 DD 4E FF         [19] 1618 	ld	c, -1 (ix)
+      000757 06 00            [ 7] 1619 	ld	b, #0x00
+      000759 09               [11] 1620 	add	hl, bc
+      00075A CDr00r00         [17] 1621 	call	_VDP_Peek_16K
+      00075D 5F               [ 4] 1622 	ld	e, a
+                                   1623 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:381: if(g_Pawn->CollisionCB(tile))
+      00075E FD 2Ar03r00      [20] 1624 	ld	iy, (_g_Pawn)
+      000762 FD 6E 12         [19] 1625 	ld	l, 18 (iy)
+                                   1626 ;	spillPairReg hl
+      000765 FD 66 13         [19] 1627 	ld	h, 19 (iy)
+                                   1628 ;	spillPairReg hl
+      000768 D5               [11] 1629 	push	de
+      000769 7B               [ 4] 1630 	ld	a, e
+      00076A CDr00r00         [17] 1631 	call	___sdcc_call_hl
+      00076D D1               [10] 1632 	pop	de
+      00076E B7               [ 4] 1633 	or	a, a
+      00076F 28 1E            [12] 1634 	jr	Z, 00155$
+                                   1635 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:383: g_Pawn->PhysicsCB(PAWN_PHYSICS_COL_LEFT, tile);
+      000771 2Ar03r00         [16] 1636 	ld	hl, (_g_Pawn)
+      000774 01 10 00         [10] 1637 	ld	bc, #0x0010
+      000777 09               [11] 1638 	add	hl, bc
+      000778 4E               [ 7] 1639 	ld	c, (hl)
+      000779 23               [ 6] 1640 	inc	hl
+      00077A 46               [ 7] 1641 	ld	b, (hl)
+      00077B 6B               [ 4] 1642 	ld	l, e
+                                   1643 ;	spillPairReg hl
+                                   1644 ;	spillPairReg hl
+      00077C 3E 03            [ 7] 1645 	ld	a, #0x03
+      00077E C5               [11] 1646 	push	bc
+      00077F FD E1            [14] 1647 	pop	iy
+      000781 CDr00r00         [17] 1648 	call	___sdcc_call_iy
+                                   1649 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:384: targetX = (cellX * 8) + 8;
+      000784 DD 7E FF         [19] 1650 	ld	a, -1 (ix)
+      000787 87               [ 4] 1651 	add	a, a
+      000788 87               [ 4] 1652 	add	a, a
+      000789 87               [ 4] 1653 	add	a, a
+      00078A C6 08            [ 7] 1654 	add	a, #0x08
+      00078C DD 77 F9         [19] 1655 	ld	-7 (ix), a
+      00078F                       1656 00155$:
+                                   1657 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:389: g_Pawn->PositionX = targetX;
+      00078F 2Ar03r00         [16] 1658 	ld	hl, (_g_Pawn)
+      000792 01 05 00         [10] 1659 	ld	bc, #0x0005
+      000795 09               [11] 1660 	add	hl, bc
+      000796 DD 7E F9         [19] 1661 	ld	a, -7 (ix)
+      000799 77               [ 7] 1662 	ld	(hl), a
+                                   1663 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:390: g_Pawn->PositionY = targetY;
+      00079A 2Ar03r00         [16] 1664 	ld	hl, (_g_Pawn)
+      00079D 01 06 00         [10] 1665 	ld	bc, #0x0006
+      0007A0 09               [11] 1666 	add	hl, bc
+      0007A1 DD 7E FA         [19] 1667 	ld	a, -6 (ix)
+      0007A4 77               [ 7] 1668 	ld	(hl), a
+                                   1669 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:105: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
+      0007A5 ED 4Br03r00      [20] 1670 	ld	bc, (_g_Pawn)
+                                   1671 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:112: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
+      0007A9 21 0B 00         [10] 1672 	ld	hl, #0x000b
+      0007AC 09               [11] 1673 	add	hl, bc
+      0007AD EB               [ 4] 1674 	ex	de, hl
+                                   1675 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:391: g_Pawn->Update |= PAWN_UPDATE_POSITION;
+      0007AE 1A               [ 7] 1676 	ld	a, (de)
+      0007AF CB C7            [ 8] 1677 	set	0, a
+      0007B1 12               [ 7] 1678 	ld	(de), a
+                                   1679 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:105: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
+      0007B2 2Ar03r00         [16] 1680 	ld	hl, (_g_Pawn)
+                                   1681 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:112: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
+      0007B5 01 0B 00         [10] 1682 	ld	bc, #0x000b
+      0007B8 09               [11] 1683 	add	hl, bc
+                                   1684 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:392: g_Pawn->Update &= ~PAWN_UPDATE_COLLISION;
+      0007B9 CB A6            [15] 1685 	res	4, (hl)
+      0007BB                       1686 00158$:
+                                   1687 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:395: }
+      0007BB DD F9            [10] 1688 	ld	sp, ix
+      0007BD DD E1            [14] 1689 	pop	ix
+      0007BF C9               [10] 1690 	ret
+                                   1691 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:399: void GamePawn_Draw(Game_Pawn* pawn)
+                                   1692 ;	---------------------------------
+                                   1693 ; Function GamePawn_Draw
+                                   1694 ; ---------------------------------
+      0007C0                       1695 _GamePawn_Draw::
+      0007C0 DD E5            [15] 1696 	push	ix
+      0007C2 DD 21 00 00      [14] 1697 	ld	ix,#0
+      0007C6 DD 39            [15] 1698 	add	ix,sp
+      0007C8 F5               [11] 1699 	push	af
+      0007C9 22r03r00         [16] 1700 	ld	(_g_Pawn), hl
+                                   1701 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:402: if(g_Pawn->Update == 0)
+      0007CC ED 4Br03r00      [20] 1702 	ld	bc, (_g_Pawn)
+      0007D0 C5               [11] 1703 	push	bc
+      0007D1 FD E1            [14] 1704 	pop	iy
+      0007D3 FD 7E 0B         [19] 1705 	ld	a, 11 (iy)
+      0007D6 B7               [ 4] 1706 	or	a, a
+                                   1707 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:403: return;
+      0007D7 CArA4r08         [10] 1708 	jp	Z,00121$
+                                   1709 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:405: g_Sprite = g_Pawn->SpriteList;
+      0007DA 69               [ 4] 1710 	ld	l, c
+      0007DB 60               [ 4] 1711 	ld	h, b
+      0007DC 7E               [ 7] 1712 	ld	a, (hl)
+      0007DD 23               [ 6] 1713 	inc	hl
+      0007DE 32r05r00         [13] 1714 	ld	(_g_Sprite+0), a
+      0007E1 7E               [ 7] 1715 	ld	a, (hl)
+      0007E2 32r06r00         [13] 1716 	ld	(_g_Sprite+1), a
+                                   1717 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:409: loop(i, g_Pawn->SpriteNum)
+      0007E5 DD 36 FF 00      [19] 1718 	ld	-1 (ix), #0x00
+      0007E9                       1719 00119$:
+                                   1720 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:402: if(g_Pawn->Update == 0)
+      0007E9 ED 4Br03r00      [20] 1721 	ld	bc, (_g_Pawn)
+                                   1722 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:409: loop(i, g_Pawn->SpriteNum)
+      0007ED 69               [ 4] 1723 	ld	l, c
+                                   1724 ;	spillPairReg hl
+                                   1725 ;	spillPairReg hl
+      0007EE 60               [ 4] 1726 	ld	h, b
+                                   1727 ;	spillPairReg hl
+                                   1728 ;	spillPairReg hl
+      0007EF 23               [ 6] 1729 	inc	hl
+      0007F0 23               [ 6] 1730 	inc	hl
+      0007F1 DD 7E FF         [19] 1731 	ld	a,-1 (ix)
+      0007F4 96               [ 7] 1732 	sub	a,(hl)
+      0007F5 D2r9Er08         [10] 1733 	jp	NC, 00117$
+                                   1734 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:411: if(g_Sprite->Flag & PAWN_SPRITE_EVEN) // Skip odd frames
+      0007F8 2Ar05r00         [16] 1735 	ld	hl, (_g_Sprite)
+      0007FB 11 05 00         [10] 1736 	ld	de, #0x0005
+      0007FE 19               [11] 1737 	add	hl, de
+      0007FF 5E               [ 7] 1738 	ld	e, (hl)
+      000800 CB 43            [ 8] 1739 	bit	0, e
+      000802 28 14            [12] 1740 	jr	Z, 00112$
+                                   1741 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:413: if((g_Pawn->Counter & 1) != 0)
+      000804 59               [ 4] 1742 	ld	e, c
+      000805 50               [ 4] 1743 	ld	d, b
+      000806 21 0C 00         [10] 1744 	ld	hl, #12
+      000809 19               [11] 1745 	add	hl, de
+      00080A 7E               [ 7] 1746 	ld	a, (hl)
+      00080B 0F               [ 4] 1747 	rrca
+      00080C DAr8Er08         [10] 1748 	jp	C,00116$
+                                   1749 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:402: if(g_Pawn->Update == 0)
+      00080F 21 0B 00         [10] 1750 	ld	hl, #0x000b
+      000812 09               [11] 1751 	add	hl, bc
+                                   1752 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:416: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
+      000813 CB CE            [15] 1753 	set	1, (hl)
+      000815 C3r2Fr08         [10] 1754 	jp	00113$
+      000818                       1755 00112$:
+                                   1756 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:418: else if(g_Sprite->Flag & PAWN_SPRITE_ODD) // Skip even frames
+      000818 CB 4B            [ 8] 1757 	bit	1, e
+      00081A 28 13            [12] 1758 	jr	Z, 00113$
+                                   1759 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:420: if((g_Pawn->Counter & 1) == 0)
+      00081C 59               [ 4] 1760 	ld	e, c
+      00081D 50               [ 4] 1761 	ld	d, b
+      00081E 21 0C 00         [10] 1762 	ld	hl, #12
+      000821 19               [11] 1763 	add	hl, de
+      000822 7E               [ 7] 1764 	ld	a, (hl)
+      000823 0F               [ 4] 1765 	rrca
+      000824 30 68            [12] 1766 	jr	NC, 00116$
+                                   1767 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:402: if(g_Pawn->Update == 0)
+      000826 21 0B 00         [10] 1768 	ld	hl, #0x000b
+      000829 09               [11] 1769 	add	hl, bc
+      00082A EB               [ 4] 1770 	ex	de, hl
+                                   1771 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:423: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
+      00082B 1A               [ 7] 1772 	ld	a, (de)
+      00082C CB CF            [ 8] 1773 	set	1, a
+      00082E 12               [ 7] 1774 	ld	(de), a
+      00082F                       1775 00113$:
+                                   1776 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:402: if(g_Pawn->Update == 0)
+      00082F ED 5Br03r00      [20] 1777 	ld	de, (_g_Pawn)
+                                   1778 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:426: g_Game_DrawY = g_Pawn->PositionY + g_Sprite->OffsetY - 1; // Decrement Y to fit screen coordinate
+      000833 D5               [11] 1779 	push	de
+      000834 FD E1            [14] 1780 	pop	iy
+      000836 FD 7E 06         [19] 1781 	ld	a, 6 (iy)
+                                   1782 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:411: if(g_Sprite->Flag & PAWN_SPRITE_EVEN) // Skip odd frames
+      000839 ED 4Br05r00      [20] 1783 	ld	bc, (_g_Sprite)
+                                   1784 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:426: g_Game_DrawY = g_Pawn->PositionY + g_Sprite->OffsetY - 1; // Decrement Y to fit screen coordinate
+      00083D 69               [ 4] 1785 	ld	l, c
+                                   1786 ;	spillPairReg hl
+                                   1787 ;	spillPairReg hl
+      00083E 60               [ 4] 1788 	ld	h, b
+                                   1789 ;	spillPairReg hl
+                                   1790 ;	spillPairReg hl
+      00083F 23               [ 6] 1791 	inc	hl
+      000840 23               [ 6] 1792 	inc	hl
+      000841 6E               [ 7] 1793 	ld	l, (hl)
+                                   1794 ;	spillPairReg hl
+      000842 85               [ 4] 1795 	add	a, l
+      000843 21r00r00         [10] 1796 	ld	hl, #_g_Game_DrawY
+      000846 3D               [ 4] 1797 	dec	a
+      000847 77               [ 7] 1798 	ld	(hl), a
+                                   1799 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:427: g_Game_DrawX = g_Pawn->PositionX + g_Sprite->OffsetX;
+      000848 D5               [11] 1800 	push	de
+      000849 FD E1            [14] 1801 	pop	iy
+      00084B FD 7E 05         [19] 1802 	ld	a, 5 (iy)
+      00084E 69               [ 4] 1803 	ld	l, c
+                                   1804 ;	spillPairReg hl
+                                   1805 ;	spillPairReg hl
+      00084F 60               [ 4] 1806 	ld	h, b
+                                   1807 ;	spillPairReg hl
+                                   1808 ;	spillPairReg hl
+      000850 23               [ 6] 1809 	inc	hl
+      000851 6E               [ 7] 1810 	ld	l, (hl)
+                                   1811 ;	spillPairReg hl
+      000852 85               [ 4] 1812 	add	a, l
+      000853 32r01r00         [13] 1813 	ld	(_g_Game_DrawX+0), a
+                                   1814 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:428: u8 size = 2;
+      000856 DD 36 FE 02      [19] 1815 	ld	-2 (ix), #0x02
+                                   1816 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:430: if(g_Pawn->Update & PAWN_UPDATE_PATTERN)
+      00085A D5               [11] 1817 	push	de
+      00085B FD E1            [14] 1818 	pop	iy
+      00085D FD CB 0B 4E      [20] 1819 	bit	1, 11 (iy)
+      000861 28 13            [12] 1820 	jr	Z, 00115$
+                                   1821 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:432: g_Game_DrawPattern = g_Pawn->AnimFrame + g_Sprite->DataOffset;
+      000863 21 08 00         [10] 1822 	ld	hl, #8
+      000866 19               [11] 1823 	add	hl, de
+      000867 7E               [ 7] 1824 	ld	a, (hl)
+      000868 69               [ 4] 1825 	ld	l, c
+                                   1826 ;	spillPairReg hl
+                                   1827 ;	spillPairReg hl
+      000869 60               [ 4] 1828 	ld	h, b
+                                   1829 ;	spillPairReg hl
+                                   1830 ;	spillPairReg hl
+      00086A 23               [ 6] 1831 	inc	hl
+      00086B 23               [ 6] 1832 	inc	hl
+      00086C 23               [ 6] 1833 	inc	hl
+      00086D 5E               [ 7] 1834 	ld	e, (hl)
+      00086E 83               [ 4] 1835 	add	a, e
+      00086F 32r02r00         [13] 1836 	ld	(_g_Game_DrawPattern+0), a
+                                   1837 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:433: size++;
+      000872 DD 36 FE 03      [19] 1838 	ld	-2 (ix), #0x03
+      000876                       1839 00115$:
+                                   1840 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:437: u16 dest = g_SpriteAtributeLow + (g_Sprite->SpriteID * 4);
+      000876 0A               [ 7] 1841 	ld	a, (bc)
+      000877 6F               [ 4] 1842 	ld	l, a
+                                   1843 ;	spillPairReg hl
+                                   1844 ;	spillPairReg hl
+      000878 26 00            [ 7] 1845 	ld	h, #0x00
+                                   1846 ;	spillPairReg hl
+                                   1847 ;	spillPairReg hl
+      00087A 29               [11] 1848 	add	hl, hl
+      00087B 29               [11] 1849 	add	hl, hl
+      00087C ED 4Br00r00      [20] 1850 	ld	bc, (_g_SpriteAttributeLow)
+      000880 09               [11] 1851 	add	hl, bc
+      000881 EB               [ 4] 1852 	ex	de, hl
+                                   1853 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:439: VDP_WriteVRAM((u8*)&g_Game_DrawY, dest, g_SpriteAtributeHigh, size);
+      000882 DD 4E FE         [19] 1854 	ld	c, -2 (ix)
+      000885 06 00            [ 7] 1855 	ld	b, #0x00
+      000887 C5               [11] 1856 	push	bc
+      000888 21r00r00         [10] 1857 	ld	hl, #_g_Game_DrawY
+      00088B CDr00r00         [17] 1858 	call	_VDP_WriteVRAM_16K
+                                   1859 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:444: SkipDrawing:
+      00088E                       1860 00116$:
+                                   1861 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:446: g_Sprite = (const Game_Sprite*)((u8*)g_Sprite + sizeof(Game_Sprite));
+      00088E 2Ar05r00         [16] 1862 	ld	hl, (_g_Sprite)
+      000891 01 06 00         [10] 1863 	ld	bc, #0x0006
+      000894 09               [11] 1864 	add	hl, bc
+      000895 22r05r00         [16] 1865 	ld	(_g_Sprite), hl
+                                   1866 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:409: loop(i, g_Pawn->SpriteNum)
+      000898 DD 34 FF         [23] 1867 	inc	-1 (ix)
+      00089B C3rE9r07         [10] 1868 	jp	00119$
+      00089E                       1869 00117$:
+                                   1870 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:448: g_Pawn->Update = 0;
+      00089E 21 0B 00         [10] 1871 	ld	hl, #0x000b
+      0008A1 09               [11] 1872 	add	hl, bc
+      0008A2 36 00            [10] 1873 	ld	(hl), #0x00
+      0008A4                       1874 00121$:
+                                   1875 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:449: }
+      0008A4 DD F9            [10] 1876 	ld	sp, ix
+      0008A6 DD E1            [14] 1877 	pop	ix
+      0008A8 C9               [10] 1878 	ret
+                                   1879 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:455: void GamePawn_SetMovement(Game_Pawn* pawn, i8 dx, i8 dy) 
+                                   1880 ;	---------------------------------
+                                   1881 ; Function GamePawn_SetMovement
+                                   1882 ; ---------------------------------
+      0008A9                       1883 _GamePawn_SetMovement::
+      0008A9 EB               [ 4] 1884 	ex	de, hl
+                                   1885 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:457: pawn->MoveX = dx;
+      0008AA 21 0D 00         [10] 1886 	ld	hl, #0x000d
+      0008AD 19               [11] 1887 	add	hl, de
+      0008AE FD 21 02 00      [14] 1888 	ld	iy, #2
+      0008B2 FD 39            [15] 1889 	add	iy, sp
+      0008B4 FD 7E 00         [19] 1890 	ld	a, 0 (iy)
+      0008B7 77               [ 7] 1891 	ld	(hl), a
+                                   1892 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:458: pawn->MoveY = dy;
+      0008B8 21 0E 00         [10] 1893 	ld	hl, #0x000e
+      0008BB 19               [11] 1894 	add	hl, de
+      0008BC FD 7E 01         [19] 1895 	ld	a, 1 (iy)
+      0008BF FD 23            [10] 1896 	inc	iy
+      0008C1 77               [ 7] 1897 	ld	(hl), a
+                                   1898 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:459: pawn->Update |= PAWN_UPDATE_COLLISION;
+      0008C2 21 0B 00         [10] 1899 	ld	hl, #0x000b
+      0008C5 19               [11] 1900 	add	hl, de
+      0008C6 CB E6            [15] 1901 	set	4, (hl)
+                                   1902 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:460: }
+      0008C8 E1               [10] 1903 	pop	hl
+      0008C9 F1               [10] 1904 	pop	af
+      0008CA E9               [ 4] 1905 	jp	(hl)
+                                   1906 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:464: void GamePawn_InitializePhysics(Game_Pawn* pawn, Game_PhysicsCB pcb, Game_CollisionCB ccb, u8 boundX, u8 boundY)
+                                   1907 ;	---------------------------------
+                                   1908 ; Function GamePawn_InitializePhysics
+                                   1909 ; ---------------------------------
+      0008CB                       1910 _GamePawn_InitializePhysics::
+      0008CB DD E5            [15] 1911 	push	ix
+      0008CD DD 21 00 00      [14] 1912 	ld	ix,#0
+      0008D1 DD 39            [15] 1913 	add	ix,sp
+      0008D3 4D               [ 4] 1914 	ld	c, l
+      0008D4 44               [ 4] 1915 	ld	b, h
+                                   1916 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:468: pawn->PhysicsCB = pcb; 
+      0008D5 21 10 00         [10] 1917 	ld	hl, #0x0010
+      0008D8 09               [11] 1918 	add	hl, bc
+      0008D9 73               [ 7] 1919 	ld	(hl), e
+      0008DA 23               [ 6] 1920 	inc	hl
+      0008DB 72               [ 7] 1921 	ld	(hl), d
+                                   1922 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:469: pawn->CollisionCB = ccb;
+      0008DC 21 12 00         [10] 1923 	ld	hl, #0x0012
+      0008DF 09               [11] 1924 	add	hl, bc
+      0008E0 DD 7E 04         [19] 1925 	ld	a, 4 (ix)
+      0008E3 77               [ 7] 1926 	ld	(hl), a
+      0008E4 23               [ 6] 1927 	inc	hl
+      0008E5 DD 7E 05         [19] 1928 	ld	a, 5 (ix)
+      0008E8 77               [ 7] 1929 	ld	(hl), a
+                                   1930 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:476: }
+      0008E9 DD E1            [14] 1931 	pop	ix
+      0008EB E1               [10] 1932 	pop	hl
+      0008EC F1               [10] 1933 	pop	af
+      0008ED F1               [10] 1934 	pop	af
+      0008EE E9               [ 4] 1935 	jp	(hl)
+                                   1936 	.area _CODE
+                                   1937 	.area _INITIALIZER
+                                   1938 	.area _CABS (ABS)
