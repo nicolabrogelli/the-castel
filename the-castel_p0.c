@@ -2,11 +2,24 @@
 #include "data/level/level002.h"
 #include "data/level/level003.h"
 #include "data/level/level004.h"
+#include "data/level/level005.h"
 #include "data/level/level006.h"
 #include "data/level/level007.h"
 #include "data/level/level008.h"
+#include "data/level/level009.h"
 #include "data/level/level010.h"
 #include "data/level/level011.h"
+#include "data/level/level012.h"
 #include "data/level/level013.h"
 #include "data/level/level014.h"
+#include "data/level/level015.h"
+#include "data/level/level029.h"
+#include "data/level/level030.h"
+
+#include "data/sprites.h"
+#include "data/pt3/data_music.h"
+#include "data/ayfx/ayfx_bank.h"
+#include "data/tiles.h"
+
+
 

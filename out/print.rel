@@ -232,7 +232,7 @@ S _Print_SetColor Def00012B
 S _Print_DrawLineV Def000CF1
 S _Print_SetMode Def00003B
 S _Print_DrawText Def0004D2
-A _DATA size 31 flags 0 addr 0
+A _DATA size 32 flags 0 addr 0
 S _g_PrintData Def000000
 A _INITIALIZED size 8 flags 0 addr 0
 S _g_PrintInvalid Def000000

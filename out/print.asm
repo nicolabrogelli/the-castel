@@ -277,7 +277,7 @@ _g_GRPACX	=	0xfcb7
 _g_GRPACY	=	0xfcb9
 _g_SLTSL	=	0xffff
 _g_PrintData::
-	.ds 49
+	.ds 50
 ;--------------------------------------------------------
 ; ram data
 ;--------------------------------------------------------
@@ -315,10 +315,10 @@ _Print_Initialize::
 ;	spillPairReg hl
 	ld	a, #0x0f
 	call	_Print_SetColor
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:204: g_PrintData.CursorX = x;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:226: g_PrintData.CursorX = x;
 	ld	hl, #(_g_PrintData + 5)
 	ld	(hl), #0x00
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:205: g_PrintData.CursorY = y;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:227: g_PrintData.CursorY = y;
 	ld	hl, #(_g_PrintData + 6)
 	ld	(hl), #0x00
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.h:447: inline u8 VDP_GetMode() { return g_VDP_Data.Mode; }
@@ -326,7 +326,7 @@ _Print_Initialize::
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:167: switch(VDP_GetMode()) // Screen mode specific initialization
 	sub	a, #0x02
 	jr	NZ, 00102$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:227: g_PrintData.TabSize = size;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:249: g_PrintData.TabSize = size;
 	ld	hl, #(_g_PrintData + 4)
 	ld	(hl), #0x03
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:182: g_PrintData.ScreenWidth = 32;
@@ -557,31 +557,31 @@ _Print_SetFont::
 	ld	hl, #0x0008
 	add	hl, bc
 	ex	de, hl
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:175: g_PrintData.PatternX     = patternX;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:197: g_PrintData.PatternX     = patternX;
 	ld	hl, #_g_PrintData
 	ld	(hl), #0x08
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:176: g_PrintData.PatternY     = patternY;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:198: g_PrintData.PatternY     = patternY;
 	ld	bc, #_g_PrintData + 1
 	ld	a, #0x08
 	ld	(bc), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:177: g_PrintData.UnitX        = sizeX;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:199: g_PrintData.UnitX        = sizeX;
 	ld	hl, #(_g_PrintData + 2)
 	ld	(hl), #0x06
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:178: g_PrintData.UnitY        = sizeY;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:200: g_PrintData.UnitY        = sizeY;
 	ld	hl, #(_g_PrintData + 3)
 	ld	(hl), #0x08
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:179: g_PrintData.CharFirst    = firstChr;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:201: g_PrintData.CharFirst    = firstChr;
 	ld	hl, #(_g_PrintData + 20)
 	ld	(hl), #0x01
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:180: g_PrintData.CharLast     = lastChr;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:202: g_PrintData.CharLast     = lastChr;
 	ld	hl, #(_g_PrintData + 21)
 	ld	(hl), #0xff
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:181: g_PrintData.CharCount    = lastChr - firstChr + 1;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:203: g_PrintData.CharCount    = lastChr - firstChr + 1;
 	ld	hl, #(_g_PrintData + 22)
 	ld	(hl), #0xff
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:182: g_PrintData.FontPatterns = patterns;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:204: g_PrintData.FontPatterns = patterns;
 	ld	((_g_PrintData + 28)), de
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:183: g_PrintData.FontAddr     = g_PrintData.FontPatterns - (firstChr * g_PrintData.PatternY); // pre-compute address of the virtual index 0 character (used to quick drawing in PutChar_GX functions)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:205: g_PrintData.FontAddr     = g_PrintData.FontPatterns - (firstChr * g_PrintData.PatternY); // pre-compute address of the virtual index 0 character (used to quick drawing in PutChar_GX functions)
 	ld	a, (bc)
 	ld	c, a
 	ld	b, #0x00
@@ -650,36 +650,36 @@ _Print_SetFont::
 	rlca
 	and	a, #0x0f
 	ld	d, a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:175: g_PrintData.PatternX     = patternX;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:197: g_PrintData.PatternX     = patternX;
 	ld	hl, #_g_PrintData
 	ld	(hl), d
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:176: g_PrintData.PatternY     = patternY;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:198: g_PrintData.PatternY     = patternY;
 	ld	hl, #(_g_PrintData + 1)
 	ld	(hl), e
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:177: g_PrintData.UnitX        = sizeX;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:199: g_PrintData.UnitX        = sizeX;
 	ld	hl, #(_g_PrintData + 2)
 	ld	a, -1 (ix)
 	ld	(hl), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:178: g_PrintData.UnitY        = sizeY;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:200: g_PrintData.UnitY        = sizeY;
 	ld	hl, #(_g_PrintData + 3)
 	ld	a, -2 (ix)
 	ld	(hl), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:179: g_PrintData.CharFirst    = firstChr;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:201: g_PrintData.CharFirst    = firstChr;
 	ld	hl, #(_g_PrintData + 20)
 	ld	a, -3 (ix)
 	ld	(hl), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:180: g_PrintData.CharLast     = lastChr;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:202: g_PrintData.CharLast     = lastChr;
 	ld	hl, #(_g_PrintData + 21)
 	ld	a, -4 (ix)
 	ld	(hl), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:181: g_PrintData.CharCount    = lastChr - firstChr + 1;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:203: g_PrintData.CharCount    = lastChr - firstChr + 1;
 	ld	a, -4 (ix)
 	sub	a, -3 (ix)
 	inc	a
 	ld	(#(_g_PrintData + 22)),a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:182: g_PrintData.FontPatterns = patterns;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:204: g_PrintData.FontPatterns = patterns;
 	ld	((_g_PrintData + 28)), bc
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:183: g_PrintData.FontAddr     = g_PrintData.FontPatterns - (firstChr * g_PrintData.PatternY); // pre-compute address of the virtual index 0 character (used to quick drawing in PutChar_GX functions)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:205: g_PrintData.FontAddr     = g_PrintData.FontPatterns - (firstChr * g_PrintData.PatternY); // pre-compute address of the virtual index 0 character (used to quick drawing in PutChar_GX functions)
 	push	bc
 	ld	h, -3 (ix)
 ;	spillPairReg hl
@@ -1049,37 +1049,37 @@ _Print_SetTextFont::
 	ld	hl, #0x0008
 	add	hl, de
 	ex	de, hl
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:175: g_PrintData.PatternX     = patternX;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:197: g_PrintData.PatternX     = patternX;
 	ld	hl, #_g_PrintData
 	ld	(hl), #0x08
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:176: g_PrintData.PatternY     = patternY;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:198: g_PrintData.PatternY     = patternY;
 	ld	hl, #(_g_PrintData + 1)
 	ld	(hl), #0x08
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:177: g_PrintData.UnitX        = sizeX;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:199: g_PrintData.UnitX        = sizeX;
 	ld	hl, #(_g_PrintData + 2)
 	ld	(hl), #0x01
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:178: g_PrintData.UnitY        = sizeY;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:200: g_PrintData.UnitY        = sizeY;
 	ld	hl, #(_g_PrintData + 3)
 	ld	(hl), #0x01
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:179: g_PrintData.CharFirst    = firstChr;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:201: g_PrintData.CharFirst    = firstChr;
 	ld	hl, #(_g_PrintData + 20)
 	ld	(hl), #0x01
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:180: g_PrintData.CharLast     = lastChr;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:202: g_PrintData.CharLast     = lastChr;
 	ld	hl, #(_g_PrintData + 21)
 	ld	(hl), #0xff
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:181: g_PrintData.CharCount    = lastChr - firstChr + 1;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:203: g_PrintData.CharCount    = lastChr - firstChr + 1;
 	ld	hl, #_g_PrintData + 22
 	ld	-4 (ix), l
 	ld	-3 (ix), h
 	ld	(hl), #0xff
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:182: g_PrintData.FontPatterns = patterns;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:204: g_PrintData.FontPatterns = patterns;
 	ld	hl, #_g_PrintData + 28
 	ld	-2 (ix), l
 	ld	-1 (ix), h
 	ld	(hl), e
 	inc	hl
 	ld	(hl), d
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:183: g_PrintData.FontAddr     = g_PrintData.FontPatterns - (firstChr * g_PrintData.PatternY); // pre-compute address of the virtual index 0 character (used to quick drawing in PutChar_GX functions)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:205: g_PrintData.FontAddr     = g_PrintData.FontPatterns - (firstChr * g_PrintData.PatternY); // pre-compute address of the virtual index 0 character (used to quick drawing in PutChar_GX functions)
 	ld	a, (#(_g_PrintData + 1) + 0)
 	ld	l, a
 ;	spillPairReg hl
@@ -1120,25 +1120,25 @@ _Print_SetTextFont::
 	inc	hl
 	inc	hl
 	ld	d, (hl)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:175: g_PrintData.PatternX     = patternX;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:197: g_PrintData.PatternX     = patternX;
 	ld	hl, #_g_PrintData
 	ld	(hl), #0x08
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:176: g_PrintData.PatternY     = patternY;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:198: g_PrintData.PatternY     = patternY;
 	ld	hl, #(_g_PrintData + 1)
 	ld	(hl), #0x08
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:177: g_PrintData.UnitX        = sizeX;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:199: g_PrintData.UnitX        = sizeX;
 	ld	hl, #(_g_PrintData + 2)
 	ld	(hl), #0x01
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:178: g_PrintData.UnitY        = sizeY;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:200: g_PrintData.UnitY        = sizeY;
 	ld	hl, #(_g_PrintData + 3)
 	ld	(hl), #0x01
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:179: g_PrintData.CharFirst    = firstChr;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:201: g_PrintData.CharFirst    = firstChr;
 	ld	hl, #(_g_PrintData + 20)
 	ld	(hl), d
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:180: g_PrintData.CharLast     = lastChr;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:202: g_PrintData.CharLast     = lastChr;
 	ld	hl, #(_g_PrintData + 21)
 	ld	(hl), e
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:181: g_PrintData.CharCount    = lastChr - firstChr + 1;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:203: g_PrintData.CharCount    = lastChr - firstChr + 1;
 	ld	hl, #_g_PrintData + 22
 	ld	-4 (ix), l
 	ld	-3 (ix), h
@@ -1148,7 +1148,7 @@ _Print_SetTextFont::
 	ld	l, -4 (ix)
 	ld	h, -3 (ix)
 	ld	(hl), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:182: g_PrintData.FontPatterns = patterns;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:204: g_PrintData.FontPatterns = patterns;
 	ld	hl, #_g_PrintData + 28
 	ld	-2 (ix), l
 	ld	-1 (ix), h
@@ -1157,7 +1157,7 @@ _Print_SetTextFont::
 	inc	hl
 	ld	a, -5 (ix)
 	ld	(hl), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:183: g_PrintData.FontAddr     = g_PrintData.FontPatterns - (firstChr * g_PrintData.PatternY); // pre-compute address of the virtual index 0 character (used to quick drawing in PutChar_GX functions)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:205: g_PrintData.FontAddr     = g_PrintData.FontPatterns - (firstChr * g_PrintData.PatternY); // pre-compute address of the virtual index 0 character (used to quick drawing in PutChar_GX functions)
 	ld	a, (#(_g_PrintData + 1) + 0)
 	push	bc
 	ld	e, a
@@ -1400,10 +1400,10 @@ _Print_DrawChar::
 	xor	a, a
 	sbc	hl, de
 	jr	NC, 00102$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:409: g_PrintData.CursorX = 0;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:431: g_PrintData.CursorX = 0;
 	xor	a, a
 	ld	(bc), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:410: g_PrintData.CursorY += PRINT_H(g_PrintData.UnitY);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:432: g_PrintData.CursorY += PRINT_H(g_PrintData.UnitY);
 	ld	de, #_g_PrintData + 6
 	ld	a, (de)
 	inc	a
@@ -1462,7 +1462,7 @@ _Print_DrawText::
 	ret	Z
 	sub	a, #0x09
 	jr	NZ, 00105$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:401: g_PrintData.CursorX += PRINT_W(g_PrintData.UnitX) + g_PrintData.TabSize - 1;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:423: g_PrintData.CursorX += PRINT_W(g_PrintData.UnitX) + g_PrintData.TabSize - 1;
 	ld	bc, #_g_PrintData + 5
 	ld	a, (bc)
 	ld	hl, #(_g_PrintData + 4)
@@ -1470,7 +1470,7 @@ _Print_DrawText::
 ;	spillPairReg hl
 	add	a, l
 	ld	(bc), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:402: g_PrintData.CursorX &= ~(g_PrintData.TabSize - 1);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:424: g_PrintData.CursorX &= ~(g_PrintData.TabSize - 1);
 	ld	hl, #(_g_PrintData + 4)
 	ld	l, (hl)
 ;	spillPairReg hl
@@ -1491,10 +1491,10 @@ _Print_DrawText::
 	ld	a, c
 	sub	a, #0x0a
 	jr	NZ, 00102$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:409: g_PrintData.CursorX = 0;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:431: g_PrintData.CursorX = 0;
 	ld	hl, #(_g_PrintData + 5)
 	ld	(hl), #0x00
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:410: g_PrintData.CursorY += PRINT_H(g_PrintData.UnitY);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:432: g_PrintData.CursorY += PRINT_H(g_PrintData.UnitY);
 	ld	bc, #_g_PrintData + 6
 	ld	a, (bc)
 	inc	a
@@ -2680,7 +2680,7 @@ _Print_DrawFormat::
 	ld	a, -1 (ix)
 	sub	a, #0x09
 	jr	NZ, 00189$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:401: g_PrintData.CursorX += PRINT_W(g_PrintData.UnitX) + g_PrintData.TabSize - 1;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:423: g_PrintData.CursorX += PRINT_W(g_PrintData.UnitX) + g_PrintData.TabSize - 1;
 	ld	bc, #_g_PrintData + 5
 	ld	a, (bc)
 	ld	hl, #(_g_PrintData + 4)
@@ -2688,7 +2688,7 @@ _Print_DrawFormat::
 	add	a, e
 	ld	e, a
 	ld	(bc), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:402: g_PrintData.CursorX &= ~(g_PrintData.TabSize - 1);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:424: g_PrintData.CursorX &= ~(g_PrintData.TabSize - 1);
 	ld	a, (#(_g_PrintData + 4) + 0)
 	dec	a
 	cpl
@@ -2701,10 +2701,10 @@ _Print_DrawFormat::
 	ld	a, -1 (ix)
 	sub	a, #0x0a
 	jr	NZ, 00186$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:409: g_PrintData.CursorX = 0;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:431: g_PrintData.CursorX = 0;
 	ld	hl, #(_g_PrintData + 5)
 	ld	(hl), #0x00
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:410: g_PrintData.CursorY += PRINT_H(g_PrintData.UnitY);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:432: g_PrintData.CursorY += PRINT_H(g_PrintData.UnitY);
 	ld	bc, #_g_PrintData + 6
 	ld	a, (bc)
 	inc	a
@@ -2716,7 +2716,7 @@ _Print_DrawFormat::
 	ld	a, -1 (ix)
 	sub	a, #0x20
 	jr	NZ, 00183$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:394: g_PrintData.CursorX += PRINT_W(g_PrintData.UnitX);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:416: g_PrintData.CursorX += PRINT_W(g_PrintData.UnitX);
 	ld	bc, #_g_PrintData + 5
 	ld	a, (bc)
 	inc	a
@@ -2749,10 +2749,10 @@ _Print_DrawLineH::
 	add	ix,sp
 	ld	b, a
 	ld	c, l
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:204: g_PrintData.CursorX = x;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:226: g_PrintData.CursorX = x;
 	ld	hl, #(_g_PrintData + 5)
 	ld	(hl), b
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:205: g_PrintData.CursorY = y;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:227: g_PrintData.CursorY = y;
 	ld	hl, #(_g_PrintData + 6)
 	ld	(hl), c
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1443: Print_DrawCharX(0x17, len);
@@ -2787,10 +2787,10 @@ _Print_DrawLineV::
 	ld	a, -1 (ix)
 	add	a, b
 	ld	e, a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:204: g_PrintData.CursorX = x;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:226: g_PrintData.CursorX = x;
 	ld	hl, #(_g_PrintData + 5)
 	ld	(hl), c
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:205: g_PrintData.CursorY = y;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:227: g_PrintData.CursorY = y;
 	ld	hl, #(_g_PrintData + 6)
 	ld	(hl), e
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1453: Print_DrawChar(0x16);
@@ -2819,10 +2819,10 @@ _Print_DrawBox::
 	dec	sp
 	ld	d, a
 	ld	e, l
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:204: g_PrintData.CursorX = x;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:226: g_PrintData.CursorX = x;
 	ld	hl, #(_g_PrintData + 5)
 	ld	(hl), d
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:205: g_PrintData.CursorY = y;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:227: g_PrintData.CursorY = y;
 	ld	hl, #(_g_PrintData + 6)
 	ld	(hl), e
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1463: Print_DrawChar(0x18);
@@ -2835,9 +2835,9 @@ _Print_DrawBox::
 	add	a, 4 (ix)
 	dec	a
 	ld	c, a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:204: g_PrintData.CursorX = x;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:226: g_PrintData.CursorX = x;
 	ld	(#(_g_PrintData + 5)),a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:205: g_PrintData.CursorY = y;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:227: g_PrintData.CursorY = y;
 	ld	hl, #(_g_PrintData + 6)
 	ld	(hl), e
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1465: Print_DrawChar(0x19);
@@ -2852,10 +2852,10 @@ _Print_DrawBox::
 	add	a, 5 (ix)
 	dec	a
 	ld	b, a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:204: g_PrintData.CursorX = x;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:226: g_PrintData.CursorX = x;
 	ld	hl, #(_g_PrintData + 5)
 	ld	(hl), d
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:205: g_PrintData.CursorY = y;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:227: g_PrintData.CursorY = y;
 	ld	(#(_g_PrintData + 6)),a
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1467: Print_DrawChar(0x1A);
 	push	bc
@@ -2864,10 +2864,10 @@ _Print_DrawBox::
 	call	_Print_DrawChar
 	pop	de
 	pop	bc
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:204: g_PrintData.CursorX = x;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:226: g_PrintData.CursorX = x;
 	ld	hl, #(_g_PrintData + 5)
 	ld	(hl), c
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:205: g_PrintData.CursorY = y;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:227: g_PrintData.CursorY = y;
 	ld	hl, #(_g_PrintData + 6)
 	ld	(hl), b
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1469: Print_DrawChar(0x1B);

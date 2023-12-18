@@ -1,3 +1,7 @@
+//=============================================================================
+// DEFINES
+//=============================================================================
+
 #define COMPRESSO             1
 
 #define EMPTY_ITEM 		  	  0
@@ -185,23 +189,32 @@
 
 #define TILE_MASK_CRUCIFIX  179
 
-#define MAX_ENEMY             3
-#define MAX_GHOST             3
-#define MAX_SPIDER            3
-#define MAX_BAT               3
-#define MAX_SLIDING_PLATFORM  3
-#define MAX_ITEM_INVENTORY    5
-#define MAX_LIVES             3
-#define IMMUNITY              3
-#define LAST_LEVEL           13
-#define START_GAME            0
-#define GAME_OVER            14
-
+#define MAX_ENEMY                3
+#define MAX_GHOST                3
+#define MAX_SPIDER               3
+#define MAX_BAT                  3
+#define MAX_SLIDING_PLATFORM     3
+#define MAX_ITEM_INVENTORY       5
+#define MAX_LIVES                3
+#define IMMUNITY                 3
+#define LAST_LEVEL              15  // Ultimo livello di gioco
+#define START_GAME               0  // Livello di inizio gico
+#define GAME_OVER               LAST_LEVEL + 1  // Livello di game over
+#define OFFSET_TILE_COLLISION   50
+#define MIN_DISTANCE_MAGNENT   100
+#define MAX_DISTANCE_MAGNENT  1000
+#define DELAY_CATCH_ENEMY        1
+#define MAX_CACHE_OBJECT         5
 
 #define FRAME_1             128
 #define FRAME_4             512
 #define FRAME_9            1024
 
+#define FORCE 15
+#define GRAVITY 1
+#define GROUND 192
+#define JOY_PORT_1 0b00000011
+#define JOY_PORT_2 0b01001100
 
 // ----------------  PLAYER
 
@@ -212,7 +225,6 @@
 #define MOVE_PLAYER_FRAME_3 3*16
 #define MOVE_PLAYER_FRAME_4 4*16
 #define MOVE_PLAYER_FRAME_5 5*16
-
 #define MOVE_PLAYER_FRAME_7 7*16
 
 // DEFINIZIONE DEI FRAME PER FALL DEL PLAYER
@@ -231,78 +243,140 @@
 #define IDLE_ENEMY_FRAME_12 5*16+7*16
 #define IDLE_ENEMY_FRAME_11 4*16+7*16
 
-// DEFINIZIONE DEI FRAME PER IL MOVIMENTO DEL ENEMY
-/* #define MOVE_ENEMY_FRAME_7  0*16+7*16
-#define MOVE_ENEMY_FRAME_8  1*16+7*16
-#define MOVE_ENEMY_FRAME_9  2*16+7*16
-#define MOVE_ENEMY_FRAME_10  3*16+7*16 */
-
 // TODO: Questo è solo un esempio, deve essere cambiato
 #define IDLE_ENEMY_FRAME_12  5*16+7*16
 #define IDLE_ENEMY_FRAME_11  4*16+7*16
 
 // DEFINIZIONE DEI FRAME PER FALL DEL ENEMY
 #define FALL_ENEMY_FRAME_11  4*16+7*16
-
-
 #define JUMP_ENEMY_FRAME_11 4*16+7*16
 
-#include "data/level/level000.h"
-#define LEVEL000_WIDTH 32
-#define LEVEL000_HEIGHT 24
 
-extern unsigned char g_Level001[];
+// DEFINIZIONE DIMENSIONI LIVELLI DI GIOCO
+
 #define LEVEL001_WIDTH 32
 #define LEVEL001_HEIGHT 24
-
-extern unsigned char g_Level002[];
 #define LEVEL002_WIDTH 32
 #define LEVEL002_HEIGHT 24
-
-extern unsigned char g_Level003[];
 #define LEVEL003_WIDTH 32
 #define LEVEL003_HEIGHT 24
-
-extern unsigned char g_Level004[];
 #define LEVEL004_WIDTH 32
 #define LEVEL004_HEIGHT 24
-
-extern unsigned char g_Level006[];
+#define LEVEL005_WIDTH 32
+#define LEVEL005_HEIGHT 24
 #define LEVEL006_WIDTH 32
 #define LEVEL006_HEIGHT 24
-
-extern unsigned char g_Level007[];
 #define LEVEL007_WIDTH 32
 #define LEVEL007_HEIGHT 24
-
-extern unsigned char g_Level008[];
 #define LEVEL008_WIDTH 32
 #define LEVEL008_HEIGHT 24
-
-#include "data/level/level009.h"
 #define LEVEL009_WIDTH 32
 #define LEVEL009_HEIGHT 24
-
-extern unsigned char g_Level010[];
 #define LEVEL010_WIDTH 32
 #define LEVEL010_HEIGHT 24
-
-extern unsigned char g_Level011[];
 #define LEVEL011_WIDTH 32
 #define LEVEL011_HEIGHT 24
-
-#include "data/level/level012.h"
 #define LEVEL012_WIDTH 32
 #define LEVEL012_HEIGHT 24
-
-extern unsigned char g_Level013[];
 #define LEVEL013_WIDTH 32
 #define LEVEL013_HEIGHT 24
-
-extern unsigned char g_Level014[];
 #define LEVEL014_WIDTH 32
-#define LEVEL014_HEIGHT 16
+#define LEVEL014_HEIGHT 24
+#define LEVEL015_WIDTH 32
+#define LEVEL015_HEIGHT 24
 
-#include "data/level/level029.h"
 #define LEVEL029_WIDTH 32
 #define LEVEL029_HEIGHT 24
+#define LEVEL030_WIDTH 32
+#define LEVEL030_HEIGHT 24
+
+
+//=============================================================================
+// PROTOTIPI DELLE FUNZIONI
+//=============================================================================
+bool State_Initialize();
+bool State_Game();
+bool State_Pause();
+bool State_GameOver();
+bool State_Preset();
+u8 getTile(u8 x, u8 y);
+void setTile(u8 x, u8 y, u8 tile);
+void setTileByTileCoord(u8 x, u8 y, u8 tile);
+bool physicsCollision(u8 tile);
+void setColorTiles();
+bool interact(u8 x, u8 y);
+void drawLevel(u8 levelIdx);
+void initCharacter(struct Character *ply, u8 id);
+void updateCharacter(struct Character *ply);
+bool isMoveRight(u8 row8);
+bool isMoveLeft(u8 row8);
+bool isMoveJump(u8 row8);
+bool isInteractObject(u8 row8);
+bool physicsCollisionEnemy(u8 x, u8 y);
+void readInputControl();
+bool getMoney(u8 x, u8 y);
+void updateScore();
+void initInventory();
+bool addItemToInventory(u8 item);
+bool hasItemInInventory(u8 item);
+bool removeItemFromInventory(u8 item);
+void displayItemToInventory();
+void initLife();
+bool addLife();
+void displayLife();
+bool removeLife();
+bool hasLives();
+void physicsCollisionPlayerAndEnemy(struct Character *ply);
+void changeLevel(u8 x, u8 y, u8 key, u8 door);
+bool isUnderTheWater(u8 x, u8 y);
+void genericControl();
+bool collisionCheck(i8 dx, i8 dy);
+void inizializePT3();
+void inizializeAYFX();
+void PlayBankSFX(u8 id, u8 prio);
+void ChannelSFX(u8 chan);
+void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct CharacterEnemy *genericEnemy, u8 enemyNumber);
+void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 idFirstSprite);
+void restoreLevel();
+void hideSprite(u8 count, u8 maxElement, u8 baseSprite);
+void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape);
+void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 enemyCount, char *type);
+void VDP_LoadPattern_GM1_Pletter(const u8 *src, u8 offset);
+void restorePT3Music();
+void pausePT3Music();
+u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, u8 idxSprite, u8 bo, u8 riga, u8 colonna, u8 levelIdx);
+bool isDanger(u8 x, u8 y, u8 t);
+u8 isUnderDunger(u8 x, u8 y);
+void stopMusicPlayback();
+void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask);
+void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 enemyNumber);
+
+//=============================================================================
+// MEMORY DATA EXTERN
+//=============================================================================
+/* extern unsigned char g_Level000[]; */
+extern unsigned char g_Level001[];
+extern unsigned char g_Level002[];
+extern unsigned char g_Level003[];
+extern unsigned char g_Level004[];
+extern unsigned char g_Level005[];
+extern unsigned char g_Level006[];
+extern unsigned char g_Level007[];
+extern unsigned char g_Level008[];
+extern unsigned char g_Level009[];
+extern unsigned char g_Level010[];
+extern unsigned char g_Level011[];
+extern unsigned char g_Level012[];
+extern unsigned char g_Level013[];
+extern unsigned char g_Level014[];
+extern unsigned char g_Level015[];
+extern unsigned char g_Level029[];
+extern unsigned char g_Level030[];
+/* extern unsigned char g_Level013[];
+extern unsigned char g_Level014[];
+extern unsigned char g_Level029[]; */
+
+extern const unsigned char g_DataSprtLayer[];
+extern const unsigned char g_DataMusic[];
+extern const unsigned char g_ayfx_bank[];
+extern const unsigned char g_DataBackground_Patterns[];

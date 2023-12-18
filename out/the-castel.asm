@@ -8,10 +8,10 @@
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
-	.globl _g_DataMusic
 	.globl _main
 	.globl _physicsEventPlayer
 	.globl _Pletter_UnpackToVRAM
+	.globl _Pletter_UnpackToRAM
 	.globl _ayFX_Update
 	.globl _ayFX_Mute
 	.globl _ayFX_PlayBank
@@ -51,8 +51,14 @@
 	.globl _Keyboard_Read
 	.globl _Joystick_Read
 	.globl _Mem_Set
+	.globl _g_CountItem
+	.globl _g_Levels
+	.globl _g_CacheLevel
 	.globl _g_Lives
 	.globl _g_Inventory
+	.globl _isCatch
+	.globl _g_DelayCatchEnemy
+	.globl _g_CatchEnemy
 	.globl _g_IsDanger
 	.globl _IsUnderWater
 	.globl _g_DelayRemoveLife
@@ -69,15 +75,12 @@
 	.globl _g_PrevDirection
 	.globl _g_PawnCount
 	.globl _g_PrevRow8
-	.globl _g_Level029
-	.globl _g_Level012
-	.globl _g_Level009
-	.globl _g_Level000
 	.globl _g_Bat
 	.globl _g_Spider
 	.globl _g_Ghost
 	.globl _g_Enemy
 	.globl _g_Player
+	.globl _g_LevelUncompress
 	.globl _g_SLTSL
 	.globl _g_GRPACY
 	.globl _g_GRPACX
@@ -117,7 +120,6 @@
 	.globl _g_LINLEN
 	.globl _g_LINL32
 	.globl _g_LINL40
-	.globl _g_Levels
 	.globl _g_PlayerAnimActions
 	.globl _g_PlayerFramesFall
 	.globl _g_PlayerFramesJump
@@ -125,10 +127,6 @@
 	.globl _g_PlayerFramesMove
 	.globl _g_PlayerFramesIdle
 	.globl _g_PlayerSpriteLayers
-	.globl _g_DataSprtLayer
-	.globl _g_ayfx_bank
-	.globl _g_DataBackground_Colors
-	.globl _g_DataBackground_Patterns
 	.globl _PT3_NT2
 	.globl _g_BDOS
 	.globl _g_MASTER
@@ -311,16 +309,17 @@
 	.globl _physicsCollisionEnemy
 	.globl _physicsCollisionPlayerAndGenericEnemy
 	.globl _collisionCheck
+	.globl _pursuitCheck
 	.globl _isUnderTheWater
 	.globl _isUnderDunger
 	.globl _setColorTiles
+	.globl _foo
 	.globl _interact
 	.globl _replaceAndRemoveItem
 	.globl _changeLevel
 	.globl _getMoney
 	.globl _isDanger
 	.globl _updateScore
-	.globl _replacementItemInLevel
 	.globl _drawLevel
 	.globl _positionGenericEnemy
 	.globl _spritePosition
@@ -348,7 +347,6 @@
 	.globl _restorePT3Music
 	.globl _stopMusicPlayback
 	.globl _restoreLevel
-	.globl _adjustLevel
 	.globl _VDP_LoadPattern_GM1_Pletter
 ;--------------------------------------------------------
 ; special function registers
@@ -420,6 +418,8 @@ _g_LOGOPR	=	0xfb02
 _g_GRPACX	=	0xfcb7
 _g_GRPACY	=	0xfcb9
 _g_SLTSL	=	0xffff
+_g_LevelUncompress::
+	.ds 768
 _g_Player::
 	.ds 28
 _g_Enemy::
@@ -434,14 +434,6 @@ _g_Bat::
 ; ram data
 ;--------------------------------------------------------
 	.area _INITIALIZED
-_g_Level000::
-	.ds 768
-_g_Level009::
-	.ds 768
-_g_Level012::
-	.ds 768
-_g_Level029::
-	.ds 768
 _g_PrevRow8::
 	.ds 1
 _g_PawnCount::
@@ -474,10 +466,22 @@ _IsUnderWater::
 	.ds 1
 _g_IsDanger::
 	.ds 1
+_g_CatchEnemy::
+	.ds 1
+_g_DelayCatchEnemy::
+	.ds 1
+_isCatch::
+	.ds 1
 _g_Inventory::
 	.ds 5
 _g_Lives::
 	.ds 3
+_g_CacheLevel::
+	.ds 6
+_g_Levels::
+	.ds 918
+_g_CountItem::
+	.ds 1
 ;--------------------------------------------------------
 ; absolute external ram data
 ;--------------------------------------------------------
@@ -498,21 +502,21 @@ _g_Lives::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;./the-castel.c:299: void initLife()
+;./the-castel.c:271: void initLife()
 ;	---------------------------------
 ; Function initLife
 ; ---------------------------------
 _initLife::
-;./the-castel.c:301: g_Player.Life = MAX_LIVES;
+;./the-castel.c:273: g_Player.Life = MAX_LIVES;
 	ld	hl, #(_g_Player + 7)
 	ld	(hl), #0x03
-;./the-castel.c:303: Mem_Set(TILE_HEART, g_Lives, (3 * sizeof(g_Lives[0])));
+;./the-castel.c:275: Mem_Set(TILE_HEART, g_Lives, (3 * sizeof(g_Lives[0])));
 	ld	hl, #0x0003
 	push	hl
 	ld	de, #_g_Lives
 	ld	a, #0x4f
 	call	_Mem_Set
-;./the-castel.c:304: }
+;./the-castel.c:276: }
 	ret
 _g_RDPRIM	=	0xf380
 _g_WRPRIM	=	0xf385
@@ -775,1915 +779,6 @@ _PT3_NT2:
 	.dw #0x000f
 	.dw #0x000e
 	.dw #0x000d
-_g_DataBackground_Patterns:
-	.db #0x5f	; 95
-	.db #0x00	; 0
-	.db #0xff	; 255
-	.db #0xe3	; 227
-	.db #0x00	; 0
-	.db #0xff	; 255
-	.db #0xc0	; 192
-	.db #0x00	; 0
-	.db #0xae	; 174
-	.db #0xa0	; 160
-	.db #0xbe	; 190
-	.db #0xbf	; 191
-	.db #0xed	; 237
-	.db #0x00	; 0
-	.db #0xfe	; 254
-	.db #0x07	; 7
-	.db #0x06	; 6
-	.db #0x07	; 7
-	.db #0x08	; 8
-	.db #0x17	; 23
-	.db #0x2f	; 47
-	.db #0x5f	; 95
-	.db #0x01	; 1
-	.db #0x07	; 7
-	.db #0xe0	; 224
-	.db #0x10	; 16
-	.db #0xe8	; 232
-	.db #0xf4	; 244
-	.db #0xfa	; 250
-	.db #0xfd	; 253
-	.db #0x7d	; 125
-	.db #0x00	; 0
-	.db #0x17	; 23
-	.db #0x71	; 113	'q'
-	.db #0x0a	; 10
-	.db #0x00	; 0
-	.db #0x05	; 5
-	.db #0xfd	; 253
-	.db #0xd0	; 208
-	.db #0x0c	; 12
-	.db #0x00	; 0
-	.db #0xa0	; 160
-	.db #0xaf	; 175
-	.db #0x3d	; 61
-	.db #0xad	; 173
-	.db #0x00	; 0
-	.db #0x11	; 17
-	.db #0xc0	; 192
-	.db #0x1f	; 31
-	.db #0x00	; 0
-	.db #0x6c	; 108	'l'
-	.db #0x92	; 146
-	.db #0x82	; 130
-	.db #0x0f	; 15
-	.db #0x82	; 130
-	.db #0x44	; 68	'D'
-	.db #0x28	; 40
-	.db #0x10	; 16
-	.db #0xb5	; 181
-	.db #0x7f	; 127
-	.db #0xfe	; 254
-	.db #0xd7	; 215
-	.db #0x00	; 0
-	.db #0x01	; 1
-	.db #0x06	; 6
-	.db #0x0c	; 12
-	.db #0x18	; 24
-	.db #0x10	; 16
-	.db #0xc0	; 192
-	.db #0x00	; 0
-	.db #0x80	; 128
-	.db #0x60	; 96
-	.db #0x30	; 48	'0'
-	.db #0x18	; 24
-	.db #0x67	; 103	'g'
-	.db #0x08	; 8
-	.db #0x00	; 0
-	.db #0x47	; 71	'G'
-	.db #0x0b	; 11
-	.db #0x00	; 0
-	.db #0x1f	; 31
-	.db #0x00	; 0
-	.db #0x41	; 65	'A'
-	.db #0x0b	; 11
-	.db #0x00	; 0
-	.db #0xf8	; 248
-	.db #0x00	; 0
-	.db #0x3c	; 60
-	.db #0x18	; 24
-	.db #0x26	; 38
-	.db #0x00	; 0
-	.db #0x7e	; 126
-	.db #0x76	; 118	'v'
-	.db #0x7e	; 126
-	.db #0x82	; 130
-	.db #0x24	; 36
-	.db #0x38	; 56	'8'
-	.db #0x28	; 40
-	.db #0x38	; 56	'8'
-	.db #0x07	; 7
-	.db #0xb9	; 185
-	.db #0x09	; 9
-	.db #0x07	; 7
-	.db #0x1c	; 28
-	.db #0x6c	; 108	'l'
-	.db #0x16	; 22
-	.db #0x0f	; 15
-	.db #0x3c	; 60
-	.db #0xeb	; 235
-	.db #0x1d	; 29
-	.db #0x25	; 37
-	.db #0x58	; 88	'X'
-	.db #0xa7	; 167
-	.db #0xa4	; 164
-	.db #0xbb	; 187
-	.db #0x02	; 2
-	.db #0xdd	; 221
-	.db #0x02	; 2
-	.db #0x10	; 16
-	.db #0xf1	; 241
-	.db #0x48	; 72	'H'
-	.db #0x08	; 8
-	.db #0xe6	; 230
-	.db #0x48	; 72	'H'
-	.db #0x3a	; 58
-	.db #0x0b	; 11
-	.db #0x7c	; 124
-	.db #0x10	; 16
-	.db #0x70	; 112	'p'
-	.db #0x04	; 4
-	.db #0x03	; 3
-	.db #0x7f	; 127
-	.db #0x7f	; 127
-	.db #0x03	; 3
-	.db #0x01	; 1
-	.db #0x28	; 40
-	.db #0x80	; 128
-	.db #0x03	; 3
-	.db #0xc0	; 192
-	.db #0xfe	; 254
-	.db #0xfe	; 254
-	.db #0xc0	; 192
-	.db #0x80	; 128
-	.db #0x00	; 0
-	.db #0x3a	; 58
-	.db #0x3a	; 58
-	.db #0x00	; 0
-	.db #0x0f	; 15
-	.db #0xd2	; 210
-	.db #0x06	; 6
-	.db #0x4c	; 76	'L'
-	.db #0xfd	; 253
-	.db #0x51	; 81	'Q'
-	.db #0xd7	; 215
-	.db #0x14	; 20
-	.db #0x81	; 129
-	.db #0xbf	; 191
-	.db #0x01	; 1
-	.db #0x02	; 2
-	.db #0xff	; 255
-	.db #0xd9	; 217
-	.db #0x07	; 7
-	.db #0xbf	; 191
-	.db #0x01	; 1
-	.db #0x07	; 7
-	.db #0xc3	; 195
-	.db #0x87	; 135
-	.db #0x8f	; 143
-	.db #0x8f	; 143
-	.db #0x87	; 135
-	.db #0xc3	; 195
-	.db #0x01	; 1
-	.db #0x06	; 6
-	.db #0xb9	; 185
-	.db #0xa1	; 161
-	.db #0x81	; 129
-	.db #0xc3	; 195
-	.db #0xe7	; 231
-	.db #0xff	; 255
-	.db #0x01	; 1
-	.db #0x01	; 1
-	.db #0x83	; 131
-	.db #0x81	; 129
-	.db #0x99	; 153
-	.db #0x83	; 131
-	.db #0x9f	; 159
-	.db #0x9f	; 159
-	.db #0xa8	; 168
-	.db #0xf7	; 247
-	.db #0x74	; 116	't'
-	.db #0x0f	; 15
-	.db #0x1f	; 31
-	.db #0x97	; 151
-	.db #0x9b	; 155
-	.db #0xff	; 255
-	.db #0x7a	; 122	'z'
-	.db #0x00	; 0
-	.db #0xfc	; 252
-	.db #0xf7	; 247
-	.db #0xf5	; 245
-	.db #0x1a	; 26
-	.db #0x6f	; 111	'o'
-	.db #0xfb	; 251
-	.db #0x4d	; 77	'M'
-	.db #0x00	; 0
-	.db #0x18	; 24
-	.db #0x7f	; 127
-	.db #0x26	; 38
-	.db #0x00	; 0
-	.db #0x07	; 7
-	.db #0xfe	; 254
-	.db #0x96	; 150
-	.db #0x00	; 0
-	.db #0x07	; 7
-	.db #0xcf	; 207
-	.db #0xc0	; 192
-	.db #0xed	; 237
-	.db #0x30	; 48	'0'
-	.db #0x6d	; 109	'm'
-	.db #0x1f	; 31
-	.db #0x9c	; 156
-	.db #0xe0	; 224
-	.db #0x07	; 7
-	.db #0xf7	; 247
-	.db #0xd2	; 210
-	.db #0x00	; 0
-	.db #0x07	; 7
-	.db #0x69	; 105	'i'
-	.db #0xef	; 239
-	.db #0x00	; 0
-	.db #0x34	; 52	'4'
-	.db #0x07	; 7
-	.db #0xdf	; 223
-	.db #0x00	; 0
-	.db #0xf5	; 245
-	.db #0xd6	; 214
-	.db #0x9f	; 159
-	.db #0xc0	; 192
-	.db #0xc9	; 201
-	.db #0xc9	; 201
-	.db #0xc1	; 193
-	.db #0x80	; 128
-	.db #0x94	; 148
-	.db #0x42	; 66	'B'
-	.db #0x94	; 148
-	.db #0xf9	; 249
-	.db #0xd3	; 211
-	.db #0x61	; 97	'a'
-	.db #0x8f	; 143
-	.db #0xe3	; 227
-	.db #0x02	; 2
-	.db #0x06	; 6
-	.db #0x01	; 1
-	.db #0x07	; 7
-	.db #0x72	; 114	'r'
-	.db #0x22	; 34
-	.db #0x06	; 6
-	.db #0x06	; 6
-	.db #0x22	; 34
-	.db #0x72	; 114	'r'
-	.db #0x01	; 1
-	.db #0x07	; 7
-	.db #0x01	; 1
-	.db #0x69	; 105	'i'
-	.db #0x89	; 137
-	.db #0xa9	; 169
-	.db #0x6d	; 109	'm'
-	.db #0x01	; 1
-	.db #0xae	; 174
-	.db #0xa2	; 162
-	.db #0xa7	; 167
-	.db #0x69	; 105	'i'
-	.db #0x20	; 32
-	.db #0x00	; 0
-	.db #0x0d	; 13
-	.db #0x06	; 6
-	.db #0x24	; 36
-	.db #0x24	; 36
-	.db #0x48	; 72	'H'
-	.db #0x0b	; 11
-	.db #0x0f	; 15
-	.db #0x24	; 36
-	.db #0x7e	; 126
-	.db #0x09	; 9
-	.db #0x15	; 21
-	.db #0x03	; 3
-	.db #0x00	; 0
-	.db #0x8b	; 139
-	.db #0x00	; 0
-	.db #0x50	; 80	'P'
-	.db #0x38	; 56	'8'
-	.db #0x14	; 20
-	.db #0x54	; 84	'T'
-	.db #0x38	; 56	'8'
-	.db #0x10	; 16
-	.db #0x64	; 100	'd'
-	.db #0x68	; 104	'h'
-	.db #0xa8	; 168
-	.db #0xc2	; 194
-	.db #0x20	; 32
-	.db #0x2c	; 44
-	.db #0x4c	; 76	'L'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x30	; 48	'0'
-	.db #0x48	; 72	'H'
-	.db #0x48	; 72	'H'
-	.db #0x30	; 48	'0'
-	.db #0x54	; 84	'T'
-	.db #0x48	; 72	'H'
-	.db #0x34	; 52	'4'
-	.db #0xad	; 173
-	.db #0x17	; 23
-	.db #0x0d	; 13
-	.db #0x3c	; 60
-	.db #0x27	; 39
-	.db #0xd8	; 216
-	.db #0xb6	; 182
-	.db #0x06	; 6
-	.db #0xd5	; 213
-	.db #0x8f	; 143
-	.db #0x10	; 16
-	.db #0x59	; 89	'Y'
-	.db #0x11	; 17
-	.db #0xd3	; 211
-	.db #0x28	; 40
-	.db #0xda	; 218
-	.db #0x18	; 24
-	.db #0x5f	; 95
-	.db #0x97	; 151
-	.db #0x36	; 54	'6'
-	.db #0x5c	; 92
-	.db #0x2c	; 44
-	.db #0x6e	; 110	'n'
-	.db #0x7c	; 124
-	.db #0x19	; 25
-	.db #0x6d	; 109	'm'
-	.db #0x00	; 0
-	.db #0x04	; 4
-	.db #0x2b	; 43
-	.db #0x00	; 0
-	.db #0x6f	; 111	'o'
-	.db #0x40	; 64
-	.db #0x00	; 0
-	.db #0x38	; 56	'8'
-	.db #0x44	; 68	'D'
-	.db #0x4c	; 76	'L'
-	.db #0x54	; 84	'T'
-	.db #0x64	; 100	'd'
-	.db #0x23	; 35
-	.db #0x44	; 68	'D'
-	.db #0x38	; 56	'8'
-	.db #0x22	; 34
-	.db #0x30	; 48	'0'
-	.db #0x50	; 80	'P'
-	.db #0xae	; 174
-	.db #0xca	; 202
-	.db #0x16	; 22
-	.db #0x0f	; 15
-	.db #0x04	; 4
-	.db #0x18	; 24
-	.db #0x16	; 22
-	.db #0xce	; 206
-	.db #0x07	; 7
-	.db #0x04	; 4
-	.db #0x17	; 23
-	.db #0x19	; 25
-	.db #0x20	; 32
-	.db #0x48	; 72	'H'
-	.db #0x7c	; 124
-	.db #0x57	; 87	'W'
-	.db #0x0e	; 14
-	.db #0x3c	; 60
-	.db #0x40	; 64
-	.db #0x78	; 120	'x'
-	.db #0x04	; 4
-	.db #0x0f	; 15
-	.db #0xa5	; 165
-	.db #0x17	; 23
-	.db #0x08	; 8
-	.db #0x44	; 68	'D'
-	.db #0x07	; 7
-	.db #0x75	; 117	'u'
-	.db #0x0f	; 15
-	.db #0x40	; 64
-	.db #0x60	; 96
-	.db #0x5d	; 93
-	.db #0x0f	; 15
-	.db #0x0c	; 12
-	.db #0x02	; 2
-	.db #0xce	; 206
-	.db #0x07	; 7
-	.db #0x3c	; 60
-	.db #0x1f	; 31
-	.db #0xee	; 238
-	.db #0x5b	; 91
-	.db #0x02	; 2
-	.db #0xda	; 218
-	.db #0x07	; 7
-	.db #0x49	; 73	'I'
-	.db #0xa8	; 168
-	.db #0x26	; 38
-	.db #0x41	; 65	'A'
-	.db #0x9b	; 155
-	.db #0x34	; 52	'4'
-	.db #0x04	; 4
-	.db #0x7e	; 126
-	.db #0xe1	; 225
-	.db #0x80	; 128
-	.db #0xd9	; 217
-	.db #0x0c	; 12
-	.db #0x12	; 18
-	.db #0xd5	; 213
-	.db #0x5f	; 95
-	.db #0x06	; 6
-	.db #0x5d	; 93
-	.db #0xc3	; 195
-	.db #0x07	; 7
-	.db #0x34	; 52	'4'
-	.db #0x54	; 84	'T'
-	.db #0x54	; 84	'T'
-	.db #0x42	; 66	'B'
-	.db #0x3f	; 63
-	.db #0x7c	; 124
-	.db #0x44	; 68	'D'
-	.db #0x00	; 0
-	.db #0x67	; 103	'g'
-	.db #0x00	; 0
-	.db #0x5c	; 92
-	.db #0x75	; 117	'u'
-	.db #0x02	; 2
-	.db #0x67	; 103	'g'
-	.db #0x00	; 0
-	.db #0x86	; 134
-	.db #0x4f	; 79	'O'
-	.db #0x70	; 112	'p'
-	.db #0x48	; 72	'H'
-	.db #0x14	; 20
-	.db #0x15	; 21
-	.db #0x48	; 72	'H'
-	.db #0x70	; 112	'p'
-	.db #0x7f	; 127
-	.db #0x0d	; 13
-	.db #0x70	; 112	'p'
-	.db #0x9e	; 158
-	.db #0x02	; 2
-	.db #0x7c	; 124
-	.db #0x60	; 96
-	.db #0x07	; 7
-	.db #0xb7	; 183
-	.db #0x9c	; 156
-	.db #0x03	; 3
-	.db #0x4c	; 76	'L'
-	.db #0x77	; 119	'w'
-	.db #0x44	; 68	'D'
-	.db #0xf2	; 242
-	.db #0x37	; 55	'7'
-	.db #0xa1	; 161
-	.db #0x3a	; 58
-	.db #0x7b	; 123
-	.db #0xc8	; 200
-	.db #0xd7	; 215
-	.db #0xf1	; 241
-	.db #0x85	; 133
-	.db #0x8a	; 138
-	.db #0xa2	; 162
-	.db #0x00	; 0
-	.db #0x33	; 51	'3'
-	.db #0x09	; 9
-	.db #0x50	; 80	'P'
-	.db #0x60	; 96
-	.db #0x50	; 80	'P'
-	.db #0x48	; 72	'H'
-	.db #0x17	; 23
-	.db #0x40	; 64
-	.db #0xd4	; 212
-	.db #0x00	; 0
-	.db #0x37	; 55	'7'
-	.db #0x0f	; 15
-	.db #0x6c	; 108	'l'
-	.db #0x38	; 56	'8'
-	.db #0x54	; 84	'T'
-	.db #0x44	; 68	'D'
-	.db #0x27	; 39
-	.db #0x44	; 68	'D'
-	.db #0x64	; 100	'd'
-	.db #0x17	; 23
-	.db #0x64	; 100	'd'
-	.db #0x54	; 84	'T'
-	.db #0x4c	; 76	'L'
-	.db #0x39	; 57	'9'
-	.db #0x1c	; 28
-	.db #0xc7	; 199
-	.db #0x00	; 0
-	.db #0xbb	; 187
-	.db #0x27	; 39
-	.db #0x6c	; 108	'l'
-	.db #0x4c	; 76	'L'
-	.db #0x4f	; 79	'O'
-	.db #0x1c	; 28
-	.db #0xe3	; 227
-	.db #0xd7	; 215
-	.db #0xb3	; 179
-	.db #0x7f	; 127
-	.db #0x44	; 68	'D'
-	.db #0x9c	; 156
-	.db #0x7f	; 127
-	.db #0x38	; 56	'8'
-	.db #0xcf	; 207
-	.db #0x3b	; 59
-	.db #0xdc	; 220
-	.db #0xf0	; 240
-	.db #0xe7	; 231
-	.db #0xef	; 239
-	.db #0x3c	; 60
-	.db #0x06	; 6
-	.db #0x6f	; 111	'o'
-	.db #0x44	; 68	'D'
-	.db #0x28	; 40
-	.db #0x28	; 40
-	.db #0xd0	; 208
-	.db #0x0f	; 15
-	.db #0xb7	; 183
-	.db #0x66	; 102	'f'
-	.db #0x28	; 40
-	.db #0x07	; 7
-	.db #0x1e	; 30
-	.db #0xef	; 239
-	.db #0x57	; 87	'W'
-	.db #0xba	; 186
-	.db #0x07	; 7
-	.db #0x27	; 39
-	.db #0x2f	; 47
-	.db #0xe1	; 225
-	.db #0xdd	; 221
-	.db #0xc7	; 199
-	.db #0xbf	; 191
-	.db #0x44	; 68	'D'
-	.db #0xcf	; 207
-	.db #0x38	; 56	'8'
-	.db #0xac	; 172
-	.db #0x7f	; 127
-	.db #0x04	; 4
-	.db #0x9a	; 154
-	.db #0x4b	; 75	'K'
-	.db #0x04	; 4
-	.db #0x0f	; 15
-	.db #0x45	; 69	'E'
-	.db #0x9e	; 158
-	.db #0x44	; 68	'D'
-	.db #0x0f	; 15
-	.db #0x80	; 128
-	.db #0x50	; 80	'P'
-	.db #0x20	; 32
-	.db #0xd6	; 214
-	.db #0x87	; 135
-	.db #0x57	; 87	'W'
-	.db #0x27	; 39
-	.db #0xff	; 255
-	.db #0xff	; 255
-	.db #0xff	; 255
-	.db #0xfe	; 254
-_g_DataBackground_Colors:
-	.db #0xf1	; 241
-	.db #0xf1	; 241
-	.db #0xf1	; 241
-	.db #0xf1	; 241
-	.db #0xf1	; 241
-	.db #0xf1	; 241
-	.db #0xf1	; 241
-	.db #0xf1	; 241
-	.db #0x81	; 129
-	.db #0x81	; 129
-	.db #0x71	; 113	'q'
-	.db #0xf1	; 241
-	.db #0xa1	; 161
-	.db #0xa1	; 161
-	.db #0xf1	; 241
-	.db #0xf1	; 241
-	.db #0xf1	; 241
-	.db #0xf1	; 241
-	.db #0x41	; 65	'A'
-	.db #0x41	; 65	'A'
-	.db #0xf1	; 241
-	.db #0xf1	; 241
-	.db #0xf1	; 241
-	.db #0xf1	; 241
-	.db #0xf1	; 241
-	.db #0xf1	; 241
-	.db #0xf1	; 241
-	.db #0xf1	; 241
-	.db #0xf1	; 241
-	.db #0xf1	; 241
-	.db #0xf1	; 241
-	.db #0xf1	; 241
-_g_ayfx_bank:
-	.db #0x13	; 19
-	.db #0x25	; 37
-	.db #0x00	; 0
-	.db #0x56	; 86	'V'
-	.db #0x00	; 0
-	.db #0x8d	; 141
-	.db #0x00	; 0
-	.db #0xb6	; 182
-	.db #0x00	; 0
-	.db #0xca	; 202
-	.db #0x00	; 0
-	.db #0xdc	; 220
-	.db #0x00	; 0
-	.db #0x64	; 100	'd'
-	.db #0x01	; 1
-	.db #0x99	; 153
-	.db #0x01	; 1
-	.db #0xc3	; 195
-	.db #0x01	; 1
-	.db #0xd4	; 212
-	.db #0x01	; 1
-	.db #0x28	; 40
-	.db #0x02	; 2
-	.db #0x59	; 89	'Y'
-	.db #0x02	; 2
-	.db #0x89	; 137
-	.db #0x02	; 2
-	.db #0xba	; 186
-	.db #0x02	; 2
-	.db #0x02	; 2
-	.db #0x03	; 3
-	.db #0x2f	; 47
-	.db #0x03	; 3
-	.db #0x62	; 98	'b'
-	.db #0x03	; 3
-	.db #0x75	; 117	'u'
-	.db #0x03	; 3
-	.db #0xb4	; 180
-	.db #0x03	; 3
-	.db #0xef	; 239
-	.db #0x6f	; 111	'o'
-	.db #0x01	; 1
-	.db #0x00	; 0
-	.db #0xae	; 174
-	.db #0x32	; 50	'2'
-	.db #0x01	; 1
-	.db #0xad	; 173
-	.db #0x1a	; 26
-	.db #0x01	; 1
-	.db #0xa6	; 166
-	.db #0xe9	; 233
-	.db #0x00	; 0
-	.db #0xa5	; 165
-	.db #0xdd	; 221
-	.db #0x00	; 0
-	.db #0xa5	; 165
-	.db #0x32	; 50	'2'
-	.db #0x01	; 1
-	.db #0x84	; 132
-	.db #0x84	; 132
-	.db #0xa4	; 164
-	.db #0x4b	; 75	'K'
-	.db #0x01	; 1
-	.db #0xab	; 171
-	.db #0x1a	; 26
-	.db #0x01	; 1
-	.db #0xa9	; 169
-	.db #0xac	; 172
-	.db #0x00	; 0
-	.db #0xa8	; 168
-	.db #0x56	; 86	'V'
-	.db #0x00	; 0
-	.db #0xa3	; 163
-	.db #0x3e	; 62
-	.db #0x00	; 0
-	.db #0xa3	; 163
-	.db #0x4a	; 74	'J'
-	.db #0x00	; 0
-	.db #0xa2	; 162
-	.db #0x56	; 86	'V'
-	.db #0x00	; 0
-	.db #0x82	; 130
-	.db #0xa1	; 161
-	.db #0x3e	; 62
-	.db #0x00	; 0
-	.db #0xa1	; 161
-	.db #0x31	; 49	'1'
-	.db #0x00	; 0
-	.db #0xd0	; 208
-	.db #0x20	; 32
-	.db #0x6f	; 111	'o'
-	.db #0x94	; 148
-	.db #0x01	; 1
-	.db #0x1a	; 26
-	.db #0x6e	; 110	'n'
-	.db #0x1a	; 26
-	.db #0x02	; 2
-	.db #0x18	; 24
-	.db #0xec	; 236
-	.db #0x0f	; 15
-	.db #0x03	; 3
-	.db #0x17	; 23
-	.db #0xeb	; 235
-	.db #0xc6	; 198
-	.db #0x03	; 3
-	.db #0x10	; 16
-	.db #0xea	; 234
-	.db #0x40	; 64
-	.db #0x04	; 4
-	.db #0x0e	; 14
-	.db #0xe9	; 233
-	.db #0x35	; 53	'5'
-	.db #0x05	; 5
-	.db #0x10	; 16
-	.db #0xe8	; 232
-	.db #0xec	; 236
-	.db #0x05	; 5
-	.db #0x13	; 19
-	.db #0xe7	; 231
-	.db #0xe1	; 225
-	.db #0x06	; 6
-	.db #0x11	; 17
-	.db #0xe5	; 229
-	.db #0x67	; 103	'g'
-	.db #0x07	; 7
-	.db #0x0c	; 12
-	.db #0xe4	; 228
-	.db #0x1f	; 31
-	.db #0x08	; 8
-	.db #0x09	; 9
-	.db #0xe3	; 227
-	.db #0x80	; 128
-	.db #0x08	; 8
-	.db #0x07	; 7
-	.db #0xe2	; 226
-	.db #0x07	; 7
-	.db #0x09	; 9
-	.db #0x02	; 2
-	.db #0xe2	; 226
-	.db #0x38	; 56	'8'
-	.db #0x09	; 9
-	.db #0x00	; 0
-	.db #0xa1	; 161
-	.db #0x69	; 105	'i'
-	.db #0x09	; 9
-	.db #0xd0	; 208
-	.db #0x20	; 32
-	.db #0xef	; 239
-	.db #0x3f	; 63
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0xaa	; 170
-	.db #0x97	; 151
-	.db #0x00	; 0
-	.db #0xa6	; 166
-	.db #0x00	; 0
-	.db #0x01	; 1
-	.db #0x44	; 68	'D'
-	.db #0x1f	; 31
-	.db #0x44	; 68	'D'
-	.db #0x11	; 17
-	.db #0xea	; 234
-	.db #0x4c	; 76	'L'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0xa7	; 167
-	.db #0x7e	; 126
-	.db #0x00	; 0
-	.db #0x64	; 100	'd'
-	.db #0xc9	; 201
-	.db #0x00	; 0
-	.db #0x1f	; 31
-	.db #0x64	; 100	'd'
-	.db #0x00	; 0
-	.db #0x01	; 1
-	.db #0x11	; 17
-	.db #0xc2	; 194
-	.db #0x00	; 0
-	.db #0x82	; 130
-	.db #0xa1	; 161
-	.db #0x2e	; 46
-	.db #0x01	; 1
-	.db #0xa1	; 161
-	.db #0x60	; 96
-	.db #0x01	; 1
-	.db #0xa1	; 161
-	.db #0x92	; 146
-	.db #0x01	; 1
-	.db #0xd0	; 208
-	.db #0x20	; 32
-	.db #0xef	; 239
-	.db #0x65	; 101	'e'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0xaf	; 175
-	.db #0x97	; 151
-	.db #0x00	; 0
-	.db #0x8e	; 142
-	.db #0x85	; 133
-	.db #0x85	; 133
-	.db #0x85	; 133
-	.db #0x85	; 133
-	.db #0x85	; 133
-	.db #0x85	; 133
-	.db #0x84	; 132
-	.db #0x84	; 132
-	.db #0x84	; 132
-	.db #0x83	; 131
-	.db #0x82	; 130
-	.db #0x81	; 129
-	.db #0xd0	; 208
-	.db #0x20	; 32
-	.db #0x6f	; 111	'o'
-	.db #0xab	; 171
-	.db #0x00	; 0
-	.db #0x07	; 7
-	.db #0xe8	; 232
-	.db #0x6e	; 110	'n'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0xa5	; 165
-	.db #0x49	; 73	'I'
-	.db #0x00	; 0
-	.db #0xa4	; 164
-	.db #0x30	; 48	'0'
-	.db #0x00	; 0
-	.db #0x83	; 131
-	.db #0x21	; 33
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0xd0	; 208
-	.db #0x20	; 32
-	.db #0x69	; 105	'i'
-	.db #0x6b	; 107	'k'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x09	; 9
-	.db #0x09	; 9
-	.db #0xa9	; 169
-	.db #0x47	; 71	'G'
-	.db #0x00	; 0
-	.db #0x89	; 137
-	.db #0x89	; 137
-	.db #0xa8	; 168
-	.db #0x2f	; 47
-	.db #0x00	; 0
-	.db #0x88	; 136
-	.db #0x88	; 136
-	.db #0xa8	; 168
-	.db #0x6b	; 107	'k'
-	.db #0x00	; 0
-	.db #0x88	; 136
-	.db #0x88	; 136
-	.db #0xa7	; 167
-	.db #0x47	; 71	'G'
-	.db #0x00	; 0
-	.db #0x87	; 135
-	.db #0x87	; 135
-	.db #0xa7	; 167
-	.db #0x2f	; 47
-	.db #0x00	; 0
-	.db #0x87	; 135
-	.db #0x87	; 135
-	.db #0xa6	; 166
-	.db #0x6b	; 107	'k'
-	.db #0x00	; 0
-	.db #0x86	; 134
-	.db #0x86	; 134
-	.db #0xa6	; 166
-	.db #0x47	; 71	'G'
-	.db #0x00	; 0
-	.db #0x86	; 134
-	.db #0x86	; 134
-	.db #0xa5	; 165
-	.db #0x2f	; 47
-	.db #0x00	; 0
-	.db #0x85	; 133
-	.db #0x85	; 133
-	.db #0xa5	; 165
-	.db #0x6b	; 107	'k'
-	.db #0x00	; 0
-	.db #0x85	; 133
-	.db #0x85	; 133
-	.db #0xa5	; 165
-	.db #0x47	; 71	'G'
-	.db #0x00	; 0
-	.db #0x85	; 133
-	.db #0x85	; 133
-	.db #0xa5	; 165
-	.db #0x2f	; 47
-	.db #0x00	; 0
-	.db #0x85	; 133
-	.db #0x85	; 133
-	.db #0xa4	; 164
-	.db #0x6b	; 107	'k'
-	.db #0x00	; 0
-	.db #0x84	; 132
-	.db #0x84	; 132
-	.db #0xa4	; 164
-	.db #0x47	; 71	'G'
-	.db #0x00	; 0
-	.db #0x84	; 132
-	.db #0x84	; 132
-	.db #0xa4	; 164
-	.db #0x2f	; 47
-	.db #0x00	; 0
-	.db #0x84	; 132
-	.db #0x84	; 132
-	.db #0xa4	; 164
-	.db #0x6b	; 107	'k'
-	.db #0x00	; 0
-	.db #0x84	; 132
-	.db #0x84	; 132
-	.db #0xa3	; 163
-	.db #0x47	; 71	'G'
-	.db #0x00	; 0
-	.db #0x83	; 131
-	.db #0x83	; 131
-	.db #0xa3	; 163
-	.db #0x2f	; 47
-	.db #0x00	; 0
-	.db #0x83	; 131
-	.db #0x83	; 131
-	.db #0xa3	; 163
-	.db #0x6b	; 107	'k'
-	.db #0x00	; 0
-	.db #0x83	; 131
-	.db #0x83	; 131
-	.db #0xa3	; 163
-	.db #0x47	; 71	'G'
-	.db #0x00	; 0
-	.db #0x83	; 131
-	.db #0x83	; 131
-	.db #0xa2	; 162
-	.db #0x2f	; 47
-	.db #0x00	; 0
-	.db #0x82	; 130
-	.db #0x82	; 130
-	.db #0xa2	; 162
-	.db #0x6b	; 107	'k'
-	.db #0x00	; 0
-	.db #0x82	; 130
-	.db #0x82	; 130
-	.db #0xa3	; 163
-	.db #0x47	; 71	'G'
-	.db #0x00	; 0
-	.db #0x83	; 131
-	.db #0x83	; 131
-	.db #0xa3	; 163
-	.db #0x2f	; 47
-	.db #0x00	; 0
-	.db #0x83	; 131
-	.db #0x83	; 131
-	.db #0xa1	; 161
-	.db #0x6b	; 107	'k'
-	.db #0x00	; 0
-	.db #0x81	; 129
-	.db #0x81	; 129
-	.db #0xa1	; 161
-	.db #0x47	; 71	'G'
-	.db #0x00	; 0
-	.db #0x81	; 129
-	.db #0x81	; 129
-	.db #0xa1	; 161
-	.db #0x2f	; 47
-	.db #0x00	; 0
-	.db #0x81	; 129
-	.db #0x81	; 129
-	.db #0xd0	; 208
-	.db #0x20	; 32
-	.db #0x6f	; 111	'o'
-	.db #0x02	; 2
-	.db #0x00	; 0
-	.db #0x1f	; 31
-	.db #0x4e	; 78	'N'
-	.db #0x15	; 21
-	.db #0x4c	; 76	'L'
-	.db #0x14	; 20
-	.db #0x0b	; 11
-	.db #0x4a	; 74	'J'
-	.db #0x12	; 18
-	.db #0x49	; 73	'I'
-	.db #0x11	; 17
-	.db #0x68	; 104	'h'
-	.db #0x03	; 3
-	.db #0x00	; 0
-	.db #0x0f	; 15
-	.db #0x08	; 8
-	.db #0x67	; 103	'g'
-	.db #0x04	; 4
-	.db #0x00	; 0
-	.db #0x0e	; 14
-	.db #0x06	; 6
-	.db #0x26	; 38
-	.db #0x06	; 6
-	.db #0x00	; 0
-	.db #0x65	; 101	'e'
-	.db #0x0a	; 10
-	.db #0x00	; 0
-	.db #0x0f	; 15
-	.db #0x65	; 101	'e'
-	.db #0x0b	; 11
-	.db #0x00	; 0
-	.db #0x10	; 16
-	.db #0x64	; 100	'd'
-	.db #0x0e	; 14
-	.db #0x00	; 0
-	.db #0x12	; 18
-	.db #0x63	; 99	'c'
-	.db #0x18	; 24
-	.db #0x00	; 0
-	.db #0x14	; 20
-	.db #0x62	; 98	'b'
-	.db #0x29	; 41
-	.db #0x00	; 0
-	.db #0x19	; 25
-	.db #0x22	; 34
-	.db #0x45	; 69	'E'
-	.db #0x00	; 0
-	.db #0x61	; 97	'a'
-	.db #0x67	; 103	'g'
-	.db #0x00	; 0
-	.db #0x1c	; 28
-	.db #0xd0	; 208
-	.db #0x20	; 32
-	.db #0xef	; 239
-	.db #0xdf	; 223
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0xac	; 172
-	.db #0x94	; 148
-	.db #0x00	; 0
-	.db #0xab	; 171
-	.db #0x89	; 137
-	.db #0x00	; 0
-	.db #0xa0	; 160
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x80	; 128
-	.db #0x80	; 128
-	.db #0x80	; 128
-	.db #0x80	; 128
-	.db #0xa8	; 168
-	.db #0xdf	; 223
-	.db #0x00	; 0
-	.db #0xa5	; 165
-	.db #0x94	; 148
-	.db #0x00	; 0
-	.db #0xa4	; 164
-	.db #0x89	; 137
-	.db #0x00	; 0
-	.db #0xa0	; 160
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x80	; 128
-	.db #0x80	; 128
-	.db #0x80	; 128
-	.db #0x80	; 128
-	.db #0xa5	; 165
-	.db #0xdf	; 223
-	.db #0x00	; 0
-	.db #0xa2	; 162
-	.db #0x94	; 148
-	.db #0x00	; 0
-	.db #0xa1	; 161
-	.db #0x89	; 137
-	.db #0x00	; 0
-	.db #0xd0	; 208
-	.db #0x20	; 32
-	.db #0xec	; 236
-	.db #0x25	; 37
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x89	; 137
-	.db #0x88	; 136
-	.db #0x87	; 135
-	.db #0x86	; 134
-	.db #0x85	; 133
-	.db #0x84	; 132
-	.db #0x84	; 132
-	.db #0x83	; 131
-	.db #0x83	; 131
-	.db #0x82	; 130
-	.db #0x82	; 130
-	.db #0x81	; 129
-	.db #0x81	; 129
-	.db #0xd0	; 208
-	.db #0x20	; 32
-	.db #0xef	; 239
-	.db #0x68	; 104	'h'
-	.db #0x01	; 1
-	.db #0x00	; 0
-	.db #0x8f	; 143
-	.db #0xaf	; 175
-	.db #0x20	; 32
-	.db #0x01	; 1
-	.db #0xaf	; 175
-	.db #0xf0	; 240
-	.db #0x00	; 0
-	.db #0xaf	; 175
-	.db #0x68	; 104	'h'
-	.db #0x01	; 1
-	.db #0x8f	; 143
-	.db #0xaf	; 175
-	.db #0x20	; 32
-	.db #0x01	; 1
-	.db #0xaf	; 175
-	.db #0xf0	; 240
-	.db #0x00	; 0
-	.db #0xaf	; 175
-	.db #0x68	; 104	'h'
-	.db #0x01	; 1
-	.db #0x8f	; 143
-	.db #0xaf	; 175
-	.db #0x20	; 32
-	.db #0x01	; 1
-	.db #0xaf	; 175
-	.db #0xf0	; 240
-	.db #0x00	; 0
-	.db #0xaf	; 175
-	.db #0x68	; 104	'h'
-	.db #0x01	; 1
-	.db #0x8f	; 143
-	.db #0xab	; 171
-	.db #0x20	; 32
-	.db #0x01	; 1
-	.db #0xab	; 171
-	.db #0xf0	; 240
-	.db #0x00	; 0
-	.db #0xab	; 171
-	.db #0x68	; 104	'h'
-	.db #0x01	; 1
-	.db #0x8b	; 139
-	.db #0xa7	; 167
-	.db #0x20	; 32
-	.db #0x01	; 1
-	.db #0xa7	; 167
-	.db #0xf0	; 240
-	.db #0x00	; 0
-	.db #0xa7	; 167
-	.db #0x68	; 104	'h'
-	.db #0x01	; 1
-	.db #0x87	; 135
-	.db #0xa5	; 165
-	.db #0x20	; 32
-	.db #0x01	; 1
-	.db #0xa5	; 165
-	.db #0xf0	; 240
-	.db #0x00	; 0
-	.db #0xa5	; 165
-	.db #0x68	; 104	'h'
-	.db #0x01	; 1
-	.db #0x85	; 133
-	.db #0xa3	; 163
-	.db #0x20	; 32
-	.db #0x01	; 1
-	.db #0xa3	; 163
-	.db #0xf0	; 240
-	.db #0x00	; 0
-	.db #0xa3	; 163
-	.db #0x68	; 104	'h'
-	.db #0x01	; 1
-	.db #0x83	; 131
-	.db #0xa1	; 161
-	.db #0x20	; 32
-	.db #0x01	; 1
-	.db #0xa1	; 161
-	.db #0xf0	; 240
-	.db #0x00	; 0
-	.db #0xa1	; 161
-	.db #0x68	; 104	'h'
-	.db #0x01	; 1
-	.db #0xd0	; 208
-	.db #0x20	; 32
-	.db #0xef	; 239
-	.db #0xd0	; 208
-	.db #0x02	; 2
-	.db #0x00	; 0
-	.db #0x8f	; 143
-	.db #0xaf	; 175
-	.db #0xe0	; 224
-	.db #0x01	; 1
-	.db #0x8f	; 143
-	.db #0xad	; 173
-	.db #0x68	; 104	'h'
-	.db #0x01	; 1
-	.db #0x8d	; 141
-	.db #0xad	; 173
-	.db #0xf0	; 240
-	.db #0x00	; 0
-	.db #0x8d	; 141
-	.db #0xac	; 172
-	.db #0xb4	; 180
-	.db #0x00	; 0
-	.db #0x8c	; 140
-	.db #0xac	; 172
-	.db #0x78	; 120	'x'
-	.db #0x00	; 0
-	.db #0x8c	; 140
-	.db #0xa7	; 167
-	.db #0xd0	; 208
-	.db #0x02	; 2
-	.db #0x87	; 135
-	.db #0xa7	; 167
-	.db #0xe0	; 224
-	.db #0x01	; 1
-	.db #0x87	; 135
-	.db #0xa7	; 167
-	.db #0x68	; 104	'h'
-	.db #0x01	; 1
-	.db #0x87	; 135
-	.db #0xa7	; 167
-	.db #0xf0	; 240
-	.db #0x00	; 0
-	.db #0x87	; 135
-	.db #0xa7	; 167
-	.db #0xb4	; 180
-	.db #0x00	; 0
-	.db #0x87	; 135
-	.db #0xa7	; 167
-	.db #0x78	; 120	'x'
-	.db #0x00	; 0
-	.db #0x87	; 135
-	.db #0xd0	; 208
-	.db #0x20	; 32
-	.db #0xef	; 239
-	.db #0x5a	; 90	'Z'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x8e	; 142
-	.db #0xad	; 173
-	.db #0x78	; 120	'x'
-	.db #0x00	; 0
-	.db #0x8c	; 140
-	.db #0xab	; 171
-	.db #0xb4	; 180
-	.db #0x00	; 0
-	.db #0x8a	; 138
-	.db #0xa9	; 169
-	.db #0x5a	; 90	'Z'
-	.db #0x00	; 0
-	.db #0x88	; 136
-	.db #0xa7	; 167
-	.db #0x78	; 120	'x'
-	.db #0x00	; 0
-	.db #0x80	; 128
-	.db #0xa0	; 160
-	.db #0xb4	; 180
-	.db #0x00	; 0
-	.db #0x87	; 135
-	.db #0xa7	; 167
-	.db #0x5a	; 90	'Z'
-	.db #0x00	; 0
-	.db #0x86	; 134
-	.db #0xa6	; 166
-	.db #0x78	; 120	'x'
-	.db #0x00	; 0
-	.db #0x85	; 133
-	.db #0xa5	; 165
-	.db #0xb4	; 180
-	.db #0x00	; 0
-	.db #0x84	; 132
-	.db #0xa4	; 164
-	.db #0x5a	; 90	'Z'
-	.db #0x00	; 0
-	.db #0x83	; 131
-	.db #0xa3	; 163
-	.db #0x78	; 120	'x'
-	.db #0x00	; 0
-	.db #0x82	; 130
-	.db #0xa2	; 162
-	.db #0xb4	; 180
-	.db #0x00	; 0
-	.db #0xd0	; 208
-	.db #0x20	; 32
-	.db #0xef	; 239
-	.db #0x68	; 104	'h'
-	.db #0x01	; 1
-	.db #0x00	; 0
-	.db #0xaf	; 175
-	.db #0x40	; 64
-	.db #0x01	; 1
-	.db #0xad	; 173
-	.db #0x20	; 32
-	.db #0x01	; 1
-	.db #0xac	; 172
-	.db #0x40	; 64
-	.db #0x01	; 1
-	.db #0xab	; 171
-	.db #0x20	; 32
-	.db #0x01	; 1
-	.db #0xaa	; 170
-	.db #0x0e	; 14
-	.db #0x01	; 1
-	.db #0xa9	; 169
-	.db #0x20	; 32
-	.db #0x01	; 1
-	.db #0xa8	; 168
-	.db #0x0e	; 14
-	.db #0x01	; 1
-	.db #0xa7	; 167
-	.db #0xf0	; 240
-	.db #0x00	; 0
-	.db #0xa6	; 166
-	.db #0x0e	; 14
-	.db #0x01	; 1
-	.db #0xa5	; 165
-	.db #0xf0	; 240
-	.db #0x00	; 0
-	.db #0xa4	; 164
-	.db #0xd8	; 216
-	.db #0x00	; 0
-	.db #0xa4	; 164
-	.db #0xf0	; 240
-	.db #0x00	; 0
-	.db #0xa3	; 163
-	.db #0xd8	; 216
-	.db #0x00	; 0
-	.db #0xa2	; 162
-	.db #0xc0	; 192
-	.db #0x00	; 0
-	.db #0xa2	; 162
-	.db #0xaf	; 175
-	.db #0x00	; 0
-	.db #0xd0	; 208
-	.db #0x20	; 32
-	.db #0x6f	; 111	'o'
-	.db #0x32	; 50	'2'
-	.db #0x00	; 0
-	.db #0x06	; 6
-	.db #0xef	; 239
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x48	; 72	'H'
-	.db #0x02	; 2
-	.db #0x08	; 8
-	.db #0xec	; 236
-	.db #0x32	; 50	'2'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0xac	; 172
-	.db #0xbc	; 188
-	.db #0x00	; 0
-	.db #0xa8	; 168
-	.db #0x07	; 7
-	.db #0x01	; 1
-	.db #0xa8	; 168
-	.db #0x46	; 70	'F'
-	.db #0x01	; 1
-	.db #0xa6	; 166
-	.db #0x92	; 146
-	.db #0x01	; 1
-	.db #0xa6	; 166
-	.db #0xab	; 171
-	.db #0x01	; 1
-	.db #0xa4	; 164
-	.db #0x35	; 53	'5'
-	.db #0x02	; 2
-	.db #0xa4	; 164
-	.db #0x80	; 128
-	.db #0x02	; 2
-	.db #0xa6	; 166
-	.db #0x07	; 7
-	.db #0x01	; 1
-	.db #0xa6	; 166
-	.db #0x46	; 70	'F'
-	.db #0x01	; 1
-	.db #0xa4	; 164
-	.db #0x92	; 146
-	.db #0x01	; 1
-	.db #0xa4	; 164
-	.db #0xab	; 171
-	.db #0x01	; 1
-	.db #0xa2	; 162
-	.db #0x35	; 53	'5'
-	.db #0x02	; 2
-	.db #0xa2	; 162
-	.db #0x80	; 128
-	.db #0x02	; 2
-	.db #0xa4	; 164
-	.db #0x07	; 7
-	.db #0x01	; 1
-	.db #0xa4	; 164
-	.db #0x46	; 70	'F'
-	.db #0x01	; 1
-	.db #0xa3	; 163
-	.db #0x92	; 146
-	.db #0x01	; 1
-	.db #0xa3	; 163
-	.db #0xab	; 171
-	.db #0x01	; 1
-	.db #0xa1	; 161
-	.db #0x35	; 53	'5'
-	.db #0x02	; 2
-	.db #0xa1	; 161
-	.db #0x80	; 128
-	.db #0x02	; 2
-	.db #0xd0	; 208
-	.db #0x20	; 32
-	.db #0xef	; 239
-	.db #0x54	; 84	'T'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0xad	; 173
-	.db #0x44	; 68	'D'
-	.db #0x00	; 0
-	.db #0xab	; 171
-	.db #0x3c	; 60
-	.db #0x00	; 0
-	.db #0xa9	; 169
-	.db #0x3a	; 58
-	.db #0x00	; 0
-	.db #0x83	; 131
-	.db #0x83	; 131
-	.db #0xa3	; 163
-	.db #0x54	; 84	'T'
-	.db #0x00	; 0
-	.db #0x86	; 134
-	.db #0x88	; 136
-	.db #0xa7	; 167
-	.db #0x44	; 68	'D'
-	.db #0x00	; 0
-	.db #0xa6	; 166
-	.db #0x3c	; 60
-	.db #0x00	; 0
-	.db #0xa5	; 165
-	.db #0x3a	; 58
-	.db #0x00	; 0
-	.db #0x82	; 130
-	.db #0x82	; 130
-	.db #0xa2	; 162
-	.db #0x54	; 84	'T'
-	.db #0x00	; 0
-	.db #0x83	; 131
-	.db #0x85	; 133
-	.db #0xa4	; 164
-	.db #0x44	; 68	'D'
-	.db #0x00	; 0
-	.db #0xa3	; 163
-	.db #0x3c	; 60
-	.db #0x00	; 0
-	.db #0xa2	; 162
-	.db #0x3a	; 58
-	.db #0x00	; 0
-	.db #0xd0	; 208
-	.db #0x20	; 32
-	.db #0x6f	; 111	'o'
-	.db #0x3e	; 62
-	.db #0x00	; 0
-	.db #0x17	; 23
-	.db #0x4e	; 78	'N'
-	.db #0x10	; 16
-	.db #0x4d	; 77	'M'
-	.db #0x0b	; 11
-	.db #0x4d	; 77	'M'
-	.db #0x10	; 16
-	.db #0x0c	; 12
-	.db #0x6b	; 107	'k'
-	.db #0x25	; 37
-	.db #0x00	; 0
-	.db #0x11	; 17
-	.db #0x4a	; 74	'J'
-	.db #0x0f	; 15
-	.db #0x68	; 104	'h'
-	.db #0x3e	; 62
-	.db #0x00	; 0
-	.db #0x17	; 23
-	.db #0x48	; 72	'H'
-	.db #0x10	; 16
-	.db #0x47	; 71	'G'
-	.db #0x0b	; 11
-	.db #0x46	; 70	'F'
-	.db #0x10	; 16
-	.db #0x05	; 5
-	.db #0x64	; 100	'd'
-	.db #0x25	; 37
-	.db #0x00	; 0
-	.db #0x11	; 17
-	.db #0x44	; 68	'D'
-	.db #0x0f	; 15
-	.db #0x66	; 102	'f'
-	.db #0x3e	; 62
-	.db #0x00	; 0
-	.db #0x17	; 23
-	.db #0x45	; 69	'E'
-	.db #0x10	; 16
-	.db #0x44	; 68	'D'
-	.db #0x0b	; 11
-	.db #0x43	; 67	'C'
-	.db #0x10	; 16
-	.db #0x02	; 2
-	.db #0x62	; 98	'b'
-	.db #0x25	; 37
-	.db #0x00	; 0
-	.db #0x11	; 17
-	.db #0x41	; 65	'A'
-	.db #0x0f	; 15
-	.db #0xd0	; 208
-	.db #0x20	; 32
-	.db #0xef	; 239
-	.db #0x32	; 50	'2'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0xae	; 174
-	.db #0x4b	; 75	'K'
-	.db #0x00	; 0
-	.db #0x8d	; 141
-	.db #0x81	; 129
-	.db #0x81	; 129
-	.db #0x8a	; 138
-	.db #0x89	; 137
-	.db #0xa8	; 168
-	.db #0x32	; 50	'2'
-	.db #0x00	; 0
-	.db #0xa3	; 163
-	.db #0x25	; 37
-	.db #0x00	; 0
-	.db #0x82	; 130
-	.db #0xd0	; 208
-	.db #0x20	; 32
-	.db #0xed	; 237
-	.db #0xb3	; 179
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0xab	; 171
-	.db #0xb5	; 181
-	.db #0x00	; 0
-	.db #0xaa	; 170
-	.db #0xb7	; 183
-	.db #0x00	; 0
-	.db #0x88	; 136
-	.db #0xad	; 173
-	.db #0x75	; 117	'u'
-	.db #0x00	; 0
-	.db #0xad	; 173
-	.db #0x77	; 119	'w'
-	.db #0x00	; 0
-	.db #0xab	; 171
-	.db #0x79	; 121	'y'
-	.db #0x00	; 0
-	.db #0x89	; 137
-	.db #0x8d	; 141
-	.db #0xad	; 173
-	.db #0x6b	; 107	'k'
-	.db #0x00	; 0
-	.db #0x8b	; 139
-	.db #0x89	; 137
-	.db #0x8d	; 141
-	.db #0xad	; 173
-	.db #0x47	; 71	'G'
-	.db #0x00	; 0
-	.db #0x8c	; 140
-	.db #0x8b	; 139
-	.db #0x89	; 137
-	.db #0x87	; 135
-	.db #0x85	; 133
-	.db #0x85	; 133
-	.db #0x85	; 133
-	.db #0x85	; 133
-	.db #0xa9	; 169
-	.db #0x6b	; 107	'k'
-	.db #0x00	; 0
-	.db #0xa8	; 168
-	.db #0x47	; 71	'G'
-	.db #0x00	; 0
-	.db #0x86	; 134
-	.db #0x85	; 133
-	.db #0x84	; 132
-	.db #0x83	; 131
-	.db #0x82	; 130
-	.db #0x82	; 130
-	.db #0x82	; 130
-	.db #0xa7	; 167
-	.db #0x6b	; 107	'k'
-	.db #0x00	; 0
-	.db #0xa5	; 165
-	.db #0x47	; 71	'G'
-	.db #0x00	; 0
-	.db #0x84	; 132
-	.db #0x83	; 131
-	.db #0x82	; 130
-	.db #0x81	; 129
-	.db #0x81	; 129
-	.db #0xd0	; 208
-	.db #0x20	; 32
-	.db #0xec	; 236
-	.db #0x5c	; 92
-	.db #0x02	; 2
-	.db #0x00	; 0
-	.db #0xaf	; 175
-	.db #0x5a	; 90	'Z'
-	.db #0x01	; 1
-	.db #0x8e	; 142
-	.db #0x8e	; 142
-	.db #0x8e	; 142
-	.db #0x86	; 134
-	.db #0x88	; 136
-	.db #0x88	; 136
-	.db #0x87	; 135
-	.db #0x87	; 135
-	.db #0x87	; 135
-	.db #0x87	; 135
-	.db #0x87	; 135
-	.db #0x87	; 135
-	.db #0x87	; 135
-	.db #0x86	; 134
-	.db #0x86	; 134
-	.db #0x84	; 132
-	.db #0x82	; 130
-	.db #0xd0	; 208
-	.db #0x20	; 32
-_g_DataSprtLayer:
-	.db #0x5a	; 90	'Z'
-	.db #0x00	; 0
-	.db #0xa8	; 168
-	.db #0x00	; 0
-	.db #0x03	; 3
-	.db #0x00	; 0
-	.db #0x07	; 7
-	.db #0x04	; 4
-	.db #0x07	; 7
-	.db #0x06	; 6
-	.db #0x03	; 3
-	.db #0x03	; 3
-	.db #0xfb	; 251
-	.db #0x03	; 3
-	.db #0x9c	; 156
-	.db #0x00	; 0
-	.db #0x06	; 6
-	.db #0x0f	; 15
-	.db #0xc0	; 192
-	.db #0x06	; 6
-	.db #0xe0	; 224
-	.db #0x20	; 32
-	.db #0xe0	; 224
-	.db #0x60	; 96
-	.db #0xc0	; 192
-	.db #0x8c	; 140
-	.db #0x00	; 0
-	.db #0x60	; 96
-	.db #0x0e	; 14
-	.db #0x4c	; 76	'L'
-	.db #0x01	; 1
-	.db #0x02	; 2
-	.db #0x02	; 2
-	.db #0x05	; 5
-	.db #0x5c	; 92
-	.db #0x04	; 4
-	.db #0x00	; 0
-	.db #0x1c	; 28
-	.db #0x0e	; 14
-	.db #0x2c	; 44
-	.db #0xc0	; 192
-	.db #0x80	; 128
-	.db #0x04	; 4
-	.db #0x02	; 2
-	.db #0x98	; 152
-	.db #0x03	; 3
-	.db #0x3e	; 62
-	.db #0x00	; 0
-	.db #0x1c	; 28
-	.db #0x6a	; 106	'j'
-	.db #0xe8	; 232
-	.db #0xb6	; 182
-	.db #0x5e	; 94
-	.db #0xbf	; 191
-	.db #0x35	; 53	'5'
-	.db #0x7f	; 127
-	.db #0x03	; 3
-	.db #0x78	; 120	'x'
-	.db #0x7f	; 127
-	.db #0x0e	; 14
-	.db #0x00	; 0
-	.db #0xf6	; 246
-	.db #0x7f	; 127
-	.db #0x35	; 53	'5'
-	.db #0x08	; 8
-	.db #0xe0	; 224
-	.db #0x5c	; 92
-	.db #0x7f	; 127
-	.db #0x00	; 0
-	.db #0x27	; 39
-	.db #0x24	; 36
-	.db #0x27	; 39
-	.db #0x26	; 38
-	.db #0x23	; 35
-	.db #0x27	; 39
-	.db #0x06	; 6
-	.db #0x3c	; 60
-	.db #0x37	; 55	'7'
-	.db #0x0e	; 14
-	.db #0x07	; 7
-	.db #0x06	; 6
-	.db #0x7f	; 127
-	.db #0xe0	; 224
-	.db #0xc0	; 192
-	.db #0x40	; 64
-	.db #0xf4	; 244
-	.db #0x7f	; 127
-	.db #0x00	; 0
-	.db #0x71	; 113	'q'
-	.db #0x63	; 99	'c'
-	.db #0x03	; 3
-	.db #0x09	; 9
-	.db #0x06	; 6
-	.db #0xe1	; 225
-	.db #0xff	; 255
-	.db #0x18	; 24
-	.db #0x00	; 0
-	.db #0x3e	; 62
-	.db #0xbe	; 190
-	.db #0x7f	; 127
-	.db #0x68	; 104	'h'
-	.db #0x7f	; 127
-	.db #0x70	; 112	'p'
-	.db #0xf6	; 246
-	.db #0x7f	; 127
-	.db #0xbb	; 187
-	.db #0x1f	; 31
-	.db #0xff	; 255
-	.db #0x8f	; 143
-	.db #0xfe	; 254
-	.db #0xc3	; 195
-	.db #0xff	; 255
-	.db #0xe0	; 224
-	.db #0xfe	; 254
-	.db #0x00	; 0
-	.db #0xdd	; 221
-	.db #0x40	; 64
-	.db #0xff	; 255
-	.db #0x01	; 1
-	.db #0x87	; 135
-	.db #0xbe	; 190
-	.db #0xb3	; 179
-	.db #0x10	; 16
-	.db #0x80	; 128
-	.db #0xf0	; 240
-	.db #0xff	; 255
-	.db #0x0d	; 13
-	.db #0x26	; 38
-	.db #0x0c	; 12
-	.db #0x3e	; 62
-	.db #0xf8	; 248
-	.db #0xff	; 255
-	.db #0x3e	; 62
-	.db #0x01	; 1
-	.db #0x40	; 64
-	.db #0xf0	; 240
-	.db #0xff	; 255
-	.db #0x3f	; 63
-	.db #0x40	; 64
-	.db #0x86	; 134
-	.db #0xff	; 255
-	.db #0xff	; 255
-	.db #0x85	; 133
-	.db #0xff	; 255
-	.db #0x00	; 0
-	.db #0xf8	; 248
-	.db #0xff	; 255
-	.db #0x5f	; 95
-	.db #0x00	; 0
-	.db #0xdf	; 223
-	.db #0x7f	; 127
-	.db #0xe8	; 232
-	.db #0x80	; 128
-	.db #0x7d	; 125
-	.db #0xd2	; 210
-	.db #0x7f	; 127
-	.db #0x7b	; 123
-	.db #0xb0	; 176
-	.db #0x7f	; 127
-	.db #0xfe	; 254
-	.db #0x9b	; 155
-	.db #0x60	; 96
-	.db #0x70	; 112	'p'
-	.db #0xea	; 234
-	.db #0x46	; 70	'F'
-	.db #0xff	; 255
-	.db #0xdf	; 223
-	.db #0xcb	; 203
-	.db #0xff	; 255
-	.db #0xb9	; 185
-	.db #0x75	; 117	'u'
-	.db #0x02	; 2
-	.db #0x7c	; 124
-	.db #0x80	; 128
-	.db #0x00	; 0
-	.db #0x38	; 56	'8'
-	.db #0x10	; 16
-	.db #0x00	; 0
-	.db #0x07	; 7
-	.db #0x00	; 0
-	.db #0xe3	; 227
-	.db #0xff	; 255
-	.db #0x2e	; 46
-	.db #0x04	; 4
-	.db #0x20	; 32
-	.db #0x00	; 0
-	.db #0x2b	; 43
-	.db #0xb5	; 181
-	.db #0x7e	; 126
-	.db #0x75	; 117	'u'
-	.db #0xd8	; 216
-	.db #0x00	; 0
-	.db #0x30	; 48	'0'
-	.db #0x4b	; 75	'K'
-	.db #0x00	; 0
-	.db #0x07	; 7
-	.db #0x3f	; 63
-	.db #0x47	; 71	'G'
-	.db #0x1d	; 29
-	.db #0x27	; 39
-	.db #0x4a	; 74	'J'
-	.db #0x10	; 16
-	.db #0x10	; 16
-	.db #0xd8	; 216
-	.db #0x0f	; 15
-	.db #0x0c	; 12
-	.db #0xd2	; 210
-	.db #0x00	; 0
-	.db #0xe0	; 224
-	.db #0xfc	; 252
-	.db #0xe2	; 226
-	.db #0xb8	; 184
-	.db #0xe4	; 228
-	.db #0x50	; 80	'P'
-	.db #0x08	; 8
-	.db #0x08	; 8
-	.db #0xca	; 202
-	.db #0x96	; 150
-	.db #0x02	; 2
-	.db #0x09	; 9
-	.db #0x03	; 3
-	.db #0x09	; 9
-	.db #0x08	; 8
-	.db #0x0f	; 15
-	.db #0xe4	; 228
-	.db #0xcb	; 203
-	.db #0x01	; 1
-	.db #0x01	; 1
-	.db #0x0c	; 12
-	.db #0x18	; 24
-	.db #0xfd	; 253
-	.db #0xa0	; 160
-	.db #0x60	; 96
-	.db #0xe0	; 224
-	.db #0x0a	; 10
-	.db #0xc8	; 200
-	.db #0x88	; 136
-	.db #0xf8	; 248
-	.db #0x80	; 128
-	.db #0xe8	; 232
-	.db #0x24	; 36
-	.db #0x40	; 64
-	.db #0x00	; 0
-	.db #0x60	; 96
-	.db #0xf0	; 240
-	.db #0xc1	; 193
-	.db #0x08	; 8
-	.db #0x10	; 16
-	.db #0x14	; 20
-	.db #0x10	; 16
-	.db #0xe7	; 231
-	.db #0x63	; 99	'c'
-	.db #0x0b	; 11
-	.db #0xf0	; 240
-	.db #0x12	; 18
-	.db #0x10	; 16
-	.db #0x08	; 8
-	.db #0x06	; 6
-	.db #0x24	; 36
-	.db #0xf8	; 248
-	.db #0x42	; 66	'B'
-	.db #0x11	; 17
-	.db #0x48	; 72	'H'
-	.db #0x08	; 8
-	.db #0x87	; 135
-	.db #0x33	; 51	'3'
-	.db #0x04	; 4
-	.db #0x08	; 8
-	.db #0x45	; 69	'E'
-	.db #0x00	; 0
-	.db #0x0a	; 10
-	.db #0xf8	; 248
-	.db #0x00	; 0
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x45	; 69	'E'
-	.db #0xff	; 255
-	.db #0xff	; 255
-	.db #0x7f	; 127
-	.db #0x3f	; 63
-	.db #0x13	; 19
-	.db #0xfa	; 250
-	.db #0x69	; 105	'i'
-	.db #0xb5	; 181
-	.db #0xa0	; 160
-	.db #0x44	; 68	'D'
-	.db #0xfe	; 254
-	.db #0xfe	; 254
-	.db #0xfc	; 252
-	.db #0xf8	; 248
-	.db #0x6a	; 106	'j'
-	.db #0x90	; 144
-	.db #0xbf	; 191
-	.db #0x0f	; 15
-	.db #0xf9	; 249
-	.db #0xff	; 255
-	.db #0xff	; 255
-	.db #0xff	; 255
-	.db #0xfc	; 252
 _g_PlayerSpriteLayers:
 	.db #0x00	; 0
 	.db #0x00	;  0
@@ -2736,233 +831,7 @@ _g_PlayerAnimActions:
 	.dw _g_PlayerFramesMoveRight
 	.db #0x01	; 1
 	.db 0x03
-_g_Levels:
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x20	; 32
-	.db #0x18	; 24
-	.dw _g_Level000
-	.dw __str_0
-	.db #0x01	; 1
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x20	; 32
-	.db #0x18	; 24
-	.dw _g_Level001
-	.dw __str_1
-	.db #0x02	; 2
-	.db #0x00	; 0
-	.db #0x02	; 2
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x20	; 32
-	.db #0x18	; 24
-	.dw _g_Level002
-	.dw __str_2
-	.db #0x03	; 3
-	.db #0x01	; 1
-	.db #0x00	; 0
-	.db #0x01	; 1
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x04	; 4
-	.db #0x20	; 32
-	.db #0x10	; 16
-	.dw _g_Level014
-	.dw __str_3
-	.db #0x04	; 4
-	.db #0x02	; 2
-	.db #0x02	; 2
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x20	; 32
-	.db #0x18	; 24
-	.dw _g_Level003
-	.dw __str_4
-	.db #0x05	; 5
-	.db #0x03	; 3
-	.db #0x02	; 2
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x20	; 32
-	.db #0x18	; 24
-	.dw _g_Level004
-	.dw __str_5
-	.db #0x06	; 6
-	.db #0x04	; 4
-	.db #0x02	; 2
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x01	; 1
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x20	; 32
-	.db #0x18	; 24
-	.dw _g_Level006
-	.dw __str_6
-	.db #0x07	; 7
-	.db #0x05	; 5
-	.db #0x01	; 1
-	.db #0x01	; 1
-	.db #0x01	; 1
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x20	; 32
-	.db #0x18	; 24
-	.dw _g_Level007
-	.dw __str_7
-	.db #0x08	; 8
-	.db #0x06	; 6
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x02	; 2
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x20	; 32
-	.db #0x18	; 24
-	.dw _g_Level008
-	.dw __str_8
-	.db #0x09	; 9
-	.db #0x07	; 7
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x01	; 1
-	.db #0x02	; 2
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x20	; 32
-	.db #0x18	; 24
-	.dw _g_Level010
-	.dw __str_9
-	.db #0x0a	; 10
-	.db #0x08	; 8
-	.db #0x02	; 2
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x01	; 1
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x20	; 32
-	.db #0x18	; 24
-	.dw _g_Level011
-	.dw __str_10
-	.db #0x0b	; 11
-	.db #0x09	; 9
-	.db #0x01	; 1
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x02	; 2
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x20	; 32
-	.db #0x18	; 24
-	.dw _g_Level012
-	.dw __str_11
-	.db #0x0c	; 12
-	.db #0x0a	; 10
-	.db #0x02	; 2
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x01	; 1
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x20	; 32
-	.db #0x18	; 24
-	.dw _g_Level009
-	.dw __str_12
-	.db #0x0d	; 13
-	.db #0x0b	; 11
-	.db #0x01	; 1
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x02	; 2
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x20	; 32
-	.db #0x18	; 24
-	.dw _g_Level013
-	.dw __str_13
-	.db #0x00	; 0
-	.db #0x0c	; 12
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x01	; 1
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x20	; 32
-	.db #0x18	; 24
-	.dw _g_Level029
-	.dw __str_14
-	.db #0x00	; 0
-	.db #0x09	; 9
-	.db #0x01	; 1
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x02	; 2
-__str_0:
-	.ascii "START GAME"
-	.db 0x00
-__str_1:
-	.ascii "Level: 01"
-	.db 0x00
-__str_2:
-	.ascii "Level: 02"
-	.db 0x00
-__str_3:
-	.ascii "Level: 03"
-	.db 0x00
-__str_4:
-	.ascii "Level: 04"
-	.db 0x00
-__str_5:
-	.ascii "Level: 05"
-	.db 0x00
-__str_6:
-	.ascii "Level: 06"
-	.db 0x00
-__str_7:
-	.ascii "Level: 07"
-	.db 0x00
-__str_8:
-	.ascii "Level: 08"
-	.db 0x00
-__str_9:
-	.ascii "Level: 09"
-	.db 0x00
-__str_10:
-	.ascii "Level: 10"
-	.db 0x00
-__str_11:
-	.ascii "Level: 11"
-	.db 0x00
-__str_12:
-	.ascii "Level: 12"
-	.db 0x00
-__str_13:
-	.ascii "Level: 13"
-	.db 0x00
-__str_14:
-	.ascii "GAME OVER"
-	.db 0x00
-;./the-castel.c:311: bool addLife()
+;./the-castel.c:283: bool addLife()
 ;	---------------------------------
 ; Function addLife
 ; ---------------------------------
@@ -2971,14 +840,14 @@ _addLife::
 	ld	ix,#0
 	add	ix,sp
 	dec	sp
-;./the-castel.c:313: for (u8 i = 0; i < MAX_LIVES; i++)
+;./the-castel.c:285: for (u8 i = 0; i < MAX_LIVES; i++)
 	ld	-1 (ix), #0x00
 	ld	c, #0x00
 00105$:
 	ld	a, c
 	sub	a, #0x03
 	jr	NC, 00103$
-;./the-castel.c:315: if (g_Lives[i] == EMPTY_ITEM)
+;./the-castel.c:287: if (g_Lives[i] == EMPTY_ITEM)
 	ld	de, #_g_Lives+0
 	ld	a, e
 	add	a, c
@@ -2989,15 +858,15 @@ _addLife::
 	ld	a, (de)
 	or	a, a
 	jr	NZ, 00106$
-;./the-castel.c:317: g_Player.Life++;
+;./the-castel.c:289: g_Player.Life++;
 	ld	bc, #_g_Player+7
 	ld	a, (bc)
 	inc	a
 	ld	(bc), a
-;./the-castel.c:318: g_Lives[i] = TILE_HEART;
+;./the-castel.c:290: g_Lives[i] = TILE_HEART;
 	ld	a, #0x4f
 	ld	(de), a
-;./the-castel.c:320: setTile(220 + i * 16, (u8)(4), TILE_HEART);
+;./the-castel.c:292: setTile(220 + i * 16, (u8)(4), TILE_HEART);
 	ld	a, -1 (ix)
 	add	a, a
 	add	a, a
@@ -3013,23 +882,23 @@ _addLife::
 ;	spillPairReg hl
 	ld	a, c
 	call	_setTile
-;./the-castel.c:321: return TRUE;
+;./the-castel.c:293: return TRUE;
 	ld	a, #0x01
 	jp	00107$
 00106$:
-;./the-castel.c:313: for (u8 i = 0; i < MAX_LIVES; i++)
+;./the-castel.c:285: for (u8 i = 0; i < MAX_LIVES; i++)
 	inc	c
 	ld	-1 (ix), c
 	jp	00105$
 00103$:
-;./the-castel.c:324: return FALSE;
+;./the-castel.c:296: return FALSE;
 	xor	a, a
 00107$:
-;./the-castel.c:325: }
+;./the-castel.c:297: }
 	inc	sp
 	pop	ix
 	ret
-;./the-castel.c:332: bool removeLife()
+;./the-castel.c:304: bool removeLife()
 ;	---------------------------------
 ; Function removeLife
 ; ---------------------------------
@@ -3038,35 +907,35 @@ _removeLife::
 	ld	ix,#0
 	add	ix,sp
 	push	af
-;./the-castel.c:335: if (hasItemInInventory(TILE_AMPHORA))
+;./the-castel.c:307: if (hasItemInInventory(TILE_AMPHORA))
 	ld	a, #0x5f
 	call	_hasItemInInventory
 	or	a, a
 	jr	Z, 00105$
-;./the-castel.c:337: if (g_ImmunityCount < IMMUNITY)
+;./the-castel.c:309: if (g_ImmunityCount < IMMUNITY)
 	ld	a, (_g_ImmunityCount+0)
 	sub	a, #0x03
 	jr	NC, 00102$
-;./the-castel.c:339: g_ImmunityCount++;
+;./the-castel.c:311: g_ImmunityCount++;
 	ld	hl, #_g_ImmunityCount
 	inc	(hl)
 	jp	00103$
 00102$:
-;./the-castel.c:343: removeItemFromInventory(TILE_AMPHORA);
+;./the-castel.c:315: removeItemFromInventory(TILE_AMPHORA);
 	ld	a, #0x5f
 	call	_removeItemFromInventory
 00103$:
-;./the-castel.c:345: return FALSE;
+;./the-castel.c:317: return FALSE;
 	xor	a, a
 	jp	00112$
 00105$:
-;./the-castel.c:348: for (i8 i = MAX_LIVES - 1; i >= 0; i--)
+;./the-castel.c:320: for (i8 i = MAX_LIVES - 1; i >= 0; i--)
 	ld	-2 (ix), #0x02
 	ld	-1 (ix), #0x02
 00110$:
 	bit	7, -1 (ix)
 	jr	NZ, 00108$
-;./the-castel.c:351: if (g_Lives[i] == TILE_HEART)
+;./the-castel.c:323: if (g_Lives[i] == TILE_HEART)
 	ld	bc, #_g_Lives+0
 	ld	a, -1 (ix)
 	ld	l, a
@@ -3079,11 +948,11 @@ _removeLife::
 ;	spillPairReg hl
 	add	hl, bc
 	ld	a, (hl)
-;./the-castel.c:353: g_Lives[i] = EMPTY_ITEM;
+;./the-castel.c:325: g_Lives[i] = EMPTY_ITEM;
 	sub	a,#0x4f
 	jr	NZ, 00111$
 	ld	(hl),a
-;./the-castel.c:354: setTile(220 + i * 16, (u8)(4), 0);
+;./the-castel.c:326: setTile(220 + i * 16, (u8)(4), 0);
 	ld	a, -2 (ix)
 	add	a, a
 	add	a, a
@@ -3099,12 +968,12 @@ _removeLife::
 ;	spillPairReg hl
 	ld	a, c
 	call	_setTile
-;./the-castel.c:355: g_Player.Life--;
+;./the-castel.c:327: g_Player.Life--;
 	ld	bc, #_g_Player+7
 	ld	a, (bc)
 	dec	a
 	ld	(bc), a
-;./the-castel.c:356: return (i > 0);
+;./the-castel.c:328: return (i > 0);
 	xor	a, a
 	sub	a, -2 (ix)
 	jp	PO, 00141$
@@ -3114,61 +983,61 @@ _removeLife::
 	and	a,#0x01
 	jp	00112$
 00111$:
-;./the-castel.c:348: for (i8 i = MAX_LIVES - 1; i >= 0; i--)
+;./the-castel.c:320: for (i8 i = MAX_LIVES - 1; i >= 0; i--)
 	dec	-1 (ix)
 	ld	a, -1 (ix)
 	ld	-2 (ix), a
 	jp	00110$
 00108$:
-;./the-castel.c:360: return FALSE;
+;./the-castel.c:332: return FALSE;
 	xor	a, a
 00112$:
-;./the-castel.c:361: }
+;./the-castel.c:333: }
 	ld	sp, ix
 	pop	ix
 	ret
-;./the-castel.c:366: bool hasLives()
+;./the-castel.c:339: bool hasLives()
 ;	---------------------------------
 ; Function hasLives
 ; ---------------------------------
 _hasLives::
-;./the-castel.c:368: for (u8 i = 0; i < MAX_LIVES; i++)
+;./the-castel.c:341: for (u8 i = 0; i < MAX_LIVES; i++)
 	ld	c, #0x00
 00105$:
 	ld	a, c
 	sub	a, #0x03
 	jr	NC, 00103$
-;./the-castel.c:370: if (g_Lives[i] == TILE_HEART)
+;./the-castel.c:343: if (g_Lives[i] == TILE_HEART)
 	ld	hl, #_g_Lives
 	ld	b, #0x00
 	add	hl, bc
 	ld	a, (hl)
 	sub	a, #0x4f
 	jr	NZ, 00106$
-;./the-castel.c:372: return TRUE;
+;./the-castel.c:345: return TRUE;
 	ld	a, #0x01
 	ret
 00106$:
-;./the-castel.c:368: for (u8 i = 0; i < MAX_LIVES; i++)
+;./the-castel.c:341: for (u8 i = 0; i < MAX_LIVES; i++)
 	inc	c
 	jp	00105$
 00103$:
-;./the-castel.c:375: return FALSE;
+;./the-castel.c:348: return FALSE;
 	xor	a, a
-;./the-castel.c:376: }
+;./the-castel.c:349: }
 	ret
-;./the-castel.c:383: void displayLife()
+;./the-castel.c:356: void displayLife()
 ;	---------------------------------
 ; Function displayLife
 ; ---------------------------------
 _displayLife::
-;./the-castel.c:385: for (u8 i = 0; i < MAX_LIVES; i++)
+;./the-castel.c:358: for (u8 i = 0; i < MAX_LIVES; i++)
 	ld	c, #0x00
 00103$:
 	ld	a, c
 	sub	a, #0x03
 	ret	NC
-;./the-castel.c:387: setTile(220 + i * 16, (u8)(4), g_Lives[i]);
+;./the-castel.c:360: setTile(220 + i * 16, (u8)(4), g_Lives[i]);
 	ld	hl, #_g_Lives
 	ld	b, #0x00
 	add	hl, bc
@@ -3189,24 +1058,24 @@ _displayLife::
 	ld	a, e
 	call	_setTile
 	pop	bc
-;./the-castel.c:385: for (u8 i = 0; i < MAX_LIVES; i++)
+;./the-castel.c:358: for (u8 i = 0; i < MAX_LIVES; i++)
 	inc	c
-;./the-castel.c:389: }
+;./the-castel.c:362: }
 	jp	00103$
-;./the-castel.c:400: void initInventory()
+;./the-castel.c:373: void initInventory()
 ;	---------------------------------
 ; Function initInventory
 ; ---------------------------------
 _initInventory::
-;./the-castel.c:402: Mem_Set(EMPTY_ITEM, g_Inventory, (5 * sizeof(g_Inventory[0])));
+;./the-castel.c:375: Mem_Set(EMPTY_ITEM, g_Inventory, (5 * sizeof(g_Inventory[0])));
 	ld	hl, #0x0005
 	push	hl
 	ld	de, #_g_Inventory
 	xor	a, a
 	call	_Mem_Set
-;./the-castel.c:403: }
+;./the-castel.c:376: }
 	ret
-;./the-castel.c:410: bool addItemToInventory(u8 item)
+;./the-castel.c:383: bool addItemToInventory(u8 item)
 ;	---------------------------------
 ; Function addItemToInventory
 ; ---------------------------------
@@ -3216,28 +1085,31 @@ _addItemToInventory::
 	add	ix,sp
 	dec	sp
 	ld	-1 (ix), a
-;./the-castel.c:412: for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
+;./the-castel.c:385: for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
 	ld	c, #0x00
 	ld	e, c
 00105$:
 	ld	a, e
 	sub	a, #0x05
 	jr	NC, 00103$
-;./the-castel.c:414: if (g_Inventory[i] == EMPTY_ITEM)
+;./the-castel.c:387: if (g_Inventory[i] == EMPTY_ITEM)
 	ld	hl, #_g_Inventory+0
 	ld	d, #0x00
 	add	hl, de
 	ld	a, (hl)
 	or	a, a
 	jr	NZ, 00106$
-;./the-castel.c:416: g_Inventory[i] = item;
+;./the-castel.c:389: g_Inventory[i] = item;
 	ld	a, -1 (ix)
 	ld	(hl), a
-;./the-castel.c:417: setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, item);
+;./the-castel.c:390: setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, item);
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
 	ld	l, e
 	ld	h, d
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
 	add	hl, hl
 	add	hl, de
 	add	hl, hl
@@ -3299,35 +1171,35 @@ _addItemToInventory::
 	inc	sp
 	ld	a, c
 	call	_setTile
-;./the-castel.c:418: return TRUE;
+;./the-castel.c:391: return TRUE;
 	ld	a, #0x01
 	jp	00107$
 00106$:
-;./the-castel.c:412: for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
+;./the-castel.c:385: for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
 	inc	e
 	ld	c, e
 	jp	00105$
 00103$:
-;./the-castel.c:421: return FALSE;
+;./the-castel.c:394: return FALSE;
 	xor	a, a
 00107$:
-;./the-castel.c:422: }
+;./the-castel.c:395: }
 	inc	sp
 	pop	ix
 	ret
-;./the-castel.c:429: bool hasItemInInventory(u8 item)
+;./the-castel.c:402: bool hasItemInInventory(u8 item)
 ;	---------------------------------
 ; Function hasItemInInventory
 ; ---------------------------------
 _hasItemInInventory::
 	ld	c, a
-;./the-castel.c:431: for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
+;./the-castel.c:404: for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
 	ld	e, #0x00
 00105$:
 	ld	a, e
 	sub	a, #0x05
 	jr	NC, 00103$
-;./the-castel.c:433: if (g_Inventory[i] == item)
+;./the-castel.c:406: if (g_Inventory[i] == item)
 	ld	hl, #_g_Inventory
 	ld	d, #0x00
 	add	hl, de
@@ -3335,19 +1207,19 @@ _hasItemInInventory::
 	ld	a, c
 	sub	a, b
 	jr	NZ, 00106$
-;./the-castel.c:435: return TRUE;
+;./the-castel.c:408: return TRUE;
 	ld	a, #0x01
 	ret
 00106$:
-;./the-castel.c:431: for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
+;./the-castel.c:404: for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
 	inc	e
 	jp	00105$
 00103$:
-;./the-castel.c:438: return FALSE;
+;./the-castel.c:411: return FALSE;
 	xor	a, a
-;./the-castel.c:439: }
+;./the-castel.c:412: }
 	ret
-;./the-castel.c:446: bool removeItemFromInventory(u8 item)
+;./the-castel.c:419: bool removeItemFromInventory(u8 item)
 ;	---------------------------------
 ; Function removeItemFromInventory
 ; ---------------------------------
@@ -3359,28 +1231,31 @@ _removeItemFromInventory::
 	add	hl, sp
 	ld	sp, hl
 	ld	-1 (ix), a
-;./the-castel.c:448: for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
+;./the-castel.c:421: for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
 	ld	-3 (ix), #0x00
 	ld	-2 (ix), #0x00
 00105$:
 	ld	a, -2 (ix)
 	sub	a, #0x05
 	jp	NC, 00103$
-;./the-castel.c:450: if (g_Inventory[i] == item)
+;./the-castel.c:423: if (g_Inventory[i] == item)
 	ld	bc, #_g_Inventory+0
 	ld	l, -2 (ix)
 	ld	h, #0x00
 	add	hl, bc
 	ld	a,-1 (ix)
-;./the-castel.c:452: g_Inventory[i] = EMPTY_ITEM;
+;./the-castel.c:425: g_Inventory[i] = EMPTY_ITEM;
 	sub	a,(hl)
 	jp	NZ,00106$
 	ld	(hl),a
-;./the-castel.c:454: setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, 0);
+;./the-castel.c:427: setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, 0);
 	ld	bc, (_g_CurrRoomIdx)
 	ld	b, #0x00
 	ld	l, c
 	ld	h, b
+	add	hl, hl
+	add	hl, bc
+	add	hl, hl
 	add	hl, hl
 	add	hl, bc
 	add	hl, hl
@@ -3451,42 +1326,42 @@ _removeItemFromInventory::
 ;	spillPairReg hl
 	ld	a, -3 (ix)
 	call	_setTile
-;./the-castel.c:455: return TRUE;
+;./the-castel.c:428: return TRUE;
 	ld	a, #0x01
 	jp	00107$
 00106$:
-;./the-castel.c:448: for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
+;./the-castel.c:421: for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
 	inc	-2 (ix)
 	ld	a, -2 (ix)
 	ld	-3 (ix), a
 	jp	00105$
 00103$:
-;./the-castel.c:458: return FALSE;
+;./the-castel.c:431: return FALSE;
 	xor	a, a
 00107$:
-;./the-castel.c:459: }
+;./the-castel.c:432: }
 	ld	sp, ix
 	pop	ix
 	ret
-;./the-castel.c:466: void displayItemToInventory()
+;./the-castel.c:439: void displayItemToInventory()
 ;	---------------------------------
 ; Function displayItemToInventory
 ; ---------------------------------
 _displayItemToInventory::
-;./the-castel.c:468: if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER)
+;./the-castel.c:441: if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER)
 	ld	a, (_g_CurrRoomIdx+0)
 	or	a, a
 	ret	Z
 	ld	a, (_g_CurrRoomIdx+0)
-	sub	a, #0x0e
+	sub	a, #0x10
 	ret	Z
-;./the-castel.c:470: for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
+;./the-castel.c:443: for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
 	ld	c, #0x00
 00106$:
 	ld	a, c
 	sub	a, #0x05
 	ret	NC
-;./the-castel.c:472: setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, g_Inventory[i]);
+;./the-castel.c:445: setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, g_Inventory[i]);
 	ld	hl, #_g_Inventory
 	ld	b, #0x00
 	add	hl, bc
@@ -3495,6 +1370,9 @@ _displayItemToInventory::
 	ld	d, #0x00
 	ld	l, e
 	ld	h, d
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
 	add	hl, hl
 	add	hl, de
 	add	hl, hl
@@ -3557,18 +1435,18 @@ _displayItemToInventory::
 	ld	a, e
 	call	_setTile
 	pop	bc
-;./the-castel.c:470: for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
+;./the-castel.c:443: for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
 	inc	c
-;./the-castel.c:475: }
+;./the-castel.c:448: }
 	jp	00106$
-;./the-castel.c:487: u8 getTile(u8 x, u8 y)
+;./the-castel.c:460: u8 getTile(u8 x, u8 y)
 ;	---------------------------------
 ; Function getTile
 ; ---------------------------------
 _getTile::
 	ld	c, a
 	ld	e, l
-;./the-castel.c:489: return VDP_Peek_16K(g_ScreenLayoutLow + (y / 8) * 32 + (x / 8));
+;./the-castel.c:462: return VDP_Peek_16K(g_ScreenLayoutLow + (y / 8) * 32 + (x / 8));
 	ld	d, #0x00
 	ld	l, e
 ;	spillPairReg hl
@@ -3614,9 +1492,9 @@ _getTile::
 	sra	h
 	rr	l
 	add	hl, de
-;./the-castel.c:490: }
+;./the-castel.c:463: }
 	jp	_VDP_Peek_16K
-;./the-castel.c:499: void setTile(u8 x, u8 y, u8 tile)
+;./the-castel.c:472: void setTile(u8 x, u8 y, u8 tile)
 ;	---------------------------------
 ; Function setTile
 ; ---------------------------------
@@ -3626,7 +1504,7 @@ _setTile::
 	add	ix,sp
 	ld	c, a
 	ld	e, l
-;./the-castel.c:501: VDP_Poke_16K(tile, g_ScreenLayoutLow + (y / 8) * 32 + (x / 8));
+;./the-castel.c:474: VDP_Poke_16K(tile, g_ScreenLayoutLow + (y / 8) * 32 + (x / 8));
 	ld	d, #0x00
 	ld	l, e
 ;	spillPairReg hl
@@ -3675,12 +1553,12 @@ _setTile::
 	ex	de, hl
 	ld	a, 4 (ix)
 	call	_VDP_Poke_16K
-;./the-castel.c:502: }
+;./the-castel.c:475: }
 	pop	ix
 	pop	hl
 	inc	sp
 	jp	(hl)
-;./the-castel.c:511: void setTileByTileCoord(u8 x, u8 y, u8 tile)
+;./the-castel.c:484: void setTileByTileCoord(u8 x, u8 y, u8 tile)
 ;	---------------------------------
 ; Function setTileByTileCoord
 ; ---------------------------------
@@ -3689,7 +1567,7 @@ _setTileByTileCoord::
 	ld	ix,#0
 	add	ix,sp
 	ld	c, a
-;./the-castel.c:513: VDP_Poke_16K(tile, g_ScreenLayoutLow + y * 32 + x);
+;./the-castel.c:486: VDP_Poke_16K(tile, g_ScreenLayoutLow + y * 32 + x);
 	ld	h, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -3705,52 +1583,52 @@ _setTileByTileCoord::
 	ex	de, hl
 	ld	a, 4 (ix)
 	call	_VDP_Poke_16K
-;./the-castel.c:514: }
+;./the-castel.c:487: }
 	pop	ix
 	pop	hl
 	inc	sp
 	jp	(hl)
-;./the-castel.c:526: void physicsEventPlayer(u8 event, u8 tile)
+;./the-castel.c:499: void physicsEventPlayer(u8 event, u8 tile)
 ;	---------------------------------
 ; Function physicsEventPlayer
 ; ---------------------------------
 _physicsEventPlayer::
-;./the-castel.c:529: switch (event)
+;./the-castel.c:502: switch (event)
 	or	a,a
 	jr	Z, 00102$
 	cp	a,#0x04
 	jr	Z, 00103$
 	sub	a, #0x05
 	ret	NZ
-;./the-castel.c:532: case PAWN_PHYSICS_COL_DOWN:
+;./the-castel.c:505: case PAWN_PHYSICS_COL_DOWN:
 00102$:
-;./the-castel.c:533: g_Player.bInAir = FALSE;
+;./the-castel.c:506: g_Player.bInAir = FALSE;
 	ld	hl, #(_g_Player + 1)
 	ld	(hl), #0x00
-;./the-castel.c:534: break;
+;./the-castel.c:507: break;
 	ret
-;./the-castel.c:536: case PAWN_PHYSICS_FALL: // Handle falling
+;./the-castel.c:509: case PAWN_PHYSICS_FALL: // Handle falling
 00103$:
-;./the-castel.c:537: if (!g_Player.bInAir)
+;./the-castel.c:510: if (!g_Player.bInAir)
 	ld	hl, #_g_Player + 1
 	ld	a, (hl)
 	or	a, a
 	ret	NZ
-;./the-castel.c:539: g_Player.bInAir = TRUE;
+;./the-castel.c:512: g_Player.bInAir = TRUE;
 	ld	(hl), #0x01
-;./the-castel.c:540: g_Player.VelocityY = 0;
+;./the-castel.c:513: g_Player.VelocityY = 0;
 	ld	hl, #(_g_Player + 2)
 	ld	(hl), #0x00
-;./the-castel.c:543: };
-;./the-castel.c:544: }
+;./the-castel.c:516: };
+;./the-castel.c:517: }
 	ret
-;./the-castel.c:551: bool physicsCollision(u8 tile)
+;./the-castel.c:524: bool physicsCollision(u8 tile)
 ;	---------------------------------
 ; Function physicsCollision
 ; ---------------------------------
 _physicsCollision::
 	ld	c, a
-;./the-castel.c:553: return (tile > 110 && tile < 184);
+;./the-castel.c:526: return (tile > 110 && tile < 184);
 	ld	a, #0x6e
 	sub	a, c
 	jr	NC, 00103$
@@ -3762,22 +1640,22 @@ _physicsCollision::
 	ret
 00104$:
 	ld	a, #0x01
-;./the-castel.c:554: }
+;./the-castel.c:527: }
 	ret
-;./the-castel.c:562: bool physicsCollisionEnemy(u8 x, u8 y)
+;./the-castel.c:535: bool physicsCollisionEnemy(u8 x, u8 y)
 ;	---------------------------------
 ; Function physicsCollisionEnemy
 ; ---------------------------------
 _physicsCollisionEnemy::
-;./the-castel.c:564: return ((getTile(x, y) >= 100) /*|| getTile(x, y) == 0 */);
+;./the-castel.c:537: return ((getTile(x, y) >= 100) /*|| getTile(x, y) == 0 */);
 	call	_getTile
 	sub	a, #0x64
 	ld	a, #0x00
 	rla
 	xor	a, #0x01
-;./the-castel.c:565: }
+;./the-castel.c:538: }
 	ret
-;./the-castel.c:572: void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct CharacterEnemy *genericEnemy, u8 enemyNumber)
+;./the-castel.c:547: void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct CharacterEnemy *genericEnemy, u8 enemyNumber)
 ;	---------------------------------
 ; Function physicsCollisionPlayerAndGenericEnemy
 ; ---------------------------------
@@ -3790,19 +1668,19 @@ _physicsCollisionPlayerAndGenericEnemy::
 	push	af
 	ld	c, l
 	ld	b, h
-;./the-castel.c:574: if (g_ReverseCount > 0)
+;./the-castel.c:549: if (g_ReverseCount > 0)
 	ld	a, (_g_ReverseCount+0)
 	or	a, a
 	jr	Z, 00103$
-;./the-castel.c:575: g_ReverseCount--;
+;./the-castel.c:550: g_ReverseCount--;
 	ld	iy, #_g_ReverseCount
 	dec	0 (iy)
 	jp	00108$
 00103$:
-;./the-castel.c:578: Game_Pawn *pawn = &ply->Pawn;
+;./the-castel.c:553: Game_Pawn *pawn = &ply->Pawn;
 	ld	hl, #0x0008
 	add	hl, bc
-;./the-castel.c:580: for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
+;./the-castel.c:555: for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
 	inc	sp
 	inc	sp
 	push	hl
@@ -3813,7 +1691,7 @@ _physicsCollisionPlayerAndGenericEnemy::
 	ld	a, -1 (ix)
 	sub	a, 4 (ix)
 	jr	NC, 00108$
-;./the-castel.c:582: struct CharacterEnemy *enemy = &genericEnemy[nEnemy];
+;./the-castel.c:557: struct CharacterEnemy *enemy = &genericEnemy[nEnemy];
 	ld	l, -1 (ix)
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -3824,7 +1702,7 @@ _physicsCollisionPlayerAndGenericEnemy::
 	add	hl, hl
 	add	hl, hl
 	add	hl, de
-;./the-castel.c:583: collisionCheck(enemy->X - pawn->PositionX, enemy->Y - pawn->PositionY);
+;./the-castel.c:558: collisionCheck(enemy->X - pawn->PositionX, enemy->Y - pawn->PositionY);
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	c,l
@@ -3858,24 +1736,24 @@ _physicsCollisionPlayerAndGenericEnemy::
 	ld	a, c
 	call	_collisionCheck
 	pop	de
-;./the-castel.c:580: for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
+;./the-castel.c:555: for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
 	inc	-1 (ix)
 	jp	00106$
 00108$:
-;./the-castel.c:586: }
+;./the-castel.c:561: }
 	ld	sp, ix
 	pop	ix
 	pop	hl
 	inc	sp
 	jp	(hl)
-;./the-castel.c:594: bool collisionCheck(i8 dx, i8 dy)
+;./the-castel.c:569: bool collisionCheck(i8 dx, i8 dy)
 ;	---------------------------------
 ; Function collisionCheck
 ; ---------------------------------
 _collisionCheck::
 	ld	c, a
 	ld	b, l
-;./the-castel.c:597: if ((dx * dx) + (dy * dy) < 13 * 13)
+;./the-castel.c:572: if ((dx * dx) + (dy * dy) < 13 * 13)
 	push	bc
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -3899,73 +1777,225 @@ _collisionCheck::
 	rr	l
 	sbc	hl, de
 	jr	NC, 00107$
-;./the-castel.c:599: g_ReverseCount = 60;
+;./the-castel.c:574: g_ReverseCount = 60;
 	ld	hl, #_g_ReverseCount
 	ld	(hl), #0x3c
-;./the-castel.c:600: if (removeLife() == TRUE)
+;./the-castel.c:575: if (removeLife() == TRUE)
 	call	_removeLife
 	dec	a
 	jr	NZ, 00104$
-;./the-castel.c:602: displayLife();
+;./the-castel.c:577: displayLife();
 	call	_displayLife
-;./the-castel.c:604: PlayBankSFX(9, 0);
+;./the-castel.c:579: PlayBankSFX(9, 0);
 	ld	l, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, #0x09
 	call	_PlayBankSFX
-;./the-castel.c:606: return TRUE;
+;./the-castel.c:581: return TRUE;
 	ld	a, #0x01
 	ret
 00104$:
-;./the-castel.c:610: if (!hasLives())
+;./the-castel.c:585: if (!hasLives())
 	call	_hasLives
 	or	a, a
 	ret	NZ
-;./the-castel.c:612: stopMusicPlayback();
+;./the-castel.c:587: stopMusicPlayback();
 	call	_stopMusicPlayback
-;./the-castel.c:613: Game_SetState(State_GameOver);
+;./the-castel.c:588: Game_SetState(State_GameOver);
 	ld	hl, #_State_GameOver
 	jp	_Game_SetState
 00107$:
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:688: inline void VDP_SetColor(u8 color) { VDP_RegWrite(7, color); }
-	ld	l, #0x01
-;	spillPairReg hl
-;	spillPairReg hl
-	ld	a, #0x07
-	call	_VDP_RegWrite
-;./the-castel.c:621: return FALSE;
+;./the-castel.c:596: return FALSE;
 	xor	a, a
-;./the-castel.c:623: }
+;./the-castel.c:598: }
 	ret
-;./the-castel.c:631: bool isUnderTheWater(u8 x, u8 y)
+;./the-castel.c:607: void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 enemyNumber)
+;	---------------------------------
+; Function pursuitCheck
+; ---------------------------------
+_pursuitCheck::
+	push	ix
+	ld	ix,#0
+	add	ix,sp
+	push	af
+	push	af
+	dec	sp
+	ld	-2 (ix), l
+	ld	-1 (ix), h
+;./the-castel.c:609: Game_Pawn *pawn = &g_Player.Pawn;
+;./the-castel.c:611: for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
+	ld	a, (#(_g_Player + 8) + 6)
+	ld	-5 (ix), a
+	ld	c, #0x00
+00117$:
+	ld	a, c
+	sub	a, 4 (ix)
+	jp	NC, 00119$
+;./the-castel.c:613: struct CharacterEnemy *enemy = &genericEnemy[nEnemy];
+	ld	l, c
+;	spillPairReg hl
+;	spillPairReg hl
+	ld	h, #0x00
+;	spillPairReg hl
+;	spillPairReg hl
+	add	hl, hl
+	add	hl, hl
+	add	hl, hl
+	ld	e, -2 (ix)
+	ld	d, -1 (ix)
+	add	hl, de
+	ex	de, hl
+;./the-castel.c:614: i8 dx = enemy->X - pawn->PositionX;
+	ld	a, (de)
+	ld	-4 (ix), a
+	ld	a, (#(_g_Player + 8) + 5)
+	ld	-3 (ix), a
+	ld	a, -4 (ix)
+	sub	a, -3 (ix)
+	ld	b, a
+;./the-castel.c:615: i8 dy = enemy->Y - pawn->PositionY;
+	ld	l, e
+;	spillPairReg hl
+;	spillPairReg hl
+	ld	h, d
+;	spillPairReg hl
+;	spillPairReg hl
+	inc	hl
+	ld	a, (hl)
+	sub	a, -5 (ix)
+;./the-castel.c:617: if (dy == 0 && (((dx * dx) > MIN_DISTANCE_MAGNENT) && ((dx * dx) < MAX_DISTANCE_MAGNENT)))
+	or	a, a
+	jp	NZ, 00111$
+	push	bc
+	push	de
+;	spillPairReg hl
+;	spillPairReg hl
+	ld	a,b
+	ld	l,a
+	call	__mulschar
+	ex	de, hl
+	pop	de
+	pop	bc
+	ld	a, #0x64
+	cp	a, l
+	ld	a, #0x00
+	sbc	a, h
+	jp	PO, 00161$
+	xor	a, #0x80
+00161$:
+	jp	P, 00111$
+	ld	a, l
+	sub	a, #0xe8
+	ld	a, h
+	rla
+	ccf
+	rra
+	sbc	a, #0x83
+	jr	NC, 00111$
+;./the-castel.c:619: if (isCatch)
+	ld	a, (_isCatch+0)
+	or	a, a
+	jr	Z, 00108$
+;./the-castel.c:621: if (g_CatchEnemy - g_DelayCatchEnemy > DELAY_CATCH_ENEMY)
+	ld	a, (_g_CatchEnemy+0)
+	ld	l, a
+;	spillPairReg hl
+;	spillPairReg hl
+	ld	h, #0x00
+;	spillPairReg hl
+;	spillPairReg hl
+	ld	a, (_g_DelayCatchEnemy+0)
+	ld	c, a
+	ld	b, #0x00
+	cp	a, a
+	sbc	hl, bc
+	ld	a, #0x01
+	cp	a, l
+	ld	a, #0x00
+	sbc	a, h
+	jp	PO, 00162$
+	xor	a, #0x80
+00162$:
+	jp	P, 00105$
+;./the-castel.c:624: enemy->Direction = 1;
+	ld	hl, #0x0004
+	add	hl, de
+;./the-castel.c:623: if (pawn->PositionX > enemy->X)
+	ld	a, -4 (ix)
+	sub	a, -3 (ix)
+	jr	NC, 00102$
+;./the-castel.c:624: enemy->Direction = 1;
+	ld	(hl), #0x01
+	inc	hl
+	ld	(hl), #0x00
+	jp	00103$
+00102$:
+;./the-castel.c:626: enemy->Direction = -1;
+	ld	(hl), #0xff
+	inc	hl
+	ld	(hl), #0xff
+00103$:
+;./the-castel.c:628: isCatch = FALSE;
+	ld	iy, #_isCatch
+	ld	0 (iy), #0x00
+	jp	00119$
+00105$:
+;./the-castel.c:633: g_DelayCatchEnemy--;
+	ld	iy, #_g_DelayCatchEnemy
+	dec	0 (iy)
+	jp	00119$
+00108$:
+;./the-castel.c:639: isCatch = TRUE;
+	ld	iy, #_isCatch
+	ld	0 (iy), #0x01
+;./the-castel.c:643: break;
+	jp	00119$
+00111$:
+;./the-castel.c:647: g_DelayCatchEnemy = g_CatchEnemy;
+	ld	a, (_g_CatchEnemy+0)
+	ld	(_g_DelayCatchEnemy+0), a
+;./the-castel.c:648: isCatch = FALSE;
+	ld	iy, #_isCatch
+	ld	0 (iy), #0x00
+;./the-castel.c:611: for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
+	inc	c
+	jp	00117$
+00119$:
+;./the-castel.c:652: }
+	ld	sp, ix
+	pop	ix
+	pop	hl
+	inc	sp
+	jp	(hl)
+;./the-castel.c:660: bool isUnderTheWater(u8 x, u8 y)
 ;	---------------------------------
 ; Function isUnderTheWater
 ; ---------------------------------
 _isUnderTheWater::
-;./the-castel.c:633: return (getTile(x, y) == TILE_WATER);
+;./the-castel.c:662: return (getTile(x, y) == TILE_WATER);
 	call	_getTile
 	sub	a, #0x50
 	ld	a, #0x01
 	ret	Z
 	xor	a, a
-;./the-castel.c:634: }
+;./the-castel.c:663: }
 	ret
-;./the-castel.c:642: u8 isUnderDunger(u8 x, u8 y)
+;./the-castel.c:671: u8 isUnderDunger(u8 x, u8 y)
 ;	---------------------------------
 ; Function isUnderDunger
 ; ---------------------------------
 _isUnderDunger::
-;./the-castel.c:644: return getTile(x, y);
+;./the-castel.c:673: return getTile(x, y);
 	ld	c, a
-;./the-castel.c:645: }
+;./the-castel.c:674: }
 	jp	_getTile
-;./the-castel.c:652: void setColorTiles()
+;./the-castel.c:681: void setColorTiles()
 ;	---------------------------------
 ; Function setColorTiles
 ; ---------------------------------
 _setColorTiles::
-;./the-castel.c:654: VDP_FillVRAM_16K(0X80, g_ScreenColorLow + 8, 2); // VERDE 0XC0 - ROSSO CHIARO 0x60
+;./the-castel.c:683: VDP_FillVRAM_16K(0X80, g_ScreenColorLow + 8, 2); // VERDE 0XC0 - ROSSO CHIARO 0x60
 	ld	hl, (_g_ScreenColorLow)
 	ld	bc, #0x0008
 	add	hl, bc
@@ -3974,7 +2004,7 @@ _setColorTiles::
 	push	hl
 	ld	a, #0x80
 	call	_VDP_FillVRAM_16K
-;./the-castel.c:655: VDP_FillVRAM_16K(0x70, g_ScreenColorLow + 10, 1);
+;./the-castel.c:684: VDP_FillVRAM_16K(0x70, g_ScreenColorLow + 10, 1);
 	ld	hl, (_g_ScreenColorLow)
 	ld	bc, #0x000a
 	add	hl, bc
@@ -3983,7 +2013,7 @@ _setColorTiles::
 	push	hl
 	ld	a, #0x70
 	call	_VDP_FillVRAM_16K
-;./the-castel.c:656: VDP_FillVRAM_16K(0xA0, g_ScreenColorLow + 12, 1); // GIALLO SCURO
+;./the-castel.c:685: VDP_FillVRAM_16K(0xA0, g_ScreenColorLow + 12, 1); // GIALLO SCURO
 	ld	hl, (_g_ScreenColorLow)
 	ld	bc, #0x000c
 	add	hl, bc
@@ -3992,7 +2022,7 @@ _setColorTiles::
 	push	hl
 	ld	a, #0xa0
 	call	_VDP_FillVRAM_16K
-;./the-castel.c:657: VDP_FillVRAM_16K(0xE0, g_ScreenColorLow + 18, 2); // GRIGIO
+;./the-castel.c:686: VDP_FillVRAM_16K(0xE0, g_ScreenColorLow + 18, 2); // GRIGIO
 	ld	hl, (_g_ScreenColorLow)
 	ld	bc, #0x0012
 	add	hl, bc
@@ -4001,9 +2031,128 @@ _setColorTiles::
 	push	hl
 	ld	a, #0xe0
 	call	_VDP_FillVRAM_16K
-;./the-castel.c:658: }
+;./the-castel.c:687: }
 	ret
-;./the-castel.c:666: bool interact(u8 x, u8 y)
+;./the-castel.c:701: void foo(u8 x, u8 y, u8 tile, u8 visible)
+;	---------------------------------
+; Function foo
+; ---------------------------------
+_foo::
+	push	ix
+	ld	ix,#0
+	add	ix,sp
+	ld	b, a
+	ld	c, l
+;./the-castel.c:703: g_Levels[g_CurrRoomIdx].MyItems[g_CountItem].x = x;
+	ld	de, (_g_CurrRoomIdx)
+	ld	d, #0x00
+	ld	l, e
+	ld	h, d
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
+	ld	de, #_g_Levels
+	add	hl, de
+	ld	de, #0x000e
+	add	hl, de
+	ld	a, (_g_CountItem+0)
+	add	a, a
+	add	a, a
+	ld	e, a
+	ld	d, #0x00
+	add	hl, de
+	ld	(hl), b
+;./the-castel.c:704: g_Levels[g_CurrRoomIdx].MyItems[g_CountItem].y = y;
+	ld	de, (_g_CurrRoomIdx)
+	ld	d, #0x00
+	ld	l, e
+	ld	h, d
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
+	ld	de, #_g_Levels
+	add	hl, de
+	ld	de, #0x000e
+	add	hl, de
+	ld	a, (_g_CountItem+0)
+	add	a, a
+	add	a, a
+	ld	e, a
+	ld	d, #0x00
+	add	hl, de
+	inc	hl
+	ld	(hl), c
+;./the-castel.c:705: g_Levels[g_CurrRoomIdx].MyItems[g_CountItem].tile = tile;
+	ld	bc, (_g_CurrRoomIdx)
+	ld	b, #0x00
+	ld	l, c
+	ld	h, b
+	add	hl, hl
+	add	hl, bc
+	add	hl, hl
+	add	hl, hl
+	add	hl, bc
+	add	hl, hl
+	add	hl, bc
+	add	hl, hl
+	ld	de, #_g_Levels
+	add	hl, de
+	ld	bc, #0x000e
+	add	hl, bc
+	ld	a, (_g_CountItem+0)
+	add	a, a
+	add	a, a
+	ld	e, a
+	ld	d, #0x00
+	add	hl, de
+	inc	hl
+	inc	hl
+	inc	hl
+	ld	a, 4 (ix)
+	ld	(hl), a
+;./the-castel.c:706: g_Levels[g_CurrRoomIdx].MyItems[g_CountItem].visible = visible;
+	ld	bc, (_g_CurrRoomIdx)
+	ld	b, #0x00
+	ld	l, c
+	ld	h, b
+	add	hl, hl
+	add	hl, bc
+	add	hl, hl
+	add	hl, hl
+	add	hl, bc
+	add	hl, hl
+	add	hl, bc
+	add	hl, hl
+	ld	de, #_g_Levels
+	add	hl, de
+	ld	bc, #0x000e
+	add	hl, bc
+	ld	a, (_g_CountItem+0)
+	add	a, a
+	add	a, a
+	ld	e, a
+	ld	d, #0x00
+	add	hl, de
+	inc	hl
+	inc	hl
+	ld	a, 5 (ix)
+	ld	(hl), a
+;./the-castel.c:710: }
+	pop	ix
+	pop	hl
+	pop	af
+	jp	(hl)
+;./the-castel.c:718: bool interact(u8 x, u8 y)
 ;	---------------------------------
 ; Function interact
 ; ---------------------------------
@@ -4014,7 +2163,7 @@ _interact::
 	dec	sp
 	ld	c, a
 	ld	b, l
-;./the-castel.c:668: u8 tile = getTile(x, y);
+;./the-castel.c:720: u8 tile = getTile(x, y);
 	push	bc
 	ld	l, b
 ;	spillPairReg hl
@@ -4023,23 +2172,23 @@ _interact::
 	call	_getTile
 	pop	bc
 	ld	-1 (ix), a
-;./the-castel.c:670: DEBUG_LOGNUM("Intercat", tile);
-	ld	hl, #___str_15+0
+;./the-castel.c:727: DEBUG_LOGNUM("Intercat", tile);
+	ld	hl, #___str_0+0
 	ld	e, -1 (ix)
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
 	ld	a, #0x23
 	out	(_g_PortDebugMode), a
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:103: while(*msg)
-00138$:
+00129$:
 	ld	a, (hl)
 	or	a, a
-	jr	Z, 00141$
+	jr	Z, 00132$
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:104: g_PortDebugData = *msg++;
 	inc	hl
 	out	(_g_PortDebugData), a
-	jp	00138$
+	jp	00129$
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:109: DEBUG_LOG(msg);
-00141$:
+00132$:
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:110: g_PortDebugData = ':';
 	ld	a, #0x3a
 	out	(_g_PortDebugData), a
@@ -4049,7 +2198,7 @@ _interact::
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:112: g_PortDebugData = num;
 	ld	a, e
 	out	(_g_PortDebugData), a
-;./the-castel.c:673: switch (tile)
+;./the-castel.c:730: switch (tile)
 	ld	a, -1 (ix)
 	sub	a, #0x41
 	jp	Z,00107$
@@ -4092,33 +2241,29 @@ _interact::
 	ld	a, -1 (ix)
 	sub	a, #0x62
 	jp	Z,00124$
-	ld	a, -1 (ix)
-	sub	a, #0x68
-	jp	Z,00126$
-	ld	a, -1 (ix)
-	sub	a, #0x90
-	jp	Z,00127$
-	jp	00137$
-;./the-castel.c:675: case TILE_HEART:
+	jp	00128$
+;./the-castel.c:732: case TILE_HEART:
 00101$:
-;./the-castel.c:676: if (addLife())
+;./the-castel.c:733: if (addLife())
 	push	bc
 	call	_addLife
 	pop	bc
 	or	a, a
 	jr	Z, 00103$
-;./the-castel.c:678: replacementItemInLevel(x, y, TILE_MASK_HEART); // EMPTY_ITEM
+;./the-castel.c:735: foo(x, y, TILE_MASK_HEART, 1);
 	push	bc
-	ld	a, #0xbb
-	push	af
-	inc	sp
+	ld	hl, #0x1bb
+	push	hl
 	ld	l, b
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, c
-	call	_replacementItemInLevel
+	call	_foo
 	pop	bc
-;./the-castel.c:679: setTile(x, y, EMPTY_ITEM);
+;./the-castel.c:736: g_CountItem++;
+	ld	hl, #_g_CountItem
+	inc	(hl)
+;./the-castel.c:738: setTile(x, y, EMPTY_ITEM);
 	xor	a, a
 	push	af
 	inc	sp
@@ -4127,23 +2272,26 @@ _interact::
 ;	spillPairReg hl
 	ld	a, c
 	call	_setTile
-;./the-castel.c:680: PlayBankSFX(10, 0);
+;./the-castel.c:739: PlayBankSFX(10, 0);
 	ld	l, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, #0x0a
 	call	_PlayBankSFX
 00103$:
-;./the-castel.c:682: return TRUE;
+;./the-castel.c:741: return TRUE;
 	ld	a, #0x01
-	jp	00143$
-;./the-castel.c:686: case TILE_MASK_DOOR3:
+	jp	00134$
+;./the-castel.c:745: case TILE_MASK_DOOR3:
 00107$:
-;./the-castel.c:687: drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
+;./the-castel.c:746: drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
 	ld	bc, (_g_CurrRoomIdx)
 	ld	b, #0x00
 	ld	l, c
 	ld	h, b
+	add	hl, hl
+	add	hl, bc
+	add	hl, hl
 	add	hl, hl
 	add	hl, bc
 	add	hl, hl
@@ -4155,19 +2303,19 @@ _interact::
 	add	hl, de
 	ld	a, (hl)
 	call	_drawLevel
-;./the-castel.c:688: return TRUE;
+;./the-castel.c:747: return TRUE;
 	ld	a, #0x01
-	jp	00143$
-;./the-castel.c:689: case TILE_DOOR1:
+	jp	00134$
+;./the-castel.c:748: case TILE_DOOR1:
 00108$:
-;./the-castel.c:690: if (hasItemInInventory(TILE_KEY1))
+;./the-castel.c:749: if (hasItemInInventory(TILE_KEY1))
 	push	bc
 	ld	a, #0x60
 	call	_hasItemInInventory
 	pop	bc
 	or	a, a
 	jr	Z, 00110$
-;./the-castel.c:692: changeLevel(x, y, TILE_KEY1, TILE_MASK_DOOR1);
+;./the-castel.c:751: changeLevel(x, y, TILE_KEY1, TILE_MASK_DOOR1);
 	ld	hl, #0x4160
 	push	hl
 	ld	l, b
@@ -4176,30 +2324,30 @@ _interact::
 	ld	a, c
 	call	_changeLevel
 00110$:
-;./the-castel.c:694: return TRUE;
+;./the-castel.c:753: return TRUE;
 	ld	a, #0x01
-	jp	00143$
-;./the-castel.c:695: case TILE_DOOR2:
+	jp	00134$
+;./the-castel.c:754: case TILE_DOOR2:
 00111$:
-;./the-castel.c:696: if (g_CurrRoomIdx == LAST_LEVEL)
+;./the-castel.c:755: if (g_CurrRoomIdx == LAST_LEVEL)
 	ld	a, (_g_CurrRoomIdx+0)
-	sub	a, #0x0d
+	sub	a, #0x0f
 	jr	NZ, 00115$
-;./the-castel.c:698: stopMusicPlayback();
+;./the-castel.c:757: stopMusicPlayback();
 	call	_stopMusicPlayback
-;./the-castel.c:699: Game_SetState(State_GameOver);
+;./the-castel.c:758: Game_SetState(State_GameOver);
 	ld	hl, #_State_GameOver
 	call	_Game_SetState
 	jp	00116$
 00115$:
-;./the-castel.c:703: if (hasItemInInventory(TILE_KEY2))
+;./the-castel.c:762: if (hasItemInInventory(TILE_KEY2))
 	push	bc
 	ld	a, #0x61
 	call	_hasItemInInventory
 	pop	bc
 	or	a, a
 	jr	Z, 00116$
-;./the-castel.c:705: changeLevel(x, y, TILE_KEY2, TILE_MASK_DOOR2);
+;./the-castel.c:764: changeLevel(x, y, TILE_KEY2, TILE_MASK_DOOR2);
 	ld	hl, #0x4261
 	push	hl
 	ld	l, b
@@ -4208,19 +2356,19 @@ _interact::
 	ld	a, c
 	call	_changeLevel
 00116$:
-;./the-castel.c:708: return TRUE;
+;./the-castel.c:767: return TRUE;
 	ld	a, #0x01
-	jp	00143$
-;./the-castel.c:709: case TILE_DOOR3:
+	jp	00134$
+;./the-castel.c:768: case TILE_DOOR3:
 00117$:
-;./the-castel.c:710: if (hasItemInInventory(TILE_KEY3))
+;./the-castel.c:769: if (hasItemInInventory(TILE_KEY3))
 	push	bc
 	ld	a, #0x62
 	call	_hasItemInInventory
 	pop	bc
 	or	a, a
 	jr	Z, 00119$
-;./the-castel.c:712: changeLevel(x, y, TILE_KEY3, TILE_MASK_DOOR3);
+;./the-castel.c:771: changeLevel(x, y, TILE_KEY3, TILE_MASK_DOOR3);
 	ld	hl, #0x4362
 	push	hl
 	ld	l, b
@@ -4229,16 +2377,19 @@ _interact::
 	ld	a, c
 	call	_changeLevel
 00119$:
-;./the-castel.c:714: return TRUE;
+;./the-castel.c:773: return TRUE;
 	ld	a, #0x01
-	jp	00143$
-;./the-castel.c:715: case TILE_DOOR_PREV:
+	jp	00134$
+;./the-castel.c:774: case TILE_DOOR_PREV:
 00120$:
-;./the-castel.c:716: drawLevel(g_Levels[g_CurrRoomIdx].PrevLvIdx);
+;./the-castel.c:775: drawLevel(g_Levels[g_CurrRoomIdx].PrevLvIdx);
 	ld	bc, (_g_CurrRoomIdx)
 	ld	b, #0x00
 	ld	l, c
 	ld	h, b
+	add	hl, hl
+	add	hl, bc
+	add	hl, hl
 	add	hl, hl
 	add	hl, bc
 	add	hl, hl
@@ -4250,16 +2401,19 @@ _interact::
 	add	hl, de
 	ld	a, (hl)
 	call	_drawLevel
-;./the-castel.c:717: return false;
+;./the-castel.c:776: return false;
 	xor	a, a
-	jp	00143$
-;./the-castel.c:718: case TILE_DOOR_NEXT:
+	jp	00134$
+;./the-castel.c:777: case TILE_DOOR_NEXT:
 00121$:
-;./the-castel.c:719: drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
+;./the-castel.c:778: drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
 	ld	bc, (_g_CurrRoomIdx)
 	ld	b, #0x00
 	ld	l, c
 	ld	h, b
+	add	hl, hl
+	add	hl, bc
+	add	hl, hl
 	add	hl, hl
 	add	hl, bc
 	add	hl, hl
@@ -4271,12 +2425,12 @@ _interact::
 	add	hl, de
 	ld	a, (hl)
 	call	_drawLevel
-;./the-castel.c:720: return false;
+;./the-castel.c:779: return false;
 	xor	a, a
-	jp	00143$
-;./the-castel.c:722: case TILE_KEY1:
+	jp	00134$
+;./the-castel.c:781: case TILE_KEY1:
 00122$:
-;./the-castel.c:725: replaceAndRemoveItem(x, y, tile, TILE_MASK_KEY1);
+;./the-castel.c:784: replaceAndRemoveItem(x, y, tile, TILE_MASK_KEY1);
 	ld	h, #0xbd
 	ld	l, -1 (ix)
 	push	hl
@@ -4285,18 +2439,18 @@ _interact::
 ;	spillPairReg hl
 	ld	a, c
 	call	_replaceAndRemoveItem
-;./the-castel.c:726: PlayBankSFX(5, 0);
+;./the-castel.c:785: PlayBankSFX(5, 0);
 	ld	l, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, #0x05
 	call	_PlayBankSFX
-;./the-castel.c:728: return TRUE;
+;./the-castel.c:787: return TRUE;
 	ld	a, #0x01
-	jp	00143$
-;./the-castel.c:729: case TILE_KEY2:
+	jp	00134$
+;./the-castel.c:788: case TILE_KEY2:
 00123$:
-;./the-castel.c:732: replaceAndRemoveItem(x, y, tile, TILE_MASK_KEY2);
+;./the-castel.c:791: replaceAndRemoveItem(x, y, tile, TILE_MASK_KEY2);
 	ld	h, #0xbe
 	ld	l, -1 (ix)
 	push	hl
@@ -4305,18 +2459,18 @@ _interact::
 ;	spillPairReg hl
 	ld	a, c
 	call	_replaceAndRemoveItem
-;./the-castel.c:733: PlayBankSFX(5, 0);
+;./the-castel.c:792: PlayBankSFX(5, 0);
 	ld	l, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, #0x05
 	call	_PlayBankSFX
-;./the-castel.c:735: return TRUE;
+;./the-castel.c:794: return TRUE;
 	ld	a, #0x01
-	jp	00143$
-;./the-castel.c:736: case TILE_KEY3:
+	jp	00134$
+;./the-castel.c:795: case TILE_KEY3:
 00124$:
-;./the-castel.c:739: replaceAndRemoveItem(x, y, tile, TILE_MASK_KEY3);
+;./the-castel.c:798: replaceAndRemoveItem(x, y, tile, TILE_MASK_KEY3);
 	ld	h, #0xbf
 	ld	l, -1 (ix)
 	push	hl
@@ -4325,18 +2479,25 @@ _interact::
 ;	spillPairReg hl
 	ld	a, c
 	call	_replaceAndRemoveItem
-;./the-castel.c:740: PlayBankSFX(5, 0);
+;./the-castel.c:799: PlayBankSFX(5, 0);
 	ld	l, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, #0x05
 	call	_PlayBankSFX
-;./the-castel.c:742: return TRUE;
+;./the-castel.c:801: return TRUE;
 	ld	a, #0x01
-	jp	00143$
-;./the-castel.c:743: case TILE_AMPHORA:
+	jp	00134$
+;./the-castel.c:802: case TILE_AMPHORA:
 00125$:
-;./the-castel.c:746: replaceAndRemoveItem(x, y, tile, TILE_MASK_AMPHORA);
+;./the-castel.c:805: if (!hasItemInInventory(TILE_AMPHORA))
+	push	bc
+	ld	a, #0x5f
+	call	_hasItemInInventory
+	pop	bc
+	or	a, a
+	jr	NZ, 00127$
+;./the-castel.c:807: replaceAndRemoveItem(x, y, tile, TILE_MASK_AMPHORA);
 	ld	h, #0xbc
 	ld	l, -1 (ix)
 	push	hl
@@ -4345,142 +2506,43 @@ _interact::
 ;	spillPairReg hl
 	ld	a, c
 	call	_replaceAndRemoveItem
-;./the-castel.c:747: PlayBankSFX(5, 0);
+;./the-castel.c:808: PlayBankSFX(5, 0);
 	ld	l, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, #0x05
 	call	_PlayBankSFX
-;./the-castel.c:749: return TRUE;
-	ld	a, #0x01
-	jp	00143$
-;./the-castel.c:750: case TILE_CRUCIFIX:
-00126$:
-;./the-castel.c:753: replaceAndRemoveItem(x, y, tile, TILE_MASK_CRUCIFIX);
-	ld	h, #0xb3
-	ld	l, -1 (ix)
-	push	hl
-	ld	l, b
-;	spillPairReg hl
-;	spillPairReg hl
-	ld	a, c
-	call	_replaceAndRemoveItem
-;./the-castel.c:754: PlayBankSFX(5, 0);
-	ld	l, #0x00
-;	spillPairReg hl
-;	spillPairReg hl
-	ld	a, #0x05
-	call	_PlayBankSFX
-;./the-castel.c:756: return TRUE;
-	ld	a, #0x01
-	jp	00143$
-;./the-castel.c:757: case TILE_BLOCK_TEST:
 00127$:
-;./the-castel.c:758: if (g_PrevDirection == INPUT_RIGHT)
-	ld	a, (_g_PrevDirection+0)
-	dec	a
-	jr	NZ, 00136$
-;./the-castel.c:759: if (getTile(x + 9, y) == 0)
-	ld	a, c
-	add	a, #0x09
-	ld	e, a
-	push	bc
-	push	de
-	ld	l, b
-;	spillPairReg hl
-;	spillPairReg hl
-	ld	a, e
-	call	_getTile
-	pop	de
-	pop	bc
-	or	a, a
-	jr	NZ, 00133$
-;./the-castel.c:761: setTile(x, y, EMPTY_ITEM);
-	push	bc
-	push	de
-	xor	a, a
-	push	af
-	inc	sp
-	ld	l, b
-;	spillPairReg hl
-;	spillPairReg hl
-	ld	a, c
-	call	_setTile
-	pop	de
-	pop	bc
-;./the-castel.c:762: setTile(x + 9, y, TILE_BLOCK_TEST);
-	ld	a, #0x90
-	push	af
-	inc	sp
-	ld	l, b
-;	spillPairReg hl
-;	spillPairReg hl
-	ld	a, e
-	call	_setTile
-	jp	00136$
-00133$:
-;./the-castel.c:764: else if (g_PrevDirection == INPUT_LEFT)
-	ld	a, (_g_PrevDirection+0)
-	sub	a, #0x02
-	jr	NZ, 00136$
-;./the-castel.c:766: if (getTile(x, y) == 0)
-	push	bc
-	ld	l, b
-;	spillPairReg hl
-;	spillPairReg hl
-	ld	a, c
-	call	_getTile
-	pop	bc
-	or	a, a
-	jr	NZ, 00136$
-;./the-castel.c:768: setTile(x, y, EMPTY_ITEM);
-	push	bc
-	xor	a, a
-	push	af
-	inc	sp
-	ld	l, b
-;	spillPairReg hl
-;	spillPairReg hl
-	ld	a, c
-	call	_setTile
-	pop	bc
-;./the-castel.c:769: setTile(x, y, TILE_BLOCK_TEST);
-	ld	a, #0x90
-	push	af
-	inc	sp
-	ld	l, b
-;	spillPairReg hl
-;	spillPairReg hl
-	ld	a, c
-	call	_setTile
-00136$:
-;./the-castel.c:772: return TRUE;
+;./the-castel.c:811: return TRUE;
 	ld	a, #0x01
-	jp	00143$
-;./the-castel.c:773: }
-00137$:
-;./the-castel.c:775: updateScore();
+	jp	00134$
+;./the-castel.c:835: }
+00128$:
+;./the-castel.c:837: updateScore();
 	call	_updateScore
-;./the-castel.c:777: return FALSE;
+;./the-castel.c:839: return FALSE;
 	xor	a, a
-00143$:
-;./the-castel.c:778: }
+00134$:
+;./the-castel.c:840: }
 	inc	sp
 	pop	ix
 	ret
-___str_15:
+___str_0:
 	.ascii "Intercat"
 	.db 0x00
-;./the-castel.c:788: void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask)
+;./the-castel.c:850: void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask)
 ;	---------------------------------
 ; Function replaceAndRemoveItem
 ; ---------------------------------
 _replaceAndRemoveItem::
 	ld	c, a
 	ld	b, l
-;./the-castel.c:790: replacementItemInLevel(x, y, tileMask);
+;./the-castel.c:852: foo(x, y, tileMask, 1);
 	push	bc
-	ld	hl, #5
+	ld	a, #0x01
+	push	af
+	inc	sp
+	ld	hl, #6
 	add	hl, sp
 	ld	a, (hl)
 	push	af
@@ -4489,9 +2551,12 @@ _replaceAndRemoveItem::
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, c
-	call	_replacementItemInLevel
+	call	_foo
 	pop	bc
-;./the-castel.c:791: setTile(x, y, EMPTY_ITEM);
+;./the-castel.c:853: g_CountItem++;
+	ld	hl, #_g_CountItem
+	inc	(hl)
+;./the-castel.c:855: setTile(x, y, EMPTY_ITEM);
 	xor	a, a
 	push	af
 	inc	sp
@@ -4500,16 +2565,16 @@ _replaceAndRemoveItem::
 ;	spillPairReg hl
 	ld	a, c
 	call	_setTile
-;./the-castel.c:792: addItemToInventory(tile);
+;./the-castel.c:856: addItemToInventory(tile);
 	ld	hl, #2
 	add	hl, sp
 	ld	a, (hl)
 	call	_addItemToInventory
-;./the-castel.c:793: }
+;./the-castel.c:857: }
 	pop	hl
 	pop	af
 	jp	(hl)
-;./the-castel.c:803: void changeLevel(u8 x, u8 y, u8 key, u8 door)
+;./the-castel.c:867: void changeLevel(u8 x, u8 y, u8 key, u8 door)
 ;	---------------------------------
 ; Function changeLevel
 ; ---------------------------------
@@ -4520,23 +2585,29 @@ _changeLevel::
 	ld	h, a
 ;	spillPairReg hl
 ;	spillPairReg hl
-;./the-castel.c:805: removeItemFromInventory(key);
+;./the-castel.c:869: removeItemFromInventory(key);
 	push	hl
 	ld	a, 4 (ix)
 	call	_removeItemFromInventory
 	pop	hl
-;./the-castel.c:806: replacementItemInLevel(x, y, door);
-	ld	a, 5 (ix)
-	push	af
-	inc	sp
+;./the-castel.c:870: foo(x, y, door, 1);
+	ld	d, #0x01
+	ld	e, 5 (ix)
+	push	de
 	ld	a, h
-	call	_replacementItemInLevel
-;./the-castel.c:807: drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
+	call	_foo
+;./the-castel.c:871: g_CountItem++;
+	ld	hl, #_g_CountItem
+	inc	(hl)
+;./the-castel.c:873: drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
 	ld	bc, #_g_Levels+0
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
 	ld	l, e
 	ld	h, d
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
 	add	hl, hl
 	add	hl, de
 	add	hl, hl
@@ -4547,12 +2618,12 @@ _changeLevel::
 	add	hl, de
 	ld	a, (hl)
 	call	_drawLevel
-;./the-castel.c:808: }
+;./the-castel.c:874: }
 	pop	ix
 	pop	hl
 	pop	af
 	jp	(hl)
-;./the-castel.c:816: bool getMoney(u8 x, u8 y)
+;./the-castel.c:882: bool getMoney(u8 x, u8 y)
 ;	---------------------------------
 ; Function getMoney
 ; ---------------------------------
@@ -4562,7 +2633,7 @@ _getMoney::
 	ld	a, l
 	ld	iy, #0
 	add	iy, sp
-;./the-castel.c:818: switch (getTile(x, y))
+;./the-castel.c:884: switch (getTile(x, y))
 	ld	0 (iy), a
 	push	bc
 	ld	l, a
@@ -4573,20 +2644,22 @@ _getMoney::
 	pop	bc
 	sub	a, #0x63
 	jr	NZ, 00102$
-;./the-castel.c:823: replacementItemInLevel(x, y, TILE_MASK_MONEY);
+;./the-castel.c:889: foo(x, y, TILE_MASK_MONEY, 1);
 	push	bc
-	ld	a, #0xc0
-	push	af
-	inc	sp
-	ld	iy, #3
+	ld	hl, #0x1c0
+	push	hl
+	ld	iy, #4
 	add	iy, sp
 	ld	l, 0 (iy)
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, c
-	call	_replacementItemInLevel
+	call	_foo
 	pop	bc
-;./the-castel.c:824: setTile(x, y, EMPTY_ITEM);
+;./the-castel.c:890: g_CountItem++;
+	ld	hl, #_g_CountItem
+	inc	(hl)
+;./the-castel.c:892: setTile(x, y, EMPTY_ITEM);
 	xor	a, a
 	push	af
 	inc	sp
@@ -4597,31 +2670,31 @@ _getMoney::
 ;	spillPairReg hl
 	ld	a, c
 	call	_setTile
-;./the-castel.c:826: g_Player.Score++;
+;./the-castel.c:894: g_Player.Score++;
 	ld	bc, #_g_Player+6
 	ld	a, (bc)
 	inc	a
 	ld	(bc), a
-;./the-castel.c:827: updateScore();
+;./the-castel.c:895: updateScore();
 	call	_updateScore
-;./the-castel.c:829: PlayBankSFX(11, 15);
+;./the-castel.c:897: PlayBankSFX(11, 15);
 	ld	l, #0x0f
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, #0x0b
 	call	_PlayBankSFX
-;./the-castel.c:831: return TRUE;
+;./the-castel.c:898: return TRUE;
 	ld	a, #0x01
 	jp	00103$
-;./the-castel.c:832: }
+;./the-castel.c:899: }
 00102$:
-;./the-castel.c:833: return FALSE;
+;./the-castel.c:900: return FALSE;
 	xor	a, a
 00103$:
-;./the-castel.c:834: }
+;./the-castel.c:901: }
 	inc	sp
 	ret
-;./the-castel.c:843: bool isDanger(u8 x, u8 y, u8 t)
+;./the-castel.c:910: bool isDanger(u8 x, u8 y, u8 t)
 ;	---------------------------------
 ; Function isDanger
 ; ---------------------------------
@@ -4629,10 +2702,21 @@ _isDanger::
 	push	ix
 	ld	ix,#0
 	add	ix,sp
-;./the-castel.c:845: switch (isUnderDunger(x, y))
+	push	af
+	push	af
+	dec	sp
+	ld	b, a
+	ld	c, l
+;./the-castel.c:912: switch (isUnderDunger(x, y))
+	push	bc
+	ld	l, c
+;	spillPairReg hl
+;	spillPairReg hl
+	ld	a, b
 	call	_isUnderDunger
+	pop	bc
 	cp	a, #0x40
-	jr	Z, 00113$
+	jp	Z,00113$
 	cp	a, #0x69
 	jr	Z, 00104$
 	cp	a, #0x6a
@@ -4641,24 +2725,46 @@ _isDanger::
 	jr	Z, 00104$
 	sub	a, #0x6c
 	jp	NZ,00119$
-;./the-castel.c:850: case TILE_DANGE4:
+;./the-castel.c:917: case TILE_DANGE4:
 00104$:
-;./the-castel.c:851: if (g_IsDanger)
+;./the-castel.c:918: if (g_IsDanger)
 	ld	a, (_g_IsDanger+0)
 	or	a, a
 	jr	Z, 00111$
-;./the-castel.c:854: if (!hasLives())
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:226: g_PrintData.CursorX = x;
+	ld	hl, #(_g_PrintData + 5)
+	ld	(hl), #0x1d
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:227: g_PrintData.CursorY = y;
+	ld	hl, #(_g_PrintData + 6)
+	ld	(hl), #0x17
+;./the-castel.c:923: String_Format(StrFormat, "%03i", y);
+	ld	b, #0x00
+	ld	hl, #0
+	add	hl, sp
+	push	bc
+	ld	de, #___str_1
+	push	de
+	push	hl
+	call	_String_Format
+	ld	hl, #6
+	add	hl, sp
+	ld	sp, hl
+;./the-castel.c:924: Print_DrawText(StrFormat);
+	ld	hl, #0
+	add	hl, sp
+	call	_Print_DrawText
+;./the-castel.c:927: if (!hasLives())
 	call	_hasLives
 	or	a, a
 	jr	NZ, 00108$
-;./the-castel.c:856: stopMusicPlayback();
+;./the-castel.c:929: stopMusicPlayback();
 	call	_stopMusicPlayback
-;./the-castel.c:857: Game_SetState(State_GameOver);
+;./the-castel.c:930: Game_SetState(State_GameOver);
 	ld	hl, #_State_GameOver
 	call	_Game_SetState
 	jp	00112$
 00108$:
-;./the-castel.c:861: if ((g_DangerCounter - g_DelayRemoveLife) > t)
+;./the-castel.c:934: if ((g_DangerCounter - g_DelayRemoveLife) > t)
 	ld	a, (_g_DangerCounter+0)
 	ld	l, a
 ;	spillPairReg hl
@@ -4677,88 +2783,92 @@ _isDanger::
 	sub	a, l
 	ld	a, b
 	sbc	a, h
-	jp	PO, 00174$
+	jp	PO, 00175$
 	xor	a, #0x80
-00174$:
+00175$:
 	jp	P, 00112$
-;./the-castel.c:863: removeLife();
+;./the-castel.c:936: removeLife();
 	call	_removeLife
-;./the-castel.c:864: displayLife();
+;./the-castel.c:937: displayLife();
 	call	_displayLife
-;./the-castel.c:866: PlayBankSFX(9, 0);
+;./the-castel.c:939: PlayBankSFX(9, 0);
 	ld	l, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, #0x09
 	call	_PlayBankSFX
-;./the-castel.c:868: g_IsDanger = FALSE;
+;./the-castel.c:941: g_IsDanger = FALSE;
 	ld	hl, #_g_IsDanger
 	ld	(hl), #0x00
-;./the-castel.c:869: g_DelayRemoveLife--;
+;./the-castel.c:942: g_DelayRemoveLife--;
 	ld	iy, #_g_DelayRemoveLife
 	dec	0 (iy)
 	jp	00112$
 00111$:
-;./the-castel.c:876: g_DangerCounter = 0;
+;./the-castel.c:949: g_DangerCounter = 0;
 	ld	hl, #_g_DangerCounter
 	ld	(hl), #0x00
-;./the-castel.c:877: g_IsDanger = TRUE;
+;./the-castel.c:950: g_IsDanger = TRUE;
 	ld	iy, #_g_IsDanger
 	ld	0 (iy), #0x01
 00112$:
-;./the-castel.c:879: return TRUE;
+;./the-castel.c:952: return TRUE;
 	ld	a, #0x01
-	jp	00121$
-;./the-castel.c:880: case TILE_LAVA:
+	jp	00122$
+;./the-castel.c:953: case TILE_LAVA:
 00113$:
-;./the-castel.c:881: if (!hasLives())
+;./the-castel.c:954: if (!hasLives())
 	call	_hasLives
 	or	a, a
 	jr	NZ, 00117$
-;./the-castel.c:883: stopMusicPlayback();
+;./the-castel.c:956: stopMusicPlayback();
 	call	_stopMusicPlayback
-;./the-castel.c:884: Game_SetState(State_GameOver);
+;./the-castel.c:957: Game_SetState(State_GameOver);
 	ld	hl, #_State_GameOver
 	call	_Game_SetState
 	jp	00118$
 00117$:
-;./the-castel.c:888: if (removeLife() == TRUE)
+;./the-castel.c:961: if (removeLife() == TRUE)
 	call	_removeLife
 	dec	a
 	jr	NZ, 00118$
-;./the-castel.c:890: displayLife();
+;./the-castel.c:963: displayLife();
 	call	_displayLife
-;./the-castel.c:891: PlayBankSFX(9, 0);
+;./the-castel.c:964: PlayBankSFX(9, 0);
 	ld	l, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, #0x09
 	call	_PlayBankSFX
-;./the-castel.c:892: drawLevel(1);
+;./the-castel.c:965: drawLevel(1);
 	ld	a, #0x01
 	call	_drawLevel
 00118$:
-;./the-castel.c:895: return TRUE;
+;./the-castel.c:968: return TRUE;
 	ld	a, #0x01
-	jp	00121$
-;./the-castel.c:897: default:
+	jp	00122$
+;./the-castel.c:970: default:
 00119$:
-;./the-castel.c:898: g_DangerCounter = 0;
+;./the-castel.c:971: g_DangerCounter = 0;
 	ld	hl, #_g_DangerCounter
 	ld	(hl), #0x00
-;./the-castel.c:899: g_IsDanger = FALSE;
+;./the-castel.c:972: g_IsDanger = FALSE;
 	ld	iy, #_g_IsDanger
 	ld	0 (iy), #0x00
-;./the-castel.c:900: return FALSE;
+;./the-castel.c:973: return FALSE;
 	xor	a, a
-;./the-castel.c:901: }
-00121$:
-;./the-castel.c:902: }
+;./the-castel.c:974: }
+00122$:
+;./the-castel.c:975: }
+	ld	sp, ix
 	pop	ix
 	pop	hl
 	inc	sp
 	jp	(hl)
-;./the-castel.c:909: void updateScore()
+___str_1:
+	.ascii "%03i"
+	.db 0x00
+;./the-castel.c:982: void updateScore()
 ;	---------------------------------
 ; Function updateScore
 ; ---------------------------------
@@ -4769,25 +2879,28 @@ _updateScore::
 	ld	hl, #-5
 	add	hl, sp
 	ld	sp, hl
-;./the-castel.c:911: if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER)
+;./the-castel.c:984: if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER)
 	ld	a, (_g_CurrRoomIdx+0)
 	or	a, a
 	jr	Z, 00108$
 	ld	a, (_g_CurrRoomIdx+0)
-	sub	a, #0x0e
+	sub	a, #0x10
 	jr	Z, 00108$
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:204: g_PrintData.CursorX = x;
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:226: g_PrintData.CursorX = x;
 	ld	hl, #(_g_PrintData + 5)
 	ld	(hl), #0x00
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:205: g_PrintData.CursorY = y;
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:227: g_PrintData.CursorY = y;
 	ld	bc, #_g_PrintData + 6
 	xor	a, a
 	ld	(bc), a
-;./the-castel.c:918: Print_DrawText(g_Levels[g_CurrRoomIdx].Name);
+;./the-castel.c:991: Print_DrawText(g_Levels[g_CurrRoomIdx].Name);
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
 	ld	l, e
 	ld	h, d
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
 	add	hl, hl
 	add	hl, de
 	add	hl, hl
@@ -4804,24 +2917,24 @@ _updateScore::
 	ex	de, hl
 	call	_Print_DrawText
 	pop	bc
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:204: g_PrintData.CursorX = x;
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:226: g_PrintData.CursorX = x;
 	ld	hl, #(_g_PrintData + 5)
 	ld	(hl), #0x0a
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:205: g_PrintData.CursorY = y;
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:227: g_PrintData.CursorY = y;
 	xor	a, a
 	ld	(bc), a
-;./the-castel.c:922: Print_DrawText("SCORE:");
+;./the-castel.c:995: Print_DrawText("SCORE:");
 	push	bc
-	ld	hl, #___str_16
+	ld	hl, #___str_2
 	call	_Print_DrawText
 	pop	bc
-;./the-castel.c:923: String_Format(StrFormat, "%04i", g_Player.Score);
+;./the-castel.c:996: String_Format(StrFormat, "%04i", g_Player.Score);
 	ld	a, (#(_g_Player + 6) + 0)
 	ld	e, a
 	ld	d, #0x00
 	push	bc
 	push	de
-	ld	hl, #___str_17
+	ld	hl, #___str_3
 	push	hl
 	ld	hl, #6
 	add	hl, sp
@@ -4831,126 +2944,42 @@ _updateScore::
 	add	hl, sp
 	ld	sp, hl
 	pop	bc
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:204: g_PrintData.CursorX = x;
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:226: g_PrintData.CursorX = x;
 	ld	hl, #(_g_PrintData + 5)
 	ld	(hl), #0x10
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:205: g_PrintData.CursorY = y;
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:227: g_PrintData.CursorY = y;
 	xor	a, a
 	ld	(bc), a
-;./the-castel.c:925: Print_DrawText(StrFormat);
+;./the-castel.c:998: Print_DrawText(StrFormat);
 	push	bc
 	ld	hl, #2
 	add	hl, sp
 	call	_Print_DrawText
 	pop	bc
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:204: g_PrintData.CursorX = x;
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:226: g_PrintData.CursorX = x;
 	ld	hl, #(_g_PrintData + 5)
 	ld	(hl), #0x16
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:205: g_PrintData.CursorY = y;
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:227: g_PrintData.CursorY = y;
 	xor	a, a
 	ld	(bc), a
-;./the-castel.c:929: Print_DrawText("LIFE:");
-	ld	hl, #___str_18
+;./the-castel.c:1002: Print_DrawText("LIFE:");
+	ld	hl, #___str_4
 	call	_Print_DrawText
 00108$:
-;./the-castel.c:931: }
+;./the-castel.c:1004: }
 	ld	sp, ix
 	pop	ix
 	ret
-___str_16:
+___str_2:
 	.ascii "SCORE:"
 	.db 0x00
-___str_17:
+___str_3:
 	.ascii "%04i"
 	.db 0x00
-___str_18:
+___str_4:
 	.ascii "LIFE:"
 	.db 0x00
-;./the-castel.c:940: void replacementItemInLevel(u8 x, u8 y, u8 tile)
-;	---------------------------------
-; Function replacementItemInLevel
-; ---------------------------------
-_replacementItemInLevel::
-	push	ix
-	ld	ix,#0
-	add	ix,sp
-	push	af
-	dec	sp
-	ld	-1 (ix), a
-	ld	e, l
-;./the-castel.c:942: g_Levels[g_CurrRoomIdx].Layout[((y / 8) * 32) + (x / 8)] = tile;
-	ld	bc, (_g_CurrRoomIdx)
-	ld	b, #0x00
-	ld	l, c
-	ld	h, b
-	add	hl, hl
-	add	hl, bc
-	add	hl, hl
-	add	hl, bc
-	add	hl, hl
-	ld	bc, #_g_Levels
-	add	hl, bc
-	ld	bc, #0x0004
-	add	hl, bc
-	ld	c, (hl)
-	inc	hl
-	ld	b, (hl)
-	ld	d, #0x00
-	ld	l, e
-;	spillPairReg hl
-;	spillPairReg hl
-	ld	h, d
-;	spillPairReg hl
-;	spillPairReg hl
-	bit	7, d
-	jr	Z, 00103$
-	ld	hl, #0x0007
-	add	hl, de
-00103$:
-	sra	h
-	rr	l
-	sra	h
-	rr	l
-	sra	h
-	rr	l
-	add	hl, hl
-	add	hl, hl
-	add	hl, hl
-	add	hl, hl
-	add	hl, hl
-	ex	(sp), hl
-	ld	e, -1 (ix)
-	ld	d, #0x00
-	ld	l, e
-;	spillPairReg hl
-;	spillPairReg hl
-	ld	h, d
-;	spillPairReg hl
-;	spillPairReg hl
-	bit	7, d
-	jr	Z, 00104$
-	ld	hl, #0x0007
-	add	hl, de
-00104$:
-	sra	h
-	rr	l
-	sra	h
-	rr	l
-	sra	h
-	rr	l
-	pop	de
-	push	de
-	add	hl, de
-	add	hl, bc
-	ld	a, 4 (ix)
-	ld	(hl), a
-;./the-castel.c:943: }
-	ld	sp, ix
-	pop	ix
-	pop	hl
-	inc	sp
-	jp	(hl)
-;./the-castel.c:950: void drawLevel(u8 levelIdx)
+;./the-castel.c:1011: void drawLevel(u8 levelIdx)
 ;	---------------------------------
 ; Function drawLevel
 ; ---------------------------------
@@ -4958,11 +2987,10 @@ _drawLevel::
 	push	ix
 	ld	ix,#0
 	add	ix,sp
-	ld	hl, #-22
-	add	hl, sp
-	ld	sp, hl
+	push	af
+	push	af
 	ld	-2 (ix), a
-;./the-castel.c:952: pausePT3Music();
+;./the-castel.c:1013: pausePT3Music();
 	call	_pausePT3Music
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:674: inline void VDP_EnableDisplay(bool enable) { VDP_RegWriteBakMask(1, (u8)~R01_BL, enable ? R01_BL : 0); }
 	xor	a, a
@@ -4973,253 +3001,231 @@ _drawLevel::
 ;	spillPairReg hl
 	ld	a, #0x01
 	call	_VDP_RegWriteBakMask
-;./the-castel.c:956: g_CurrRoomIdx = levelIdx;
+;./the-castel.c:1017: g_CurrRoomIdx = levelIdx;
 	ld	a, -2 (ix)
 	ld	(_g_CurrRoomIdx+0), a
-;./the-castel.c:957: g_PawnCount = 0;
+;./the-castel.c:1018: g_PawnCount = 0;
 	ld	hl, #_g_PawnCount
 	ld	(hl), #0x00
-;./the-castel.c:958: g_GhostCount = 0;
+;./the-castel.c:1019: g_GhostCount = 0;
 	ld	hl, #_g_GhostCount
 	ld	(hl), #0x00
-;./the-castel.c:959: g_SpiderCount = 0;
+;./the-castel.c:1020: g_SpiderCount = 0;
 	ld	hl, #_g_SpiderCount
 	ld	(hl), #0x00
-;./the-castel.c:960: g_BatCount = 0;
+;./the-castel.c:1021: g_BatCount = 0;
 	ld	hl, #_g_BatCount
 	ld	(hl), #0x00
-;./the-castel.c:961: g_SecondCounter = 0;
+;./the-castel.c:1022: g_SecondCounter = 0;
 	ld	hl, #_g_SecondCounter
 	ld	(hl), #0x00
-;./the-castel.c:962: g_DangerCounter = 0;
+;./the-castel.c:1023: g_DangerCounter = 0;
 	ld	hl, #_g_DangerCounter
 	ld	(hl), #0x00
-;./the-castel.c:973: VDP_FillVRAM_16K(0, g_ScreenLayoutLow, 32 * 24);
+;./the-castel.c:1024: g_CountItem = 0; // Iniziaizza il cobtatore degli oggetti raccolti
+	ld	hl, #_g_CountItem
+	ld	(hl), #0x00
+;./the-castel.c:1026: for (u8 i = 0; i < MAX_CACHE_OBJECT; i++)
+	ld	bc, (_g_CurrRoomIdx)
+	ld	b, #0x00
+	ld	l, c
+	ld	h, b
+	add	hl, hl
+	add	hl, bc
+	add	hl, hl
+	add	hl, hl
+	add	hl, bc
+	add	hl, hl
+	add	hl, bc
+	add	hl, hl
+	ld	de, #_g_Levels
+	add	hl, de
+	ld	de, #0x000e
+	add	hl, de
+	ex	(sp), hl
+	ld	-1 (ix), #0x00
+00133$:
+	ld	a, -1 (ix)
+	sub	a, #0x05
+	jr	NC, 00103$
+;./the-castel.c:1028: if (g_Levels[g_CurrRoomIdx].MyItems[i].visible == 1)
+	ld	a, -1 (ix)
+	add	a, a
+	add	a, a
+	add	a, -4 (ix)
+	ld	c, a
+	ld	a, #0x00
+	adc	a, -3 (ix)
+	ld	b, a
+	inc	bc
+	inc	bc
+	ld	a, (bc)
+	dec	a
+	jr	NZ, 00134$
+;./the-castel.c:1029: g_CountItem++;
+	ld	hl, #_g_CountItem
+	inc	(hl)
+00134$:
+;./the-castel.c:1026: for (u8 i = 0; i < MAX_CACHE_OBJECT; i++)
+	inc	-1 (ix)
+	jp	00133$
+00103$:
+;./the-castel.c:1041: VDP_FillVRAM_16K(0, g_ScreenLayoutLow, 32 * 24);
 	ld	hl, #0x0300
 	push	hl
 	ld	de, (_g_ScreenLayoutLow)
 	xor	a, a
 	call	_VDP_FillVRAM_16K
-;./the-castel.c:976: for (u8 riga = 0; riga < g_Levels[levelIdx].Height; ++riga)
-	ld	bc, #_g_Levels+0
-	ld	e, -2 (ix)
-	ld	d, #0x00
-	ld	l, e
-	ld	h, d
-	add	hl, hl
-	add	hl, de
-	add	hl, hl
-	add	hl, de
+;./the-castel.c:1043: Pletter_UnpackToRAM(g_Levels[levelIdx].Layout, g_CacheLevel[0].Layout);
+	ld	de, (#(_g_CacheLevel + 4) + 0)
+	ld	c, -2 (ix)
+	ld	b, #0x00
+	ld	l, c
+	ld	h, b
 	add	hl, hl
 	add	hl, bc
-	ex	(sp), hl
-	ld	a, -22 (ix)
-	ld	-20 (ix), a
-	ld	a, -21 (ix)
-	ld	-19 (ix), a
-	ld	-1 (ix), #0x00
-00130$:
-	ld	l, -20 (ix)
-	ld	h, -19 (ix)
-	inc	hl
-	inc	hl
-	inc	hl
-	ld	a,-1 (ix)
-	sub	a,(hl)
-	jp	NC, 00120$
-;./the-castel.c:1000: g_ScreenLayoutLow + (32 * (riga + g_Levels[levelIdx].Y)) + (g_Levels[levelIdx].X), g_Levels[levelIdx].Width);
-	ld	a, -22 (ix)
-	add	a, #0x02
-	ld	-18 (ix), a
-	ld	a, -21 (ix)
-	adc	a, #0x00
-	ld	-17 (ix), a
-	ld	l, -18 (ix)
-	ld	h, -17 (ix)
-	ld	a, (hl)
-	ld	-3 (ix), a
-	ld	-16 (ix), a
-	ld	-15 (ix), #0x00
-	ld	a, -1 (ix)
-	ld	-9 (ix), a
-	ld	-8 (ix), #0x00
-	ld	a, -22 (ix)
-	add	a, #0x01
-	ld	-14 (ix), a
-	ld	a, -21 (ix)
-	adc	a, #0x00
-	ld	-13 (ix), a
-	ld	l, -14 (ix)
-	ld	h, -13 (ix)
-	ld	a, (hl)
-	ld	-4 (ix), a
-	ld	-7 (ix), a
-	ld	-6 (ix), #0x00
-	ld	a, -9 (ix)
-	add	a, -7 (ix)
-	ld	-5 (ix), a
-	ld	a, -8 (ix)
-	adc	a, -6 (ix)
-	ld	-4 (ix), a
-	ld	b, #0x05
-00212$:
-	sla	-5 (ix)
-	rl	-4 (ix)
-	djnz	00212$
-	ld	hl, (_g_ScreenLayoutLow)
-	ld	-7 (ix), l
-	ld	-6 (ix), h
-	ld	a, -7 (ix)
-	add	a, -5 (ix)
-	ld	-9 (ix), a
-	ld	a, -6 (ix)
-	adc	a, -4 (ix)
-	ld	-8 (ix), a
-	pop	hl
-	push	hl
-	ld	a, (hl)
-	ld	-4 (ix), a
-	ld	-5 (ix), a
-	ld	-4 (ix), #0x00
-	ld	a, -5 (ix)
-	ld	-7 (ix), a
-	ld	a, -4 (ix)
-	ld	-6 (ix), a
-	ld	a, -9 (ix)
-	add	a, -7 (ix)
-	ld	-5 (ix), a
-	ld	a, -8 (ix)
-	adc	a, -6 (ix)
-	ld	-4 (ix), a
-	ld	a, -5 (ix)
-	ld	-12 (ix), a
-	ld	a, -4 (ix)
-	ld	-11 (ix), a
-;./the-castel.c:999: VDP_WriteVRAM_16K(g_Levels[levelIdx].Layout + g_Levels[levelIdx].Width * riga,
-	ld	a, -22 (ix)
-	add	a, #0x04
-	ld	-10 (ix), a
-	ld	a, -21 (ix)
-	adc	a, #0x00
-	ld	-9 (ix), a
-	ld	l, -10 (ix)
-	ld	h, -9 (ix)
-	ld	a, (hl)
-	ld	-8 (ix), a
-	inc	hl
-	ld	a, (hl)
-	ld	-7 (ix), a
-	ld	e, -1 (ix)
-	ld	h, -3 (ix)
-;	spillPairReg hl
-;	spillPairReg hl
-	ld	l, #0x00
-	ld	d, l
-	ld	b, #0x08
-00213$:
 	add	hl, hl
-	jr	NC, 00214$
-	add	hl, de
-00214$:
-	djnz	00213$
-	ld	-6 (ix), l
-	ld	-5 (ix), h
-	ld	a, -8 (ix)
-	add	a, -6 (ix)
-	ld	-4 (ix), a
-	ld	a, -7 (ix)
-	adc	a, -5 (ix)
-	ld	-3 (ix), a
-	ld	l, -16 (ix)
-;	spillPairReg hl
-;	spillPairReg hl
-	ld	h, -15 (ix)
-;	spillPairReg hl
-;	spillPairReg hl
-	push	hl
-	ld	e, -12 (ix)
-	ld	d, -11 (ix)
-	ld	l, -4 (ix)
-;	spillPairReg hl
-;	spillPairReg hl
-	ld	h, -3 (ix)
-;	spillPairReg hl
-;	spillPairReg hl
-	call	_VDP_WriteVRAM_16K
-;./the-castel.c:1002: for (u8 colonna = 0; colonna < g_Levels[levelIdx].Width; ++colonna)
-	ld	a, -22 (ix)
-	ld	-12 (ix), a
-	ld	a, -21 (ix)
-	ld	-11 (ix), a
-	ld	a, -22 (ix)
-	ld	-7 (ix), a
-	ld	a, -21 (ix)
-	ld	-6 (ix), a
-	ld	a, -22 (ix)
-	ld	-5 (ix), a
-	ld	a, -21 (ix)
-	ld	-4 (ix), a
-	ld	-3 (ix), #0x00
-00127$:
-	ld	l, -18 (ix)
-	ld	h, -17 (ix)
-	ld	e, (hl)
-	ld	a, -3 (ix)
-	sub	a, e
-	jp	NC, 00131$
-;./the-castel.c:1005: u8 tile = g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * riga + colonna];
-	ld	l, -10 (ix)
-	ld	h, -9 (ix)
-	ld	c, (hl)
+	add	hl, hl
+	add	hl, bc
+	add	hl, hl
+	add	hl, bc
+	add	hl, hl
+	ld	bc, #_g_Levels
+	add	hl, bc
+	ld	bc, #0x0004
+	add	hl, bc
+	ld	a, (hl)
 	inc	hl
+	ld	h, (hl)
+;	spillPairReg hl
+	ld	l, a
+;	spillPairReg hl
+;	spillPairReg hl
+	call	_Pletter_UnpackToRAM
+;./the-castel.c:1046: for (u8 riga = 0; riga < g_CacheLevel[0].Height; ++riga)
+	ld	c, #0x00
+00139$:
+	ld	hl, #_g_CacheLevel + 3
 	ld	b, (hl)
-	push	bc
-	ld	h, -1 (ix)
+	ld	a, c
+	sub	a, b
+	jp	NC, 00123$
+;./the-castel.c:1070: g_ScreenLayoutLow + (32 * (riga + g_CacheLevel[0].Y)) + (g_CacheLevel[0].X), g_CacheLevel[0].Width);
+	ld	hl, #(_g_CacheLevel + 2)
+	ld	b, (hl)
+	ld	-4 (ix), b
+	ld	-3 (ix), #0x00
+	ld	e, c
+	ld	d, #0x00
+	ld	a, (#(_g_CacheLevel + 1) + 0)
+	ld	l, a
+;	spillPairReg hl
+;	spillPairReg hl
+	ld	h, #0x00
+;	spillPairReg hl
+;	spillPairReg hl
+	add	hl, de
+	add	hl, hl
+	add	hl, hl
+	add	hl, hl
+	add	hl, hl
+	add	hl, hl
+	ld	iy, (_g_ScreenLayoutLow)
+	ex	de, hl
+	add	iy, de
+	ld	a, (#_g_CacheLevel + 0)
+	ld	e, a
+	ld	d, #0x00
+	add	iy, de
+;./the-castel.c:1069: VDP_WriteVRAM_16K(g_CacheLevel[0].Layout + g_CacheLevel[0].Width * riga,
+	ld	de, (#(_g_CacheLevel + 4) + 0)
+	push	de
+	ld	e, c
+	ld	h, b
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	l, #0x00
 	ld	d, l
 	ld	b, #0x08
-00215$:
+00258$:
 	add	hl, hl
-	jr	NC, 00216$
+	jr	NC, 00259$
 	add	hl, de
-00216$:
-	djnz	00215$
+00259$:
+	djnz	00258$
+	pop	de
+	add	hl, de
+	push	bc
+	ld	e, -4 (ix)
+	ld	d, -3 (ix)
+	push	de
+	push	iy
+	pop	de
+	call	_VDP_WriteVRAM_16K
 	pop	bc
-	ld	e, -3 (ix)
+;./the-castel.c:1072: for (u8 colonna = 0; colonna < g_CacheLevel[0].Width; ++colonna)
+	ld	b, #0x00
+00136$:
+	ld	hl, #(_g_CacheLevel + 2)
+	ld	e, (hl)
+	ld	a, b
+	sub	a, e
+	jp	NC, 00140$
+;./the-castel.c:1075: u8 tile = g_CacheLevel[0].Layout[g_CacheLevel[0].Width * riga + colonna];
+	ld	hl, #(_g_CacheLevel + 4)
+	ld	a, (hl)
+	ld	-4 (ix), a
+	inc	hl
+	ld	a, (hl)
+	ld	-3 (ix), a
+	push	bc
+	ld	h, c
+;	spillPairReg hl
+;	spillPairReg hl
+	ld	l, #0x00
+	ld	d, l
+	ld	b, #0x08
+00260$:
+	add	hl, hl
+	jr	NC, 00261$
+	add	hl, de
+00261$:
+	djnz	00260$
+	pop	bc
+	ld	e, b
 	ld	d, #0x00
 	add	hl, de
-	add	hl, bc
-	ld	c, (hl)
-;./the-castel.c:1007: if (tile == TILE_START_POS) // Rilevamento della posizione iniziale del giocatore
-	ld	a, c
+	pop	de
+	push	de
+	add	hl, de
+	ld	e, (hl)
+;./the-castel.c:1077: if (tile == TILE_START_POS) // Rilevamento della posizione iniziale del giocatore
+	ld	a, e
 	sub	a, #0x7f
-	jr	NZ, 00117$
-;./the-castel.c:1009: u8 x = g_Levels[levelIdx].X + colonna;
-	pop	hl
-	push	hl
-	ld	a, (hl)
-	add	a, -3 (ix)
-	ld	c, a
-;./the-castel.c:1010: u8 y = g_Levels[levelIdx].Y + riga;
-	ld	l, -14 (ix)
-	ld	h, -13 (ix)
-	ld	a, (hl)
-	add	a, -1 (ix)
-;./the-castel.c:1019: GamePawn_SetPosition(&g_Player.Pawn, x * 8, (y - 3) * 8);
-	ld	b, a
+	jr	NZ, 00120$
+;./the-castel.c:1079: u8 x = g_CacheLevel[0].X + colonna;
+	ld	a, (#_g_CacheLevel + 0)
+	add	a, b
+	ld	e, a
+;./the-castel.c:1080: u8 y = g_CacheLevel[0].Y + riga;
+	ld	a, (#(_g_CacheLevel + 1) + 0)
+	add	a, c
+;./the-castel.c:1089: GamePawn_SetPosition(&g_Player.Pawn, x * 8, (y - 3) * 8);
+	ld	d, a
 	add	a, #0xfd
 	add	a, a
 	add	a, a
 	add	a, a
-	ld	e, a
-	ld	a, c
+	ld	l, a
+;	spillPairReg hl
+;	spillPairReg hl
+	ld	a, e
 	add	a, a
 	add	a, a
 	add	a, a
 	push	bc
-	ld	h, e
+	push	de
+	ld	h, l
 ;	spillPairReg hl
 ;	spillPairReg hl
 	push	hl
@@ -5228,30 +3234,33 @@ _drawLevel::
 	inc	sp
 	ld	hl, #(_g_Player + 8)
 	call	_GamePawn_SetPosition
-	pop	bc
-;./the-castel.c:1021: setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
+	pop	de
 	xor	a, a
 	push	af
 	inc	sp
-	ld	l, b
+	ld	l, d
 ;	spillPairReg hl
 ;	spillPairReg hl
-	ld	a, c
+	ld	a, e
 	call	_setTileByTileCoord
-	jp	00128$
-00117$:
-;./the-castel.c:1023: else if ((tile == TILE_STAR_POS_ENEMY) && (g_PawnCount < MAX_ENEMY)) // Rilevamento della posizione iniziale del nemico
-	ld	a, c
+	pop	bc
+	jp	00137$
+00120$:
+;./the-castel.c:1093: else if ((tile == TILE_STAR_POS_ENEMY) && (g_PawnCount < MAX_ENEMY)) // Rilevamento della posizione iniziale del nemico
+	ld	a, e
 	sub	a, #0x7c
-	jr	NZ, 00113$
+	jr	NZ, 00116$
 	ld	a, (_g_PawnCount+0)
 	sub	a, #0x03
-	jr	NC, 00113$
-;./the-castel.c:1025: g_PawnCount = positionGenericEnemy(TILE_STAR_POS_ENEMY, g_PawnCount, &g_Enemy[0], 196, 6, riga, colonna, levelIdx);
-	ld	h, -2 (ix)
-	ld	l, -3 (ix)
-	push	hl
-	ld	h, -1 (ix)
+	jr	NC, 00116$
+;./the-castel.c:1095: g_PawnCount = positionGenericEnemy(TILE_STAR_POS_ENEMY, g_PawnCount, &g_Enemy[0], 196, 6, riga, colonna, 0);
+	push	bc
+	xor	a, a
+	push	af
+	inc	sp
+	push	bc
+	inc	sp
+	ld	h, c
 	ld	l, #0x06
 	push	hl
 	ld	a, #0xc4
@@ -5265,25 +3274,25 @@ _drawLevel::
 ;	spillPairReg hl
 	ld	a, #0x7c
 	call	_positionGenericEnemy
+	pop	bc
 	ld	(_g_PawnCount+0), a
-	jp	00128$
-00113$:
-;./the-castel.c:1027: else if ((tile == TILE_POS_GHOST) && (g_Levels[levelIdx].GhostNumber < MAX_GHOST)) // Rilevamento della posizione iniziale del nemico
-	ld	a, c
+	jp	00137$
+00116$:
+;./the-castel.c:1097: else if ((tile == TILE_POS_GHOST) && (g_Levels[0].MyEnemyType.GhostNumber < MAX_GHOST)) // Rilevamento della posizione iniziale del nemico
+	ld	a, e
 	sub	a, #0x80
-	jr	NZ, 00109$
-	ld	l, -12 (ix)
-	ld	h, -11 (ix)
-	ld	de, #0x000b
-	add	hl, de
-	ld	a, (hl)
+	jr	NZ, 00112$
+	ld	a, (#_g_Levels + 11)
 	sub	a, #0x03
-	jr	NC, 00109$
-;./the-castel.c:1029: g_GhostCount = positionGenericEnemy(TILE_POS_GHOST, g_GhostCount, &g_Ghost[0], 200, 10, riga, colonna, levelIdx);
-	ld	h, -2 (ix)
-	ld	l, -3 (ix)
-	push	hl
-	ld	h, -1 (ix)
+	jr	NC, 00112$
+;./the-castel.c:1099: g_GhostCount = positionGenericEnemy(TILE_POS_GHOST, g_GhostCount, &g_Ghost[0], 200, 10, riga, colonna, 0);
+	push	bc
+	xor	a, a
+	push	af
+	inc	sp
+	push	bc
+	inc	sp
+	ld	h, c
 	ld	l, #0x0a
 	push	hl
 	ld	a, #0xc8
@@ -5297,25 +3306,25 @@ _drawLevel::
 ;	spillPairReg hl
 	ld	a, #0x80
 	call	_positionGenericEnemy
+	pop	bc
 	ld	(_g_GhostCount+0), a
-	jp	00128$
-00109$:
-;./the-castel.c:1031: else if ((tile == TILE_POS_SPIDER) && (g_Levels[levelIdx].SpiderNumber < MAX_SPIDER)) // Rilevamento della posizione iniziale del nemico
-	ld	a, c
+	jp	00137$
+00112$:
+;./the-castel.c:1101: else if ((tile == TILE_POS_SPIDER) && (g_Levels[0].MyEnemyType.SpiderNumber < MAX_SPIDER)) // Rilevamento della posizione iniziale del nemico
+	ld	a, e
 	sub	a, #0x81
-	jr	NZ, 00105$
-	ld	l, -7 (ix)
-	ld	h, -6 (ix)
-	ld	de, #0x000c
-	add	hl, de
-	ld	a, (hl)
+	jr	NZ, 00108$
+	ld	a, (#_g_Levels + 12)
 	sub	a, #0x03
-	jr	NC, 00105$
-;./the-castel.c:1033: g_SpiderCount = positionGenericEnemy(TILE_POS_SPIDER, g_SpiderCount, &g_Spider[0], 192, 15, riga, colonna, levelIdx);
-	ld	h, -2 (ix)
-	ld	l, -3 (ix)
-	push	hl
-	ld	h, -1 (ix)
+	jr	NC, 00108$
+;./the-castel.c:1103: g_SpiderCount = positionGenericEnemy(TILE_POS_SPIDER, g_SpiderCount, &g_Spider[0], 192, 15, riga, colonna, 0);
+	push	bc
+	xor	a, a
+	push	af
+	inc	sp
+	push	bc
+	inc	sp
+	ld	h, c
 	ld	l, #0x0f
 	push	hl
 	ld	a, #0xc0
@@ -5329,25 +3338,25 @@ _drawLevel::
 ;	spillPairReg hl
 	ld	a, #0x81
 	call	_positionGenericEnemy
+	pop	bc
 	ld	(_g_SpiderCount+0), a
-	jp	00128$
-00105$:
-;./the-castel.c:1035: else if ((tile == TILE_POS_BAT) && (g_Levels[levelIdx].BatNumber < MAX_BAT)) // Rilevamento della posizione iniziale del nemico
-	ld	a, c
+	jp	00137$
+00108$:
+;./the-castel.c:1105: else if ((tile == TILE_POS_BAT) && (g_Levels[0].MyEnemyType.BatNumber < MAX_BAT)) // Rilevamento della posizione iniziale del nemico
+	ld	a, e
 	sub	a, #0x82
-	jr	NZ, 00128$
-	ld	l, -5 (ix)
-	ld	h, -4 (ix)
-	ld	de, #0x000d
-	add	hl, de
-	ld	a, (hl)
+	jr	NZ, 00137$
+	ld	a, (#_g_Levels + 13)
 	sub	a, #0x03
-	jr	NC, 00128$
-;./the-castel.c:1037: g_BatCount = positionGenericEnemy(TILE_POS_BAT, g_BatCount, &g_Bat[0], 204, 20, riga, colonna, levelIdx);
-	ld	h, -2 (ix)
-	ld	l, -3 (ix)
-	push	hl
-	ld	h, -1 (ix)
+	jr	NC, 00137$
+;./the-castel.c:1107: g_BatCount = positionGenericEnemy(TILE_POS_BAT, g_BatCount, &g_Bat[0], 204, 20, riga, colonna, 0);
+	push	bc
+	xor	a, a
+	push	af
+	inc	sp
+	push	bc
+	inc	sp
+	ld	h, c
 	ld	l, #0x14
 	push	hl
 	ld	a, #0xcc
@@ -5361,17 +3370,18 @@ _drawLevel::
 ;	spillPairReg hl
 	ld	a, #0x82
 	call	_positionGenericEnemy
+	pop	bc
 	ld	(_g_BatCount+0), a
-00128$:
-;./the-castel.c:1002: for (u8 colonna = 0; colonna < g_Levels[levelIdx].Width; ++colonna)
-	inc	-3 (ix)
-	jp	00127$
-00131$:
-;./the-castel.c:976: for (u8 riga = 0; riga < g_Levels[levelIdx].Height; ++riga)
-	inc	-1 (ix)
-	jp	00130$
-00120$:
-;./the-castel.c:1042: hideSprite(g_PawnCount, MAX_ENEMY, 6);
+00137$:
+;./the-castel.c:1072: for (u8 colonna = 0; colonna < g_CacheLevel[0].Width; ++colonna)
+	inc	b
+	jp	00136$
+00140$:
+;./the-castel.c:1046: for (u8 riga = 0; riga < g_CacheLevel[0].Height; ++riga)
+	inc	c
+	jp	00139$
+00123$:
+;./the-castel.c:1112: hideSprite(g_PawnCount, MAX_ENEMY, 6);
 	ld	a, #0x06
 	push	af
 	inc	sp
@@ -5380,7 +3390,7 @@ _drawLevel::
 ;	spillPairReg hl
 	ld	a, (_g_PawnCount+0)
 	call	_hideSprite
-;./the-castel.c:1043: hideSprite(g_GhostCount, MAX_GHOST, 10);
+;./the-castel.c:1113: hideSprite(g_GhostCount, MAX_GHOST, 10);
 	ld	a, #0x0a
 	push	af
 	inc	sp
@@ -5389,7 +3399,7 @@ _drawLevel::
 ;	spillPairReg hl
 	ld	a, (_g_GhostCount+0)
 	call	_hideSprite
-;./the-castel.c:1044: hideSprite(g_SpiderCount, MAX_SPIDER, 15);
+;./the-castel.c:1114: hideSprite(g_SpiderCount, MAX_SPIDER, 15);
 	ld	a, #0x0f
 	push	af
 	inc	sp
@@ -5398,7 +3408,7 @@ _drawLevel::
 ;	spillPairReg hl
 	ld	a, (_g_SpiderCount+0)
 	call	_hideSprite
-;./the-castel.c:1045: hideSprite(g_BatCount, MAX_BAT, 20);
+;./the-castel.c:1115: hideSprite(g_BatCount, MAX_BAT, 20);
 	ld	a, #0x14
 	push	af
 	inc	sp
@@ -5407,18 +3417,88 @@ _drawLevel::
 ;	spillPairReg hl
 	ld	a, (_g_BatCount+0)
 	call	_hideSprite
-;./the-castel.c:1047: if (levelIdx == 0)
+;./the-castel.c:1117: if (levelIdx == 0)
 	ld	a, -2 (ix)
 	or	a, a
-	jr	Z, 00137$
-;./the-castel.c:1053: updateScore();
+	jr	Z, 00170$
+;./the-castel.c:1123: updateScore();
 	call	_updateScore
-;./the-castel.c:1055: displayItemToInventory();
+;./the-castel.c:1125: displayItemToInventory();
 	call	_displayItemToInventory
-;./the-castel.c:1056: displayLife();
+;./the-castel.c:1126: displayLife();
 	call	_displayLife
+;./the-castel.c:1130: for (u8 i = 0; i < 10; i++)
+00170$:
+	ld	-1 (ix), #0x00
+00142$:
+	ld	a, -1 (ix)
+	sub	a, #0x0a
+	jr	NC, 00149$
+;./the-castel.c:1132: if (g_Levels[g_CurrRoomIdx].MyItems[i].visible == 1)
+	ld	bc, (_g_CurrRoomIdx)
+	ld	b, #0x00
+	ld	l, c
+	ld	h, b
+	add	hl, hl
+	add	hl, bc
+	add	hl, hl
+	add	hl, hl
+	add	hl, bc
+	add	hl, hl
+	add	hl, bc
+	add	hl, hl
+	ld	de, #_g_Levels
+	add	hl, de
+	ld	bc, #0x000e
+	add	hl, bc
+	ld	a, -1 (ix)
+	add	a, a
+	add	a, a
+	add	a, l
+	ld	c, a
+	ld	a, #0x00
+	adc	a, h
+	ld	b, a
+	ld	e, c
+	ld	d, b
+	inc	de
+	inc	de
+	ld	a, (de)
+	dec	a
+	jr	NZ, 00143$
+;./the-castel.c:1134: setTile(g_Levels[g_CurrRoomIdx].MyItems[i].x, g_Levels[g_CurrRoomIdx].MyItems[i].y, g_Levels[g_CurrRoomIdx].MyItems[i].tile);
+	ld	l, c
+;	spillPairReg hl
+;	spillPairReg hl
+	ld	h, b
+;	spillPairReg hl
+;	spillPairReg hl
+	inc	hl
+	inc	hl
+	inc	hl
+	ld	e, (hl)
+	ld	l, c
+;	spillPairReg hl
+;	spillPairReg hl
+	ld	h, b
+;	spillPairReg hl
+;	spillPairReg hl
+	inc	hl
+	ld	l, (hl)
+;	spillPairReg hl
+	ld	a, (bc)
+	ld	c, a
+	ld	a, e
+	push	af
+	inc	sp
+	ld	a, c
+	call	_setTile
+00143$:
+;./the-castel.c:1130: for (u8 i = 0; i < 10; i++)
+	inc	-1 (ix)
+	jp	00142$
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:674: inline void VDP_EnableDisplay(bool enable) { VDP_RegWriteBakMask(1, (u8)~R01_BL, enable ? R01_BL : 0); }
-00137$:
+00149$:
 	ld	a, #0x40
 	push	af
 	inc	sp
@@ -5427,13 +3507,13 @@ _drawLevel::
 ;	spillPairReg hl
 	ld	a, #0x01
 	call	_VDP_RegWriteBakMask
-;./the-castel.c:1061: restorePT3Music();
+;./the-castel.c:1140: restorePT3Music();
 	call	_restorePT3Music
-;./the-castel.c:1062: }
+;./the-castel.c:1141: }
 	ld	sp, ix
 	pop	ix
 	ret
-;./the-castel.c:1075: u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, u8 idxSprite, u8 bo, u8 riga, u8 colonna, u8 levelIdx)
+;./the-castel.c:1154: u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, u8 idxSprite, u8 bo, u8 riga, u8 colonna, u8 levelIdx)
 ;	---------------------------------
 ; Function positionGenericEnemy
 ; ---------------------------------
@@ -5446,12 +3526,15 @@ _positionGenericEnemy::
 	ld	sp, iy
 	ld	-1 (ix), a
 	ld	-2 (ix), l
-;./the-castel.c:1077: if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * riga + colonna - 1] != TILE_POS_GENERIC_ENEMY)
+;./the-castel.c:1156: if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * riga + colonna - 1] != TILE_POS_GENERIC_ENEMY)
 	ld	bc, #_g_Levels+0
 	ld	e, 10 (ix)
 	ld	d, #0x00
 	ld	l, e
 	ld	h, d
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
 	add	hl, hl
 	add	hl, de
 	add	hl, hl
@@ -5501,7 +3584,7 @@ _positionGenericEnemy::
 	ld	a, -1 (ix)
 	sub	a, e
 	jr	Z, 00104$
-;./the-castel.c:1079: if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * (riga - 1) + colonna] != TILE_POS_GENERIC_ENEMY)
+;./the-castel.c:1158: if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * (riga - 1) + colonna] != TILE_POS_GENERIC_ENEMY)
 	ld	e, 8 (ix)
 	ld	d, #0x00
 	dec	de
@@ -5524,16 +3607,16 @@ _positionGenericEnemy::
 	ld	a, -1 (ix)
 	sub	a, e
 	jr	Z, 00104$
-;./the-castel.c:1087: u8 x = g_Levels[levelIdx].X + colonna;
+;./the-castel.c:1166: u8 x = g_Levels[levelIdx].X + colonna;
 	ld	a, (bc)
 	add	a, 9 (ix)
 	ld	e, a
-;./the-castel.c:1088: u8 y = g_Levels[levelIdx].Y + riga;
+;./the-castel.c:1167: u8 y = g_Levels[levelIdx].Y + riga;
 	inc	bc
 	ld	a, (bc)
 	add	a, 8 (ix)
 	ld	d, a
-;./the-castel.c:1090: managementSprite(x, y, bo, enemyCount, idxSprite);
+;./the-castel.c:1169: managementSprite(x, y, bo, enemyCount, idxSprite);
 	push	de
 	ld	h, 6 (ix)
 	ld	l, -2 (ix)
@@ -5547,8 +3630,8 @@ _positionGenericEnemy::
 	ld	a, e
 	call	_managementSprite
 	pop	de
-;./the-castel.c:1092: spritePosition(x, y, &enemy[0], enemyCount, "---");
-	ld	hl, #___str_19+0
+;./the-castel.c:1171: spritePosition(x, y, &enemy[0], enemyCount, "---");
+	ld	hl, #___str_5+0
 	ld	c, 4 (ix)
 	ld	b, 5 (ix)
 	push	de
@@ -5563,7 +3646,7 @@ _positionGenericEnemy::
 	ld	a, e
 	call	_spritePosition
 	pop	de
-;./the-castel.c:1094: setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
+;./the-castel.c:1173: setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
 	xor	a, a
 	push	af
 	inc	sp
@@ -5572,12 +3655,12 @@ _positionGenericEnemy::
 ;	spillPairReg hl
 	ld	a, e
 	call	_setTileByTileCoord
-;./the-castel.c:1095: enemyCount++;
+;./the-castel.c:1174: enemyCount++;
 	inc	-2 (ix)
 00104$:
-;./the-castel.c:1099: return enemyCount;
+;./the-castel.c:1178: return enemyCount;
 	ld	a, -2 (ix)
-;./the-castel.c:1100: }
+;./the-castel.c:1179: }
 	ld	sp, ix
 	pop	ix
 	pop	hl
@@ -5586,10 +3669,10 @@ _positionGenericEnemy::
 	pop	bc
 	inc	sp
 	jp	(hl)
-___str_19:
+___str_5:
 	.ascii "---"
 	.db 0x00
-;./the-castel.c:1102: void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 enemyCount, char *type)
+;./the-castel.c:1190: void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 enemyCount, char *type)
 ;	---------------------------------
 ; Function spritePosition
 ; ---------------------------------
@@ -5597,9 +3680,10 @@ _spritePosition::
 	push	ix
 	ld	ix,#0
 	add	ix,sp
+	push	af
 	ld	b, a
 	ld	c, l
-;./the-castel.c:1104: struct CharacterEnemy *generic = &genericEnemy[enemyCount];
+;./the-castel.c:1192: struct CharacterEnemy *generic = &genericEnemy[enemyCount];
 	ld	e, 6 (ix)
 	ld	d, #0x00
 	ex	de, hl
@@ -5611,13 +3695,13 @@ _spritePosition::
 	ld	h, 5 (ix)
 	add	hl, de
 	ex	de, hl
-;./the-castel.c:1105: generic->X = x * 8;
+;./the-castel.c:1193: generic->X = x * 8;
 	ld	a, b
 	add	a, a
 	add	a, a
 	add	a, a
 	ld	(de), a
-;./the-castel.c:1106: generic->Y = (y - 1) * 8;
+;./the-castel.c:1194: generic->Y = (y - 1) * 8;
 	ld	l, e
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -5631,13 +3715,24 @@ _spritePosition::
 	add	a, a
 	add	a, a
 	ld	(hl), a
-;./the-castel.c:1107: generic->Direction = -1;
+;./the-castel.c:1195: generic->Direction = (g_FrameCounter % 2) ? 1 : -1;
 	ld	hl, #0x0004
 	add	hl, de
-	ld	(hl), #0xff
+	ex	(sp), hl
+	ld	iy, #_g_FrameCounter
+	bit	0, 0 (iy)
+	jr	Z, 00103$
+	ld	bc, #0x0001
+	jp	00104$
+00103$:
+	ld	bc, #0xffff
+00104$:
+	pop	hl
+	push	hl
+	ld	(hl), c
 	inc	hl
-	ld	(hl), #0xff
-;./the-castel.c:1108: generic->TypeEnemy = type;
+	ld	(hl), b
+;./the-castel.c:1196: generic->TypeEnemy = type;
 	ld	hl, #0x0006
 	add	hl, de
 	ld	a, 7 (ix)
@@ -5645,26 +3740,27 @@ _spritePosition::
 	inc	hl
 	ld	a, 8 (ix)
 	ld	(hl), a
-;./the-castel.c:1109: }
+;./the-castel.c:1197: }
+	ld	sp, ix
 	pop	ix
 	pop	hl
 	pop	af
 	pop	af
 	inc	sp
 	jp	(hl)
-;./the-castel.c:1117: void hideSprite(u8 count, u8 maxElement, u8 baseSprite)
+;./the-castel.c:1205: void hideSprite(u8 count, u8 maxElement, u8 baseSprite)
 ;	---------------------------------
 ; Function hideSprite
 ; ---------------------------------
 _hideSprite::
 	ld	c, a
 	ld	b, l
-;./the-castel.c:1119: for (u8 i = count; i < maxElement; ++i)
+;./the-castel.c:1207: for (u8 i = count; i < maxElement; ++i)
 00104$:
 	ld	a, c
 	sub	a, b
 	jr	NC, 00106$
-;./the-castel.c:1121: VDP_HideSprite(baseSprite + i);
+;./the-castel.c:1209: VDP_HideSprite(baseSprite + i);
 	ld	hl, #2
 	add	hl, sp
 	ld	a, (hl)
@@ -5678,22 +3774,22 @@ _hideSprite::
 	ld	a, e
 	call	_VDP_SetSpritePositionY
 	pop	bc
-;./the-castel.c:1119: for (u8 i = count; i < maxElement; ++i)
+;./the-castel.c:1207: for (u8 i = count; i < maxElement; ++i)
 	inc	c
 	jp	00104$
 00106$:
-;./the-castel.c:1123: }
+;./the-castel.c:1211: }
 	pop	hl
 	inc	sp
 	jp	(hl)
-;./the-castel.c:1133: void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape)
+;./the-castel.c:1221: void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape)
 ;	---------------------------------
 ; Function managementSprite
 ; ---------------------------------
 _managementSprite::
 	ld	e, a
 	ld	b, l
-;./the-castel.c:1144: VDP_SetSpriteSM1(baseSprite + enemyCount, x, y, indexShape, COLOR_WHITE);
+;./the-castel.c:1232: VDP_SetSpriteSM1(baseSprite + enemyCount, x, y, indexShape, COLOR_WHITE);
 	ld	hl, #3
 	add	hl, sp
 	ld	iy, #2
@@ -5715,7 +3811,7 @@ _managementSprite::
 	call	_VDP_SetSpriteSM1
 	pop	de
 	pop	bc
-;./the-castel.c:1153: VDP_SetSpritePosition(baseSprite + enemyCount, x * 8, (y - 1) * 8);
+;./the-castel.c:1241: VDP_SetSpritePosition(baseSprite + enemyCount, x * 8, (y - 1) * 8);
 	ld	a, b
 	dec	a
 	add	a, a
@@ -5733,12 +3829,12 @@ _managementSprite::
 	inc	sp
 	ld	a, c
 	call	_VDP_SetSpritePosition
-;./the-castel.c:1154: }
+;./the-castel.c:1242: }
 	pop	hl
 	pop	af
 	inc	sp
 	jp	(hl)
-;./the-castel.c:1162: void initCharacter(struct Character *ply, u8 id)
+;./the-castel.c:1250: void initCharacter(struct Character *ply, u8 id)
 ;	---------------------------------
 ; Function initCharacter
 ; ---------------------------------
@@ -5746,7 +3842,7 @@ _initCharacter::
 	push	ix
 	ld	ix,#0
 	add	ix,sp
-;./the-castel.c:1164: Mem_Set(0, ply, sizeof(struct Character));
+;./the-castel.c:1252: Mem_Set(0, ply, sizeof(struct Character));
 	ld	e, l
 	ld	d, h
 	push	hl
@@ -5755,14 +3851,14 @@ _initCharacter::
 	xor	a, a
 	call	_Mem_Set
 	pop	hl
-;./the-castel.c:1166: Game_Pawn *pawn = &ply->Pawn;
+;./the-castel.c:1254: Game_Pawn *pawn = &ply->Pawn;
 	ld	bc, #0x0008
 	add	hl, bc
-;./the-castel.c:1168: if (id == 0)
+;./the-castel.c:1256: if (id == 0)
 	ld	a, 4 (ix)
 	or	a, a
 	jr	NZ, 00103$
-;./the-castel.c:1170: GamePawn_Initialize(pawn, g_PlayerSpriteLayers, numberof(g_PlayerSpriteLayers), 0, g_PlayerAnimActions);
+;./the-castel.c:1258: GamePawn_Initialize(pawn, g_PlayerSpriteLayers, numberof(g_PlayerSpriteLayers), 0, g_PlayerAnimActions);
 	ld	bc, #_g_PlayerAnimActions+0
 	ld	de, #_g_PlayerSpriteLayers+0
 	push	hl
@@ -5771,13 +3867,13 @@ _initCharacter::
 	push	bc
 	call	_GamePawn_Initialize
 	pop	hl
-;./the-castel.c:1171: GamePawn_SetPosition(pawn, 255 - 16 - 16, 128);
+;./the-castel.c:1259: GamePawn_SetPosition(pawn, 255 - 16 - 16, 128);
 	push	hl
 	ld	de, #0x80df
 	push	de
 	call	_GamePawn_SetPosition
 	pop	hl
-;./the-castel.c:1172: GamePawn_InitializePhysics(pawn, physicsEventPlayer, physicsCollision, 16, 16);
+;./the-castel.c:1260: GamePawn_InitializePhysics(pawn, physicsEventPlayer, physicsCollision, 16, 16);
 	ld	a, #0x10
 	push	af
 	inc	sp
@@ -5789,12 +3885,12 @@ _initCharacter::
 	ld	de, #_physicsEventPlayer
 	call	_GamePawn_InitializePhysics
 00103$:
-;./the-castel.c:1174: }
+;./the-castel.c:1262: }
 	pop	ix
 	pop	hl
 	inc	sp
 	jp	(hl)
-;./the-castel.c:1181: void updateCharacter(struct Character *ply)
+;./the-castel.c:1269: void updateCharacter(struct Character *ply)
 ;	---------------------------------
 ; Function updateCharacter
 ; ---------------------------------
@@ -5807,9 +3903,9 @@ _updateCharacter::
 	ld	sp, iy
 	ld	-2 (ix), l
 	ld	-1 (ix), h
-;./the-castel.c:1184: u8 dir = 0;
+;./the-castel.c:1272: u8 dir = 0;
 	ld	-15 (ix), #0x00
-;./the-castel.c:1185: ply->DX = 0;
+;./the-castel.c:1273: ply->DX = 0;
 	ld	a, -2 (ix)
 	add	a, #0x03
 	ld	-14 (ix), a
@@ -5819,7 +3915,7 @@ _updateCharacter::
 	ld	l, -14 (ix)
 	ld	h, -13 (ix)
 	ld	(hl), #0x00
-;./the-castel.c:1186: ply->DY = 0;
+;./the-castel.c:1274: ply->DY = 0;
 	ld	a, -2 (ix)
 	add	a, #0x04
 	ld	-12 (ix), a
@@ -5829,7 +3925,7 @@ _updateCharacter::
 	ld	l, -12 (ix)
 	ld	h, -11 (ix)
 	ld	(hl), #0x00
-;./the-castel.c:1189: if (ply->Input & INPUT_RIGHT)
+;./the-castel.c:1277: if (ply->Input & INPUT_RIGHT)
 	ld	a, -2 (ix)
 	add	a, #0x05
 	ld	-4 (ix), a
@@ -5842,22 +3938,22 @@ _updateCharacter::
 	ld	-5 (ix), a
 	bit	0, -5 (ix)
 	jr	Z, 00105$
-;./the-castel.c:1191: ply->DX++;
+;./the-castel.c:1279: ply->DX++;
 	ld	l,-14 (ix)
 	ld	h,-13 (ix)
 	inc	(hl)
-;./the-castel.c:1192: ply->bMoving = TRUE;
+;./the-castel.c:1280: ply->bMoving = TRUE;
 	ld	l, -2 (ix)
 	ld	h, -1 (ix)
 	ld	(hl), #0x01
-;./the-castel.c:1193: dir = 1;
+;./the-castel.c:1281: dir = 1;
 	ld	-15 (ix), #0x01
 	jp	00106$
 00105$:
-;./the-castel.c:1195: else if (ply->Input & INPUT_LEFT)
+;./the-castel.c:1283: else if (ply->Input & INPUT_LEFT)
 	bit	1, -5 (ix)
 	jr	Z, 00102$
-;./the-castel.c:1197: ply->DX--;
+;./the-castel.c:1285: ply->DX--;
 	ld	l, -14 (ix)
 	ld	h, -13 (ix)
 	ld	a, (hl)
@@ -5866,20 +3962,20 @@ _updateCharacter::
 	ld	l, -14 (ix)
 	ld	h, -13 (ix)
 	ld	(hl), a
-;./the-castel.c:1198: ply->bMoving = TRUE;
+;./the-castel.c:1286: ply->bMoving = TRUE;
 	ld	l, -2 (ix)
 	ld	h, -1 (ix)
 	ld	(hl), #0x01
-;./the-castel.c:1199: dir = 0;
+;./the-castel.c:1287: dir = 0;
 	ld	-15 (ix), #0x00
 	jp	00106$
 00102$:
-;./the-castel.c:1202: ply->bMoving = FALSE;
+;./the-castel.c:1290: ply->bMoving = FALSE;
 	ld	l, -2 (ix)
 	ld	h, -1 (ix)
 	ld	(hl), #0x00
 00106$:
-;./the-castel.c:1204: if (ply->bInAir) // Jump/fall
+;./the-castel.c:1292: if (ply->bInAir) // Jump/fall
 	ld	a, -2 (ix)
 	add	a, #0x01
 	ld	-10 (ix), a
@@ -5892,7 +3988,7 @@ _updateCharacter::
 	ld	-5 (ix), a
 	or	a, a
 	jp	Z, 00117$
-;./the-castel.c:1206: ply->DY -= ply->VelocityY / 4;
+;./the-castel.c:1294: ply->DY -= ply->VelocityY / 4;
 	ld	a, -12 (ix)
 	ld	-8 (ix), a
 	ld	a, -11 (ix)
@@ -5941,37 +4037,37 @@ _updateCharacter::
 	ld	h, -7 (ix)
 	ld	a, -3 (ix)
 	ld	(hl), a
-;./the-castel.c:1207: ply->VelocityY -= GRAVITY;
+;./the-castel.c:1295: ply->VelocityY -= GRAVITY;
 	ld	l, -5 (ix)
 	ld	h, -4 (ix)
 	ld	c, (hl)
 	dec	c
 	ld	l, -5 (ix)
 	ld	h, -4 (ix)
-;./the-castel.c:1209: if (ply->VelocityY < -FORCE)
+;./the-castel.c:1297: if (ply->VelocityY < -FORCE)
 	ld	a,c
 	ld	(hl),a
 	xor	a, #0x80
 	sub	a, #0x71
 	jr	NC, 00118$
-;./the-castel.c:1210: ply->VelocityY = -FORCE;
+;./the-castel.c:1298: ply->VelocityY = -FORCE;
 	ld	l, -5 (ix)
 	ld	h, -4 (ix)
 	ld	(hl), #0xf1
 	jp	00118$
 00117$:
-;./the-castel.c:1212: else if (ply->Input & INPUT_JUMP)
+;./the-castel.c:1300: else if (ply->Input & INPUT_JUMP)
 	ld	l, -4 (ix)
 	ld	h, -3 (ix)
 	ld	a, (hl)
 	ld	-3 (ix), a
 	bit	2, -3 (ix)
 	jr	Z, 00114$
-;./the-castel.c:1214: ply->bInAir = TRUE;
+;./the-castel.c:1302: ply->bInAir = TRUE;
 	ld	l, -10 (ix)
 	ld	h, -9 (ix)
 	ld	(hl), #0x01
-;./the-castel.c:1215: ply->VelocityY = FORCE;
+;./the-castel.c:1303: ply->VelocityY = FORCE;
 	ld	a, -2 (ix)
 	add	a, #0x02
 	ld	-4 (ix), a
@@ -5983,10 +4079,10 @@ _updateCharacter::
 	ld	(hl), #0x0f
 	jp	00118$
 00114$:
-;./the-castel.c:1217: else if (ply->Input & INPUT_GET)
+;./the-castel.c:1305: else if (ply->Input & INPUT_GET)
 	bit	3, -3 (ix)
 	jr	Z, 00118$
-;./the-castel.c:1225: if (interact(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) /*||
+;./the-castel.c:1313: if (interact(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) /*||
 	ld	a, (#_g_Player + 14)
 	ld	-3 (ix), a
 	add	a, #0x0c
@@ -6001,13 +4097,13 @@ _updateCharacter::
 	ld	a, -3 (ix)
 	call	_interact
 00118$:
-;./the-castel.c:1238: u8 act = ACTION_IDLE;
+;./the-castel.c:1326: u8 act = ACTION_IDLE;
 	ld	-4 (ix), #0x00
-;./the-castel.c:1204: if (ply->bInAir) // Jump/fall
+;./the-castel.c:1292: if (ply->bInAir) // Jump/fall
 	ld	l, -10 (ix)
 	ld	h, -9 (ix)
 	ld	a, (hl)
-;./the-castel.c:1239: if (ply->bInAir && (ply->VelocityY >= 0))
+;./the-castel.c:1327: if (ply->bInAir && (ply->VelocityY >= 0))
 	ld	-3 (ix), a
 	or	a, a
 	jr	Z, 00130$
@@ -6023,47 +4119,47 @@ _updateCharacter::
 	ld	-5 (ix), a
 	bit	7, -5 (ix)
 	jr	NZ, 00130$
-;./the-castel.c:1240: act = ACTION_JUMP;
+;./the-castel.c:1328: act = ACTION_JUMP;
 	ld	-4 (ix), #0x02
 	jp	00131$
 00130$:
-;./the-castel.c:1241: else if (ply->bInAir)
+;./the-castel.c:1329: else if (ply->bInAir)
 	ld	a, -3 (ix)
 	or	a, a
 	jr	Z, 00127$
-;./the-castel.c:1242: act = ACTION_FALL;
+;./the-castel.c:1330: act = ACTION_FALL;
 	ld	-4 (ix), #0x03
 	jp	00131$
 00127$:
-;./the-castel.c:1243: else if (ply->bMoving)
+;./the-castel.c:1331: else if (ply->bMoving)
 	ld	l, -2 (ix)
 	ld	h, -1 (ix)
 	ld	a, (hl)
 	or	a, a
 	jr	Z, 00131$
-;./the-castel.c:1245: if (dir == 1)
+;./the-castel.c:1333: if (dir == 1)
 	ld	a, -15 (ix)
 	dec	a
 	jr	NZ, 00122$
-;./the-castel.c:1247: act = ACTION_MOVE_RIGHT;
+;./the-castel.c:1335: act = ACTION_MOVE_RIGHT;
 	ld	-4 (ix), #0x04
 	jp	00131$
 00122$:
-;./the-castel.c:1249: else if (dir == 0)
+;./the-castel.c:1337: else if (dir == 0)
 	ld	a, -15 (ix)
 	or	a, a
 	jr	NZ, 00131$
-;./the-castel.c:1250: act = ACTION_MOVE;
+;./the-castel.c:1338: act = ACTION_MOVE;
 	ld	-4 (ix), #0x01
 00131$:
-;./the-castel.c:1253: Game_Pawn *pawn = &ply->Pawn;
+;./the-castel.c:1341: Game_Pawn *pawn = &ply->Pawn;
 	ld	a, -2 (ix)
 	add	a, #0x08
 	ld	e, a
 	ld	a, -1 (ix)
 	adc	a, #0x00
 	ld	d, a
-;./the-castel.c:1254: GamePawn_SetAction(pawn, act);
+;./the-castel.c:1342: GamePawn_SetAction(pawn, act);
 	push	de
 	ld	a, -4 (ix)
 	push	af
@@ -6075,7 +4171,7 @@ _updateCharacter::
 ;	spillPairReg hl
 	call	_GamePawn_SetAction
 	pop	de
-;./the-castel.c:1255: GamePawn_SetMovement(pawn, ply->DX, ply->DY);
+;./the-castel.c:1343: GamePawn_SetMovement(pawn, ply->DX, ply->DY);
 	ld	l, -12 (ix)
 	ld	h, -11 (ix)
 	ld	a, (hl)
@@ -6094,14 +4190,14 @@ _updateCharacter::
 ;	spillPairReg hl
 	call	_GamePawn_SetMovement
 	pop	de
-;./the-castel.c:1256: GamePawn_Update(pawn);
+;./the-castel.c:1344: GamePawn_Update(pawn);
 	ex	de, hl
 	call	_GamePawn_Update
-;./the-castel.c:1257: }
+;./the-castel.c:1345: }
 	ld	sp, ix
 	pop	ix
 	ret
-;./the-castel.c:1264: void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 idFirstSprite)
+;./the-castel.c:1354: void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 idFirstSprite)
 ;	---------------------------------
 ; Function updateGenericEnemy
 ; ---------------------------------
@@ -6114,13 +4210,13 @@ _updateGenericEnemy::
 	ld	sp, iy
 	ld	-2 (ix), l
 	ld	-1 (ix), h
-;./the-castel.c:1267: for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
+;./the-castel.c:1357: for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
 	ld	c, #0x00
 00112$:
 	ld	a, c
 	sub	a, 4 (ix)
 	jp	NC, 00114$
-;./the-castel.c:1269: struct CharacterEnemy *enemy = &genericEnemy[nEnemy];
+;./the-castel.c:1359: struct CharacterEnemy *enemy = &genericEnemy[nEnemy];
 	ld	l, c
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -6133,7 +4229,7 @@ _updateGenericEnemy::
 	ld	e, -2 (ix)
 	ld	d, -1 (ix)
 	add	hl, de
-;./the-castel.c:1271: if (!physicsCollisionEnemy(enemy->X + 7, enemy->Y) == 1)
+;./the-castel.c:1361: if (!physicsCollisionEnemy(enemy->X + 7, enemy->Y) == 1) // 7
 	ld	e, l
 	ld	d, h
 	inc	hl
@@ -6152,7 +4248,7 @@ _updateGenericEnemy::
 	ld	-3 (ix), a
 	pop	de
 	pop	bc
-;./the-castel.c:1273: if (enemy->Direction < 0)
+;./the-castel.c:1363: if (enemy->Direction < 0)
 	ld	hl, #0x0004
 	add	hl, de
 	ld	a, (hl)
@@ -6161,28 +4257,28 @@ _updateGenericEnemy::
 	ld	a, (hl)
 	ld	-5 (ix), a
 	dec	hl
-;./the-castel.c:1271: if (!physicsCollisionEnemy(enemy->X + 7, enemy->Y) == 1)
+;./the-castel.c:1361: if (!physicsCollisionEnemy(enemy->X + 7, enemy->Y) == 1) // 7
 	ld	a, -3 (ix)
 	or	a, a
 	jr	NZ, 00108$
 	ld	a, (de)
 	ld	b, a
-;./the-castel.c:1273: if (enemy->Direction < 0)
+;./the-castel.c:1363: if (enemy->Direction < 0)
 	bit	7, -5 (ix)
 	jr	Z, 00102$
-;./the-castel.c:1275: enemy->X--;
+;./the-castel.c:1365: enemy->X--;
 	ld	a, b
 	dec	a
 	ld	(de), a
 	jp	00109$
 00102$:
-;./the-castel.c:1279: enemy->X++;
+;./the-castel.c:1369: enemy->X++;
 	ld	a, b
 	inc	a
 	ld	(de), a
 	jp	00109$
 00108$:
-;./the-castel.c:1284: enemy->Direction *= -1;
+;./the-castel.c:1374: enemy->Direction *= -1;
 	xor	a, a
 	sub	a, -6 (ix)
 	ld	-4 (ix), a
@@ -6194,24 +4290,24 @@ _updateGenericEnemy::
 	inc	hl
 	ld	a, -3 (ix)
 	ld	(hl), a
-;./the-castel.c:1271: if (!physicsCollisionEnemy(enemy->X + 7, enemy->Y) == 1)
+;./the-castel.c:1361: if (!physicsCollisionEnemy(enemy->X + 7, enemy->Y) == 1) // 7
 	ld	a, (de)
 	ld	b, a
-;./the-castel.c:1285: if (enemy->Direction < 0)
+;./the-castel.c:1375: if (enemy->Direction < 0)
 	bit	7, -3 (ix)
 	jr	Z, 00105$
-;./the-castel.c:1287: enemy->X--;
+;./the-castel.c:1377: enemy->X--;
 	ld	a, b
 	dec	a
 	ld	(de), a
 	jp	00109$
 00105$:
-;./the-castel.c:1291: enemy->X++;
+;./the-castel.c:1381: enemy->X++;
 	ld	a, b
 	inc	a
 	ld	(de), a
 00109$:
-;./the-castel.c:1302: VDP_SetSpritePosition(idFirstSprite + nEnemy, enemy->X, enemy->Y);
+;./the-castel.c:1392: VDP_SetSpritePosition(idFirstSprite + nEnemy, enemy->X, enemy->Y);
 	pop	hl
 	push	hl
 	ld	b, (hl)
@@ -6228,38 +4324,43 @@ _updateGenericEnemy::
 	ld	a, e
 	call	_VDP_SetSpritePosition
 	pop	bc
-;./the-castel.c:1267: for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
+;./the-castel.c:1357: for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
 	inc	c
 	jp	00112$
 00114$:
-;./the-castel.c:1306: }
+;./the-castel.c:1396: }
 	ld	sp, ix
 	pop	ix
 	pop	hl
 	pop	af
 	jp	(hl)
-;./the-castel.c:1313: void genericControl()
+;./the-castel.c:1403: void genericControl()
 ;	---------------------------------
 ; Function genericControl
 ; ---------------------------------
 _genericControl::
-;./the-castel.c:1317: if (isUnderTheWater(g_Player.Pawn.PositionX, g_Player.Pawn.PositionY))
-	ld	hl, #(_g_Player + 14)
-	ld	b, (hl)
+;./the-castel.c:1407: if (isUnderTheWater(g_Player.Pawn.PositionX, g_Player.Pawn.PositionY))
+	ld	bc, #_g_Player + 14
+	ld	a, (bc)
+	ld	d, a
 	ld	hl, #(_g_Player + 13)
-	ld	c, (hl)
-	ld	l, b
+	ld	e, (hl)
+	push	bc
+	ld	l, d
 ;	spillPairReg hl
 ;	spillPairReg hl
-	ld	a, c
+	ld	a, e
 	call	_isUnderTheWater
+	ld	e, a
+	pop	bc
+	ld	a, e
 	or	a, a
 	jr	Z, 00110$
-;./the-castel.c:1319: if (IsUnderWater)
+;./the-castel.c:1409: if (IsUnderWater)
 	ld	a, (_IsUnderWater+0)
 	or	a, a
 	jr	Z, 00107$
-;./the-castel.c:1321: if ((g_SecondCounter - g_DelayRemoveLife) > 3)
+;./the-castel.c:1411: if ((g_SecondCounter - g_DelayRemoveLife) > 3)
 	ld	a, (_g_SecondCounter+0)
 	ld	l, a
 ;	spillPairReg hl
@@ -6268,120 +4369,140 @@ _genericControl::
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, (_g_DelayRemoveLife+0)
-	ld	c, a
-	ld	b, #0x00
+	ld	e, a
+	ld	d, #0x00
 	cp	a, a
-	sbc	hl, bc
+	sbc	hl, de
 	ld	a, #0x03
 	cp	a, l
 	ld	a, #0x00
 	sbc	a, h
-	jp	PO, 00145$
+	jp	PO, 00150$
 	xor	a, #0x80
-00145$:
+00150$:
 	jp	P, 00111$
-;./the-castel.c:1323: if (removeLife() == TRUE)
+;./the-castel.c:1413: if (removeLife() == TRUE)
+	push	bc
 	call	_removeLife
+	pop	bc
 	dec	a
 	jr	NZ, 00102$
-;./the-castel.c:1325: displayLife();
+;./the-castel.c:1415: displayLife();
+	push	bc
 	call	_displayLife
-;./the-castel.c:1327: PlayBankSFX(9, 0);
 	ld	l, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, #0x09
 	call	_PlayBankSFX
-;./the-castel.c:1329: IsUnderWater = FALSE;
+	pop	bc
+;./the-castel.c:1419: IsUnderWater = FALSE;
 	ld	hl, #_IsUnderWater
 	ld	(hl), #0x00
 	jp	00111$
 00102$:
-;./the-castel.c:1333: stopMusicPlayback();
+;./the-castel.c:1423: stopMusicPlayback();
+	push	bc
 	call	_stopMusicPlayback
-;./the-castel.c:1334: Game_SetState(State_GameOver);
 	ld	hl, #_State_GameOver
 	call	_Game_SetState
+	pop	bc
 	jp	00111$
 00107$:
-;./the-castel.c:1340: g_DelayRemoveLife = g_SecondCounter;
+;./the-castel.c:1430: g_DelayRemoveLife = g_SecondCounter;
 	ld	a, (_g_SecondCounter+0)
 	ld	(_g_DelayRemoveLife+0), a
-;./the-castel.c:1341: IsUnderWater = TRUE;
+;./the-castel.c:1431: IsUnderWater = TRUE;
 	ld	hl, #_IsUnderWater
 	ld	(hl), #0x01
 	jp	00111$
 00110$:
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:688: inline void VDP_SetColor(u8 color) { VDP_RegWrite(7, color); }
-	ld	l, #0x01
-;	spillPairReg hl
-;	spillPairReg hl
-	ld	a, #0x07
-	call	_VDP_RegWrite
-;./the-castel.c:1347: IsUnderWater = FALSE;  // Non siamo più in collisione
+;./the-castel.c:1437: IsUnderWater = FALSE;  // Non siamo più in collisione
 	ld	hl, #_IsUnderWater
 	ld	(hl), #0x00
-;./the-castel.c:1348: g_DelayRemoveLife = 0; // Azzera il tempo dopo il quale si va a rimuovere una vita
+;./the-castel.c:1438: g_DelayRemoveLife = 0; // Azzera il tempo dopo il quale si va a rimuovere una vita
 	ld	hl, #_g_DelayRemoveLife
 	ld	(hl), #0x00
 00111$:
-;./the-castel.c:1356: if (getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) ||
-	ld	a, (#(_g_Player + 14) + 0)
+;./the-castel.c:1446: if (getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) ||
+	ld	a, (bc)
 	add	a, #0x0c
-	ld	c, a
+	ld	d, a
 	ld	a, (#(_g_Player + 13) + 0)
 	add	a, #0x08
-	ld	b, a
-	ld	l, c
+	ld	e, a
+	push	bc
+	ld	l, d
 ;	spillPairReg hl
 ;	spillPairReg hl
-	ld	a, b
+	ld	a, e
 	call	_getMoney
+	pop	bc
 	or	a, a
 	jr	NZ, 00113$
-;./the-castel.c:1357: getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4))
-	ld	a, (#(_g_Player + 14) + 0)
+;./the-castel.c:1447: getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4))
+	ld	a, (bc)
 	add	a, #0x04
-	ld	c, a
+	ld	d, a
 	ld	a, (#(_g_Player + 13) + 0)
 	add	a, #0x08
-	ld	b, a
-	ld	l, c
+	ld	e, a
+	push	bc
+	ld	l, d
 ;	spillPairReg hl
 ;	spillPairReg hl
-	ld	a, b
+	ld	a, e
 	call	_getMoney
+	pop	bc
 00113$:
-;./the-castel.c:1363: if (isDanger(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12, 2))
-	ld	a, (#(_g_Player + 14) + 0)
+;./the-castel.c:1458: if ((isDanger(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12, 2)) || isDanger(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY - 100, 2))
+	ld	a, (bc)
 	add	a, #0x0c
-	ld	c, a
+	ld	d, a
 	ld	a, (#(_g_Player + 13) + 0)
 	add	a, #0x08
-	ld	b, a
+	ld	e, a
+	push	bc
 	ld	a, #0x02
 	push	af
 	inc	sp
-	ld	l, c
+	ld	l, d
 ;	spillPairReg hl
 ;	spillPairReg hl
-	ld	a, b
+	ld	a, e
 	call	_isDanger
-;./the-castel.c:1367: }
+	pop	bc
+	or	a, a
+	ret	NZ
+	ld	a, (bc)
+	add	a, #0x9c
+	ld	b, a
+	ld	a, (#(_g_Player + 13) + 0)
+	add	a, #0x08
+	ld	c, a
+	ld	a, #0x02
+	push	af
+	inc	sp
+	ld	l, b
+;	spillPairReg hl
+;	spillPairReg hl
+	ld	a, c
+	call	_isDanger
+;./the-castel.c:1462: }
 	ret
-;./the-castel.c:1374: bool State_Initialize()
+;./the-castel.c:1469: bool State_Initialize()
 ;	---------------------------------
 ; Function State_Initialize
 ; ---------------------------------
 _State_Initialize::
-;./the-castel.c:1378: inizializePT3();
+;./the-castel.c:1473: inizializePT3();
 	call	_inizializePT3
-;./the-castel.c:1382: inizializeAYFX();
+;./the-castel.c:1477: inizializeAYFX();
 	call	_inizializeAYFX
-;./the-castel.c:1384: ChannelSFX(PSG_CHANNEL_A);
+;./the-castel.c:1479: ChannelSFX(PSG_CHANNEL_A);
 	xor	a, a
 	call	_ChannelSFX
-;./the-castel.c:1385: PlayBankSFX(0, 0);
+;./the-castel.c:1480: PlayBankSFX(0, 0);
 ;	spillPairReg hl
 ;	spillPairReg hl
 	xor	a, a
@@ -6402,44 +4523,44 @@ _State_Initialize::
 ;	spillPairReg hl
 	ld	a, #0x07
 	call	_VDP_RegWrite
-;./the-castel.c:1401: VDP_ClearVRAM();
+;./the-castel.c:1496: VDP_ClearVRAM();
 	call	_VDP_ClearVRAM
-;./the-castel.c:1413: VDP_LoadPattern_GM1_Pletter(g_DataBackground_Patterns, 0);
+;./the-castel.c:1508: VDP_LoadPattern_GM1_Pletter(g_DataBackground_Patterns, 0);
 	xor	a, a
 	push	af
 	inc	sp
 	ld	hl, #_g_DataBackground_Patterns
 	call	_VDP_LoadPattern_GM1_Pletter
-;./the-castel.c:1416: Print_SetMode(PRINT_MODE_TEXT);
+;./the-castel.c:1511: Print_SetMode(PRINT_MODE_TEXT);
 	ld	a, #0x04
 	call	_Print_SetMode
-;./the-castel.c:1417: Print_SetFontEx(8, 8, 1, 1, ' ', '_', g_DataBackground_Patterns + 192);
+;./the-castel.c:1512: Print_SetFontEx(8, 8, 1, 1, ' ', '_', g_DataBackground_Patterns + 192);
 	ld	bc, #_g_DataBackground_Patterns + 192
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:175: g_PrintData.PatternX     = patternX;
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:197: g_PrintData.PatternX     = patternX;
 	ld	hl, #_g_PrintData
 	ld	(hl), #0x08
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:176: g_PrintData.PatternY     = patternY;
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:198: g_PrintData.PatternY     = patternY;
 	ld	de, #_g_PrintData + 1
 	ld	a, #0x08
 	ld	(de), a
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:177: g_PrintData.UnitX        = sizeX;
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:199: g_PrintData.UnitX        = sizeX;
 	ld	hl, #(_g_PrintData + 2)
 	ld	(hl), #0x01
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:178: g_PrintData.UnitY        = sizeY;
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:200: g_PrintData.UnitY        = sizeY;
 	ld	hl, #(_g_PrintData + 3)
 	ld	(hl), #0x01
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:179: g_PrintData.CharFirst    = firstChr;
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:201: g_PrintData.CharFirst    = firstChr;
 	ld	hl, #(_g_PrintData + 20)
 	ld	(hl), #0x20
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:180: g_PrintData.CharLast     = lastChr;
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:202: g_PrintData.CharLast     = lastChr;
 	ld	hl, #(_g_PrintData + 21)
 	ld	(hl), #0x5f
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:181: g_PrintData.CharCount    = lastChr - firstChr + 1;
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:203: g_PrintData.CharCount    = lastChr - firstChr + 1;
 	ld	hl, #(_g_PrintData + 22)
 	ld	(hl), #0x40
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:182: g_PrintData.FontPatterns = patterns;
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:204: g_PrintData.FontPatterns = patterns;
 	ld	((_g_PrintData + 28)), bc
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:183: g_PrintData.FontAddr     = g_PrintData.FontPatterns - (firstChr * g_PrintData.PatternY); // pre-compute address of the virtual index 0 character (used to quick drawing in PutChar_GX functions)
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:205: g_PrintData.FontAddr     = g_PrintData.FontPatterns - (firstChr * g_PrintData.PatternY); // pre-compute address of the virtual index 0 character (used to quick drawing in PutChar_GX functions)
 	ld	a, (de)
 	ld	e, a
 	ld	d, #0x00
@@ -6456,12 +4577,12 @@ _State_Initialize::
 	sbc	a, h
 	ld	b, a
 	ld	((_g_PrintData + 30)), bc
-;./the-castel.c:1418: Print_Initialize();
+;./the-castel.c:1513: Print_Initialize();
 	call	_Print_Initialize
-;./the-castel.c:1419: g_PrintData.PatternOffset = 192;
+;./the-castel.c:1514: g_PrintData.PatternOffset = 192;
 	ld	hl, #(_g_PrintData + 32)
 	ld	(hl), #0xc0
-;./the-castel.c:1422: setColorTiles();
+;./the-castel.c:1517: setColorTiles();
 	call	_setColorTiles
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:1044: inline void VDP_SetSpriteFlag(u8 flag) { VDP_RegWriteBakMask(1, (u8)~(R01_ST|R01_MAG), flag); }
 	ld	a, #0x02
@@ -6472,64 +4593,70 @@ _State_Initialize::
 ;	spillPairReg hl
 	ld	a, #0x01
 	call	_VDP_RegWriteBakMask
-;./the-castel.c:1456: Pletter_UnpackToVRAM(g_DataSprtLayer, g_SpritePatternLow);
+;./the-castel.c:1551: Pletter_UnpackToVRAM(g_DataSprtLayer, g_SpritePatternLow);
 	ld	de, (_g_SpritePatternLow)
 	ld	hl, #_g_DataSprtLayer
 	call	_Pletter_UnpackToVRAM
-;./the-castel.c:1458: Game_SetState(State_Preset);
+;./the-castel.c:1553: Game_SetState(State_Preset);
 	ld	hl, #_State_Preset
 	call	_Game_SetState
-;./the-castel.c:1460: return FALSE; // Frame finished
+;./the-castel.c:1555: return FALSE; // Frame finished
 	xor	a, a
-;./the-castel.c:1461: }
+;./the-castel.c:1556: }
 	ret
-;./the-castel.c:1468: bool State_Game()
+;./the-castel.c:1563: bool State_Game()
 ;	---------------------------------
 ; Function State_Game
 ; ---------------------------------
 _State_Game::
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/system.h:130: inline void Halt() { __asm__("halt"); }
 	halt
-;./the-castel.c:1475: PT3_Decode();	 // Update data to write to the PSG regiters from the music
+;./the-castel.c:1570: PT3_Decode();	 // Update data to write to the PSG regiters from the music
 	call	_PT3_Decode
-;./the-castel.c:1476: ayFX_Update();	 // Overwrite PSG registers data for the SFX
+;./the-castel.c:1571: ayFX_Update();	 // Overwrite PSG registers data for the SFX
 	call	_ayFX_Update
-;./the-castel.c:1477: PT3_UpdatePSG(); // Update PSG registers
+;./the-castel.c:1572: PT3_UpdatePSG(); // Update PSG registers
 	call	_PT3_UpdatePSG
-;./the-castel.c:1484: GamePawn_Draw(&g_Player.Pawn);
+;./the-castel.c:1579: GamePawn_Draw(&g_Player.Pawn);
 	ld	hl, #(_g_Player + 8)
 	call	_GamePawn_Draw
-;./the-castel.c:1491: updateCharacter(&g_Player);
+;./the-castel.c:1586: updateCharacter(&g_Player);
 	ld	hl, #_g_Player
 	call	_updateCharacter
-;./the-castel.c:1497: genericControl();
+;./the-castel.c:1592: genericControl();
 	call	_genericControl
-;./the-castel.c:1501: readInputControl();
+;./the-castel.c:1596: readInputControl();
 	call	_readInputControl
-;./the-castel.c:1504: if (g_Frame == 50)
+;./the-castel.c:1599: if (g_Frame == 50)
 	ld	a, (_g_Frame+0)
 	sub	a, #0x32
 	jr	NZ, 00102$
-;./the-castel.c:1506: g_SecondCounter++;
+;./the-castel.c:1601: g_SecondCounter++;
 	ld	hl, #_g_SecondCounter
 	inc	(hl)
-;./the-castel.c:1507: g_Frame = 0;
+;./the-castel.c:1602: g_CatchEnemy++;
+	ld	hl, #_g_CatchEnemy
+	inc	(hl)
+;./the-castel.c:1603: g_Frame = 0;
 	ld	hl, #_g_Frame
 	ld	(hl), #0x00
 00102$:
-;./the-castel.c:1510: if (g_FrameCounter % 2 == 0)
+;./the-castel.c:1606: if (g_FrameCounter % 2 == 0)
 	ld	hl, #_g_FrameCounter
 	bit	0, (hl)
 	jp	NZ,00104$
-;./the-castel.c:1512: g_DangerCounter++;
+;./the-castel.c:1608: g_DangerCounter++;
 	ld	hl, #_g_DangerCounter
 	inc	(hl)
-;./the-castel.c:1516: updateGenericEnemy(&g_Enemy[0], g_Levels[g_CurrRoomIdx].SkeletonNumber, 6);
+;./the-castel.c:1610: pursuitCheck(&g_Enemy[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber);
 	ld	bc, #_g_Levels+0
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
 	ld	l, e
 	ld	h, d
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
 	add	hl, hl
 	add	hl, de
 	add	hl, hl
@@ -6540,19 +4667,47 @@ _State_Game::
 	add	hl, de
 	ld	d, (hl)
 	push	bc
-	ld	a, #0x06
-	push	af
-	inc	sp
 	push	de
 	inc	sp
 	ld	hl, #_g_Enemy
-	call	_updateGenericEnemy
+	call	_pursuitCheck
 	pop	bc
-;./the-castel.c:1524: physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Enemy[0], g_Levels[g_CurrRoomIdx].SkeletonNumber);
+;./the-castel.c:1614: updateGenericEnemy(&g_Enemy[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber, 6);
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
 	ld	l, e
 	ld	h, d
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
+	add	hl, bc
+	ld	de, #0x000a
+	add	hl, de
+	ld	a, (hl)
+	push	bc
+	ld	h, #0x06
+;	spillPairReg hl
+;	spillPairReg hl
+	push	hl
+	inc	sp
+	push	af
+	inc	sp
+	ld	hl, #_g_Enemy
+	call	_updateGenericEnemy
+	pop	bc
+;./the-castel.c:1622: physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Enemy[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber);
+	ld	de, (_g_CurrRoomIdx)
+	ld	d, #0x00
+	ld	l, e
+	ld	h, d
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
 	add	hl, hl
 	add	hl, de
 	add	hl, hl
@@ -6569,11 +4724,14 @@ _State_Game::
 	ld	hl, #_g_Player
 	call	_physicsCollisionPlayerAndGenericEnemy
 	pop	bc
-;./the-castel.c:1528: updateGenericEnemy(&g_Ghost[0], g_Levels[g_CurrRoomIdx].GhostNumber, 10);
+;./the-castel.c:1624: pursuitCheck(&g_Ghost[0], g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber);
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
 	ld	l, e
 	ld	h, d
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
 	add	hl, hl
 	add	hl, de
 	add	hl, hl
@@ -6584,19 +4742,47 @@ _State_Game::
 	add	hl, de
 	ld	d, (hl)
 	push	bc
-	ld	a, #0x0a
-	push	af
-	inc	sp
 	push	de
 	inc	sp
 	ld	hl, #_g_Ghost
-	call	_updateGenericEnemy
+	call	_pursuitCheck
 	pop	bc
-;./the-castel.c:1536: physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Ghost[0], g_Levels[g_CurrRoomIdx].GhostNumber);
+;./the-castel.c:1628: updateGenericEnemy(&g_Ghost[0], g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber, 10);
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
 	ld	l, e
 	ld	h, d
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
+	add	hl, bc
+	ld	de, #0x000b
+	add	hl, de
+	ld	a, (hl)
+	push	bc
+	ld	h, #0x0a
+;	spillPairReg hl
+;	spillPairReg hl
+	push	hl
+	inc	sp
+	push	af
+	inc	sp
+	ld	hl, #_g_Ghost
+	call	_updateGenericEnemy
+	pop	bc
+;./the-castel.c:1636: physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Ghost[0], g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber);
+	ld	de, (_g_CurrRoomIdx)
+	ld	d, #0x00
+	ld	l, e
+	ld	h, d
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
 	add	hl, hl
 	add	hl, de
 	add	hl, hl
@@ -6613,11 +4799,14 @@ _State_Game::
 	ld	hl, #_g_Player
 	call	_physicsCollisionPlayerAndGenericEnemy
 	pop	bc
-;./the-castel.c:1540: updateGenericEnemy(&g_Spider[0], g_Levels[g_CurrRoomIdx].SpiderNumber, 15);
+;./the-castel.c:1638: pursuitCheck(&g_Spider[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber);
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
 	ld	l, e
 	ld	h, d
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
 	add	hl, hl
 	add	hl, de
 	add	hl, hl
@@ -6628,19 +4817,47 @@ _State_Game::
 	add	hl, de
 	ld	d, (hl)
 	push	bc
-	ld	a, #0x0f
-	push	af
-	inc	sp
 	push	de
 	inc	sp
 	ld	hl, #_g_Spider
-	call	_updateGenericEnemy
+	call	_pursuitCheck
 	pop	bc
-;./the-castel.c:1548: physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Spider[0], g_Levels[g_CurrRoomIdx].SpiderNumber);
+;./the-castel.c:1642: updateGenericEnemy(&g_Spider[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber, 15);
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
 	ld	l, e
 	ld	h, d
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
+	add	hl, bc
+	ld	de, #0x000c
+	add	hl, de
+	ld	a, (hl)
+	push	bc
+	ld	h, #0x0f
+;	spillPairReg hl
+;	spillPairReg hl
+	push	hl
+	inc	sp
+	push	af
+	inc	sp
+	ld	hl, #_g_Spider
+	call	_updateGenericEnemy
+	pop	bc
+;./the-castel.c:1650: physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Spider[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber);
+	ld	de, (_g_CurrRoomIdx)
+	ld	d, #0x00
+	ld	l, e
+	ld	h, d
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
 	add	hl, hl
 	add	hl, de
 	add	hl, hl
@@ -6657,11 +4874,14 @@ _State_Game::
 	ld	hl, #_g_Player
 	call	_physicsCollisionPlayerAndGenericEnemy
 	pop	bc
-;./the-castel.c:1552: updateGenericEnemy(&g_Bat[0], g_Levels[g_CurrRoomIdx].BatNumber, 20);
+;./the-castel.c:1652: pursuitCheck(&g_Bat[0], g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber);
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
 	ld	l, e
 	ld	h, d
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
 	add	hl, hl
 	add	hl, de
 	add	hl, hl
@@ -6672,19 +4892,47 @@ _State_Game::
 	add	hl, de
 	ld	d, (hl)
 	push	bc
-	ld	a, #0x14
-	push	af
-	inc	sp
 	push	de
 	inc	sp
 	ld	hl, #_g_Bat
-	call	_updateGenericEnemy
+	call	_pursuitCheck
 	pop	bc
-;./the-castel.c:1560: physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Bat[0], g_Levels[g_CurrRoomIdx].BatNumber);
+;./the-castel.c:1656: updateGenericEnemy(&g_Bat[0], g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber, 20);
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
 	ld	l, e
 	ld	h, d
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
+	add	hl, bc
+	ld	de, #0x000d
+	add	hl, de
+	ld	a, (hl)
+	push	bc
+	ld	h, #0x14
+;	spillPairReg hl
+;	spillPairReg hl
+	push	hl
+	inc	sp
+	push	af
+	inc	sp
+	ld	hl, #_g_Bat
+	call	_updateGenericEnemy
+	pop	bc
+;./the-castel.c:1664: physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Bat[0], g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber);
+	ld	de, (_g_CurrRoomIdx)
+	ld	d, #0x00
+	ld	l, e
+	ld	h, d
+	add	hl, hl
+	add	hl, de
+	add	hl, hl
 	add	hl, hl
 	add	hl, de
 	add	hl, hl
@@ -6700,58 +4948,58 @@ _State_Game::
 	ld	hl, #_g_Player
 	call	_physicsCollisionPlayerAndGenericEnemy
 00104$:
-;./the-castel.c:1562: g_FrameCounter++;
+;./the-castel.c:1666: g_FrameCounter++;
 	ld	hl, #_g_FrameCounter
 	inc	(hl)
-;./the-castel.c:1563: g_Frame++;
+;./the-castel.c:1667: g_Frame++;
 	ld	hl, #_g_Frame
 	inc	(hl)
-;./the-castel.c:1568: return TRUE;
+;./the-castel.c:1672: return TRUE;
 	ld	a, #0x01
-;./the-castel.c:1569: }
+;./the-castel.c:1673: }
 	ret
-;./the-castel.c:1576: bool State_Preset()
+;./the-castel.c:1680: bool State_Preset()
 ;	---------------------------------
 ; Function State_Preset
 ; ---------------------------------
 _State_Preset::
-;./the-castel.c:1579: restoreLevel();
+;./the-castel.c:1683: restoreLevel();
 	call	_restoreLevel
-;./the-castel.c:1587: initCharacter(&g_Player, 0);
+;./the-castel.c:1691: initCharacter(&g_Player, 0);
 	xor	a, a
 	push	af
 	inc	sp
 	ld	hl, #_g_Player
 	call	_initCharacter
-;./the-castel.c:1591: initInventory();
+;./the-castel.c:1695: initInventory();
 	call	_initInventory
-;./the-castel.c:1595: initLife();
+;./the-castel.c:1699: initLife();
 	call	_initLife
-;./the-castel.c:1603: drawLevel(0);
+;./the-castel.c:1707: drawLevel(0);
 	xor	a, a
 	call	_drawLevel
-;./the-castel.c:1607: Game_SetState(State_Game);
+;./the-castel.c:1711: Game_SetState(State_Game);
 	ld	hl, #_State_Game
 	call	_Game_SetState
-;./the-castel.c:1609: return TRUE;
+;./the-castel.c:1713: return TRUE;
 	ld	a, #0x01
-;./the-castel.c:1610: }
+;./the-castel.c:1714: }
 	ret
-;./the-castel.c:1617: bool State_Pause()
+;./the-castel.c:1721: bool State_Pause()
 ;	---------------------------------
 ; Function State_Pause
 ; ---------------------------------
 _State_Pause::
-;./the-castel.c:1619: return TRUE;
+;./the-castel.c:1723: return TRUE;
 	ld	a, #0x01
-;./the-castel.c:1620: }
+;./the-castel.c:1724: }
 	ret
-;./the-castel.c:1627: bool State_GameOver()
+;./the-castel.c:1731: bool State_GameOver()
 ;	---------------------------------
 ; Function State_GameOver
 ; ---------------------------------
 _State_GameOver::
-;./the-castel.c:1215: ply->VelocityY = FORCE;
+;./the-castel.c:1215: * @param u8 x Coordinata x
 	ld	c, #0x00
 00107$:
 	ld	a, c
@@ -6766,12 +5014,12 @@ _State_GameOver::
 	pop	bc
 	inc	c
 	jp	00107$
-;./the-castel.c:1630: VDP_HideAllSprites();
+;./the-castel.c:1734: VDP_HideAllSprites();
 00105$:
-;./the-castel.c:1632: drawLevel((sizeof(g_Levels) / sizeof(g_Levels[0])) - 1); // -1
-	ld	a, #0x0e
+;./the-castel.c:1736: drawLevel(GAME_OVER); // -1
+	ld	a, #0x10
 	call	_drawLevel
-;./the-castel.c:1635: while (Keyboard_Read(8) != 254)
+;./the-castel.c:1739: while (Keyboard_Read(8) != 254)
 00101$:
 	ld	l, #0x08
 ;	spillPairReg hl
@@ -6780,29 +5028,29 @@ _State_GameOver::
 	ld	a, l
 	sub	a, #0xfe
 	jr	NZ, 00101$
-;./the-castel.c:1639: Game_SetState(State_Preset);
+;./the-castel.c:1743: Game_SetState(State_Preset);
 	ld	hl, #_State_Preset
 	call	_Game_SetState
-;./the-castel.c:1641: return TRUE;
+;./the-castel.c:1745: return TRUE;
 	ld	a, #0x01
-;./the-castel.c:1642: }
+;./the-castel.c:1746: }
 	ret
-;./the-castel.c:1653: void readInputControl()
+;./the-castel.c:1757: void readInputControl()
 ;	---------------------------------
 ; Function readInputControl
 ; ---------------------------------
 _readInputControl::
-;./the-castel.c:1655: u8 row8 = Keyboard_Read(8);
+;./the-castel.c:1759: u8 row8 = Keyboard_Read(8);
 	ld	l, #0x08
 ;	spillPairReg hl
 ;	spillPairReg hl
 	call	_Keyboard_Read
 	ld	c, l
-;./the-castel.c:1657: g_Player.Input = 0;
+;./the-castel.c:1761: g_Player.Input = 0;
 	ld	de, #_g_Player+5
 	xor	a, a
 	ld	(de), a
-;./the-castel.c:1658: if (isMoveRight(row8))
+;./the-castel.c:1762: if (isMoveRight(row8))
 	push	bc
 	push	de
 	ld	a, c
@@ -6811,12 +5059,12 @@ _readInputControl::
 	pop	bc
 	or	a, a
 	jr	Z, 00102$
-;./the-castel.c:1660: g_Player.Input |= INPUT_RIGHT;
+;./the-castel.c:1764: g_Player.Input |= INPUT_RIGHT;
 	ld	a, (de)
 	set	0, a
 	ld	(de), a
 00102$:
-;./the-castel.c:1662: if (isMoveLeft(row8))
+;./the-castel.c:1766: if (isMoveLeft(row8))
 	push	bc
 	push	de
 	ld	a, c
@@ -6825,12 +5073,12 @@ _readInputControl::
 	pop	bc
 	or	a, a
 	jr	Z, 00104$
-;./the-castel.c:1664: g_Player.Input |= INPUT_LEFT;
+;./the-castel.c:1768: g_Player.Input |= INPUT_LEFT;
 	ld	a, (de)
 	set	1, a
 	ld	(de), a
 00104$:
-;./the-castel.c:1666: if (isMoveJump(row8))
+;./the-castel.c:1770: if (isMoveJump(row8))
 	push	bc
 	push	de
 	ld	a, c
@@ -6839,12 +5087,12 @@ _readInputControl::
 	pop	bc
 	or	a, a
 	jr	Z, 00106$
-;./the-castel.c:1668: g_Player.Input |= INPUT_JUMP;
+;./the-castel.c:1772: g_Player.Input |= INPUT_JUMP;
 	ld	a, (de)
 	set	2, a
 	ld	(de), a
 00106$:
-;./the-castel.c:1670: if (isInteractObject(row8))
+;./the-castel.c:1774: if (isInteractObject(row8))
 	push	bc
 	push	de
 	ld	a, c
@@ -6853,17 +5101,17 @@ _readInputControl::
 	pop	bc
 	or	a, a
 	jr	Z, 00108$
-;./the-castel.c:1672: g_Player.Input |= INPUT_GET;
+;./the-castel.c:1776: g_Player.Input |= INPUT_GET;
 	ld	a, (de)
 	set	3, a
 	ld	(de), a
 00108$:
-;./the-castel.c:1675: g_PrevRow8 = row8;
+;./the-castel.c:1779: g_PrevRow8 = row8;
 	ld	hl, #_g_PrevRow8
 	ld	(hl), c
-;./the-castel.c:1676: }
+;./the-castel.c:1780: }
 	ret
-;./the-castel.c:1683: bool isMoveRight(u8 row8)
+;./the-castel.c:1787: bool isMoveRight(u8 row8)
 ;	---------------------------------
 ; Function isMoveRight
 ; ---------------------------------
@@ -6871,9 +5119,9 @@ _isMoveRight::
 	ld	h, a
 ;	spillPairReg hl
 ;	spillPairReg hl
-;./the-castel.c:1685: bool isRight = FALSE;
+;./the-castel.c:1789: bool isRight = FALSE;
 	ld	c, #0x00
-;./the-castel.c:1686: if (IS_KEY_PRESSED(row8, KEY_RIGHT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_RIGHT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_RIGHT))
+;./the-castel.c:1790: if (IS_KEY_PRESSED(row8, KEY_RIGHT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_RIGHT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_RIGHT))
 	add	hl, hl
 	jr	NC, 00101$
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:160: u8 in = ~Joystick_Read(port);
@@ -6885,7 +5133,7 @@ _isMoveRight::
 	cpl
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:161: return (in & JOY_INPUT_DIR_MASK);
 	and	a, #0x0f
-;./the-castel.c:1686: if (IS_KEY_PRESSED(row8, KEY_RIGHT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_RIGHT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_RIGHT))
+;./the-castel.c:1790: if (IS_KEY_PRESSED(row8, KEY_RIGHT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_RIGHT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_RIGHT))
 	sub	a, #0x08
 	jr	Z, 00101$
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:160: u8 in = ~Joystick_Read(port);
@@ -6897,31 +5145,31 @@ _isMoveRight::
 	cpl
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:161: return (in & JOY_INPUT_DIR_MASK);
 	and	a, #0x0f
-;./the-castel.c:1686: if (IS_KEY_PRESSED(row8, KEY_RIGHT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_RIGHT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_RIGHT))
+;./the-castel.c:1790: if (IS_KEY_PRESSED(row8, KEY_RIGHT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_RIGHT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_RIGHT))
 	sub	a, #0x08
 	jr	NZ, 00102$
 00101$:
-;./the-castel.c:1688: g_Player.Input |= INPUT_RIGHT;
+;./the-castel.c:1792: g_Player.Input |= INPUT_RIGHT;
 	ld	bc, #_g_Player+5
 	ld	a, (bc)
 	set	0, a
 	ld	(bc), a
-;./the-castel.c:1689: isRight = TRUE;
+;./the-castel.c:1793: isRight = TRUE;
 	ld	c, #0x01
 00102$:
-;./the-castel.c:1692: return isRight;
+;./the-castel.c:1796: return isRight;
 	ld	a, c
-;./the-castel.c:1693: }
+;./the-castel.c:1797: }
 	ret
-;./the-castel.c:1700: bool isMoveLeft(u8 row8)
+;./the-castel.c:1804: bool isMoveLeft(u8 row8)
 ;	---------------------------------
 ; Function isMoveLeft
 ; ---------------------------------
 _isMoveLeft::
 	ld	b, a
-;./the-castel.c:1702: bool isLeft = FALSE;
+;./the-castel.c:1806: bool isLeft = FALSE;
 	ld	c, #0x00
-;./the-castel.c:1703: if (IS_KEY_PRESSED(row8, KEY_LEFT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_LEFT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_LEFT))
+;./the-castel.c:1807: if (IS_KEY_PRESSED(row8, KEY_LEFT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_LEFT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_LEFT))
 	bit	4, b
 	jr	Z, 00101$
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:160: u8 in = ~Joystick_Read(port);
@@ -6933,7 +5181,7 @@ _isMoveLeft::
 	cpl
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:161: return (in & JOY_INPUT_DIR_MASK);
 	and	a, #0x0f
-;./the-castel.c:1703: if (IS_KEY_PRESSED(row8, KEY_LEFT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_LEFT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_LEFT))
+;./the-castel.c:1807: if (IS_KEY_PRESSED(row8, KEY_LEFT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_LEFT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_LEFT))
 	sub	a, #0x04
 	jr	Z, 00101$
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:160: u8 in = ~Joystick_Read(port);
@@ -6945,31 +5193,31 @@ _isMoveLeft::
 	cpl
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:161: return (in & JOY_INPUT_DIR_MASK);
 	and	a, #0x0f
-;./the-castel.c:1703: if (IS_KEY_PRESSED(row8, KEY_LEFT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_LEFT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_LEFT))
+;./the-castel.c:1807: if (IS_KEY_PRESSED(row8, KEY_LEFT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_LEFT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_LEFT))
 	sub	a, #0x04
 	jr	NZ, 00102$
 00101$:
-;./the-castel.c:1705: g_Player.Input |= INPUT_LEFT;
+;./the-castel.c:1809: g_Player.Input |= INPUT_LEFT;
 	ld	bc, #_g_Player+5
 	ld	a, (bc)
 	set	1, a
 	ld	(bc), a
-;./the-castel.c:1706: isLeft = TRUE;
+;./the-castel.c:1810: isLeft = TRUE;
 	ld	c, #0x01
 00102$:
-;./the-castel.c:1709: return isLeft;
+;./the-castel.c:1813: return isLeft;
 	ld	a, c
-;./the-castel.c:1710: }
+;./the-castel.c:1814: }
 	ret
-;./the-castel.c:1717: bool isMoveJump(u8 row8)
+;./the-castel.c:1821: bool isMoveJump(u8 row8)
 ;	---------------------------------
 ; Function isMoveJump
 ; ---------------------------------
 _isMoveJump::
 	ld	b, a
-;./the-castel.c:1719: bool isJump = FALSE;
+;./the-castel.c:1823: bool isJump = FALSE;
 	ld	c, #0x00
-;./the-castel.c:1720: if (IS_KEY_PRESSED(row8, KEY_UP) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_A)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_A)))
+;./the-castel.c:1824: if (IS_KEY_PRESSED(row8, KEY_UP) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_A)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_A)))
 	bit	5, b
 	jr	Z, 00101$
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:167: u8 in = Joystick_Read(port);
@@ -6981,7 +5229,7 @@ _isMoveJump::
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:168: return ((in & trigger) == 0);
 	and	a,#0x10
 	jr	Z, 00101$
-;./the-castel.c:1720: if (IS_KEY_PRESSED(row8, KEY_UP) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_A)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_A)))
+;./the-castel.c:1824: if (IS_KEY_PRESSED(row8, KEY_UP) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_A)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_A)))
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:167: u8 in = Joystick_Read(port);
 	ld	l, #0x4c
 ;	spillPairReg hl
@@ -6991,29 +5239,29 @@ _isMoveJump::
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:168: return ((in & trigger) == 0);
 	and	a,#0x10
 	jr	NZ, 00102$
-;./the-castel.c:1720: if (IS_KEY_PRESSED(row8, KEY_UP) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_A)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_A)))
+;./the-castel.c:1824: if (IS_KEY_PRESSED(row8, KEY_UP) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_A)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_A)))
 00101$:
-;./the-castel.c:1722: g_Player.Input |= INPUT_JUMP;
+;./the-castel.c:1826: g_Player.Input |= INPUT_JUMP;
 	ld	bc, #_g_Player+5
 	ld	a, (bc)
 	set	2, a
 	ld	(bc), a
-;./the-castel.c:1723: isJump = TRUE;
+;./the-castel.c:1827: isJump = TRUE;
 	ld	c, #0x01
 00102$:
-;./the-castel.c:1726: return isJump;
+;./the-castel.c:1830: return isJump;
 	ld	a, c
-;./the-castel.c:1727: }
+;./the-castel.c:1831: }
 	ret
-;./the-castel.c:1734: bool isInteractObject(u8 row8)
+;./the-castel.c:1838: bool isInteractObject(u8 row8)
 ;	---------------------------------
 ; Function isInteractObject
 ; ---------------------------------
 _isInteractObject::
 	ld	b, a
-;./the-castel.c:1736: bool isGet = FALSE;
+;./the-castel.c:1840: bool isGet = FALSE;
 	ld	c, #0x00
-;./the-castel.c:1737: if (IS_KEY_PRESSED(row8, KEY_SPACE) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_B)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_B)))
+;./the-castel.c:1841: if (IS_KEY_PRESSED(row8, KEY_SPACE) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_B)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_B)))
 	bit	0, b
 	jr	Z, 00101$
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:167: u8 in = Joystick_Read(port);
@@ -7025,7 +5273,7 @@ _isInteractObject::
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:168: return ((in & trigger) == 0);
 	and	a,#0x20
 	jr	Z, 00101$
-;./the-castel.c:1737: if (IS_KEY_PRESSED(row8, KEY_SPACE) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_B)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_B)))
+;./the-castel.c:1841: if (IS_KEY_PRESSED(row8, KEY_SPACE) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_B)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_B)))
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:167: u8 in = Joystick_Read(port);
 	ld	l, #0x4c
 ;	spillPairReg hl
@@ -7035,36 +5283,36 @@ _isInteractObject::
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:168: return ((in & trigger) == 0);
 	and	a,#0x20
 	jr	NZ, 00102$
-;./the-castel.c:1737: if (IS_KEY_PRESSED(row8, KEY_SPACE) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_B)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_B)))
+;./the-castel.c:1841: if (IS_KEY_PRESSED(row8, KEY_SPACE) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_B)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_B)))
 00101$:
-;./the-castel.c:1739: g_Player.Input |= INPUT_GET;
+;./the-castel.c:1843: g_Player.Input |= INPUT_GET;
 	ld	bc, #_g_Player+5
 	ld	a, (bc)
 	set	3, a
 	ld	(bc), a
-;./the-castel.c:1740: isGet = TRUE;
+;./the-castel.c:1844: isGet = TRUE;
 	ld	c, #0x01
 00102$:
-;./the-castel.c:1743: return isGet;
+;./the-castel.c:1847: return isGet;
 	ld	a, c
-;./the-castel.c:1744: }
+;./the-castel.c:1848: }
 	ret
-;./the-castel.c:1756: void PlayBankSFX(u8 id, u8 prio)
+;./the-castel.c:1860: void PlayBankSFX(u8 id, u8 prio)
 ;	---------------------------------
 ; Function PlayBankSFX
 ; ---------------------------------
 _PlayBankSFX::
-;./the-castel.c:1758: ayFX_PlayBank(id, prio); // Riproduzione di un suono ayFX
+;./the-castel.c:1862: ayFX_PlayBank(id, prio); // Riproduzione di un suono ayFX
 	ld	c, a
-;./the-castel.c:1759: }
+;./the-castel.c:1863: }
 	jp	_ayFX_PlayBank
-;./the-castel.c:1766: void ChannelSFX(u8 chan)
+;./the-castel.c:1870: void ChannelSFX(u8 chan)
 ;	---------------------------------
 ; Function ChannelSFX
 ; ---------------------------------
 _ChannelSFX::
 	ld	c, a
-;./the-castel.c:1768: ayFX_Mute();		   // Arresta la riproduzione dell'audio e disattiva il canale
+;./the-castel.c:1872: ayFX_Mute();		   // Arresta la riproduzione dell'audio e disattiva il canale
 	push	bc
 	call	_ayFX_Mute
 	pop	bc
@@ -7073,32 +5321,32 @@ _ChannelSFX::
 	ld	a, #0x03
 	sub	a, c
 	ld	(hl), a
-;./the-castel.c:1769: ayFX_SetChannel(chan); // Impostare il canale da utilizzare per la riproduzione del suono
-;./the-castel.c:1770: }
+;./the-castel.c:1873: ayFX_SetChannel(chan); // Impostare il canale da utilizzare per la riproduzione del suono
+;./the-castel.c:1874: }
 	ret
-;./the-castel.c:1777: void inizializePT3()
+;./the-castel.c:1881: void inizializePT3()
 ;	---------------------------------
 ; Function inizializePT3
 ; ---------------------------------
 _inizializePT3::
-;./the-castel.c:1779: PT3_Init();				   // Inizializza il Player PT3
+;./the-castel.c:1883: PT3_Init();				   // Inizializza il Player PT3
 	call	_PT3_Init
-;./the-castel.c:1780: PT3_SetNoteTable(PT3_NT2); // Setta la tabella delle note
+;./the-castel.c:1884: PT3_SetNoteTable(PT3_NT2); // Setta la tabella delle note
 	ld	hl, #_PT3_NT2+0
 	ld	(_PT3_NoteTable), hl
-;./the-castel.c:1781: PT3_SetLoop(TRUE);
+;./the-castel.c:1885: PT3_SetLoop(TRUE);
 	ld	a, #0x01
 	call	_PT3_SetLoop
-;./the-castel.c:1782: PT3_InitSong(g_DataMusic);
+;./the-castel.c:1886: PT3_InitSong(g_DataMusic);
 	ld	hl, #_g_DataMusic
-;./the-castel.c:1783: }
+;./the-castel.c:1887: }
 	jp	_PT3_InitSong
-;./the-castel.c:1790: void inizializeAYFX()
+;./the-castel.c:1894: void inizializeAYFX()
 ;	---------------------------------
 ; Function inizializeAYFX
 ; ---------------------------------
 _inizializeAYFX::
-;./the-castel.c:1792: ayFX_InitBank(g_ayfx_bank);		// Impostazione del riproduttore ayFX tramite l'array g_ayfx_bank
+;./the-castel.c:1896: ayFX_InitBank(g_ayfx_bank);		// Impostazione del riproduttore ayFX tramite l'array g_ayfx_bank
 	ld	hl, #_g_ayfx_bank
 	call	_ayFX_InitBank
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/ayfx/ayfx_player.h:121: inline void ayFX_SetChannel(u8 chan) { ayFX_Channel = 3 - chan; }
@@ -7107,201 +5355,134 @@ _inizializeAYFX::
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/ayfx/ayfx_player.h:114: inline void ayFX_SetMode(u8 mode) { ayFX_Mode = mode; }
 	ld	hl, #_ayFX_Mode
 	ld	(hl), #0x00
-;./the-castel.c:1794: ayFX_SetMode(AYFX_MODE_FIXED);	// Set channel mode
-;./the-castel.c:1795: }
+;./the-castel.c:1898: ayFX_SetMode(AYFX_MODE_FIXED);	// Set channel mode
+;./the-castel.c:1899: }
 	ret
-;./the-castel.c:1802: void pausePT3Music()
+;./the-castel.c:1906: void pausePT3Music()
 ;	---------------------------------
 ; Function pausePT3Music
 ; ---------------------------------
 _pausePT3Music::
-;./the-castel.c:1804: PT3_Pause();
+;./the-castel.c:1908: PT3_Pause();
 	call	_PT3_Pause
-;./the-castel.c:1805: PT3_UpdatePSG();
-;./the-castel.c:1806: }
+;./the-castel.c:1909: PT3_UpdatePSG();
+;./the-castel.c:1910: }
 	jp	_PT3_UpdatePSG
-;./the-castel.c:1813: void restorePT3Music()
+;./the-castel.c:1917: void restorePT3Music()
 ;	---------------------------------
 ; Function restorePT3Music
 ; ---------------------------------
 _restorePT3Music::
-;./the-castel.c:1815: PT3_Resume();
+;./the-castel.c:1919: PT3_Resume();
 	call	_PT3_Resume
-;./the-castel.c:1816: PT3_UpdatePSG();
-;./the-castel.c:1817: }
+;./the-castel.c:1920: PT3_UpdatePSG();
+;./the-castel.c:1921: }
 	jp	_PT3_UpdatePSG
-;./the-castel.c:1824: void stopMusicPlayback()
+;./the-castel.c:1928: void stopMusicPlayback()
 ;	---------------------------------
 ; Function stopMusicPlayback
 ; ---------------------------------
 _stopMusicPlayback::
-;./the-castel.c:1826: ayFX_Mute();
+;./the-castel.c:1930: ayFX_Mute();
 	call	_ayFX_Mute
-;./the-castel.c:1827: ayFX_Update();
+;./the-castel.c:1931: ayFX_Update();
 	call	_ayFX_Update
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/pt3/pt3_player.h:301: PT3_State |= 1 << (chan + 1);
 	ld	a, (_PT3_State+0)
 	or	a, #0x08
 	ld	(_PT3_State+0), a
-;./the-castel.c:1829: PT3_Pause();
+;./the-castel.c:1933: PT3_Pause();
 	call	_PT3_Pause
-;./the-castel.c:1830: PT3_UpdatePSG();
-;./the-castel.c:1831: }
+;./the-castel.c:1934: PT3_UpdatePSG();
+;./the-castel.c:1935: }
 	jp	_PT3_UpdatePSG
-;./the-castel.c:1838: void restoreLevel()
+;./the-castel.c:1942: void restoreLevel()
 ;	---------------------------------
 ; Function restoreLevel
 ; ---------------------------------
 _restoreLevel::
-;./the-castel.c:1845: adjustLevel(&g_Level001[0], LEVEL001_WIDTH * LEVEL001_HEIGHT);
-	ld	de, #0x0300
-	ld	hl, #_g_Level001
-	call	_adjustLevel
-;./the-castel.c:1846: adjustLevel(&g_Level002[0], LEVEL002_WIDTH * LEVEL002_HEIGHT);
-	ld	de, #0x0300
-	ld	hl, #_g_Level002
-	call	_adjustLevel
-;./the-castel.c:1847: adjustLevel(&g_Level003[0], LEVEL003_WIDTH * LEVEL003_HEIGHT);
-	ld	de, #0x0300
-	ld	hl, #_g_Level003
-	call	_adjustLevel
-;./the-castel.c:1848: adjustLevel(&g_Level004[0], LEVEL004_WIDTH * LEVEL004_HEIGHT);
-	ld	de, #0x0300
-	ld	hl, #_g_Level004
-	call	_adjustLevel
-;./the-castel.c:1849: adjustLevel(&g_Level006[0], LEVEL006_WIDTH * LEVEL006_HEIGHT);
-	ld	de, #0x0300
-	ld	hl, #_g_Level006
-	call	_adjustLevel
-;./the-castel.c:1850: adjustLevel(&g_Level007[0], LEVEL007_WIDTH * LEVEL007_HEIGHT);
-	ld	de, #0x0300
-	ld	hl, #_g_Level007
-	call	_adjustLevel
-;./the-castel.c:1851: adjustLevel(&g_Level008[0], LEVEL008_WIDTH * LEVEL008_HEIGHT);
-	ld	de, #0x0300
-	ld	hl, #_g_Level008
-	call	_adjustLevel
-;./the-castel.c:1852: adjustLevel(&g_Level009[0], LEVEL009_WIDTH * LEVEL009_HEIGHT);
-	ld	de, #0x0300
-	ld	hl, #_g_Level009
-	call	_adjustLevel
-;./the-castel.c:1853: adjustLevel(&g_Level010[0], LEVEL010_WIDTH * LEVEL010_HEIGHT);
-	ld	de, #0x0300
-	ld	hl, #_g_Level010
-	call	_adjustLevel
-;./the-castel.c:1854: adjustLevel(&g_Level011[0], LEVEL011_WIDTH * LEVEL011_HEIGHT);
-	ld	de, #0x0300
-	ld	hl, #_g_Level011
-	call	_adjustLevel
-;./the-castel.c:1855: adjustLevel(&g_Level012[0], LEVEL012_WIDTH * LEVEL012_HEIGHT);
-	ld	de, #0x0300
-	ld	hl, #_g_Level012
-	call	_adjustLevel
-;./the-castel.c:1856: adjustLevel(&g_Level013[0], LEVEL013_WIDTH * LEVEL013_HEIGHT);
-	ld	de, #0x0300
-	ld	hl, #_g_Level013
-;./the-castel.c:1857: }
-	jp	_adjustLevel
-;./the-castel.c:1865: void adjustLevel(unsigned char *level, u16 sizeLevel)
-;	---------------------------------
-; Function adjustLevel
-; ---------------------------------
-_adjustLevel::
 	push	ix
 	ld	ix,#0
 	add	ix,sp
 	push	af
-	ex	(sp), hl
-;./the-castel.c:1867: for (u16 i = 0; i < sizeLevel; i++)
-	ld	bc, #0x0000
-00123$:
+;./the-castel.c:1944: for (u8 level = 0; level < (int)(sizeof(g_Levels) / sizeof(g_Levels[0])) - 1; level++)
+	ld	c, #0x00
+00107$:
 	ld	a, c
-	sub	a, e
-	ld	a, b
-	sbc	a, d
-	jr	NC, 00125$
-;./the-castel.c:1869: if (level[i] == TILE_MASK_MONEY)
-	pop	hl
-	push	hl
+	sub	a, #0x10
+	jr	NC, 00109$
+;./the-castel.c:1946: for (u8 element = 0; element < 10; element++)
+	ld	b, #0x00
+	ld	l, c
+	ld	h, b
+	add	hl, hl
 	add	hl, bc
-	ld	a, (hl)
-	sub	a, #0xc0
-	jr	NZ, 00102$
-;./the-castel.c:1871: level[i] = TILE_MONEY;
-	ld	(hl), #0x63
-00102$:
-;./the-castel.c:1873: if (level[i] == TILE_MASK_KEY3)
-	ld	a, (hl)
-	sub	a, #0xbf
-	jr	NZ, 00104$
-;./the-castel.c:1875: level[i] = TILE_KEY3;
-	ld	(hl), #0x62
+	add	hl, hl
+	add	hl, hl
+	add	hl, bc
+	add	hl, hl
+	add	hl, bc
+	add	hl, hl
+	ex	de, hl
+	ld	hl, #_g_Levels
+	add	hl, de
+	ex	de, hl
+	ld	hl, #0x000e
+	add	hl, de
+	ex	(sp), hl
+	ld	b, #0x00
 00104$:
-;./the-castel.c:1877: if (level[i] == TILE_MASK_KEY2)
-	ld	a, (hl)
-	sub	a, #0xbe
-	jr	NZ, 00106$
-;./the-castel.c:1879: level[i] = TILE_KEY2;
-	ld	(hl), #0x61
-00106$:
-;./the-castel.c:1881: if (level[i] == TILE_MASK_KEY1)
-	ld	a, (hl)
-	sub	a, #0xbd
-	jr	NZ, 00108$
-;./the-castel.c:1883: level[i] = TILE_KEY1;
-	ld	(hl), #0x60
+;./the-castel.c:1948: g_Levels[level].MyItems[element].x = 0;
+	ld	a,b
+	cp	a,#0x0a
+	jr	NC, 00108$
+	add	a, a
+	add	a, a
+	add	a, -2 (ix)
+	ld	e, a
+	ld	a, #0x00
+	adc	a, -1 (ix)
+	ld	d, a
+	xor	a, a
+	ld	(de), a
+;./the-castel.c:1949: g_Levels[level].MyItems[element].y = 0;
+	ld	l, e
+;	spillPairReg hl
+;	spillPairReg hl
+	ld	h, d
+;	spillPairReg hl
+;	spillPairReg hl
+	inc	hl
+	ld	(hl), #0x00
+;./the-castel.c:1950: g_Levels[level].MyItems[element].tile = 0;
+	ld	l, e
+;	spillPairReg hl
+;	spillPairReg hl
+	ld	h, d
+;	spillPairReg hl
+;	spillPairReg hl
+	inc	hl
+	inc	hl
+	inc	hl
+	ld	(hl), #0x00
+;./the-castel.c:1951: g_Levels[level].MyItems[element].visible = 0;
+	inc	de
+	inc	de
+	xor	a, a
+	ld	(de), a
+;./the-castel.c:1946: for (u8 element = 0; element < 10; element++)
+	inc	b
+	jp	00104$
 00108$:
-;./the-castel.c:1885: if (level[i] == TILE_MASK_AMPHORA)
-	ld	a, (hl)
-	sub	a, #0xbc
-	jr	NZ, 00110$
-;./the-castel.c:1887: level[i] = TILE_AMPHORA;
-	ld	(hl), #0x5f
-00110$:
-;./the-castel.c:1889: if (level[i] == TILE_MASK_HEART)
-	ld	a, (hl)
-	sub	a, #0xbb
-	jr	NZ, 00112$
-;./the-castel.c:1891: level[i] = TILE_HEART;
-	ld	(hl), #0x4f
-00112$:
-;./the-castel.c:1893: if (level[i] == TILE_MASK_DOOR1)
-	ld	a, (hl)
-	sub	a, #0x41
-	jr	NZ, 00114$
-;./the-castel.c:1895: level[i] = TILE_DOOR1;
-	ld	(hl), #0x45
-00114$:
-;./the-castel.c:1897: if (level[i] == TILE_MASK_DOOR2)
-	ld	a, (hl)
-	sub	a, #0x42
-	jr	NZ, 00116$
-;./the-castel.c:1899: level[i] = TILE_DOOR2;
-	ld	(hl), #0x46
-00116$:
-;./the-castel.c:1901: if (level[i] == TILE_MASK_DOOR3)
-	ld	a, (hl)
-	sub	a, #0x43
-	jr	NZ, 00118$
-;./the-castel.c:1903: level[i] = TILE_DOOR3;
-	ld	(hl), #0x4a
-00118$:
-;./the-castel.c:1905: if (level[i] == TILE_MASK_CRUCIFIX)
-	ld	a, (hl)
-	sub	a, #0xb3
-	jr	NZ, 00124$
-;./the-castel.c:1907: level[i] = TILE_CRUCIFIX;
-	ld	(hl), #0x68
-00124$:
-;./the-castel.c:1867: for (u16 i = 0; i < sizeLevel; i++)
-	inc	bc
-	jp	00123$
-00125$:
-;./the-castel.c:1910: }
+;./the-castel.c:1944: for (u8 level = 0; level < (int)(sizeof(g_Levels) / sizeof(g_Levels[0])) - 1; level++)
+	inc	c
+	jp	00107$
+00109$:
+;./the-castel.c:1954: }
 	ld	sp, ix
 	pop	ix
 	ret
-;./the-castel.c:1915: void VDP_LoadPattern_GM1_Pletter(const u8 *src, u8 offset)
+;./the-castel.c:1959: void VDP_LoadPattern_GM1_Pletter(const u8 *src, u8 offset)
 ;	---------------------------------
 ; Function VDP_LoadPattern_GM1_Pletter
 ; ---------------------------------
@@ -7311,7 +5492,7 @@ _VDP_LoadPattern_GM1_Pletter::
 	add	ix,sp
 	ld	c, l
 	ld	b, h
-;./the-castel.c:1917: Pletter_UnpackToVRAM(src, g_ScreenPatternLow + (offset * 8));
+;./the-castel.c:1961: Pletter_UnpackToVRAM(src, g_ScreenPatternLow + (offset * 8));
 	ld	l, 4 (ix)
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -7331,18 +5512,18 @@ _VDP_LoadPattern_GM1_Pletter::
 ;	spillPairReg hl
 ;	spillPairReg hl
 	call	_Pletter_UnpackToVRAM
-;./the-castel.c:1918: }
+;./the-castel.c:1962: }
 	pop	ix
 	pop	hl
 	inc	sp
 	jp	(hl)
-;./the-castel.c:1924: void main()
+;./the-castel.c:1968: void main()
 ;	---------------------------------
 ; Function main
 ; ---------------------------------
 _main::
-;./the-castel.c:1927: DEBUG_LOG("Start debug session!");
-	ld	bc, #___str_20+0
+;./the-castel.c:1971: DEBUG_LOG("Start debug session!");
+	ld	bc, #___str_6+0
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
 	ld	a, #0x23
 	out	(_g_PortDebugMode), a
@@ -7355,18 +5536,18 @@ _main::
 	out	(_g_PortDebugData), a
 	inc	bc
 	jp	00102$
-;./the-castel.c:1927: DEBUG_LOG("Start debug session!");
+;./the-castel.c:1971: DEBUG_LOG("Start debug session!");
 00105$:
-;./the-castel.c:1934: Game_SetState(State_Initialize);
+;./the-castel.c:1978: Game_SetState(State_Initialize);
 	ld	hl, #_State_Initialize
 	call	_Game_SetState
-;./the-castel.c:1941: Game_MainLoop(VDP_MODE_GRAPHIC1);
+;./the-castel.c:1985: Game_MainLoop(VDP_MODE_GRAPHIC1);
 	ld	a, #0x02
 	call	_Game_MainLoop
-;./the-castel.c:1945: Game_Release();
+;./the-castel.c:1989: Game_Release();
 	call	_Game_Release
-;./the-castel.c:1947: DEBUG_LOG("End debug session!");
-	ld	bc, #___str_21+0
+;./the-castel.c:1991: DEBUG_LOG("End debug session!");
+	ld	bc, #___str_7+0
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
 	ld	a, #0x23
 	out	(_g_PortDebugMode), a
@@ -7379,3096 +5560,71 @@ _main::
 	out	(_g_PortDebugData), a
 	inc	bc
 	jp	00106$
-;./the-castel.c:1947: DEBUG_LOG("End debug session!");
+;./the-castel.c:1991: DEBUG_LOG("End debug session!");
 00109$:
-;./the-castel.c:1949: Bios_Exit(0);
+;./the-castel.c:1993: Bios_Exit(0);
 	xor	a, a
-;./the-castel.c:1950: }
+;./the-castel.c:1994: }
 	jp	_Bios_Exit
-___str_20:
+___str_6:
 	.ascii "Start debug session!"
 	.db 0x00
-___str_21:
+___str_7:
 	.ascii "End debug session!"
 	.db 0x00
 	.area _CODE
+___str_8:
+	.ascii "STRAT GAME"
+	.db 0x00
+___str_9:
+	.ascii "Level: 01"
+	.db 0x00
+___str_10:
+	.ascii "Level: 02"
+	.db 0x00
+___str_11:
+	.ascii "Level: 03"
+	.db 0x00
+___str_12:
+	.ascii "Level: 04"
+	.db 0x00
+___str_13:
+	.ascii "Level: 05"
+	.db 0x00
+___str_14:
+	.ascii "Level: 06"
+	.db 0x00
+___str_15:
+	.ascii "Level: 07"
+	.db 0x00
+___str_16:
+	.ascii "Level: 08"
+	.db 0x00
+___str_17:
+	.ascii "Level: 09"
+	.db 0x00
+___str_18:
+	.ascii "Level: 10"
+	.db 0x00
+___str_19:
+	.ascii "Level: 11"
+	.db 0x00
+___str_20:
+	.ascii "Level: 12"
+	.db 0x00
+___str_21:
+	.ascii "Level: 13"
+	.db 0x00
+___str_22:
+	.ascii "Level: 14"
+	.db 0x00
+___str_23:
+	.ascii "level: 15"
+	.db 0x00
+___str_24:
+	.ascii "GAME OVER"
+	.db 0x00
 	.area _INITIALIZER
-__xinit__g_Level000:
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0xe5	; 229
-	.db #0xee	; 238
-	.db #0xf4	; 244
-	.db #0xf2	; 242
-	.db #0xe1	; 225
-	.db #0x00	; 0
-	.db #0xee	; 238
-	.db #0xe5	; 229
-	.db #0xec	; 236
-	.db #0x00	; 0
-	.db #0xe3	; 227
-	.db #0xe1	; 225
-	.db #0xf3	; 243
-	.db #0xf4	; 244
-	.db #0xe5	; 229
-	.db #0xec	; 236
-	.db #0xec	; 236
-	.db #0xef	; 239
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0xe5	; 229
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0xf3	; 243
-	.db #0xe1	; 225
-	.db #0xec	; 236
-	.db #0xf6	; 246
-	.db #0xe1	; 225
-	.db #0x00	; 0
-	.db #0xec	; 236
-	.db #0xe1	; 225
-	.db #0x00	; 0
-	.db #0xf0	; 240
-	.db #0xf2	; 242
-	.db #0xe9	; 233
-	.db #0xee	; 238
-	.db #0xe3	; 227
-	.db #0xe9	; 233
-	.db #0xf0	; 240
-	.db #0xe5	; 229
-	.db #0xf3	; 243
-	.db #0xf3	; 243
-	.db #0xe1	; 225
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x93	; 147
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x93	; 147
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x48	; 72	'H'
-	.db #0x49	; 73	'I'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x4c	; 76	'L'
-	.db #0x4b	; 75	'K'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x7f	; 127
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x4e	; 78	'N'
-	.db #0x4d	; 77	'M'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-__xinit__g_Level009:
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x99	; 153
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x00	; 0
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x5b	; 91
-	.db #0x5c	; 92
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x5b	; 91
-	.db #0x5c	; 92
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x5d	; 93
-	.db #0x5e	; 94
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x5d	; 93
-	.db #0x5e	; 94
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x64	; 100	'd'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x64	; 100	'd'
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x82	; 130
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x7f	; 127
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x63	; 99	'c'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x63	; 99	'c'
-	.db #0x00	; 0
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x93	; 147
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x63	; 99	'c'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x48	; 72	'H'
-	.db #0x49	; 73	'I'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x64	; 100	'd'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x64	; 100	'd'
-	.db #0x48	; 72	'H'
-	.db #0x49	; 73	'I'
-	.db #0x00	; 0
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x64	; 100	'd'
-	.db #0x4c	; 76	'L'
-	.db #0x4b	; 75	'K'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x64	; 100	'd'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x82	; 130
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x4c	; 76	'L'
-	.db #0x4b	; 75	'K'
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x46	; 70	'F'
-	.db #0x4d	; 77	'M'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x7c	; 124
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x47	; 71	'G'
-	.db #0x4d	; 77	'M'
-	.db #0x00	; 0
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-__xinit__g_Level012:
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x99	; 153
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x00	; 0
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x5b	; 91
-	.db #0x5c	; 92
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x5d	; 93
-	.db #0x5e	; 94
-	.db #0x95	; 149
-	.db #0x95	; 149
-	.db #0x5b	; 91
-	.db #0x5c	; 92
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x5b	; 91
-	.db #0x5c	; 92
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x5b	; 91
-	.db #0x5c	; 92
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x5b	; 91
-	.db #0x5c	; 92
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x94	; 148
-	.db #0x5d	; 93
-	.db #0x5e	; 94
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x5d	; 93
-	.db #0x5e	; 94
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x5d	; 93
-	.db #0x5e	; 94
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x5d	; 93
-	.db #0x5e	; 94
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x5f	; 95
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x64	; 100	'd'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x64	; 100	'd'
-	.db #0x00	; 0
-	.db #0x48	; 72	'H'
-	.db #0x49	; 73	'I'
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x64	; 100	'd'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x64	; 100	'd'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x82	; 130
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x4c	; 76	'L'
-	.db #0x4b	; 75	'K'
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x63	; 99	'c'
-	.db #0x7c	; 124
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x4e	; 78	'N'
-	.db #0x4d	; 77	'M'
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x63	; 99	'c'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x99	; 153
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x99	; 153
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x63	; 99	'c'
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x48	; 72	'H'
-	.db #0x49	; 73	'I'
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x48	; 72	'H'
-	.db #0x49	; 73	'I'
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x4c	; 76	'L'
-	.db #0x4b	; 75	'K'
-	.db #0x99	; 153
-	.db #0x64	; 100	'd'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x64	; 100	'd'
-	.db #0x4c	; 76	'L'
-	.db #0x4b	; 75	'K'
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x7f	; 127
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x47	; 71	'G'
-	.db #0x4d	; 77	'M'
-	.db #0x95	; 149
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x63	; 99	'c'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x7c	; 124
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x63	; 99	'c'
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x47	; 71	'G'
-	.db #0x4d	; 77	'M'
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-__xinit__g_Level029:
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x95	; 149
-	.db #0x93	; 147
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0xe7	; 231
-	.db #0xe1	; 225
-	.db #0xed	; 237
-	.db #0xe5	; 229
-	.db #0x00	; 0
-	.db #0xef	; 239
-	.db #0xf6	; 246
-	.db #0xe5	; 229
-	.db #0xf2	; 242
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x93	; 147
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x93	; 147
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0xf0	; 240
-	.db #0xf2	; 242
-	.db #0xe5	; 229
-	.db #0xed	; 237
-	.db #0xe9	; 233
-	.db #0x00	; 0
-	.db #0xf3	; 243
-	.db #0xf0	; 240
-	.db #0xe1	; 225
-	.db #0xe3	; 227
-	.db #0xe5	; 229
-	.db #0x00	; 0
-	.db #0xf0	; 240
-	.db #0xe5	; 229
-	.db #0xf2	; 242
-	.db #0x00	; 0
-	.db #0xe3	; 227
-	.db #0xef	; 239
-	.db #0xee	; 238
-	.db #0xf4	; 244
-	.db #0xe9	; 233
-	.db #0xee	; 238
-	.db #0xf5	; 245
-	.db #0xe1	; 225
-	.db #0xf2	; 242
-	.db #0xe5	; 229
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x91	; 145
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x91	; 145
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x9a	; 154
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x9a	; 154
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
-	.db #0x94	; 148
-	.db #0x95	; 149
-	.db #0x92	; 146
-	.db #0x93	; 147
-	.db #0x95	; 149
-	.db #0x97	; 151
-	.db #0x95	; 149
-	.db #0x91	; 145
-	.db #0x95	; 149
-	.db #0x98	; 152
-	.db #0x95	; 149
-	.db #0x99	; 153
-	.db #0x95	; 149
-	.db #0x9a	; 154
-	.db #0x95	; 149
 __xinit__g_PrevRow8:
 	.db #0xff	; 255
 __xinit__g_PawnCount:
@@ -10501,6 +5657,12 @@ __xinit__IsUnderWater:
 	.db #0x00	; 0
 __xinit__g_IsDanger:
 	.db #0x00	; 0
+__xinit__g_CatchEnemy:
+	.db #0x00	; 0
+__xinit__g_DelayCatchEnemy:
+	.db #0x00	; 0
+__xinit__isCatch:
+	.db #0x00	; 0
 __xinit__g_Inventory:
 	.db #0x00	; 0
 	.db #0x00	; 0
@@ -10511,44 +5673,20 @@ __xinit__g_Lives:
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
-	.area _CABS (ABS)
-	.org 0x3924
-_g_DataMusic:
-	.db #0x05	; 5
-	.db #0x16	; 22
-	.db #0x00	; 0
-	.db #0xe0	; 224
+__xinit__g_CacheLevel:
 	.db #0x00	; 0
 	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x4f	; 79	'O'
-	.db #0x05	; 5
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x75	; 117	'u'
-	.db #0x05	; 5
+	.db #0x20	; 32
+	.db #0x18	; 24
+	.dw _g_LevelUncompress
+__xinit__g_Levels:
 	.db #0x00	; 0
 	.db #0x00	; 0
-	.db #0x7b	; 123
-	.db #0x05	; 5
-	.db #0x91	; 145
-	.db #0x05	; 5
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0xa7	; 167
-	.db #0x05	; 5
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0xf1	; 241
-	.db #0x05	; 5
+	.db #0x20	; 32
+	.db #0x18	; 24
+	.dw _g_Level030
+	.dw ___str_8
+	.db #0x01	; 1
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
@@ -10565,8 +5703,97 @@ _g_DataMusic:
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x20	; 32
+	.db #0x18	; 24
+	.dw _g_Level001
+	.dw ___str_9
+	.db #0x02	; 2
+	.db #0x00	; 0
+	.db #0x02	; 2
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x20	; 32
+	.db #0x18	; 24
+	.dw _g_Level002
+	.dw ___str_10
 	.db #0x03	; 3
-	.db #0x06	; 6
+	.db #0x01	; 1
+	.db #0x02	; 2
+	.db #0x02	; 2
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
@@ -10583,18 +5810,47 @@ _g_DataMusic:
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
-	.db #0x81	; 129
-	.db #0x06	; 6
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x20	; 32
+	.db #0x18	; 24
+	.dw _g_Level003
+	.dw ___str_11
+	.db #0x04	; 4
+	.db #0x02	; 2
+	.db #0x02	; 2
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
-	.db #0x84	; 132
-	.db #0x06	; 6
-	.db #0x8c	; 140
-	.db #0x06	; 6
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
@@ -10608,1517 +5864,706 @@ _g_DataMusic:
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
 	.db #0x00	; 0
-	.db #0x94	; 148
-	.db #0x06	; 6
-	.db #0x9c	; 156
-	.db #0x06	; 6
-	.db #0xa4	; 164
-	.db #0x06	; 6
 	.db #0x00	; 0
+	.db #0x20	; 32
+	.db #0x18	; 24
+	.dw _g_Level004
+	.dw ___str_12
+	.db #0x05	; 5
 	.db #0x03	; 3
-	.db #0x1b	; 27
-	.db #0x03	; 3
+	.db #0x02	; 2
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x01	; 1
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x20	; 32
+	.db #0x18	; 24
+	.dw _g_Level006
+	.dw ___str_13
 	.db #0x06	; 6
+	.db #0x04	; 4
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x20	; 32
+	.db #0x18	; 24
+	.dw _g_Level007
+	.dw ___str_14
+	.db #0x07	; 7
+	.db #0x05	; 5
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x02	; 2
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x20	; 32
+	.db #0x18	; 24
+	.dw _g_Level015
+	.dw ___str_15
+	.db #0x08	; 8
+	.db #0x06	; 6
+	.db #0x01	; 1
+	.db #0x01	; 1
+	.db #0x00	; 0
+	.db #0x02	; 2
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x20	; 32
+	.db #0x18	; 24
+	.dw _g_Level008
+	.dw ___str_16
 	.db #0x09	; 9
-	.db #0x06	; 6
+	.db #0x07	; 7
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x01	; 1
+	.db #0x02	; 2
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x20	; 32
+	.db #0x18	; 24
+	.dw _g_Level010
+	.dw ___str_17
+	.db #0x0a	; 10
+	.db #0x08	; 8
+	.db #0x02	; 2
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x01	; 1
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x20	; 32
+	.db #0x18	; 24
+	.dw _g_Level011
+	.dw ___str_18
+	.db #0x0b	; 11
 	.db #0x09	; 9
+	.db #0x01	; 1
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x02	; 2
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x20	; 32
+	.db #0x18	; 24
+	.dw _g_Level012
+	.dw ___str_19
 	.db #0x0c	; 12
+	.db #0x0a	; 10
+	.db #0x02	; 2
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x01	; 1
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x20	; 32
+	.db #0x18	; 24
+	.dw _g_Level009
+	.dw ___str_20
+	.db #0x0d	; 13
+	.db #0x0b	; 11
+	.db #0x01	; 1
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x02	; 2
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x20	; 32
+	.db #0x18	; 24
+	.dw _g_Level013
+	.dw ___str_21
+	.db #0x0e	; 14
+	.db #0x0c	; 12
+	.db #0x00	; 0
+	.db #0x01	; 1
+	.db #0x00	; 0
+	.db #0x01	; 1
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x20	; 32
+	.db #0x18	; 24
+	.dw _g_Level014
+	.dw ___str_22
 	.db #0x0f	; 15
-	.db #0x18	; 24
-	.db #0x18	; 24
-	.db #0x18	; 24
-	.db #0x18	; 24
-	.db #0x06	; 6
-	.db #0x09	; 9
-	.db #0x06	; 6
-	.db #0x09	; 9
-	.db #0x12	; 18
-	.db #0x15	; 21
-	.db #0x12	; 18
-	.db #0x15	; 21
-	.db #0xff	; 255
-	.db #0x1c	; 28
-	.db #0x01	; 1
-	.db #0x53	; 83	'S'
-	.db #0x01	; 1
-	.db #0x57	; 87	'W'
-	.db #0x01	; 1
-	.db #0x86	; 134
-	.db #0x01	; 1
-	.db #0xbc	; 188
-	.db #0x01	; 1
-	.db #0xdf	; 223
-	.db #0x01	; 1
-	.db #0x93	; 147
-	.db #0x02	; 2
-	.db #0xcd	; 205
-	.db #0x02	; 2
-	.db #0xee	; 238
-	.db #0x02	; 2
-	.db #0x1b	; 27
-	.db #0x03	; 3
-	.db #0x57	; 87	'W'
-	.db #0x03	; 3
-	.db #0x82	; 130
-	.db #0x03	; 3
-	.db #0xaf	; 175
-	.db #0x03	; 3
-	.db #0xeb	; 235
-	.db #0x03	; 3
-	.db #0x06	; 6
-	.db #0x04	; 4
-	.db #0x34	; 52	'4'
-	.db #0x04	; 4
-	.db #0x70	; 112	'p'
-	.db #0x04	; 4
-	.db #0x8b	; 139
-	.db #0x04	; 4
-	.db #0x13	; 19
-	.db #0x05	; 5
-	.db #0xcd	; 205
-	.db #0x02	; 2
-	.db #0xee	; 238
-	.db #0x02	; 2
-	.db #0x33	; 51	'3'
-	.db #0x05	; 5
-	.db #0x57	; 87	'W'
-	.db #0x03	; 3
-	.db #0x82	; 130
-	.db #0x03	; 3
-	.db #0x93	; 147
-	.db #0x02	; 2
-	.db #0xb9	; 185
-	.db #0x04	; 4
-	.db #0xe5	; 229
-	.db #0x04	; 4
 	.db #0x0d	; 13
 	.db #0x02	; 2
-	.db #0x43	; 67	'C'
-	.db #0x02	; 2
-	.db #0x65	; 101	'e'
-	.db #0x02	; 2
-	.db #0x1a	; 26
 	.db #0x00	; 0
-	.db #0x34	; 52	'4'
-	.db #0x08	; 8
-	.db #0x40	; 64
-	.db #0xcf	; 207
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x74	; 116	't'
-	.db #0xb1	; 177
-	.db #0x04	; 4
-	.db #0xc0	; 192
-	.db #0xbb	; 187
 	.db #0x00	; 0
-	.db #0x3b	; 59
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x72	; 114	'r'
-	.db #0xc0	; 192
-	.db #0xbb	; 187
+	.db #0x01	; 1
 	.db #0x00	; 0
-	.db #0x2f	; 47
-	.db #0x76	; 118	'v'
-	.db #0xbb	; 187
 	.db #0x00	; 0
-	.db #0x27	; 39
-	.db #0x79	; 121	'y'
-	.db #0xc0	; 192
-	.db #0xbb	; 187
 	.db #0x00	; 0
-	.db #0x23	; 35
-	.db #0x7b	; 123
-	.db #0xc0	; 192
-	.db #0xbb	; 187
 	.db #0x00	; 0
-	.db #0x27	; 39
-	.db #0x79	; 121	'y'
-	.db #0xc0	; 192
-	.db #0xbb	; 187
 	.db #0x00	; 0
-	.db #0x23	; 35
-	.db #0x7b	; 123
-	.db #0xbb	; 187
 	.db #0x00	; 0
-	.db #0x27	; 39
-	.db #0x79	; 121	'y'
-	.db #0xbb	; 187
 	.db #0x00	; 0
-	.db #0x23	; 35
-	.db #0x7b	; 123
-	.db #0xbb	; 187
 	.db #0x00	; 0
-	.db #0x2f	; 47
-	.db #0x76	; 118	'v'
 	.db #0x00	; 0
-	.db #0xb1	; 177
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db #0x00	; 0
+	.db #0x00	; 0
 	.db #0x20	; 32
-	.db #0xc0	; 192
+	.db #0x18	; 24
+	.dw _g_Level005
+	.dw ___str_23
 	.db #0x00	; 0
-	.db #0xff	; 255
-	.db #0x16	; 22
-	.db #0xcf	; 207
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x74	; 116	't'
-	.db #0x80	; 128
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5c	; 92
-	.db #0xdb	; 219
-	.db #0x4f	; 79	'O'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5a	; 90	'Z'
-	.db #0xdb	; 219
-	.db #0x4e	; 78	'N'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x61	; 97	'a'
-	.db #0xdb	; 219
-	.db #0x44	; 68	'D'
-	.db #0x7b	; 123
-	.db #0x45	; 69	'E'
-	.db #0x7b	; 123
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x63	; 99	'c'
-	.db #0xdb	; 219
-	.db #0x44	; 68	'D'
-	.db #0x7b	; 123
-	.db #0x4e	; 78	'N'
-	.db #0x74	; 116	't'
-	.db #0x4d	; 77	'M'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x61	; 97	'a'
-	.db #0xdb	; 219
-	.db #0x4d	; 77	'M'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5e	; 94
-	.db #0x00	; 0
-	.db #0x1a	; 26
-	.db #0x00	; 0
-	.db #0x34	; 52	'4'
-	.db #0x08	; 8
-	.db #0x40	; 64
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x74	; 116	't'
-	.db #0xb1	; 177
-	.db #0x04	; 4
-	.db #0xc0	; 192
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x3b	; 59
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x72	; 114	'r'
-	.db #0xc0	; 192
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2f	; 47
-	.db #0x76	; 118	'v'
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2f	; 47
-	.db #0x76	; 118	'v'
-	.db #0xc0	; 192
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2c	; 44
-	.db #0x77	; 119	'w'
-	.db #0xc0	; 192
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x27	; 39
-	.db #0x79	; 121	'y'
-	.db #0xc0	; 192
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2f	; 47
-	.db #0x76	; 118	'v'
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x27	; 39
-	.db #0x79	; 121	'y'
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x23	; 35
-	.db #0x7b	; 123
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2f	; 47
-	.db #0x76	; 118	'v'
-	.db #0x00	; 0
-	.db #0xf0	; 240
-	.db #0x0c	; 12
-	.db #0xcf	; 207
-	.db #0xb1	; 177
-	.db #0x04	; 4
-	.db #0x68	; 104	'h'
-	.db #0xd7	; 215
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x74	; 116	't'
-	.db #0xd6	; 214
-	.db #0xb1	; 177
-	.db #0x04	; 4
-	.db #0x68	; 104	'h'
-	.db #0xd7	; 215
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x74	; 116	't'
-	.db #0xb1	; 177
-	.db #0x04	; 4
-	.db #0x74	; 116	't'
-	.db #0xd6	; 214
-	.db #0x68	; 104	'h'
-	.db #0xd7	; 215
-	.db #0x74	; 116	't'
-	.db #0xd6	; 214
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x68	; 104	'h'
-	.db #0x68	; 104	'h'
-	.db #0xd7	; 215
-	.db #0xb1	; 177
-	.db #0x04	; 4
-	.db #0x68	; 104	'h'
-	.db #0x00	; 0
-	.db #0xff	; 255
-	.db #0x16	; 22
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x74	; 116	't'
-	.db #0x80	; 128
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5c	; 92
-	.db #0xdb	; 219
-	.db #0x4f	; 79	'O'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5a	; 90	'Z'
-	.db #0xdb	; 219
-	.db #0x4e	; 78	'N'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x61	; 97	'a'
-	.db #0xdb	; 219
-	.db #0x4e	; 78	'N'
-	.db #0x74	; 116	't'
-	.db #0x44	; 68	'D'
-	.db #0x7b	; 123
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x63	; 99	'c'
-	.db #0xdb	; 219
-	.db #0x44	; 68	'D'
-	.db #0x7b	; 123
-	.db #0x4e	; 78	'N'
-	.db #0x74	; 116	't'
-	.db #0x4d	; 77	'M'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x61	; 97	'a'
-	.db #0xdb	; 219
-	.db #0x4d	; 77	'M'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5e	; 94
-	.db #0x00	; 0
-	.db #0x1a	; 26
-	.db #0x00	; 0
-	.db #0x34	; 52	'4'
-	.db #0x08	; 8
-	.db #0x40	; 64
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x74	; 116	't'
-	.db #0xb1	; 177
-	.db #0x04	; 4
-	.db #0xc0	; 192
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x3b	; 59
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x72	; 114	'r'
-	.db #0xc0	; 192
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2f	; 47
-	.db #0x76	; 118	'v'
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x27	; 39
-	.db #0x79	; 121	'y'
-	.db #0xc0	; 192
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x23	; 35
-	.db #0x7b	; 123
-	.db #0xc0	; 192
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x27	; 39
-	.db #0x79	; 121	'y'
-	.db #0xc0	; 192
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x23	; 35
-	.db #0x7b	; 123
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x27	; 39
-	.db #0x79	; 121	'y'
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x23	; 35
-	.db #0x7b	; 123
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2f	; 47
-	.db #0x76	; 118	'v'
-	.db #0x00	; 0
-	.db #0xf0	; 240
-	.db #0x0c	; 12
-	.db #0xb1	; 177
-	.db #0x04	; 4
-	.db #0x68	; 104	'h'
-	.db #0xd7	; 215
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x74	; 116	't'
-	.db #0xd6	; 214
-	.db #0xb1	; 177
-	.db #0x04	; 4
-	.db #0x68	; 104	'h'
-	.db #0xd7	; 215
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x74	; 116	't'
-	.db #0xb1	; 177
-	.db #0x04	; 4
-	.db #0x74	; 116	't'
-	.db #0xd6	; 214
-	.db #0x68	; 104	'h'
-	.db #0xd7	; 215
-	.db #0x74	; 116	't'
-	.db #0xd6	; 214
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x68	; 104	'h'
-	.db #0x68	; 104	'h'
-	.db #0xd7	; 215
-	.db #0xb1	; 177
-	.db #0x04	; 4
-	.db #0x68	; 104	'h'
-	.db #0x00	; 0
-	.db #0xff	; 255
-	.db #0x16	; 22
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x74	; 116	't'
-	.db #0x80	; 128
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5c	; 92
-	.db #0xdb	; 219
-	.db #0x4f	; 79	'O'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5a	; 90	'Z'
-	.db #0xdb	; 219
-	.db #0x4e	; 78	'N'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x61	; 97	'a'
-	.db #0xdb	; 219
-	.db #0x44	; 68	'D'
-	.db #0x7b	; 123
-	.db #0x45	; 69	'E'
-	.db #0x7b	; 123
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x63	; 99	'c'
-	.db #0xdb	; 219
-	.db #0x44	; 68	'D'
-	.db #0x7b	; 123
-	.db #0x4e	; 78	'N'
-	.db #0x74	; 116	't'
-	.db #0x4d	; 77	'M'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x61	; 97	'a'
-	.db #0xdb	; 219
-	.db #0x4d	; 77	'M'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5e	; 94
-	.db #0x00	; 0
-	.db #0x1a	; 26
-	.db #0x00	; 0
-	.db #0x34	; 52	'4'
-	.db #0x0c	; 12
-	.db #0x40	; 64
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x68	; 104	'h'
-	.db #0xc0	; 192
-	.db #0xd7	; 215
-	.db #0xb0	; 176
-	.db #0x74	; 116	't'
-	.db #0xd6	; 214
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x3b	; 59
-	.db #0x68	; 104	'h'
-	.db #0xc0	; 192
-	.db #0xd7	; 215
-	.db #0xb0	; 176
-	.db #0x74	; 116	't'
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2f	; 47
-	.db #0x74	; 116	't'
-	.db #0xc0	; 192
-	.db #0xd6	; 214
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x46	; 70	'F'
-	.db #0x68	; 104	'h'
-	.db #0xc0	; 192
-	.db #0xd7	; 215
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2f	; 47
-	.db #0x74	; 116	't'
-	.db #0xc0	; 192
-	.db #0xd6	; 214
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x23	; 35
-	.db #0x68	; 104	'h'
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x27	; 39
-	.db #0x68	; 104	'h'
-	.db #0xd7	; 215
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x23	; 35
-	.db #0x74	; 116	't'
-	.db #0xd4	; 212
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2f	; 47
-	.db #0x76	; 118	'v'
-	.db #0x00	; 0
-	.db #0xf0	; 240
-	.db #0x2e	; 46
-	.db #0xcd	; 205
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x77	; 119	'w'
-	.db #0x7b	; 123
-	.db #0xc8	; 200
-	.db #0x77	; 119	'w'
-	.db #0xcd	; 205
-	.db #0x74	; 116	't'
-	.db #0xc8	; 200
-	.db #0x7b	; 123
-	.db #0xcd	; 205
-	.db #0x72	; 114	'r'
-	.db #0x71	; 113	'q'
-	.db #0xc8	; 200
-	.db #0x72	; 114	'r'
-	.db #0xcd	; 205
-	.db #0x6f	; 111	'o'
-	.db #0xc8	; 200
-	.db #0x71	; 113	'q'
-	.db #0x6f	; 111	'o'
-	.db #0xcd	; 205
-	.db #0x76	; 118	'v'
-	.db #0x7e	; 126
-	.db #0xc8	; 200
-	.db #0x76	; 118	'v'
-	.db #0xcd	; 205
-	.db #0x7d	; 125
-	.db #0xc8	; 200
-	.db #0x7e	; 126
-	.db #0x00	; 0
-	.db #0xff	; 255
-	.db #0x16	; 22
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x74	; 116	't'
-	.db #0x44	; 68	'D'
-	.db #0x80	; 128
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5c	; 92
-	.db #0xdb	; 219
-	.db #0x4f	; 79	'O'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5a	; 90	'Z'
-	.db #0xdb	; 219
-	.db #0x4e	; 78	'N'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x61	; 97	'a'
-	.db #0xdb	; 219
-	.db #0x44	; 68	'D'
-	.db #0x7b	; 123
-	.db #0x6f	; 111	'o'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x63	; 99	'c'
-	.db #0xdb	; 219
-	.db #0x44	; 68	'D'
-	.db #0x7b	; 123
-	.db #0x76	; 118	'v'
-	.db #0x4d	; 77	'M'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x61	; 97	'a'
-	.db #0xdb	; 219
-	.db #0x4d	; 77	'M'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5e	; 94
-	.db #0x00	; 0
-	.db #0x1a	; 26
-	.db #0x00	; 0
-	.db #0x2c	; 44
-	.db #0x0c	; 12
-	.db #0x40	; 64
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x68	; 104	'h'
-	.db #0xc0	; 192
-	.db #0xd7	; 215
-	.db #0xb0	; 176
-	.db #0x74	; 116	't'
-	.db #0xd6	; 214
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x3b	; 59
-	.db #0x68	; 104	'h'
-	.db #0xc0	; 192
-	.db #0xd7	; 215
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2f	; 47
-	.db #0x74	; 116	't'
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x27	; 39
-	.db #0x74	; 116	't'
-	.db #0xc0	; 192
-	.db #0xd6	; 214
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x1d	; 29
-	.db #0x68	; 104	'h'
-	.db #0xc0	; 192
-	.db #0xd7	; 215
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x27	; 39
-	.db #0x74	; 116	't'
-	.db #0xc0	; 192
-	.db #0xd6	; 214
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x1d	; 29
-	.db #0x68	; 104	'h'
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x27	; 39
-	.db #0x68	; 104	'h'
-	.db #0xd7	; 215
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x27	; 39
-	.db #0x74	; 116	't'
-	.db #0xd4	; 212
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2f	; 47
-	.db #0x76	; 118	'v'
-	.db #0x00	; 0
-	.db #0xf0	; 240
-	.db #0x2e	; 46
-	.db #0xcd	; 205
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x7e	; 126
-	.db #0xc8	; 200
-	.db #0xd0	; 208
-	.db #0x7e	; 126
-	.db #0xc4	; 196
-	.db #0xd0	; 208
-	.db #0xcd	; 205
-	.db #0x80	; 128
-	.db #0xb1	; 177
-	.db #0x01	; 1
-	.db #0x82	; 130
-	.db #0xc8	; 200
-	.db #0x80	; 128
-	.db #0xcd	; 205
-	.db #0x85	; 133
-	.db #0xc8	; 200
-	.db #0x82	; 130
-	.db #0xcd	; 205
-	.db #0x87	; 135
-	.db #0xc8	; 200
-	.db #0x85	; 133
-	.db #0xcd	; 205
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x8a	; 138
-	.db #0xc8	; 200
-	.db #0x87	; 135
-	.db #0x8a	; 138
-	.db #0xcd	; 205
-	.db #0x85	; 133
-	.db #0x8a	; 138
-	.db #0xc8	; 200
-	.db #0x85	; 133
-	.db #0xcd	; 205
-	.db #0x89	; 137
-	.db #0xc8	; 200
-	.db #0x8a	; 138
-	.db #0x00	; 0
-	.db #0xff	; 255
-	.db #0x16	; 22
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x74	; 116	't'
-	.db #0x80	; 128
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5c	; 92
-	.db #0xdb	; 219
-	.db #0x4f	; 79	'O'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5a	; 90	'Z'
-	.db #0xdb	; 219
-	.db #0x4e	; 78	'N'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x61	; 97	'a'
-	.db #0xdb	; 219
-	.db #0x4e	; 78	'N'
-	.db #0x80	; 128
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x63	; 99	'c'
-	.db #0xdb	; 219
-	.db #0x4d	; 77	'M'
-	.db #0x80	; 128
-	.db #0x4e	; 78	'N'
-	.db #0x74	; 116	't'
-	.db #0x4d	; 77	'M'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x61	; 97	'a'
-	.db #0xdb	; 219
-	.db #0x4d	; 77	'M'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5e	; 94
-	.db #0x00	; 0
-	.db #0x1a	; 26
-	.db #0x00	; 0
-	.db #0x34	; 52	'4'
-	.db #0x0c	; 12
-	.db #0x40	; 64
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x68	; 104	'h'
-	.db #0xc0	; 192
-	.db #0xd7	; 215
-	.db #0xb0	; 176
-	.db #0x74	; 116	't'
-	.db #0xd6	; 214
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x3b	; 59
-	.db #0x68	; 104	'h'
-	.db #0xc0	; 192
-	.db #0xd7	; 215
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2f	; 47
-	.db #0x74	; 116	't'
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2f	; 47
-	.db #0x74	; 116	't'
-	.db #0xc0	; 192
-	.db #0xd6	; 214
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2c	; 44
-	.db #0x68	; 104	'h'
-	.db #0xc0	; 192
-	.db #0xd7	; 215
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x23	; 35
-	.db #0x74	; 116	't'
-	.db #0xc0	; 192
-	.db #0xd6	; 214
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x23	; 35
-	.db #0x68	; 104	'h'
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x27	; 39
-	.db #0x68	; 104	'h'
-	.db #0xd7	; 215
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x23	; 35
-	.db #0x74	; 116	't'
-	.db #0xd4	; 212
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2f	; 47
-	.db #0x76	; 118	'v'
-	.db #0x00	; 0
-	.db #0xf0	; 240
-	.db #0x02	; 2
-	.db #0xcd	; 205
-	.db #0xb1	; 177
-	.db #0x01	; 1
-	.db #0x7b	; 123
-	.db #0xcc	; 204
-	.db #0xb1	; 177
-	.db #0x04	; 4
-	.db #0xd0	; 208
-	.db #0xcb	; 203
-	.db #0xd0	; 208
-	.db #0xca	; 202
-	.db #0xd0	; 208
-	.db #0xc9	; 201
-	.db #0xd0	; 208
-	.db #0xc8	; 200
-	.db #0xd0	; 208
-	.db #0xc7	; 199
-	.db #0xd0	; 208
-	.db #0xc6	; 198
-	.db #0xd0	; 208
-	.db #0xc5	; 197
-	.db #0xb1	; 177
-	.db #0x03	; 3
-	.db #0xd0	; 208
-	.db #0x00	; 0
-	.db #0xff	; 255
-	.db #0x16	; 22
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x74	; 116	't'
-	.db #0x80	; 128
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5c	; 92
-	.db #0xdb	; 219
-	.db #0x4f	; 79	'O'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5a	; 90	'Z'
-	.db #0xdb	; 219
-	.db #0x4e	; 78	'N'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x61	; 97	'a'
-	.db #0xdb	; 219
-	.db #0x45	; 69	'E'
-	.db #0x7b	; 123
-	.db #0x44	; 68	'D'
-	.db #0x7b	; 123
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5e	; 94
-	.db #0xdb	; 219
-	.db #0x4f	; 79	'O'
-	.db #0x74	; 116	't'
-	.db #0x4e	; 78	'N'
-	.db #0x74	; 116	't'
-	.db #0x4d	; 77	'M'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x61	; 97	'a'
-	.db #0xdb	; 219
-	.db #0x4d	; 77	'M'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5e	; 94
-	.db #0x00	; 0
-	.db #0x1a	; 26
-	.db #0x00	; 0
-	.db #0x34	; 52	'4'
-	.db #0x0c	; 12
-	.db #0x40	; 64
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x68	; 104	'h'
-	.db #0xc0	; 192
-	.db #0xd7	; 215
-	.db #0xb0	; 176
-	.db #0x74	; 116	't'
-	.db #0xd6	; 214
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2f	; 47
-	.db #0x68	; 104	'h'
-	.db #0xc0	; 192
-	.db #0xd7	; 215
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2f	; 47
-	.db #0x74	; 116	't'
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2f	; 47
-	.db #0x74	; 116	't'
-	.db #0xc0	; 192
-	.db #0xd6	; 214
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2c	; 44
-	.db #0x68	; 104	'h'
-	.db #0xc0	; 192
-	.db #0xd7	; 215
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2c	; 44
-	.db #0x74	; 116	't'
-	.db #0xc0	; 192
-	.db #0xd6	; 214
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2f	; 47
-	.db #0x68	; 104	'h'
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2c	; 44
-	.db #0x68	; 104	'h'
-	.db #0xd7	; 215
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2c	; 44
-	.db #0x74	; 116	't'
-	.db #0xd4	; 212
-	.db #0xbb	; 187
-	.db #0x00	; 0
-	.db #0x2f	; 47
-	.db #0x76	; 118	'v'
-	.db #0x00	; 0
-	.db #0xf0	; 240
-	.db #0x02	; 2
-	.db #0xcd	; 205
-	.db #0xb1	; 177
-	.db #0x01	; 1
-	.db #0x74	; 116	't'
-	.db #0xcc	; 204
-	.db #0xb1	; 177
-	.db #0x04	; 4
-	.db #0xd0	; 208
-	.db #0xcb	; 203
-	.db #0xd0	; 208
-	.db #0xca	; 202
-	.db #0xd0	; 208
-	.db #0xc9	; 201
-	.db #0xd0	; 208
-	.db #0xc8	; 200
-	.db #0xd0	; 208
-	.db #0xc7	; 199
-	.db #0xd0	; 208
-	.db #0xc6	; 198
-	.db #0xd0	; 208
-	.db #0xc5	; 197
-	.db #0xb1	; 177
-	.db #0x03	; 3
-	.db #0xd0	; 208
-	.db #0x00	; 0
-	.db #0xf4	; 244
-	.db #0x16	; 22
-	.db #0xcf	; 207
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x74	; 116	't'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5c	; 92
-	.db #0xdb	; 219
-	.db #0x45	; 69	'E'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5a	; 90	'Z'
-	.db #0xdb	; 219
-	.db #0x4f	; 79	'O'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5e	; 94
-	.db #0xdb	; 219
-	.db #0x44	; 68	'D'
-	.db #0x74	; 116	't'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x63	; 99	'c'
-	.db #0xdb	; 219
-	.db #0x45	; 69	'E'
-	.db #0x74	; 116	't'
-	.db #0x44	; 68	'D'
-	.db #0x74	; 116	't'
-	.db #0x45	; 69	'E'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x61	; 97	'a'
-	.db #0xdb	; 219
-	.db #0x45	; 69	'E'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5e	; 94
-	.db #0x00	; 0
-	.db #0xf0	; 240
-	.db #0x2e	; 46
-	.db #0xcf	; 207
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x74	; 116	't'
-	.db #0xca	; 202
-	.db #0xd0	; 208
-	.db #0xd7	; 215
-	.db #0xcf	; 207
-	.db #0xb1	; 177
-	.db #0x01	; 1
-	.db #0x73	; 115	's'
-	.db #0xe7	; 231
-	.db #0xc6	; 198
-	.db #0x74	; 116	't'
-	.db #0xd6	; 214
-	.db #0xcf	; 207
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x67	; 103	'g'
-	.db #0xe7	; 231
-	.db #0xc4	; 196
-	.db #0x74	; 116	't'
-	.db #0xd7	; 215
-	.db #0xcf	; 207
-	.db #0x73	; 115	's'
-	.db #0xb1	; 177
-	.db #0x04	; 4
-	.db #0x73	; 115	's'
-	.db #0xd6	; 214
-	.db #0x67	; 103	'g'
-	.db #0xd7	; 215
-	.db #0x73	; 115	's'
-	.db #0xd6	; 214
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x67	; 103	'g'
-	.db #0x67	; 103	'g'
-	.db #0xd7	; 215
-	.db #0xb1	; 177
-	.db #0x04	; 4
-	.db #0x73	; 115	's'
-	.db #0x00	; 0
-	.db #0xff	; 255
-	.db #0x16	; 22
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x74	; 116	't'
-	.db #0x44	; 68	'D'
-	.db #0x80	; 128
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5c	; 92
-	.db #0xdb	; 219
-	.db #0x4f	; 79	'O'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5a	; 90	'Z'
-	.db #0xdb	; 219
-	.db #0x4e	; 78	'N'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x61	; 97	'a'
-	.db #0xdb	; 219
-	.db #0x44	; 68	'D'
-	.db #0x7b	; 123
-	.db #0x45	; 69	'E'
-	.db #0x7b	; 123
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x63	; 99	'c'
-	.db #0xdb	; 219
-	.db #0x44	; 68	'D'
-	.db #0x7b	; 123
-	.db #0x76	; 118	'v'
-	.db #0x4d	; 77	'M'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x61	; 97	'a'
-	.db #0xdb	; 219
-	.db #0x4d	; 77	'M'
-	.db #0x74	; 116	't'
-	.db #0xde	; 222
-	.db #0x40	; 64
-	.db #0x5e	; 94
-	.db #0x00	; 0
-	.db #0xb1	; 177
-	.db #0x03	; 3
-	.db #0xc0	; 192
-	.db #0xf0	; 240
-	.db #0x2e	; 46
-	.db #0xc9	; 201
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x77	; 119	'w'
-	.db #0xb1	; 177
-	.db #0x04	; 4
-	.db #0x7b	; 123
-	.db #0x74	; 116	't'
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x72	; 114	'r'
-	.db #0xb1	; 177
-	.db #0x04	; 4
-	.db #0x71	; 113	'q'
-	.db #0xb1	; 177
-	.db #0x06	; 6
-	.db #0x6f	; 111	'o'
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x76	; 118	'v'
-	.db #0xb1	; 177
-	.db #0x04	; 4
-	.db #0x7e	; 126
-	.db #0xb1	; 177
-	.db #0x01	; 1
-	.db #0x7d	; 125
-	.db #0x00	; 0
-	.db #0xb1	; 177
-	.db #0x03	; 3
-	.db #0xd0	; 208
-	.db #0xf0	; 240
-	.db #0x2e	; 46
-	.db #0xc9	; 201
-	.db #0xb1	; 177
-	.db #0x08	; 8
-	.db #0x7e	; 126
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x80	; 128
-	.db #0x82	; 130
-	.db #0x85	; 133
-	.db #0x87	; 135
-	.db #0xb1	; 177
-	.db #0x06	; 6
-	.db #0x8a	; 138
-	.db #0xb1	; 177
-	.db #0x02	; 2
-	.db #0x85	; 133
-	.db #0xb1	; 177
-	.db #0x04	; 4
-	.db #0x8a	; 138
-	.db #0xb1	; 177
-	.db #0x01	; 1
-	.db #0x89	; 137
-	.db #0x00	; 0
-	.db #0x01	; 1
-	.db #0x09	; 9
-	.db #0x00	; 0
-	.db #0x8f	; 143
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x8e	; 142
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x8e	; 142
-	.db #0xff	; 255
-	.db #0xff	; 255
-	.db #0x00	; 0
-	.db #0x8e	; 142
-	.db #0xfe	; 254
-	.db #0xff	; 255
-	.db #0x00	; 0
-	.db #0x8e	; 142
-	.db #0xff	; 255
-	.db #0xff	; 255
-	.db #0x00	; 0
-	.db #0x8e	; 142
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x8e	; 142
-	.db #0x01	; 1
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x8e	; 142
-	.db #0x02	; 2
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x8e	; 142
-	.db #0x01	; 1
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x01	; 1
-	.db #0x00	; 0
-	.db #0x90	; 144
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x04	; 4
-	.db #0x05	; 5
-	.db #0x01	; 1
-	.db #0x8f	; 143
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x01	; 1
-	.db #0x8f	; 143
-	.db #0x00	; 0
-	.db #0x03	; 3
-	.db #0x01	; 1
-	.db #0x8d	; 141
-	.db #0x00	; 0
-	.db #0x05	; 5
-	.db #0x01	; 1
-	.db #0x8b	; 139
-	.db #0x00	; 0
-	.db #0x06	; 6
-	.db #0x00	; 0
-	.db #0x90	; 144
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x04	; 4
-	.db #0x05	; 5
-	.db #0x01	; 1
-	.db #0x0f	; 15
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x01	; 1
-	.db #0x0f	; 15
-	.db #0x00	; 0
-	.db #0x01	; 1
-	.db #0x01	; 1
 	.db #0x0e	; 14
 	.db #0x00	; 0
-	.db #0x03	; 3
-	.db #0x01	; 1
-	.db #0x0c	; 12
 	.db #0x00	; 0
-	.db #0x06	; 6
 	.db #0x00	; 0
-	.db #0x90	; 144
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x11	; 17
-	.db #0x12	; 18
-	.db #0x00	; 0
-	.db #0x0f	; 15
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x8d	; 141
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x8b	; 139
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x89	; 137
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x88	; 136
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x87	; 135
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x86	; 134
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x85	; 133
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x84	; 132
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x83	; 131
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x82	; 130
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x82	; 130
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x82	; 130
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x81	; 129
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x81	; 129
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x81	; 129
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x80	; 128
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x80	; 128
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x03	; 3
-	.db #0x04	; 4
-	.db #0x00	; 0
-	.db #0x8f	; 143
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x8f	; 143
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x8f	; 143
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x85	; 133
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x1e	; 30
-	.db #0x1f	; 31
-	.db #0x00	; 0
-	.db #0x8f	; 143
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x8e	; 142
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x8e	; 142
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x8e	; 142
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x8e	; 142
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x8e	; 142
-	.db #0xff	; 255
-	.db #0xff	; 255
-	.db #0x00	; 0
-	.db #0x8d	; 141
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x8d	; 141
-	.db #0xff	; 255
-	.db #0xff	; 255
-	.db #0x00	; 0
-	.db #0x8c	; 140
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x8c	; 140
-	.db #0xff	; 255
-	.db #0xff	; 255
-	.db #0x00	; 0
-	.db #0x8b	; 139
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x8b	; 139
-	.db #0xff	; 255
-	.db #0xff	; 255
-	.db #0x00	; 0
-	.db #0x8a	; 138
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x8a	; 138
-	.db #0xff	; 255
-	.db #0xff	; 255
-	.db #0x00	; 0
-	.db #0x89	; 137
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x89	; 137
-	.db #0xff	; 255
-	.db #0xff	; 255
-	.db #0x00	; 0
-	.db #0x88	; 136
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x88	; 136
-	.db #0xff	; 255
-	.db #0xff	; 255
-	.db #0x00	; 0
-	.db #0x87	; 135
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x87	; 135
-	.db #0xff	; 255
-	.db #0xff	; 255
-	.db #0x00	; 0
-	.db #0x86	; 134
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x86	; 134
-	.db #0xff	; 255
-	.db #0xff	; 255
-	.db #0x00	; 0
-	.db #0x85	; 133
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x85	; 133
-	.db #0xff	; 255
-	.db #0xff	; 255
-	.db #0x00	; 0
-	.db #0x84	; 132
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x84	; 132
-	.db #0xff	; 255
-	.db #0xff	; 255
-	.db #0x00	; 0
-	.db #0x83	; 131
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x83	; 131
-	.db #0xff	; 255
-	.db #0xff	; 255
-	.db #0x00	; 0
-	.db #0x82	; 130
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x82	; 130
-	.db #0xff	; 255
-	.db #0xff	; 255
-	.db #0x00	; 0
-	.db #0x81	; 129
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x01	; 1
-	.db #0x00	; 0
-	.db #0x00	; 0
-	.db #0x06	; 6
-	.db #0xfb	; 251
-	.db #0x00	; 0
-	.db #0x03	; 3
-	.db #0x00	; 0
-	.db #0xfb	; 251
-	.db #0x03	; 3
-	.db #0x00	; 0
-	.db #0x06	; 6
-	.db #0xfb	; 251
-	.db #0xfe	; 254
-	.db #0x03	; 3
-	.db #0xfb	; 251
-	.db #0xfe	; 254
-	.db #0x03	; 3
-	.db #0x00	; 0
-	.db #0x06	; 6
 	.db #0x02	; 2
-	.db #0x05	; 5
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x20	; 32
+	.db #0x18	; 24
+	.dw _g_Level029
+	.dw ___str_24
+	.db #0x00	; 0
 	.db #0x09	; 9
-	.db #0x05	; 5
-	.db #0x02	; 2
-	.db #0x09	; 9
 	.db #0x00	; 0
-	.db #0x06	; 6
 	.db #0x00	; 0
-	.db #0x05	; 5
-	.db #0x09	; 9
 	.db #0x00	; 0
-	.db #0x09	; 9
-	.db #0x05	; 5
 	.db #0x00	; 0
-	.db #0x06	; 6
 	.db #0x00	; 0
-	.db #0x03	; 3
-	.db #0x07	; 7
 	.db #0x00	; 0
-	.db #0x07	; 7
-	.db #0x03	; 3
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db #0x00	; 0
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+	.db 0x00
+__xinit__g_CountItem:
+	.db #0x00	; 0
+	.area _CABS (ABS)
