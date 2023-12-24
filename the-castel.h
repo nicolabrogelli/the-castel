@@ -197,7 +197,7 @@
 #define MAX_ITEM_INVENTORY       5
 #define MAX_LIVES                3
 #define IMMUNITY                 3
-#define LAST_LEVEL              16  // Ultimo livello di gioco
+#define LAST_LEVEL              19  // Ultimo livello di gioco
 #define START_GAME               0  // Livello di inizio gico
 #define GAME_OVER               LAST_LEVEL + 1  // Livello di game over
 #define OFFSET_TILE_COLLISION   50
@@ -253,43 +253,8 @@
 
 
 // DEFINIZIONE DIMENSIONI LIVELLI DI GIOCO
-#define LEVEL001_WIDTH 32
-#define LEVEL001_HEIGHT 24
-#define LEVEL002_WIDTH 32
-#define LEVEL002_HEIGHT 24
-#define LEVEL003_WIDTH 32
-#define LEVEL003_HEIGHT 24
-#define LEVEL004_WIDTH 32
-#define LEVEL004_HEIGHT 24
-#define LEVEL005_WIDTH 32
-#define LEVEL005_HEIGHT 24
-#define LEVEL006_WIDTH 32
-#define LEVEL006_HEIGHT 24
-#define LEVEL007_WIDTH 32
-#define LEVEL007_HEIGHT 24
-#define LEVEL008_WIDTH 32
-#define LEVEL008_HEIGHT 24
-#define LEVEL009_WIDTH 32
-#define LEVEL009_HEIGHT 24
-#define LEVEL010_WIDTH 32
-#define LEVEL010_HEIGHT 24
-#define LEVEL011_WIDTH 32
-#define LEVEL011_HEIGHT 24
-#define LEVEL012_WIDTH 32
-#define LEVEL012_HEIGHT 24
-#define LEVEL013_WIDTH 32
-#define LEVEL013_HEIGHT 24
-#define LEVEL014_WIDTH 32
-#define LEVEL014_HEIGHT 24
-#define LEVEL015_WIDTH 32
-#define LEVEL015_HEIGHT 24
-#define LEVEL016_WIDTH 32
-#define LEVEL016_HEIGHT 24
-#define LEVEL029_WIDTH 32
-#define LEVEL029_HEIGHT 24
-#define LEVEL030_WIDTH 32
-#define LEVEL030_HEIGHT 24
-
+#define LEVEL_WIDTH 32
+#define LEVEL_HEIGHT 24
 
 //=============================================================================
 // PROTOTIPI DELLE FUNZIONI
@@ -344,7 +309,7 @@ void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 baseSpri
 void VDP_LoadPattern_GM1_Pletter(const u8 *src, u8 offset);
 void restorePT3Music();
 void pausePT3Music();
-u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, u8 idxSprite, u8 bo, u8 riga, u8 colonna, u8 levelIdx);
+u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, u8 idxSprite, u8 bo, u8 riga, u8 colonna, u8 levelIdx, c8 *Name);
 bool isDanger(u8 x, u8 y, u8 t);
 u8 isUnderDunger(u8 x, u8 y);
 void stopMusicPlayback();
@@ -370,11 +335,20 @@ extern unsigned char g_Level013[];
 extern unsigned char g_Level014[];
 extern unsigned char g_Level015[];
 extern unsigned char g_Level016[];
+extern unsigned char g_Level017[];
+extern unsigned char g_Level018[];
+extern unsigned char g_Level019[];
+extern unsigned char g_Level020[];
+extern unsigned char g_Level021[];
+extern unsigned char g_Level022[];
+extern unsigned char g_Level023[];
+extern unsigned char g_Level024[];
+extern unsigned char g_Level025[];
+extern unsigned char g_Level026[];
+extern unsigned char g_Level027[];
+extern unsigned char g_Level028[];
 extern unsigned char g_Level029[];
 extern unsigned char g_Level030[];
-/* extern unsigned char g_Level013[];
-extern unsigned char g_Level014[];
-extern unsigned char g_Level029[]; */
 
 extern const unsigned char g_DataSprtLayer[];
 extern const unsigned char g_DataMusic[];

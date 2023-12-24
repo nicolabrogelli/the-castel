@@ -11,6 +11,9 @@
 set Tools= ..\..\MSXgl\tools
 set MSXtk=%Tools%\MSXtk\bin
 
+
+
+
 %Tools%\compress\Pletter\pletter.exe levelcompression\level001.bin levelcompression\level001.pl5
 %MSXtk%\MSXbin.exe levelcompression\level001.pl5 -t g_Level001 -ad -o levelcompression\level001.h
 
@@ -59,11 +62,47 @@ set MSXtk=%Tools%\MSXtk\bin
 %Tools%\compress\Pletter\pletter.exe levelcompression\level016.bin levelcompression\level016.pl5
 %MSXtk%\MSXbin.exe levelcompression\level016.pl5 -t g_Level016 -ad -o levelcompression\level016.h
 
+%Tools%\compress\Pletter\pletter.exe levelcompression\level017.bin levelcompression\level017.pl5
+%MSXtk%\MSXbin.exe levelcompression\level017.pl5 -t g_Level017 -ad -o levelcompression\level017.h
+
+%Tools%\compress\Pletter\pletter.exe levelcompression\level018.bin levelcompression\level018.pl5
+%MSXtk%\MSXbin.exe levelcompression\level018.pl5 -t g_Level018 -ad -o levelcompression\level018.h
+
+%Tools%\compress\Pletter\pletter.exe levelcompression\level019.bin levelcompression\level019.pl5
+%MSXtk%\MSXbin.exe levelcompression\level019.pl5 -t g_Level019 -ad -o levelcompression\level019.h
+
+%Tools%\compress\Pletter\pletter.exe levelcompression\level020.bin levelcompression\level020.pl5
+%MSXtk%\MSXbin.exe levelcompression\level020.pl5 -t g_Level020 -ad -o levelcompression\level020.h
+
+%Tools%\compress\Pletter\pletter.exe levelcompression\level021.bin levelcompression\level021.pl5
+%MSXtk%\MSXbin.exe levelcompression\level021.pl5 -t g_Level021 -ad -o levelcompression\level021.h
+
+%Tools%\compress\Pletter\pletter.exe levelcompression\level022.bin levelcompression\level022.pl5
+%MSXtk%\MSXbin.exe levelcompression\level022.pl5 -t g_Level022 -ad -o levelcompression\level022.h
+
+%Tools%\compress\Pletter\pletter.exe levelcompression\level023.bin levelcompression\level023.pl5
+%MSXtk%\MSXbin.exe levelcompression\level023.pl5 -t g_Level023 -ad -o levelcompression\level023.h
+
+%Tools%\compress\Pletter\pletter.exe levelcompression\level024.bin levelcompression\level024.pl5
+%MSXtk%\MSXbin.exe levelcompression\level024.pl5 -t g_Level024 -ad -o levelcompression\level024.h
+
+%Tools%\compress\Pletter\pletter.exe levelcompression\level025.bin levelcompression\level025.pl5
+%MSXtk%\MSXbin.exe levelcompression\level025.pl5 -t g_Level025 -ad -o levelcompression\level025.h
+
+%Tools%\compress\Pletter\pletter.exe levelcompression\level026.bin levelcompression\level026.pl5
+%MSXtk%\MSXbin.exe levelcompression\level026.pl5 -t g_Level026 -ad -o levelcompression\level026.h
+
+%Tools%\compress\Pletter\pletter.exe levelcompression\level027.bin levelcompression\level027.pl5
+%MSXtk%\MSXbin.exe levelcompression\level027.pl5 -t g_Level027 -ad -o levelcompression\level027.h
+
+%Tools%\compress\Pletter\pletter.exe levelcompression\level028.bin levelcompression\level028.pl5
+%MSXtk%\MSXbin.exe levelcompression\level028.pl5 -t g_Level028 -ad -o levelcompression\level028.h
+
+
+
+
 %Tools%\compress\Pletter\pletter.exe levelcompression\level030.bin levelcompression\level030.pl5
 %MSXtk%\MSXbin.exe levelcompression\level030.pl5 -t g_Level030 -ad -o levelcompression\level030.h
 
 %Tools%\compress\Pletter\pletter.exe levelcompression\level029.bin levelcompression\level029.pl5
 %MSXtk%\MSXbin.exe levelcompression\level029.pl5 -t g_Level029 -ad -o levelcompression\level029.h
-
-
-
