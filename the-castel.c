@@ -16,20 +16,18 @@
 #include "debug.h"
 #include "string.h"
 #include "input.h"
-#include "pt3/pt3_player.h"
-#include "pt3/pt3_notetable2.h"
-#include "ayfx/ayfx_player.h"
+
 #include "compress/pletter.h"
 #include "version.h"
 
+#include "tiles.h"
+#include "tiles_defs.h"
+#include "inventory.h"
+#include "control.h"
+#include "music.h"
+#include "level_defs.h"
+
 //
-enum INPUT_ACTION
-{
-	INPUT_RIGHT = 0b00000001,
-	INPUT_LEFT = 0b00000010,
-	INPUT_JUMP = 0b00000100,
-	INPUT_GET = 0b00001000,
-};
 
 // Gameplay character stricture
 struct Character
@@ -175,31 +173,7 @@ u8 g_DelayCatchEnemy = 0;
 bool isCatch = FALSE;
 u8 g_Fire = 1;
 
-unsigned char g_Inventory[MAX_ITEM_INVENTORY] = {0, 0, 0, 0, 0};
 unsigned char g_Lives[MAX_LIVES] = {0, 0, 0};
-
-/**
- * \struct
- * struct: La struttura rappresenta la posizione e la visibilitòà di un oggetto
- */
-typedef struct
-{
-	u8 x;
-	u8 y;
-	u8 visible;
-	u8 tile;
-} ObjectItem;
-
-/** \struct
- * struct: Struttura che rappresenta il numero di nemici per livello
- */
-typedef struct
-{
-	u8 SkeletonNumber; /** Numero di scheletri nel livello*/
-	u8 GhostNumber;	   /** Numero di fantasmi nel livello */
-	u8 SpiderNumber;   /** Numero di ragni nel livello */
-	u8 BatNumber;	   /** Numero di pipistrelli nel livello */
-} EnemyType;
 
 /**
  * \struct
@@ -222,48 +196,35 @@ struct CacheLevel g_CacheLevel[] = {
 	{0, 0, 32, 24, g_LevelUncompress},
 };
 
-/** \struct
-	struct: Struttura che rappresenta la stanza
-*/
-struct LevelDefinition
+/**
+ * @brief Si effettua la lettura della tastiera
+ * @param void
+ * @return void
+ */
+void readInputControl()
 {
-	u8 X;					/** Coordinata Y della stanza */
-	u8 Y;					/** Coordinata Y della stanza */
-	u8 Width;				/** Larghezza della stanza*/
-	u8 Height;				/** Altezza della stanza */
-	u8 *Layout;				/** Layout della stanza */
-	const c8 *Name;			/** Nome della stanza */
-	u8 NextLvlIdx;			/** Livello successivo */
-	u8 PrevLvIdx;			/** Livello precedente */
-	EnemyType MyEnemyType;	/** Rappresenta il numero di nemici per livello */
-	ObjectItem MyItems[10]; /** Rappresenta gli oggetti utilizzati nel livello */
-};
+	u8 row8 = Keyboard_Read(8);
 
-// Elenco delle stanze e delle loro caratteristiche
-struct LevelDefinition g_Levels[] = {
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level030, "STRAT GAME", 1, 0, {0, 0, 0, 0}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level001, "Level: 01", 2, 0, {2, 0, 0, 0}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level002, "Level: 02", 3, 1, {2, 2, 0, 0}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level003, "Level: 03", 4, 2, {2, 0, 0, 0}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level004, "Level: 04", 5, 3, {2, 0, 0, 1}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level006, "Level: 05", 6, 4, {1, 1, 1, 0}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level007, "Level: 06", 7, 5, {0, 0, 0, 2}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level015, "Level: 07", 8, 6, {1, 1, 0, 2}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level008, "Level: 08", 9, 7, {0, 0, 1, 2}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level010, "Level: 09", 10, 8, {2, 0, 0, 1}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level011, "Level: 10", 11, 9, {1, 0, 0, 2}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level012, "Level: 11", 12, 10, {2, 0, 0, 1}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level009, "Level: 12", 13, 11, {1, 0, 0, 2}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level013, "Level: 13", 14, 12, {0, 1, 0, 1}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level014, "Level: 14", 15, 13, {2, 0, 0, 1}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level005, "level: 15", 16, 14, {0, 0, 0, 2}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level016, "level: 16", 17, 15, {2, 1, 0, 2}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},	
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level027, "Level: 17", 18, 16, {1, 1, 1, 0}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level025, "Level: 18", 19, 17, {0, 0, 0, 3}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},	
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level026, "Level: 19", 20, 18, {3, 0, 0, 0}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level029, "GAME OVER", 0, 9, {0, 0, 0, 0}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}},	
+	g_Player.Input = 0;
+	if (isMoveRight(row8, g_Player.Input))
+	{
+		g_Player.Input |= INPUT_RIGHT;
+	}
+	if (isMoveLeft(row8, g_Player.Input))
+	{
+		g_Player.Input |= INPUT_LEFT;
+	}
+	if (isMoveJump(row8, g_Player.Input))
+	{
+		g_Player.Input |= INPUT_JUMP;
+	}
+	if (isInteractObject(row8, g_Player.Input))
+	{
+		g_Player.Input |= INPUT_GET;
+	}
 
-};
+	g_PrevRow8 = row8;
+}
 
 //=============================================================================
 // FUNZIONI PER LA GESTIONE DELLE VITE
@@ -318,7 +279,7 @@ bool removeLife()
 		}
 		else
 		{
-			removeItemFromInventory(TILE_AMPHORA);
+			removeItemFromInventory(TILE_AMPHORA, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
 		}
 		return FALSE;
 	}
@@ -365,131 +326,6 @@ void displayLife()
 	{
 		setTile(220 + i * 16, (u8)(4), g_Lives[i]);
 	}
-}
-
-//=============================================================================
-// FUNZIONI PER LA GESTIONE DELL'INVENTARIO
-//=============================================================================
-
-/**
- * @brief Inizializzazione dell'inventario
- * @param void
- * @return void
- */
-void initInventory()
-{
-	Mem_Set(EMPTY_ITEM, g_Inventory, (5 * sizeof(g_Inventory[0])));
-}
-
-/**
- * @brief Aggiunta di un oggetto all'inventario
- * @param u8 item Oggetto da inserire nell'inventario
- * @return bool TRUE se l'oggetto è inserito nell'inventario
- */
-bool addItemToInventory(u8 item)
-{
-	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
-	{
-		if (g_Inventory[i] == EMPTY_ITEM)
-		{
-			g_Inventory[i] = item;
-			setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, item);
-			return TRUE;
-		}
-	}
-	return FALSE;
-}
-
-/**
- * @brief Verificare la presenza di un oggetto nell'inventario
- * @param u8 item Oggetto da verificare
- * @return bool TRUE se l'oggetto è nell'inventario
- */
-bool hasItemInInventory(u8 item)
-{
-	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
-	{
-		if (g_Inventory[i] == item)
-		{
-			return TRUE;
-		}
-	}
-	return FALSE;
-}
-
-/**
- * @brief Rimuove un oggetto dall'inventario
- * @param u8 item Oggetto da rimuovere
- * @return bool TRUE se l'oggetto è stato rimosso
- */
-bool removeItemFromInventory(u8 item)
-{
-	for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
-	{
-		if (g_Inventory[i] == item)
-		{
-			g_Inventory[i] = EMPTY_ITEM;
-
-			setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, 0);
-			return TRUE;
-		}
-	}
-	return FALSE;
-}
-
-/**
- * @brief Visualizza tutti gli elementi dell'inventario
- * @param void
- * @return void
- */
-void displayItemToInventory()
-{
-	if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER)
-	{
-		for (u8 i = 0; i < MAX_ITEM_INVENTORY; i++)
-		{
-			setTile((g_Levels[g_CurrRoomIdx].X * 8) + 8 + i * 16, (u8)((g_Levels[g_CurrRoomIdx].Height * 8) - 16) + g_Levels[g_CurrRoomIdx].Y * 8, g_Inventory[i]);
-		}
-	}
-}
-
-//=============================================================================
-// FUNZIONI DI LIBRERIA PER LA GESTIONE DELLE TILES
-//=============================================================================
-
-/**
- * @brief Recuperare la tile dalla posizione indicata
- * @param u8 x Posizione x della tile
- * @param u8 y Posizione y della tile
- * @return u8 Codice che rappresenta la tile
- */
-u8 getTile(u8 x, u8 y)
-{
-	return VDP_Peek_16K(g_ScreenLayoutLow + (y / 8) * 32 + (x / 8));
-}
-
-/**
- * @brief Modifica la tile nella posizione indicata
- * @param u8 x Posizione x della tile
- * @param u8 y Posizione y della tile
- * @param u8 tile Codice che rappresenta la tile
- * @return void
- */
-void setTile(u8 x, u8 y, u8 tile)
-{
-	VDP_Poke_16K(tile, g_ScreenLayoutLow + (y / 8) * 32 + (x / 8));
-}
-
-/**
- * @brief Sostituisce la tile nella posizione indicata con una tile vuota con le coordinate della tile stessa.
- * @param u8 x Posizione x della tile
- * @param u8 y Posizione y della tile
- * @param u8 tile Codice che rappresenta la tile
- * @return void
- */
-void setTileByTileCoord(u8 x, u8 y, u8 tile)
-{
-	VDP_Poke_16K(tile, g_ScreenLayoutLow + y * 32 + x);
 }
 
 //=============================================================================
@@ -570,7 +406,7 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
 						// TODO: elimina il nemico
 						VDP_HideSprite(enemy->SpriteId);
 						enemy->State = 0;
-						removeItemFromInventory(TILE_CRUCIFIX);
+						removeItemFromInventory(TILE_CRUCIFIX, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
 					}
 					else
 					{
@@ -579,9 +415,9 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
 						{
 							displayLife();
 							PlayBankSFX(9, 0);
-/* 							Print_DrawTextAt(20,21,"ENEMY!!! ");
-							Print_DrawTextAt(20,22,enemy->TypeEnemy);
-							Print_DrawIntAt(20,23,enemy->SpriteId); */
+							/* 							Print_DrawTextAt(20,21,"ENEMY!!! ");
+														Print_DrawTextAt(20,22,enemy->TypeEnemy);
+														Print_DrawIntAt(20,23,enemy->SpriteId); */
 						}
 						else
 						{
@@ -589,7 +425,7 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
 							{
 								stopMusicPlayback();
 								Game_SetState(State_GameOver);
-							} 
+							}
 						}
 					}
 				}
@@ -874,7 +710,7 @@ void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask)
 	g_CountItem++;
 
 	setTile(x, y, EMPTY_ITEM);
-	addItemToInventory(tile);
+	addItemToInventory(tile, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
 }
 
 /**
@@ -887,7 +723,7 @@ void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask)
  */
 void changeLevel(u8 x, u8 y, u8 key, u8 door)
 {
-	removeItemFromInventory(key);
+	removeItemFromInventory(key, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
 	foo(x, y, door, 1);
 	g_CountItem++;
 
@@ -962,7 +798,7 @@ bool isDanger(u8 x, u8 y, u8 t)
 						g_IsDanger = FALSE;
 						g_DelayRemoveLife--;
 
-						Print_DrawTextAt(20,22,"DANGER!!!");
+						Print_DrawTextAt(20, 22, "DANGER!!!");
 					}
 				}
 			}
@@ -986,7 +822,7 @@ bool isDanger(u8 x, u8 y, u8 t)
 				displayLife();
 				PlayBankSFX(9, 0);
 				drawLevel(g_CurrRoomIdx); // Inizia nuovamente dalla stanza in cui siamo
-				Print_DrawTextAt(20,22,"LAVA!!!  ");
+				Print_DrawTextAt(20, 22, "LAVA!!!  ");
 			}
 		}
 		return TRUE;
@@ -1049,7 +885,7 @@ void drawLevel(u8 levelIdx)
 
 	// Ad ogni cambio di livello rimuove l'amphora dall'inventario, in modo da ridurlo ad un aiuto momntaneo
 	if (hasItemInInventory(TILE_AMPHORA))
-		removeItemFromInventory(TILE_AMPHORA);
+		removeItemFromInventory(TILE_AMPHORA, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
 
 	for (u8 i = 0; i < MAX_CACHE_OBJECT; i++)
 	{
@@ -1149,7 +985,9 @@ void drawLevel(u8 levelIdx)
 	{
 		updateScore();
 
-		displayItemToInventory();
+		if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER)
+			displayItemToInventory(g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+
 		displayLife();
 	}
 
@@ -1449,7 +1287,7 @@ void genericControl()
 
 					IsUnderWater = FALSE;
 
-					Print_DrawTextAt(20,22,"ACQUA!!! ");
+					Print_DrawTextAt(20, 22, "ACQUA!!! ");
 				}
 				else
 				{
@@ -1505,8 +1343,7 @@ bool State_Initialize()
 	// Impostazione del riproduttore ayfx e del canale audio
 	inizializeAYFX();
 
-	ChannelSFX(PSG_CHANNEL_A);
-	PlayBankSFX(0, 0);
+	setChannel();
 
 	// Funzione: VDP_EnableDisplay
 	// Abilita/disabilita la visualizzazione dello schermo (registro 1). [MSX1/2/2+/TR]
@@ -1644,7 +1481,7 @@ bool State_Game()
 
 		g_DangerCounter++;
 
-		//pursuitCheck(&g_Enemy[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber);
+		// pursuitCheck(&g_Enemy[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber);
 
 		// Funzione: updateSkeleton
 		// Aggiorna il rendering dei nemici.
@@ -1658,7 +1495,7 @@ bool State_Game()
 		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 		physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Enemy[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber);
 
-		//pursuitCheck(&g_Ghost[0], g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber);
+		// pursuitCheck(&g_Ghost[0], g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber);
 
 		// Funzione: updateGhost
 		// Aggiorna il rendering dei nemici.
@@ -1672,7 +1509,7 @@ bool State_Game()
 		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 		physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Ghost[0], g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber);
 
-		//pursuitCheck(&g_Spider[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber);
+		// pursuitCheck(&g_Spider[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber);
 
 		// Funzione: updateGhost
 		// Aggiorna il rendering dei nemici.
@@ -1686,7 +1523,7 @@ bool State_Game()
 		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 		physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Spider[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber);
 
-		//pursuitCheck(&g_Bat[0], g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber);
+		// pursuitCheck(&g_Bat[0], g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber);
 
 		// Funzione: updateGhost
 		// Aggiorna il rendering dei nemici.
@@ -1776,214 +1613,6 @@ bool State_GameOver()
 	Game_SetState(State_Preset);
 
 	return TRUE;
-}
-
-//=============================================================================
-// GESTIONE DELLA TATIERA E JOY
-//=============================================================================
-
-/**
- * @brief Si effettua la lettura della tastiera
- * @param void
- * @return void
- */
-void readInputControl()
-{
-	u8 row8 = Keyboard_Read(8);
-
-	g_Player.Input = 0;
-	if (isMoveRight(row8))
-	{
-		g_Player.Input |= INPUT_RIGHT;
-	}
-	if (isMoveLeft(row8))
-	{
-		g_Player.Input |= INPUT_LEFT;
-	}
-	if (isMoveJump(row8))
-	{
-		g_Player.Input |= INPUT_JUMP;
-	}
-	if (isInteractObject(row8))
-	{
-		g_Player.Input |= INPUT_GET;
-	}
-
-	g_PrevRow8 = row8;
-}
-
-/**
- * @brief Aggiorna la direzione del Player
- * @param u8 row8
- * @return bool TRUE se il tasto RIGHT o il joy è nella direzione destra
- */
-bool isMoveRight(u8 row8)
-{
-	bool isRight = FALSE;
-	if (IS_KEY_PRESSED(row8, KEY_RIGHT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_RIGHT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_RIGHT))
-	{
-		g_Player.Input |= INPUT_RIGHT;
-		isRight = TRUE;
-	}
-
-	return isRight;
-}
-
-/**
- * @brief Aggiorna la direzione del Player
- * @param u8 row8
- * @return bool TRUE se il tasto LEFT o il joy è nella direzione sinistra
- */
-bool isMoveLeft(u8 row8)
-{
-	bool isLeft = FALSE;
-	if (IS_KEY_PRESSED(row8, KEY_LEFT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_LEFT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_LEFT))
-	{
-		g_Player.Input |= INPUT_LEFT;
-		isLeft = TRUE;
-	}
-
-	return isLeft;
-}
-
-/**
- * @brief Aggiorna la direzione del Player
- * @param u8 row8
- * @return bool TRUE se il tasto UP o il pulsante A è stato premuto
- */
-bool isMoveJump(u8 row8)
-{
-	bool isJump = FALSE;
-	if (IS_KEY_PRESSED(row8, KEY_UP) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_A)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_A)))
-	{
-		g_Player.Input |= INPUT_JUMP;
-		isJump = TRUE;
-	}
-
-	return isJump;
-}
-
-/**
- * @brief Aggiorna la direzione del Player
- * @param u8 row8
- * @return bool TRUE se il tasto SPACE o il pulsante B è stato premuto
- */
-bool isInteractObject(u8 row8)
-{
-	bool isGet = FALSE;
-	if (IS_KEY_PRESSED(row8, KEY_SPACE) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_B)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_B)))
-	{
-		g_Player.Input |= INPUT_GET;
-		isGet = TRUE;
-	}
-
-	return isGet;
-}
-
-//=============================================================================
-// MUSICA
-//=============================================================================
-
-/**
- * @brief Riproduce il suono
- * @param u8 id
- * @param u8 prio
- * @return void
- */
-void PlayBankSFX(u8 id, u8 prio)
-{
-	ayFX_PlayBank(id, prio); // Riproduzione di un suono ayFX
-}
-
-/**
- * @brief Seleziona una canale dovs SFX riproduce il suono
- * @param u8 chan Canale
- * @return void
- */
-void ChannelSFX(u8 chan)
-{
-	ayFX_Mute();		   // Arresta la riproduzione dell'audio e disattiva il canale
-	ayFX_SetChannel(chan); // Impostare il canale da utilizzare per la riproduzione del suono
-}
-
-/**
- * @brief Inizializzaione del Player PT3 e impostazione della tabella delle note
- * @parm void
- * @return void
- */
-void inizializePT3()
-{
-	PT3_Init();				   // Inizializza il Player PT3
-	PT3_SetNoteTable(PT3_NT2); // Setta la tabella delle note
-	PT3_SetLoop(TRUE);
-	PT3_InitSong(g_DataMusic);
-}
-
-/**
- * @brief Impostazione del riproduttore ayfx e del canale audio
- * @param void
- * @return void
- */
-void inizializeAYFX()
-{
-	ayFX_InitBank(g_ayfx_bank);		// Impostazione del riproduttore ayFX tramite l'array g_ayfx_bank
-	ayFX_SetChannel(PSG_CHANNEL_A); // Impostare il canale da utilizzare per la riproduzione del suono
-	ayFX_SetMode(AYFX_MODE_FIXED);	// Set channel mode
-}
-
-/**
- * @brief Mette in pausa la musica
- * @param void
- * @return void
- */
-void pausePT3Music()
-{
-	PT3_Pause();
-	PT3_UpdatePSG();
-}
-
-/**
- * @brief Fa ripartire la musica dal punto dove si è interrotta
- * @param void
- * @return void
- */
-void restorePT3Music()
-{
-	PT3_Resume();
-	PT3_UpdatePSG();
-}
-
-/**
- * @brief Arresta la riproduzione della musica e degli effetti sonori
- * @param void
- * @return void
- */
-void stopMusicPlayback()
-{
-	ayFX_Mute();
-	ayFX_Update();
-	PT3_Mute(PT3_STATE_MUTE_A, TRUE);
-	PT3_Pause();
-	PT3_UpdatePSG();
-}
-
-/**
- * @brief Effettua il restore dei livelli di gioco
- * @param void
- * @return void
- */
-void restoreLevel()
-{
-	for (u8 level = 0; level < (int)(sizeof(g_Levels) / sizeof(g_Levels[0])) - 1; level++)
-	{
-		for (u8 element = 0; element < 10; element++)
-		{
-			g_Levels[level].MyItems[element].x = 0;
-			g_Levels[level].MyItems[element].y = 0;
-			g_Levels[level].MyItems[element].tile = 0;
-			g_Levels[level].MyItems[element].visible = 0;
-		}
-	}
 }
 
 //=============================================================================

@@ -7,41 +7,10 @@ Symbol Table
     .__.ABS.                                                    =  000000 G
     .__.CPU.                                                    =  000000 L
     .__.H$L.                                                    =  000000 L
-  7 _g_DataBackground_Colors                                       001860 GR
-  7 _g_DataBackground_Patterns                                     00162E GR
-  A _g_DataMusic                                                   003924 GR
-  7 _g_DataSprtLayer                                               00110F GR
-  7 _g_Level001                                                    000000 GR
-  7 _g_Level002                                                    0000C0 GR
-  7 _g_Level003                                                    00018A GR
-  7 _g_Level004                                                    000243 GR
-  7 _g_Level005                                                    0002FF GR
-  7 _g_Level006                                                    0003C4 GR
-  7 _g_Level007                                                    00047C GR
-  7 _g_Level008                                                    00053E GR
-  7 _g_Level009                                                    000608 GR
-  7 _g_Level010                                                    0006D2 GR
-  7 _g_Level011                                                    000794 GR
-  7 _g_Level012                                                    000854 GR
-  7 _g_Level013                                                    000923 GR
-  7 _g_Level014                                                    0009E7 GR
-  7 _g_Level015                                                    000AD3 GR
-  7 _g_Level016                                                    000BBD GR
-  7 _g_Level017                                                    000C9C GR
-  7 _g_Level018                                                    000CCB GR
-  7 _g_Level019                                                    000CFA GR
-  7 _g_Level020                                                    000D29 GR
-  7 _g_Level021                                                    000D58 GR
-  7 _g_Level022                                                    000D87 GR
-  7 _g_Level023                                                    000DB6 GR
-  7 _g_Level024                                                    000DE5 GR
-  7 _g_Level025                                                    000E14 GR
-  7 _g_Level026                                                    000EB6 GR
-  7 _g_Level027                                                    000F6F GR
-  7 _g_Level028                                                    001004 GR
-  7 _g_Level029                                                    001033 GR
-  7 _g_Level030                                                    001097 GR
-  7 _g_ayfx_bank                                                   00123A GR
+  7 _g_DataBackground_Colors                                       00035D GR
+  7 _g_DataBackground_Patterns                                     00012B GR
+  7 _g_DataSprtLayer                                               000000 GR
+
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 2.
 Hexadecimal [24-Bits]
@@ -55,8 +24,7 @@ Area Table
    4 _HOME                                      size      0   flags    0
    5 _GSINIT                                    size      0   flags    0
    6 _GSFINAL                                   size      0   flags    0
-   7 _PAGE0                                     size   1880   flags    0
+   7 _PAGE0                                     size    37D   flags    0
    8 _INITIALIZER                               size      0   flags    0
    9 _CABS                                      size      0   flags    8
-   A _CABS0                                     size    648   flags    8
 

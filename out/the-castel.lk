@@ -9,6 +9,11 @@
 -l z80
 C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/crt0_rom48_isr.rel
 C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/the-castel.rel
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/tiles.rel
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/inventory.rel
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/control.rel
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/music.rel
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/level_defs.rel
 C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/the-castel_p0.rel
 
 -e
