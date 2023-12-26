@@ -519,17 +519,6 @@ bool isUnderTheWater(u8 x, u8 y)
 }
 
 /**
- * @brief Controlla che il player non sia sommerso dall'acqua
- * @param u8 x Coordinata x
- * @param u8 y Coordinata y
- * @return TRUE se è sotto l'acqua
- */
-u8 isUnderDunger(u8 x, u8 y)
-{
-	return getTile(x, y);
-}
-
-/**
  * @brief Imposta i colori delle tiles
  * @param void
  * @return void
@@ -741,17 +730,9 @@ bool getMoney(u8 x, u8 y)
 	switch (getTile(x, y))
 	{
 	case TILE_MONEY:
-		// Modifico al volo il livello di gioco, cosi non sono costretto
-		// a creare una cache dei livelli.
-		foo(x, y, TILE_MASK_MONEY, 1);
-		g_CountItem++;
-
 		setTile(x, y, EMPTY_ITEM);
+		foo(x, y, TILE_MASK_MONEY, 1); // Per il momento non posso spostare questa funzione, in quanto dovrei duplicare la chiamata the tile
 
-		g_Player.Score++;
-		updateScore();
-
-		PlayBankSFX(11, 15);
 		return TRUE;
 	}
 	return FALSE;
@@ -766,48 +747,27 @@ bool getMoney(u8 x, u8 y)
  */
 bool isDanger(u8 x, u8 y, u8 t)
 {
-	switch (isUnderDunger(x, y))
+	/* 	Print_DrawIntAt(20,22,g_DangerCounter);
+		Print_DrawIntAt(20,23,g_DelayRemoveLife); */
+	switch (getTile(x, y))
 	{
 	case TILE_DANGE1:
 	case TILE_DANGE2:
 	case TILE_DANGE3:
 	case TILE_DANGE4:
-		if (g_IsDanger)
+		if (hasLives())
 		{
-
-			c8 StrFormat[5];
-			Print_SetPosition(29, 23);
-			String_Format(StrFormat, "%03i", y);
-			Print_DrawText(StrFormat);
-
-			{
-				if (!hasLives())
-				{
-					stopMusicPlayback();
-					Game_SetState(State_GameOver);
-				}
-				else
-				{
-					if ((g_DangerCounter - g_DelayRemoveLife) > t)
-					{
-						removeLife();
-						displayLife();
-
-						PlayBankSFX(9, 0);
-
-						g_IsDanger = FALSE;
-						g_DelayRemoveLife--;
-
-						Print_DrawTextAt(20, 22, "DANGER!!!");
-					}
-				}
-			}
+			removeLife();
+			displayLife();
+			PlayBankSFX(9, 0);
+			drawLevel(g_CurrRoomIdx); // Inizia nuovamente dalla stanza in cui siamo
 		}
 		else
 		{
-			g_DangerCounter = 0;
-			g_IsDanger = TRUE;
+			stopMusicPlayback();
+			Game_SetState(State_GameOver);
 		}
+
 		return TRUE;
 	case TILE_LAVA:
 		if (!hasLives())
@@ -828,8 +788,7 @@ bool isDanger(u8 x, u8 y, u8 t)
 		return TRUE;
 
 	default:
-		g_DangerCounter = 0;
-		g_IsDanger = FALSE;
+		g_DelayRemoveLife = g_DangerCounter;
 		return FALSE;
 	}
 }
@@ -1317,12 +1276,19 @@ void genericControl()
 	if (getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) ||
 		getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4))
 	{
-		// TODO: non faccio nulla!
+		// Modifico al volo il livello di gioco, cosi non sono costretto
+		// a creare una cache dei livelli.
+		g_CountItem++;
+		g_Player.Score++;
+		updateScore();
+
+		PlayBankSFX(11, 15);
 	}
 
 	// Controllo se il player è in una situazione di pericola
 	// Print_DrawIntAt(23,20,g_Player.Pawn.PositionY);
-	if ((isDanger(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12, 2)))
+	if (isDanger(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12, 1) ||
+		isDanger(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4, 1))
 	{
 		// TODO: non faccio nulla!
 	}

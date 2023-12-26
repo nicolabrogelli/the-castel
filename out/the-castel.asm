@@ -308,7 +308,6 @@
 	.globl _collisionCheck
 	.globl _pursuitCheck
 	.globl _isUnderTheWater
-	.globl _isUnderDunger
 	.globl _setColorTiles
 	.globl _foo
 	.globl _interact
@@ -1577,21 +1576,12 @@ _isUnderTheWater::
 	xor	a, a
 ;./the-castel.c:519: }
 	ret
-;./the-castel.c:527: u8 isUnderDunger(u8 x, u8 y)
-;	---------------------------------
-; Function isUnderDunger
-; ---------------------------------
-_isUnderDunger::
-;./the-castel.c:529: return getTile(x, y);
-	ld	c, a
-;./the-castel.c:530: }
-	jp	_getTile
-;./the-castel.c:537: void setColorTiles()
+;./the-castel.c:526: void setColorTiles()
 ;	---------------------------------
 ; Function setColorTiles
 ; ---------------------------------
 _setColorTiles::
-;./the-castel.c:539: VDP_FillVRAM_16K(0X80, g_ScreenColorLow + 8, 2); // VERDE 0XC0 - ROSSO CHIARO 0x60
+;./the-castel.c:528: VDP_FillVRAM_16K(0X80, g_ScreenColorLow + 8, 2); // VERDE 0XC0 - ROSSO CHIARO 0x60
 	ld	hl, (_g_ScreenColorLow)
 	ld	bc, #0x0008
 	add	hl, bc
@@ -1600,7 +1590,7 @@ _setColorTiles::
 	push	hl
 	ld	a, #0x80
 	call	_VDP_FillVRAM_16K
-;./the-castel.c:540: VDP_FillVRAM_16K(0x70, g_ScreenColorLow + 10, 1);
+;./the-castel.c:529: VDP_FillVRAM_16K(0x70, g_ScreenColorLow + 10, 1);
 	ld	hl, (_g_ScreenColorLow)
 	ld	bc, #0x000a
 	add	hl, bc
@@ -1609,7 +1599,7 @@ _setColorTiles::
 	push	hl
 	ld	a, #0x70
 	call	_VDP_FillVRAM_16K
-;./the-castel.c:541: VDP_FillVRAM_16K(0xA0, g_ScreenColorLow + 12, 1); // GIALLO SCURO
+;./the-castel.c:530: VDP_FillVRAM_16K(0xA0, g_ScreenColorLow + 12, 1); // GIALLO SCURO
 	ld	hl, (_g_ScreenColorLow)
 	ld	bc, #0x000c
 	add	hl, bc
@@ -1618,7 +1608,7 @@ _setColorTiles::
 	push	hl
 	ld	a, #0xa0
 	call	_VDP_FillVRAM_16K
-;./the-castel.c:542: VDP_FillVRAM_16K(0xE0, g_ScreenColorLow + 18, 2); // GRIGIO
+;./the-castel.c:531: VDP_FillVRAM_16K(0xE0, g_ScreenColorLow + 18, 2); // GRIGIO
 	ld	hl, (_g_ScreenColorLow)
 	ld	bc, #0x0012
 	add	hl, bc
@@ -1627,9 +1617,9 @@ _setColorTiles::
 	push	hl
 	ld	a, #0xe0
 	call	_VDP_FillVRAM_16K
-;./the-castel.c:543: }
+;./the-castel.c:532: }
 	ret
-;./the-castel.c:557: void foo(u8 x, u8 y, u8 tile, u8 visible)
+;./the-castel.c:546: void foo(u8 x, u8 y, u8 tile, u8 visible)
 ;	---------------------------------
 ; Function foo
 ; ---------------------------------
@@ -1639,7 +1629,7 @@ _foo::
 	add	ix,sp
 	ld	b, a
 	ld	c, l
-;./the-castel.c:559: g_Levels[g_CurrRoomIdx].MyItems[g_CountItem].x = x;
+;./the-castel.c:548: g_Levels[g_CurrRoomIdx].MyItems[g_CountItem].x = x;
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
 	ld	l, e
@@ -1663,7 +1653,7 @@ _foo::
 	ld	d, #0x00
 	add	hl, de
 	ld	(hl), b
-;./the-castel.c:560: g_Levels[g_CurrRoomIdx].MyItems[g_CountItem].y = y;
+;./the-castel.c:549: g_Levels[g_CurrRoomIdx].MyItems[g_CountItem].y = y;
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
 	ld	l, e
@@ -1688,7 +1678,7 @@ _foo::
 	add	hl, de
 	inc	hl
 	ld	(hl), c
-;./the-castel.c:561: g_Levels[g_CurrRoomIdx].MyItems[g_CountItem].tile = tile;
+;./the-castel.c:550: g_Levels[g_CurrRoomIdx].MyItems[g_CountItem].tile = tile;
 	ld	bc, (_g_CurrRoomIdx)
 	ld	b, #0x00
 	ld	l, c
@@ -1716,7 +1706,7 @@ _foo::
 	inc	hl
 	ld	a, 4 (ix)
 	ld	(hl), a
-;./the-castel.c:562: g_Levels[g_CurrRoomIdx].MyItems[g_CountItem].visible = visible;
+;./the-castel.c:551: g_Levels[g_CurrRoomIdx].MyItems[g_CountItem].visible = visible;
 	ld	bc, (_g_CurrRoomIdx)
 	ld	b, #0x00
 	ld	l, c
@@ -1743,12 +1733,12 @@ _foo::
 	inc	hl
 	ld	a, 5 (ix)
 	ld	(hl), a
-;./the-castel.c:566: }
+;./the-castel.c:555: }
 	pop	ix
 	pop	hl
 	pop	af
 	jp	(hl)
-;./the-castel.c:574: bool interact(u8 x, u8 y)
+;./the-castel.c:563: bool interact(u8 x, u8 y)
 ;	---------------------------------
 ; Function interact
 ; ---------------------------------
@@ -1759,7 +1749,7 @@ _interact::
 	dec	sp
 	ld	c, a
 	ld	b, l
-;./the-castel.c:576: u8 tile = getTile(x, y);
+;./the-castel.c:565: u8 tile = getTile(x, y);
 	push	bc
 	ld	l, b
 ;	spillPairReg hl
@@ -1768,7 +1758,7 @@ _interact::
 	call	_getTile
 	pop	bc
 	ld	-1 (ix), a
-;./the-castel.c:583: DEBUG_LOGNUM("Intercat", tile);
+;./the-castel.c:572: DEBUG_LOGNUM("Intercat", tile);
 	ld	hl, #___str_0+0
 	ld	e, -1 (ix)
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
@@ -1794,7 +1784,7 @@ _interact::
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:112: g_PortDebugData = num;
 	ld	a, e
 	out	(_g_PortDebugData), a
-;./the-castel.c:586: switch (tile)
+;./the-castel.c:575: switch (tile)
 	ld	a, -1 (ix)
 	sub	a, #0x41
 	jp	Z,00107$
@@ -1841,15 +1831,15 @@ _interact::
 	sub	a, #0x68
 	jp	Z,00128$
 	jp	00129$
-;./the-castel.c:588: case TILE_HEART:
+;./the-castel.c:577: case TILE_HEART:
 00101$:
-;./the-castel.c:589: if (addLife())
+;./the-castel.c:578: if (addLife())
 	push	bc
 	call	_addLife
 	pop	bc
 	or	a, a
 	jr	Z, 00103$
-;./the-castel.c:591: foo(x, y, TILE_MASK_HEART, 1);
+;./the-castel.c:580: foo(x, y, TILE_MASK_HEART, 1);
 	push	bc
 	ld	hl, #0x1bb
 	push	hl
@@ -1859,10 +1849,10 @@ _interact::
 	ld	a, c
 	call	_foo
 	pop	bc
-;./the-castel.c:592: g_CountItem++;
+;./the-castel.c:581: g_CountItem++;
 	ld	hl, #_g_CountItem
 	inc	(hl)
-;./the-castel.c:594: setTile(x, y, EMPTY_ITEM);
+;./the-castel.c:583: setTile(x, y, EMPTY_ITEM);
 	xor	a, a
 	push	af
 	inc	sp
@@ -1871,19 +1861,19 @@ _interact::
 ;	spillPairReg hl
 	ld	a, c
 	call	_setTile
-;./the-castel.c:595: PlayBankSFX(10, 0);
+;./the-castel.c:584: PlayBankSFX(10, 0);
 	ld	l, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, #0x0a
 	call	_PlayBankSFX
 00103$:
-;./the-castel.c:597: return TRUE;
+;./the-castel.c:586: return TRUE;
 	ld	a, #0x01
 	jp	00135$
-;./the-castel.c:601: case TILE_MASK_DOOR3:
+;./the-castel.c:590: case TILE_MASK_DOOR3:
 00107$:
-;./the-castel.c:602: drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
+;./the-castel.c:591: drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
 	ld	bc, (_g_CurrRoomIdx)
 	ld	b, #0x00
 	ld	l, c
@@ -1902,19 +1892,19 @@ _interact::
 	add	hl, de
 	ld	a, (hl)
 	call	_drawLevel
-;./the-castel.c:603: return TRUE;
+;./the-castel.c:592: return TRUE;
 	ld	a, #0x01
 	jp	00135$
-;./the-castel.c:604: case TILE_DOOR1:
+;./the-castel.c:593: case TILE_DOOR1:
 00108$:
-;./the-castel.c:605: if (hasItemInInventory(TILE_KEY1))
+;./the-castel.c:594: if (hasItemInInventory(TILE_KEY1))
 	push	bc
 	ld	a, #0x60
 	call	_hasItemInInventory
 	pop	bc
 	or	a, a
 	jr	Z, 00110$
-;./the-castel.c:607: changeLevel(x, y, TILE_KEY1, TILE_MASK_DOOR1);
+;./the-castel.c:596: changeLevel(x, y, TILE_KEY1, TILE_MASK_DOOR1);
 	ld	hl, #0x4160
 	push	hl
 	ld	l, b
@@ -1923,30 +1913,30 @@ _interact::
 	ld	a, c
 	call	_changeLevel
 00110$:
-;./the-castel.c:609: return TRUE;
+;./the-castel.c:598: return TRUE;
 	ld	a, #0x01
 	jp	00135$
-;./the-castel.c:610: case TILE_DOOR2:
+;./the-castel.c:599: case TILE_DOOR2:
 00111$:
-;./the-castel.c:611: if (g_CurrRoomIdx == LAST_LEVEL)
+;./the-castel.c:600: if (g_CurrRoomIdx == LAST_LEVEL)
 	ld	a, (_g_CurrRoomIdx+0)
 	sub	a, #0x13
 	jr	NZ, 00115$
-;./the-castel.c:613: stopMusicPlayback();
+;./the-castel.c:602: stopMusicPlayback();
 	call	_stopMusicPlayback
-;./the-castel.c:614: Game_SetState(State_GameOver);
+;./the-castel.c:603: Game_SetState(State_GameOver);
 	ld	hl, #_State_GameOver
 	call	_Game_SetState
 	jp	00116$
 00115$:
-;./the-castel.c:618: if (hasItemInInventory(TILE_KEY2))
+;./the-castel.c:607: if (hasItemInInventory(TILE_KEY2))
 	push	bc
 	ld	a, #0x61
 	call	_hasItemInInventory
 	pop	bc
 	or	a, a
 	jr	Z, 00116$
-;./the-castel.c:620: changeLevel(x, y, TILE_KEY2, TILE_MASK_DOOR2);
+;./the-castel.c:609: changeLevel(x, y, TILE_KEY2, TILE_MASK_DOOR2);
 	ld	hl, #0x4261
 	push	hl
 	ld	l, b
@@ -1955,19 +1945,19 @@ _interact::
 	ld	a, c
 	call	_changeLevel
 00116$:
-;./the-castel.c:623: return TRUE;
+;./the-castel.c:612: return TRUE;
 	ld	a, #0x01
 	jp	00135$
-;./the-castel.c:624: case TILE_DOOR3:
+;./the-castel.c:613: case TILE_DOOR3:
 00117$:
-;./the-castel.c:625: if (hasItemInInventory(TILE_KEY3))
+;./the-castel.c:614: if (hasItemInInventory(TILE_KEY3))
 	push	bc
 	ld	a, #0x62
 	call	_hasItemInInventory
 	pop	bc
 	or	a, a
 	jr	Z, 00119$
-;./the-castel.c:627: changeLevel(x, y, TILE_KEY3, TILE_MASK_DOOR3);
+;./the-castel.c:616: changeLevel(x, y, TILE_KEY3, TILE_MASK_DOOR3);
 	ld	hl, #0x4362
 	push	hl
 	ld	l, b
@@ -1976,12 +1966,12 @@ _interact::
 	ld	a, c
 	call	_changeLevel
 00119$:
-;./the-castel.c:629: return TRUE;
+;./the-castel.c:618: return TRUE;
 	ld	a, #0x01
 	jp	00135$
-;./the-castel.c:630: case TILE_DOOR_PREV:
+;./the-castel.c:619: case TILE_DOOR_PREV:
 00120$:
-;./the-castel.c:631: drawLevel(g_Levels[g_CurrRoomIdx].PrevLvIdx);
+;./the-castel.c:620: drawLevel(g_Levels[g_CurrRoomIdx].PrevLvIdx);
 	ld	bc, (_g_CurrRoomIdx)
 	ld	b, #0x00
 	ld	l, c
@@ -2000,12 +1990,12 @@ _interact::
 	add	hl, de
 	ld	a, (hl)
 	call	_drawLevel
-;./the-castel.c:632: return false;
+;./the-castel.c:621: return false;
 	xor	a, a
 	jp	00135$
-;./the-castel.c:633: case TILE_DOOR_NEXT:
+;./the-castel.c:622: case TILE_DOOR_NEXT:
 00121$:
-;./the-castel.c:634: drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
+;./the-castel.c:623: drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
 	ld	bc, (_g_CurrRoomIdx)
 	ld	b, #0x00
 	ld	l, c
@@ -2024,12 +2014,12 @@ _interact::
 	add	hl, de
 	ld	a, (hl)
 	call	_drawLevel
-;./the-castel.c:635: return false;
+;./the-castel.c:624: return false;
 	xor	a, a
 	jp	00135$
-;./the-castel.c:637: case TILE_KEY1:
+;./the-castel.c:626: case TILE_KEY1:
 00122$:
-;./the-castel.c:640: replaceAndRemoveItem(x, y, tile, TILE_MASK_KEY1);
+;./the-castel.c:629: replaceAndRemoveItem(x, y, tile, TILE_MASK_KEY1);
 	ld	h, #0xbd
 	ld	l, -1 (ix)
 	push	hl
@@ -2038,18 +2028,18 @@ _interact::
 ;	spillPairReg hl
 	ld	a, c
 	call	_replaceAndRemoveItem
-;./the-castel.c:641: PlayBankSFX(5, 0);
+;./the-castel.c:630: PlayBankSFX(5, 0);
 	ld	l, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, #0x05
 	call	_PlayBankSFX
-;./the-castel.c:643: return TRUE;
+;./the-castel.c:632: return TRUE;
 	ld	a, #0x01
 	jp	00135$
-;./the-castel.c:644: case TILE_KEY2:
+;./the-castel.c:633: case TILE_KEY2:
 00123$:
-;./the-castel.c:647: replaceAndRemoveItem(x, y, tile, TILE_MASK_KEY2);
+;./the-castel.c:636: replaceAndRemoveItem(x, y, tile, TILE_MASK_KEY2);
 	ld	h, #0xbe
 	ld	l, -1 (ix)
 	push	hl
@@ -2058,18 +2048,18 @@ _interact::
 ;	spillPairReg hl
 	ld	a, c
 	call	_replaceAndRemoveItem
-;./the-castel.c:648: PlayBankSFX(5, 0);
+;./the-castel.c:637: PlayBankSFX(5, 0);
 	ld	l, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, #0x05
 	call	_PlayBankSFX
-;./the-castel.c:650: return TRUE;
+;./the-castel.c:639: return TRUE;
 	ld	a, #0x01
 	jp	00135$
-;./the-castel.c:651: case TILE_KEY3:
+;./the-castel.c:640: case TILE_KEY3:
 00124$:
-;./the-castel.c:654: replaceAndRemoveItem(x, y, tile, TILE_MASK_KEY3);
+;./the-castel.c:643: replaceAndRemoveItem(x, y, tile, TILE_MASK_KEY3);
 	ld	h, #0xbf
 	ld	l, -1 (ix)
 	push	hl
@@ -2078,25 +2068,25 @@ _interact::
 ;	spillPairReg hl
 	ld	a, c
 	call	_replaceAndRemoveItem
-;./the-castel.c:655: PlayBankSFX(5, 0);
+;./the-castel.c:644: PlayBankSFX(5, 0);
 	ld	l, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, #0x05
 	call	_PlayBankSFX
-;./the-castel.c:657: return TRUE;
+;./the-castel.c:646: return TRUE;
 	ld	a, #0x01
 	jp	00135$
-;./the-castel.c:658: case TILE_AMPHORA:
+;./the-castel.c:647: case TILE_AMPHORA:
 00125$:
-;./the-castel.c:661: if (!hasItemInInventory(TILE_AMPHORA))
+;./the-castel.c:650: if (!hasItemInInventory(TILE_AMPHORA))
 	push	bc
 	ld	a, #0x5f
 	call	_hasItemInInventory
 	pop	bc
 	or	a, a
 	jr	NZ, 00127$
-;./the-castel.c:663: replaceAndRemoveItem(x, y, tile, TILE_MASK_AMPHORA);
+;./the-castel.c:652: replaceAndRemoveItem(x, y, tile, TILE_MASK_AMPHORA);
 	ld	h, #0xbc
 	ld	l, -1 (ix)
 	push	hl
@@ -2105,19 +2095,19 @@ _interact::
 ;	spillPairReg hl
 	ld	a, c
 	call	_replaceAndRemoveItem
-;./the-castel.c:664: PlayBankSFX(5, 0);
+;./the-castel.c:653: PlayBankSFX(5, 0);
 	ld	l, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, #0x05
 	call	_PlayBankSFX
 00127$:
-;./the-castel.c:667: return TRUE;
+;./the-castel.c:656: return TRUE;
 	ld	a, #0x01
 	jp	00135$
-;./the-castel.c:668: case TILE_CRUCIFIX:
+;./the-castel.c:657: case TILE_CRUCIFIX:
 00128$:
-;./the-castel.c:671: replaceAndRemoveItem(x, y, tile, TILE_EMPTY);
+;./the-castel.c:660: replaceAndRemoveItem(x, y, tile, TILE_EMPTY);
 	xor	a, a
 	push	af
 	inc	sp
@@ -2129,30 +2119,30 @@ _interact::
 ;	spillPairReg hl
 	ld	a, c
 	call	_replaceAndRemoveItem
-;./the-castel.c:672: PlayBankSFX(5, 0);
+;./the-castel.c:661: PlayBankSFX(5, 0);
 	ld	l, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, #0x05
 	call	_PlayBankSFX
-;./the-castel.c:674: return TRUE;
+;./the-castel.c:663: return TRUE;
 	ld	a, #0x01
 	jp	00135$
-;./the-castel.c:692: }
+;./the-castel.c:681: }
 00129$:
-;./the-castel.c:694: updateScore();
+;./the-castel.c:683: updateScore();
 	call	_updateScore
-;./the-castel.c:696: return FALSE;
+;./the-castel.c:685: return FALSE;
 	xor	a, a
 00135$:
-;./the-castel.c:697: }
+;./the-castel.c:686: }
 	inc	sp
 	pop	ix
 	ret
 ___str_0:
 	.ascii "Intercat"
 	.db 0x00
-;./the-castel.c:707: void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask)
+;./the-castel.c:696: void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask)
 ;	---------------------------------
 ; Function replaceAndRemoveItem
 ; ---------------------------------
@@ -2162,7 +2152,7 @@ _replaceAndRemoveItem::
 	add	ix,sp
 	ld	c, a
 	ld	b, l
-;./the-castel.c:709: foo(x, y, tileMask, 1);
+;./the-castel.c:698: foo(x, y, tileMask, 1);
 	push	bc
 	ld	h, #0x01
 	ld	l, 5 (ix)
@@ -2173,10 +2163,10 @@ _replaceAndRemoveItem::
 	ld	a, c
 	call	_foo
 	pop	bc
-;./the-castel.c:710: g_CountItem++;
+;./the-castel.c:699: g_CountItem++;
 	ld	hl, #_g_CountItem
 	inc	(hl)
-;./the-castel.c:712: setTile(x, y, EMPTY_ITEM);
+;./the-castel.c:701: setTile(x, y, EMPTY_ITEM);
 	xor	a, a
 	push	af
 	inc	sp
@@ -2185,7 +2175,7 @@ _replaceAndRemoveItem::
 ;	spillPairReg hl
 	ld	a, c
 	call	_setTile
-;./the-castel.c:713: addItemToInventory(tile, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+;./the-castel.c:702: addItemToInventory(tile, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
 	ld	bc, #_g_Levels+0
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
@@ -2227,12 +2217,12 @@ _replaceAndRemoveItem::
 	push	bc
 	ld	a, 4 (ix)
 	call	_addItemToInventory
-;./the-castel.c:714: }
+;./the-castel.c:703: }
 	pop	ix
 	pop	hl
 	pop	af
 	jp	(hl)
-;./the-castel.c:724: void changeLevel(u8 x, u8 y, u8 key, u8 door)
+;./the-castel.c:713: void changeLevel(u8 x, u8 y, u8 key, u8 door)
 ;	---------------------------------
 ; Function changeLevel
 ; ---------------------------------
@@ -2242,7 +2232,7 @@ _changeLevel::
 	add	ix,sp
 	ld	c, a
 	ld	b, l
-;./the-castel.c:726: removeItemFromInventory(key, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+;./the-castel.c:715: removeItemFromInventory(key, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
 	ld	l, e
@@ -2290,7 +2280,7 @@ _changeLevel::
 	ld	a, 4 (ix)
 	call	_removeItemFromInventory
 	pop	bc
-;./the-castel.c:727: foo(x, y, door, 1);
+;./the-castel.c:716: foo(x, y, door, 1);
 	ld	h, #0x01
 	ld	l, 5 (ix)
 	push	hl
@@ -2299,10 +2289,10 @@ _changeLevel::
 ;	spillPairReg hl
 	ld	a, c
 	call	_foo
-;./the-castel.c:728: g_CountItem++;
+;./the-castel.c:717: g_CountItem++;
 	ld	hl, #_g_CountItem
 	inc	(hl)
-;./the-castel.c:730: drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
+;./the-castel.c:719: drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
 	ld	bc, (_g_CurrRoomIdx)
 	ld	b, #0x00
 	ld	l, c
@@ -2321,25 +2311,21 @@ _changeLevel::
 	add	hl, de
 	ld	a, (hl)
 	call	_drawLevel
-;./the-castel.c:731: }
+;./the-castel.c:720: }
 	pop	ix
 	pop	hl
 	pop	af
 	jp	(hl)
-;./the-castel.c:739: bool getMoney(u8 x, u8 y)
+;./the-castel.c:728: bool getMoney(u8 x, u8 y)
 ;	---------------------------------
 ; Function getMoney
 ; ---------------------------------
 _getMoney::
-	dec	sp
 	ld	c, a
-	ld	a, l
-	ld	iy, #0
-	add	iy, sp
-;./the-castel.c:741: switch (getTile(x, y))
-	ld	0 (iy), a
+	ld	b, l
+;./the-castel.c:730: switch (getTile(x, y))
 	push	bc
-	ld	l, a
+	ld	l, b
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, c
@@ -2347,57 +2333,35 @@ _getMoney::
 	pop	bc
 	sub	a, #0x63
 	jr	NZ, 00102$
-;./the-castel.c:746: foo(x, y, TILE_MASK_MONEY, 1);
+;./the-castel.c:733: setTile(x, y, EMPTY_ITEM);
 	push	bc
-	ld	hl, #0x1c0
-	push	hl
-	ld	iy, #4
-	add	iy, sp
-	ld	l, 0 (iy)
-;	spillPairReg hl
-;	spillPairReg hl
-	ld	a, c
-	call	_foo
-	pop	bc
-;./the-castel.c:747: g_CountItem++;
-	ld	hl, #_g_CountItem
-	inc	(hl)
-;./the-castel.c:749: setTile(x, y, EMPTY_ITEM);
 	xor	a, a
 	push	af
 	inc	sp
-	ld	iy, #1
-	add	iy, sp
-	ld	l, 0 (iy)
+	ld	l, b
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, c
 	call	_setTile
-;./the-castel.c:751: g_Player.Score++;
-	ld	bc, #_g_Player+6
-	ld	a, (bc)
-	inc	a
-	ld	(bc), a
-;./the-castel.c:752: updateScore();
-	call	_updateScore
-;./the-castel.c:754: PlayBankSFX(11, 15);
-	ld	l, #0x0f
+	pop	bc
+;./the-castel.c:734: foo(x, y, TILE_MASK_MONEY, 1); // Per il momento non posso spostare questa funzione, in quanto dovrei duplicare la chiamata the tile
+	ld	hl, #0x1c0
+	push	hl
+	ld	l, b
 ;	spillPairReg hl
 ;	spillPairReg hl
-	ld	a, #0x0b
-	call	_PlayBankSFX
-;./the-castel.c:755: return TRUE;
+	ld	a, c
+	call	_foo
+;./the-castel.c:736: return TRUE;
 	ld	a, #0x01
-	jp	00103$
-;./the-castel.c:756: }
-00102$:
-;./the-castel.c:757: return FALSE;
-	xor	a, a
-00103$:
-;./the-castel.c:758: }
-	inc	sp
 	ret
-;./the-castel.c:767: bool isDanger(u8 x, u8 y, u8 t)
+;./the-castel.c:737: }
+00102$:
+;./the-castel.c:738: return FALSE;
+	xor	a, a
+;./the-castel.c:739: }
+	ret
+;./the-castel.c:748: bool isDanger(u8 x, u8 y, u8 t)
 ;	---------------------------------
 ; Function isDanger
 ; ---------------------------------
@@ -2405,21 +2369,10 @@ _isDanger::
 	push	ix
 	ld	ix,#0
 	add	ix,sp
-	push	af
-	push	af
-	dec	sp
-	ld	b, a
-	ld	c, l
-;./the-castel.c:769: switch (isUnderDunger(x, y))
-	push	bc
-	ld	l, c
-;	spillPairReg hl
-;	spillPairReg hl
-	ld	a, b
-	call	_isUnderDunger
-	pop	bc
+;./the-castel.c:752: switch (getTile(x, y))
+	call	_getTile
 	cp	a, #0x40
-	jp	Z,00113$
+	jr	Z, 00108$
 	cp	a, #0x69
 	jr	Z, 00104$
 	cp	a, #0x6a
@@ -2427,137 +2380,66 @@ _isDanger::
 	cp	a, #0x6b
 	jr	Z, 00104$
 	sub	a, #0x6c
-	jp	NZ,00119$
-;./the-castel.c:774: case TILE_DANGE4:
+	jr	NZ, 00114$
+;./the-castel.c:757: case TILE_DANGE4:
 00104$:
-;./the-castel.c:775: if (g_IsDanger)
-	ld	a, (_g_IsDanger+0)
-	or	a, a
-	jp	Z, 00111$
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:226: g_PrintData.CursorX = x;
-	ld	hl, #(_g_PrintData + 5)
-	ld	(hl), #0x1d
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:227: g_PrintData.CursorY = y;
-	ld	hl, #(_g_PrintData + 6)
-	ld	(hl), #0x17
-;./the-castel.c:780: String_Format(StrFormat, "%03i", y);
-	ld	b, #0x00
-	ld	hl, #0
-	add	hl, sp
-	push	bc
-	ld	de, #___str_1
-	push	de
-	push	hl
-	call	_String_Format
-	ld	hl, #6
-	add	hl, sp
-	ld	sp, hl
-;./the-castel.c:781: Print_DrawText(StrFormat);
-	ld	hl, #0
-	add	hl, sp
-	call	_Print_DrawText
-;./the-castel.c:784: if (!hasLives())
+;./the-castel.c:758: if (hasLives())
 	call	_hasLives
 	or	a, a
-	jr	NZ, 00108$
-;./the-castel.c:786: stopMusicPlayback();
-	call	_stopMusicPlayback
-;./the-castel.c:787: Game_SetState(State_GameOver);
-	ld	hl, #_State_GameOver
-	call	_Game_SetState
-	jp	00112$
-00108$:
-;./the-castel.c:791: if ((g_DangerCounter - g_DelayRemoveLife) > t)
-	ld	a, (_g_DangerCounter+0)
-	ld	l, a
-;	spillPairReg hl
-;	spillPairReg hl
-	ld	h, #0x00
-;	spillPairReg hl
-;	spillPairReg hl
-	ld	a, (_g_DelayRemoveLife+0)
-	ld	c, a
-	ld	b, #0x00
-	cp	a, a
-	sbc	hl, bc
-	ld	c, 4 (ix)
-	ld	b, #0x00
-	ld	a, c
-	sub	a, l
-	ld	a, b
-	sbc	a, h
-	jp	PO, 00179$
-	xor	a, #0x80
-00179$:
-	jp	P, 00112$
-;./the-castel.c:793: removeLife();
+	jr	Z, 00106$
+;./the-castel.c:760: removeLife();
 	call	_removeLife
-;./the-castel.c:794: displayLife();
+;./the-castel.c:761: displayLife();
 	call	_displayLife
-;./the-castel.c:796: PlayBankSFX(9, 0);
+;./the-castel.c:762: PlayBankSFX(9, 0);
 	ld	l, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, #0x09
 	call	_PlayBankSFX
-;./the-castel.c:798: g_IsDanger = FALSE;
-	ld	hl, #_g_IsDanger
-	ld	(hl), #0x00
-;./the-castel.c:799: g_DelayRemoveLife--;
-	ld	hl, #_g_DelayRemoveLife
-	dec	(hl)
-;./the-castel.c:801: Print_DrawTextAt(20, 22, "DANGER!!!");
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:226: g_PrintData.CursorX = x;
-	ld	hl, #(_g_PrintData + 5)
-	ld	(hl), #0x14
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:227: g_PrintData.CursorY = y;
-	ld	hl, #(_g_PrintData + 6)
-	ld	(hl), #0x16
-;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:486: Print_DrawText(str);
-	ld	hl, #___str_2
-	call	_Print_DrawText
-;./the-castel.c:801: Print_DrawTextAt(20, 22, "DANGER!!!");
-	jp	00112$
-00111$:
-;./the-castel.c:808: g_DangerCounter = 0;
-	ld	hl, #_g_DangerCounter
-	ld	(hl), #0x00
-;./the-castel.c:809: g_IsDanger = TRUE;
-	ld	iy, #_g_IsDanger
-	ld	0 (iy), #0x01
-00112$:
-;./the-castel.c:811: return TRUE;
-	ld	a, #0x01
-	jp	00126$
-;./the-castel.c:812: case TILE_LAVA:
-00113$:
-;./the-castel.c:813: if (!hasLives())
-	call	_hasLives
-	or	a, a
-	jr	NZ, 00117$
-;./the-castel.c:815: stopMusicPlayback();
-	call	_stopMusicPlayback
-;./the-castel.c:816: Game_SetState(State_GameOver);
-	ld	hl, #_State_GameOver
-	call	_Game_SetState
-	jp	00118$
-00117$:
-;./the-castel.c:820: if (removeLife() == TRUE)
-	call	_removeLife
-	dec	a
-	jr	NZ, 00118$
-;./the-castel.c:822: displayLife();
-	call	_displayLife
-;./the-castel.c:823: PlayBankSFX(9, 0);
-	ld	l, #0x00
-;	spillPairReg hl
-;	spillPairReg hl
-	ld	a, #0x09
-	call	_PlayBankSFX
-;./the-castel.c:824: drawLevel(g_CurrRoomIdx); // Inizia nuovamente dalla stanza in cui siamo
+;./the-castel.c:763: drawLevel(g_CurrRoomIdx); // Inizia nuovamente dalla stanza in cui siamo
 	ld	a, (_g_CurrRoomIdx+0)
 	call	_drawLevel
-;./the-castel.c:825: Print_DrawTextAt(20, 22, "LAVA!!!  ");
+	jp	00107$
+00106$:
+;./the-castel.c:767: stopMusicPlayback();
+	call	_stopMusicPlayback
+;./the-castel.c:768: Game_SetState(State_GameOver);
+	ld	hl, #_State_GameOver
+	call	_Game_SetState
+00107$:
+;./the-castel.c:771: return TRUE;
+	ld	a, #0x01
+	jp	00118$
+;./the-castel.c:772: case TILE_LAVA:
+00108$:
+;./the-castel.c:773: if (!hasLives())
+	call	_hasLives
+	or	a, a
+	jr	NZ, 00112$
+;./the-castel.c:775: stopMusicPlayback();
+	call	_stopMusicPlayback
+;./the-castel.c:776: Game_SetState(State_GameOver);
+	ld	hl, #_State_GameOver
+	call	_Game_SetState
+	jp	00113$
+00112$:
+;./the-castel.c:780: if (removeLife() == TRUE)
+	call	_removeLife
+	dec	a
+	jr	NZ, 00113$
+;./the-castel.c:782: displayLife();
+	call	_displayLife
+;./the-castel.c:783: PlayBankSFX(9, 0);
+	ld	l, #0x00
+;	spillPairReg hl
+;	spillPairReg hl
+	ld	a, #0x09
+	call	_PlayBankSFX
+;./the-castel.c:784: drawLevel(g_CurrRoomIdx); // Inizia nuovamente dalla stanza in cui siamo
+	ld	a, (_g_CurrRoomIdx+0)
+	call	_drawLevel
+;./the-castel.c:785: Print_DrawTextAt(20, 22, "LAVA!!!  ");
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:226: g_PrintData.CursorX = x;
 	ld	hl, #(_g_PrintData + 5)
 	ld	(hl), #0x14
@@ -2565,41 +2447,31 @@ _isDanger::
 	ld	hl, #(_g_PrintData + 6)
 	ld	(hl), #0x16
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:486: Print_DrawText(str);
-	ld	hl, #___str_3
+	ld	hl, #___str_1
 	call	_Print_DrawText
-;./the-castel.c:825: Print_DrawTextAt(20, 22, "LAVA!!!  ");
-00118$:
-;./the-castel.c:828: return TRUE;
+;./the-castel.c:785: Print_DrawTextAt(20, 22, "LAVA!!!  ");
+00113$:
+;./the-castel.c:788: return TRUE;
 	ld	a, #0x01
-	jp	00126$
-;./the-castel.c:830: default:
-00119$:
-;./the-castel.c:831: g_DangerCounter = 0;
-	ld	hl, #_g_DangerCounter
-	ld	(hl), #0x00
-;./the-castel.c:832: g_IsDanger = FALSE;
-	ld	iy, #_g_IsDanger
-	ld	0 (iy), #0x00
-;./the-castel.c:833: return FALSE;
+	jp	00118$
+;./the-castel.c:790: default:
+00114$:
+;./the-castel.c:791: g_DelayRemoveLife = g_DangerCounter;
+	ld	a, (_g_DangerCounter+0)
+	ld	(_g_DelayRemoveLife+0), a
+;./the-castel.c:792: return FALSE;
 	xor	a, a
-;./the-castel.c:834: }
-00126$:
-;./the-castel.c:835: }
-	ld	sp, ix
+;./the-castel.c:793: }
+00118$:
+;./the-castel.c:794: }
 	pop	ix
 	pop	hl
 	inc	sp
 	jp	(hl)
 ___str_1:
-	.ascii "%03i"
-	.db 0x00
-___str_2:
-	.ascii "DANGER!!!"
-	.db 0x00
-___str_3:
 	.ascii "LAVA!!!  "
 	.db 0x00
-;./the-castel.c:842: void updateScore()
+;./the-castel.c:801: void updateScore()
 ;	---------------------------------
 ; Function updateScore
 ; ---------------------------------
@@ -2610,7 +2482,7 @@ _updateScore::
 	ld	hl, #-5
 	add	hl, sp
 	ld	sp, hl
-;./the-castel.c:844: if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER)
+;./the-castel.c:803: if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER)
 	ld	a, (_g_CurrRoomIdx+0)
 	or	a, a
 	jr	Z, 00108$
@@ -2624,7 +2496,7 @@ _updateScore::
 	ld	bc, #_g_PrintData + 6
 	xor	a, a
 	ld	(bc), a
-;./the-castel.c:851: Print_DrawText(g_Levels[g_CurrRoomIdx].Name);
+;./the-castel.c:810: Print_DrawText(g_Levels[g_CurrRoomIdx].Name);
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
 	ld	l, e
@@ -2654,18 +2526,18 @@ _updateScore::
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:227: g_PrintData.CursorY = y;
 	xor	a, a
 	ld	(bc), a
-;./the-castel.c:855: Print_DrawText("SCORE:");
+;./the-castel.c:814: Print_DrawText("SCORE:");
 	push	bc
-	ld	hl, #___str_4
+	ld	hl, #___str_2
 	call	_Print_DrawText
 	pop	bc
-;./the-castel.c:856: String_Format(StrFormat, "%04i", g_Player.Score);
+;./the-castel.c:815: String_Format(StrFormat, "%04i", g_Player.Score);
 	ld	a, (#(_g_Player + 6) + 0)
 	ld	e, a
 	ld	d, #0x00
 	push	bc
 	push	de
-	ld	hl, #___str_5
+	ld	hl, #___str_3
 	push	hl
 	ld	hl, #6
 	add	hl, sp
@@ -2681,7 +2553,7 @@ _updateScore::
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:227: g_PrintData.CursorY = y;
 	xor	a, a
 	ld	(bc), a
-;./the-castel.c:858: Print_DrawText(StrFormat);
+;./the-castel.c:817: Print_DrawText(StrFormat);
 	push	bc
 	ld	hl, #2
 	add	hl, sp
@@ -2693,24 +2565,24 @@ _updateScore::
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:227: g_PrintData.CursorY = y;
 	xor	a, a
 	ld	(bc), a
-;./the-castel.c:862: Print_DrawText("LIFE:");
-	ld	hl, #___str_6
+;./the-castel.c:821: Print_DrawText("LIFE:");
+	ld	hl, #___str_4
 	call	_Print_DrawText
 00108$:
-;./the-castel.c:864: }
+;./the-castel.c:823: }
 	ld	sp, ix
 	pop	ix
 	ret
-___str_4:
+___str_2:
 	.ascii "SCORE:"
 	.db 0x00
-___str_5:
+___str_3:
 	.ascii "%04i"
 	.db 0x00
-___str_6:
+___str_4:
 	.ascii "LIFE:"
 	.db 0x00
-;./the-castel.c:871: void drawLevel(u8 levelIdx)
+;./the-castel.c:830: void drawLevel(u8 levelIdx)
 ;	---------------------------------
 ; Function drawLevel
 ; ---------------------------------
@@ -2721,7 +2593,7 @@ _drawLevel::
 	push	af
 	push	af
 	ld	-2 (ix), a
-;./the-castel.c:873: pausePT3Music();
+;./the-castel.c:832: pausePT3Music();
 	call	_pausePT3Music
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:674: inline void VDP_EnableDisplay(bool enable) { VDP_RegWriteBakMask(1, (u8)~R01_BL, enable ? R01_BL : 0); }
 	xor	a, a
@@ -2732,36 +2604,36 @@ _drawLevel::
 ;	spillPairReg hl
 	ld	a, #0x01
 	call	_VDP_RegWriteBakMask
-;./the-castel.c:877: g_CurrRoomIdx = levelIdx;
+;./the-castel.c:836: g_CurrRoomIdx = levelIdx;
 	ld	a, -2 (ix)
 	ld	(_g_CurrRoomIdx+0), a
-;./the-castel.c:878: g_PawnCount = 0;
+;./the-castel.c:837: g_PawnCount = 0;
 	ld	hl, #_g_PawnCount
 	ld	(hl), #0x00
-;./the-castel.c:879: g_GhostCount = 0;
+;./the-castel.c:838: g_GhostCount = 0;
 	ld	hl, #_g_GhostCount
 	ld	(hl), #0x00
-;./the-castel.c:880: g_SpiderCount = 0;
+;./the-castel.c:839: g_SpiderCount = 0;
 	ld	hl, #_g_SpiderCount
 	ld	(hl), #0x00
-;./the-castel.c:881: g_BatCount = 0;
+;./the-castel.c:840: g_BatCount = 0;
 	ld	hl, #_g_BatCount
 	ld	(hl), #0x00
-;./the-castel.c:882: g_SecondCounter = 0;
+;./the-castel.c:841: g_SecondCounter = 0;
 	ld	hl, #_g_SecondCounter
 	ld	(hl), #0x00
-;./the-castel.c:883: g_DangerCounter = 0;
+;./the-castel.c:842: g_DangerCounter = 0;
 	ld	hl, #_g_DangerCounter
 	ld	(hl), #0x00
-;./the-castel.c:884: g_CountItem = 0; // Iniziaizza il cobtatore degli oggetti raccolti
+;./the-castel.c:843: g_CountItem = 0; // Iniziaizza il cobtatore degli oggetti raccolti
 	ld	hl, #_g_CountItem
 	ld	(hl), #0x00
-;./the-castel.c:887: if (hasItemInInventory(TILE_AMPHORA))
+;./the-castel.c:846: if (hasItemInInventory(TILE_AMPHORA))
 	ld	a, #0x5f
 	call	_hasItemInInventory
 	or	a, a
 	jr	Z, 00159$
-;./the-castel.c:888: removeItemFromInventory(TILE_AMPHORA, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+;./the-castel.c:847: removeItemFromInventory(TILE_AMPHORA, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
 	ld	bc, #_g_Levels+0
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
@@ -2805,14 +2677,14 @@ _drawLevel::
 	inc	sp
 	ld	a, #0x5f
 	call	_removeItemFromInventory
-;./the-castel.c:890: for (u8 i = 0; i < MAX_CACHE_OBJECT; i++)
+;./the-castel.c:849: for (u8 i = 0; i < MAX_CACHE_OBJECT; i++)
 00159$:
 	ld	-1 (ix), #0x00
 00138$:
 	ld	a, -1 (ix)
 	sub	a, #0x05
 	jr	NC, 00105$
-;./the-castel.c:892: if (g_Levels[g_CurrRoomIdx].MyItems[i].visible == 1)
+;./the-castel.c:851: if (g_Levels[g_CurrRoomIdx].MyItems[i].visible == 1)
 	ld	bc, (_g_CurrRoomIdx)
 	ld	b, #0x00
 	ld	l, c
@@ -2840,21 +2712,21 @@ _drawLevel::
 	ld	a, (hl)
 	dec	a
 	jr	NZ, 00139$
-;./the-castel.c:893: g_CountItem++;
+;./the-castel.c:852: g_CountItem++;
 	ld	hl, #_g_CountItem
 	inc	(hl)
 00139$:
-;./the-castel.c:890: for (u8 i = 0; i < MAX_CACHE_OBJECT; i++)
+;./the-castel.c:849: for (u8 i = 0; i < MAX_CACHE_OBJECT; i++)
 	inc	-1 (ix)
 	jp	00138$
 00105$:
-;./the-castel.c:905: VDP_FillVRAM_16K(0, g_ScreenLayoutLow, 32 * 24);
+;./the-castel.c:864: VDP_FillVRAM_16K(0, g_ScreenLayoutLow, 32 * 24);
 	ld	hl, #0x0300
 	push	hl
 	ld	de, (_g_ScreenLayoutLow)
 	xor	a, a
 	call	_VDP_FillVRAM_16K
-;./the-castel.c:907: Pletter_UnpackToRAM(g_Levels[levelIdx].Layout, g_CacheLevel[0].Layout);
+;./the-castel.c:866: Pletter_UnpackToRAM(g_Levels[levelIdx].Layout, g_CacheLevel[0].Layout);
 	ld	de, (#(_g_CacheLevel + 4) + 0)
 	ld	c, -2 (ix)
 	ld	b, #0x00
@@ -2880,7 +2752,7 @@ _drawLevel::
 ;	spillPairReg hl
 ;	spillPairReg hl
 	call	_Pletter_UnpackToRAM
-;./the-castel.c:910: for (u8 riga = 0; riga < g_CacheLevel[0].Height; ++riga)
+;./the-castel.c:869: for (u8 riga = 0; riga < g_CacheLevel[0].Height; ++riga)
 	ld	c, #0x00
 00144$:
 	ld	hl, #_g_CacheLevel + 3
@@ -2888,7 +2760,7 @@ _drawLevel::
 	ld	a, c
 	sub	a, b
 	jp	NC, 00125$
-;./the-castel.c:934: g_ScreenLayoutLow + (32 * (riga + g_CacheLevel[0].Y)) + (g_CacheLevel[0].X), g_CacheLevel[0].Width);
+;./the-castel.c:893: g_ScreenLayoutLow + (32 * (riga + g_CacheLevel[0].Y)) + (g_CacheLevel[0].X), g_CacheLevel[0].Width);
 	ld	hl, #(_g_CacheLevel + 2)
 	ld	b, (hl)
 	ld	-4 (ix), b
@@ -2915,7 +2787,7 @@ _drawLevel::
 	ld	e, a
 	ld	d, #0x00
 	add	iy, de
-;./the-castel.c:933: VDP_WriteVRAM_16K(g_CacheLevel[0].Layout + g_CacheLevel[0].Width * riga,
+;./the-castel.c:892: VDP_WriteVRAM_16K(g_CacheLevel[0].Layout + g_CacheLevel[0].Width * riga,
 	ld	de, (#(_g_CacheLevel + 4) + 0)
 	push	de
 	ld	e, c
@@ -2941,7 +2813,7 @@ _drawLevel::
 	pop	de
 	call	_VDP_WriteVRAM_16K
 	pop	bc
-;./the-castel.c:936: for (u8 colonna = 0; colonna < g_CacheLevel[0].Width; ++colonna)
+;./the-castel.c:895: for (u8 colonna = 0; colonna < g_CacheLevel[0].Width; ++colonna)
 	ld	b, #0x00
 00141$:
 	ld	hl, #(_g_CacheLevel + 2)
@@ -2949,7 +2821,7 @@ _drawLevel::
 	ld	a, b
 	sub	a, e
 	jp	NC, 00145$
-;./the-castel.c:939: u8 tile = g_CacheLevel[0].Layout[g_CacheLevel[0].Width * riga + colonna];
+;./the-castel.c:898: u8 tile = g_CacheLevel[0].Layout[g_CacheLevel[0].Width * riga + colonna];
 	ld	hl, #(_g_CacheLevel + 4)
 	ld	a, (hl)
 	ld	-4 (ix), a
@@ -2977,18 +2849,18 @@ _drawLevel::
 	push	de
 	add	hl, de
 	ld	e, (hl)
-;./the-castel.c:941: if (tile == TILE_START_POS) // Rilevamento della posizione iniziale del giocatore
+;./the-castel.c:900: if (tile == TILE_START_POS) // Rilevamento della posizione iniziale del giocatore
 	ld	a, e
 	sub	a, #0x7f
 	jr	NZ, 00122$
-;./the-castel.c:943: u8 x = g_CacheLevel[0].X + colonna;
+;./the-castel.c:902: u8 x = g_CacheLevel[0].X + colonna;
 	ld	a, (#_g_CacheLevel + 0)
 	add	a, b
 	ld	e, a
-;./the-castel.c:944: u8 y = g_CacheLevel[0].Y + riga;
+;./the-castel.c:903: u8 y = g_CacheLevel[0].Y + riga;
 	ld	a, (#(_g_CacheLevel + 1) + 0)
 	add	a, c
-;./the-castel.c:953: GamePawn_SetPosition(&g_Player.Pawn, x * 8, (y - 3) * 8);
+;./the-castel.c:912: GamePawn_SetPosition(&g_Player.Pawn, x * 8, (y - 3) * 8);
 	ld	d, a
 	add	a, #0xfd
 	add	a, a
@@ -3024,16 +2896,16 @@ _drawLevel::
 	pop	bc
 	jp	00142$
 00122$:
-;./the-castel.c:956: else if ((tile == TILE_STAR_POS_ENEMY) && (g_PawnCount < MAX_ENEMY)) // Rilevamento della posizione iniziale del nemico
+;./the-castel.c:915: else if ((tile == TILE_STAR_POS_ENEMY) && (g_PawnCount < MAX_ENEMY)) // Rilevamento della posizione iniziale del nemico
 	ld	a, e
 	sub	a, #0x7c
 	jr	NZ, 00118$
 	ld	a, (_g_PawnCount+0)
 	sub	a, #0x03
 	jr	NC, 00118$
-;./the-castel.c:958: g_PawnCount = positionGenericEnemy(TILE_STAR_POS_ENEMY, g_PawnCount, &g_Enemy[0], 196, 6, riga, colonna, 0, "Scheletor");
+;./the-castel.c:917: g_PawnCount = positionGenericEnemy(TILE_STAR_POS_ENEMY, g_PawnCount, &g_Enemy[0], 196, 6, riga, colonna, 0, "Scheletor");
 	push	bc
-	ld	hl, #___str_7
+	ld	hl, #___str_5
 	push	hl
 	xor	a, a
 	push	af
@@ -3058,16 +2930,16 @@ _drawLevel::
 	ld	(_g_PawnCount+0), a
 	jp	00142$
 00118$:
-;./the-castel.c:960: else if ((tile == TILE_POS_GHOST) && (g_Levels[0].MyEnemyType.GhostNumber < MAX_GHOST)) // Rilevamento della posizione iniziale del nemico
+;./the-castel.c:919: else if ((tile == TILE_POS_GHOST) && (g_Levels[0].MyEnemyType.GhostNumber < MAX_GHOST)) // Rilevamento della posizione iniziale del nemico
 	ld	a, e
 	sub	a, #0x80
 	jr	NZ, 00114$
 	ld	a, (#_g_Levels + 11)
 	sub	a, #0x03
 	jr	NC, 00114$
-;./the-castel.c:962: g_GhostCount = positionGenericEnemy(TILE_POS_GHOST, g_GhostCount, &g_Ghost[0], 200, 10, riga, colonna, 0, "Ghost");
+;./the-castel.c:921: g_GhostCount = positionGenericEnemy(TILE_POS_GHOST, g_GhostCount, &g_Ghost[0], 200, 10, riga, colonna, 0, "Ghost");
 	push	bc
-	ld	hl, #___str_8
+	ld	hl, #___str_6
 	push	hl
 	xor	a, a
 	push	af
@@ -3092,16 +2964,16 @@ _drawLevel::
 	ld	(_g_GhostCount+0), a
 	jp	00142$
 00114$:
-;./the-castel.c:964: else if ((tile == TILE_POS_SPIDER) && (g_Levels[0].MyEnemyType.SpiderNumber < MAX_SPIDER)) // Rilevamento della posizione iniziale del nemico
+;./the-castel.c:923: else if ((tile == TILE_POS_SPIDER) && (g_Levels[0].MyEnemyType.SpiderNumber < MAX_SPIDER)) // Rilevamento della posizione iniziale del nemico
 	ld	a, e
 	sub	a, #0x81
 	jr	NZ, 00110$
 	ld	a, (#_g_Levels + 12)
 	sub	a, #0x03
 	jr	NC, 00110$
-;./the-castel.c:966: g_SpiderCount = positionGenericEnemy(TILE_POS_SPIDER, g_SpiderCount, &g_Spider[0], 192, 15, riga, colonna, 0, "Spider");
+;./the-castel.c:925: g_SpiderCount = positionGenericEnemy(TILE_POS_SPIDER, g_SpiderCount, &g_Spider[0], 192, 15, riga, colonna, 0, "Spider");
 	push	bc
-	ld	hl, #___str_9
+	ld	hl, #___str_7
 	push	hl
 	xor	a, a
 	push	af
@@ -3126,16 +2998,16 @@ _drawLevel::
 	ld	(_g_SpiderCount+0), a
 	jp	00142$
 00110$:
-;./the-castel.c:968: else if ((tile == TILE_POS_BAT) && (g_Levels[0].MyEnemyType.BatNumber < MAX_BAT)) // Rilevamento della posizione iniziale del nemico
+;./the-castel.c:927: else if ((tile == TILE_POS_BAT) && (g_Levels[0].MyEnemyType.BatNumber < MAX_BAT)) // Rilevamento della posizione iniziale del nemico
 	ld	a, e
 	sub	a, #0x82
 	jr	NZ, 00142$
 	ld	a, (#_g_Levels + 13)
 	sub	a, #0x03
 	jr	NC, 00142$
-;./the-castel.c:970: g_BatCount = positionGenericEnemy(TILE_POS_BAT, g_BatCount, &g_Bat[0], 204, 20, riga, colonna, 0, "Bat");
+;./the-castel.c:929: g_BatCount = positionGenericEnemy(TILE_POS_BAT, g_BatCount, &g_Bat[0], 204, 20, riga, colonna, 0, "Bat");
 	push	bc
-	ld	hl, #___str_10
+	ld	hl, #___str_8
 	push	hl
 	xor	a, a
 	push	af
@@ -3159,15 +3031,15 @@ _drawLevel::
 	pop	bc
 	ld	(_g_BatCount+0), a
 00142$:
-;./the-castel.c:936: for (u8 colonna = 0; colonna < g_CacheLevel[0].Width; ++colonna)
+;./the-castel.c:895: for (u8 colonna = 0; colonna < g_CacheLevel[0].Width; ++colonna)
 	inc	b
 	jp	00141$
 00145$:
-;./the-castel.c:910: for (u8 riga = 0; riga < g_CacheLevel[0].Height; ++riga)
+;./the-castel.c:869: for (u8 riga = 0; riga < g_CacheLevel[0].Height; ++riga)
 	inc	c
 	jp	00144$
 00125$:
-;./the-castel.c:975: hideSprite(g_PawnCount, MAX_ENEMY, 6);
+;./the-castel.c:934: hideSprite(g_PawnCount, MAX_ENEMY, 6);
 	ld	a, #0x06
 	push	af
 	inc	sp
@@ -3176,7 +3048,7 @@ _drawLevel::
 ;	spillPairReg hl
 	ld	a, (_g_PawnCount+0)
 	call	_hideSprite
-;./the-castel.c:976: hideSprite(g_GhostCount, MAX_GHOST, 10);
+;./the-castel.c:935: hideSprite(g_GhostCount, MAX_GHOST, 10);
 	ld	a, #0x0a
 	push	af
 	inc	sp
@@ -3185,7 +3057,7 @@ _drawLevel::
 ;	spillPairReg hl
 	ld	a, (_g_GhostCount+0)
 	call	_hideSprite
-;./the-castel.c:977: hideSprite(g_SpiderCount, MAX_SPIDER, 15);
+;./the-castel.c:936: hideSprite(g_SpiderCount, MAX_SPIDER, 15);
 	ld	a, #0x0f
 	push	af
 	inc	sp
@@ -3194,7 +3066,7 @@ _drawLevel::
 ;	spillPairReg hl
 	ld	a, (_g_SpiderCount+0)
 	call	_hideSprite
-;./the-castel.c:978: hideSprite(g_BatCount, MAX_BAT, 20);
+;./the-castel.c:937: hideSprite(g_BatCount, MAX_BAT, 20);
 	ld	a, #0x14
 	push	af
 	inc	sp
@@ -3203,20 +3075,20 @@ _drawLevel::
 ;	spillPairReg hl
 	ld	a, (_g_BatCount+0)
 	call	_hideSprite
-;./the-castel.c:980: if (levelIdx == 0)
+;./the-castel.c:939: if (levelIdx == 0)
 	ld	a, -2 (ix)
 	or	a, a
 	jr	Z, 00178$
-;./the-castel.c:986: updateScore();
+;./the-castel.c:945: updateScore();
 	call	_updateScore
-;./the-castel.c:988: if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER)
+;./the-castel.c:947: if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER)
 	ld	a, (_g_CurrRoomIdx+0)
 	or	a, a
 	jr	Z, 00127$
 	ld	a, (_g_CurrRoomIdx+0)
 	sub	a, #0x14
 	jr	Z, 00127$
-;./the-castel.c:989: displayItemToInventory(g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+;./the-castel.c:948: displayItemToInventory(g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
 	ld	bc, (_g_CurrRoomIdx)
 	ld	b, #0x00
 	ld	l, c
@@ -3257,16 +3129,16 @@ _drawLevel::
 	ld	a, c
 	call	_displayItemToInventory
 00127$:
-;./the-castel.c:991: displayLife();
+;./the-castel.c:950: displayLife();
 	call	_displayLife
-;./the-castel.c:995: for (u8 i = 0; i < 10; i++)
+;./the-castel.c:954: for (u8 i = 0; i < 10; i++)
 00178$:
 	ld	-1 (ix), #0x00
 00147$:
 	ld	a, -1 (ix)
 	sub	a, #0x0a
 	jr	NC, 00154$
-;./the-castel.c:997: if (g_Levels[g_CurrRoomIdx].MyItems[i].visible == 1)
+;./the-castel.c:956: if (g_Levels[g_CurrRoomIdx].MyItems[i].visible == 1)
 	ld	bc, (_g_CurrRoomIdx)
 	ld	b, #0x00
 	ld	l, c
@@ -3298,7 +3170,7 @@ _drawLevel::
 	ld	a, (de)
 	dec	a
 	jr	NZ, 00148$
-;./the-castel.c:999: setTile(g_Levels[g_CurrRoomIdx].MyItems[i].x, g_Levels[g_CurrRoomIdx].MyItems[i].y, g_Levels[g_CurrRoomIdx].MyItems[i].tile);
+;./the-castel.c:958: setTile(g_Levels[g_CurrRoomIdx].MyItems[i].x, g_Levels[g_CurrRoomIdx].MyItems[i].y, g_Levels[g_CurrRoomIdx].MyItems[i].tile);
 	ld	l, c
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -3326,7 +3198,7 @@ _drawLevel::
 	ld	a, c
 	call	_setTile
 00148$:
-;./the-castel.c:995: for (u8 i = 0; i < 10; i++)
+;./the-castel.c:954: for (u8 i = 0; i < 10; i++)
 	inc	-1 (ix)
 	jp	00147$
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:674: inline void VDP_EnableDisplay(bool enable) { VDP_RegWriteBakMask(1, (u8)~R01_BL, enable ? R01_BL : 0); }
@@ -3339,25 +3211,25 @@ _drawLevel::
 ;	spillPairReg hl
 	ld	a, #0x01
 	call	_VDP_RegWriteBakMask
-;./the-castel.c:1005: restorePT3Music();
+;./the-castel.c:964: restorePT3Music();
 	call	_restorePT3Music
-;./the-castel.c:1006: }
+;./the-castel.c:965: }
 	ld	sp, ix
 	pop	ix
 	ret
-___str_7:
+___str_5:
 	.ascii "Scheletor"
 	.db 0x00
-___str_8:
+___str_6:
 	.ascii "Ghost"
 	.db 0x00
-___str_9:
+___str_7:
 	.ascii "Spider"
 	.db 0x00
-___str_10:
+___str_8:
 	.ascii "Bat"
 	.db 0x00
-;./the-castel.c:1019: u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, u8 idxSprite, u8 baseSprite, u8 riga, u8 colonna, u8 levelIdx, c8 *Name)
+;./the-castel.c:978: u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, u8 idxSprite, u8 baseSprite, u8 riga, u8 colonna, u8 levelIdx, c8 *Name)
 ;	---------------------------------
 ; Function positionGenericEnemy
 ; ---------------------------------
@@ -3370,7 +3242,7 @@ _positionGenericEnemy::
 	ld	sp, iy
 	ld	-1 (ix), a
 	ld	-2 (ix), l
-;./the-castel.c:1021: if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * riga + colonna - 1] != TILE_POS_GENERIC_ENEMY)
+;./the-castel.c:980: if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * riga + colonna - 1] != TILE_POS_GENERIC_ENEMY)
 	ld	bc, #_g_Levels+0
 	ld	e, 10 (ix)
 	ld	d, #0x00
@@ -3428,7 +3300,7 @@ _positionGenericEnemy::
 	ld	a, -1 (ix)
 	sub	a, e
 	jr	Z, 00104$
-;./the-castel.c:1023: if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * (riga - 1) + colonna] != TILE_POS_GENERIC_ENEMY)
+;./the-castel.c:982: if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * (riga - 1) + colonna] != TILE_POS_GENERIC_ENEMY)
 	ld	e, 8 (ix)
 	ld	d, #0x00
 	dec	de
@@ -3451,16 +3323,16 @@ _positionGenericEnemy::
 	ld	a, -1 (ix)
 	sub	a, e
 	jr	Z, 00104$
-;./the-castel.c:1031: u8 x = g_Levels[levelIdx].X + colonna;
+;./the-castel.c:990: u8 x = g_Levels[levelIdx].X + colonna;
 	ld	a, (bc)
 	add	a, 9 (ix)
 	ld	e, a
-;./the-castel.c:1032: u8 y = g_Levels[levelIdx].Y + riga;
+;./the-castel.c:991: u8 y = g_Levels[levelIdx].Y + riga;
 	inc	bc
 	ld	a, (bc)
 	add	a, 8 (ix)
 	ld	d, a
-;./the-castel.c:1034: managementSprite(x, y, baseSprite, enemyCount, idxSprite);
+;./the-castel.c:993: managementSprite(x, y, baseSprite, enemyCount, idxSprite);
 	push	de
 	ld	h, 6 (ix)
 	ld	l, -2 (ix)
@@ -3474,7 +3346,7 @@ _positionGenericEnemy::
 	ld	a, e
 	call	_managementSprite
 	pop	de
-;./the-castel.c:1036: spritePosition(x, y, &enemy[0], baseSprite, enemyCount, Name);
+;./the-castel.c:995: spritePosition(x, y, &enemy[0], baseSprite, enemyCount, Name);
 	ld	c, 4 (ix)
 	ld	b, 5 (ix)
 	push	de
@@ -3495,7 +3367,7 @@ _positionGenericEnemy::
 	ld	a, e
 	call	_spritePosition
 	pop	de
-;./the-castel.c:1038: setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
+;./the-castel.c:997: setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
 	xor	a, a
 	push	af
 	inc	sp
@@ -3504,12 +3376,12 @@ _positionGenericEnemy::
 ;	spillPairReg hl
 	ld	a, e
 	call	_setTileByTileCoord
-;./the-castel.c:1039: enemyCount++;
+;./the-castel.c:998: enemyCount++;
 	inc	-2 (ix)
 00104$:
-;./the-castel.c:1043: return enemyCount;
+;./the-castel.c:1002: return enemyCount;
 	ld	a, -2 (ix)
-;./the-castel.c:1044: }
+;./the-castel.c:1003: }
 	ld	sp, ix
 	pop	ix
 	pop	hl
@@ -3517,7 +3389,7 @@ _positionGenericEnemy::
 	add	iy, sp
 	ld	sp, iy
 	jp	(hl)
-;./the-castel.c:1055: void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 baseSprite, u8 enemyCount, char *type)
+;./the-castel.c:1014: void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 baseSprite, u8 enemyCount, char *type)
 ;	---------------------------------
 ; Function spritePosition
 ; ---------------------------------
@@ -3527,7 +3399,7 @@ _spritePosition::
 	add	ix,sp
 	ld	b, a
 	ld	c, l
-;./the-castel.c:1057: struct CharacterEnemy *generic = &genericEnemy[enemyCount];
+;./the-castel.c:1016: struct CharacterEnemy *generic = &genericEnemy[enemyCount];
 	ld	e, 7 (ix)
 	ld	d, #0x00
 	ld	l, e
@@ -3541,13 +3413,13 @@ _spritePosition::
 	ld	h, 5 (ix)
 	add	hl, de
 	ex	de, hl
-;./the-castel.c:1058: generic->X = x * 8;
+;./the-castel.c:1017: generic->X = x * 8;
 	ld	a, b
 	add	a, a
 	add	a, a
 	add	a, a
 	ld	(de), a
-;./the-castel.c:1059: generic->Y = (y - 1) * 8;
+;./the-castel.c:1018: generic->Y = (y - 1) * 8;
 	ld	l, e
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -3561,7 +3433,7 @@ _spritePosition::
 	add	a, a
 	add	a, a
 	ld	(hl), a
-;./the-castel.c:1060: generic->Direction = (g_GameFrame % 2) ? 1 : -1;
+;./the-castel.c:1019: generic->Direction = (g_GameFrame % 2) ? 1 : -1;
 	ld	hl, #0x0004
 	add	hl, de
 	ld	iy, #_g_GameFrame
@@ -3575,7 +3447,7 @@ _spritePosition::
 	ld	(hl), c
 	inc	hl
 	ld	(hl), b
-;./the-castel.c:1061: generic->TypeEnemy = type;
+;./the-castel.c:1020: generic->TypeEnemy = type;
 	ld	hl, #0x0006
 	add	hl, de
 	ld	a, 8 (ix)
@@ -3583,38 +3455,38 @@ _spritePosition::
 	inc	hl
 	ld	a, 9 (ix)
 	ld	(hl), a
-;./the-castel.c:1062: generic->SpriteId = baseSprite + enemyCount;
+;./the-castel.c:1021: generic->SpriteId = baseSprite + enemyCount;
 	ld	hl, #0x0008
 	add	hl, de
 	ld	a, 6 (ix)
 	add	a, 7 (ix)
 	ld	(hl), a
-;./the-castel.c:1063: generic->State = 1;
+;./the-castel.c:1022: generic->State = 1;
 	inc	de
 	inc	de
 	inc	de
 	ld	a, #0x01
 	ld	(de), a
-;./the-castel.c:1064: }
+;./the-castel.c:1023: }
 	pop	ix
 	pop	hl
 	pop	af
 	pop	af
 	pop	af
 	jp	(hl)
-;./the-castel.c:1072: void hideSprite(u8 count, u8 maxElement, u8 baseSprite)
+;./the-castel.c:1031: void hideSprite(u8 count, u8 maxElement, u8 baseSprite)
 ;	---------------------------------
 ; Function hideSprite
 ; ---------------------------------
 _hideSprite::
 	ld	c, a
 	ld	b, l
-;./the-castel.c:1074: for (u8 i = count; i < maxElement; ++i)
+;./the-castel.c:1033: for (u8 i = count; i < maxElement; ++i)
 00104$:
 	ld	a, c
 	sub	a, b
 	jr	NC, 00106$
-;./the-castel.c:1076: VDP_HideSprite(baseSprite + i);
+;./the-castel.c:1035: VDP_HideSprite(baseSprite + i);
 	ld	hl, #2
 	add	hl, sp
 	ld	a, (hl)
@@ -3628,22 +3500,22 @@ _hideSprite::
 	ld	a, e
 	call	_VDP_SetSpritePositionY
 	pop	bc
-;./the-castel.c:1074: for (u8 i = count; i < maxElement; ++i)
+;./the-castel.c:1033: for (u8 i = count; i < maxElement; ++i)
 	inc	c
 	jp	00104$
 00106$:
-;./the-castel.c:1078: }
+;./the-castel.c:1037: }
 	pop	hl
 	inc	sp
 	jp	(hl)
-;./the-castel.c:1088: void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape)
+;./the-castel.c:1047: void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape)
 ;	---------------------------------
 ; Function managementSprite
 ; ---------------------------------
 _managementSprite::
 	ld	e, a
 	ld	b, l
-;./the-castel.c:1099: VDP_SetSpriteSM1(baseSprite + enemyCount, x, y, indexShape, COLOR_WHITE);
+;./the-castel.c:1058: VDP_SetSpriteSM1(baseSprite + enemyCount, x, y, indexShape, COLOR_WHITE);
 	ld	hl, #3
 	add	hl, sp
 	ld	iy, #2
@@ -3665,7 +3537,7 @@ _managementSprite::
 	call	_VDP_SetSpriteSM1
 	pop	de
 	pop	bc
-;./the-castel.c:1108: VDP_SetSpritePosition(baseSprite + enemyCount, x * 8, (y - 1) * 8);
+;./the-castel.c:1067: VDP_SetSpritePosition(baseSprite + enemyCount, x * 8, (y - 1) * 8);
 	ld	a, b
 	dec	a
 	add	a, a
@@ -3683,12 +3555,12 @@ _managementSprite::
 	inc	sp
 	ld	a, c
 	call	_VDP_SetSpritePosition
-;./the-castel.c:1109: }
+;./the-castel.c:1068: }
 	pop	hl
 	pop	af
 	inc	sp
 	jp	(hl)
-;./the-castel.c:1117: void initCharacter(struct Character *ply, u8 id)
+;./the-castel.c:1076: void initCharacter(struct Character *ply, u8 id)
 ;	---------------------------------
 ; Function initCharacter
 ; ---------------------------------
@@ -3696,7 +3568,7 @@ _initCharacter::
 	push	ix
 	ld	ix,#0
 	add	ix,sp
-;./the-castel.c:1119: Mem_Set(0, ply, sizeof(struct Character));
+;./the-castel.c:1078: Mem_Set(0, ply, sizeof(struct Character));
 	ld	e, l
 	ld	d, h
 	push	hl
@@ -3705,14 +3577,14 @@ _initCharacter::
 	xor	a, a
 	call	_Mem_Set
 	pop	hl
-;./the-castel.c:1121: Game_Pawn *pawn = &ply->Pawn;
+;./the-castel.c:1080: Game_Pawn *pawn = &ply->Pawn;
 	ld	bc, #0x0008
 	add	hl, bc
-;./the-castel.c:1123: if (id == 0)
+;./the-castel.c:1082: if (id == 0)
 	ld	a, 4 (ix)
 	or	a, a
 	jr	NZ, 00103$
-;./the-castel.c:1125: GamePawn_Initialize(pawn, g_PlayerSpriteLayers, numberof(g_PlayerSpriteLayers), 0, g_PlayerAnimActions);
+;./the-castel.c:1084: GamePawn_Initialize(pawn, g_PlayerSpriteLayers, numberof(g_PlayerSpriteLayers), 0, g_PlayerAnimActions);
 	ld	bc, #_g_PlayerAnimActions+0
 	ld	de, #_g_PlayerSpriteLayers+0
 	push	hl
@@ -3721,13 +3593,13 @@ _initCharacter::
 	push	bc
 	call	_GamePawn_Initialize
 	pop	hl
-;./the-castel.c:1126: GamePawn_SetPosition(pawn, 255 - 16 - 16, 128);
+;./the-castel.c:1085: GamePawn_SetPosition(pawn, 255 - 16 - 16, 128);
 	push	hl
 	ld	de, #0x80df
 	push	de
 	call	_GamePawn_SetPosition
 	pop	hl
-;./the-castel.c:1127: GamePawn_InitializePhysics(pawn, physicsEventPlayer, physicsCollision, 16, 16);
+;./the-castel.c:1086: GamePawn_InitializePhysics(pawn, physicsEventPlayer, physicsCollision, 16, 16);
 	ld	a, #0x10
 	push	af
 	inc	sp
@@ -3739,12 +3611,12 @@ _initCharacter::
 	ld	de, #_physicsEventPlayer
 	call	_GamePawn_InitializePhysics
 00103$:
-;./the-castel.c:1129: }
+;./the-castel.c:1088: }
 	pop	ix
 	pop	hl
 	inc	sp
 	jp	(hl)
-;./the-castel.c:1136: void updateCharacter(struct Character *ply)
+;./the-castel.c:1095: void updateCharacter(struct Character *ply)
 ;	---------------------------------
 ; Function updateCharacter
 ; ---------------------------------
@@ -3757,9 +3629,9 @@ _updateCharacter::
 	ld	sp, iy
 	ld	-2 (ix), l
 	ld	-1 (ix), h
-;./the-castel.c:1139: u8 dir = 0;
+;./the-castel.c:1098: u8 dir = 0;
 	ld	-15 (ix), #0x00
-;./the-castel.c:1140: ply->DX = 0;
+;./the-castel.c:1099: ply->DX = 0;
 	ld	a, -2 (ix)
 	add	a, #0x03
 	ld	-14 (ix), a
@@ -3769,7 +3641,7 @@ _updateCharacter::
 	ld	l, -14 (ix)
 	ld	h, -13 (ix)
 	ld	(hl), #0x00
-;./the-castel.c:1141: ply->DY = 0;
+;./the-castel.c:1100: ply->DY = 0;
 	ld	a, -2 (ix)
 	add	a, #0x04
 	ld	-12 (ix), a
@@ -3779,7 +3651,7 @@ _updateCharacter::
 	ld	l, -12 (ix)
 	ld	h, -11 (ix)
 	ld	(hl), #0x00
-;./the-castel.c:1144: if (ply->Input & INPUT_RIGHT)
+;./the-castel.c:1103: if (ply->Input & INPUT_RIGHT)
 	ld	a, -2 (ix)
 	add	a, #0x05
 	ld	-4 (ix), a
@@ -3792,22 +3664,22 @@ _updateCharacter::
 	ld	-5 (ix), a
 	bit	0, -5 (ix)
 	jr	Z, 00105$
-;./the-castel.c:1146: ply->DX++;
+;./the-castel.c:1105: ply->DX++;
 	ld	l,-14 (ix)
 	ld	h,-13 (ix)
 	inc	(hl)
-;./the-castel.c:1147: ply->bMoving = TRUE;
+;./the-castel.c:1106: ply->bMoving = TRUE;
 	ld	l, -2 (ix)
 	ld	h, -1 (ix)
 	ld	(hl), #0x01
-;./the-castel.c:1148: dir = 1;
+;./the-castel.c:1107: dir = 1;
 	ld	-15 (ix), #0x01
 	jp	00106$
 00105$:
-;./the-castel.c:1150: else if (ply->Input & INPUT_LEFT)
+;./the-castel.c:1109: else if (ply->Input & INPUT_LEFT)
 	bit	1, -5 (ix)
 	jr	Z, 00102$
-;./the-castel.c:1152: ply->DX--;
+;./the-castel.c:1111: ply->DX--;
 	ld	l, -14 (ix)
 	ld	h, -13 (ix)
 	ld	a, (hl)
@@ -3816,20 +3688,20 @@ _updateCharacter::
 	ld	l, -14 (ix)
 	ld	h, -13 (ix)
 	ld	(hl), a
-;./the-castel.c:1153: ply->bMoving = TRUE;
+;./the-castel.c:1112: ply->bMoving = TRUE;
 	ld	l, -2 (ix)
 	ld	h, -1 (ix)
 	ld	(hl), #0x01
-;./the-castel.c:1154: dir = 0;
+;./the-castel.c:1113: dir = 0;
 	ld	-15 (ix), #0x00
 	jp	00106$
 00102$:
-;./the-castel.c:1157: ply->bMoving = FALSE;
+;./the-castel.c:1116: ply->bMoving = FALSE;
 	ld	l, -2 (ix)
 	ld	h, -1 (ix)
 	ld	(hl), #0x00
 00106$:
-;./the-castel.c:1159: if (ply->bInAir) // Jump/fall
+;./the-castel.c:1118: if (ply->bInAir) // Jump/fall
 	ld	a, -2 (ix)
 	add	a, #0x01
 	ld	-10 (ix), a
@@ -3842,7 +3714,7 @@ _updateCharacter::
 	ld	-5 (ix), a
 	or	a, a
 	jp	Z, 00117$
-;./the-castel.c:1161: ply->DY -= ply->VelocityY / 4;
+;./the-castel.c:1120: ply->DY -= ply->VelocityY / 4;
 	ld	a, -12 (ix)
 	ld	-8 (ix), a
 	ld	a, -11 (ix)
@@ -3891,37 +3763,37 @@ _updateCharacter::
 	ld	h, -7 (ix)
 	ld	a, -3 (ix)
 	ld	(hl), a
-;./the-castel.c:1162: ply->VelocityY -= GRAVITY;
+;./the-castel.c:1121: ply->VelocityY -= GRAVITY;
 	ld	l, -5 (ix)
 	ld	h, -4 (ix)
 	ld	c, (hl)
 	dec	c
 	ld	l, -5 (ix)
 	ld	h, -4 (ix)
-;./the-castel.c:1164: if (ply->VelocityY < -FORCE)
+;./the-castel.c:1123: if (ply->VelocityY < -FORCE)
 	ld	a,c
 	ld	(hl),a
 	xor	a, #0x80
 	sub	a, #0x71
 	jr	NC, 00118$
-;./the-castel.c:1165: ply->VelocityY = -FORCE;
+;./the-castel.c:1124: ply->VelocityY = -FORCE;
 	ld	l, -5 (ix)
 	ld	h, -4 (ix)
 	ld	(hl), #0xf1
 	jp	00118$
 00117$:
-;./the-castel.c:1167: else if (ply->Input & INPUT_JUMP)
+;./the-castel.c:1126: else if (ply->Input & INPUT_JUMP)
 	ld	l, -4 (ix)
 	ld	h, -3 (ix)
 	ld	a, (hl)
 	ld	-3 (ix), a
 	bit	2, -3 (ix)
 	jr	Z, 00114$
-;./the-castel.c:1169: ply->bInAir = TRUE;
+;./the-castel.c:1128: ply->bInAir = TRUE;
 	ld	l, -10 (ix)
 	ld	h, -9 (ix)
 	ld	(hl), #0x01
-;./the-castel.c:1170: ply->VelocityY = FORCE;
+;./the-castel.c:1129: ply->VelocityY = FORCE;
 	ld	a, -2 (ix)
 	add	a, #0x02
 	ld	-4 (ix), a
@@ -3933,10 +3805,10 @@ _updateCharacter::
 	ld	(hl), #0x0f
 	jp	00118$
 00114$:
-;./the-castel.c:1172: else if (ply->Input & INPUT_GET)
+;./the-castel.c:1131: else if (ply->Input & INPUT_GET)
 	bit	3, -3 (ix)
 	jr	Z, 00118$
-;./the-castel.c:1180: if (interact(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) /*||
+;./the-castel.c:1139: if (interact(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) /*||
 	ld	a, (#_g_Player + 14)
 	ld	-3 (ix), a
 	add	a, #0x0c
@@ -3951,13 +3823,13 @@ _updateCharacter::
 	ld	a, -3 (ix)
 	call	_interact
 00118$:
-;./the-castel.c:1193: u8 act = ACTION_IDLE;
+;./the-castel.c:1152: u8 act = ACTION_IDLE;
 	ld	-4 (ix), #0x00
-;./the-castel.c:1159: if (ply->bInAir) // Jump/fall
+;./the-castel.c:1118: if (ply->bInAir) // Jump/fall
 	ld	l, -10 (ix)
 	ld	h, -9 (ix)
 	ld	a, (hl)
-;./the-castel.c:1194: if (ply->bInAir && (ply->VelocityY >= 0))
+;./the-castel.c:1153: if (ply->bInAir && (ply->VelocityY >= 0))
 	ld	-3 (ix), a
 	or	a, a
 	jr	Z, 00130$
@@ -3973,47 +3845,47 @@ _updateCharacter::
 	ld	-5 (ix), a
 	bit	7, -5 (ix)
 	jr	NZ, 00130$
-;./the-castel.c:1195: act = ACTION_JUMP;
+;./the-castel.c:1154: act = ACTION_JUMP;
 	ld	-4 (ix), #0x02
 	jp	00131$
 00130$:
-;./the-castel.c:1196: else if (ply->bInAir)
+;./the-castel.c:1155: else if (ply->bInAir)
 	ld	a, -3 (ix)
 	or	a, a
 	jr	Z, 00127$
-;./the-castel.c:1197: act = ACTION_FALL;
+;./the-castel.c:1156: act = ACTION_FALL;
 	ld	-4 (ix), #0x03
 	jp	00131$
 00127$:
-;./the-castel.c:1198: else if (ply->bMoving)
+;./the-castel.c:1157: else if (ply->bMoving)
 	ld	l, -2 (ix)
 	ld	h, -1 (ix)
 	ld	a, (hl)
 	or	a, a
 	jr	Z, 00131$
-;./the-castel.c:1200: if (dir == 1)
+;./the-castel.c:1159: if (dir == 1)
 	ld	a, -15 (ix)
 	dec	a
 	jr	NZ, 00122$
-;./the-castel.c:1202: act = ACTION_MOVE_RIGHT;
+;./the-castel.c:1161: act = ACTION_MOVE_RIGHT;
 	ld	-4 (ix), #0x04
 	jp	00131$
 00122$:
-;./the-castel.c:1204: else if (dir == 0)
+;./the-castel.c:1163: else if (dir == 0)
 	ld	a, -15 (ix)
 	or	a, a
 	jr	NZ, 00131$
-;./the-castel.c:1205: act = ACTION_MOVE;
+;./the-castel.c:1164: act = ACTION_MOVE;
 	ld	-4 (ix), #0x01
 00131$:
-;./the-castel.c:1208: Game_Pawn *pawn = &ply->Pawn;
+;./the-castel.c:1167: Game_Pawn *pawn = &ply->Pawn;
 	ld	a, -2 (ix)
 	add	a, #0x08
 	ld	e, a
 	ld	a, -1 (ix)
 	adc	a, #0x00
 	ld	d, a
-;./the-castel.c:1209: GamePawn_SetAction(pawn, act);
+;./the-castel.c:1168: GamePawn_SetAction(pawn, act);
 	push	de
 	ld	a, -4 (ix)
 	push	af
@@ -4025,7 +3897,7 @@ _updateCharacter::
 ;	spillPairReg hl
 	call	_GamePawn_SetAction
 	pop	de
-;./the-castel.c:1210: GamePawn_SetMovement(pawn, ply->DX, ply->DY);
+;./the-castel.c:1169: GamePawn_SetMovement(pawn, ply->DX, ply->DY);
 	ld	l, -12 (ix)
 	ld	h, -11 (ix)
 	ld	a, (hl)
@@ -4044,14 +3916,14 @@ _updateCharacter::
 ;	spillPairReg hl
 	call	_GamePawn_SetMovement
 	pop	de
-;./the-castel.c:1211: GamePawn_Update(pawn);
+;./the-castel.c:1170: GamePawn_Update(pawn);
 	ex	de, hl
 	call	_GamePawn_Update
-;./the-castel.c:1212: }
+;./the-castel.c:1171: }
 	ld	sp, ix
 	pop	ix
 	ret
-;./the-castel.c:1221: void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 idFirstSprite)
+;./the-castel.c:1180: void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 idFirstSprite)
 ;	---------------------------------
 ; Function updateGenericEnemy
 ; ---------------------------------
@@ -4063,13 +3935,13 @@ _updateGenericEnemy::
 	add	iy, sp
 	ld	sp, iy
 	ex	de, hl
-;./the-castel.c:1224: for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
+;./the-castel.c:1183: for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
 	ld	c, #0x00
 00114$:
 	ld	a, c
 	sub	a, 4 (ix)
 	jp	NC, 00116$
-;./the-castel.c:1226: struct CharacterEnemy *enemy = &genericEnemy[nEnemy];
+;./the-castel.c:1185: struct CharacterEnemy *enemy = &genericEnemy[nEnemy];
 	ld	b, #0x00
 	ld	l, c
 	ld	h, b
@@ -4079,7 +3951,7 @@ _updateGenericEnemy::
 	add	hl, bc
 	add	hl, de
 	ex	(sp), hl
-;./the-castel.c:1227: if (enemy->State == 1)
+;./the-castel.c:1186: if (enemy->State == 1)
 	pop	hl
 	push	hl
 	inc	hl
@@ -4088,7 +3960,7 @@ _updateGenericEnemy::
 	ld	a, (hl)
 	dec	a
 	jp	NZ,00111$
-;./the-castel.c:1229: if (!physicsCollisionEnemy(enemy->X + 7, enemy->Y) == 1) // 7
+;./the-castel.c:1188: if (!physicsCollisionEnemy(enemy->X + 7, enemy->Y) == 1) // 7
 	ld	a, -8 (ix)
 	add	a, #0x01
 	ld	-6 (ix), a
@@ -4117,7 +3989,7 @@ _updateGenericEnemy::
 	ld	a, b
 	pop	bc
 	ld	b, a
-;./the-castel.c:1231: if (enemy->Direction < 0)
+;./the-castel.c:1190: if (enemy->Direction < 0)
 	ld	a, -8 (ix)
 	add	a, #0x04
 	ld	l, a
@@ -4134,31 +4006,31 @@ _updateGenericEnemy::
 	ld	a, (hl)
 	ld	-3 (ix), a
 	dec	hl
-;./the-castel.c:1229: if (!physicsCollisionEnemy(enemy->X + 7, enemy->Y) == 1) // 7
+;./the-castel.c:1188: if (!physicsCollisionEnemy(enemy->X + 7, enemy->Y) == 1) // 7
 	ld	a, b
 	or	a, a
 	jr	NZ, 00108$
 	pop	hl
 	push	hl
 	ld	b, (hl)
-;./the-castel.c:1231: if (enemy->Direction < 0)
+;./the-castel.c:1190: if (enemy->Direction < 0)
 	bit	7, -3 (ix)
 	jr	Z, 00102$
-;./the-castel.c:1233: enemy->X--;
+;./the-castel.c:1192: enemy->X--;
 	dec	b
 	pop	hl
 	push	hl
 	ld	(hl), b
 	jp	00109$
 00102$:
-;./the-castel.c:1237: enemy->X++;
+;./the-castel.c:1196: enemy->X++;
 	inc	b
 	pop	hl
 	push	hl
 	ld	(hl), b
 	jp	00109$
 00108$:
-;./the-castel.c:1242: enemy->Direction *= -1;
+;./the-castel.c:1201: enemy->Direction *= -1;
 	xor	a, a
 	sub	a, -4 (ix)
 	ld	-2 (ix), a
@@ -4170,27 +4042,27 @@ _updateGenericEnemy::
 	inc	hl
 	ld	a, -1 (ix)
 	ld	(hl), a
-;./the-castel.c:1229: if (!physicsCollisionEnemy(enemy->X + 7, enemy->Y) == 1) // 7
+;./the-castel.c:1188: if (!physicsCollisionEnemy(enemy->X + 7, enemy->Y) == 1) // 7
 	pop	hl
 	push	hl
 	ld	b, (hl)
-;./the-castel.c:1243: if (enemy->Direction < 0)
+;./the-castel.c:1202: if (enemy->Direction < 0)
 	bit	7, -1 (ix)
 	jr	Z, 00105$
-;./the-castel.c:1245: enemy->X--;
+;./the-castel.c:1204: enemy->X--;
 	dec	b
 	pop	hl
 	push	hl
 	ld	(hl), b
 	jp	00109$
 00105$:
-;./the-castel.c:1249: enemy->X++;
+;./the-castel.c:1208: enemy->X++;
 	inc	b
 	pop	hl
 	push	hl
 	ld	(hl), b
 00109$:
-;./the-castel.c:1260: VDP_SetSpritePosition(idFirstSprite + nEnemy, enemy->X, enemy->Y);
+;./the-castel.c:1219: VDP_SetSpritePosition(idFirstSprite + nEnemy, enemy->X, enemy->Y);
 	ld	l, -6 (ix)
 	ld	h, -5 (ix)
 	ld	b, (hl)
@@ -4212,22 +4084,22 @@ _updateGenericEnemy::
 	pop	de
 	pop	bc
 00111$:
-;./the-castel.c:1224: for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
+;./the-castel.c:1183: for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
 	inc	c
 	jp	00114$
 00116$:
-;./the-castel.c:1265: }
+;./the-castel.c:1224: }
 	ld	sp, ix
 	pop	ix
 	pop	hl
 	pop	af
 	jp	(hl)
-;./the-castel.c:1272: void genericControl()
+;./the-castel.c:1231: void genericControl()
 ;	---------------------------------
 ; Function genericControl
 ; ---------------------------------
 _genericControl::
-;./the-castel.c:1276: if (isUnderTheWater(g_Player.Pawn.PositionX, g_Player.Pawn.PositionY))
+;./the-castel.c:1235: if (isUnderTheWater(g_Player.Pawn.PositionX, g_Player.Pawn.PositionY))
 	ld	hl, #(_g_Player + 14)
 	ld	b, (hl)
 	ld	hl, #(_g_Player + 13)
@@ -4239,11 +4111,11 @@ _genericControl::
 	call	_isUnderTheWater
 	or	a, a
 	jr	Z, 00110$
-;./the-castel.c:1278: if (IsUnderWater)
+;./the-castel.c:1237: if (IsUnderWater)
 	ld	a, (_IsUnderWater+0)
 	or	a, a
 	jr	Z, 00107$
-;./the-castel.c:1280: if ((g_SecondCounter - g_DelayRemoveLife) > 3)
+;./the-castel.c:1239: if ((g_SecondCounter - g_DelayRemoveLife) > 3)
 	ld	a, (_g_SecondCounter+0)
 	ld	l, a
 ;	spillPairReg hl
@@ -4260,26 +4132,26 @@ _genericControl::
 	cp	a, l
 	ld	a, #0x00
 	sbc	a, h
-	jp	PO, 00146$
+	jp	PO, 00152$
 	xor	a, #0x80
-00146$:
+00152$:
 	jp	P, 00111$
-;./the-castel.c:1282: if (removeLife() == TRUE)
+;./the-castel.c:1241: if (removeLife() == TRUE)
 	call	_removeLife
 	dec	a
 	jr	NZ, 00102$
-;./the-castel.c:1284: displayLife();
+;./the-castel.c:1243: displayLife();
 	call	_displayLife
-;./the-castel.c:1286: PlayBankSFX(9, 0);
+;./the-castel.c:1245: PlayBankSFX(9, 0);
 	ld	l, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, #0x09
 	call	_PlayBankSFX
-;./the-castel.c:1288: IsUnderWater = FALSE;
+;./the-castel.c:1247: IsUnderWater = FALSE;
 	ld	hl, #_IsUnderWater
 	ld	(hl), #0x00
-;./the-castel.c:1290: Print_DrawTextAt(20, 22, "ACQUA!!! ");
+;./the-castel.c:1249: Print_DrawTextAt(20, 22, "ACQUA!!! ");
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:226: g_PrintData.CursorX = x;
 	ld	hl, #(_g_PrintData + 5)
 	ld	(hl), #0x14
@@ -4287,34 +4159,34 @@ _genericControl::
 	ld	hl, #(_g_PrintData + 6)
 	ld	(hl), #0x16
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:486: Print_DrawText(str);
-	ld	hl, #___str_11
+	ld	hl, #___str_9
 	call	_Print_DrawText
-;./the-castel.c:1290: Print_DrawTextAt(20, 22, "ACQUA!!! ");
+;./the-castel.c:1249: Print_DrawTextAt(20, 22, "ACQUA!!! ");
 	jp	00111$
 00102$:
-;./the-castel.c:1294: stopMusicPlayback();
+;./the-castel.c:1253: stopMusicPlayback();
 	call	_stopMusicPlayback
-;./the-castel.c:1295: Game_SetState(State_GameOver);
+;./the-castel.c:1254: Game_SetState(State_GameOver);
 	ld	hl, #_State_GameOver
 	call	_Game_SetState
 	jp	00111$
 00107$:
-;./the-castel.c:1301: g_DelayRemoveLife = g_SecondCounter;
+;./the-castel.c:1260: g_DelayRemoveLife = g_SecondCounter;
 	ld	a, (_g_SecondCounter+0)
 	ld	(_g_DelayRemoveLife+0), a
-;./the-castel.c:1302: IsUnderWater = TRUE;
+;./the-castel.c:1261: IsUnderWater = TRUE;
 	ld	hl, #_IsUnderWater
 	ld	(hl), #0x01
 	jp	00111$
 00110$:
-;./the-castel.c:1308: IsUnderWater = FALSE;  // Non siamo più in collisione
+;./the-castel.c:1267: IsUnderWater = FALSE;  // Non siamo più in collisione
 	ld	hl, #_IsUnderWater
 	ld	(hl), #0x00
-;./the-castel.c:1309: g_DelayRemoveLife = 0; // Azzera il tempo dopo il quale si va a rimuovere una vita
+;./the-castel.c:1268: g_DelayRemoveLife = 0; // Azzera il tempo dopo il quale si va a rimuovere una vita
 	ld	hl, #_g_DelayRemoveLife
 	ld	(hl), #0x00
 00111$:
-;./the-castel.c:1317: if (getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) ||
+;./the-castel.c:1276: if (getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) ||
 	ld	a, (#(_g_Player + 14) + 0)
 	add	a, #0x0c
 	ld	c, a
@@ -4327,8 +4199,8 @@ _genericControl::
 	ld	a, b
 	call	_getMoney
 	or	a, a
-	jr	NZ, 00113$
-;./the-castel.c:1318: getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4))
+	jr	NZ, 00112$
+;./the-castel.c:1277: getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4))
 	ld	a, (#(_g_Player + 14) + 0)
 	add	a, #0x04
 	ld	c, a
@@ -4340,15 +4212,34 @@ _genericControl::
 ;	spillPairReg hl
 	ld	a, b
 	call	_getMoney
+	or	a, a
+	jr	Z, 00113$
+00112$:
+;./the-castel.c:1281: g_CountItem++;
+	ld	hl, #_g_CountItem
+	inc	(hl)
+;./the-castel.c:1282: g_Player.Score++;
+	ld	bc, #_g_Player + 6
+	ld	a, (bc)
+	inc	a
+	ld	(bc), a
+;./the-castel.c:1283: updateScore();
+	call	_updateScore
+;./the-castel.c:1285: PlayBankSFX(11, 15);
+	ld	l, #0x0f
+;	spillPairReg hl
+;	spillPairReg hl
+	ld	a, #0x0b
+	call	_PlayBankSFX
 00113$:
-;./the-castel.c:1325: if ((isDanger(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12, 2)))
+;./the-castel.c:1290: if (isDanger(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12, 1) ||
 	ld	a, (#(_g_Player + 14) + 0)
 	add	a, #0x0c
 	ld	c, a
 	ld	a, (#(_g_Player + 13) + 0)
 	add	a, #0x08
 	ld	b, a
-	ld	a, #0x02
+	ld	a, #0x01
 	push	af
 	inc	sp
 	ld	l, c
@@ -4356,21 +4247,38 @@ _genericControl::
 ;	spillPairReg hl
 	ld	a, b
 	call	_isDanger
-;./the-castel.c:1329: }
+	or	a, a
+	ret	NZ
+;./the-castel.c:1291: isDanger(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4, 1))
+	ld	a, (#(_g_Player + 14) + 0)
+	add	a, #0x04
+	ld	c, a
+	ld	a, (#(_g_Player + 13) + 0)
+	add	a, #0x08
+	ld	b, a
+	ld	a, #0x01
+	push	af
+	inc	sp
+	ld	l, c
+;	spillPairReg hl
+;	spillPairReg hl
+	ld	a, b
+	call	_isDanger
+;./the-castel.c:1295: }
 	ret
-___str_11:
+___str_9:
 	.ascii "ACQUA!!! "
 	.db 0x00
-;./the-castel.c:1336: bool State_Initialize()
+;./the-castel.c:1302: bool State_Initialize()
 ;	---------------------------------
 ; Function State_Initialize
 ; ---------------------------------
 _State_Initialize::
-;./the-castel.c:1340: inizializePT3();
+;./the-castel.c:1306: inizializePT3();
 	call	_inizializePT3
-;./the-castel.c:1344: inizializeAYFX();
+;./the-castel.c:1310: inizializeAYFX();
 	call	_inizializeAYFX
-;./the-castel.c:1346: setChannel();
+;./the-castel.c:1312: setChannel();
 	call	_setChannel
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:674: inline void VDP_EnableDisplay(bool enable) { VDP_RegWriteBakMask(1, (u8)~R01_BL, enable ? R01_BL : 0); }
 	xor	a, a
@@ -4387,18 +4295,18 @@ _State_Initialize::
 ;	spillPairReg hl
 	ld	a, #0x07
 	call	_VDP_RegWrite
-;./the-castel.c:1362: VDP_ClearVRAM();
+;./the-castel.c:1328: VDP_ClearVRAM();
 	call	_VDP_ClearVRAM
-;./the-castel.c:1374: VDP_LoadPattern_GM1_Pletter(g_DataBackground_Patterns, 0);
+;./the-castel.c:1340: VDP_LoadPattern_GM1_Pletter(g_DataBackground_Patterns, 0);
 	xor	a, a
 	push	af
 	inc	sp
 	ld	hl, #_g_DataBackground_Patterns
 	call	_VDP_LoadPattern_GM1_Pletter
-;./the-castel.c:1377: Print_SetMode(PRINT_MODE_TEXT);
+;./the-castel.c:1343: Print_SetMode(PRINT_MODE_TEXT);
 	ld	a, #0x04
 	call	_Print_SetMode
-;./the-castel.c:1378: Print_SetFontEx(8, 8, 1, 1, ' ', '_', g_DataBackground_Patterns + 192);
+;./the-castel.c:1344: Print_SetFontEx(8, 8, 1, 1, ' ', '_', g_DataBackground_Patterns + 192);
 	ld	bc, #_g_DataBackground_Patterns + 192
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:197: g_PrintData.PatternX     = patternX;
 	ld	hl, #_g_PrintData
@@ -4441,12 +4349,12 @@ _State_Initialize::
 	sbc	a, h
 	ld	b, a
 	ld	((_g_PrintData + 30)), bc
-;./the-castel.c:1379: Print_Initialize();
+;./the-castel.c:1345: Print_Initialize();
 	call	_Print_Initialize
-;./the-castel.c:1380: g_PrintData.PatternOffset = 192;
+;./the-castel.c:1346: g_PrintData.PatternOffset = 192;
 	ld	hl, #(_g_PrintData + 32)
 	ld	(hl), #0xc0
-;./the-castel.c:1383: setColorTiles();
+;./the-castel.c:1349: setColorTiles();
 	call	_setColorTiles
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:1044: inline void VDP_SetSpriteFlag(u8 flag) { VDP_RegWriteBakMask(1, (u8)~(R01_ST|R01_MAG), flag); }
 	ld	a, #0x02
@@ -4457,54 +4365,54 @@ _State_Initialize::
 ;	spillPairReg hl
 	ld	a, #0x01
 	call	_VDP_RegWriteBakMask
-;./the-castel.c:1417: Pletter_UnpackToVRAM(g_DataSprtLayer, g_SpritePatternLow);
+;./the-castel.c:1383: Pletter_UnpackToVRAM(g_DataSprtLayer, g_SpritePatternLow);
 	ld	de, (_g_SpritePatternLow)
 	ld	hl, #_g_DataSprtLayer
 	call	_Pletter_UnpackToVRAM
-;./the-castel.c:1419: Game_SetState(State_Preset);
+;./the-castel.c:1385: Game_SetState(State_Preset);
 	ld	hl, #_State_Preset
 	call	_Game_SetState
-;./the-castel.c:1421: return FALSE; // Frame finished
+;./the-castel.c:1387: return FALSE; // Frame finished
 	xor	a, a
-;./the-castel.c:1422: }
+;./the-castel.c:1388: }
 	ret
-;./the-castel.c:1429: bool State_Game()
+;./the-castel.c:1395: bool State_Game()
 ;	---------------------------------
 ; Function State_Game
 ; ---------------------------------
 _State_Game::
-;./the-castel.c:1436: GamePawn_Draw(&g_Player.Pawn);
+;./the-castel.c:1402: GamePawn_Draw(&g_Player.Pawn);
 	ld	hl, #(_g_Player + 8)
 	call	_GamePawn_Draw
-;./the-castel.c:1443: updateCharacter(&g_Player);
+;./the-castel.c:1409: updateCharacter(&g_Player);
 	ld	hl, #_g_Player
 	call	_updateCharacter
-;./the-castel.c:1449: genericControl();
+;./the-castel.c:1415: genericControl();
 	call	_genericControl
-;./the-castel.c:1453: readInputControl();
+;./the-castel.c:1419: readInputControl();
 	call	_readInputControl
-;./the-castel.c:1456: if (g_Frame == 50)
+;./the-castel.c:1422: if (g_Frame == 50)
 	ld	a, (_g_Frame+0)
 	sub	a, #0x32
 	jr	NZ, 00102$
-;./the-castel.c:1458: g_SecondCounter++;
+;./the-castel.c:1424: g_SecondCounter++;
 	ld	hl, #_g_SecondCounter
 	inc	(hl)
-;./the-castel.c:1459: g_CatchEnemy++;
+;./the-castel.c:1425: g_CatchEnemy++;
 	ld	hl, #_g_CatchEnemy
 	inc	(hl)
-;./the-castel.c:1460: g_Frame = 0;
+;./the-castel.c:1426: g_Frame = 0;
 	ld	hl, #_g_Frame
 	ld	(hl), #0x00
 00102$:
-;./the-castel.c:1463: if (g_GameFrame % 2 == 0)
+;./the-castel.c:1429: if (g_GameFrame % 2 == 0)
 	ld	hl, #_g_GameFrame
 	bit	0, (hl)
 	jp	NZ,00104$
-;./the-castel.c:1482: g_DangerCounter++;
+;./the-castel.c:1448: g_DangerCounter++;
 	ld	hl, #_g_DangerCounter
 	inc	(hl)
-;./the-castel.c:1488: updateGenericEnemy(&g_Enemy[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber, 6);
+;./the-castel.c:1454: updateGenericEnemy(&g_Enemy[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber, 6);
 	ld	bc, #_g_Levels+0
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
@@ -4531,7 +4439,7 @@ _State_Game::
 	ld	hl, #_g_Enemy
 	call	_updateGenericEnemy
 	pop	bc
-;./the-castel.c:1496: physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Enemy[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber);
+;./the-castel.c:1462: physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Enemy[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber);
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
 	ld	l, e
@@ -4555,7 +4463,7 @@ _State_Game::
 	ld	hl, #_g_Player
 	call	_physicsCollisionPlayerAndGenericEnemy
 	pop	bc
-;./the-castel.c:1502: updateGenericEnemy(&g_Ghost[0], g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber, 10);
+;./the-castel.c:1468: updateGenericEnemy(&g_Ghost[0], g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber, 10);
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
 	ld	l, e
@@ -4581,7 +4489,7 @@ _State_Game::
 	ld	hl, #_g_Ghost
 	call	_updateGenericEnemy
 	pop	bc
-;./the-castel.c:1510: physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Ghost[0], g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber);
+;./the-castel.c:1476: physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Ghost[0], g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber);
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
 	ld	l, e
@@ -4605,7 +4513,7 @@ _State_Game::
 	ld	hl, #_g_Player
 	call	_physicsCollisionPlayerAndGenericEnemy
 	pop	bc
-;./the-castel.c:1516: updateGenericEnemy(&g_Spider[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber, 15);
+;./the-castel.c:1482: updateGenericEnemy(&g_Spider[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber, 15);
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
 	ld	l, e
@@ -4631,7 +4539,7 @@ _State_Game::
 	ld	hl, #_g_Spider
 	call	_updateGenericEnemy
 	pop	bc
-;./the-castel.c:1524: physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Spider[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber);
+;./the-castel.c:1490: physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Spider[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber);
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
 	ld	l, e
@@ -4655,7 +4563,7 @@ _State_Game::
 	ld	hl, #_g_Player
 	call	_physicsCollisionPlayerAndGenericEnemy
 	pop	bc
-;./the-castel.c:1530: updateGenericEnemy(&g_Bat[0], g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber, 20);
+;./the-castel.c:1496: updateGenericEnemy(&g_Bat[0], g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber, 20);
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
 	ld	l, e
@@ -4681,7 +4589,7 @@ _State_Game::
 	ld	hl, #_g_Bat
 	call	_updateGenericEnemy
 	pop	bc
-;./the-castel.c:1538: physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Bat[0], g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber);
+;./the-castel.c:1504: physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Bat[0], g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber);
 	ld	de, (_g_CurrRoomIdx)
 	ld	d, #0x00
 	ld	l, e
@@ -4704,55 +4612,55 @@ _State_Game::
 	ld	hl, #_g_Player
 	call	_physicsCollisionPlayerAndGenericEnemy
 00104$:
-;./the-castel.c:1540: g_Frame++;
+;./the-castel.c:1506: g_Frame++;
 	ld	hl, #_g_Frame
 	inc	(hl)
-;./the-castel.c:1542: return TRUE;
+;./the-castel.c:1508: return TRUE;
 	ld	a, #0x01
-;./the-castel.c:1543: }
+;./the-castel.c:1509: }
 	ret
-;./the-castel.c:1550: bool State_Preset()
+;./the-castel.c:1516: bool State_Preset()
 ;	---------------------------------
 ; Function State_Preset
 ; ---------------------------------
 _State_Preset::
-;./the-castel.c:1553: restoreLevel();
+;./the-castel.c:1519: restoreLevel();
 	call	_restoreLevel
-;./the-castel.c:1561: initCharacter(&g_Player, 0);
+;./the-castel.c:1527: initCharacter(&g_Player, 0);
 	xor	a, a
 	push	af
 	inc	sp
 	ld	hl, #_g_Player
 	call	_initCharacter
-;./the-castel.c:1565: initInventory();
+;./the-castel.c:1531: initInventory();
 	call	_initInventory
-;./the-castel.c:1569: initLife();
+;./the-castel.c:1535: initLife();
 	call	_initLife
-;./the-castel.c:1577: drawLevel(0);
+;./the-castel.c:1543: drawLevel(0);
 	xor	a, a
 	call	_drawLevel
-;./the-castel.c:1581: Game_SetState(State_Game);
+;./the-castel.c:1547: Game_SetState(State_Game);
 	ld	hl, #_State_Game
 	call	_Game_SetState
-;./the-castel.c:1583: return TRUE;
+;./the-castel.c:1549: return TRUE;
 	ld	a, #0x01
-;./the-castel.c:1584: }
+;./the-castel.c:1550: }
 	ret
-;./the-castel.c:1591: bool State_Pause()
+;./the-castel.c:1557: bool State_Pause()
 ;	---------------------------------
 ; Function State_Pause
 ; ---------------------------------
 _State_Pause::
-;./the-castel.c:1593: return TRUE;
+;./the-castel.c:1559: return TRUE;
 	ld	a, #0x01
-;./the-castel.c:1594: }
+;./the-castel.c:1560: }
 	ret
-;./the-castel.c:1601: bool State_GameOver()
+;./the-castel.c:1567: bool State_GameOver()
 ;	---------------------------------
 ; Function State_GameOver
 ; ---------------------------------
 _State_GameOver::
-;./the-castel.c:1215: * @brief Aggiorna la posizione di un generico nemico
+;./the-castel.c:1215: // Parametri:
 	ld	c, #0x00
 00107$:
 	ld	a, c
@@ -4767,12 +4675,12 @@ _State_GameOver::
 	pop	bc
 	inc	c
 	jp	00107$
-;./the-castel.c:1604: VDP_HideAllSprites();
+;./the-castel.c:1570: VDP_HideAllSprites();
 00105$:
-;./the-castel.c:1606: drawLevel(GAME_OVER); // -1
+;./the-castel.c:1572: drawLevel(GAME_OVER); // -1
 	ld	a, #0x14
 	call	_drawLevel
-;./the-castel.c:1609: while (Keyboard_Read(8) != 254)
+;./the-castel.c:1575: while (Keyboard_Read(8) != 254)
 00101$:
 	ld	l, #0x08
 ;	spillPairReg hl
@@ -4781,14 +4689,14 @@ _State_GameOver::
 	ld	a, l
 	sub	a, #0xfe
 	jr	NZ, 00101$
-;./the-castel.c:1613: Game_SetState(State_Preset);
+;./the-castel.c:1579: Game_SetState(State_Preset);
 	ld	hl, #_State_Preset
 	call	_Game_SetState
-;./the-castel.c:1615: return TRUE;
+;./the-castel.c:1581: return TRUE;
 	ld	a, #0x01
-;./the-castel.c:1616: }
+;./the-castel.c:1582: }
 	ret
-;./the-castel.c:1621: void VDP_LoadPattern_GM1_Pletter(const u8 *src, u8 offset)
+;./the-castel.c:1587: void VDP_LoadPattern_GM1_Pletter(const u8 *src, u8 offset)
 ;	---------------------------------
 ; Function VDP_LoadPattern_GM1_Pletter
 ; ---------------------------------
@@ -4798,7 +4706,7 @@ _VDP_LoadPattern_GM1_Pletter::
 	add	ix,sp
 	ld	c, l
 	ld	b, h
-;./the-castel.c:1623: Pletter_UnpackToVRAM(src, g_ScreenPatternLow + (offset * 8));
+;./the-castel.c:1589: Pletter_UnpackToVRAM(src, g_ScreenPatternLow + (offset * 8));
 	ld	l, 4 (ix)
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -4818,30 +4726,30 @@ _VDP_LoadPattern_GM1_Pletter::
 ;	spillPairReg hl
 ;	spillPairReg hl
 	call	_Pletter_UnpackToVRAM
-;./the-castel.c:1624: }
+;./the-castel.c:1590: }
 	pop	ix
 	pop	hl
 	inc	sp
 	jp	(hl)
-;./the-castel.c:1630: void VSyncCallback()
+;./the-castel.c:1596: void VSyncCallback()
 ;	---------------------------------
 ; Function VSyncCallback
 ; ---------------------------------
 _VSyncCallback::
-;./the-castel.c:1632: PT3_Decode();	 // Update data to write to the PSG regiters from the music
+;./the-castel.c:1598: PT3_Decode();	 // Update data to write to the PSG regiters from the music
 	call	_PT3_Decode
-;./the-castel.c:1633: ayFX_Update();	 // Overwrite PSG registers data for the SFX
+;./the-castel.c:1599: ayFX_Update();	 // Overwrite PSG registers data for the SFX
 	call	_ayFX_Update
-;./the-castel.c:1634: PT3_UpdatePSG(); // Update PSG registers
-;./the-castel.c:1635: }
+;./the-castel.c:1600: PT3_UpdatePSG(); // Update PSG registers
+;./the-castel.c:1601: }
 	jp	_PT3_UpdatePSG
-;./the-castel.c:1637: void main()
+;./the-castel.c:1603: void main()
 ;	---------------------------------
 ; Function main
 ; ---------------------------------
 _main::
-;./the-castel.c:1640: DEBUG_LOG("Start debug session!");
-	ld	bc, #___str_12+0
+;./the-castel.c:1606: DEBUG_LOG("Start debug session!");
+	ld	bc, #___str_10+0
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
 	ld	a, #0x23
 	out	(_g_PortDebugMode), a
@@ -4854,22 +4762,22 @@ _main::
 	out	(_g_PortDebugData), a
 	inc	bc
 	jp	00102$
-;./the-castel.c:1640: DEBUG_LOG("Start debug session!");
+;./the-castel.c:1606: DEBUG_LOG("Start debug session!");
 00105$:
-;./the-castel.c:1642: Game_SetVSyncCallback(VSyncCallback);
+;./the-castel.c:1608: Game_SetVSyncCallback(VSyncCallback);
 	ld	iy, #_g_GameVSyncCB
 	ld	0 (iy), #<(_VSyncCallback)
 	ld	1 (iy), #>(_VSyncCallback)
-;./the-castel.c:1649: Game_SetState(State_Initialize);
+;./the-castel.c:1615: Game_SetState(State_Initialize);
 	ld	hl, #_State_Initialize
 	call	_Game_SetState
-;./the-castel.c:1656: Game_MainLoop(VDP_MODE_GRAPHIC1);
+;./the-castel.c:1622: Game_MainLoop(VDP_MODE_GRAPHIC1);
 	ld	a, #0x02
 	call	_Game_MainLoop
-;./the-castel.c:1660: Game_Release();
+;./the-castel.c:1626: Game_Release();
 	call	_Game_Release
-;./the-castel.c:1662: DEBUG_LOG("End debug session!");
-	ld	bc, #___str_13+0
+;./the-castel.c:1628: DEBUG_LOG("End debug session!");
+	ld	bc, #___str_11+0
 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
 	ld	a, #0x23
 	out	(_g_PortDebugMode), a
@@ -4882,16 +4790,16 @@ _main::
 	out	(_g_PortDebugData), a
 	inc	bc
 	jp	00107$
-;./the-castel.c:1662: DEBUG_LOG("End debug session!");
+;./the-castel.c:1628: DEBUG_LOG("End debug session!");
 00110$:
-;./the-castel.c:1664: Bios_Exit(0);
+;./the-castel.c:1630: Bios_Exit(0);
 	xor	a, a
-;./the-castel.c:1665: }
+;./the-castel.c:1631: }
 	jp	_Bios_Exit
-___str_12:
+___str_10:
 	.ascii "Start debug session!"
 	.db 0x00
-___str_13:
+___str_11:
 	.ascii "End debug session!"
 	.db 0x00
 	.area _CODE
