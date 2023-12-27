@@ -1737,7 +1737,7 @@
       0007FE 19               [11] 1737 	add	hl, de
       0007FF 5E               [ 7] 1738 	ld	e, (hl)
       000800 CB 43            [ 8] 1739 	bit	0, e
-      000802 28 17            [12] 1740 	jr	Z, 00112$
+      000802 28 14            [12] 1740 	jr	Z, 00112$
                                    1741 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:413: if((g_Pawn->Counter & 1) != 0)
       000804 59               [ 4] 1742 	ld	e, c
       000805 50               [ 4] 1743 	ld	d, b
@@ -1749,29 +1749,29 @@
                                    1749 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:402: if(g_Pawn->Update == 0)
       00080F 21 0B 00         [10] 1750 	ld	hl, #0x000b
       000812 09               [11] 1751 	add	hl, bc
-      000813 EB               [ 4] 1752 	ex	de, hl
-                                   1753 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:416: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
-      000814 1A               [ 7] 1754 	ld	a, (de)
-      000815 CB CF            [ 8] 1755 	set	1, a
-      000817 12               [ 7] 1756 	ld	(de), a
-      000818 C3r2Fr08         [10] 1757 	jp	00113$
-      00081B                       1758 00112$:
-                                   1759 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:418: else if(g_Sprite->Flag & PAWN_SPRITE_ODD) // Skip even frames
-      00081B CB 4B            [ 8] 1760 	bit	1, e
-      00081D 28 10            [12] 1761 	jr	Z, 00113$
-                                   1762 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:420: if((g_Pawn->Counter & 1) == 0)
-      00081F 59               [ 4] 1763 	ld	e, c
-      000820 50               [ 4] 1764 	ld	d, b
-      000821 21 0C 00         [10] 1765 	ld	hl, #12
-      000824 19               [11] 1766 	add	hl, de
-      000825 7E               [ 7] 1767 	ld	a, (hl)
-      000826 0F               [ 4] 1768 	rrca
-      000827 30 65            [12] 1769 	jr	NC, 00116$
-                                   1770 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:402: if(g_Pawn->Update == 0)
-      000829 21 0B 00         [10] 1771 	ld	hl, #0x000b
-      00082C 09               [11] 1772 	add	hl, bc
-                                   1773 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:423: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
-      00082D CB CE            [15] 1774 	set	1, (hl)
+                                   1752 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:416: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
+      000813 CB CE            [15] 1753 	set	1, (hl)
+      000815 C3r2Fr08         [10] 1754 	jp	00113$
+      000818                       1755 00112$:
+                                   1756 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:418: else if(g_Sprite->Flag & PAWN_SPRITE_ODD) // Skip even frames
+      000818 CB 4B            [ 8] 1757 	bit	1, e
+      00081A 28 13            [12] 1758 	jr	Z, 00113$
+                                   1759 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:420: if((g_Pawn->Counter & 1) == 0)
+      00081C 59               [ 4] 1760 	ld	e, c
+      00081D 50               [ 4] 1761 	ld	d, b
+      00081E 21 0C 00         [10] 1762 	ld	hl, #12
+      000821 19               [11] 1763 	add	hl, de
+      000822 7E               [ 7] 1764 	ld	a, (hl)
+      000823 0F               [ 4] 1765 	rrca
+      000824 30 68            [12] 1766 	jr	NC, 00116$
+                                   1767 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:402: if(g_Pawn->Update == 0)
+      000826 21 0B 00         [10] 1768 	ld	hl, #0x000b
+      000829 09               [11] 1769 	add	hl, bc
+      00082A EB               [ 4] 1770 	ex	de, hl
+                                   1771 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:423: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
+      00082B 1A               [ 7] 1772 	ld	a, (de)
+      00082C CB CF            [ 8] 1773 	set	1, a
+      00082E 12               [ 7] 1774 	ld	(de), a
       00082F                       1775 00113$:
                                    1776 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:402: if(g_Pawn->Update == 0)
       00082F ED 5Br03r00      [20] 1777 	ld	de, (_g_Pawn)

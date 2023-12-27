@@ -152,6 +152,7 @@ struct CharacterEnemy g_Enemy[MAX_ENEMY];
 struct CharacterEnemy g_Ghost[MAX_GHOST];
 struct CharacterEnemy g_Spider[MAX_SPIDER];
 struct CharacterEnemy g_Bat[MAX_BAT];
+struct CharacterEnemy g_platform[1];
 
 u8 g_PrevRow8 = 0xFF;
 u8 g_PawnCount = 0;
@@ -161,6 +162,7 @@ u8 g_CurrRoomIdx = 0;
 u8 g_GhostCount = 0;
 u8 g_SpiderCount = 0;
 u8 g_BatCount = 0;
+u8 g_SlideCount = 0;
 u8 g_ImmunityCount = 0;
 u8 g_SecondCounter = 0;
 u8 g_DangerCounter = 0;
@@ -841,6 +843,7 @@ void drawLevel(u8 levelIdx)
 	g_SecondCounter = 0;
 	g_DangerCounter = 0;
 	g_CountItem = 0; // Iniziaizza il cobtatore degli oggetti raccolti
+	g_SlideCount = 0;
 
 	// Ad ogni cambio di livello rimuove l'amphora dall'inventario, in modo da ridurlo ad un aiuto momntaneo
 	if (hasItemInInventory(TILE_AMPHORA))
@@ -914,27 +917,38 @@ void drawLevel(u8 levelIdx)
 			}
 			else if ((tile == TILE_STAR_POS_ENEMY) && (g_PawnCount < MAX_ENEMY)) // Rilevamento della posizione iniziale del nemico
 			{
-				g_PawnCount = positionGenericEnemy(TILE_STAR_POS_ENEMY, g_PawnCount, &g_Enemy[0], 196, 6, riga, colonna, 0, "Scheletor");
+				g_PawnCount = positionGenericEnemy(TILE_STAR_POS_ENEMY, g_PawnCount, &g_Enemy[0], 196, FIRST_ID_SKELETOR, riga, colonna, 0, "Scheletor");
+				DEBUG_LOG("Scheletor");
 			}
 			else if ((tile == TILE_POS_GHOST) && (g_Levels[0].MyEnemyType.GhostNumber < MAX_GHOST)) // Rilevamento della posizione iniziale del nemico
 			{
-				g_GhostCount = positionGenericEnemy(TILE_POS_GHOST, g_GhostCount, &g_Ghost[0], 200, 10, riga, colonna, 0, "Ghost");
+				g_GhostCount = positionGenericEnemy(TILE_POS_GHOST, g_GhostCount, &g_Ghost[0], 200, FIRST_ID_GHOST, riga, colonna, 0, "Ghost");
+				DEBUG_LOG("Ghost");
 			}
 			else if ((tile == TILE_POS_SPIDER) && (g_Levels[0].MyEnemyType.SpiderNumber < MAX_SPIDER)) // Rilevamento della posizione iniziale del nemico
 			{
-				g_SpiderCount = positionGenericEnemy(TILE_POS_SPIDER, g_SpiderCount, &g_Spider[0], 192, 15, riga, colonna, 0, "Spider");
+				g_SpiderCount = positionGenericEnemy(TILE_POS_SPIDER, g_SpiderCount, &g_Spider[0], 192, FIRST_ID_SPIDER, riga, colonna, 0, "Spider");
+				DEBUG_LOG("Spider");
 			}
 			else if ((tile == TILE_POS_BAT) && (g_Levels[0].MyEnemyType.BatNumber < MAX_BAT)) // Rilevamento della posizione iniziale del nemico
 			{
-				g_BatCount = positionGenericEnemy(TILE_POS_BAT, g_BatCount, &g_Bat[0], 204, 20, riga, colonna, 0, "Bat");
+				g_BatCount = positionGenericEnemy(TILE_POS_BAT, g_BatCount, &g_Bat[0], 204, FIRST_ID_BAT, riga, colonna, 0, "Bat");
+				DEBUG_LOG("Bat");
+			}
+			else if (tile == TILE_POS_PLATFORM) // Rilevamento piattaforma mobile
+			{
+				g_SlideCount = positionGenericEnemy(TILE_POS_PLATFORM, g_SlideCount, &g_platform[0], 208, FIRST_ID_SLIDE, riga, colonna, 0, "platform");
+				DEBUG_LOG("Platform");
 			}
 		}
 	}
 
-	hideSprite(g_PawnCount, MAX_ENEMY, 6);
-	hideSprite(g_GhostCount, MAX_GHOST, 10);
-	hideSprite(g_SpiderCount, MAX_SPIDER, 15);
-	hideSprite(g_BatCount, MAX_BAT, 20);
+	hideSprite(0, MAX_NUMBRER_SPRITE_HIDE, FIRST_ID_SPRITE);
+/* 	hideSprite(g_SlideCount, MAX_SLIDING_PLATFORM, FIRST_ID_SLIDE);
+	hideSprite(g_PawnCount, MAX_ENEMY, FIRST_ID_SKELETOR);
+	hideSprite(g_GhostCount, MAX_GHOST, FIRST_ID_GHOST);
+	hideSprite(g_SpiderCount, MAX_SPIDER, FIRST_ID_SPIDER);
+	hideSprite(g_BatCount, MAX_BAT, FIRST_ID_BAT); */
 
 	if (levelIdx == 0)
 	{
@@ -1088,6 +1102,27 @@ void initCharacter(struct Character *ply, u8 id)
 }
 
 /**
+ * @brief Verifica che il player sia posizionato sulla piattaforma
+ */
+bool isOnPlatform(u8 *X, u8 *Y)
+{
+
+	if ((*X < g_platform[0].X - 16) || (*X > g_platform[0].X + 16))
+	{
+		// TODO: Non facio nulla
+	}
+	else
+	{
+		if ((*Y + 17 > g_platform[0].Y) && (*Y + 17 < g_platform[0].Y + 8))
+		{
+			*Y = g_platform[0].Y - 16;
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+/**
  * @brief Aggiorna il pawn
  * @param struct Character *ply
  * @return void
@@ -1130,30 +1165,41 @@ void updateCharacter(struct Character *ply)
 	}
 	else if (ply->Input & INPUT_GET)
 	{
-		// TODO:  Da ottimizzare
-		// Attenzione l'aggiunta dell'iterazione crea dei rallentamenti al gioco
-		// 1) Il primo rigo si utilizza nteagire com gli elementi che is trovano sul piano di gioco
-		// 2) La seconda riga si utilizza per inteagire com gli elementi che is trovano una tile sopra il piano di gioco
-		// 3,4,5,6) Sono solamente per test, non devono essere abilitate per il momento
-
-		if (interact(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) /*||
-			interact(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4)  ||
-			interact(g_Player.Pawn.PositionX + 16, g_Player.Pawn.PositionY + 12) ||
-			interact(g_Player.Pawn.PositionX + 16, g_Player.Pawn.PositionY + 4) ||
-			interact(g_Player.Pawn.PositionX, g_Player.Pawn.PositionY + 12) ||
-			interact(g_Player.Pawn.PositionX, g_Player.Pawn.PositionY + 4) */
-		)
+		if (interact(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12))
 		{
 			// TODO: non faccio nulla!
 		}
 	}
 
+	/* 	bool onPlatform = FALSE;
+
+		onPlatform = isOnPlatform(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY);
+
+		if (onPlatform)
+		{
+			//bFalling = FALSE;
+			g_Player.VelocityY = 0;
+		}
+	 */
+
 	// Update player animation & physics
 	u8 act = ACTION_IDLE;
 	if (ply->bInAir && (ply->VelocityY >= 0))
+	{
 		act = ACTION_JUMP;
+	}
 	else if (ply->bInAir)
-		act = ACTION_FALL;
+	{
+		if (isOnPlatform(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY))
+		{
+			act = ACTION_IDLE;
+			ply->DY +=2;
+		}
+		else
+		{
+			act = ACTION_FALL;
+		}
+	}
 	else if (ply->bMoving)
 	{
 		if (dir == 1)
@@ -1246,7 +1292,6 @@ void genericControl()
 
 					IsUnderWater = FALSE;
 
-					Print_DrawTextAt(20, 22, "ACQUA!!! ");
 				}
 				else
 				{
@@ -1451,7 +1496,7 @@ bool State_Game()
 
 		// Funzione: updateSkeleton
 		// Aggiorna il rendering dei nemici.
-		updateGenericEnemy(&g_Enemy[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber, 6);
+		updateGenericEnemy(&g_Enemy[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber, FIRST_ID_SKELETOR);
 
 		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
 		// Funzione: physicsCollisionPlayerAndEnemy
@@ -1465,7 +1510,7 @@ bool State_Game()
 
 		// Funzione: updateGhost
 		// Aggiorna il rendering dei nemici.
-		updateGenericEnemy(&g_Ghost[0], g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber, 10);
+		updateGenericEnemy(&g_Ghost[0], g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber, FIRST_ID_GHOST);
 
 		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
 		// Funzione: physicsCollisionPlayerAndGhost
@@ -1479,7 +1524,7 @@ bool State_Game()
 
 		// Funzione: updateGhost
 		// Aggiorna il rendering dei nemici.
-		updateGenericEnemy(&g_Spider[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber, 15);
+		updateGenericEnemy(&g_Spider[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber, FIRST_ID_SPIDER);
 
 		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
 		// Funzione: physicsCollisionPlayerAndGhost
@@ -1493,7 +1538,7 @@ bool State_Game()
 
 		// Funzione: updateGhost
 		// Aggiorna il rendering dei nemici.
-		updateGenericEnemy(&g_Bat[0], g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber, 20);
+		updateGenericEnemy(&g_Bat[0], g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber, FIRST_ID_BAT);
 
 		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
 		// Funzione: physicsCollisionPlayerAndGhost
@@ -1502,6 +1547,10 @@ bool State_Game()
 		// Parametri:
 		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 		physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Bat[0], g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber);
+
+		// Funzione: updateGenericEnemy
+		// Aggiorna il rendering della piattaforma.
+		updateGenericEnemy(&g_platform[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumber, FIRST_ID_SLIDE);
 	}
 	g_Frame++;
 
@@ -1541,8 +1590,6 @@ bool State_Preset()
 	//  u8 levelIdx - rappresenta l'id del livello
 	// VDP_EnableDisplay(FALSE);
 	drawLevel(0);
-
-	// VDP_EnableDisplay(TRUE);
 
 	Game_SetState(State_Game);
 

@@ -52,7 +52,7 @@
 ;--------------------------------------------------------
 	.area _INITIALIZED
 _g_Levels::
-	.ds 1134
+	.ds 1155
 ;--------------------------------------------------------
 ; absolute external ram data
 ;--------------------------------------------------------
@@ -100,11 +100,12 @@ _restoreLevel::
 	add	hl, hl
 	add	hl, bc
 	add	hl, hl
+	add	hl, bc
 	ex	de, hl
 	ld	hl, #_g_Levels
 	add	hl, de
 	ex	de, hl
-	ld	hl, #0x000e
+	ld	hl, #0x000f
 	add	hl, de
 	ex	(sp), hl
 	ld	b, #0x00
@@ -236,54 +237,58 @@ _g_Level001:
 	.db #0x1f	; 31
 	.db #0x4c	; 76	'L'
 	.db #0x4b	; 75	'K'
-	.db #0x6c	; 108	'l'
+	.db #0x77	; 119	'w'
 	.db #0x3f	; 63
 	.db #0x4c	; 76	'L'
+	.db #0xe3	; 227
+	.db #0x18	; 24
 	.db #0x64	; 100	'd'
-	.db #0xd5	; 213
-	.db #0x86	; 134
-	.db #0x1e	; 30
-	.db #0x64	; 100	'd'
+	.db #0x63	; 99	'c'
+	.db #0x05	; 5
 	.db #0x46	; 70	'F'
 	.db #0x4d	; 77	'M'
-	.db #0x69	; 105	'i'
+	.db #0x34	; 52	'4'
 	.db #0x3f	; 63
 	.db #0x76	; 118	'v'
-	.db #0xbc	; 188
-	.db #0x16	; 22
+	.db #0xfb	; 251
+	.db #0x15	; 21
+	.db #0xe1	; 225
+	.db #0x1e	; 30
 	.db #0x63	; 99	'c'
-	.db #0x3c	; 60
 	.db #0x00	; 0
 	.db #0x7c	; 124
-	.db #0x09	; 9
-	.db #0xd2	; 210
+	.db #0xdd	; 221
+	.db #0x7f	; 127
 	.db #0x38	; 56	'8'
+	.db #0x7d	; 125
+	.db #0x3f	; 63
+	.db #0x06	; 6
+	.db #0xcd	; 205
+	.db #0x1a	; 26
+	.db #0x84	; 132
+	.db #0x35	; 53	'5'
+	.db #0x20	; 32
+	.db #0x8e	; 142
+	.db #0xb1	; 177
+	.db #0x25	; 37
+	.db #0xfb	; 251
 	.db #0x3f	; 63
 	.db #0xfb	; 251
-	.db #0x06	; 6
-	.db #0x5e	; 94
-	.db #0xc9	; 201
-	.db #0x3b	; 59
-	.db #0x25	; 37
-	.db #0xef	; 239
-	.db #0x3f	; 63
-	.db #0xee	; 238
 	.db #0x00	; 0
+	.db #0xec	; 236
 	.db #0x33	; 51	'3'
-	.db #0xd2	; 210
-	.db #0x06	; 6
 	.db #0x27	; 39
 	.db #0xdd	; 221
 	.db #0xb6	; 182
 	.db #0x1f	; 31
 	.db #0x3f	; 63
-	.db #0xb9	; 185
+	.db #0xb8	; 184
 	.db #0x20	; 32
-	.db #0x53	; 83	'S'
+	.db #0xf6	; 246
+	.db #0x7d	; 125
 	.db #0x64	; 100	'd'
-	.db #0xe1	; 225
-	.db #0x93	; 147
-	.db #0xf8	; 248
+	.db #0x7a	; 122	'z'
+	.db #0xec	; 236
 	.db #0x3f	; 63
 	.db #0xf3	; 243
 	.db #0x0e	; 14
@@ -291,59 +296,59 @@ _g_Level001:
 	.db #0xe1	; 225
 	.db #0xf2	; 242
 	.db #0xf4	; 244
-	.db #0x76	; 118	'v'
-	.db #0x8f	; 143
-	.db #0x94	; 148
-	.db #0x51	; 81	'Q'
+	.db #0xa2	; 162
+	.db #0x23	; 35
+	.db #0x90	; 144
+	.db #0xd4	; 212
 	.db #0x3f	; 63
+	.db #0x5a	; 90	'Z'
 	.db #0x99	; 153
-	.db #0x6b	; 107	'k'
 	.db #0x1e	; 30
-	.db #0x0d	; 13
-	.db #0x97	; 151
+	.db #0xc9	; 201
+	.db #0xba	; 186
 	.db #0x6a	; 106	'j'
-	.db #0x6a	; 106	'j'
-	.db #0x41	; 65	'A'
-	.db #0x09	; 9
-	.db #0x41	; 65	'A'
-	.db #0xe2	; 226
-	.db #0xce	; 206
-	.db #0x20	; 32
-	.db #0xd5	; 213
-	.db #0x9f	; 159
-	.db #0x7f	; 127
-	.db #0x82	; 130
-	.db #0x5b	; 91
-	.db #0xff	; 255
-	.db #0x3b	; 59
-	.db #0xc7	; 199
-	.db #0xb6	; 182
-	.db #0xb6	; 182
+	.db #0x64	; 100	'd'
+	.db #0xbc	; 188
+	.db #0xe5	; 229
 	.db #0x63	; 99	'c'
-	.db #0xf2	; 242
-	.db #0x08	; 8
+	.db #0x78	; 120	'x'
+	.db #0x63	; 99	'c'
+	.db #0xb5	; 181
+	.db #0x20	; 32
+	.db #0x47	; 71	'G'
+	.db #0x3a	; 58
+	.db #0x82	; 130
+	.db #0xd6	; 214
+	.db #0xff	; 255
+	.db #0xce	; 206
 	.db #0xc7	; 199
-	.db #0x77	; 119	'w'
+	.db #0xed	; 237
+	.db #0xb6	; 182
+	.db #0xbc	; 188
+	.db #0x63	; 99	'c'
+	.db #0x08	; 8
 	.db #0x9d	; 157
+	.db #0xc7	; 199
+	.db #0xe6	; 230
 	.db #0x1c	; 28
 	.db #0x69	; 105	'i'
-	.db #0xae	; 174
-	.db #0xf8	; 248
 	.db #0x9e	; 158
-	.db #0xe2	; 226
+	.db #0xae	; 174
+	.db #0xce	; 206
+	.db #0x9e	; 158
+	.db #0x2a	; 42
 	.db #0xf8	; 248
 	.db #0x7f	; 127
-	.db #0xa7	; 167
 	.db #0x02	; 2
 	.db #0xc7	; 199
-	.db #0x59	; 89	'Y'
+	.db #0x7e	; 126
+	.db #0x1b	; 27
 	.db #0xbb	; 187
-	.db #0xec	; 236
+	.db #0x6c	; 108	'l'
 	.db #0x17	; 23
+	.db #0x27	; 39
 	.db #0xaf	; 175
-	.db #0x96	; 150
 	.db #0x61	; 97	'a'
-	.db #0x06	; 6
 	.db #0x8f	; 143
 	.db #0xa4	; 164
 	.db #0xf5	; 245
@@ -4672,6 +4677,7 @@ __xinit__g_Levels:
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
+	.db #0x00	; 0
 	.db 0x00
 	.db 0x00
 	.db 0x00
@@ -4707,6 +4713,7 @@ __xinit__g_Levels:
 	.db #0x02	; 2
 	.db #0x00	; 0
 	.db #0x00	; 0
+	.db #0x01	; 1
 	.db #0x01	; 1
 	.db #0x00	; 0
 	.db #0x00	; 0
@@ -4776,6 +4783,7 @@ __xinit__g_Levels:
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
+	.db #0x00	; 0
 	.db 0x00
 	.db 0x00
 	.db 0x00
@@ -4809,6 +4817,7 @@ __xinit__g_Levels:
 	.db #0x04	; 4
 	.db #0x02	; 2
 	.db #0x03	; 3
+	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
@@ -4880,6 +4889,7 @@ __xinit__g_Levels:
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
+	.db #0x00	; 0
 	.db 0x00
 	.db 0x00
 	.db 0x00
@@ -4915,6 +4925,7 @@ __xinit__g_Levels:
 	.db #0x01	; 1
 	.db #0x01	; 1
 	.db #0x01	; 1
+	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
@@ -4984,6 +4995,7 @@ __xinit__g_Levels:
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
+	.db #0x00	; 0
 	.db 0x00
 	.db 0x00
 	.db 0x00
@@ -5020,6 +5032,7 @@ __xinit__g_Levels:
 	.db #0x01	; 1
 	.db #0x00	; 0
 	.db #0x02	; 2
+	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
@@ -5088,6 +5101,7 @@ __xinit__g_Levels:
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
+	.db #0x00	; 0
 	.db 0x00
 	.db 0x00
 	.db 0x00
@@ -5124,6 +5138,7 @@ __xinit__g_Levels:
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x01	; 1
+	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
@@ -5192,6 +5207,7 @@ __xinit__g_Levels:
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
+	.db #0x00	; 0
 	.db 0x00
 	.db 0x00
 	.db 0x00
@@ -5228,6 +5244,7 @@ __xinit__g_Levels:
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x01	; 1
+	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
@@ -5296,6 +5313,7 @@ __xinit__g_Levels:
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
+	.db #0x00	; 0
 	.db 0x00
 	.db 0x00
 	.db 0x00
@@ -5332,6 +5350,7 @@ __xinit__g_Levels:
 	.db #0x01	; 1
 	.db #0x00	; 0
 	.db #0x01	; 1
+	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
@@ -5400,6 +5419,7 @@ __xinit__g_Levels:
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
+	.db #0x00	; 0
 	.db 0x00
 	.db 0x00
 	.db 0x00
@@ -5436,6 +5456,7 @@ __xinit__g_Levels:
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x02	; 2
+	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
@@ -5504,6 +5525,7 @@ __xinit__g_Levels:
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
+	.db #0x00	; 0
 	.db 0x00
 	.db 0x00
 	.db 0x00
@@ -5539,6 +5561,7 @@ __xinit__g_Levels:
 	.db #0x01	; 1
 	.db #0x01	; 1
 	.db #0x01	; 1
+	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
@@ -5608,6 +5631,7 @@ __xinit__g_Levels:
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
+	.db #0x00	; 0
 	.db 0x00
 	.db 0x00
 	.db 0x00
@@ -5660,6 +5684,7 @@ __xinit__g_Levels:
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
+	.db #0x00	; 0
 	.db 0x00
 	.db 0x00
 	.db 0x00
@@ -5692,6 +5717,7 @@ __xinit__g_Levels:
 	.dw ___str_20
 	.db #0x00	; 0
 	.db #0x09	; 9
+	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0
 	.db #0x00	; 0

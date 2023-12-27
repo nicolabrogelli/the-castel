@@ -334,15 +334,27 @@ _g_DataSprtLayer:
 	.db #0xfe	; 254
 	.db #0xfc	; 252
 	.db #0xf8	; 248
-	.db #0x6a	; 106	'j'
+	.db #0x7b	; 123
 	.db #0x90	; 144
+	.db #0x07	; 7
+	.db #0x7f	; 127
+	.db #0xff	; 255
 	.db #0xbf	; 191
+	.db #0xbf	; 191
+	.db #0xff	; 255
+	.db #0xa1	; 161
 	.db #0x0f	; 15
-	.db #0xf9	; 249
+	.db #0xfd	; 253
+	.db #0xfd	; 253
+	.db #0x7a	; 122	'z'
+	.db #0x0f	; 15
+	.db #0xe9	; 233
+	.db #0x00	; 0
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xff	; 255
-	.db #0xfc	; 252
+	.db #0xff	; 255
+	.db #0x80	; 128
 _g_DataBackground_Patterns:
 	.db #0x5f	; 95
 	.db #0x00	; 0

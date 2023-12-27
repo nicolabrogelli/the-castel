@@ -1749,11 +1749,8 @@ _GamePawn_Draw::
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:402: if(g_Pawn->Update == 0)
 	ld	hl, #0x000b
 	add	hl, bc
-	ex	de, hl
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:416: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
-	ld	a, (de)
-	set	1, a
-	ld	(de), a
+	set	1, (hl)
 	jp	00113$
 00112$:
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:418: else if(g_Sprite->Flag & PAWN_SPRITE_ODD) // Skip even frames
@@ -1770,8 +1767,11 @@ _GamePawn_Draw::
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:402: if(g_Pawn->Update == 0)
 	ld	hl, #0x000b
 	add	hl, bc
+	ex	de, hl
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:423: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
-	set	1, (hl)
+	ld	a, (de)
+	set	1, a
+	ld	(de), a
 00113$:
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:402: if(g_Pawn->Update == 0)
 	ld	de, (_g_Pawn)

@@ -7,8 +7,8 @@ Symbol Table
     .__.ABS.                                                    =  000000 G
     .__.CPU.                                                    =  000000 L
     .__.H$L.                                                    =  000000 L
-  7 _g_DataBackground_Colors                                       00035D GR
-  7 _g_DataBackground_Patterns                                     00012B GR
+  7 _g_DataBackground_Colors                                       000369 GR
+  7 _g_DataBackground_Patterns                                     000137 GR
   7 _g_DataSprtLayer                                               000000 GR
 
 
@@ -24,7 +24,7 @@ Area Table
    4 _HOME                                      size      0   flags    0
    5 _GSINIT                                    size      0   flags    0
    6 _GSFINAL                                   size      0   flags    0
-   7 _PAGE0                                     size    37D   flags    0
+   7 _PAGE0                                     size    389   flags    0
    8 _INITIALIZER                               size      0   flags    0
    9 _CABS                                      size      0   flags    8
 

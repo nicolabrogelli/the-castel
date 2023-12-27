@@ -11,7 +11,15 @@
 #define MAX_GHOST                3
 #define MAX_SPIDER               3
 #define MAX_BAT                  3
-#define MAX_SLIDING_PLATFORM     3
+#define MAX_SLIDING_PLATFORM     1
+#define MAX_NUMBRER_SPRITE_HIDE 25
+#define FIRST_ID_SPRITE          6
+
+#define FIRST_ID_SKELETOR        6
+#define FIRST_ID_GHOST           9 //10
+#define FIRST_ID_SPIDER         12 //15
+#define FIRST_ID_BAT            15 //20
+#define FIRST_ID_SLIDE          18 //30
 
 #define MAX_LIVES                3
 #define IMMUNITY                 3
