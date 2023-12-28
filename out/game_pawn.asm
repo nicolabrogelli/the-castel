@@ -1667,22 +1667,22 @@ _GamePawn_Update::
 	ld	a, -6 (ix)
 	ld	(hl), a
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:105: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
+	ld	hl, (_g_Pawn)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:112: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
+	ld	bc, #0x000b
+	add	hl, bc
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:391: g_Pawn->Update |= PAWN_UPDATE_POSITION;
+	set	0, (hl)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:105: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
 	ld	bc, (_g_Pawn)
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:112: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
 	ld	hl, #0x000b
 	add	hl, bc
 	ex	de, hl
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:391: g_Pawn->Update |= PAWN_UPDATE_POSITION;
-	ld	a, (de)
-	set	0, a
-	ld	(de), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:105: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
-	ld	hl, (_g_Pawn)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:112: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
-	ld	bc, #0x000b
-	add	hl, bc
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:392: g_Pawn->Update &= ~PAWN_UPDATE_COLLISION;
-	res	4, (hl)
+	ld	a, (de)
+	res	4, a
+	ld	(de), a
 00158$:
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:395: }
 	ld	sp, ix

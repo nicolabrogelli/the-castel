@@ -152,7 +152,7 @@ struct CharacterEnemy g_Enemy[MAX_ENEMY];
 struct CharacterEnemy g_Ghost[MAX_GHOST];
 struct CharacterEnemy g_Spider[MAX_SPIDER];
 struct CharacterEnemy g_Bat[MAX_BAT];
-struct CharacterEnemy g_platform[1];
+struct CharacterEnemy g_platform[MAX_SLIDING_PLATFORM];
 
 u8 g_PrevRow8 = 0xFF;
 u8 g_PawnCount = 0;
@@ -417,9 +417,6 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
 						{
 							displayLife();
 							PlayBankSFX(9, 0);
-							/* 							Print_DrawTextAt(20,21,"ENEMY!!! ");
-														Print_DrawTextAt(20,22,enemy->TypeEnemy);
-														Print_DrawIntAt(20,23,enemy->SpriteId); */
 						}
 						else
 						{
@@ -484,18 +481,15 @@ void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 enemyNumber)
 						enemy->Direction = -1;
 
 					isCatch = FALSE;
-					// Print_DrawIntAt(22,20, 1);
 				}
 				else
 				{
 					g_DelayCatchEnemy--;
-					// Print_DrawIntAt(22,20, 2);
 				}
 			}
 			else
 			{
 				isCatch = TRUE;
-				// Print_DrawIntAt(22,20, 0);
 			}
 
 			break;
@@ -504,7 +498,6 @@ void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 enemyNumber)
 		{
 			g_DelayCatchEnemy = g_CatchEnemy;
 			isCatch = FALSE;
-			// Print_DrawIntAt(22,20, 3);
 		}
 	}
 }
@@ -551,9 +544,6 @@ void foo(u8 x, u8 y, u8 tile, u8 visible)
 	g_Levels[g_CurrRoomIdx].MyItems[g_CountItem].y = y;
 	g_Levels[g_CurrRoomIdx].MyItems[g_CountItem].tile = tile;
 	g_Levels[g_CurrRoomIdx].MyItems[g_CountItem].visible = visible;
-
-	// Print_DrawIntAt(20, 23, g_CurrRoomIdx);
-	// Print_DrawIntAt(20, 22, g_CountItem);
 }
 
 /**
@@ -565,13 +555,7 @@ void foo(u8 x, u8 y, u8 tile, u8 visible)
 bool interact(u8 x, u8 y)
 {
 	u8 tile = getTile(x, y);
-
-	/* 	c8 StrFormat[5];
-		Print_SetPosition(29, 23);
-		String_Format(StrFormat, "%03i", tile);
-		Print_DrawText(StrFormat); */
-
-	DEBUG_LOGNUM("Intercat", tile);
+	//DEBUG_LOGNUM("Intercat", tile);
 
 	// TODO: Ottimizzare il case!!
 	switch (tile)
@@ -749,14 +733,13 @@ bool getMoney(u8 x, u8 y)
  */
 bool isDanger(u8 x, u8 y, u8 t)
 {
-	/* 	Print_DrawIntAt(20,22,g_DangerCounter);
-		Print_DrawIntAt(20,23,g_DelayRemoveLife); */
 	switch (getTile(x, y))
 	{
 	case TILE_DANGE1:
 	case TILE_DANGE2:
 	case TILE_DANGE3:
 	case TILE_DANGE4:
+	case TILE_LAVA:
 		if (hasLives())
 		{
 			removeLife();
@@ -771,26 +754,7 @@ bool isDanger(u8 x, u8 y, u8 t)
 		}
 
 		return TRUE;
-	case TILE_LAVA:
-		if (!hasLives())
-		{
-			stopMusicPlayback();
-			Game_SetState(State_GameOver);
-		}
-		else
-		{
-			if (removeLife() == TRUE)
-			{
-				displayLife();
-				PlayBankSFX(9, 0);
-				drawLevel(g_CurrRoomIdx); // Inizia nuovamente dalla stanza in cui siamo
-				Print_DrawTextAt(20, 22, "LAVA!!!  ");
-			}
-		}
-		return TRUE;
-
 	default:
-		g_DelayRemoveLife = g_DangerCounter;
 		return FALSE;
 	}
 }
@@ -845,6 +809,13 @@ void drawLevel(u8 levelIdx)
 	g_CountItem = 0; // Iniziaizza il cobtatore degli oggetti raccolti
 	g_SlideCount = 0;
 
+	DEBUG_LOGNUM("----- Livello", g_CurrRoomIdx);
+	DEBUG_LOGNUM("----- Skeletor Number", g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber);
+	DEBUG_LOGNUM("----- Ghost Number", g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber);
+	DEBUG_LOGNUM("----- Spider Number", g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber);
+	DEBUG_LOGNUM("----- Bat Number", g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber);
+	DEBUG_LOGNUM("----- Slide Number", g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumber);
+
 	// Ad ogni cambio di livello rimuove l'amphora dall'inventario, in modo da ridurlo ad un aiuto momntaneo
 	if (hasItemInInventory(TILE_AMPHORA))
 		removeItemFromInventory(TILE_AMPHORA, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
@@ -866,6 +837,8 @@ void drawLevel(u8 levelIdx)
 	//   Puliza dello schermo
 	VDP_FillVRAM_16K(0, g_ScreenLayoutLow, 32 * 24);
 
+	// Scompatta il livello di gioco da mostrare sullo schermo nella cache
+	// Altrimenti non sarebbe possibile mnipolare gli oggetti del livello
 	Pletter_UnpackToRAM(g_Levels[levelIdx].Layout, g_CacheLevel[0].Layout);
 
 	// Disegnare il livello riga per riga
@@ -915,27 +888,27 @@ void drawLevel(u8 levelIdx)
 				GamePawn_SetPosition(&g_Player.Pawn, x * 8, (y - 3) * 8);
 				setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
 			}
-			else if ((tile == TILE_STAR_POS_ENEMY) && (g_PawnCount < MAX_ENEMY)) // Rilevamento della posizione iniziale del nemico
+			else if ((tile == TILE_STAR_POS_ENEMY) && (g_PawnCount <  g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber)) // Rilevamento della posizione iniziale del nemico
 			{
 				g_PawnCount = positionGenericEnemy(TILE_STAR_POS_ENEMY, g_PawnCount, &g_Enemy[0], 196, FIRST_ID_SKELETOR, riga, colonna, 0, "Scheletor");
 				DEBUG_LOG("Scheletor");
 			}
-			else if ((tile == TILE_POS_GHOST) && (g_Levels[0].MyEnemyType.GhostNumber < MAX_GHOST)) // Rilevamento della posizione iniziale del nemico
+			else if ((tile == TILE_POS_GHOST) && (g_GhostCount < g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber)) // Rilevamento della posizione iniziale del nemico
 			{
 				g_GhostCount = positionGenericEnemy(TILE_POS_GHOST, g_GhostCount, &g_Ghost[0], 200, FIRST_ID_GHOST, riga, colonna, 0, "Ghost");
 				DEBUG_LOG("Ghost");
 			}
-			else if ((tile == TILE_POS_SPIDER) && (g_Levels[0].MyEnemyType.SpiderNumber < MAX_SPIDER)) // Rilevamento della posizione iniziale del nemico
+			else if ((tile == TILE_POS_SPIDER) && (g_SpiderCount < g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber)) // Rilevamento della posizione iniziale del nemico
 			{
 				g_SpiderCount = positionGenericEnemy(TILE_POS_SPIDER, g_SpiderCount, &g_Spider[0], 192, FIRST_ID_SPIDER, riga, colonna, 0, "Spider");
 				DEBUG_LOG("Spider");
 			}
-			else if ((tile == TILE_POS_BAT) && (g_Levels[0].MyEnemyType.BatNumber < MAX_BAT)) // Rilevamento della posizione iniziale del nemico
+			else if ((tile == TILE_POS_BAT) && (g_BatCount < g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber)) // Rilevamento della posizione iniziale del nemico
 			{
 				g_BatCount = positionGenericEnemy(TILE_POS_BAT, g_BatCount, &g_Bat[0], 204, FIRST_ID_BAT, riga, colonna, 0, "Bat");
 				DEBUG_LOG("Bat");
 			}
-			else if (tile == TILE_POS_PLATFORM) // Rilevamento piattaforma mobile
+			else if ((tile == TILE_POS_PLATFORM) && (g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumber < MAX_SLIDING_PLATFORM) ) // Rilevamento piattaforma mobile
 			{
 				g_SlideCount = positionGenericEnemy(TILE_POS_PLATFORM, g_SlideCount, &g_platform[0], 208, FIRST_ID_SLIDE, riga, colonna, 0, "platform");
 				DEBUG_LOG("Platform");
@@ -943,12 +916,12 @@ void drawLevel(u8 levelIdx)
 		}
 	}
 
-	hideSprite(0, MAX_NUMBRER_SPRITE_HIDE, FIRST_ID_SPRITE);
-/* 	hideSprite(g_SlideCount, MAX_SLIDING_PLATFORM, FIRST_ID_SLIDE);
+	//hideSprite(0, MAX_NUMBRER_SPRITE_HIDE, FIRST_ID_SPRITE);
+ 	hideSprite(0, MAX_SLIDING_PLATFORM, FIRST_ID_SLIDE);
 	hideSprite(g_PawnCount, MAX_ENEMY, FIRST_ID_SKELETOR);
 	hideSprite(g_GhostCount, MAX_GHOST, FIRST_ID_GHOST);
 	hideSprite(g_SpiderCount, MAX_SPIDER, FIRST_ID_SPIDER);
-	hideSprite(g_BatCount, MAX_BAT, FIRST_ID_BAT); */
+	hideSprite(g_BatCount, MAX_BAT, FIRST_ID_BAT); 
 
 	if (levelIdx == 0)
 	{
@@ -1171,17 +1144,6 @@ void updateCharacter(struct Character *ply)
 		}
 	}
 
-	/* 	bool onPlatform = FALSE;
-
-		onPlatform = isOnPlatform(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY);
-
-		if (onPlatform)
-		{
-			//bFalling = FALSE;
-			g_Player.VelocityY = 0;
-		}
-	 */
-
 	// Update player animation & physics
 	u8 act = ACTION_IDLE;
 	if (ply->bInAir && (ply->VelocityY >= 0))
@@ -1190,7 +1152,7 @@ void updateCharacter(struct Character *ply)
 	}
 	else if (ply->bInAir)
 	{
-		if (isOnPlatform(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY))
+		if (g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumber > 0 && isOnPlatform(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY))
 		{
 			act = ACTION_IDLE;
 			ply->DY +=2;
@@ -1291,7 +1253,6 @@ void genericControl()
 					PlayBankSFX(9, 0);
 
 					IsUnderWater = FALSE;
-
 				}
 				else
 				{

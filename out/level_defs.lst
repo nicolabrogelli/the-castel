@@ -73,7 +73,7 @@
                                      73 ; code
                                      74 ;--------------------------------------------------------
                                      75 	.area _CODE
-                                     76 ;./level_defs.c:71: void restoreLevel()
+                                     76 ;./level_defs.c:72: void restoreLevel()
                                      77 ;	---------------------------------
                                      78 ; Function restoreLevel
                                      79 ; ---------------------------------
@@ -82,13 +82,13 @@
       000002 DD 21 00 00      [14]   82 	ld	ix,#0
       000006 DD 39            [15]   83 	add	ix,sp
       000008 F5               [11]   84 	push	af
-                                     85 ;./level_defs.c:73: for (u8 level = 0; level < (int)(sizeof(g_Levels) / sizeof(g_Levels[0])) - 1; level++)
+                                     85 ;./level_defs.c:74: for (u8 level = 0; level < (int)(sizeof(g_Levels) / sizeof(g_Levels[0])) - 1; level++)
       000009 0E 00            [ 7]   86 	ld	c, #0x00
       00000B                         87 00107$:
       00000B 79               [ 4]   88 	ld	a, c
       00000C D6 14            [ 7]   89 	sub	a, #0x14
       00000E 30 45            [12]   90 	jr	NC, 00109$
-                                     91 ;./level_defs.c:75: for (u8 element = 0; element < 10; element++)
+                                     91 ;./level_defs.c:76: for (u8 element = 0; element < 10; element++)
       000010 06 00            [ 7]   92 	ld	b, #0x00
       000012 69               [ 4]   93 	ld	l, c
       000013 60               [ 4]   94 	ld	h, b
@@ -110,7 +110,7 @@
       000027 E3               [19]  110 	ex	(sp), hl
       000028 06 00            [ 7]  111 	ld	b, #0x00
       00002A                        112 00104$:
-                                    113 ;./level_defs.c:77: g_Levels[level].MyItems[element].x = 0;
+                                    113 ;./level_defs.c:78: g_Levels[level].MyItems[element].x = 0;
       00002A 78               [ 4]  114 	ld	a,b
       00002B FE 0A            [ 7]  115 	cp	a,#0x0a
       00002D 30 22            [12]  116 	jr	NC, 00108$
@@ -123,7 +123,7 @@
       00003A 57               [ 4]  123 	ld	d, a
       00003B AF               [ 4]  124 	xor	a, a
       00003C 12               [ 7]  125 	ld	(de), a
-                                    126 ;./level_defs.c:78: g_Levels[level].MyItems[element].y = 0;
+                                    126 ;./level_defs.c:79: g_Levels[level].MyItems[element].y = 0;
       00003D 6B               [ 4]  127 	ld	l, e
                                     128 ;	spillPairReg hl
                                     129 ;	spillPairReg hl
@@ -132,7 +132,7 @@
                                     132 ;	spillPairReg hl
       00003F 23               [ 6]  133 	inc	hl
       000040 36 00            [10]  134 	ld	(hl), #0x00
-                                    135 ;./level_defs.c:79: g_Levels[level].MyItems[element].tile = 0;
+                                    135 ;./level_defs.c:80: g_Levels[level].MyItems[element].tile = 0;
       000042 6B               [ 4]  136 	ld	l, e
                                     137 ;	spillPairReg hl
                                     138 ;	spillPairReg hl
@@ -143,20 +143,20 @@
       000045 23               [ 6]  143 	inc	hl
       000046 23               [ 6]  144 	inc	hl
       000047 36 00            [10]  145 	ld	(hl), #0x00
-                                    146 ;./level_defs.c:80: g_Levels[level].MyItems[element].visible = 0;
+                                    146 ;./level_defs.c:81: g_Levels[level].MyItems[element].visible = 0;
       000049 13               [ 6]  147 	inc	de
       00004A 13               [ 6]  148 	inc	de
       00004B AF               [ 4]  149 	xor	a, a
       00004C 12               [ 7]  150 	ld	(de), a
-                                    151 ;./level_defs.c:75: for (u8 element = 0; element < 10; element++)
+                                    151 ;./level_defs.c:76: for (u8 element = 0; element < 10; element++)
       00004D 04               [ 4]  152 	inc	b
       00004E C3r2Ar00         [10]  153 	jp	00104$
       000051                        154 00108$:
-                                    155 ;./level_defs.c:73: for (u8 level = 0; level < (int)(sizeof(g_Levels) / sizeof(g_Levels[0])) - 1; level++)
+                                    155 ;./level_defs.c:74: for (u8 level = 0; level < (int)(sizeof(g_Levels) / sizeof(g_Levels[0])) - 1; level++)
       000051 0C               [ 4]  156 	inc	c
       000052 C3r0Br00         [10]  157 	jp	00107$
       000055                        158 00109$:
-                                    159 ;./level_defs.c:83: }
+                                    159 ;./level_defs.c:84: }
       000055 DD F9            [10]  160 	ld	sp, ix
       000057 DD E1            [14]  161 	pop	ix
       000059 C9               [10]  162 	ret

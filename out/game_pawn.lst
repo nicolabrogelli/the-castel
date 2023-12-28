@@ -1667,22 +1667,22 @@
       0007A1 DD 7E FA         [19] 1667 	ld	a, -6 (ix)
       0007A4 77               [ 7] 1668 	ld	(hl), a
                                    1669 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:105: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
-      0007A5 ED 4Br03r00      [20] 1670 	ld	bc, (_g_Pawn)
+      0007A5 2Ar03r00         [16] 1670 	ld	hl, (_g_Pawn)
                                    1671 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:112: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
-      0007A9 21 0B 00         [10] 1672 	ld	hl, #0x000b
-      0007AC 09               [11] 1673 	add	hl, bc
-      0007AD EB               [ 4] 1674 	ex	de, hl
-                                   1675 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:391: g_Pawn->Update |= PAWN_UPDATE_POSITION;
-      0007AE 1A               [ 7] 1676 	ld	a, (de)
-      0007AF CB C7            [ 8] 1677 	set	0, a
-      0007B1 12               [ 7] 1678 	ld	(de), a
-                                   1679 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:105: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
-      0007B2 2Ar03r00         [16] 1680 	ld	hl, (_g_Pawn)
-                                   1681 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:112: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
-      0007B5 01 0B 00         [10] 1682 	ld	bc, #0x000b
-      0007B8 09               [11] 1683 	add	hl, bc
-                                   1684 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:392: g_Pawn->Update &= ~PAWN_UPDATE_COLLISION;
-      0007B9 CB A6            [15] 1685 	res	4, (hl)
+      0007A8 01 0B 00         [10] 1672 	ld	bc, #0x000b
+      0007AB 09               [11] 1673 	add	hl, bc
+                                   1674 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:391: g_Pawn->Update |= PAWN_UPDATE_POSITION;
+      0007AC CB C6            [15] 1675 	set	0, (hl)
+                                   1676 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:105: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
+      0007AE ED 4Br03r00      [20] 1677 	ld	bc, (_g_Pawn)
+                                   1678 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:112: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
+      0007B2 21 0B 00         [10] 1679 	ld	hl, #0x000b
+      0007B5 09               [11] 1680 	add	hl, bc
+      0007B6 EB               [ 4] 1681 	ex	de, hl
+                                   1682 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:392: g_Pawn->Update &= ~PAWN_UPDATE_COLLISION;
+      0007B7 1A               [ 7] 1683 	ld	a, (de)
+      0007B8 CB A7            [ 8] 1684 	res	4, a
+      0007BA 12               [ 7] 1685 	ld	(de), a
       0007BB                       1686 00158$:
                                    1687 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:395: }
       0007BB DD F9            [10] 1688 	ld	sp, ix

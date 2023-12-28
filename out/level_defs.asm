@@ -73,7 +73,7 @@ _g_Levels::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;./level_defs.c:71: void restoreLevel()
+;./level_defs.c:72: void restoreLevel()
 ;	---------------------------------
 ; Function restoreLevel
 ; ---------------------------------
@@ -82,13 +82,13 @@ _restoreLevel::
 	ld	ix,#0
 	add	ix,sp
 	push	af
-;./level_defs.c:73: for (u8 level = 0; level < (int)(sizeof(g_Levels) / sizeof(g_Levels[0])) - 1; level++)
+;./level_defs.c:74: for (u8 level = 0; level < (int)(sizeof(g_Levels) / sizeof(g_Levels[0])) - 1; level++)
 	ld	c, #0x00
 00107$:
 	ld	a, c
 	sub	a, #0x14
 	jr	NC, 00109$
-;./level_defs.c:75: for (u8 element = 0; element < 10; element++)
+;./level_defs.c:76: for (u8 element = 0; element < 10; element++)
 	ld	b, #0x00
 	ld	l, c
 	ld	h, b
@@ -110,7 +110,7 @@ _restoreLevel::
 	ex	(sp), hl
 	ld	b, #0x00
 00104$:
-;./level_defs.c:77: g_Levels[level].MyItems[element].x = 0;
+;./level_defs.c:78: g_Levels[level].MyItems[element].x = 0;
 	ld	a,b
 	cp	a,#0x0a
 	jr	NC, 00108$
@@ -123,7 +123,7 @@ _restoreLevel::
 	ld	d, a
 	xor	a, a
 	ld	(de), a
-;./level_defs.c:78: g_Levels[level].MyItems[element].y = 0;
+;./level_defs.c:79: g_Levels[level].MyItems[element].y = 0;
 	ld	l, e
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -132,7 +132,7 @@ _restoreLevel::
 ;	spillPairReg hl
 	inc	hl
 	ld	(hl), #0x00
-;./level_defs.c:79: g_Levels[level].MyItems[element].tile = 0;
+;./level_defs.c:80: g_Levels[level].MyItems[element].tile = 0;
 	ld	l, e
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -143,20 +143,20 @@ _restoreLevel::
 	inc	hl
 	inc	hl
 	ld	(hl), #0x00
-;./level_defs.c:80: g_Levels[level].MyItems[element].visible = 0;
+;./level_defs.c:81: g_Levels[level].MyItems[element].visible = 0;
 	inc	de
 	inc	de
 	xor	a, a
 	ld	(de), a
-;./level_defs.c:75: for (u8 element = 0; element < 10; element++)
+;./level_defs.c:76: for (u8 element = 0; element < 10; element++)
 	inc	b
 	jp	00104$
 00108$:
-;./level_defs.c:73: for (u8 level = 0; level < (int)(sizeof(g_Levels) / sizeof(g_Levels[0])) - 1; level++)
+;./level_defs.c:74: for (u8 level = 0; level < (int)(sizeof(g_Levels) / sizeof(g_Levels[0])) - 1; level++)
 	inc	c
 	jp	00107$
 00109$:
-;./level_defs.c:83: }
+;./level_defs.c:84: }
 	ld	sp, ix
 	pop	ix
 	ret
