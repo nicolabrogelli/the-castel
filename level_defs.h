@@ -23,8 +23,17 @@ typedef struct
 	u8 GhostNumber;	   /** Numero di fantasmi nel livello */
 	u8 SpiderNumber;   /** Numero di ragni nel livello */
 	u8 BatNumber;	   /** Numero di pipistrelli nel livello */
-	u8 SliderNumber;   /** So che non è un nemico :)*/
+	u8 SliderNumber;   /** So che non è un nemico */
 } EnemyType;
+
+
+typedef struct 
+{
+	u8 NextDoorLevel;
+	u8 PrevDoorLevel;
+	u8 NextDoorElevator;
+
+} DoorLevel;
 
 
 /** \struct

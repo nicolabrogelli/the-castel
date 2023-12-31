@@ -72,8 +72,8 @@
 #define TILE_POS_SPIDER     129
 #define TILE_POS_BAT        130
 #define TILE_POS_131        131
-#define TILE_POS_PLATFORM   132
-#define TILE_133            133
+#define TILE_POS_PLATFORM_O 132
+#define TILE_POS_PLATFORM_V 133
 #define TILE_134            134
 #define TILE_135            135
 #define TILE_136            136
