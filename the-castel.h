@@ -19,11 +19,12 @@
 #define FIRST_ID_GHOST           9 //10
 #define FIRST_ID_SPIDER         12 //15
 #define FIRST_ID_BAT            15 //20
-#define FIRST_ID_SLIDE          18 //30
+#define FIRST_ID_SLIDE_H        18 //30
+#define FIRST_ID_SLIDE_V        21 //30
 
 #define MAX_LIVES                3
 #define IMMUNITY                 3
-#define LAST_LEVEL              19  // Ultimo livello di gioco
+#define LAST_LEVEL              21  // Ultimo livello di gioco
 #define START_GAME               0  // Livello di inizio gico
 #define GAME_OVER               LAST_LEVEL + 1  // Livello di game over
 #define OFFSET_TILE_COLLISION   50
@@ -121,6 +122,7 @@ u8 isUnderDunger(u8 x, u8 y);
 
 void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask);
 void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 enemyNumber);
+
 
 
 

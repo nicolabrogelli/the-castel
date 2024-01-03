@@ -17,8 +17,8 @@
 
 // NUMERO 8 TILE AZZURRE
 #define TILE_WATER           80
-#define TILE_81              81
-#define TILE_82              82
+#define TILE_UP_DOOR         81
+#define TILE_DOWN_DOOR       82
 #define TILE_83              83
 #define TILE_84              84
 #define TILE_85              85

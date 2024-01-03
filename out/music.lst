@@ -1617,7 +1617,7 @@
       0004B9 C5               [11] 1617 	push	bc
       0004BA CDr00r00         [17] 1618 	call	_ayFX_Mute
       0004BD C1               [10] 1619 	pop	bc
-                                   1620 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/ayfx/ayfx_player.h:121: inline void ayFX_SetChannel(u8 chan) { ayFX_Channel = 3 - chan; }
+                                   1620 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/ayfx/ayfx_player.h:121: inline void ayFX_SetChannel(u8 chan) { ayFX_Channel = 3 - chan; }
       0004BE 21r00r00         [10] 1621 	ld	hl, #_ayFX_Channel
       0004C1 3E 03            [ 7] 1622 	ld	a, #0x03
       0004C3 91               [ 4] 1623 	sub	a, c
@@ -1650,10 +1650,10 @@
                                    1650 ;./music.c:52: ayFX_InitBank(g_ayfx_bank);     // Impostazione del riproduttore ayFX tramite l'array g_ayfx_bank
       0004DA 21rC4r00         [10] 1651 	ld	hl, #_g_ayfx_bank
       0004DD CDr00r00         [17] 1652 	call	_ayFX_InitBank
-                                   1653 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/ayfx/ayfx_player.h:121: inline void ayFX_SetChannel(u8 chan) { ayFX_Channel = 3 - chan; }
+                                   1653 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/ayfx/ayfx_player.h:121: inline void ayFX_SetChannel(u8 chan) { ayFX_Channel = 3 - chan; }
       0004E0 21r00r00         [10] 1654 	ld	hl, #_ayFX_Channel
       0004E3 36 03            [10] 1655 	ld	(hl), #0x03
-                                   1656 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/ayfx/ayfx_player.h:114: inline void ayFX_SetMode(u8 mode) { ayFX_Mode = mode; }
+                                   1656 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/ayfx/ayfx_player.h:114: inline void ayFX_SetMode(u8 mode) { ayFX_Mode = mode; }
       0004E5 21r00r00         [10] 1657 	ld	hl, #_ayFX_Mode
       0004E8 36 00            [10] 1658 	ld	(hl), #0x00
                                    1659 ;./music.c:54: ayFX_SetMode(AYFX_MODE_FIXED);  // Set channel mode
@@ -1688,7 +1688,7 @@
       0004F7 CDr00r00         [17] 1688 	call	_ayFX_Mute
                                    1689 ;./music.c:87: ayFX_Update();
       0004FA CDr00r00         [17] 1690 	call	_ayFX_Update
-                                   1691 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/pt3/pt3_player.h:301: PT3_State |= 1 << (chan + 1);
+                                   1691 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/pt3/pt3_player.h:301: PT3_State |= 1 << (chan + 1);
       0004FD 3Ar00r00         [13] 1692 	ld	a, (_PT3_State+0)
       000500 F6 08            [ 7] 1693 	or	a, #0x08
       000502 32r00r00         [13] 1694 	ld	(_PT3_State+0), a

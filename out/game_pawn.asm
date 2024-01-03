@@ -283,7 +283,7 @@ _g_Sprite:
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:33: void GamePawn_Initialize(Game_Pawn* pawn, const Game_Sprite* sprtList, u8 sprtNum, u8 sprtID, const Game_Action* actList)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:38: void GamePawn_Initialize(Game_Pawn* pawn, const Game_Sprite* sprtList, u8 sprtNum, u8 sprtID, const Game_Action* actList)
 ;	---------------------------------
 ; Function GamePawn_Initialize
 ; ---------------------------------
@@ -291,7 +291,7 @@ _GamePawn_Initialize::
 	push	ix
 	ld	ix,#0
 	add	ix,sp
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:38: Mem_Set(0x00, g_Pawn, sizeof(Game_Pawn));
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:43: Mem_Set(0x00, g_Pawn, sizeof(Game_Pawn));
 	ld	(_g_Pawn), hl
 	push	de
 	ld	bc, #0x0014
@@ -300,18 +300,18 @@ _GamePawn_Initialize::
 	xor	a, a
 	call	_Mem_Set
 	pop	de
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:39: g_Pawn->SpriteList = sprtList;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:44: g_Pawn->SpriteList = sprtList;
 	ld	hl, (_g_Pawn)
 	ld	(hl), e
 	inc	hl
 	ld	(hl), d
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:40: g_Pawn->SpriteNum = sprtNum;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:45: g_Pawn->SpriteNum = sprtNum;
 	ld	hl, (_g_Pawn)
 	inc	hl
 	inc	hl
 	ld	a, 4 (ix)
 	ld	(hl), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:44: g_Pawn->ActionList = actList;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:49: g_Pawn->ActionList = actList;
 	ld	hl, (_g_Pawn)
 	inc	hl
 	inc	hl
@@ -321,7 +321,7 @@ _GamePawn_Initialize::
 	inc	hl
 	ld	a, 7 (ix)
 	ld	(hl), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:47: GamePawn_SetAction(g_Pawn, 0);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:52: GamePawn_SetAction(g_Pawn, 0);
 	push	de
 	xor	a, a
 	push	af
@@ -329,9 +329,9 @@ _GamePawn_Initialize::
 	ld	hl, (_g_Pawn)
 	call	_GamePawn_SetAction
 	pop	de
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:53: g_Sprite = sprtList;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:58: g_Sprite = sprtList;
 	ld	(_g_Sprite), de
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:54: loop(i, g_Pawn->SpriteNum)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:59: loop(i, g_Pawn->SpriteNum)
 	ld	c, #0x00
 00103$:
 	ld	hl, (_g_Pawn)
@@ -341,10 +341,10 @@ _GamePawn_Initialize::
 	ld	a, c
 	sub	a, b
 	jr	NC, 00105$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:57: u8 sprtIdx = g_Sprite->SpriteID;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:62: u8 sprtIdx = g_Sprite->SpriteID;
 	ld	hl, (_g_Sprite)
 	ld	b, (hl)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:60: VDP_SetSpriteColorSM1(sprtIdx, g_Sprite->Color);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:65: VDP_SetSpriteColorSM1(sprtIdx, g_Sprite->Color);
 	ld	de, #0x0004
 	add	hl, de
 	ld	l, (hl)
@@ -353,7 +353,7 @@ _GamePawn_Initialize::
 	ld	a, b
 	call	_VDP_SetSpriteColorSM1
 	pop	bc
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:70: g_Sprite++;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:75: g_Sprite++;
 	ld	hl, #_g_Sprite
 	ld	a, (hl)
 	add	a, #0x06
@@ -362,11 +362,11 @@ _GamePawn_Initialize::
 	inc	hl
 	inc	(hl)
 00118$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:54: loop(i, g_Pawn->SpriteNum)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:59: loop(i, g_Pawn->SpriteNum)
 	inc	c
 	jp	00103$
 00105$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:73: }
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:78: }
 	pop	ix
 	pop	hl
 	pop	af
@@ -517,42 +517,42 @@ _g_RG25SAV	=	0xfffa
 _g_RG26SAV	=	0xfffb
 _g_RG27SAV	=	0xfffc
 _g_SVFFFD	=	0xfffd
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:77: void GamePawn_SetPosition(Game_Pawn* pawn, u8 x, u8 y)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:82: void GamePawn_SetPosition(Game_Pawn* pawn, u8 x, u8 y)
 ;	---------------------------------
 ; Function GamePawn_SetPosition
 ; ---------------------------------
 _GamePawn_SetPosition::
 	ex	de, hl
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:79: pawn->PositionX = x;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:84: pawn->PositionX = x;
 	ld	hl, #0x0005
 	add	hl, de
 	ld	iy, #2
 	add	iy, sp
 	ld	a, 0 (iy)
 	ld	(hl), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:80: pawn->PositionY = y;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:85: pawn->PositionY = y;
 	ld	hl, #0x0006
 	add	hl, de
 	ld	a, 1 (iy)
 	inc	iy
 	ld	(hl), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:81: pawn->MoveX = 0;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:86: pawn->MoveX = 0;
 	ld	hl, #0x000d
 	add	hl, de
 	ld	(hl), #0x00
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:82: pawn->MoveY = 0;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:87: pawn->MoveY = 0;
 	ld	hl, #0x000e
 	add	hl, de
 	ld	(hl), #0x00
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:83: pawn->Update |= PAWN_UPDATE_POSITION;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:88: pawn->Update |= PAWN_UPDATE_POSITION;
 	ld	hl, #0x000b
 	add	hl, de
 	set	0, (hl)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:84: }
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:89: }
 	pop	hl
 	pop	af
 	jp	(hl)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:89: void GamePawn_SetAction(Game_Pawn* pawn, u8 id)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:94: void GamePawn_SetAction(Game_Pawn* pawn, u8 id)
 ;	---------------------------------
 ; Function GamePawn_SetAction
 ; ---------------------------------
@@ -560,7 +560,7 @@ _GamePawn_SetAction::
 	dec	sp
 	ld	c, l
 	ld	b, h
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:91: if(pawn->ActionId != id)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:96: if(pawn->ActionId != id)
 	ld	hl, #0x0007
 	add	hl, bc
 	ex	de, hl
@@ -571,32 +571,32 @@ _GamePawn_SetAction::
 	ld	a, 3 (iy)
 	sub	a, 0 (iy)
 	jr	Z, 00103$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:93: pawn->ActionId = id;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:98: pawn->ActionId = id;
 	ld	a, 3 (iy)
 	inc	iy
 	inc	iy
 	inc	iy
 	ld	(de), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:94: pawn->AnimTimer = 0;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:99: pawn->AnimTimer = 0;
 	ld	hl, #0x000a
 	add	hl, bc
 	ld	(hl), #0x00
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:95: pawn->AnimStep = 0;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:100: pawn->AnimStep = 0;
 	ld	hl, #0x0009
 	add	hl, bc
 	ld	(hl), #0x00
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:96: pawn->Update |= PAWN_UPDATE_PATTERN;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:101: pawn->Update |= PAWN_UPDATE_PATTERN;
 	ld	hl, #0x000b
 	add	hl, bc
 	set	1, (hl)
 	ld	a, (hl)
 00103$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:98: }
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:103: }
 	inc	sp
 	pop	hl
 	inc	sp
 	jp	(hl)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:102: void GamePawn_Update(Game_Pawn* pawn)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:107: void GamePawn_Update(Game_Pawn* pawn)
 ;	---------------------------------
 ; Function GamePawn_Update
 ; ---------------------------------
@@ -608,7 +608,7 @@ _GamePawn_Update::
 	add	iy, sp
 	ld	sp, iy
 	ld	(_g_Pawn), hl
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:105: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:110: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
 	ld	bc, (_g_Pawn)
 	ld	l, c
 ;	spillPairReg hl
@@ -634,7 +634,7 @@ _GamePawn_Update::
 	add	hl, de
 	ld	-5 (ix), l
 	ld	-4 (ix), h
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:108: if(g_Pawn->AnimTimer >= act->FrameList[g_Pawn->AnimStep].Duration)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:113: if(g_Pawn->AnimTimer >= act->FrameList[g_Pawn->AnimStep].Duration)
 	ld	hl, #0x000a
 	add	hl, bc
 	ex	de, hl
@@ -663,17 +663,17 @@ _GamePawn_Update::
 	ld	a,-3 (ix)
 	sub	a,(hl)
 	jr	C, 00102$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:110: g_Pawn->AnimTimer = 0;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:115: g_Pawn->AnimTimer = 0;
 	xor	a, a
 	ld	(de), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:111: g_Pawn->AnimStep++;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:116: g_Pawn->AnimStep++;
 	ld	hl, (_g_Pawn)
 	ld	bc, #0x0009
 	add	hl, bc
 	inc	(hl)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:105: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:110: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
 	ld	bc, (_g_Pawn)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:112: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:117: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
 	ld	hl, #0x000b
 	add	hl, bc
 	ex	de, hl
@@ -681,9 +681,9 @@ _GamePawn_Update::
 	set	1, a
 	ld	(de), a
 00102$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:105: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:110: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
 	ld	hl, (_g_Pawn)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:116: if(g_Pawn->AnimStep >= act->FrameNum)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:121: if(g_Pawn->AnimStep >= act->FrameNum)
 	ld	-2 (ix), l
 	ld	-1 (ix), h
 	ld	bc,#9
@@ -700,7 +700,7 @@ _GamePawn_Update::
 	ld	c, (hl)
 	sub	a, c
 	jr	C, 00107$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:118: if(act->Loop) // restart action
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:123: if(act->Loop) // restart action
 	ld	l, -5 (ix)
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -713,39 +713,39 @@ _GamePawn_Update::
 	ld	a, (hl)
 	and	a,#0x01
 	jr	Z, 00104$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:120: g_Pawn->AnimTimer = 0;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:125: g_Pawn->AnimTimer = 0;
 	ld	l, -2 (ix)
 	ld	h, -1 (ix)
 	ld	de, #0x000a
 	add	hl, de
 	ld	(hl), #0x00
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:121: g_Pawn->AnimStep = 0;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:126: g_Pawn->AnimStep = 0;
 	ld	hl, (_g_Pawn)
 	ld	bc, #0x0009
 	add	hl, bc
 	ld	(hl), #0x00
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:105: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:110: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
 	ld	bc, (_g_Pawn)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:112: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:117: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
 	ld	hl, #0x000b
 	add	hl, bc
 	ex	de, hl
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:122: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:127: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
 	ld	a, (de)
 	set	1, a
 	ld	(de), a
 	jp	00107$
 00104$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:126: GamePawn_SetAction(g_Pawn, 0);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:131: GamePawn_SetAction(g_Pawn, 0);
 	xor	a, a
 	push	af
 	inc	sp
 	ld	hl, (_g_Pawn)
 	call	_GamePawn_SetAction
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:127: return;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:132: return;
 	jp	00158$
 00107$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:132: const Game_Frame* frame = &act->FrameList[g_Pawn->AnimStep];
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:137: const Game_Frame* frame = &act->FrameList[g_Pawn->AnimStep];
 	ld	l, -5 (ix)
 	ld	h, -4 (ix)
 	ld	c, (hl)
@@ -760,7 +760,7 @@ _GamePawn_Update::
 	add	hl, hl
 	add	hl, hl
 	add	hl, bc
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:133: if(frame->Event != 0)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:138: if(frame->Event != 0)
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	-2 (ix), l
@@ -775,11 +775,11 @@ _GamePawn_Update::
 	ld	a, d
 	or	a, e
 	jr	Z, 00109$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:134: frame->Event();
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:139: frame->Event();
 	ex	de, hl
 	call	___sdcc_call_hl
 00109$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:137: g_Pawn->AnimFrame = frame->Id;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:142: g_Pawn->AnimFrame = frame->Id;
 	ld	bc, (_g_Pawn)
 	ld	hl, #0x0008
 	add	hl, bc
@@ -788,26 +788,26 @@ _GamePawn_Update::
 	ld	h, -1 (ix)
 	ld	a, (hl)
 	ld	(de), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:138: g_Pawn->AnimTimer++;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:143: g_Pawn->AnimTimer++;
 	ld	hl, (_g_Pawn)
 	ld	bc, #0x000a
 	add	hl, bc
 	inc	(hl)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:139: g_Pawn->Counter++;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:144: g_Pawn->Counter++;
 	ld	hl, (_g_Pawn)
 	ld	bc, #0x000c
 	add	hl, bc
 	inc	(hl)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:105: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:110: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
 	ld	hl, (_g_Pawn)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:142: if(g_Pawn->Update & PAWN_UPDATE_COLLISION)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:147: if(g_Pawn->Update & PAWN_UPDATE_COLLISION)
 	ld	-5 (ix), l
 	ld	-4 (ix), h
 	ld	bc,#11
 	add	hl,bc
 	bit	4, (hl)
 	jp	Z,00158$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:144: u8 targetX = g_Pawn->PositionX + g_Pawn->MoveX;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:149: u8 targetX = g_Pawn->PositionX + g_Pawn->MoveX;
 	ld	a, -5 (ix)
 	ld	-2 (ix), a
 	ld	a, -4 (ix)
@@ -832,7 +832,7 @@ _GamePawn_Update::
 	add	a, -3 (ix)
 	ld	-1 (ix), a
 	ld	-7 (ix), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:145: u8 targetY = g_Pawn->PositionY + g_Pawn->MoveY;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:150: u8 targetY = g_Pawn->PositionY + g_Pawn->MoveY;
 	ld	a, -5 (ix)
 	ld	-2 (ix), a
 	ld	a, -4 (ix)
@@ -858,14 +858,14 @@ _GamePawn_Update::
 	add	a, -2 (ix)
 	ld	-1 (ix), a
 	ld	-6 (ix), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:149: if(g_Pawn->MoveY > 0)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:154: if(g_Pawn->MoveY > 0)
 	xor	a, a
 	sub	a, -2 (ix)
 	jp	PO, 00343$
 	xor	a, #0x80
 00343$:
 	jp	P, 00138$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:152: if(targetY + GET_BOUND_Y >= GAMEPAWN_BORDER_MAX_Y)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:157: if(targetY + GET_BOUND_Y >= GAMEPAWN_BORDER_MAX_Y)
 	ld	c, -6 (ix)
 	ld	b, #0x00
 	ld	hl, #0x0010
@@ -878,7 +878,7 @@ _GamePawn_Update::
 	rra
 	sbc	a, #0x80
 	jr	C, 00119$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:155: g_Pawn->PhysicsCB(PAWN_PHYSICS_BORDER_DOWN, 0);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:160: g_Pawn->PhysicsCB(PAWN_PHYSICS_BORDER_DOWN, 0);
 	ld	c, -5 (ix)
 	ld	b, -4 (ix)
 	ld	hl, #16
@@ -895,7 +895,7 @@ _GamePawn_Update::
 	call	___sdcc_call_iy
 	jp	00140$
 00119$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:164: u8 cellY = (targetY + GET_BOUND_Y) / 8;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:169: u8 cellY = (targetY + GET_BOUND_Y) / 8;
 	ld	e, l
 	ld	d, h
 	bit	7, h
@@ -911,9 +911,9 @@ _GamePawn_Update::
 	sra	d
 	rr	e
 	ld	-4 (ix), e
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:165: u8 cellX, lastCell = 0xFF;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:170: u8 cellX, lastCell = 0xFF;
 	ld	-3 (ix), #0xff
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:181: cellX = (targetX + (GET_BOUND_X / 4)) / 8;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:186: cellX = (targetX + (GET_BOUND_X / 4)) / 8;
 	ld	c, -7 (ix)
 	ld	b, #0x00
 	ld	hl, #0x0004
@@ -937,13 +937,13 @@ _GamePawn_Update::
 	rr	l
 	sra	e
 	rr	l
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:182: if(cellX != lastCell)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:187: if(cellX != lastCell)
 	ld	a, l
 	inc	a
 	jr	Z, 00113$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:184: lastCell = cellX;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:189: lastCell = cellX;
 	ld	-3 (ix), l
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:185: u8 tile = VDP_Peek_16K(g_ScreenLayoutLow + (cellY * 32) + cellX);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:190: u8 tile = GAMEPAWN_GET_TILE(cellX, cellY);
 	ld	e, -4 (ix)
 	ld	d, #0x00
 	ex	de, hl
@@ -963,7 +963,7 @@ _GamePawn_Update::
 	add	hl, de
 	call	_VDP_Peek_16K
 	ld	e, a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:186: if(g_Pawn->CollisionCB(tile))
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:191: if(g_Pawn->CollisionCB(tile))
 	ld	iy, (_g_Pawn)
 	ld	l, 18 (iy)
 ;	spillPairReg hl
@@ -977,7 +977,7 @@ _GamePawn_Update::
 	pop	bc
 	or	a, a
 	jr	Z, 00113$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:188: g_Pawn->PhysicsCB(PAWN_PHYSICS_COL_DOWN, tile);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:193: g_Pawn->PhysicsCB(PAWN_PHYSICS_COL_DOWN, tile);
 	ld	hl, (_g_Pawn)
 	ld	bc, #0x0010
 	add	hl, bc
@@ -991,17 +991,17 @@ _GamePawn_Update::
 	push	bc
 	pop	iy
 	call	___sdcc_call_iy
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:189: targetY = (cellY * 8) - GET_BOUND_Y;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:194: targetY = (cellY * 8) - GET_BOUND_Y;
 	ld	a, -4 (ix)
 	add	a, a
 	add	a, a
 	add	a, a
 	add	a, #0xf0
 	ld	-6 (ix), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:190: goto skipVertival;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:195: goto skipVertival;
 	jp	00140$
 00113$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:209: cellX = (targetX + GET_BOUND_X - (GET_BOUND_X / 4)) / 8;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:214: cellX = (targetX + GET_BOUND_X - (GET_BOUND_X / 4)) / 8;
 	ld	hl, #0x000c
 	add	hl, bc
 	ld	e, l
@@ -1018,11 +1018,11 @@ _GamePawn_Update::
 	rr	e
 	sra	d
 	rr	e
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:210: if(cellX != lastCell)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:215: if(cellX != lastCell)
 	ld	a, -3 (ix)
 	sub	a, e
 	jp	Z,00140$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:213: u8 tile = VDP_Peek_16K(g_ScreenLayoutLow + (cellY * 32) + cellX);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:218: u8 tile = GAMEPAWN_GET_TILE(cellX, cellY);
 	ld	l, -4 (ix)
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -1040,7 +1040,7 @@ _GamePawn_Update::
 	add	hl, de
 	call	_VDP_Peek_16K
 	ld	e, a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:214: if(g_Pawn->CollisionCB(tile))
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:219: if(g_Pawn->CollisionCB(tile))
 	ld	iy, (_g_Pawn)
 	ld	l, 18 (iy)
 ;	spillPairReg hl
@@ -1052,7 +1052,7 @@ _GamePawn_Update::
 	pop	de
 	or	a, a
 	jp	Z, 00140$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:216: g_Pawn->PhysicsCB(PAWN_PHYSICS_COL_DOWN, tile);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:221: g_Pawn->PhysicsCB(PAWN_PHYSICS_COL_DOWN, tile);
 	ld	hl, (_g_Pawn)
 	ld	bc, #0x0010
 	add	hl, bc
@@ -1066,28 +1066,28 @@ _GamePawn_Update::
 	push	bc
 	pop	iy
 	call	___sdcc_call_iy
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:217: targetY = (cellY * 8) - GET_BOUND_Y;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:222: targetY = (cellY * 8) - GET_BOUND_Y;
 	ld	a, -4 (ix)
 	add	a, a
 	add	a, a
 	add	a, a
 	add	a, #0xf0
 	ld	-6 (ix), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:218: goto skipVertival;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:223: goto skipVertival;
 	jp	00140$
 00138$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:240: else if(g_Pawn->MoveY < 0)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:245: else if(g_Pawn->MoveY < 0)
 	bit	7, -2 (ix)
 	jp	Z, 00135$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:246: if(targetY > g_Pawn->PositionY)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:251: if(targetY > g_Pawn->PositionY)
 	ld	a, -3 (ix)
 	sub	a, -6 (ix)
 	jr	NC, 00124$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:253: targetY = GAMEPAWN_BORDER_MIN_Y;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:258: targetY = GAMEPAWN_BORDER_MIN_Y;
 	ld	-6 (ix), #0x00
 	jp	00140$
 00124$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:259: u8 cellX = (targetX + (GET_BOUND_X / 2)) / 8;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:264: u8 cellX = (targetX + (GET_BOUND_X / 2)) / 8;
 	ld	c, -7 (ix)
 	ld	b, #0x00
 	ld	hl, #0x0008
@@ -1107,7 +1107,7 @@ _GamePawn_Update::
 	sra	d
 	rr	e
 	ld	-1 (ix), e
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:260: u8 cellY = (targetY) / 8;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:265: u8 cellY = (targetY) / 8;
 	ld	c, -6 (ix)
 	ld	b, #0x00
 	ld	l, c
@@ -1127,7 +1127,7 @@ _GamePawn_Update::
 	rr	l
 	sra	h
 	rr	l
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:261: u8 tile = VDP_Peek_16K(g_ScreenLayoutLow + (cellY * 32) + cellX);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:266: u8 tile = GAMEPAWN_GET_TILE(cellX, cellY);
 	ld	c,l
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -1146,7 +1146,7 @@ _GamePawn_Update::
 	add	hl, de
 	call	_VDP_Peek_16K
 	ld	b, a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:262: if(g_Pawn->CollisionCB(tile))
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:267: if(g_Pawn->CollisionCB(tile))
 	ld	hl, (_g_Pawn)
 	ld	de, #0x0012
 	add	hl, de
@@ -1160,7 +1160,7 @@ _GamePawn_Update::
 	pop	bc
 	or	a, a
 	jp	Z, 00140$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:264: g_Pawn->PhysicsCB(PAWN_PHYSICS_COL_UP, tile);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:269: g_Pawn->PhysicsCB(PAWN_PHYSICS_COL_UP, tile);
 	ld	hl, (_g_Pawn)
 	ld	de, #0x0010
 	add	hl, de
@@ -1176,7 +1176,7 @@ _GamePawn_Update::
 	pop	iy
 	call	___sdcc_call_iy
 	pop	bc
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:265: targetY = (cellY * 8) + 8;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:270: targetY = (cellY * 8) + 8;
 	ld	a, c
 	add	a, a
 	add	a, a
@@ -1185,9 +1185,9 @@ _GamePawn_Update::
 	ld	-6 (ix), a
 	jp	00140$
 00135$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:277: u8 tile = 0;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:282: u8 tile = 0;
 	ld	-5 (ix), #0x00
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:278: u8 cellY = (targetY + GET_BOUND_Y) / 8;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:283: u8 cellY = (targetY + GET_BOUND_Y) / 8;
 	ld	c, -6 (ix)
 	ld	b, #0x00
 	ld	hl, #0x0010
@@ -1207,9 +1207,9 @@ _GamePawn_Update::
 	sra	d
 	rr	e
 	ld	-4 (ix), e
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:279: u8 cellX, lastCell = 0xFF;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:284: u8 cellX, lastCell = 0xFF;
 	ld	-3 (ix), #0xff
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:291: cellX = (targetX + (GET_BOUND_X / 4)) / 8;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:296: cellX = (targetX + (GET_BOUND_X / 4)) / 8;
 	ld	a, -7 (ix)
 	ld	-9 (ix), a
 	ld	-8 (ix), #0x00
@@ -1234,13 +1234,13 @@ _GamePawn_Update::
 	rr	c
 	sra	b
 	rr	c
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:292: if(cellX != lastCell)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:297: if(cellX != lastCell)
 	ld	a, c
 	inc	a
 	jr	Z, 00129$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:294: lastCell = cellX;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:299: lastCell = cellX;
 	ld	-3 (ix), c
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:295: tile = VDP_Peek_16K(g_ScreenLayoutLow + (cellY * 32) + cellX);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:300: tile = GAMEPAWN_GET_TILE(cellX, cellY);
 	ld	l, -4 (ix)
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -1258,7 +1258,7 @@ _GamePawn_Update::
 	add	hl, bc
 	call	_VDP_Peek_16K
 	ld	-5 (ix), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:296: if(g_Pawn->CollisionCB(tile))
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:301: if(g_Pawn->CollisionCB(tile))
 	ld	hl, (_g_Pawn)
 	ld	de, #0x0012
 	add	hl, de
@@ -1273,9 +1273,9 @@ _GamePawn_Update::
 	call	___sdcc_call_hl
 	or	a, a
 	jp	NZ, 00140$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:297: goto skipVertival;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:302: goto skipVertival;
 00129$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:311: cellX = (targetX + GET_BOUND_X - (GET_BOUND_X / 4)) / 8;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:316: cellX = (targetX + GET_BOUND_X - (GET_BOUND_X / 4)) / 8;
 	pop	hl
 	push	hl
 	ld	de, #0x000c
@@ -1298,11 +1298,11 @@ _GamePawn_Update::
 	sra	-1 (ix)
 	rr	-2 (ix)
 	ld	a, -2 (ix)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:312: if(cellX != lastCell)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:317: if(cellX != lastCell)
 	ld	-1 (ix), a
 	sub	a, -3 (ix)
 	jp	Z,00133$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:315: tile = VDP_Peek_16K(g_ScreenLayoutLow + (cellY * 32) + cellX);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:320: tile = GAMEPAWN_GET_TILE(cellX, cellY);
 	ld	a, -4 (ix)
 	ld	-3 (ix), a
 	ld	-2 (ix), #0x00
@@ -1345,7 +1345,7 @@ _GamePawn_Update::
 	call	_VDP_Peek_16K
 	ld	-1 (ix), a
 	ld	-5 (ix), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:316: if(g_Pawn->CollisionCB(tile))
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:321: if(g_Pawn->CollisionCB(tile))
 	ld	hl, (_g_Pawn)
 	ld	-2 (ix), l
 	ld	-1 (ix), h
@@ -1367,9 +1367,9 @@ _GamePawn_Update::
 	ld	-1 (ix), a
 	or	a, a
 	jr	NZ, 00140$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:317: goto skipVertival;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:322: goto skipVertival;
 00133$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:330: g_Pawn->PhysicsCB(PAWN_PHYSICS_FALL, tile);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:335: g_Pawn->PhysicsCB(PAWN_PHYSICS_FALL, tile);
 	ld	hl, (_g_Pawn)
 	ld	-2 (ix), l
 	ld	-1 (ix), h
@@ -1397,14 +1397,14 @@ _GamePawn_Update::
 	ex	(sp), hl
 	pop	iy
 	call	___sdcc_call_iy
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:333: skipVertival:
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:338: skipVertival:
 00140$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:105: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:110: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
 	ld	hl, (_g_Pawn)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:144: u8 targetX = g_Pawn->PositionX + g_Pawn->MoveX;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:149: u8 targetX = g_Pawn->PositionX + g_Pawn->MoveX;
 	ld	-3 (ix), l
 	ld	-2 (ix), h
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:336: if(g_Pawn->MoveX > 0)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:341: if(g_Pawn->MoveX > 0)
 	ld	bc,#13
 	add	hl,bc
 	ld	a, (hl)
@@ -1415,7 +1415,7 @@ _GamePawn_Update::
 	xor	a, #0x80
 00349$:
 	jp	P, 00154$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:339: if((u8)(targetX + GET_BOUND_X) < g_Pawn->PositionX)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:344: if((u8)(targetX + GET_BOUND_X) < g_Pawn->PositionX)
 	ld	a, -7 (ix)
 	add	a, #0x10
 	ld	c, -3 (ix)
@@ -1425,7 +1425,7 @@ _GamePawn_Update::
 	ld	c, (hl)
 	sub	a, c
 	jr	NC, 00144$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:342: g_Pawn->PhysicsCB(PAWN_PHYSICS_BORDER_RIGHT, 0);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:347: g_Pawn->PhysicsCB(PAWN_PHYSICS_BORDER_RIGHT, 0);
 	ld	c, -3 (ix)
 	ld	b, -2 (ix)
 	ld	hl, #16
@@ -1442,7 +1442,7 @@ _GamePawn_Update::
 	call	___sdcc_call_iy
 	jp	00155$
 00144$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:351: u8 cellX = (targetX + GET_BOUND_X) / 8;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:356: u8 cellX = (targetX + GET_BOUND_X) / 8;
 	ld	c, -7 (ix)
 	ld	b, #0x00
 	ld	hl, #0x0010
@@ -1462,7 +1462,7 @@ _GamePawn_Update::
 	sra	d
 	rr	e
 	ld	-1 (ix), e
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:352: u8 cellY = (targetY + (GET_BOUND_Y / 2)) / 8;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:357: u8 cellY = (targetY + (GET_BOUND_Y / 2)) / 8;
 	ld	c, -6 (ix)
 	ld	b, #0x00
 	ld	hl, #0x0008
@@ -1483,7 +1483,7 @@ _GamePawn_Update::
 	rr	l
 	sra	h
 	rr	l
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:353: u8 tile = VDP_Peek_16K(g_ScreenLayoutLow + (cellY * 32) + cellX);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:358: u8 tile = GAMEPAWN_GET_TILE(cellX, cellY);
 	ld	h, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -1499,7 +1499,7 @@ _GamePawn_Update::
 	add	hl, bc
 	call	_VDP_Peek_16K
 	ld	e, a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:354: if(g_Pawn->CollisionCB(tile))
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:359: if(g_Pawn->CollisionCB(tile))
 	ld	iy, (_g_Pawn)
 	ld	l, 18 (iy)
 ;	spillPairReg hl
@@ -1511,7 +1511,7 @@ _GamePawn_Update::
 	pop	de
 	or	a, a
 	jp	Z, 00155$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:356: g_Pawn->PhysicsCB(PAWN_PHYSICS_COL_RIGHT, tile);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:361: g_Pawn->PhysicsCB(PAWN_PHYSICS_COL_RIGHT, tile);
 	ld	hl, (_g_Pawn)
 	ld	bc, #0x0010
 	add	hl, bc
@@ -1525,7 +1525,7 @@ _GamePawn_Update::
 	push	bc
 	pop	iy
 	call	___sdcc_call_iy
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:357: targetX = (cellX * 8) - GET_BOUND_X;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:362: targetX = (cellX * 8) - GET_BOUND_X;
 	ld	a, -1 (ix)
 	add	a, a
 	add	a, a
@@ -1534,10 +1534,10 @@ _GamePawn_Update::
 	ld	-7 (ix), a
 	jp	00155$
 00154$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:363: else if(g_Pawn->MoveX < 0)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:368: else if(g_Pawn->MoveX < 0)
 	bit	7, -1 (ix)
 	jp	Z, 00155$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:366: if(targetX > g_Pawn->PositionX)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:371: if(targetX > g_Pawn->PositionX)
 	ld	c, -3 (ix)
 	ld	b, -2 (ix)
 	ld	hl, #5
@@ -1545,7 +1545,7 @@ _GamePawn_Update::
 	ld	a, (hl)
 	sub	a, -7 (ix)
 	jr	NC, 00149$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:369: g_Pawn->PhysicsCB(PAWN_PHYSICS_BORDER_LEFT, 0);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:374: g_Pawn->PhysicsCB(PAWN_PHYSICS_BORDER_LEFT, 0);
 	ld	c, -3 (ix)
 	ld	b, -2 (ix)
 	ld	hl, #16
@@ -1562,7 +1562,7 @@ _GamePawn_Update::
 	call	___sdcc_call_iy
 	jp	00155$
 00149$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:378: u8 cellX = (targetX) / 8;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:383: u8 cellX = (targetX) / 8;
 	ld	c, -7 (ix)
 	ld	b, #0x00
 	ld	l, c
@@ -1583,7 +1583,7 @@ _GamePawn_Update::
 	sra	h
 	rr	l
 	ld	-1 (ix), l
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:379: u8 cellY = (targetY + (GET_BOUND_Y / 2)) / 8;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:384: u8 cellY = (targetY + (GET_BOUND_Y / 2)) / 8;
 	ld	c, -6 (ix)
 	ld	b, #0x00
 	ld	hl, #0x0008
@@ -1604,7 +1604,7 @@ _GamePawn_Update::
 	rr	l
 	sra	h
 	rr	l
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:380: u8 tile = VDP_Peek_16K(g_ScreenLayoutLow + (cellY * 32) + cellX);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:385: u8 tile = GAMEPAWN_GET_TILE(cellX, cellY);
 	ld	h, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -1620,7 +1620,7 @@ _GamePawn_Update::
 	add	hl, bc
 	call	_VDP_Peek_16K
 	ld	e, a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:381: if(g_Pawn->CollisionCB(tile))
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:386: if(g_Pawn->CollisionCB(tile))
 	ld	iy, (_g_Pawn)
 	ld	l, 18 (iy)
 ;	spillPairReg hl
@@ -1632,7 +1632,7 @@ _GamePawn_Update::
 	pop	de
 	or	a, a
 	jr	Z, 00155$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:383: g_Pawn->PhysicsCB(PAWN_PHYSICS_COL_LEFT, tile);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:388: g_Pawn->PhysicsCB(PAWN_PHYSICS_COL_LEFT, tile);
 	ld	hl, (_g_Pawn)
 	ld	bc, #0x0010
 	add	hl, bc
@@ -1646,7 +1646,7 @@ _GamePawn_Update::
 	push	bc
 	pop	iy
 	call	___sdcc_call_iy
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:384: targetX = (cellX * 8) + 8;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:389: targetX = (cellX * 8) + 8;
 	ld	a, -1 (ix)
 	add	a, a
 	add	a, a
@@ -1654,41 +1654,41 @@ _GamePawn_Update::
 	add	a, #0x08
 	ld	-7 (ix), a
 00155$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:389: g_Pawn->PositionX = targetX;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:394: g_Pawn->PositionX = targetX;
 	ld	hl, (_g_Pawn)
 	ld	bc, #0x0005
 	add	hl, bc
 	ld	a, -7 (ix)
 	ld	(hl), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:390: g_Pawn->PositionY = targetY;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:395: g_Pawn->PositionY = targetY;
 	ld	hl, (_g_Pawn)
 	ld	bc, #0x0006
 	add	hl, bc
 	ld	a, -6 (ix)
 	ld	(hl), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:105: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
-	ld	hl, (_g_Pawn)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:112: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
-	ld	bc, #0x000b
-	add	hl, bc
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:391: g_Pawn->Update |= PAWN_UPDATE_POSITION;
-	set	0, (hl)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:105: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:110: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
 	ld	bc, (_g_Pawn)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:112: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:117: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
 	ld	hl, #0x000b
 	add	hl, bc
 	ex	de, hl
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:392: g_Pawn->Update &= ~PAWN_UPDATE_COLLISION;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:396: g_Pawn->Update |= PAWN_UPDATE_POSITION;
 	ld	a, (de)
-	res	4, a
+	set	0, a
 	ld	(de), a
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:110: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
+	ld	hl, (_g_Pawn)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:117: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
+	ld	bc, #0x000b
+	add	hl, bc
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:397: g_Pawn->Update &= ~PAWN_UPDATE_COLLISION;
+	res	4, (hl)
 00158$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:395: }
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:400: }
 	ld	sp, ix
 	pop	ix
 	ret
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:399: void GamePawn_Draw(Game_Pawn* pawn)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:404: void GamePawn_Draw(Game_Pawn* pawn)
 ;	---------------------------------
 ; Function GamePawn_Draw
 ; ---------------------------------
@@ -1698,15 +1698,15 @@ _GamePawn_Draw::
 	add	ix,sp
 	push	af
 	ld	(_g_Pawn), hl
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:402: if(g_Pawn->Update == 0)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:407: if(g_Pawn->Update == 0)
 	ld	bc, (_g_Pawn)
 	push	bc
 	pop	iy
 	ld	a, 11 (iy)
 	or	a, a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:403: return;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:408: return;
 	jp	Z,00121$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:405: g_Sprite = g_Pawn->SpriteList;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:410: g_Sprite = g_Pawn->SpriteList;
 	ld	l, c
 	ld	h, b
 	ld	a, (hl)
@@ -1714,12 +1714,12 @@ _GamePawn_Draw::
 	ld	(_g_Sprite+0), a
 	ld	a, (hl)
 	ld	(_g_Sprite+1), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:409: loop(i, g_Pawn->SpriteNum)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:414: loop(i, g_Pawn->SpriteNum)
 	ld	-1 (ix), #0x00
 00119$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:402: if(g_Pawn->Update == 0)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:407: if(g_Pawn->Update == 0)
 	ld	bc, (_g_Pawn)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:409: loop(i, g_Pawn->SpriteNum)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:414: loop(i, g_Pawn->SpriteNum)
 	ld	l, c
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -1731,14 +1731,14 @@ _GamePawn_Draw::
 	ld	a,-1 (ix)
 	sub	a,(hl)
 	jp	NC, 00117$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:411: if(g_Sprite->Flag & PAWN_SPRITE_EVEN) // Skip odd frames
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:416: if(g_Sprite->Flag & PAWN_SPRITE_EVEN) // Skip odd frames
 	ld	hl, (_g_Sprite)
 	ld	de, #0x0005
 	add	hl, de
 	ld	e, (hl)
 	bit	0, e
 	jr	Z, 00112$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:413: if((g_Pawn->Counter & 1) != 0)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:418: if((g_Pawn->Counter & 1) != 0)
 	ld	e, c
 	ld	d, b
 	ld	hl, #12
@@ -1746,17 +1746,17 @@ _GamePawn_Draw::
 	ld	a, (hl)
 	rrca
 	jp	C,00116$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:402: if(g_Pawn->Update == 0)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:407: if(g_Pawn->Update == 0)
 	ld	hl, #0x000b
 	add	hl, bc
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:416: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:421: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
 	set	1, (hl)
 	jp	00113$
 00112$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:418: else if(g_Sprite->Flag & PAWN_SPRITE_ODD) // Skip even frames
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:423: else if(g_Sprite->Flag & PAWN_SPRITE_ODD) // Skip even frames
 	bit	1, e
 	jr	Z, 00113$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:420: if((g_Pawn->Counter & 1) == 0)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:425: if((g_Pawn->Counter & 1) == 0)
 	ld	e, c
 	ld	d, b
 	ld	hl, #12
@@ -1764,24 +1764,24 @@ _GamePawn_Draw::
 	ld	a, (hl)
 	rrca
 	jr	NC, 00116$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:402: if(g_Pawn->Update == 0)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:407: if(g_Pawn->Update == 0)
 	ld	hl, #0x000b
 	add	hl, bc
 	ex	de, hl
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:423: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:428: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
 	ld	a, (de)
 	set	1, a
 	ld	(de), a
 00113$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:402: if(g_Pawn->Update == 0)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:407: if(g_Pawn->Update == 0)
 	ld	de, (_g_Pawn)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:426: g_Game_DrawY = g_Pawn->PositionY + g_Sprite->OffsetY - 1; // Decrement Y to fit screen coordinate
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:431: g_Game_DrawY = g_Pawn->PositionY + g_Sprite->OffsetY - 1; // Decrement Y to fit screen coordinate
 	push	de
 	pop	iy
 	ld	a, 6 (iy)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:411: if(g_Sprite->Flag & PAWN_SPRITE_EVEN) // Skip odd frames
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:416: if(g_Sprite->Flag & PAWN_SPRITE_EVEN) // Skip odd frames
 	ld	bc, (_g_Sprite)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:426: g_Game_DrawY = g_Pawn->PositionY + g_Sprite->OffsetY - 1; // Decrement Y to fit screen coordinate
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:431: g_Game_DrawY = g_Pawn->PositionY + g_Sprite->OffsetY - 1; // Decrement Y to fit screen coordinate
 	ld	l, c
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -1796,7 +1796,7 @@ _GamePawn_Draw::
 	ld	hl, #_g_Game_DrawY
 	dec	a
 	ld	(hl), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:427: g_Game_DrawX = g_Pawn->PositionX + g_Sprite->OffsetX;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:432: g_Game_DrawX = g_Pawn->PositionX + g_Sprite->OffsetX;
 	push	de
 	pop	iy
 	ld	a, 5 (iy)
@@ -1811,14 +1811,14 @@ _GamePawn_Draw::
 ;	spillPairReg hl
 	add	a, l
 	ld	(_g_Game_DrawX+0), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:428: u8 size = 2;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:433: u8 size = 2;
 	ld	-2 (ix), #0x02
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:430: if(g_Pawn->Update & PAWN_UPDATE_PATTERN)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:435: if(g_Pawn->Update & PAWN_UPDATE_PATTERN)
 	push	de
 	pop	iy
 	bit	1, 11 (iy)
 	jr	Z, 00115$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:432: g_Game_DrawPattern = g_Pawn->AnimFrame + g_Sprite->DataOffset;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:437: g_Game_DrawPattern = g_Pawn->AnimFrame + g_Sprite->DataOffset;
 	ld	hl, #8
 	add	hl, de
 	ld	a, (hl)
@@ -1834,10 +1834,10 @@ _GamePawn_Draw::
 	ld	e, (hl)
 	add	a, e
 	ld	(_g_Game_DrawPattern+0), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:433: size++;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:438: size++;
 	ld	-2 (ix), #0x03
 00115$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:437: u16 dest = g_SpriteAtributeLow + (g_Sprite->SpriteID * 4);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:442: u16 dest = g_SpriteAtributeLow + (g_Sprite->SpriteID * 4);
 	ld	a, (bc)
 	ld	l, a
 ;	spillPairReg hl
@@ -1850,60 +1850,60 @@ _GamePawn_Draw::
 	ld	bc, (_g_SpriteAttributeLow)
 	add	hl, bc
 	ex	de, hl
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:439: VDP_WriteVRAM((u8*)&g_Game_DrawY, dest, g_SpriteAtributeHigh, size);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:444: VDP_WriteVRAM((u8*)&g_Game_DrawY, dest, g_SpriteAtributeHigh, size);
 	ld	c, -2 (ix)
 	ld	b, #0x00
 	push	bc
 	ld	hl, #_g_Game_DrawY
 	call	_VDP_WriteVRAM_16K
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:444: SkipDrawing:
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:449: SkipDrawing:
 00116$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:446: g_Sprite = (const Game_Sprite*)((u8*)g_Sprite + sizeof(Game_Sprite));
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:451: g_Sprite = (const Game_Sprite*)((u8*)g_Sprite + sizeof(Game_Sprite));
 	ld	hl, (_g_Sprite)
 	ld	bc, #0x0006
 	add	hl, bc
 	ld	(_g_Sprite), hl
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:409: loop(i, g_Pawn->SpriteNum)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:414: loop(i, g_Pawn->SpriteNum)
 	inc	-1 (ix)
 	jp	00119$
 00117$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:448: g_Pawn->Update = 0;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:453: g_Pawn->Update = 0;
 	ld	hl, #0x000b
 	add	hl, bc
 	ld	(hl), #0x00
 00121$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:449: }
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:454: }
 	ld	sp, ix
 	pop	ix
 	ret
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:455: void GamePawn_SetMovement(Game_Pawn* pawn, i8 dx, i8 dy) 
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:460: void GamePawn_SetMovement(Game_Pawn* pawn, i8 dx, i8 dy) 
 ;	---------------------------------
 ; Function GamePawn_SetMovement
 ; ---------------------------------
 _GamePawn_SetMovement::
 	ex	de, hl
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:457: pawn->MoveX = dx;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:462: pawn->MoveX = dx;
 	ld	hl, #0x000d
 	add	hl, de
 	ld	iy, #2
 	add	iy, sp
 	ld	a, 0 (iy)
 	ld	(hl), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:458: pawn->MoveY = dy;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:463: pawn->MoveY = dy;
 	ld	hl, #0x000e
 	add	hl, de
 	ld	a, 1 (iy)
 	inc	iy
 	ld	(hl), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:459: pawn->Update |= PAWN_UPDATE_COLLISION;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:464: pawn->Update |= PAWN_UPDATE_COLLISION;
 	ld	hl, #0x000b
 	add	hl, de
 	set	4, (hl)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:460: }
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:465: }
 	pop	hl
 	pop	af
 	jp	(hl)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:464: void GamePawn_InitializePhysics(Game_Pawn* pawn, Game_PhysicsCB pcb, Game_CollisionCB ccb, u8 boundX, u8 boundY)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:469: void GamePawn_InitializePhysics(Game_Pawn* pawn, Game_PhysicsCB pcb, Game_CollisionCB ccb, u8 boundX, u8 boundY)
 ;	---------------------------------
 ; Function GamePawn_InitializePhysics
 ; ---------------------------------
@@ -1913,13 +1913,13 @@ _GamePawn_InitializePhysics::
 	add	ix,sp
 	ld	c, l
 	ld	b, h
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:468: pawn->PhysicsCB = pcb; 
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:473: pawn->PhysicsCB = pcb; 
 	ld	hl, #0x0010
 	add	hl, bc
 	ld	(hl), e
 	inc	hl
 	ld	(hl), d
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:469: pawn->CollisionCB = ccb;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:474: pawn->CollisionCB = ccb;
 	ld	hl, #0x0012
 	add	hl, bc
 	ld	a, 4 (ix)
@@ -1927,7 +1927,7 @@ _GamePawn_InitializePhysics::
 	inc	hl
 	ld	a, 5 (ix)
 	ld	(hl), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:476: }
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:481: }
 	pop	ix
 	pop	hl
 	pop	af

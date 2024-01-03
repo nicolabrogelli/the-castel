@@ -23,7 +23,8 @@ typedef struct
 	u8 GhostNumber;	   /** Numero di fantasmi nel livello */
 	u8 SpiderNumber;   /** Numero di ragni nel livello */
 	u8 BatNumber;	   /** Numero di pipistrelli nel livello */
-	u8 SliderNumber;   /** So che non è un nemico */
+	u8 SliderNumberH;   /** So che non è un nemico */
+	u8 SliderNumberV;
 } EnemyType;
 
 
@@ -31,8 +32,8 @@ typedef struct
 {
 	u8 NextDoorLevel;
 	u8 PrevDoorLevel;
-	u8 NextDoorElevator;
-
+	u8 UpDoorLevel;
+	u8 DownDoorLevel;
 } DoorLevel;
 
 
@@ -47,8 +48,9 @@ struct LevelDefinition
 	u8 Height;				/** Altezza della stanza */
 	u8 *Layout;				/** Layout della stanza */
 	const c8 *Name;			/** Nome della stanza */
-	u8 NextLvlIdx;			/** Livello successivo */
-	u8 PrevLvIdx;			/** Livello precedente */
+	DoorLevel DoorLevel;
+// 	u8 NextLvlIdx;			/** Livello successivo */
+//	u8 PrevLvIdx;			/** Livello precedente */
 	EnemyType MyEnemyType;	/** Rappresenta il numero di nemici per livello */
 	ObjectItem MyItems[10]; /** Rappresenta gli oggetti utilizzati nel livello */
 };

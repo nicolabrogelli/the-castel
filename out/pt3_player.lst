@@ -169,18 +169,18 @@
                                     169 ; code
                                     170 ;--------------------------------------------------------
                                     171 	.area _CODE
-                                    172 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:117: void EmptyCB() {}
+                                    172 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:117: void EmptyCB() {}
                                     173 ;	---------------------------------
                                     174 ; Function EmptyCB
                                     175 ; ---------------------------------
       000000                        176 _EmptyCB::
       000000 C9               [10]  177 	ret
-                                    178 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:134: void PT3_Init()
+                                    178 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:134: void PT3_Init()
                                     179 ;	---------------------------------
                                     180 ; Function PT3_Init
                                     181 ; ---------------------------------
       000001                        182 _PT3_Init::
-                                    183 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:178: __endasm;
+                                    183 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:178: __endasm;
       000001 21 11 00         [10]  184 	ld	HL, #0x11
       000004 54               [ 4]  185 	ld	D, H
       000005 5C               [ 4]  186 	ld	E, H
@@ -218,14 +218,14 @@
       000035 01 0D 00         [10]  218 	ld	BC, #13
       000038 77               [ 7]  219 	ld	(HL), A
       000039 ED B0            [21]  220 	ldir
-                                    221 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:179: }
+                                    221 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:179: }
       00003B C9               [10]  222 	ret
-                                    223 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:185: void PT3_InitSong(const void* songAddr)
+                                    223 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:185: void PT3_InitSong(const void* songAddr)
                                     224 ;	---------------------------------
                                     225 ; Function PT3_InitSong
                                     226 ; ---------------------------------
       00003C                        227 _PT3_InitSong::
-                                    228 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:268: __endasm;
+                                    228 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:268: __endasm;
       00003C 11 9C FF         [10]  229 	ld	DE, #-100
       00003F 19               [11]  230 	add	HL, DE
       000040 22r5Er01         [16]  231 	ld	(#_PT3_ModAddr), HL
@@ -278,34 +278,34 @@
       0000B2 22r49r00         [16]  278 	ld	(#_ChanC + 15), HL ;S3 can comment S1,2,3; see
                                     279 ;	also EMPTYSAMORN comment
       0000B5 C3rC1r00         [10]  280 	jp	_PT3_Resume
-                                    281 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:269: }
+                                    281 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:269: }
       0000B8 C9               [10]  282 	ret
-                                    283 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:273: void PT3_Pause() __naked
+                                    283 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:273: void PT3_Pause() __naked
                                     284 ;	---------------------------------
                                     285 ; Function PT3_Pause
                                     286 ; ---------------------------------
       0000B9                        287 _PT3_Pause::
-                                    288 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:280: __endasm;
+                                    288 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:280: __endasm;
       0000B9 21r5Dr01         [10]  289 	ld	HL, #_PT3_State
       0000BC CB 86            [15]  290 	res	0, (HL)
       0000BE C3rD3r00         [10]  291 	jp	_PT3_Silence
-                                    292 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:281: }
-                                    293 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:285: void PT3_Resume()
+                                    292 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:281: }
+                                    293 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:285: void PT3_Resume()
                                     294 ;	---------------------------------
                                     295 ; Function PT3_Resume
                                     296 ; ---------------------------------
       0000C1                        297 _PT3_Resume::
-                                    298 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:290: __endasm;
+                                    298 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:290: __endasm;
       0000C1 21r5Dr01         [10]  299 	ld	HL, #_PT3_State
       0000C4 CB C6            [15]  300 	set	0, (HL)
-                                    301 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:291: }
+                                    301 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:291: }
       0000C6 C9               [10]  302 	ret
-                                    303 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:296: void PT3_SetLoop(u8 loop)
+                                    303 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:296: void PT3_SetLoop(u8 loop)
                                     304 ;	---------------------------------
                                     305 ; Function PT3_SetLoop
                                     306 ; ---------------------------------
       0000C7                        307 _PT3_SetLoop::
-                                    308 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:310: __endasm;
+                                    308 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:310: __endasm;
       0000C7 21r5Dr01         [10]  309 	ld	HL, #_PT3_State
       0000CA B7               [ 4]  310 	or	A
       0000CB 20 03            [12]  311 	jr	NZ, LoopON
@@ -313,26 +313,26 @@
       0000CF C9               [10]  313 	ret
       0000D0                        314 	LoopON:
       0000D0 CB E6            [15]  315 	set	4, (HL)
-                                    316 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:311: }
+                                    316 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:311: }
       0000D2 C9               [10]  317 	ret
-                                    318 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:315: void PT3_Silence() __naked
+                                    318 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:315: void PT3_Silence() __naked
                                     319 ;	---------------------------------
                                     320 ; Function PT3_Silence
                                     321 ; ---------------------------------
       0000D3                        322 _PT3_Silence::
-                                    323 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:324: __endasm;
+                                    323 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:324: __endasm;
       0000D3 AF               [ 4]  324 	xor	A
       0000D4 32r65r00         [13]  325 	ld	(#_PT3_Regs + 8), A
       0000D7 32r66r00         [13]  326 	ld	(#_PT3_Regs + 9), A
       0000DA 32r67r00         [13]  327 	ld	(#_PT3_Regs + 10), A
       0000DD C3rE0r00         [10]  328 	jp	_PT3_UpdatePSG ;ROUT_A0
-                                    329 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:325: }
-                                    330 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:330: void PT3_UpdatePSG()
+                                    329 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:325: }
+                                    330 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:330: void PT3_UpdatePSG()
                                     331 ;	---------------------------------
                                     332 ; Function PT3_UpdatePSG
                                     333 ; ---------------------------------
       0000E0                        334 _PT3_UpdatePSG::
-                                    335 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:387: __endasm;
+                                    335 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:387: __endasm;
       0000E0 21r5Dr01         [10]  336 	ld	HL, #_PT3_State
       0000E3 AF               [ 4]  337 	xor	A
       0000E4                        338 	UpdatePSGMuteA:
@@ -409,14 +409,14 @@
       000158 A7               [ 4]  370 	and	A
       000159 F8               [11]  371 	ret	M
       00015A D3 A1            [11]  372 	out	(0xA1), A
-                                    373 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:388: }
+                                    373 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:388: }
       00015C C9               [10]  374 	ret
-                                    375 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:392: void PT3_Decode() __naked
+                                    375 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:392: void PT3_Decode() __naked
                                     376 ;	---------------------------------
                                     377 ; Function PT3_Decode
                                     378 ; ---------------------------------
       00015D                        379 _PT3_Decode::
-                                    380 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:1093: __endasm;
+                                    380 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:1093: __endasm;
       00015D F3               [ 4]  381 	di
       00015E CDr63r01         [17]  382 	call	decode_start
       000161 FB               [ 4]  383 	ei
@@ -1040,7 +1040,7 @@
       000593                       1001 	EMPTYSAMORN:
       000593 00 01 00 90           1002 	.db	0,1,0,0x90
                                    1003 ;delete	$90 if you dont need default sample ; # pongo el 0 aqui
-                                   1004 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:1094: }
+                                   1004 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:1094: }
                                    1005 	.area _CODE
                                    1006 	.area _INITIALIZER
       000000                       1007 __xinit__PT3_Finish:

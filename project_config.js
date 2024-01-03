@@ -21,7 +21,8 @@
 // TOOLS SETTINGS
 //*****************************************************************************
 
-Emulator = 'C:/Users/nicol/msxgl-workspace/openmsx-19.1/openmsx.exe';
+Emulator = 'C:/Users/87003101/msxgl-workspace/openmsx-19.1/openmsx.exe'; //'C:/Users/87003010/msxgl-workspace/openmsx-19.1/openmsx.exe';
+
 //Emulator = `${ToolsDir}openMSX/openmsx`;
 // Emulator = `${ToolsDir}Emulicious/Emulicious`;
 // Emulator = `${ToolsDir}BlueMSX/blueMSX`;

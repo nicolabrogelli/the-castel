@@ -153,7 +153,8 @@ struct CharacterEnemy g_Enemy[MAX_ENEMY];
 struct CharacterEnemy g_Ghost[MAX_GHOST];
 struct CharacterEnemy g_Spider[MAX_SPIDER];
 struct CharacterEnemy g_Bat[MAX_BAT];
-struct CharacterEnemy g_platform[MAX_SLIDING_PLATFORM];
+struct CharacterEnemy g_platformV[MAX_SLIDING_PLATFORM];
+struct CharacterEnemy g_platformH[MAX_SLIDING_PLATFORM];
 
 u8 g_PrevRow8 = 0xFF;
 u8 g_PawnCount = 0;
@@ -163,7 +164,8 @@ u8 g_CurrRoomIdx = 0;
 u8 g_GhostCount = 0;
 u8 g_SpiderCount = 0;
 u8 g_BatCount = 0;
-u8 g_SlideCount = 0;
+u8 g_SlideCountH = 0;
+u8 g_SlideCountV = 0;
 u8 g_ImmunityCount = 0;
 u8 g_SecondCounter = 0;
 u8 g_DangerCounter = 0;
@@ -575,7 +577,8 @@ bool interact(u8 x, u8 y)
 	case TILE_MASK_DOOR1:
 	case TILE_MASK_DOOR2:
 	case TILE_MASK_DOOR3:
-		drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
+		VDP_HideAllSprites();
+		drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.NextDoorLevel);
 		return TRUE;
 	case TILE_DOOR1:
 		if (hasItemInInventory(TILE_KEY1))
@@ -604,10 +607,12 @@ bool interact(u8 x, u8 y)
 		}
 		return TRUE;
 	case TILE_DOOR_PREV:
-		drawLevel(g_Levels[g_CurrRoomIdx].PrevLvIdx);
+		VDP_HideAllSprites();
+		drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.PrevDoorLevel);
 		return false;
 	case TILE_DOOR_NEXT:
-		drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
+		VDP_HideAllSprites();
+		drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.NextDoorLevel);
 		return false;
 
 	case TILE_KEY1:
@@ -703,7 +708,8 @@ void changeLevel(u8 x, u8 y, u8 key, u8 door)
 	foo(x, y, door, 1);
 	g_CountItem++;
 
-	drawLevel(g_Levels[g_CurrRoomIdx].NextLvlIdx);
+	VDP_HideAllSprites();
+	drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.NextDoorLevel);
 }
 
 /**
@@ -720,6 +726,29 @@ bool getMoney(u8 x, u8 y)
 		setTile(x, y, EMPTY_ITEM);
 		foo(x, y, TILE_MASK_MONEY, 1); // Per il momento non posso spostare questa funzione, in quanto dovrei duplicare la chiamata the tile
 
+		return TRUE;
+	}
+	return FALSE;
+}
+
+/**
+ * @brief Routine per verificare se è oresente un varco per il passaggio di livello
+ * @param u8 x Coordinata X
+ * @param u8 y Coordinata Y
+ * @return TRUE se è presente
+ */
+bool isPassage(u8 x, u8 y)
+{
+	switch (getTile(x, y))
+	{
+	case TILE_UP_DOOR:
+		VDP_HideAllSprites();
+		drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.UpDoorLevel);
+		return TRUE;
+
+	case TILE_DOWN_DOOR:
+		VDP_HideAllSprites();
+		drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.DownDoorLevel);
 		return TRUE;
 	}
 	return FALSE;
@@ -745,6 +774,7 @@ bool isDanger(u8 x, u8 y, u8 t)
 		{
 			displayLife();
 			PlayBankSFX(9, 0);
+			VDP_HideAllSprites();
 			drawLevel(g_CurrRoomIdx); // Inizia nuovamente dalla stanza in cui siamo
 		}
 		else
@@ -795,7 +825,6 @@ void updateScore()
 void drawLevel(u8 levelIdx)
 {
 	pausePT3Music();
-
 	VDP_EnableDisplay(FALSE);
 
 	g_CurrRoomIdx = levelIdx;
@@ -806,14 +835,16 @@ void drawLevel(u8 levelIdx)
 	g_SecondCounter = 0;
 	g_DangerCounter = 0;
 	g_CountItem = 0; // Iniziaizza il cobtatore degli oggetti raccolti
-	g_SlideCount = 0;
+	g_SlideCountH = 0;
+	g_SlideCountV = 0;
 
 	DEBUG_LOGNUM("----- Livello", g_CurrRoomIdx);
 	DEBUG_LOGNUM("----- CONFIGURATO Skeletor Number", g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber);
 	DEBUG_LOGNUM("----- CONFIGURATO Ghost Number", g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber);
 	DEBUG_LOGNUM("----- CONFIGURATO Spider Number", g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber);
 	DEBUG_LOGNUM("----- CONFIGURATO Bat Number", g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber);
-	DEBUG_LOGNUM("----- CONFIGURATO Slide Number", g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumber);
+	DEBUG_LOGNUM("----- CONFIGURATO Slide Number H", g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH);
+	DEBUG_LOGNUM("----- CONFIGURATO Slide Number V", g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV);
 
 	// Ad ogni cambio di livello rimuove l'amphora dall'inventario, in modo da ridurlo ad un aiuto momntaneo
 	if (hasItemInInventory(TILE_AMPHORA))
@@ -890,42 +921,37 @@ void drawLevel(u8 levelIdx)
 			else if ((tile == TILE_STAR_POS_ENEMY) && (g_PawnCount < g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber)) // Rilevamento della posizione iniziale del nemico
 			{
 				g_PawnCount = positionGenericEnemy(TILE_STAR_POS_ENEMY, g_PawnCount, &g_Enemy[0], 196, FIRST_ID_SKELETOR, riga, colonna, 0, "Scheletor", 0);
-				DEBUG_LOG("INSERITO Scheletor");
 			}
 			else if ((tile == TILE_POS_GHOST) && (g_GhostCount < g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber)) // Rilevamento della posizione iniziale del nemico
 			{
 				g_GhostCount = positionGenericEnemy(TILE_POS_GHOST, g_GhostCount, &g_Ghost[0], 200, FIRST_ID_GHOST, riga, colonna, 0, "Ghost", 0);
-				DEBUG_LOG("INSERITO Ghost");
 			}
 			else if ((tile == TILE_POS_SPIDER) && (g_SpiderCount < g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber)) // Rilevamento della posizione iniziale del nemico
 			{
 				g_SpiderCount = positionGenericEnemy(TILE_POS_SPIDER, g_SpiderCount, &g_Spider[0], 192, FIRST_ID_SPIDER, riga, colonna, 0, "Spider", 0);
-				DEBUG_LOG("INSERITO Spider");
 			}
 			else if ((tile == TILE_POS_BAT) && (g_BatCount < g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber)) // Rilevamento della posizione iniziale del nemico
 			{
 				g_BatCount = positionGenericEnemy(TILE_POS_BAT, g_BatCount, &g_Bat[0], 204, FIRST_ID_BAT, riga, colonna, 0, "Bat", 0);
-				DEBUG_LOG("INSERITO Bat");
 			}
-			else if ((tile == TILE_POS_PLATFORM_O) && (g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumber < MAX_SLIDING_PLATFORM)) // Rilevamento piattaforma mobile
+			else if ((tile == TILE_POS_PLATFORM_O) && (g_SlideCountH < g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH)) // Rilevamento piattaforma mobile
 			{
-				g_SlideCount = positionGenericEnemy(TILE_POS_PLATFORM_O, g_SlideCount, &g_platform[0], 208, FIRST_ID_SLIDE, riga, colonna, 0, "platform", 0);
-				DEBUG_LOG("INSERITO Platform orizzontale");
+				g_SlideCountH = positionGenericEnemy(TILE_POS_PLATFORM_O, g_SlideCountH, &g_platformH[0], 208, FIRST_ID_SLIDE_H, riga, colonna, 0, "platform H", 0);
 			}
-			else if ((tile == TILE_POS_PLATFORM_V) && (g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumber < MAX_SLIDING_PLATFORM)) // Rilevamento piattaforma mobile
+			else if ((tile == TILE_POS_PLATFORM_V) && (g_SlideCountV < g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV)) // Rilevamento piattaforma mobile
 			{
-				g_SlideCount = positionGenericEnemy(TILE_POS_PLATFORM_V, g_SlideCount, &g_platform[0], 208, FIRST_ID_SLIDE, riga, colonna, 0, "platform", 1);
-				DEBUG_LOG("INSERITO Platform verticale");
+				g_SlideCountV = positionGenericEnemy(TILE_POS_PLATFORM_V, g_SlideCountV, &g_platformV[0], 208, FIRST_ID_SLIDE_V, riga, colonna, 0, "platform V", 1);
 			}
 		}
 	}
 
-	// hideSprite(0, MAX_NUMBRER_SPRITE_HIDE, FIRST_ID_SPRITE);
-	hideSprite(g_SlideCount, MAX_SLIDING_PLATFORM, FIRST_ID_SLIDE);
+
 	hideSprite(g_PawnCount, MAX_ENEMY, FIRST_ID_SKELETOR);
 	hideSprite(g_GhostCount, MAX_GHOST, FIRST_ID_GHOST);
 	hideSprite(g_SpiderCount, MAX_SPIDER, FIRST_ID_SPIDER);
 	hideSprite(g_BatCount, MAX_BAT, FIRST_ID_BAT);
+	hideSprite(g_SlideCountH, MAX_SLIDING_PLATFORM, FIRST_ID_SLIDE_H);
+	hideSprite(g_SlideCountV, MAX_SLIDING_PLATFORM, FIRST_ID_SLIDE_V);
 
 	if (levelIdx == 0)
 	{
@@ -1057,7 +1083,7 @@ void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape)
 	//   index - Indice dello sprite nella tabella degli attributi.
 	//   x     - Coordinata X iniziale dello schermo.
 	//   y     - Coordinata Y iniziale dello schermo.
-	VDP_SetSpritePosition(baseSprite + enemyCount, x * 8, (y - 1) * 8);
+	//VDP_SetSpritePosition(baseSprite + enemyCount, x * 8, (y - 1) * 8);
 }
 
 /**
@@ -1083,19 +1109,42 @@ void initCharacter(struct Character *ply, u8 id)
 /**
  * @brief Verifica che il player sia posizionato sulla piattaforma
  */
-bool isOnPlatform(u8 *X, u8 *Y)
+bool isOnPlatformH(u8 *X, u8 *Y)
 {
-	for (u8 i = 0; i < MAX_SLIDING_PLATFORM; i++)
+	for (u8 i = 0; i < g_SlideCountH; i++)
 	{
-		if ((*X < g_platform[i].X - 16) || (*X > g_platform[i].X + 16))
+		if ((*X < g_platformH[i].X - 16) || (*X > g_platformH[i].X + 16))
 		{
 			// TODO: Non facio nulla
 		}
 		else
 		{
-			if ((*Y + 17 > g_platform[i].Y) && (*Y + 17 < g_platform[i].Y + 8))
+			if ((*Y + 17 > g_platformH[i].Y) && (*Y + 17 < g_platformH[i].Y + 8))
 			{
-				*Y = g_platform[i].Y - 16;
+				*Y = g_platformH[i].Y - 16;
+				return TRUE;
+			}
+		}
+	}
+	return FALSE;
+}
+
+/**
+ * @brief Verifica che il player sia posizionato sulla piattaforma
+ */
+bool isOnPlatformV(u8 *X, u8 *Y)
+{
+	for (u8 i = 0; i < g_SlideCountV; i++)
+	{
+		if ((*X < g_platformV[i].X - 16) || (*X > g_platformV[i].X + 16))
+		{
+			// TODO: Non facio nulla
+		}
+		else
+		{
+			if ((*Y + 17 > g_platformV[i].Y) && (*Y + 17 < g_platformV[i].Y + 8))
+			{
+				*Y = g_platformV[i].Y - 16;
 				return TRUE;
 			}
 		}
@@ -1160,7 +1209,7 @@ void updateCharacter(struct Character *ply)
 	}
 	else if (ply->bInAir)
 	{
-		if (g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumber > 0 && isOnPlatform(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY))
+		if (((g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH) || (g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV)) > 0 && (isOnPlatformH(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY) || isOnPlatformV(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY)))
 		{
 			act = ACTION_IDLE;
 			ply->DY += 2;
@@ -1312,9 +1361,15 @@ void genericControl()
 	}
 
 	// Controllo se il player è in una situazione di pericola
-	// Print_DrawIntAt(23,20,g_Player.Pawn.PositionY);
 	if (isDanger(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12, 1) ||
 		isDanger(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4, 1))
+	{
+		// TODO: non faccio nulla!
+	}
+
+	// Verifica se è presente un varco per passare a un livello successivo
+	if (isPassage(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) ||
+		isPassage(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4))
 	{
 		// TODO: non faccio nulla!
 	}
@@ -1450,6 +1505,14 @@ bool State_Game()
 		g_SecondCounter++;
 		g_CatchEnemy++;
 		g_Frame = 0;
+
+
+/* 		DEBUG_LOGNUM("SCHELETOR", g_PawnCount);
+		DEBUG_LOGNUM("GHOST", g_GhostCount);
+		DEBUG_LOGNUM("SPIDER", g_SpiderCount);
+		DEBUG_LOGNUM("BAT", g_BatCount);
+		DEBUG_LOGNUM("SLIDER H", g_SlideCountH);
+		DEBUG_LOGNUM("SLIDER V", g_SlideCountV); */
 	}
 
 	if (g_GameFrame % 2 == 0)
@@ -1531,7 +1594,8 @@ bool State_Game()
 
 		// Funzione: updateGenericEnemy
 		// Aggiorna il rendering della piattaforma.
-		updateGenericEnemy(&g_platform[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumber, FIRST_ID_SLIDE);
+		updateGenericEnemy(&g_platformH[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH, FIRST_ID_SLIDE_H);
+		updateGenericEnemy(&g_platformV[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV, FIRST_ID_SLIDE_V);
 	}
 	g_Frame++;
 
@@ -1570,6 +1634,7 @@ bool State_Preset()
 	// Parametri:
 	//  u8 levelIdx - rappresenta l'id del livello
 	// VDP_EnableDisplay(FALSE);
+	VDP_HideAllSprites();
 	drawLevel(0);
 
 	Game_SetState(State_Game);
