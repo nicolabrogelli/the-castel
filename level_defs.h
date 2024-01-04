@@ -23,8 +23,8 @@ typedef struct
 	u8 GhostNumber;	   /** Numero di fantasmi nel livello */
 	u8 SpiderNumber;   /** Numero di ragni nel livello */
 	u8 BatNumber;	   /** Numero di pipistrelli nel livello */
-	u8 SliderNumberH;   /** So che non è un nemico */
-	u8 SliderNumberV;
+	u8 SliderNumberH;  /** Piattaforma Orizzontale */
+	u8 SliderNumberV;  /** Piattaforma Verticale */
 } EnemyType;
 
 

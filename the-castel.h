@@ -24,7 +24,7 @@
 
 #define MAX_LIVES                3
 #define IMMUNITY                 3
-#define LAST_LEVEL              21  // Ultimo livello di gioco
+#define LAST_LEVEL              19  // Ultimo livello di gioco
 #define START_GAME               0  // Livello di inizio gico
 #define GAME_OVER               LAST_LEVEL + 1  // Livello di game over
 #define OFFSET_TILE_COLLISION   50

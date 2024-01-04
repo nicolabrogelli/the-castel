@@ -44,16 +44,16 @@
                                      44 ; code
                                      45 ;--------------------------------------------------------
                                      46 	.area _CODE
-                                     47 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:29: void String_FromUInt8ZT(u8 value, c8* string)
+                                     47 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:29: void String_FromUInt8ZT(u8 value, c8* string)
                                      48 ;	---------------------------------
                                      49 ; Function String_FromUInt8ZT
                                      50 ; ---------------------------------
       000000                         51 _String_FromUInt8ZT::
-                                     52 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:37: __endasm;
+                                     52 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:37: __endasm;
       000000 CDr16r00         [17]   53 	call	_String_FromUInt8
       000003 AF               [ 4]   54 	xor	a
       000004 12               [ 7]   55 	ld	(de), a
-                                     56 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:38: }
+                                     56 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:38: }
       000005 C9               [10]   57 	ret
       000006                         58 _g_HexChar:
       000006 30                      59 	.db #0x30	; 48	'0'
@@ -72,12 +72,12 @@
       000013 44                      72 	.db #0x44	; 68	'D'
       000014 45                      73 	.db #0x45	; 69	'E'
       000015 46                      74 	.db #0x46	; 70	'F'
-                                     75 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:42: void String_FromUInt8(u8 value, c8* string)
+                                     75 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:42: void String_FromUInt8(u8 value, c8* string)
                                      76 ;	---------------------------------
                                      77 ; Function String_FromUInt8
                                      78 ; ---------------------------------
       000016                         79 _String_FromUInt8::
-                                     80 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:67: __endasm;
+                                     80 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:67: __endasm;
       000016                         81 	DispA:
       000016 0E 9C            [ 7]   82 	ld	c, #-100
       000018 CDr22r00         [17]   83 	call	Na1
@@ -97,25 +97,25 @@
       00002C 13               [ 6]   97 	inc	de
       00002D 08               [ 4]   98 	ex	af, af'		; '
       00002E C9               [10]   99 	ret
-                                    100 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:69: }
+                                    100 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:69: }
       00002F C9               [10]  101 	ret
-                                    102 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:76: void String_FromUInt16ZT(u16 value, c8* string)
+                                    102 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:76: void String_FromUInt16ZT(u16 value, c8* string)
                                     103 ;	---------------------------------
                                     104 ; Function String_FromUInt16ZT
                                     105 ; ---------------------------------
       000030                        106 _String_FromUInt16ZT::
-                                    107 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:84: __endasm;
+                                    107 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:84: __endasm;
       000030 CDr36r00         [17]  108 	call	_String_FromUInt16
       000033 AF               [ 4]  109 	xor	a
       000034 12               [ 7]  110 	ld	(de), a
-                                    111 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:85: }
+                                    111 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:85: }
       000035 C9               [10]  112 	ret
-                                    113 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:89: void String_FromUInt16(u16 value, c8* string)
+                                    113 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:89: void String_FromUInt16(u16 value, c8* string)
                                     114 ;	---------------------------------
                                     115 ; Function String_FromUInt16
                                     116 ; ---------------------------------
       000036                        117 _String_FromUInt16::
-                                    118 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:116: __endasm;
+                                    118 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:116: __endasm;
       000036                        119 	Num2Dec:
       000036 01 F0 D8         [10]  120 	ld	bc, #-10000
       000039 CDr4Er00         [17]  121 	call	Num1
@@ -136,9 +136,9 @@
       000056 12               [ 7]  136 	ld	(de), a
       000057 13               [ 6]  137 	inc	de
       000058 C9               [10]  138 	ret
-                                    139 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:117: }
+                                    139 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:117: }
       000059 C9               [10]  140 	ret
-                                    141 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:129: void String_Format(c8* dest, const c8* format, ...)
+                                    141 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:129: void String_Format(c8* dest, const c8* format, ...)
                                     142 ;	---------------------------------
                                     143 ; Function String_Format
                                     144 ; ---------------------------------
@@ -149,17 +149,17 @@
       000062 21 DD FF         [10]  149 	ld	hl, #-35
       000065 39               [11]  150 	add	hl, sp
       000066 F9               [ 6]  151 	ld	sp, hl
-                                    152 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:132: va_start(args, format);
+                                    152 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:132: va_start(args, format);
       000067 21 2B 00         [10]  153 	ld	hl, #43
       00006A 39               [11]  154 	add	hl, sp
       00006B DD 75 ED         [19]  155 	ld	-19 (ix), l
       00006E DD 74 EE         [19]  156 	ld	-18 (ix), h
-                                    157 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:135: const c8* ptr = format;
+                                    157 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:135: const c8* ptr = format;
       000071 DD 7E 06         [19]  158 	ld	a, 6 (ix)
       000074 DD 77 F9         [19]  159 	ld	-7 (ix), a
       000077 DD 7E 07         [19]  160 	ld	a, 7 (ix)
       00007A DD 77 FA         [19]  161 	ld	-6 (ix), a
-                                    162 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:136: while(*ptr != 0)
+                                    162 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:136: while(*ptr != 0)
       00007D                        163 00166$:
       00007D DD 6E F9         [19]  164 	ld	l, -7 (ix)
       000080 DD 66 FA         [19]  165 	ld	h, -6 (ix)
@@ -167,45 +167,45 @@
       000084 DD 77 FF         [19]  167 	ld	-1 (ix), a
       000087 B7               [ 4]  168 	or	a, a
       000088 CArE8r06         [10]  169 	jp	Z, 00168$
-                                    170 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:138: if(*ptr == '%')
+                                    170 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:138: if(*ptr == '%')
       00008B DD 7E FF         [19]  171 	ld	a, -1 (ix)
       00008E D6 25            [ 7]  172 	sub	a, #0x25
       000090 C2rB3r06         [10]  173 	jp	NZ,00164$
-                                    174 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:140: ptr++;
+                                    174 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:140: ptr++;
       000093 DD 4E F9         [19]  175 	ld	c, -7 (ix)
       000096 DD 46 FA         [19]  176 	ld	b, -6 (ix)
       000099 03               [ 6]  177 	inc	bc
-                                    178 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:143: u8 pad = STRINT_PAD_NONE;
+                                    178 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:143: u8 pad = STRINT_PAD_NONE;
       00009A DD 36 EF 00      [19]  179 	ld	-17 (ix), #0x00
-                                    180 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:144: u8 len = 0;
+                                    180 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:144: u8 len = 0;
       00009E DD 36 F0 00      [19]  181 	ld	-16 (ix), #0x00
-                                    182 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:145: if(*ptr == '0')
+                                    182 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:145: if(*ptr == '0')
       0000A2 0A               [ 7]  183 	ld	a, (bc)
       0000A3 5F               [ 4]  184 	ld	e, a
       0000A4 D6 30            [ 7]  185 	sub	a, #0x30
       0000A6 20 08            [12]  186 	jr	NZ, 00105$
-                                    187 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:147: pad = STRINT_PAD_ZERO;
+                                    187 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:147: pad = STRINT_PAD_ZERO;
       0000A8 DD 36 EF 01      [19]  188 	ld	-17 (ix), #0x01
-                                    189 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:148: ptr++;
+                                    189 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:148: ptr++;
       0000AC 03               [ 6]  190 	inc	bc
       0000AD C3rC5r00         [10]  191 	jp	00190$
       0000B0                        192 00105$:
-                                    193 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:150: else if((*ptr >= '1') && (*ptr <= '9'))
+                                    193 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:150: else if((*ptr >= '1') && (*ptr <= '9'))
       0000B0 7B               [ 4]  194 	ld	a, e
       0000B1 D6 31            [ 7]  195 	sub	a, #0x31
       0000B3 38 10            [12]  196 	jr	C, 00190$
       0000B5 3E 39            [ 7]  197 	ld	a, #0x39
       0000B7 93               [ 4]  198 	sub	a, e
       0000B8 38 0B            [12]  199 	jr	C, 00190$
-                                    200 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:152: pad = STRINT_PAD_SPACE;
+                                    200 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:152: pad = STRINT_PAD_SPACE;
       0000BA DD 36 EF 02      [19]  201 	ld	-17 (ix), #0x02
-                                    202 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:153: len = *ptr - '0';
+                                    202 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:153: len = *ptr - '0';
       0000BE 7B               [ 4]  203 	ld	a, e
       0000BF C6 D0            [ 7]  204 	add	a, #0xd0
       0000C1 DD 77 F0         [19]  205 	ld	-16 (ix), a
-                                    206 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:154: ptr++;
+                                    206 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:154: ptr++;
       0000C4 03               [ 6]  207 	inc	bc
-                                    208 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:156: while((*ptr >= '0') && (*ptr <= '9'))
+                                    208 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:156: while((*ptr >= '0') && (*ptr <= '9'))
       0000C5                        209 00190$:
       0000C5 DD 71 FE         [19]  210 	ld	-2 (ix), c
       0000C8 DD 70 FF         [19]  211 	ld	-1 (ix), b
@@ -219,7 +219,7 @@
       0000D7 3E 39            [ 7]  219 	ld	a, #0x39
       0000D9 91               [ 4]  220 	sub	a, c
       0000DA 38 1A            [12]  221 	jr	C, 00229$
-                                    222 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:158: len *= 10;
+                                    222 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:158: len *= 10;
       0000DC DD 6E F0         [19]  223 	ld	l, -16 (ix)
                                     224 ;	spillPairReg hl
                                     225 ;	spillPairReg hl
@@ -228,12 +228,12 @@
       0000E1 29               [11]  228 	add	hl, hl
       0000E2 19               [11]  229 	add	hl, de
       0000E3 29               [11]  230 	add	hl, hl
-                                    231 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:159: len += *ptr - '0';
+                                    231 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:159: len += *ptr - '0';
       0000E4 79               [ 4]  232 	ld	a, c
       0000E5 C6 D0            [ 7]  233 	add	a, #0xd0
       0000E7 85               [ 4]  234 	add	a, l
       0000E8 DD 77 F0         [19]  235 	ld	-16 (ix), a
-                                    236 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:160: ptr++;
+                                    236 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:160: ptr++;
       0000EB DD 34 FE         [23]  237 	inc	-2 (ix)
       0000EE 20 DB            [12]  238 	jr	NZ, 00108$
       0000F0 DD 34 FF         [23]  239 	inc	-1 (ix)
@@ -243,7 +243,7 @@
       0000F9 DD 77 F9         [19]  243 	ld	-7 (ix), a
       0000FC DD 7E FF         [19]  244 	ld	a, -1 (ix)
       0000FF DD 77 FA         [19]  245 	ld	-6 (ix), a
-                                    246 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:164: switch(*ptr)
+                                    246 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:164: switch(*ptr)
       000102 79               [ 4]  247 	ld	a,c
       000103 FE 25            [ 7]  248 	cp	a,#0x25
       000105 28 31            [12]  249 	jr	Z, 00111$
@@ -268,9 +268,9 @@
       000130 D6 78            [ 7]  268 	sub	a, #0x78
       000132 CArE8r04         [10]  269 	jp	Z,00150$
       000135 C3rDCr06         [10]  270 	jp	00165$
-                                    271 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:166: case '%':
+                                    271 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:166: case '%':
       000138                        272 00111$:
-                                    273 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:167: *dest++ = '%';
+                                    273 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:167: *dest++ = '%';
       000138 DD 6E 04         [19]  274 	ld	l, 4 (ix)
                                     275 ;	spillPairReg hl
                                     276 ;	spillPairReg hl
@@ -281,11 +281,11 @@
       000140 23               [ 6]  281 	inc	hl
       000141 DD 75 04         [19]  282 	ld	4 (ix), l
       000144 DD 74 05         [19]  283 	ld	5 (ix), h
-                                    284 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:168: break;
+                                    284 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:168: break;
       000147 C3rDCr06         [10]  285 	jp	00165$
-                                    286 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:176: case 'd':
+                                    286 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:176: case 'd':
       00014A                        287 00115$:
-                                    288 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:180: if((*ptr == 'I') || (*ptr == 'D'))
+                                    288 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:180: if((*ptr == 'I') || (*ptr == 'D'))
       00014A DD 6E F9         [19]  289 	ld	l, -7 (ix)
       00014D DD 66 FA         [19]  290 	ld	h, -6 (ix)
       000150 7E               [ 7]  291 	ld	a, (hl)
@@ -296,7 +296,7 @@
       00015B D6 44            [ 7]  296 	sub	a, #0x44
       00015D 20 4B            [12]  297 	jr	NZ, 00117$
       00015F                        298 00116$:
-                                    299 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:181: val = (i32)va_arg(args, i32);
+                                    299 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:181: val = (i32)va_arg(args, i32);
       00015F DD 7E ED         [19]  300 	ld	a, -19 (ix)
       000162 C6 04            [ 7]  301 	add	a, #0x04
       000164 DD 77 FC         [19]  302 	ld	-4 (ix), a
@@ -326,7 +326,7 @@
       0001A5 ED B0            [21]  326 	ldir
       0001A7 C3rF9r01         [10]  327 	jp	00118$
       0001AA                        328 00117$:
-                                    329 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:183: val = (i32)va_arg(args, i16);
+                                    329 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:183: val = (i32)va_arg(args, i16);
       0001AA DD 7E ED         [19]  330 	ld	a, -19 (ix)
       0001AD C6 02            [ 7]  331 	add	a, #0x02
       0001AF DD 77 FC         [19]  332 	ld	-4 (ix), a
@@ -359,10 +359,10 @@
       0001F3 DD 77 FD         [19]  359 	ld	-3 (ix), a
       0001F6 DD 77 FE         [19]  360 	ld	-2 (ix), a
       0001F9                        361 00118$:
-                                    362 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:188: if(val < 0)
+                                    362 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:188: if(val < 0)
       0001F9 DD CB FE 7E      [20]  363 	bit	7, -2 (ix)
       0001FD 28 2D            [12]  364 	jr	Z, 00121$
-                                    365 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:190: *dest++ = '-';
+                                    365 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:190: *dest++ = '-';
       0001FF DD 6E 04         [19]  366 	ld	l, 4 (ix)
                                     367 ;	spillPairReg hl
                                     368 ;	spillPairReg hl
@@ -373,7 +373,7 @@
       000207 23               [ 6]  373 	inc	hl
       000208 DD 75 04         [19]  374 	ld	4 (ix), l
       00020B DD 74 05         [19]  375 	ld	5 (ix), h
-                                    376 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:191: val = -val;
+                                    376 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:191: val = -val;
       00020E AF               [ 4]  377 	xor	a, a
       00020F DD 96 FB         [19]  378 	sub	a, -5 (ix)
       000212 DD 77 FB         [19]  379 	ld	-5 (ix), a
@@ -387,10 +387,10 @@
       000226 DD 96 FE         [19]  387 	sub	a, -2 (ix)
       000229 DD 77 FE         [19]  388 	ld	-2 (ix), a
       00022C                        389 00121$:
-                                    390 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:194: c8* ptr = str;
-                                    391 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:195: *ptr = 0;
+                                    390 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:194: c8* ptr = str;
+                                    391 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:195: *ptr = 0;
       00022C DD 36 DD 00      [19]  392 	ld	-35 (ix), #0x00
-                                    393 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:197: while(val >= 10)
+                                    393 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:197: while(val >= 10)
       000230 E5               [11]  394 	push	hl
       000231 F5               [11]  395 	push	af
       000232 21 04 00         [10]  396 	ld	hl, #4
@@ -403,14 +403,14 @@
       000241 E1               [10]  403 	pop	hl
       000242 DD 36 FF 01      [19]  404 	ld	-1 (ix), #0x01
       000246                        405 00122$:
-                                    406 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:199: *++ptr = '0' + (val % 10);
+                                    406 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:199: *++ptr = '0' + (val % 10);
       000246 DD 7E F1         [19]  407 	ld	a, -15 (ix)
       000249 C6 01            [ 7]  408 	add	a, #0x01
       00024B DD 77 F3         [19]  409 	ld	-13 (ix), a
       00024E DD 7E F2         [19]  410 	ld	a, -14 (ix)
       000251 CE 00            [ 7]  411 	adc	a, #0x00
       000253 DD 77 F4         [19]  412 	ld	-12 (ix), a
-                                    413 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:197: while(val >= 10)
+                                    413 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:197: while(val >= 10)
       000256 DD 7E FB         [19]  414 	ld	a, -5 (ix)
       000259 D6 0A            [ 7]  415 	sub	a, #0x0a
       00025B DD 7E FC         [19]  416 	ld	a, -4 (ix)
@@ -423,7 +423,7 @@
       00026A 1F               [ 4]  423 	rra
       00026B DE 80            [ 7]  424 	sbc	a, #0x80
       00026D 38 69            [12]  425 	jr	C, 00230$
-                                    426 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:199: *++ptr = '0' + (val % 10);
+                                    426 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:199: *++ptr = '0' + (val % 10);
       00026F DD 7E F3         [19]  427 	ld	a, -13 (ix)
       000272 DD 77 F1         [19]  428 	ld	-15 (ix), a
       000275 DD 7E F4         [19]  429 	ld	a, -12 (ix)
@@ -453,7 +453,7 @@
       0002A7 DD 6E F3         [19]  453 	ld	l, -13 (ix)
       0002AA DD 66 F4         [19]  454 	ld	h, -12 (ix)
       0002AD 77               [ 7]  455 	ld	(hl), a
-                                    456 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:200: val /= 10;
+                                    456 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:200: val /= 10;
       0002AE 21 00 00         [10]  457 	ld	hl, #0x0000
       0002B1 E5               [11]  458 	push	hl
       0002B2 2E 0A            [ 7]  459 	ld	l, #0x0a
@@ -473,13 +473,13 @@
       0002C9 DD 72 FC         [19]  473 	ld	-4 (ix), d
       0002CC DD 75 FD         [19]  474 	ld	-3 (ix), l
       0002CF DD 74 FE         [19]  475 	ld	-2 (ix), h
-                                    476 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:201: digit++;
+                                    476 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:201: digit++;
       0002D2 DD 34 FF         [23]  477 	inc	-1 (ix)
       0002D5 C3r46r02         [10]  478 	jp	00122$
       0002D8                        479 00230$:
       0002D8 DD 7E FF         [19]  480 	ld	a, -1 (ix)
       0002DB DD 77 F6         [19]  481 	ld	-10 (ix), a
-                                    482 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:203: *++ptr = '0' + val;
+                                    482 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:203: *++ptr = '0' + val;
       0002DE DD 7E F3         [19]  483 	ld	a, -13 (ix)
       0002E1 DD 77 F7         [19]  484 	ld	-9 (ix), a
       0002E4 DD 7E F4         [19]  485 	ld	a, -12 (ix)
@@ -490,11 +490,11 @@
       0002F2 DD 6E F7         [19]  490 	ld	l, -9 (ix)
       0002F5 DD 66 F8         [19]  491 	ld	h, -8 (ix)
       0002F8 77               [ 7]  492 	ld	(hl), a
-                                    493 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:205: if(len > digit)
+                                    493 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:205: if(len > digit)
       0002F9 DD 7E FF         [19]  494 	ld	a, -1 (ix)
       0002FC DD 96 F0         [19]  495 	sub	a, -16 (ix)
       0002FF 30 4A            [12]  496 	jr	NC, 00211$
-                                    497 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:207: c8 padChr = (pad == STRINT_PAD_ZERO) ? '0' : ' ';
+                                    497 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:207: c8 padChr = (pad == STRINT_PAD_ZERO) ? '0' : ' ';
       000301 DD 7E EF         [19]  498 	ld	a, -17 (ix)
       000304 3D               [ 4]  499 	dec	a
       000305 20 06            [12]  500 	jr	NZ, 00181$
@@ -504,7 +504,7 @@
       00030D 01 20 00         [10]  504 	ld	bc, #0x0020
       000310                        505 00182$:
       000310 DD 71 FE         [19]  506 	ld	-2 (ix), c
-                                    507 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:208: for(u8 i = 0; i < len - digit; ++i)
+                                    507 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:208: for(u8 i = 0; i < len - digit; ++i)
       000313 DD 4E 04         [19]  508 	ld	c, 4 (ix)
       000316 DD 46 05         [19]  509 	ld	b, 5 (ix)
       000319 DD 36 FF 00      [19]  510 	ld	-1 (ix), #0x00
@@ -528,14 +528,14 @@
       000335 EE 80            [ 7]  528 	xor	a, #0x80
       000337                        529 00440$:
       000337 F2r45r03         [10]  530 	jp	P, 00231$
-                                    531 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:209: *dest++ = padChr;
+                                    531 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:209: *dest++ = padChr;
       00033A DD 7E FE         [19]  532 	ld	a, -2 (ix)
       00033D 02               [ 7]  533 	ld	(bc), a
       00033E 03               [ 6]  534 	inc	bc
-                                    535 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:208: for(u8 i = 0; i < len - digit; ++i)
+                                    535 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:208: for(u8 i = 0; i < len - digit; ++i)
       00033F DD 34 FF         [23]  536 	inc	-1 (ix)
       000342 C3r1Dr03         [10]  537 	jp	00174$
-                                    538 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:212: while(*ptr != 0)
+                                    538 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:212: while(*ptr != 0)
       000345                        539 00231$:
       000345 DD 71 04         [19]  540 	ld	4 (ix), c
       000348 DD 70 05         [19]  541 	ld	5 (ix), b
@@ -550,7 +550,7 @@
       00035D 0A               [ 7]  550 	ld	a, (bc)
       00035E B7               [ 4]  551 	or	a, a
       00035F CArC7r06         [10]  552 	jp	Z, 00232$
-                                    553 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:213: *dest++ = *ptr--;
+                                    553 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:213: *dest++ = *ptr--;
       000362 0B               [ 6]  554 	dec	bc
       000363 DD 6E FE         [19]  555 	ld	l, -2 (ix)
       000366 DD 66 FF         [19]  556 	ld	h, -1 (ix)
@@ -559,16 +559,16 @@
       00036D 20 EE            [12]  559 	jr	NZ, 00128$
       00036F DD 34 FF         [23]  560 	inc	-1 (ix)
       000372 C3r5Dr03         [10]  561 	jp	00128$
-                                    562 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:226: case 'X':
+                                    562 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:226: case 'X':
       000375                        563 00133$:
-                                    564 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:228: if(len == 0)
+                                    564 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:228: if(len == 0)
       000375 DD 7E F0         [19]  565 	ld	a, -16 (ix)
       000378 B7               [ 4]  566 	or	a, a
       000379 20 04            [12]  567 	jr	NZ, 00135$
-                                    568 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:229: len = 8;
+                                    568 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:229: len = 8;
       00037B DD 36 F0 08      [19]  569 	ld	-16 (ix), #0x08
       00037F                        570 00135$:
-                                    571 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:230: u32 val = (u32)va_arg(args, u32);
+                                    571 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:230: u32 val = (u32)va_arg(args, u32);
       00037F DD 6E ED         [19]  572 	ld	l, -19 (ix)
       000382 DD 66 EE         [19]  573 	ld	h, -18 (ix)
       000385 11 04 00         [10]  574 	ld	de, #0x0004
@@ -583,11 +583,11 @@
       000398 EB               [ 4]  583 	ex	de, hl
       000399 01 04 00         [10]  584 	ld	bc, #0x0004
       00039C ED B0            [21]  585 	ldir
-                                    586 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:232: if(len > 7)
+                                    586 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:232: if(len > 7)
       00039E 3E 07            [ 7]  587 	ld	a, #0x07
       0003A0 DD 96 F0         [19]  588 	sub	a, -16 (ix)
       0003A3 30 23            [12]  589 	jr	NC, 00137$
-                                    590 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:233: *dest++ = g_HexChar[(val >> 28) & 0xF];
+                                    590 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:233: *dest++ = g_HexChar[(val >> 28) & 0xF];
       0003A5 DD 4E 04         [19]  591 	ld	c, 4 (ix)
       0003A8 DD 46 05         [19]  592 	ld	b, 5 (ix)
       0003AB DD 5E FF         [19]  593 	ld	e, -1 (ix)
@@ -608,11 +608,11 @@
       0003C2 DD 71 04         [19]  608 	ld	4 (ix), c
       0003C5 DD 70 05         [19]  609 	ld	5 (ix), b
       0003C8                        610 00137$:
-                                    611 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:234: if(len > 6)
+                                    611 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:234: if(len > 6)
       0003C8 3E 06            [ 7]  612 	ld	a, #0x06
       0003CA DD 96 F0         [19]  613 	sub	a, -16 (ix)
       0003CD 30 1B            [12]  614 	jr	NC, 00139$
-                                    615 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:235: *dest++ = g_HexChar[(val >> 24) & 0xF];
+                                    615 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:235: *dest++ = g_HexChar[(val >> 24) & 0xF];
       0003CF DD 4E 04         [19]  616 	ld	c, 4 (ix)
       0003D2 DD 46 05         [19]  617 	ld	b, 5 (ix)
       0003D5 DD 7E FF         [19]  618 	ld	a, -1 (ix)
@@ -627,11 +627,11 @@
       0003E4 DD 71 04         [19]  627 	ld	4 (ix), c
       0003E7 DD 70 05         [19]  628 	ld	5 (ix), b
       0003EA                        629 00139$:
-                                    630 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:236: if(len > 5)
+                                    630 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:236: if(len > 5)
       0003EA 3E 05            [ 7]  631 	ld	a, #0x05
       0003EC DD 96 F0         [19]  632 	sub	a, -16 (ix)
       0003EF 30 28            [12]  633 	jr	NC, 00141$
-                                    634 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:237: *dest++ = g_HexChar[(val >> 20) & 0xF];
+                                    634 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:237: *dest++ = g_HexChar[(val >> 20) & 0xF];
       0003F1 DD 4E 04         [19]  635 	ld	c, 4 (ix)
       0003F4 DD 46 05         [19]  636 	ld	b, 5 (ix)
       0003F7 DD 5E FE         [19]  637 	ld	e, -2 (ix)
@@ -654,11 +654,11 @@
       000413 DD 71 04         [19]  654 	ld	4 (ix), c
       000416 DD 70 05         [19]  655 	ld	5 (ix), b
       000419                        656 00141$:
-                                    657 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:238: if(len > 4)
+                                    657 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:238: if(len > 4)
       000419 3E 04            [ 7]  658 	ld	a, #0x04
       00041B DD 96 F0         [19]  659 	sub	a, -16 (ix)
       00041E 30 1B            [12]  660 	jr	NC, 00143$
-                                    661 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:239: *dest++ = g_HexChar[(val >> 16) & 0xF];
+                                    661 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:239: *dest++ = g_HexChar[(val >> 16) & 0xF];
       000420 DD 4E 04         [19]  662 	ld	c, 4 (ix)
       000423 DD 46 05         [19]  663 	ld	b, 5 (ix)
       000426 DD 7E FE         [19]  664 	ld	a, -2 (ix)
@@ -673,11 +673,11 @@
       000435 DD 71 04         [19]  673 	ld	4 (ix), c
       000438 DD 70 05         [19]  674 	ld	5 (ix), b
       00043B                        675 00143$:
-                                    676 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:240: if(len > 3)
+                                    676 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:240: if(len > 3)
       00043B 3E 03            [ 7]  677 	ld	a, #0x03
       00043D DD 96 F0         [19]  678 	sub	a, -16 (ix)
       000440 30 2D            [12]  679 	jr	NC, 00145$
-                                    680 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:241: *dest++ = g_HexChar[(val >> 12) & 0xF];
+                                    680 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:241: *dest++ = g_HexChar[(val >> 12) & 0xF];
       000442 DD 4E 04         [19]  681 	ld	c, 4 (ix)
       000445 DD 46 05         [19]  682 	ld	b, 5 (ix)
       000448 DD 5E FD         [19]  683 	ld	e, -3 (ix)
@@ -706,11 +706,11 @@
       000469 DD 71 04         [19]  706 	ld	4 (ix), c
       00046C DD 70 05         [19]  707 	ld	5 (ix), b
       00046F                        708 00145$:
-                                    709 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:242: if(len > 2)
+                                    709 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:242: if(len > 2)
       00046F 3E 02            [ 7]  710 	ld	a, #0x02
       000471 DD 96 F0         [19]  711 	sub	a, -16 (ix)
       000474 30 1B            [12]  712 	jr	NC, 00147$
-                                    713 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:243: *dest++ = g_HexChar[(val >> 8) & 0xF];
+                                    713 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:243: *dest++ = g_HexChar[(val >> 8) & 0xF];
       000476 DD 4E 04         [19]  714 	ld	c, 4 (ix)
       000479 DD 46 05         [19]  715 	ld	b, 5 (ix)
       00047C DD 7E FD         [19]  716 	ld	a, -3 (ix)
@@ -725,11 +725,11 @@
       00048B DD 71 04         [19]  725 	ld	4 (ix), c
       00048E DD 70 05         [19]  726 	ld	5 (ix), b
       000491                        727 00147$:
-                                    728 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:244: if(len > 1)
+                                    728 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:244: if(len > 1)
       000491 3E 01            [ 7]  729 	ld	a, #0x01
       000493 DD 96 F0         [19]  730 	sub	a, -16 (ix)
       000496 30 32            [12]  731 	jr	NC, 00149$
-                                    732 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:245: *dest++ = g_HexChar[(val >> 4) & 0xF];
+                                    732 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:245: *dest++ = g_HexChar[(val >> 4) & 0xF];
       000498 DD 4E 04         [19]  733 	ld	c, 4 (ix)
       00049B DD 46 05         [19]  734 	ld	b, 5 (ix)
       00049E DD 5E FC         [19]  735 	ld	e, -4 (ix)
@@ -760,7 +760,7 @@
       0004C4 DD 71 04         [19]  760 	ld	4 (ix), c
       0004C7 DD 70 05         [19]  761 	ld	5 (ix), b
       0004CA                        762 00149$:
-                                    763 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:246: *dest++ = g_HexChar[val & 0xF];
+                                    763 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:246: *dest++ = g_HexChar[val & 0xF];
       0004CA DD 4E 04         [19]  764 	ld	c, 4 (ix)
       0004CD DD 46 05         [19]  765 	ld	b, 5 (ix)
       0004D0 DD 7E FC         [19]  766 	ld	a, -4 (ix)
@@ -774,18 +774,18 @@
       0004DE 03               [ 6]  774 	inc	bc
       0004DF DD 71 04         [19]  775 	ld	4 (ix), c
       0004E2 DD 70 05         [19]  776 	ld	5 (ix), b
-                                    777 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:247: break;
+                                    777 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:247: break;
       0004E5 C3rDCr06         [10]  778 	jp	00165$
-                                    779 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:252: case 'x':
+                                    779 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:252: case 'x':
       0004E8                        780 00150$:
-                                    781 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:254: if(len == 0)
+                                    781 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:254: if(len == 0)
       0004E8 DD 7E F0         [19]  782 	ld	a, -16 (ix)
       0004EB B7               [ 4]  783 	or	a, a
       0004EC 20 04            [12]  784 	jr	NZ, 00152$
-                                    785 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:255: len = 4;
+                                    785 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:255: len = 4;
       0004EE DD 36 F0 04      [19]  786 	ld	-16 (ix), #0x04
       0004F2                        787 00152$:
-                                    788 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:256: u16 val = (u16)va_arg(args, u16);
+                                    788 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:256: u16 val = (u16)va_arg(args, u16);
       0004F2 DD 4E ED         [19]  789 	ld	c, -19 (ix)
       0004F5 DD 46 EE         [19]  790 	ld	b, -18 (ix)
       0004F8 03               [ 6]  791 	inc	bc
@@ -799,11 +799,11 @@
       000506 03               [ 6]  799 	inc	bc
       000507 0A               [ 7]  800 	ld	a, (bc)
       000508 DD 77 F6         [19]  801 	ld	-10 (ix), a
-                                    802 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:257: if(len > 3)
+                                    802 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:257: if(len > 3)
       00050B 3E 03            [ 7]  803 	ld	a, #0x03
       00050D DD 96 F0         [19]  804 	sub	a, -16 (ix)
       000510 30 56            [12]  805 	jr	NC, 00154$
-                                    806 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:258: *dest++ = g_HexChar[(val >> 12) & 0xF];
+                                    806 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:258: *dest++ = g_HexChar[(val >> 12) & 0xF];
       000512 DD 7E 04         [19]  807 	ld	a, 4 (ix)
       000515 DD 77 F7         [19]  808 	ld	-9 (ix), a
       000518 DD 7E 05         [19]  809 	ld	a, 5 (ix)
@@ -839,11 +839,11 @@
       000563 CE 00            [ 7]  839 	adc	a, #0x00
       000565 DD 77 05         [19]  840 	ld	5 (ix), a
       000568                        841 00154$:
-                                    842 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:259: if(len > 2)
+                                    842 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:259: if(len > 2)
       000568 3E 02            [ 7]  843 	ld	a, #0x02
       00056A DD 96 F0         [19]  844 	sub	a, -16 (ix)
       00056D 30 53            [12]  845 	jr	NC, 00156$
-                                    846 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:260: *dest++ = g_HexChar[(val >> 8) & 0xF];
+                                    846 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:260: *dest++ = g_HexChar[(val >> 8) & 0xF];
       00056F DD 7E 04         [19]  847 	ld	a, 4 (ix)
       000572 DD 77 F7         [19]  848 	ld	-9 (ix), a
       000575 DD 7E 05         [19]  849 	ld	a, 5 (ix)
@@ -875,11 +875,11 @@
       0005BD CE 00            [ 7]  875 	adc	a, #0x00
       0005BF DD 77 05         [19]  876 	ld	5 (ix), a
       0005C2                        877 00156$:
-                                    878 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:261: if(len > 1)
+                                    878 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:261: if(len > 1)
       0005C2 3E 01            [ 7]  879 	ld	a, #0x01
       0005C4 DD 96 F0         [19]  880 	sub	a, -16 (ix)
       0005C7 30 72            [12]  881 	jr	NC, 00158$
-                                    882 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:262: *dest++ = g_HexChar[(val >> 4) & 0xF];
+                                    882 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:262: *dest++ = g_HexChar[(val >> 4) & 0xF];
       0005C9 DD 7E 04         [19]  883 	ld	a, 4 (ix)
       0005CC DD 77 F7         [19]  884 	ld	-9 (ix), a
       0005CF DD 7E 05         [19]  885 	ld	a, 5 (ix)
@@ -919,7 +919,7 @@
       000636 CE 00            [ 7]  919 	adc	a, #0x00
       000638 DD 77 05         [19]  920 	ld	5 (ix), a
       00063B                        921 00158$:
-                                    922 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:263: *dest++ = g_HexChar[val & 0xF];
+                                    922 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:263: *dest++ = g_HexChar[val & 0xF];
       00063B DD 4E 04         [19]  923 	ld	c, 4 (ix)
       00063E DD 46 05         [19]  924 	ld	b, 5 (ix)
       000641 DD 7E F5         [19]  925 	ld	a, -11 (ix)
@@ -937,11 +937,11 @@
       00064F 03               [ 6]  937 	inc	bc
       000650 DD 71 04         [19]  938 	ld	4 (ix), c
       000653 DD 70 05         [19]  939 	ld	5 (ix), b
-                                    940 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:264: break;
+                                    940 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:264: break;
       000656 C3rDCr06         [10]  941 	jp	00165$
-                                    942 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:268: case 'c':
+                                    942 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:268: case 'c':
       000659                        943 00159$:
-                                    944 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:270: c8 val = (c8)va_arg(args, c8);
+                                    944 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:270: c8 val = (c8)va_arg(args, c8);
       000659 DD 4E ED         [19]  945 	ld	c, -19 (ix)
       00065C DD 46 EE         [19]  946 	ld	b, -18 (ix)
       00065F 03               [ 6]  947 	inc	bc
@@ -949,18 +949,18 @@
       000663 DD 70 EE         [19]  949 	ld	-18 (ix), b
       000666 0B               [ 6]  950 	dec	bc
       000667 0A               [ 7]  951 	ld	a, (bc)
-                                    952 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:271: *dest++ = val;
+                                    952 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:271: *dest++ = val;
       000668 DD 4E 04         [19]  953 	ld	c, 4 (ix)
       00066B DD 46 05         [19]  954 	ld	b, 5 (ix)
       00066E 02               [ 7]  955 	ld	(bc), a
       00066F 03               [ 6]  956 	inc	bc
       000670 DD 71 04         [19]  957 	ld	4 (ix), c
       000673 DD 70 05         [19]  958 	ld	5 (ix), b
-                                    959 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:272: break;
+                                    959 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:272: break;
       000676 C3rDCr06         [10]  960 	jp	00165$
-                                    961 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:276: case 's':
+                                    961 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:276: case 's':
       000679                        962 00160$:
-                                    963 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:278: const c8* val = (const c8*)va_arg(args, const c8*);
+                                    963 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:278: const c8* val = (const c8*)va_arg(args, const c8*);
       000679 DD 6E ED         [19]  964 	ld	l, -19 (ix)
                                     965 ;	spillPairReg hl
                                     966 ;	spillPairReg hl
@@ -976,7 +976,7 @@
       000689 4E               [ 7]  976 	ld	c, (hl)
       00068A 23               [ 6]  977 	inc	hl
       00068B 46               [ 7]  978 	ld	b, (hl)
-                                    979 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:279: u8 len = String_Length(val);
+                                    979 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:279: u8 len = String_Length(val);
       00068C 1E 00            [ 7]  980 	ld	e, #0x00
       00068E 69               [ 4]  981 	ld	l, c
                                     982 ;	spillPairReg hl
@@ -992,7 +992,7 @@
       000695 1C               [ 4]  992 	inc	e
       000696 C3r90r06         [10]  993 	jp	00169$
       000699                        994 00171$:
-                                    995 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:280: for(u8 i = 0; i < len; i++)
+                                    995 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:280: for(u8 i = 0; i < len; i++)
       000699 C5               [11]  996 	push	bc
       00069A FD E1            [14]  997 	pop	iy
       00069C DD 4E 04         [19]  998 	ld	c, 4 (ix)
@@ -1002,17 +1002,17 @@
       0006A4 7A               [ 4] 1002 	ld	a, d
       0006A5 93               [ 4] 1003 	sub	a, e
       0006A6 30 2E            [12] 1004 	jr	NC, 00234$
-                                   1005 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:281: *dest++ = *val++;
+                                   1005 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:281: *dest++ = *val++;
       0006A8 FD 7E 00         [19] 1006 	ld	a, 0 (iy)
       0006AB FD 23            [10] 1007 	inc	iy
       0006AD 02               [ 7] 1008 	ld	(bc), a
       0006AE 03               [ 6] 1009 	inc	bc
-                                   1010 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:280: for(u8 i = 0; i < len; i++)
+                                   1010 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:280: for(u8 i = 0; i < len; i++)
       0006AF 14               [ 4] 1011 	inc	d
       0006B0 C3rA4r06         [10] 1012 	jp	00177$
-                                   1013 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:284: }
+                                   1013 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:284: }
       0006B3                       1014 00164$:
-                                   1015 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:287: *dest++ = *ptr;
+                                   1015 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:287: *dest++ = *ptr;
       0006B3 DD 4E 04         [19] 1016 	ld	c, 4 (ix)
       0006B6 DD 46 05         [19] 1017 	ld	b, 5 (ix)
       0006B9 DD 7E FF         [19] 1018 	ld	a, -1 (ix)
@@ -1020,34 +1020,34 @@
       0006BD 03               [ 6] 1020 	inc	bc
       0006BE DD 71 04         [19] 1021 	ld	4 (ix), c
       0006C1 DD 70 05         [19] 1022 	ld	5 (ix), b
-                                   1023 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:293: va_end(args);
+                                   1023 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:293: va_end(args);
       0006C4 C3rDCr06         [10] 1024 	jp	00165$
-                                   1025 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:287: *dest++ = *ptr;
+                                   1025 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:287: *dest++ = *ptr;
       0006C7                       1026 00232$:
       0006C7 DD 7E FE         [19] 1027 	ld	a, -2 (ix)
       0006CA DD 77 04         [19] 1028 	ld	4 (ix), a
       0006CD DD 7E FF         [19] 1029 	ld	a, -1 (ix)
       0006D0 DD 77 05         [19] 1030 	ld	5 (ix), a
-                                   1031 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:293: va_end(args);
+                                   1031 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:293: va_end(args);
       0006D3 C3rDCr06         [10] 1032 	jp	00165$
-                                   1033 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:287: *dest++ = *ptr;
+                                   1033 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:287: *dest++ = *ptr;
       0006D6                       1034 00234$:
       0006D6 DD 71 04         [19] 1035 	ld	4 (ix), c
       0006D9 DD 70 05         [19] 1036 	ld	5 (ix), b
       0006DC                       1037 00165$:
-                                   1038 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:289: ptr++;
+                                   1038 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:289: ptr++;
       0006DC DD 34 F9         [23] 1039 	inc	-7 (ix)
       0006DF C2r7Dr00         [10] 1040 	jp	NZ,00166$
       0006E2 DD 34 FA         [23] 1041 	inc	-6 (ix)
       0006E5 C3r7Dr00         [10] 1042 	jp	00166$
       0006E8                       1043 00168$:
-                                   1044 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:291: *dest = 0;
+                                   1044 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:291: *dest = 0;
       0006E8 DD 4E 04         [19] 1045 	ld	c, 4 (ix)
       0006EB DD 46 05         [19] 1046 	ld	b, 5 (ix)
       0006EE AF               [ 4] 1047 	xor	a, a
       0006EF 02               [ 7] 1048 	ld	(bc), a
-                                   1049 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:293: va_end(args);
-                                   1050 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:294: }
+                                   1049 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:293: va_end(args);
+                                   1050 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:294: }
       0006F0 DD F9            [10] 1051 	ld	sp, ix
       0006F2 DD E1            [14] 1052 	pop	ix
       0006F4 C9               [10] 1053 	ret

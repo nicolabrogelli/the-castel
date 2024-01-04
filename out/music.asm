@@ -1617,7 +1617,7 @@ _ChannelSFX::
 	push	bc
 	call	_ayFX_Mute
 	pop	bc
-;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/ayfx/ayfx_player.h:121: inline void ayFX_SetChannel(u8 chan) { ayFX_Channel = 3 - chan; }
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/ayfx/ayfx_player.h:121: inline void ayFX_SetChannel(u8 chan) { ayFX_Channel = 3 - chan; }
 	ld	hl, #_ayFX_Channel
 	ld	a, #0x03
 	sub	a, c
@@ -1650,10 +1650,10 @@ _inizializeAYFX::
 ;./music.c:52: ayFX_InitBank(g_ayfx_bank);     // Impostazione del riproduttore ayFX tramite l'array g_ayfx_bank
 	ld	hl, #_g_ayfx_bank
 	call	_ayFX_InitBank
-;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/ayfx/ayfx_player.h:121: inline void ayFX_SetChannel(u8 chan) { ayFX_Channel = 3 - chan; }
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/ayfx/ayfx_player.h:121: inline void ayFX_SetChannel(u8 chan) { ayFX_Channel = 3 - chan; }
 	ld	hl, #_ayFX_Channel
 	ld	(hl), #0x03
-;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/ayfx/ayfx_player.h:114: inline void ayFX_SetMode(u8 mode) { ayFX_Mode = mode; }
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/ayfx/ayfx_player.h:114: inline void ayFX_SetMode(u8 mode) { ayFX_Mode = mode; }
 	ld	hl, #_ayFX_Mode
 	ld	(hl), #0x00
 ;./music.c:54: ayFX_SetMode(AYFX_MODE_FIXED);  // Set channel mode
@@ -1688,7 +1688,7 @@ _stopMusicPlayback::
 	call	_ayFX_Mute
 ;./music.c:87: ayFX_Update();
 	call	_ayFX_Update
-;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/pt3/pt3_player.h:301: PT3_State |= 1 << (chan + 1);
+;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/pt3/pt3_player.h:301: PT3_State |= 1 << (chan + 1);
 	ld	a, (_PT3_State+0)
 	or	a, #0x08
 	ld	(_PT3_State+0), a

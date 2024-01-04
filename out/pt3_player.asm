@@ -169,18 +169,18 @@ _PT3_Finish::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:117: void EmptyCB() {}
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:117: void EmptyCB() {}
 ;	---------------------------------
 ; Function EmptyCB
 ; ---------------------------------
 _EmptyCB::
 	ret
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:134: void PT3_Init()
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:134: void PT3_Init()
 ;	---------------------------------
 ; Function PT3_Init
 ; ---------------------------------
 _PT3_Init::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:178: __endasm;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:178: __endasm;
 	ld	HL, #0x11
 	ld	D, H
 	ld	E, H
@@ -218,14 +218,14 @@ _PT3_Init::
 	ld	BC, #13
 	ld	(HL), A
 	ldir
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:179: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:179: }
 	ret
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:185: void PT3_InitSong(const void* songAddr)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:185: void PT3_InitSong(const void* songAddr)
 ;	---------------------------------
 ; Function PT3_InitSong
 ; ---------------------------------
 _PT3_InitSong::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:268: __endasm;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:268: __endasm;
 	ld	DE, #-100
 	add	HL, DE
 	ld	(#_PT3_ModAddr), HL
@@ -278,34 +278,34 @@ _PT3_InitSong::
 	ld	(#_ChanC + 15), HL ;S3 can comment S1,2,3; see
 ;	also EMPTYSAMORN comment
 	jp	_PT3_Resume
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:269: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:269: }
 	ret
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:273: void PT3_Pause() __naked
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:273: void PT3_Pause() __naked
 ;	---------------------------------
 ; Function PT3_Pause
 ; ---------------------------------
 _PT3_Pause::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:280: __endasm;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:280: __endasm;
 	ld	HL, #_PT3_State
 	res	0, (HL)
 	jp	_PT3_Silence
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:281: }
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:285: void PT3_Resume()
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:281: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:285: void PT3_Resume()
 ;	---------------------------------
 ; Function PT3_Resume
 ; ---------------------------------
 _PT3_Resume::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:290: __endasm;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:290: __endasm;
 	ld	HL, #_PT3_State
 	set	0, (HL)
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:291: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:291: }
 	ret
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:296: void PT3_SetLoop(u8 loop)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:296: void PT3_SetLoop(u8 loop)
 ;	---------------------------------
 ; Function PT3_SetLoop
 ; ---------------------------------
 _PT3_SetLoop::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:310: __endasm;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:310: __endasm;
 	ld	HL, #_PT3_State
 	or	A
 	jr	NZ, LoopON
@@ -313,26 +313,26 @@ _PT3_SetLoop::
 	ret
 	LoopON:
 	set	4, (HL)
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:311: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:311: }
 	ret
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:315: void PT3_Silence() __naked
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:315: void PT3_Silence() __naked
 ;	---------------------------------
 ; Function PT3_Silence
 ; ---------------------------------
 _PT3_Silence::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:324: __endasm;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:324: __endasm;
 	xor	A
 	ld	(#_PT3_Regs + 8), A
 	ld	(#_PT3_Regs + 9), A
 	ld	(#_PT3_Regs + 10), A
 	jp	_PT3_UpdatePSG ;ROUT_A0
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:325: }
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:330: void PT3_UpdatePSG()
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:325: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:330: void PT3_UpdatePSG()
 ;	---------------------------------
 ; Function PT3_UpdatePSG
 ; ---------------------------------
 _PT3_UpdatePSG::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:387: __endasm;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:387: __endasm;
 	ld	HL, #_PT3_State
 	xor	A
 	UpdatePSGMuteA:
@@ -370,14 +370,14 @@ _PT3_UpdatePSG::
 	and	A
 	ret	M
 	out	(0xA1), A
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:388: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:388: }
 	ret
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:392: void PT3_Decode() __naked
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:392: void PT3_Decode() __naked
 ;	---------------------------------
 ; Function PT3_Decode
 ; ---------------------------------
 _PT3_Decode::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:1093: __endasm;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:1093: __endasm;
 	di
 	call	decode_start
 	ei
@@ -1001,7 +1001,7 @@ _PT3_Decode::
 	EMPTYSAMORN:
 	.db	0,1,0,0x90
 ;delete	$90 if you dont need default sample ; # pongo el 0 aqui
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:1094: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:1094: }
 	.area _CODE
 	.area _INITIALIZER
 __xinit__PT3_Finish:

@@ -354,52 +354,52 @@ _g_VDPInitilized::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:165: void VDP_SetModeFlag(u8 flag)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:165: void VDP_SetModeFlag(u8 flag)
 ;	---------------------------------
 ; Function VDP_SetModeFlag
 ; ---------------------------------
 _VDP_SetModeFlag::
 	ld	e, a
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:168: u8 reg1 = g_VDP_REGSAV[1];
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:168: u8 reg1 = g_VDP_REGSAV[1];
 	ld	a, (#_g_VDP_REGSAV + 1)
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:169: reg1 &= 0b11100111;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:169: reg1 &= 0b11100111;
 	and	a, #0xe7
 	ld	l, a
 ;	spillPairReg hl
 ;	spillPairReg hl
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:170: if(flag & 0b00001)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:170: if(flag & 0b00001)
 	bit	0, e
 	jr	Z, 00102$
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:171: reg1 |= 0b00010000;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:171: reg1 |= 0b00010000;
 	set	4, l
 00102$:
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:172: if(flag & 0b00010)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:172: if(flag & 0b00010)
 	bit	1, e
 	jr	Z, 00104$
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:173: reg1 |= 0b00001000;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:173: reg1 |= 0b00001000;
 	set	3, l
 00104$:
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:174: VDP_RegWriteBak(1, reg1);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:174: VDP_RegWriteBak(1, reg1);
 	ld	a, #0x01
 	call	_VDP_RegWriteBak
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:177: u8 reg0 = g_VDP_REGSAV[0];
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:177: u8 reg0 = g_VDP_REGSAV[0];
 	ld	a, (#_g_VDP_REGSAV + 0)
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:178: reg0 &= 0b11110001;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:178: reg0 &= 0b11110001;
 	and	a, #0xf1
 	ld	c, a
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:179: flag >>= 1;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:179: flag >>= 1;
 	ld	a, e
 	srl	a
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:180: flag &= 0b00001110;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:180: flag &= 0b00001110;
 	and	a, #0x0e
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:181: reg0 |= flag;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:181: reg0 |= flag;
 	or	a, c
 	ld	l, a
 ;	spillPairReg hl
 ;	spillPairReg hl
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:182: VDP_RegWriteBak(0, reg0);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:182: VDP_RegWriteBak(0, reg0);
 	xor	a, a
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:183: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:183: }
 	jp	_VDP_RegWriteBak
 _g_RDPRIM	=	0xf380
 _g_WRPRIM	=	0xf385
@@ -554,49 +554,49 @@ _g_ROMVersion	=	0x002b
 _g_MSXVER	=	0x002d
 _g_MSXMID	=	0x002e
 _g_CHAR_16	=	0x0034
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:214: void VDP_SetModeGraphic1()
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:214: void VDP_SetModeGraphic1()
 ;	---------------------------------
 ; Function VDP_SetModeGraphic1
 ; ---------------------------------
 _VDP_SetModeGraphic1::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:216: VDP_SetModeFlag(VDP_G1_MODE);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:216: VDP_SetModeFlag(VDP_G1_MODE);
 	xor	a, a
 	call	_VDP_SetModeFlag
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:217: VDP_SetLayoutTable(VDP_G1_ADDR_NT);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:217: VDP_SetLayoutTable(VDP_G1_ADDR_NT);
 	ld	hl, #0x1800
 	call	_VDP_SetLayoutTable
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:218: VDP_SetColorTable(VDP_G1_ADDR_CT);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:218: VDP_SetColorTable(VDP_G1_ADDR_CT);
 	ld	hl, #0x2000
 	call	_VDP_SetColorTable
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:219: VDP_SetPatternTable(VDP_G1_ADDR_PT);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:219: VDP_SetPatternTable(VDP_G1_ADDR_PT);
 	ld	hl, #0x0000
 	call	_VDP_SetPatternTable
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:221: VDP_SetSpriteAttributeTable(VDP_G1_ADDR_SAT);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:221: VDP_SetSpriteAttributeTable(VDP_G1_ADDR_SAT);
 	ld	hl, #0x1b00
 	call	_VDP_SetSpriteAttributeTable
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:222: VDP_SetSpritePatternTable(VDP_G1_ADDR_SPT);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:222: VDP_SetSpritePatternTable(VDP_G1_ADDR_SPT);
 	ld	hl, #0x3800
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:224: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:224: }
 	jp	_VDP_SetSpritePatternTable
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:251: void VDP_ClearVRAM()
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:251: void VDP_ClearVRAM()
 ;	---------------------------------
 ; Function VDP_ClearVRAM
 ; ---------------------------------
 _VDP_ClearVRAM::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:254: VDP_FillVRAM_16K(0, 0x0000, 0x4000);  // Clear 16 KB of VRAM
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:254: VDP_FillVRAM_16K(0, 0x0000, 0x4000);  // Clear 16 KB of VRAM
 	ld	hl, #0x4000
 	push	hl
 	ld	de, #0x0000
 	xor	a, a
 	call	_VDP_FillVRAM_16K
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:261: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:261: }
 	ret
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:272: void VDP_WriteVRAM_16K(const u8* src, u16 dest, u16 count)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:272: void VDP_WriteVRAM_16K(const u8* src, u16 dest, u16 count)
 ;	---------------------------------
 ; Function VDP_WriteVRAM_16K
 ; ---------------------------------
 _VDP_WriteVRAM_16K::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:341: __endasm;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:341: __endasm;
 	ld	iy, #2
 	add	iy, sp
 	ld	a, e
@@ -619,16 +619,16 @@ _VDP_WriteVRAM_16K::
 	dec	d
 	jp	nz, wrt16_loop_start
 	 wrt16_loop_end:
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:342: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:342: }
 	pop	hl
 	pop	af
 	jp	(hl)
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:351: void VDP_FillVRAM_16K(u8 value, u16 dest, u16 count) __NAKED // Stack: 4 bytes
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:351: void VDP_FillVRAM_16K(u8 value, u16 dest, u16 count) __NAKED // Stack: 4 bytes
 ;	---------------------------------
 ; Function VDP_FillVRAM_16K
 ; ---------------------------------
 _VDP_FillVRAM_16K::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:402: __endasm;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:402: __endasm;
 	ld	c, a
 	ld	a, e
 	di
@@ -652,13 +652,13 @@ _VDP_FillVRAM_16K::
 	 fll16_loop_end:
 	ei
 	jp	(iy)
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:403: }
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:516: void VDP_ReadVRAM_16K(u16 src, u8* dest, u16 count)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:403: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:516: void VDP_ReadVRAM_16K(u16 src, u8* dest, u16 count)
 ;	---------------------------------
 ; Function VDP_ReadVRAM_16K
 ; ---------------------------------
 _VDP_ReadVRAM_16K::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:586: __endasm;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:586: __endasm;
 	ld	iy, #2
 	add	iy, sp
 	ld	a, l
@@ -681,16 +681,16 @@ _VDP_ReadVRAM_16K::
 	dec	d
 	jp	nz, rd16_loop_start
 	 rd16_loop_end:
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:587: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:587: }
 	pop	hl
 	pop	af
 	jp	(hl)
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:597: u8 VDP_Peek_16K(u16 dest) __PRESERVES(b, c, d, e, iyl, iyh)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:597: u8 VDP_Peek_16K(u16 dest) __PRESERVES(b, c, d, e, iyl, iyh)
 ;	---------------------------------
 ; Function VDP_Peek_16K
 ; ---------------------------------
 _VDP_Peek_16K::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:632: __endasm;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:632: __endasm;
 	ld	a, l
 	di
 	out	(0x99), a
@@ -700,14 +700,14 @@ _VDP_Peek_16K::
 	add	hl, hl
 	ei
 	in	a, (0x98)
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:633: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:633: }
 	ret
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:641: void VDP_Poke_16K(u8 val, u16 dest) __PRESERVES(c, h, l, iyl, iyh)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:641: void VDP_Poke_16K(u8 val, u16 dest) __PRESERVES(c, h, l, iyl, iyh)
 ;	---------------------------------
 ; Function VDP_Poke_16K
 ; ---------------------------------
 _VDP_Poke_16K::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:678: __endasm;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:678: __endasm;
 	ld	b, a
 	ld	a, e
 	di
@@ -720,48 +720,48 @@ _VDP_Poke_16K::
 	ld	a, b
 	ei
 	out	(0x98), a
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:679: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:679: }
 	ret
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1447: void VDP_Initialize()
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1447: void VDP_Initialize()
 ;	---------------------------------
 ; Function VDP_Initialize
 ; ---------------------------------
 _VDP_Initialize::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1455: __endasm;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1455: __endasm;
 	ld	hl, #0xF3DF
 	ld	de, #_g_VDP_REGSAV+0
 	ld	bc, #8
 	ldir
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1478: g_VDPInitilized = TRUE;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1478: g_VDPInitilized = TRUE;
 	ld	hl, #_g_VDPInitilized
 	ld	(hl), #0x01
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1480: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1480: }
 	ret
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1488: void VDP_SetMode(const u8 mode)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1488: void VDP_SetMode(const u8 mode)
 ;	---------------------------------
 ; Function VDP_SetMode
 ; ---------------------------------
 _VDP_SetMode::
 	ld	c, a
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1491: if(!g_VDPInitilized)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1491: if(!g_VDPInitilized)
 	ld	a, (_g_VDPInitilized+0)
 	or	a, a
 	jr	NZ, 00102$
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1492: VDP_Initialize();
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1492: VDP_Initialize();
 	push	bc
 	call	_VDP_Initialize
 	pop	bc
 00102$:
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1499: g_VDP_Data.Mode = mode;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1499: g_VDP_Data.Mode = mode;
 	ld	hl, #_g_VDP_Data
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1500: switch(mode)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1500: switch(mode)
 	ld	a,c
 	ld	(hl),a
 	sub	a, #0x02
 	jr	NZ, 00110$
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1517: case VDP_MODE_GRAPHIC1:		VDP_SetModeGraphic1(); break;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1517: case VDP_MODE_GRAPHIC1:		VDP_SetModeGraphic1(); break;
 	call	_VDP_SetModeGraphic1
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.h:674: inline void VDP_EnableDisplay(bool enable) { VDP_RegWriteBakMask(1, (u8)~R01_BL, enable ? R01_BL : 0); }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.h:674: inline void VDP_EnableDisplay(bool enable) { VDP_RegWriteBakMask(1, (u8)~R01_BL, enable ? R01_BL : 0); }
 00110$:
 	ld	a, #0x40
 	push	af
@@ -771,7 +771,7 @@ _VDP_SetMode::
 ;	spillPairReg hl
 	ld	a, #0x01
 	call	_VDP_RegWriteBakMask
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.h:681: inline void VDP_EnableVBlank(bool enable) { VDP_RegWriteBakMask(1, (u8)~R01_IE0, enable ? R01_IE0 : 0); }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.h:681: inline void VDP_EnableVBlank(bool enable) { VDP_RegWriteBakMask(1, (u8)~R01_IE0, enable ? R01_IE0 : 0); }
 	ld	a, #0x20
 	push	af
 	inc	sp
@@ -780,15 +780,15 @@ _VDP_SetMode::
 ;	spillPairReg hl
 	ld	a, #0x01
 	call	_VDP_RegWriteBakMask
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1605: VDP_EnableVBlank(TRUE);
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1628: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1605: VDP_EnableVBlank(TRUE);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1628: }
 	ret
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1634: u8 VDP_GetVersion() __NAKED
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1634: u8 VDP_GetVersion() __NAKED
 ;	---------------------------------
 ; Function VDP_GetVersion
 ; ---------------------------------
 _VDP_GetVersion::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1703: __endasm;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1703: __endasm;
 	 VDP_GetVersionAsm:
 	call	VDP_IsTMS9918A
 	ret	z
@@ -839,13 +839,13 @@ _VDP_GetVersion::
 	ex	af, af'					; '
 	and	#0b01000000
 	ret
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1704: }
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1712: void VDP_RegWrite(u8 reg, u8 value) __PRESERVES(b, c, d, e, iyl, iyh)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1704: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1712: void VDP_RegWrite(u8 reg, u8 value) __PRESERVES(b, c, d, e, iyl, iyh)
 ;	---------------------------------
 ; Function VDP_RegWrite
 ; ---------------------------------
 _VDP_RegWrite::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1726: __endasm;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1726: __endasm;
 	ld	h, a
 	ld	a, l
 	di
@@ -854,14 +854,14 @@ _VDP_RegWrite::
 	add	#0x80
 	ei
 	out	(0x99), a
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1727: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1727: }
 	ret
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1735: void VDP_RegWriteBak(u8 reg, u8 value) __PRESERVES(d, e, iyl, iyh)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1735: void VDP_RegWriteBak(u8 reg, u8 value) __PRESERVES(d, e, iyl, iyh)
 ;	---------------------------------
 ; Function VDP_RegWriteBak
 ; ---------------------------------
 _VDP_RegWriteBak::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1755: __endasm;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1755: __endasm;
 	ld	c, a
 	ld	a, l
 	ld	b, #0
@@ -874,9 +874,9 @@ _VDP_RegWriteBak::
 	add	#0x80
 	ei
 	out	(0x99), a
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1756: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1756: }
 	ret
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1765: void VDP_RegWriteBakMask(u8 reg, u8 mask, u8 flag)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1765: void VDP_RegWriteBakMask(u8 reg, u8 mask, u8 flag)
 ;	---------------------------------
 ; Function VDP_RegWriteBakMask
 ; ---------------------------------
@@ -886,43 +886,43 @@ _VDP_RegWriteBakMask::
 	add	ix,sp
 	ld	c, a
 	ld	e, l
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1767: u8 value = g_VDP_REGSAV[reg];
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1767: u8 value = g_VDP_REGSAV[reg];
 	ld	hl, #_g_VDP_REGSAV+0
 	ld	b, #0x00
 	add	hl, bc
 	ld	a, (hl)
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1768: value &= mask;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1768: value &= mask;
 	and	a, e
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1769: value |= flag;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1769: value |= flag;
 	or	a, 4 (ix)
 	ld	l, a
 ;	spillPairReg hl
 ;	spillPairReg hl
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1770: VDP_RegWriteBak(reg, value);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1770: VDP_RegWriteBak(reg, value);
 	ld	a, c
 	call	_VDP_RegWriteBak
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1771: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1771: }
 	pop	ix
 	pop	hl
 	inc	sp
 	jp	(hl)
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1775: u8 VDP_ReadDefaultStatus() __PRESERVES(b, c, d, e, h, l, iyl, iyh)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1775: u8 VDP_ReadDefaultStatus() __PRESERVES(b, c, d, e, h, l, iyl, iyh)
 ;	---------------------------------
 ; Function VDP_ReadDefaultStatus
 ; ---------------------------------
 _VDP_ReadDefaultStatus::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1779: __endasm;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1779: __endasm;
 	in	a, (0x99)
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1780: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1780: }
 	ret
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1797: void VDP_SetLayoutTable(VADDR addr)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1797: void VDP_SetLayoutTable(VADDR addr)
 ;	---------------------------------
 ; Function VDP_SetLayoutTable
 ; ---------------------------------
 _VDP_SetLayoutTable::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1799: g_ScreenLayoutLow = (u16)addr;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1799: g_ScreenLayoutLow = (u16)addr;
 	ld	(_g_ScreenLayoutLow), hl
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1802: reg = (u8)(addr >> 10);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1802: reg = (u8)(addr >> 10);
 	ld	a, h
 	rrca
 	rrca
@@ -933,18 +933,18 @@ _VDP_SetLayoutTable::
 	ld	h, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1823: VDP_RegWrite(2, reg);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1823: VDP_RegWrite(2, reg);
 	ld	a, #0x02
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1828: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1828: }
 	jp	_VDP_RegWrite
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1832: void VDP_SetColorTable(VADDR addr)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1832: void VDP_SetColorTable(VADDR addr)
 ;	---------------------------------
 ; Function VDP_SetColorTable
 ; ---------------------------------
 _VDP_SetColorTable::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1834: g_ScreenColorLow = (u16)addr;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1834: g_ScreenColorLow = (u16)addr;
 	ld	(_g_ScreenColorLow), hl
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1837: reg = (u8)(addr >> 6);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1837: reg = (u8)(addr >> 6);
 	srl	h
 	rr	l
 	srl	h
@@ -958,31 +958,31 @@ _VDP_SetColorTable::
 	srl	h
 	rr	l
 	ld	c, l
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1838: switch(g_VDP_Data.Mode)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1838: switch(g_VDP_Data.Mode)
 	ld	a, (#_g_VDP_Data + 0)
 	sub	a, #0x03
 	jr	NZ, 00102$
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1858: reg |= 0b1111111;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1858: reg |= 0b1111111;
 	ld	a, c
 	or	a, #0x7f
 	ld	c, a
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1860: };	
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1860: };	
 00102$:
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1861: VDP_RegWrite(3, reg);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1861: VDP_RegWrite(3, reg);
 	ld	l, c
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, #0x03
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1869: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1869: }
 	jp	_VDP_RegWrite
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1873: void VDP_SetPatternTable(VADDR addr)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1873: void VDP_SetPatternTable(VADDR addr)
 ;	---------------------------------
 ; Function VDP_SetPatternTable
 ; ---------------------------------
 _VDP_SetPatternTable::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1875: g_ScreenPatternLow = (u16)addr;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1875: g_ScreenPatternLow = (u16)addr;
 	ld	(_g_ScreenPatternLow), hl
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1878: reg = (u8)(addr >> 11);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1878: reg = (u8)(addr >> 11);
 	ld	a, h
 	rrca
 	rrca
@@ -990,32 +990,32 @@ _VDP_SetPatternTable::
 	and	a, #0x1f
 	ld	c, a
 	ld	b, #0x00
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1879: switch(g_VDP_Data.Mode)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1879: switch(g_VDP_Data.Mode)
 	ld	a, (#_g_VDP_Data + 0)
 	sub	a, #0x03
 	jr	NZ, 00102$
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1893: reg |= 0b11;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1893: reg |= 0b11;
 	ld	a, c
 	or	a, #0x03
 	ld	c, a
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1894: };
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1894: };
 00102$:
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1895: VDP_RegWrite(4, reg);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1895: VDP_RegWrite(4, reg);
 	ld	l, c
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, #0x04
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1900: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1900: }
 	jp	_VDP_RegWrite
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1914: void VDP_SetSpriteAttributeTable(VADDR addr)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1914: void VDP_SetSpriteAttributeTable(VADDR addr)
 ;	---------------------------------
 ; Function VDP_SetSpriteAttributeTable
 ; ---------------------------------
 _VDP_SetSpriteAttributeTable::
 	ex	de, hl
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1916: g_SpriteAttributeLow = (u16)addr;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1916: g_SpriteAttributeLow = (u16)addr;
 	ld	(_g_SpriteAttributeLow), de
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1919: reg = (u8)(addr >> 7);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1919: reg = (u8)(addr >> 7);
 	ld	l, e
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -1034,10 +1034,10 @@ _VDP_SetSpriteAttributeTable::
 	rr	l
 	srl	c
 	rr	l
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1942: VDP_RegWrite(5, reg);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1942: VDP_RegWrite(5, reg);
 	ld	a, #0x05
 	call	_VDP_RegWrite
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1951: addr -= 0x200;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1951: addr -= 0x200;
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	l, e
@@ -1047,17 +1047,17 @@ _VDP_SetSpriteAttributeTable::
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	(_g_SpriteColorLow), hl
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1952: g_SpriteColorLow = (u16)addr;
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1956: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1952: g_SpriteColorLow = (u16)addr;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1956: }
 	ret
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1962: void VDP_SetSpritePatternTable(VADDR addr)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1962: void VDP_SetSpritePatternTable(VADDR addr)
 ;	---------------------------------
 ; Function VDP_SetSpritePatternTable
 ; ---------------------------------
 _VDP_SetSpritePatternTable::
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1964: g_SpritePatternLow  = (u16)addr;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1964: g_SpritePatternLow  = (u16)addr;
 	ld	(_g_SpritePatternLow), hl
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1969: u8 reg = (u8)(addr >> 11);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1969: u8 reg = (u8)(addr >> 11);
 	ld	a, h
 	rrca
 	rrca
@@ -1069,11 +1069,11 @@ _VDP_SetSpritePatternTable::
 	ld	h, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1970: VDP_RegWrite(6, reg);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1970: VDP_RegWrite(6, reg);
 	ld	a, #0x06
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1972: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1972: }
 	jp	_VDP_RegWrite
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1976: void VDP_LoadSpritePattern(const u8* addr, u8 index, u8 count)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1976: void VDP_LoadSpritePattern(const u8* addr, u8 index, u8 count)
 ;	---------------------------------
 ; Function VDP_LoadSpritePattern
 ; ---------------------------------
@@ -1083,9 +1083,9 @@ _VDP_LoadSpritePattern::
 	add	ix,sp
 	ld	c, l
 	ld	b, h
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1978: u16 low = g_SpritePatternLow;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1978: u16 low = g_SpritePatternLow;
 	ld	de, (_g_SpritePatternLow)
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1979: low += (index * 8);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1979: low += (index * 8);
 	ld	l, 4 (ix)
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -1097,7 +1097,7 @@ _VDP_LoadSpritePattern::
 	add	hl, hl
 	add	hl, de
 	ex	de, hl
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1980: VDP_WriteVRAM(addr, low, g_SpritePatternHigh, count * 8);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1980: VDP_WriteVRAM(addr, low, g_SpritePatternHigh, count * 8);
 	ld	l, 5 (ix)
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -1115,12 +1115,12 @@ _VDP_LoadSpritePattern::
 ;	spillPairReg hl
 ;	spillPairReg hl
 	call	_VDP_WriteVRAM_16K
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1981: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1981: }
 	pop	ix
 	pop	hl
 	pop	af
 	jp	(hl)
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1985: void VDP_SetSpriteSM1(u8 index, u8 x, u8 y, u8 shape, u8 color)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1985: void VDP_SetSpriteSM1(u8 index, u8 x, u8 y, u8 shape, u8 color)
 ;	---------------------------------
 ; Function VDP_SetSpriteSM1
 ; ---------------------------------
@@ -1130,24 +1130,24 @@ _VDP_SetSpriteSM1::
 	add	ix,sp
 	ld	e, a
 	ld	c, l
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1987: g_VDP_Sprite.Y = y;				// Y coordinate on screen (all lower priority sprite will be disable if equal to 216 or 0xD0)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1987: g_VDP_Sprite.Y = y;				// Y coordinate on screen (all lower priority sprite will be disable if equal to 216 or 0xD0)
 	ld	hl, #_g_VDP_Sprite
 	ld	a, 4 (ix)
 	ld	(hl), a
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1988: g_VDP_Sprite.X = x;				// X coordinate of the sprite
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1988: g_VDP_Sprite.X = x;				// X coordinate of the sprite
 	ld	hl, #(_g_VDP_Sprite + 1)
 	ld	(hl), c
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1989: g_VDP_Sprite.Pattern = shape;	// Pattern index
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1989: g_VDP_Sprite.Pattern = shape;	// Pattern index
 	ld	hl, #(_g_VDP_Sprite + 2)
 	ld	a, 5 (ix)
 	ld	(hl), a
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1990: g_VDP_Sprite.Color = color;		// Color index (Sprite Mode 1 only) + Early clock
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1990: g_VDP_Sprite.Color = color;		// Color index (Sprite Mode 1 only) + Early clock
 	ld	hl, #(_g_VDP_Sprite + 3)
 	ld	a, 6 (ix)
 	ld	(hl), a
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1992: u16 low = g_SpriteAttributeLow;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1992: u16 low = g_SpriteAttributeLow;
 	ld	bc, (_g_SpriteAttributeLow)
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1993: low += (index * 4);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1993: low += (index * 4);
 	ld	l, e
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -1158,18 +1158,18 @@ _VDP_SetSpriteSM1::
 	add	hl, hl
 	add	hl, bc
 	ex	de, hl
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1994: VDP_WriteVRAM((u8*)&g_VDP_Sprite, low, g_SpriteAtributeHigh, 4);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1994: VDP_WriteVRAM((u8*)&g_VDP_Sprite, low, g_SpriteAtributeHigh, 4);
 	ld	hl, #0x0004
 	push	hl
 	ld	hl, #_g_VDP_Sprite
 	call	_VDP_WriteVRAM_16K
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1995: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1995: }
 	pop	ix
 	pop	hl
 	pop	af
 	inc	sp
 	jp	(hl)
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1999: void VDP_SetSprite(u8 index, u8 x, u8 y, u8 shape)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:1999: void VDP_SetSprite(u8 index, u8 x, u8 y, u8 shape)
 ;	---------------------------------
 ; Function VDP_SetSprite
 ; ---------------------------------
@@ -1179,20 +1179,20 @@ _VDP_SetSprite::
 	add	ix,sp
 	ld	e, a
 	ld	c, l
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2001: g_VDP_Sprite.Y = y;				// Y coordinate on screen (all lower priority sprite will be disable if equal to 216 or 0xD0)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2001: g_VDP_Sprite.Y = y;				// Y coordinate on screen (all lower priority sprite will be disable if equal to 216 or 0xD0)
 	ld	hl, #_g_VDP_Sprite
 	ld	a, 4 (ix)
 	ld	(hl), a
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2002: g_VDP_Sprite.X = x;				// X coordinate of the sprite
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2002: g_VDP_Sprite.X = x;				// X coordinate of the sprite
 	ld	hl, #(_g_VDP_Sprite + 1)
 	ld	(hl), c
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2003: g_VDP_Sprite.Pattern = shape;	// Pattern index
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2003: g_VDP_Sprite.Pattern = shape;	// Pattern index
 	ld	hl, #(_g_VDP_Sprite + 2)
 	ld	a, 5 (ix)
 	ld	(hl), a
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2005: u16 low = g_SpriteAttributeLow;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2005: u16 low = g_SpriteAttributeLow;
 	ld	bc, (_g_SpriteAttributeLow)
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2006: low += (index * 4);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2006: low += (index * 4);
 	ld	l, e
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -1203,17 +1203,17 @@ _VDP_SetSprite::
 	add	hl, hl
 	add	hl, bc
 	ex	de, hl
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2007: VDP_WriteVRAM((u8*)&g_VDP_Sprite, low, g_SpriteAtributeHigh, 3);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2007: VDP_WriteVRAM((u8*)&g_VDP_Sprite, low, g_SpriteAtributeHigh, 3);
 	ld	hl, #0x0003
 	push	hl
 	ld	hl, #_g_VDP_Sprite
 	call	_VDP_WriteVRAM_16K
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2008: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2008: }
 	pop	ix
 	pop	hl
 	pop	af
 	jp	(hl)
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2046: void VDP_SetSpritePosition(u8 index, u8 x, u8 y)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2046: void VDP_SetSpritePosition(u8 index, u8 x, u8 y)
 ;	---------------------------------
 ; Function VDP_SetSpritePosition
 ; ---------------------------------
@@ -1223,16 +1223,16 @@ _VDP_SetSpritePosition::
 	add	ix,sp
 	ld	e, a
 	ld	c, l
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2048: g_VDP_Sprite.Y = y;				// Y coordinate on screen (all lower priority sprite will be disable if equal to 216 or 0xD0)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2048: g_VDP_Sprite.Y = y;				// Y coordinate on screen (all lower priority sprite will be disable if equal to 216 or 0xD0)
 	ld	hl, #_g_VDP_Sprite
 	ld	a, 4 (ix)
 	ld	(hl), a
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2049: g_VDP_Sprite.X = x;				// X coordinate of the sprite
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2049: g_VDP_Sprite.X = x;				// X coordinate of the sprite
 	ld	hl, #(_g_VDP_Sprite + 1)
 	ld	(hl), c
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2051: u16 low = g_SpriteAttributeLow;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2051: u16 low = g_SpriteAttributeLow;
 	ld	bc, (_g_SpriteAttributeLow)
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2052: low += (index * 4);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2052: low += (index * 4);
 	ld	l, e
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -1243,26 +1243,26 @@ _VDP_SetSpritePosition::
 	add	hl, hl
 	add	hl, bc
 	ex	de, hl
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2053: VDP_WriteVRAM((u8*)&g_VDP_Sprite, low, g_SpriteAtributeHigh, 2);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2053: VDP_WriteVRAM((u8*)&g_VDP_Sprite, low, g_SpriteAtributeHigh, 2);
 	ld	hl, #0x0002
 	push	hl
 	ld	hl, #_g_VDP_Sprite
 	call	_VDP_WriteVRAM_16K
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2054: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2054: }
 	pop	ix
 	pop	hl
 	inc	sp
 	jp	(hl)
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2058: void VDP_SetSpritePositionX(u8 index, u8 x)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2058: void VDP_SetSpritePositionX(u8 index, u8 x)
 ;	---------------------------------
 ; Function VDP_SetSpritePositionX
 ; ---------------------------------
 _VDP_SetSpritePositionX::
 	ld	b, a
 	ld	c, l
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2060: u16 low = g_SpriteAttributeLow;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2060: u16 low = g_SpriteAttributeLow;
 	ld	de, (_g_SpriteAttributeLow)
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2061: low += (index * 4);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2061: low += (index * 4);
 	ld	l, b
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -1273,21 +1273,21 @@ _VDP_SetSpritePositionX::
 	add	hl, hl
 	add	hl, de
 	ex	de, hl
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2062: VDP_Poke(x, ++low, g_SpriteAtributeHigh);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2062: VDP_Poke(x, ++low, g_SpriteAtributeHigh);
 	inc	de
 	ld	a, c
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2063: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2063: }
 	jp	_VDP_Poke_16K
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2067: void VDP_SetSpritePositionY(u8 index, u8 y)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2067: void VDP_SetSpritePositionY(u8 index, u8 y)
 ;	---------------------------------
 ; Function VDP_SetSpritePositionY
 ; ---------------------------------
 _VDP_SetSpritePositionY::
 	ld	b, a
 	ld	c, l
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2069: u16 low = g_SpriteAttributeLow;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2069: u16 low = g_SpriteAttributeLow;
 	ld	de, (_g_SpriteAttributeLow)
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2070: low += (index * 4);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2070: low += (index * 4);
 	ld	l, b
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -1298,22 +1298,22 @@ _VDP_SetSpritePositionY::
 	add	hl, hl
 	add	hl, de
 	ex	de, hl
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2071: VDP_Poke(y, low, g_SpriteAtributeHigh);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2071: VDP_Poke(y, low, g_SpriteAtributeHigh);
 	ld	a, c
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2072: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2072: }
 	jp	_VDP_Poke_16K
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2076: void VDP_SetSpritePattern(u8 index, u8 shape)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2076: void VDP_SetSpritePattern(u8 index, u8 shape)
 ;	---------------------------------
 ; Function VDP_SetSpritePattern
 ; ---------------------------------
 _VDP_SetSpritePattern::
 	ld	b, a
 	ld	c, l
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2078: u16 low = g_SpriteAttributeLow + 2;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2078: u16 low = g_SpriteAttributeLow + 2;
 	ld	de, (_g_SpriteAttributeLow)
 	inc	de
 	inc	de
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2079: low += (index * 4);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2079: low += (index * 4);
 	ld	l, b
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -1324,23 +1324,23 @@ _VDP_SetSpritePattern::
 	add	hl, hl
 	add	hl, de
 	ex	de, hl
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2080: VDP_Poke(shape, low, g_SpriteAtributeHigh);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2080: VDP_Poke(shape, low, g_SpriteAtributeHigh);
 	ld	a, c
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2081: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2081: }
 	jp	_VDP_Poke_16K
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2085: void VDP_SetSpriteColorSM1(u8 index, u8 color)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2085: void VDP_SetSpriteColorSM1(u8 index, u8 color)
 ;	---------------------------------
 ; Function VDP_SetSpriteColorSM1
 ; ---------------------------------
 _VDP_SetSpriteColorSM1::
 	ld	b, a
 	ld	c, l
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2087: u16 low = g_SpriteAttributeLow + 3;
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2087: u16 low = g_SpriteAttributeLow + 3;
 	ld	de, (_g_SpriteAttributeLow)
 	inc	de
 	inc	de
 	inc	de
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2088: low += (index * 4);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2088: low += (index * 4);
 	ld	l, b
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -1351,22 +1351,22 @@ _VDP_SetSpriteColorSM1::
 	add	hl, hl
 	add	hl, de
 	ex	de, hl
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2089: VDP_Poke(color, low, g_SpriteAtributeHigh);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2089: VDP_Poke(color, low, g_SpriteAtributeHigh);
 	ld	a, c
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2090: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2090: }
 	jp	_VDP_Poke_16K
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2123: void VDP_DisableSpritesFrom(u8 index)
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2123: void VDP_DisableSpritesFrom(u8 index)
 ;	---------------------------------
 ; Function VDP_DisableSpritesFrom
 ; ---------------------------------
 _VDP_DisableSpritesFrom::
 	ld	c, a
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2130: VDP_SetSpritePositionY(index, y);
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2130: VDP_SetSpritePositionY(index, y);
 	ld	l, #0xd0
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, c
-;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2131: }
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.c:2131: }
 	jp	_VDP_SetSpritePositionY
 	.area _CODE
 	.area _INITIALIZER

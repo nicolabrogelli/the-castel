@@ -104,6 +104,8 @@
 #define VDP_USE_16X16_SPRITE		TRUE	// Use 16x16 sprites mode
 #define VDP_USE_RESTORE_S0			TRUE	// Do restore of status register pointer to S#0 (needed onlt for default BIOS ISR)
 
+#define VDP_USE_PALETTE16			TRUE	// Use 16 entries palette (use only 15 entries otherwise)
+
 // ISR protection while modifiying VDP registers
 // - VDP_ISR_SAFE_NONE ............ No ISR protection (for program not using VDP interruption)
 // - VDP_ISR_SAFE_DEFAULT ......... Protect only VDP register pair writing (default behavior; ISR can read/write registers but VRAM ones)
@@ -150,6 +152,15 @@
 #define DOS_USE_HANDLE				TRUE	// Add support for file managment features through file handle
 #define DOS_USE_UTILITIES			TRUE	// Add support for file managment features through filename
 #define DOS_USE_VALIDATOR			TRUE	// Add support for last error backup and return value validation
+
+//-----------------------------------------------------------------------------
+// CLOCK MODULE
+//-----------------------------------------------------------------------------
+
+#define RTC_USE_CLOCK				TRUE	// Add functions to handle date and time
+#define RTC_USE_CLOCK_EXTRA			TRUE	// Add extra date and time functions that require additional data
+#define RTC_USE_SAVEDATA			TRUE	// Add functions to read/write into the CMOS 
+#define RTC_USE_SAVESIGNED			TRUE	// Add signature handling to validate CMOS I/O
 
 //-----------------------------------------------------------------------------
 // DRAW MODULE
@@ -231,6 +242,10 @@
 #define GAMEPAWN_BORDER_MIN_Y		0
 #define GAMEPAWN_BORDER_MAX_Y		184
 #define GAMEPAWN_FORCE_SM1			FALSE	// Force the use sprite mode 1 
+
+#define GAMEPAWN_USE_VRAM_COL		TRUE	// Use VRAM to chech tile collision (use RAM buffer instead)
+#define GAMEPAWN_TILEMAP_WIDTH		32		// Width of the tiles map
+#define GAMEPAWN_TILEMAP_HEIGHT		24		// Height of the tiles map
 
 //-----------------------------------------------------------------------------
 // GAME MENU MODULE

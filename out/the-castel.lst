@@ -1277,7 +1277,7 @@
       000289 C1               [10] 1277 	pop	bc
       00028A 66               [ 7] 1278 	ld	h, (hl)
                                    1279 ;	spillPairReg hl
-                                   1280 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:1213: inline void VDP_HideSprite(u8 index) { VDP_SetSpritePositionY(index, VDP_SPRITE_HIDE); }
+                                   1280 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:1213: inline void VDP_HideSprite(u8 index) { VDP_SetSpritePositionY(index, VDP_SPRITE_HIDE); }
       00028B C5               [11] 1281 	push	bc
       00028C D5               [11] 1282 	push	de
       00028D 2E D5            [ 7] 1283 	ld	l, #0xd5
@@ -1924,7 +1924,7 @@
       00061B                       1924 00111$:
                                    1925 ;./the-castel.c:590: if (g_CurrRoomIdx == LAST_LEVEL)
       00061B 3Ar04r00         [13] 1926 	ld	a, (_g_CurrRoomIdx+0)
-      00061E D6 15            [ 7] 1927 	sub	a, #0x15
+      00061E D6 13            [ 7] 1927 	sub	a, #0x13
       000620 20 0C            [12] 1928 	jr	NZ, 00115$
                                    1929 ;./the-castel.c:592: stopMusicPlayback();
       000622 CDr00r00         [17] 1930 	call	_stopMusicPlayback
@@ -2607,12 +2607,12 @@
       000953 B7               [ 4] 2607 	or	a, a
       000954 28 78            [12] 2608 	jr	Z, 00108$
       000956 3Ar04r00         [13] 2609 	ld	a, (_g_CurrRoomIdx+0)
-      000959 D6 16            [ 7] 2610 	sub	a, #0x16
+      000959 D6 14            [ 7] 2610 	sub	a, #0x14
       00095B 28 71            [12] 2611 	jr	Z, 00108$
-                                   2612 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:226: g_PrintData.CursorX = x;
+                                   2612 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:226: g_PrintData.CursorX = x;
       00095D 21r05r00         [10] 2613 	ld	hl, #(_g_PrintData + 5)
       000960 36 00            [10] 2614 	ld	(hl), #0x00
-                                   2615 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:227: g_PrintData.CursorY = y;
+                                   2615 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:227: g_PrintData.CursorY = y;
       000962 01r06r00         [10] 2616 	ld	bc, #_g_PrintData + 6
       000965 AF               [ 4] 2617 	xor	a, a
       000966 02               [ 7] 2618 	ld	(bc), a
@@ -2640,10 +2640,10 @@
       000983 EB               [ 4] 2640 	ex	de, hl
       000984 CDr00r00         [17] 2641 	call	_Print_DrawText
       000987 C1               [10] 2642 	pop	bc
-                                   2643 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:226: g_PrintData.CursorX = x;
+                                   2643 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:226: g_PrintData.CursorX = x;
       000988 21r05r00         [10] 2644 	ld	hl, #(_g_PrintData + 5)
       00098B 36 0A            [10] 2645 	ld	(hl), #0x0a
-                                   2646 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:227: g_PrintData.CursorY = y;
+                                   2646 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:227: g_PrintData.CursorY = y;
       00098D AF               [ 4] 2647 	xor	a, a
       00098E 02               [ 7] 2648 	ld	(bc), a
                                    2649 ;./the-castel.c:809: Print_DrawText("SCORE:");
@@ -2667,10 +2667,10 @@
       0009AE 39               [11] 2667 	add	hl, sp
       0009AF F9               [ 6] 2668 	ld	sp, hl
       0009B0 C1               [10] 2669 	pop	bc
-                                   2670 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:226: g_PrintData.CursorX = x;
+                                   2670 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:226: g_PrintData.CursorX = x;
       0009B1 21r05r00         [10] 2671 	ld	hl, #(_g_PrintData + 5)
       0009B4 36 10            [10] 2672 	ld	(hl), #0x10
-                                   2673 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:227: g_PrintData.CursorY = y;
+                                   2673 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:227: g_PrintData.CursorY = y;
       0009B6 AF               [ 4] 2674 	xor	a, a
       0009B7 02               [ 7] 2675 	ld	(bc), a
                                    2676 ;./the-castel.c:812: Print_DrawText(StrFormat);
@@ -2679,10 +2679,10 @@
       0009BC 39               [11] 2679 	add	hl, sp
       0009BD CDr00r00         [17] 2680 	call	_Print_DrawText
       0009C0 C1               [10] 2681 	pop	bc
-                                   2682 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:226: g_PrintData.CursorX = x;
+                                   2682 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:226: g_PrintData.CursorX = x;
       0009C1 21r05r00         [10] 2683 	ld	hl, #(_g_PrintData + 5)
       0009C4 36 16            [10] 2684 	ld	(hl), #0x16
-                                   2685 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:227: g_PrintData.CursorY = y;
+                                   2685 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:227: g_PrintData.CursorY = y;
       0009C6 AF               [ 4] 2686 	xor	a, a
       0009C7 02               [ 7] 2687 	ld	(bc), a
                                    2688 ;./the-castel.c:816: Print_DrawText("LIFE:");
@@ -2715,7 +2715,7 @@
       0009EF DD 77 FE         [19] 2715 	ld	-2 (ix), a
                                    2716 ;./the-castel.c:827: pausePT3Music();
       0009F2 CDr00r00         [17] 2717 	call	_pausePT3Music
-                                   2718 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:674: inline void VDP_EnableDisplay(bool enable) { VDP_RegWriteBakMask(1, (u8)~R01_BL, enable ? R01_BL : 0); }
+                                   2718 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:674: inline void VDP_EnableDisplay(bool enable) { VDP_RegWriteBakMask(1, (u8)~R01_BL, enable ? R01_BL : 0); }
       0009F5 AF               [ 4] 2719 	xor	a, a
       0009F6 F5               [11] 2720 	push	af
       0009F7 33               [ 6] 2721 	inc	sp
@@ -2758,27 +2758,27 @@
       000A32 3Ar04r00         [13] 2758 	ld	a, (_g_CurrRoomIdx+0)
       000A35 4F               [ 4] 2759 	ld	c, a
       000A36 11r51r0F         [10] 2760 	ld	de, #___str_3+0
-                                   2761 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
+                                   2761 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
       000A39 3E 23            [ 7] 2762 	ld	a, #0x23
       000A3B D3 2E            [11] 2763 	out	(_g_PortDebugMode), a
-                                   2764 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:103: while(*msg)
+                                   2764 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:103: while(*msg)
       000A3D                       2765 00144$:
       000A3D 1A               [ 7] 2766 	ld	a, (de)
       000A3E B7               [ 4] 2767 	or	a, a
       000A3F 28 06            [12] 2768 	jr	Z, 00147$
-                                   2769 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:104: g_PortDebugData = *msg++;
+                                   2769 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:104: g_PortDebugData = *msg++;
       000A41 D3 2F            [11] 2770 	out	(_g_PortDebugData), a
       000A43 13               [ 6] 2771 	inc	de
       000A44 C3r3Dr0A         [10] 2772 	jp	00144$
-                                   2773 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:109: DEBUG_LOG(msg);
+                                   2773 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:109: DEBUG_LOG(msg);
       000A47                       2774 00147$:
-                                   2775 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:110: g_PortDebugData = ':';
+                                   2775 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:110: g_PortDebugData = ':';
       000A47 3E 3A            [ 7] 2776 	ld	a, #0x3a
       000A49 D3 2F            [11] 2777 	out	(_g_PortDebugData), a
-                                   2778 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:111: g_PortDebugMode = DEBUG_NOLINEFEED|DEBUG_MODE_MULTI|DEBUG_MULTI_DEC; // Multi byte ASCII mode
+                                   2778 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:111: g_PortDebugMode = DEBUG_NOLINEFEED|DEBUG_MODE_MULTI|DEBUG_MULTI_DEC; // Multi byte ASCII mode
       000A4B 3E 62            [ 7] 2779 	ld	a, #0x62
       000A4D D3 2E            [11] 2780 	out	(_g_PortDebugMode), a
-                                   2781 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:112: g_PortDebugData = num;
+                                   2781 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:112: g_PortDebugData = num;
       000A4F 79               [ 4] 2782 	ld	a, c
       000A50 D3 2F            [11] 2783 	out	(_g_PortDebugData), a
                                    2784 ;./the-castel.c:842: DEBUG_LOGNUM("----- CONFIGURATO Skeletor Number", g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber);
@@ -2803,27 +2803,27 @@
       000A6B FD 6E 0C         [19] 2803 	ld	l, 12 (iy)
                                    2804 ;	spillPairReg hl
       000A6E 01r5Fr0F         [10] 2805 	ld	bc, #___str_4+0
-                                   2806 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
+                                   2806 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
       000A71 3E 23            [ 7] 2807 	ld	a, #0x23
       000A73 D3 2E            [11] 2808 	out	(_g_PortDebugMode), a
-                                   2809 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:103: while(*msg)
+                                   2809 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:103: while(*msg)
       000A75                       2810 00149$:
       000A75 0A               [ 7] 2811 	ld	a, (bc)
       000A76 B7               [ 4] 2812 	or	a, a
       000A77 28 06            [12] 2813 	jr	Z, 00152$
-                                   2814 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:104: g_PortDebugData = *msg++;
+                                   2814 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:104: g_PortDebugData = *msg++;
       000A79 D3 2F            [11] 2815 	out	(_g_PortDebugData), a
       000A7B 03               [ 6] 2816 	inc	bc
       000A7C C3r75r0A         [10] 2817 	jp	00149$
-                                   2818 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:109: DEBUG_LOG(msg);
+                                   2818 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:109: DEBUG_LOG(msg);
       000A7F                       2819 00152$:
-                                   2820 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:110: g_PortDebugData = ':';
+                                   2820 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:110: g_PortDebugData = ':';
       000A7F 3E 3A            [ 7] 2821 	ld	a, #0x3a
       000A81 D3 2F            [11] 2822 	out	(_g_PortDebugData), a
-                                   2823 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:111: g_PortDebugMode = DEBUG_NOLINEFEED|DEBUG_MODE_MULTI|DEBUG_MULTI_DEC; // Multi byte ASCII mode
+                                   2823 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:111: g_PortDebugMode = DEBUG_NOLINEFEED|DEBUG_MODE_MULTI|DEBUG_MULTI_DEC; // Multi byte ASCII mode
       000A83 3E 62            [ 7] 2824 	ld	a, #0x62
       000A85 D3 2E            [11] 2825 	out	(_g_PortDebugMode), a
-                                   2826 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:112: g_PortDebugData = num;
+                                   2826 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:112: g_PortDebugData = num;
       000A87 7D               [ 4] 2827 	ld	a, l
       000A88 D3 2F            [11] 2828 	out	(_g_PortDebugData), a
                                    2829 ;./the-castel.c:843: DEBUG_LOGNUM("----- CONFIGURATO Ghost Number", g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber);
@@ -2832,27 +2832,27 @@
       000A8D FD 6E 0D         [19] 2832 	ld	l, 13 (iy)
                                    2833 ;	spillPairReg hl
       000A90 01r81r0F         [10] 2834 	ld	bc, #___str_5+0
-                                   2835 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
+                                   2835 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
       000A93 3E 23            [ 7] 2836 	ld	a, #0x23
       000A95 D3 2E            [11] 2837 	out	(_g_PortDebugMode), a
-                                   2838 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:103: while(*msg)
+                                   2838 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:103: while(*msg)
       000A97                       2839 00154$:
       000A97 0A               [ 7] 2840 	ld	a, (bc)
       000A98 B7               [ 4] 2841 	or	a, a
       000A99 28 06            [12] 2842 	jr	Z, 00157$
-                                   2843 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:104: g_PortDebugData = *msg++;
+                                   2843 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:104: g_PortDebugData = *msg++;
       000A9B D3 2F            [11] 2844 	out	(_g_PortDebugData), a
       000A9D 03               [ 6] 2845 	inc	bc
       000A9E C3r97r0A         [10] 2846 	jp	00154$
-                                   2847 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:109: DEBUG_LOG(msg);
+                                   2847 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:109: DEBUG_LOG(msg);
       000AA1                       2848 00157$:
-                                   2849 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:110: g_PortDebugData = ':';
+                                   2849 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:110: g_PortDebugData = ':';
       000AA1 3E 3A            [ 7] 2850 	ld	a, #0x3a
       000AA3 D3 2F            [11] 2851 	out	(_g_PortDebugData), a
-                                   2852 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:111: g_PortDebugMode = DEBUG_NOLINEFEED|DEBUG_MODE_MULTI|DEBUG_MULTI_DEC; // Multi byte ASCII mode
+                                   2852 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:111: g_PortDebugMode = DEBUG_NOLINEFEED|DEBUG_MODE_MULTI|DEBUG_MULTI_DEC; // Multi byte ASCII mode
       000AA5 3E 62            [ 7] 2853 	ld	a, #0x62
       000AA7 D3 2E            [11] 2854 	out	(_g_PortDebugMode), a
-                                   2855 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:112: g_PortDebugData = num;
+                                   2855 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:112: g_PortDebugData = num;
       000AA9 7D               [ 4] 2856 	ld	a, l
       000AAA D3 2F            [11] 2857 	out	(_g_PortDebugData), a
                                    2858 ;./the-castel.c:844: DEBUG_LOGNUM("----- CONFIGURATO Spider Number", g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber);
@@ -2861,27 +2861,27 @@
       000AAF FD 6E 0E         [19] 2861 	ld	l, 14 (iy)
                                    2862 ;	spillPairReg hl
       000AB2 01rA0r0F         [10] 2863 	ld	bc, #___str_6+0
-                                   2864 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
+                                   2864 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
       000AB5 3E 23            [ 7] 2865 	ld	a, #0x23
       000AB7 D3 2E            [11] 2866 	out	(_g_PortDebugMode), a
-                                   2867 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:103: while(*msg)
+                                   2867 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:103: while(*msg)
       000AB9                       2868 00159$:
       000AB9 0A               [ 7] 2869 	ld	a, (bc)
       000ABA B7               [ 4] 2870 	or	a, a
       000ABB 28 06            [12] 2871 	jr	Z, 00162$
-                                   2872 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:104: g_PortDebugData = *msg++;
+                                   2872 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:104: g_PortDebugData = *msg++;
       000ABD D3 2F            [11] 2873 	out	(_g_PortDebugData), a
       000ABF 03               [ 6] 2874 	inc	bc
       000AC0 C3rB9r0A         [10] 2875 	jp	00159$
-                                   2876 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:109: DEBUG_LOG(msg);
+                                   2876 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:109: DEBUG_LOG(msg);
       000AC3                       2877 00162$:
-                                   2878 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:110: g_PortDebugData = ':';
+                                   2878 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:110: g_PortDebugData = ':';
       000AC3 3E 3A            [ 7] 2879 	ld	a, #0x3a
       000AC5 D3 2F            [11] 2880 	out	(_g_PortDebugData), a
-                                   2881 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:111: g_PortDebugMode = DEBUG_NOLINEFEED|DEBUG_MODE_MULTI|DEBUG_MULTI_DEC; // Multi byte ASCII mode
+                                   2881 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:111: g_PortDebugMode = DEBUG_NOLINEFEED|DEBUG_MODE_MULTI|DEBUG_MULTI_DEC; // Multi byte ASCII mode
       000AC7 3E 62            [ 7] 2882 	ld	a, #0x62
       000AC9 D3 2E            [11] 2883 	out	(_g_PortDebugMode), a
-                                   2884 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:112: g_PortDebugData = num;
+                                   2884 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:112: g_PortDebugData = num;
       000ACB 7D               [ 4] 2885 	ld	a, l
       000ACC D3 2F            [11] 2886 	out	(_g_PortDebugData), a
                                    2887 ;./the-castel.c:845: DEBUG_LOGNUM("----- CONFIGURATO Bat Number", g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber);
@@ -2890,27 +2890,27 @@
       000AD1 FD 6E 0F         [19] 2890 	ld	l, 15 (iy)
                                    2891 ;	spillPairReg hl
       000AD4 01rC0r0F         [10] 2892 	ld	bc, #___str_7+0
-                                   2893 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
+                                   2893 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
       000AD7 3E 23            [ 7] 2894 	ld	a, #0x23
       000AD9 D3 2E            [11] 2895 	out	(_g_PortDebugMode), a
-                                   2896 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:103: while(*msg)
+                                   2896 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:103: while(*msg)
       000ADB                       2897 00164$:
       000ADB 0A               [ 7] 2898 	ld	a, (bc)
       000ADC B7               [ 4] 2899 	or	a, a
       000ADD 28 06            [12] 2900 	jr	Z, 00167$
-                                   2901 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:104: g_PortDebugData = *msg++;
+                                   2901 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:104: g_PortDebugData = *msg++;
       000ADF D3 2F            [11] 2902 	out	(_g_PortDebugData), a
       000AE1 03               [ 6] 2903 	inc	bc
       000AE2 C3rDBr0A         [10] 2904 	jp	00164$
-                                   2905 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:109: DEBUG_LOG(msg);
+                                   2905 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:109: DEBUG_LOG(msg);
       000AE5                       2906 00167$:
-                                   2907 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:110: g_PortDebugData = ':';
+                                   2907 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:110: g_PortDebugData = ':';
       000AE5 3E 3A            [ 7] 2908 	ld	a, #0x3a
       000AE7 D3 2F            [11] 2909 	out	(_g_PortDebugData), a
-                                   2910 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:111: g_PortDebugMode = DEBUG_NOLINEFEED|DEBUG_MODE_MULTI|DEBUG_MULTI_DEC; // Multi byte ASCII mode
+                                   2910 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:111: g_PortDebugMode = DEBUG_NOLINEFEED|DEBUG_MODE_MULTI|DEBUG_MULTI_DEC; // Multi byte ASCII mode
       000AE9 3E 62            [ 7] 2911 	ld	a, #0x62
       000AEB D3 2E            [11] 2912 	out	(_g_PortDebugMode), a
-                                   2913 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:112: g_PortDebugData = num;
+                                   2913 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:112: g_PortDebugData = num;
       000AED 7D               [ 4] 2914 	ld	a, l
       000AEE D3 2F            [11] 2915 	out	(_g_PortDebugData), a
                                    2916 ;./the-castel.c:846: DEBUG_LOGNUM("----- CONFIGURATO Slide Number H", g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH);
@@ -2919,27 +2919,27 @@
       000AF3 FD 6E 10         [19] 2919 	ld	l, 16 (iy)
                                    2920 ;	spillPairReg hl
       000AF6 01rDDr0F         [10] 2921 	ld	bc, #___str_8+0
-                                   2922 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
+                                   2922 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
       000AF9 3E 23            [ 7] 2923 	ld	a, #0x23
       000AFB D3 2E            [11] 2924 	out	(_g_PortDebugMode), a
-                                   2925 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:103: while(*msg)
+                                   2925 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:103: while(*msg)
       000AFD                       2926 00169$:
       000AFD 0A               [ 7] 2927 	ld	a, (bc)
       000AFE B7               [ 4] 2928 	or	a, a
       000AFF 28 06            [12] 2929 	jr	Z, 00172$
-                                   2930 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:104: g_PortDebugData = *msg++;
+                                   2930 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:104: g_PortDebugData = *msg++;
       000B01 D3 2F            [11] 2931 	out	(_g_PortDebugData), a
       000B03 03               [ 6] 2932 	inc	bc
       000B04 C3rFDr0A         [10] 2933 	jp	00169$
-                                   2934 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:109: DEBUG_LOG(msg);
+                                   2934 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:109: DEBUG_LOG(msg);
       000B07                       2935 00172$:
-                                   2936 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:110: g_PortDebugData = ':';
+                                   2936 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:110: g_PortDebugData = ':';
       000B07 3E 3A            [ 7] 2937 	ld	a, #0x3a
       000B09 D3 2F            [11] 2938 	out	(_g_PortDebugData), a
-                                   2939 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:111: g_PortDebugMode = DEBUG_NOLINEFEED|DEBUG_MODE_MULTI|DEBUG_MULTI_DEC; // Multi byte ASCII mode
+                                   2939 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:111: g_PortDebugMode = DEBUG_NOLINEFEED|DEBUG_MODE_MULTI|DEBUG_MULTI_DEC; // Multi byte ASCII mode
       000B0B 3E 62            [ 7] 2940 	ld	a, #0x62
       000B0D D3 2E            [11] 2941 	out	(_g_PortDebugMode), a
-                                   2942 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:112: g_PortDebugData = num;
+                                   2942 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:112: g_PortDebugData = num;
       000B0F 7D               [ 4] 2943 	ld	a, l
       000B10 D3 2F            [11] 2944 	out	(_g_PortDebugData), a
                                    2945 ;./the-castel.c:847: DEBUG_LOGNUM("----- CONFIGURATO Slide Number V", g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV);
@@ -2947,27 +2947,27 @@
       000B15 19               [11] 2947 	add	hl, de
       000B16 4E               [ 7] 2948 	ld	c, (hl)
       000B17 11rFEr0F         [10] 2949 	ld	de, #___str_9+0
-                                   2950 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
+                                   2950 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
       000B1A 3E 23            [ 7] 2951 	ld	a, #0x23
       000B1C D3 2E            [11] 2952 	out	(_g_PortDebugMode), a
-                                   2953 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:103: while(*msg)
+                                   2953 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:103: while(*msg)
       000B1E                       2954 00174$:
       000B1E 1A               [ 7] 2955 	ld	a, (de)
       000B1F B7               [ 4] 2956 	or	a, a
       000B20 28 06            [12] 2957 	jr	Z, 00177$
-                                   2958 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:104: g_PortDebugData = *msg++;
+                                   2958 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:104: g_PortDebugData = *msg++;
       000B22 D3 2F            [11] 2959 	out	(_g_PortDebugData), a
       000B24 13               [ 6] 2960 	inc	de
       000B25 C3r1Er0B         [10] 2961 	jp	00174$
-                                   2962 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:109: DEBUG_LOG(msg);
+                                   2962 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:109: DEBUG_LOG(msg);
       000B28                       2963 00177$:
-                                   2964 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:110: g_PortDebugData = ':';
+                                   2964 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:110: g_PortDebugData = ':';
       000B28 3E 3A            [ 7] 2965 	ld	a, #0x3a
       000B2A D3 2F            [11] 2966 	out	(_g_PortDebugData), a
-                                   2967 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:111: g_PortDebugMode = DEBUG_NOLINEFEED|DEBUG_MODE_MULTI|DEBUG_MULTI_DEC; // Multi byte ASCII mode
+                                   2967 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:111: g_PortDebugMode = DEBUG_NOLINEFEED|DEBUG_MODE_MULTI|DEBUG_MULTI_DEC; // Multi byte ASCII mode
       000B2C 3E 62            [ 7] 2968 	ld	a, #0x62
       000B2E D3 2E            [11] 2969 	out	(_g_PortDebugMode), a
-                                   2970 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:112: g_PortDebugData = num;
+                                   2970 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:112: g_PortDebugData = num;
       000B30 79               [ 4] 2971 	ld	a, c
       000B31 D3 2F            [11] 2972 	out	(_g_PortDebugData), a
                                    2973 ;./the-castel.c:850: if (hasItemInInventory(TILE_AMPHORA))
@@ -3634,7 +3634,7 @@
       000EBC B7               [ 4] 3634 	or	a, a
       000EBD 28 2D            [12] 3635 	jr	Z, 00135$
       000EBF 3Ar04r00         [13] 3636 	ld	a, (_g_CurrRoomIdx+0)
-      000EC2 D6 16            [ 7] 3637 	sub	a, #0x16
+      000EC2 D6 14            [ 7] 3637 	sub	a, #0x14
       000EC4 28 26            [12] 3638 	jr	Z, 00135$
                                    3639 ;./the-castel.c:965: displayItemToInventory(g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
       000EC6 ED 4Br04r00      [20] 3640 	ld	bc, (_g_CurrRoomIdx)
@@ -3749,7 +3749,7 @@
                                    3749 ;./the-castel.c:971: for (u8 i = 0; i < 10; i++)
       000F38 DD 34 FF         [23] 3750 	inc	-1 (ix)
       000F3B C3rF3r0E         [10] 3751 	jp	00190$
-                                   3752 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:674: inline void VDP_EnableDisplay(bool enable) { VDP_RegWriteBakMask(1, (u8)~R01_BL, enable ? R01_BL : 0); }
+                                   3752 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:674: inline void VDP_EnableDisplay(bool enable) { VDP_RegWriteBakMask(1, (u8)~R01_BL, enable ? R01_BL : 0); }
       000F3E                       3753 00197$:
       000F3E 3E 40            [ 7] 3754 	ld	a, #0x40
       000F40 F5               [11] 3755 	push	af
@@ -4108,7 +4108,7 @@
       0011B9 7E               [ 7] 4081 	ld	a, (hl)
       0011BA 81               [ 4] 4082 	add	a, c
       0011BB 5F               [ 4] 4083 	ld	e, a
-                                   4084 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:1213: inline void VDP_HideSprite(u8 index) { VDP_SetSpritePositionY(index, VDP_SPRITE_HIDE); }
+                                   4084 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:1213: inline void VDP_HideSprite(u8 index) { VDP_SetSpritePositionY(index, VDP_SPRITE_HIDE); }
       0011BC C5               [11] 4085 	push	bc
       0011BD 2E D5            [ 7] 4086 	ld	l, #0xd5
                                    4087 ;	spillPairReg hl
@@ -5250,7 +5250,7 @@
       001832 CDr00r00         [17] 5223 	call	_inizializeAYFX
                                    5224 ;./the-castel.c:1393: setChannel();
       001835 CDr00r00         [17] 5225 	call	_setChannel
-                                   5226 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:674: inline void VDP_EnableDisplay(bool enable) { VDP_RegWriteBakMask(1, (u8)~R01_BL, enable ? R01_BL : 0); }
+                                   5226 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:674: inline void VDP_EnableDisplay(bool enable) { VDP_RegWriteBakMask(1, (u8)~R01_BL, enable ? R01_BL : 0); }
       001838 AF               [ 4] 5227 	xor	a, a
       001839 F5               [11] 5228 	push	af
       00183A 33               [ 6] 5229 	inc	sp
@@ -5259,7 +5259,7 @@
                                    5232 ;	spillPairReg hl
       00183D 3E 01            [ 7] 5233 	ld	a, #0x01
       00183F CDr00r00         [17] 5234 	call	_VDP_RegWriteBakMask
-                                   5235 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:688: inline void VDP_SetColor(u8 color) { VDP_RegWrite(7, color); }
+                                   5235 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:688: inline void VDP_SetColor(u8 color) { VDP_RegWrite(7, color); }
       001842 2E 01            [ 7] 5236 	ld	l, #0x01
                                    5237 ;	spillPairReg hl
                                    5238 ;	spillPairReg hl
@@ -5278,31 +5278,31 @@
       001857 CDr00r00         [17] 5251 	call	_Print_SetMode
                                    5252 ;./the-castel.c:1425: Print_SetFontEx(8, 8, 1, 1, ' ', '_', g_DataBackground_Patterns + 192);
       00185A 01rC0r00         [10] 5253 	ld	bc, #_g_DataBackground_Patterns + 192
-                                   5254 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:197: g_PrintData.PatternX     = patternX;
+                                   5254 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:197: g_PrintData.PatternX     = patternX;
       00185D 21r00r00         [10] 5255 	ld	hl, #_g_PrintData
       001860 36 08            [10] 5256 	ld	(hl), #0x08
-                                   5257 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:198: g_PrintData.PatternY     = patternY;
+                                   5257 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:198: g_PrintData.PatternY     = patternY;
       001862 11r01r00         [10] 5258 	ld	de, #_g_PrintData + 1
       001865 3E 08            [ 7] 5259 	ld	a, #0x08
       001867 12               [ 7] 5260 	ld	(de), a
-                                   5261 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:199: g_PrintData.UnitX        = sizeX;
+                                   5261 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:199: g_PrintData.UnitX        = sizeX;
       001868 21r02r00         [10] 5262 	ld	hl, #(_g_PrintData + 2)
       00186B 36 01            [10] 5263 	ld	(hl), #0x01
-                                   5264 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:200: g_PrintData.UnitY        = sizeY;
+                                   5264 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:200: g_PrintData.UnitY        = sizeY;
       00186D 21r03r00         [10] 5265 	ld	hl, #(_g_PrintData + 3)
       001870 36 01            [10] 5266 	ld	(hl), #0x01
-                                   5267 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:201: g_PrintData.CharFirst    = firstChr;
+                                   5267 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:201: g_PrintData.CharFirst    = firstChr;
       001872 21r14r00         [10] 5268 	ld	hl, #(_g_PrintData + 20)
       001875 36 20            [10] 5269 	ld	(hl), #0x20
-                                   5270 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:202: g_PrintData.CharLast     = lastChr;
+                                   5270 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:202: g_PrintData.CharLast     = lastChr;
       001877 21r15r00         [10] 5271 	ld	hl, #(_g_PrintData + 21)
       00187A 36 5F            [10] 5272 	ld	(hl), #0x5f
-                                   5273 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:203: g_PrintData.CharCount    = lastChr - firstChr + 1;
+                                   5273 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:203: g_PrintData.CharCount    = lastChr - firstChr + 1;
       00187C 21r16r00         [10] 5274 	ld	hl, #(_g_PrintData + 22)
       00187F 36 40            [10] 5275 	ld	(hl), #0x40
-                                   5276 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:204: g_PrintData.FontPatterns = patterns;
+                                   5276 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:204: g_PrintData.FontPatterns = patterns;
       001881 ED 43r1Cr00      [20] 5277 	ld	((_g_PrintData + 28)), bc
-                                   5278 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:205: g_PrintData.FontAddr     = g_PrintData.FontPatterns - (firstChr * g_PrintData.PatternY); // pre-compute address of the virtual index 0 character (used to quick drawing in PutChar_GX functions)
+                                   5278 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/print.h:205: g_PrintData.FontAddr     = g_PrintData.FontPatterns - (firstChr * g_PrintData.PatternY); // pre-compute address of the virtual index 0 character (used to quick drawing in PutChar_GX functions)
       001885 1A               [ 7] 5279 	ld	a, (de)
       001886 5F               [ 4] 5280 	ld	e, a
       001887 16 00            [ 7] 5281 	ld	d, #0x00
@@ -5326,7 +5326,7 @@
       00189F 36 C0            [10] 5299 	ld	(hl), #0xc0
                                    5300 ;./the-castel.c:1430: setColorTiles();
       0018A1 CDr12r04         [17] 5301 	call	_setColorTiles
-                                   5302 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:1051: inline void VDP_SetSpriteFlag(u8 flag) { VDP_RegWriteBakMask(1, (u8)~(R01_ST|R01_MAG), flag); }
+                                   5302 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/vdp.h:1051: inline void VDP_SetSpriteFlag(u8 flag) { VDP_RegWriteBakMask(1, (u8)~(R01_ST|R01_MAG), flag); }
       0018A4 3E 02            [ 7] 5303 	ld	a, #0x02
       0018A6 F5               [11] 5304 	push	af
       0018A7 33               [ 6] 5305 	inc	sp
@@ -5717,7 +5717,7 @@
                                    5690 ;./the-castel.c:1663: VDP_HideAllSprites();
       001AA7                       5691 00105$:
                                    5692 ;./the-castel.c:1665: drawLevel(GAME_OVER); // -1
-      001AA7 3E 16            [ 7] 5693 	ld	a, #0x16
+      001AA7 3E 14            [ 7] 5693 	ld	a, #0x14
       001AA9 CDrE5r09         [17] 5694 	call	_drawLevel
                                    5695 ;./the-castel.c:1668: while (Keyboard_Read(8) != 254)
       001AAC                       5696 00101$:
@@ -5789,15 +5789,15 @@
       001AEA                       5762 _main::
                                    5763 ;./the-castel.c:1699: DEBUG_LOG("Start debug session!");
       001AEA 01r2Ar1B         [10] 5764 	ld	bc, #___str_16+0
-                                   5765 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
+                                   5765 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
       001AED 3E 23            [ 7] 5766 	ld	a, #0x23
       001AEF D3 2E            [11] 5767 	out	(_g_PortDebugMode), a
-                                   5768 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:103: while(*msg)
+                                   5768 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:103: while(*msg)
       001AF1                       5769 00102$:
       001AF1 0A               [ 7] 5770 	ld	a, (bc)
       001AF2 B7               [ 4] 5771 	or	a, a
       001AF3 28 06            [12] 5772 	jr	Z, 00105$
-                                   5773 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:104: g_PortDebugData = *msg++;
+                                   5773 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:104: g_PortDebugData = *msg++;
       001AF5 D3 2F            [11] 5774 	out	(_g_PortDebugData), a
       001AF7 03               [ 6] 5775 	inc	bc
       001AF8 C3rF1r1A         [10] 5776 	jp	00102$
@@ -5817,15 +5817,15 @@
       001B12 CDr00r00         [17] 5790 	call	_Game_Release
                                    5791 ;./the-castel.c:1721: DEBUG_LOG("End debug session!");
       001B15 01r3Fr1B         [10] 5792 	ld	bc, #___str_17+0
-                                   5793 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
+                                   5793 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:102: g_PortDebugMode = DEBUG_MODE_MULTI|DEBUG_MULTI_ASCII; // Multi byte ASCII mode
       001B18 3E 23            [ 7] 5794 	ld	a, #0x23
       001B1A D3 2E            [11] 5795 	out	(_g_PortDebugMode), a
-                                   5796 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:103: while(*msg)
+                                   5796 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:103: while(*msg)
       001B1C                       5797 00107$:
       001B1C 0A               [ 7] 5798 	ld	a, (bc)
       001B1D B7               [ 4] 5799 	or	a, a
       001B1E 28 06            [12] 5800 	jr	Z, 00110$
-                                   5801 ;C:/Users/87003101/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:104: g_PortDebugData = *msg++;
+                                   5801 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/debug.h:104: g_PortDebugData = *msg++;
       001B20 D3 2F            [11] 5802 	out	(_g_PortDebugData), a
       001B22 03               [ 6] 5803 	inc	bc
       001B23 C3r1Cr1B         [10] 5804 	jp	00107$

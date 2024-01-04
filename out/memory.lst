@@ -54,16 +54,16 @@
                                      54 ; code
                                      55 ;--------------------------------------------------------
                                      56 	.area _CODE
-                                     57 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:24: void* Mem_HeapAlloc(u16 size)
+                                     57 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:24: void* Mem_HeapAlloc(u16 size)
                                      58 ;	---------------------------------
                                      59 ; Function Mem_HeapAlloc
                                      60 ; ---------------------------------
       000000                         61 _Mem_HeapAlloc::
       000000 4D               [ 4]   62 	ld	c, l
       000001 44               [ 4]   63 	ld	b, h
-                                     64 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:26: u16 addr = g_HeapStartAddress;
+                                     64 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:26: u16 addr = g_HeapStartAddress;
       000002 ED 5Br00r00      [20]   65 	ld	de, (_g_HeapStartAddress)
-                                     66 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:27: g_HeapStartAddress += size;
+                                     66 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:27: g_HeapStartAddress += size;
       000006 21r00r00         [10]   67 	ld	hl, #_g_HeapStartAddress
       000009 7E               [ 7]   68 	ld	a, (hl)
       00000A 81               [ 4]   69 	add	a, c
@@ -72,16 +72,16 @@
       00000D 7E               [ 7]   72 	ld	a, (hl)
       00000E 88               [ 4]   73 	adc	a, b
       00000F 77               [ 7]   74 	ld	(hl), a
-                                     75 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:28: return (void*)addr;
-                                     76 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:29: }
+                                     75 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:28: return (void*)addr;
+                                     76 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:29: }
       000010 C9               [10]   77 	ret
-                                     78 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:33: void Mem_HeapFree(u16 size)
+                                     78 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:33: void Mem_HeapFree(u16 size)
                                      79 ;	---------------------------------
                                      80 ; Function Mem_HeapFree
                                      81 ; ---------------------------------
       000011                         82 _Mem_HeapFree::
       000011 EB               [ 4]   83 	ex	de, hl
-                                     84 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:35: g_HeapStartAddress -= size;	
+                                     84 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:35: g_HeapStartAddress -= size;	
       000012 21r00r00         [10]   85 	ld	hl, #_g_HeapStartAddress
       000015 7E               [ 7]   86 	ld	a, (hl)
       000016 93               [ 4]   87 	sub	a, e
@@ -90,26 +90,26 @@
       000019 7E               [ 7]   90 	ld	a, (hl)
       00001A 9A               [ 4]   91 	sbc	a, d
       00001B 77               [ 7]   92 	ld	(hl), a
-                                     93 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:36: }
+                                     93 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:36: }
       00001C C9               [10]   94 	ret
-                                     95 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:40: void Mem_Copy(const void* src, void* dest, u16 size) __NAKED // Stack: 4 bytes
+                                     95 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:40: void Mem_Copy(const void* src, void* dest, u16 size) __NAKED // Stack: 4 bytes
                                      96 ;	---------------------------------
                                      97 ; Function Mem_Copy
                                      98 ; ---------------------------------
       00001D                         99 _Mem_Copy::
-                                    100 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:59: __endasm;
+                                    100 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:59: __endasm;
       00001D FD E1            [14]  101 	pop	iy
       00001F C1               [10]  102 	pop	bc
       000020 ED B0            [21]  103 	ldir
       000022                        104 	 mem_copy_end:
       000022 FD E9            [ 8]  105 	jp	(iy)
-                                    106 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:60: }
-                                    107 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:111: void Mem_Set(u8 val, void* dest, u16 size) __NAKED // Stack: 4 bytes
+                                    106 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:60: }
+                                    107 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:111: void Mem_Set(u8 val, void* dest, u16 size) __NAKED // Stack: 4 bytes
                                     108 ;	---------------------------------
                                     109 ; Function Mem_Set
                                     110 ; ---------------------------------
       000024                        111 _Mem_Set::
-                                    112 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:138: __endasm;
+                                    112 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:138: __endasm;
       000024 D5               [11]  113 	push	de
       000025 E1               [10]  114 	pop	hl
       000026 77               [ 7]  115 	ld	(hl), a
@@ -120,13 +120,13 @@
       00002C ED B0            [21]  120 	ldir
       00002E                        121 	 mem_fill_end:
       00002E FD E9            [ 8]  122 	jp	(iy)
-                                    123 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:139: }
-                                    124 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:143: void Mem_Set_16b(u16 val, void* dest, u16 size)
+                                    123 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:139: }
+                                    124 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:143: void Mem_Set_16b(u16 val, void* dest, u16 size)
                                     125 ;	---------------------------------
                                     126 ; Function Mem_Set_16b
                                     127 ; ---------------------------------
       000030                        128 _Mem_Set_16b::
-                                    129 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:177: __endasm;
+                                    129 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:177: __endasm;
       000030 D5               [11]  130 	push	de
       000031 EB               [ 4]  131 	ex	de, hl
       000032 72               [ 7]  132 	ld	(hl), d
@@ -142,17 +142,17 @@
       00003D ED B0            [21]  142 	ldir
       00003F                        143 	 mem_fill16_end:
       00003F FD E9            [ 8]  144 	jp	(iy)
-                                    145 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:178: }
+                                    145 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:178: }
       000041 E1               [10]  146 	pop	hl
       000042 F1               [10]  147 	pop	af
       000043 E9               [ 4]  148 	jp	(hl)
-                                    149 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:249: void Mem_DynamicInitialize(void* base, u16 size)
+                                    149 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:249: void Mem_DynamicInitialize(void* base, u16 size)
                                     150 ;	---------------------------------
                                     151 ; Function Mem_DynamicInitialize
                                     152 ; ---------------------------------
       000044                        153 _Mem_DynamicInitialize::
-                                    154 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:251: g_MemChunkRoot = (struct MemChunkHeader*)base;
-                                    155 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:252: g_MemChunkRoot->Size = (size - sizeof(struct MemChunkHeader)) | MEM_CHUNK_FREE;
+                                    154 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:251: g_MemChunkRoot = (struct MemChunkHeader*)base;
+                                    155 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:252: g_MemChunkRoot->Size = (size - sizeof(struct MemChunkHeader)) | MEM_CHUNK_FREE;
       000044 22r00r00         [16]  156 	ld	(_g_MemChunkRoot), hl
       000047 7B               [ 4]  157 	ld	a, e
       000048 C6 FC            [ 7]  158 	add	a, #0xfc
@@ -164,7 +164,7 @@
       000051 71               [ 7]  164 	ld	(hl), c
       000052 23               [ 6]  165 	inc	hl
       000053 70               [ 7]  166 	ld	(hl), b
-                                    167 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:253: g_MemChunkRoot->Next = NULL;
+                                    167 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:253: g_MemChunkRoot->Next = NULL;
       000054 2Ar00r00         [16]  168 	ld	hl, (_g_MemChunkRoot)
       000057 23               [ 6]  169 	inc	hl
       000058 23               [ 6]  170 	inc	hl
@@ -172,9 +172,9 @@
       00005A 77               [ 7]  172 	ld	(hl), a
       00005B 23               [ 6]  173 	inc	hl
       00005C 77               [ 7]  174 	ld	(hl), a
-                                    175 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:254: }
+                                    175 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:254: }
       00005D C9               [10]  176 	ret
-                                    177 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:258: void* Mem_DynamicAlloc(u16 size)
+                                    177 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:258: void* Mem_DynamicAlloc(u16 size)
                                     178 ;	---------------------------------
                                     179 ; Function Mem_DynamicAlloc
                                     180 ; ---------------------------------
@@ -187,14 +187,14 @@
       00006C FD F9            [10]  187 	ld	sp, iy
       00006E DD 75 FE         [19]  188 	ld	-2 (ix), l
       000071 DD 74 FF         [19]  189 	ld	-1 (ix), h
-                                    190 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:265: struct MemChunkHeader* chunk = g_MemChunkRoot;
+                                    190 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:265: struct MemChunkHeader* chunk = g_MemChunkRoot;
       000074 ED 5Br00r00      [20]  191 	ld	de, (_g_MemChunkRoot)
-                                    192 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:266: while(chunk)
+                                    192 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:266: while(chunk)
       000078                        193 00107$:
       000078 7A               [ 4]  194 	ld	a, d
       000079 B3               [ 4]  195 	or	a, e
       00007A CAr1Fr01         [10]  196 	jp	Z, 00109$
-                                    197 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:268: u16 chunkSize = chunk->Size;
+                                    197 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:268: u16 chunkSize = chunk->Size;
       00007D 6B               [ 4]  198 	ld	l, e
       00007E 62               [ 4]  199 	ld	h, d
       00007F 4E               [ 7]  200 	ld	c, (hl)
@@ -206,46 +206,46 @@
       000083 60               [ 4]  206 	ld	h, b
                                     207 ;	spillPairReg hl
                                     208 ;	spillPairReg hl
-                                    209 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:269: if(chunkSize & MEM_CHUNK_FREE) // Free chunk
+                                    209 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:269: if(chunkSize & MEM_CHUNK_FREE) // Free chunk
       000084 CB 7C            [ 8]  210 	bit	7, h
       000086 CAr16r01         [10]  211 	jp	Z,00106$
-                                    212 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:271: chunkSize &= ~MEM_CHUNK_FREE;
+                                    212 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:271: chunkSize &= ~MEM_CHUNK_FREE;
       000089 CB BC            [ 8]  213 	res	7, h
-                                    214 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:272: if(chunkSize == size) // Re-use chunk
+                                    214 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:272: if(chunkSize == size) // Re-use chunk
       00008B 7D               [ 4]  215 	ld	a, l
       00008C DD 96 FE         [19]  216 	sub	a, -2 (ix)
       00008F 20 14            [12]  217 	jr	NZ, 00102$
       000091 7C               [ 4]  218 	ld	a, h
       000092 DD 96 FF         [19]  219 	sub	a, -1 (ix)
       000095 20 0E            [12]  220 	jr	NZ, 00102$
-                                    221 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:274: chunk->Size &= ~MEM_CHUNK_FREE;
+                                    221 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:274: chunk->Size &= ~MEM_CHUNK_FREE;
       000097 CB B8            [ 8]  222 	res	7, b
       000099 6B               [ 4]  223 	ld	l, e
       00009A 62               [ 4]  224 	ld	h, d
       00009B 71               [ 7]  225 	ld	(hl), c
       00009C 23               [ 6]  226 	inc	hl
       00009D 70               [ 7]  227 	ld	(hl), b
-                                    228 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:275: return (void*)((u16)chunk + sizeof(struct MemChunkHeader));
+                                    228 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:275: return (void*)((u16)chunk + sizeof(struct MemChunkHeader));
       00009E 13               [ 6]  229 	inc	de
       00009F 13               [ 6]  230 	inc	de
       0000A0 13               [ 6]  231 	inc	de
       0000A1 13               [ 6]  232 	inc	de
       0000A2 C3r22r01         [10]  233 	jp	00110$
       0000A5                        234 00102$:
-                                    235 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:277: u16 needSize = size + sizeof(struct MemChunkHeader);
+                                    235 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:277: u16 needSize = size + sizeof(struct MemChunkHeader);
       0000A5 DD 4E FE         [19]  236 	ld	c, -2 (ix)
       0000A8 DD 46 FF         [19]  237 	ld	b, -1 (ix)
       0000AB 03               [ 6]  238 	inc	bc
       0000AC 03               [ 6]  239 	inc	bc
       0000AD 03               [ 6]  240 	inc	bc
       0000AE 03               [ 6]  241 	inc	bc
-                                    242 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:278: if(chunkSize > needSize) // Create new sub-chunk
+                                    242 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:278: if(chunkSize > needSize) // Create new sub-chunk
       0000AF 79               [ 4]  243 	ld	a, c
       0000B0 95               [ 4]  244 	sub	a, l
       0000B1 78               [ 4]  245 	ld	a, b
       0000B2 9C               [ 4]  246 	sbc	a, h
       0000B3 30 61            [12]  247 	jr	NC, 00106$
-                                    248 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:280: struct MemChunkHeader* newChunk = (struct MemChunkHeader*)(chunk + needSize); // New free sub-chunk
+                                    248 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:280: struct MemChunkHeader* newChunk = (struct MemChunkHeader*)(chunk + needSize); // New free sub-chunk
       0000B5 C5               [11]  249 	push	bc
       0000B6 FD E1            [14]  250 	pop	iy
       0000B8 FD 29            [15]  251 	add	iy, iy
@@ -254,7 +254,7 @@
       0000BE 33               [ 6]  254 	inc	sp
       0000BF 33               [ 6]  255 	inc	sp
       0000C0 FD E5            [15]  256 	push	iy
-                                    257 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:281: newChunk->Size = (chunkSize - needSize) | MEM_CHUNK_FREE;
+                                    257 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:281: newChunk->Size = (chunkSize - needSize) | MEM_CHUNK_FREE;
       0000C2 BF               [ 4]  258 	cp	a, a
       0000C3 ED 42            [15]  259 	sbc	hl, bc
       0000C5 4D               [ 4]  260 	ld	c, l
@@ -265,7 +265,7 @@
       0000CB 71               [ 7]  265 	ld	(hl), c
       0000CC 23               [ 6]  266 	inc	hl
       0000CD 70               [ 7]  267 	ld	(hl), b
-                                    268 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:282: newChunk->Next = chunk->Next;
+                                    268 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:282: newChunk->Next = chunk->Next;
       0000CE DD 7E F8         [19]  269 	ld	a, -8 (ix)
       0000D1 C6 02            [ 7]  270 	add	a, #0x02
       0000D3 DD 77 FA         [19]  271 	ld	-6 (ix), a
@@ -289,7 +289,7 @@
       0000F6 23               [ 6]  289 	inc	hl
       0000F7 DD 7E FD         [19]  290 	ld	a, -3 (ix)
       0000FA 77               [ 7]  291 	ld	(hl), a
-                                    292 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:284: chunk->Size = size; // Allocated sub-chunk
+                                    292 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:284: chunk->Size = size; // Allocated sub-chunk
       0000FB 6B               [ 4]  293 	ld	l, e
       0000FC 62               [ 4]  294 	ld	h, d
       0000FD DD 7E FE         [19]  295 	ld	a, -2 (ix)
@@ -297,20 +297,20 @@
       000101 23               [ 6]  297 	inc	hl
       000102 DD 7E FF         [19]  298 	ld	a, -1 (ix)
       000105 77               [ 7]  299 	ld	(hl), a
-                                    300 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:285: chunk->Next = newChunk;
+                                    300 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:285: chunk->Next = newChunk;
       000106 DD 7E F8         [19]  301 	ld	a, -8 (ix)
       000109 02               [ 7]  302 	ld	(bc), a
       00010A 03               [ 6]  303 	inc	bc
       00010B DD 7E F9         [19]  304 	ld	a, -7 (ix)
       00010E 02               [ 7]  305 	ld	(bc), a
-                                    306 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:287: return (void*)((u16)chunk + sizeof(struct MemChunkHeader));
+                                    306 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:287: return (void*)((u16)chunk + sizeof(struct MemChunkHeader));
       00010F 13               [ 6]  307 	inc	de
       000110 13               [ 6]  308 	inc	de
       000111 13               [ 6]  309 	inc	de
       000112 13               [ 6]  310 	inc	de
       000113 C3r22r01         [10]  311 	jp	00110$
       000116                        312 00106$:
-                                    313 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:290: chunk = chunk->Next;
+                                    313 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:290: chunk = chunk->Next;
       000116 EB               [ 4]  314 	ex	de, hl
       000117 23               [ 6]  315 	inc	hl
       000118 23               [ 6]  316 	inc	hl
@@ -319,14 +319,14 @@
       00011B 56               [ 7]  319 	ld	d, (hl)
       00011C C3r78r00         [10]  320 	jp	00107$
       00011F                        321 00109$:
-                                    322 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:292: return NULL;
+                                    322 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:292: return NULL;
       00011F 11 00 00         [10]  323 	ld	de, #0x0000
       000122                        324 00110$:
-                                    325 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:293: }
+                                    325 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:293: }
       000122 DD F9            [10]  326 	ld	sp, ix
       000124 DD E1            [14]  327 	pop	ix
       000126 C9               [10]  328 	ret
-                                    329 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:297: void Mem_DynamicMerge()
+                                    329 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:297: void Mem_DynamicMerge()
                                     330 ;	---------------------------------
                                     331 ; Function Mem_DynamicMerge
                                     332 ; ---------------------------------
@@ -336,14 +336,14 @@
       00012D DD 39            [15]  336 	add	ix,sp
       00012F F5               [11]  337 	push	af
       000130 F5               [11]  338 	push	af
-                                    339 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:299: struct MemChunkHeader* chunk = g_MemChunkRoot;
+                                    339 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:299: struct MemChunkHeader* chunk = g_MemChunkRoot;
       000131 ED 4Br00r00      [20]  340 	ld	bc, (_g_MemChunkRoot)
-                                    341 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:300: while(chunk)
+                                    341 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:300: while(chunk)
       000135                        342 00105$:
       000135 78               [ 4]  343 	ld	a, b
       000136 B1               [ 4]  344 	or	a, c
       000137 28 4F            [12]  345 	jr	Z, 00108$
-                                    346 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:302: struct MemChunkHeader* nextChunk = chunk->Next;
+                                    346 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:302: struct MemChunkHeader* nextChunk = chunk->Next;
       000139 21 02 00         [10]  347 	ld	hl, #0x0002
       00013C 09               [11]  348 	add	hl, bc
       00013D E3               [19]  349 	ex	(sp), hl
@@ -353,7 +353,7 @@
       000141 DD 77 FE         [19]  353 	ld	-2 (ix), a
       000144 23               [ 6]  354 	inc	hl
       000145 7E               [ 7]  355 	ld	a, (hl)
-                                    356 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:303: if((nextChunk != NULL) && (chunk->Size & MEM_CHUNK_FREE) && (nextChunk->Size & MEM_CHUNK_FREE))
+                                    356 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:303: if((nextChunk != NULL) && (chunk->Size & MEM_CHUNK_FREE) && (nextChunk->Size & MEM_CHUNK_FREE))
       000146 DD 77 FF         [19]  357 	ld	-1 (ix), a
       000149 DD B6 FE         [19]  358 	or	a, -2 (ix)
       00014C 28 32            [12]  359 	jr	Z, 00102$
@@ -375,7 +375,7 @@
                                     375 ;	spillPairReg hl
       000161 CB 7C            [ 8]  376 	bit	7, h
       000163 28 1B            [12]  377 	jr	Z, 00102$
-                                    378 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:305: chunk->Size += nextChunk->Size + sizeof(struct MemChunkHeader);
+                                    378 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:305: chunk->Size += nextChunk->Size + sizeof(struct MemChunkHeader);
       000165 23               [ 6]  379 	inc	hl
       000166 23               [ 6]  380 	inc	hl
       000167 23               [ 6]  381 	inc	hl
@@ -387,7 +387,7 @@
       00016D 03               [ 6]  387 	inc	bc
       00016E 7A               [ 4]  388 	ld	a, d
       00016F 02               [ 7]  389 	ld	(bc), a
-                                    390 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:306: chunk->Next = nextChunk->Next;
+                                    390 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:306: chunk->Next = nextChunk->Next;
       000170 DD 6E FE         [19]  391 	ld	l, -2 (ix)
                                     392 ;	spillPairReg hl
                                     393 ;	spillPairReg hl
@@ -405,7 +405,7 @@
       00017E 23               [ 6]  405 	inc	hl
       00017F 70               [ 7]  406 	ld	(hl), b
       000180                        407 00102$:
-                                    408 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:308: chunk = chunk->Next;
+                                    408 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:308: chunk = chunk->Next;
       000180 E1               [10]  409 	pop	hl
       000181 E5               [11]  410 	push	hl
       000182 4E               [ 7]  411 	ld	c, (hl)
@@ -413,16 +413,16 @@
       000184 46               [ 7]  413 	ld	b, (hl)
       000185 C3r35r01         [10]  414 	jp	00105$
       000188                        415 00108$:
-                                    416 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:310: }
+                                    416 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:310: }
       000188 DD F9            [10]  417 	ld	sp, ix
       00018A DD E1            [14]  418 	pop	ix
       00018C C9               [10]  419 	ret
-                                    420 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:314: void Mem_DynamicFree(void* ptr)
+                                    420 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:314: void Mem_DynamicFree(void* ptr)
                                     421 ;	---------------------------------
                                     422 ; Function Mem_DynamicFree
                                     423 ; ---------------------------------
       00018D                        424 _Mem_DynamicFree::
-                                    425 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:316: struct MemChunkHeader* chunk = (struct MemChunkHeader*)((u16)ptr - sizeof(struct MemChunkHeader));
+                                    425 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:316: struct MemChunkHeader* chunk = (struct MemChunkHeader*)((u16)ptr - sizeof(struct MemChunkHeader));
       00018D 7D               [ 4]  426 	ld	a, l
       00018E C6 FC            [ 7]  427 	add	a, #0xfc
       000190 6F               [ 4]  428 	ld	l, a
@@ -433,7 +433,7 @@
       000194 67               [ 4]  433 	ld	h, a
                                     434 ;	spillPairReg hl
                                     435 ;	spillPairReg hl
-                                    436 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:317: chunk->Size |= MEM_CHUNK_FREE;
+                                    436 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:317: chunk->Size |= MEM_CHUNK_FREE;
       000195 4E               [ 7]  437 	ld	c, (hl)
       000196 23               [ 6]  438 	inc	hl
       000197 46               [ 7]  439 	ld	b, (hl)
@@ -442,8 +442,8 @@
       00019B 71               [ 7]  442 	ld	(hl), c
       00019C 23               [ 6]  443 	inc	hl
       00019D 70               [ 7]  444 	ld	(hl), b
-                                    445 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:318: Mem_DynamicMerge();
-                                    446 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:319: }
+                                    445 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:318: Mem_DynamicMerge();
+                                    446 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/memory.c:319: }
       00019E C3r27r01         [10]  447 	jp	_Mem_DynamicMerge
                                     448 	.area _CODE
                                     449 	.area _INITIALIZER
