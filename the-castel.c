@@ -286,7 +286,7 @@ bool removeLife()
 		{
 			removeItemFromInventory(TILE_AMPHORA, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
 		}
-		return FALSE;
+		return TRUE;
 	}
 
 	for (i8 i = MAX_LIVES - 1; i >= 0; i--)

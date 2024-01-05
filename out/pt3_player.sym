@@ -7,6 +7,756 @@ Symbol Table
     .__.ABS.                                                    =  000000 G
     .__.CPU.                                                    =  000000 L
     .__.H$L.                                                    =  000000 L
+  0 A$pt3_player$1000                                              00048E GR
+  0 A$pt3_player$1001                                              000491 GR
+  0 A$pt3_player$1002                                              000492 GR
+  0 A$pt3_player$1003                                              000493 GR
+  0 A$pt3_player$1004                                              000496 GR
+  0 A$pt3_player$1005                                              000499 GR
+  0 A$pt3_player$1006                                              00049A GR
+  0 A$pt3_player$1007                                              00049C GR
+  0 A$pt3_player$1008                                              00049E GR
+  0 A$pt3_player$1009                                              0004A1 GR
+  0 A$pt3_player$1011                                              0004A4 GR
+  0 A$pt3_player$1012                                              0004A5 GR
+  0 A$pt3_player$1013                                              0004A6 GR
+  0 A$pt3_player$1014                                              0004A7 GR
+  0 A$pt3_player$1015                                              0004A9 GR
+  0 A$pt3_player$1016                                              0004AD GR
+  0 A$pt3_player$1017                                              0004AE GR
+  0 A$pt3_player$1018                                              0004AF GR
+  0 A$pt3_player$1019                                              0004B0 GR
+  0 A$pt3_player$1020                                              0004B1 GR
+  0 A$pt3_player$1021                                              0004B4 GR
+  0 A$pt3_player$1022                                              0004B7 GR
+  0 A$pt3_player$1023                                              0004B8 GR
+  0 A$pt3_player$1024                                              0004BC GR
+  0 A$pt3_player$1025                                              0004BD GR
+  0 A$pt3_player$1026                                              0004BE GR
+  0 A$pt3_player$1027                                              0004C1 GR
+  0 A$pt3_player$1028                                              0004C3 GR
+  0 A$pt3_player$1029                                              0004C6 GR
+  0 A$pt3_player$1030                                              0004C8 GR
+  0 A$pt3_player$1031                                              0004CB GR
+  0 A$pt3_player$1032                                              0004CE GR
+  0 A$pt3_player$1033                                              0004D1 GR
+  0 A$pt3_player$1034                                              0004D4 GR
+  0 A$pt3_player$1035                                              0004D5 GR
+  0 A$pt3_player$1036                                              0004D6 GR
+  0 A$pt3_player$1037                                              0004D9 GR
+  0 A$pt3_player$1038                                              0004DC GR
+  0 A$pt3_player$1039                                              0004E0 GR
+  0 A$pt3_player$1040                                              0004E2 GR
+  0 A$pt3_player$1041                                              0004E5 GR
+  0 A$pt3_player$1042                                              0004E8 GR
+  0 A$pt3_player$1043                                              0004E9 GR
+  0 A$pt3_player$1044                                              0004EB GR
+  0 A$pt3_player$1046                                              0004EC GR
+  0 A$pt3_player$1047                                              0004EE GR
+  0 A$pt3_player$1048                                              0004F1 GR
+  0 A$pt3_player$1049                                              0004F4 GR
+  0 A$pt3_player$1050                                              0004F7 GR
+  0 A$pt3_player$1051                                              0004F8 GR
+  0 A$pt3_player$1052                                              0004FB GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 2.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  0 A$pt3_player$1053                                              0004FE GR
+  0 A$pt3_player$1055                                              000501 GR
+  0 A$pt3_player$1056                                              000504 GR
+  0 A$pt3_player$1057                                              000506 GR
+  0 A$pt3_player$1058                                              000508 GR
+  0 A$pt3_player$1059                                              00050A GR
+  0 A$pt3_player$1060                                              00050C GR
+  0 A$pt3_player$1061                                              00050E GR
+  0 A$pt3_player$1062                                              000510 GR
+  0 A$pt3_player$1063                                              000511 GR
+  0 A$pt3_player$1065                                              000513 GR
+  0 A$pt3_player$1066                                              000515 GR
+  0 A$pt3_player$1067                                              000517 GR
+  0 A$pt3_player$1069                                              000518 GR
+  0 A$pt3_player$1071                                              00051B GR
+  0 A$pt3_player$1072                                              00051C GR
+  0 A$pt3_player$1073                                              00051D GR
+  0 A$pt3_player$1074                                              00051F GR
+  0 A$pt3_player$1075                                              000520 GR
+  0 A$pt3_player$1076                                              000523 GR
+  0 A$pt3_player$1078                                              000524 GR
+  0 A$pt3_player$1079                                              000526 GR
+  0 A$pt3_player$1080                                              000528 GR
+  0 A$pt3_player$1082                                              00052A GR
+  0 A$pt3_player$1083                                              00052D GR
+  0 A$pt3_player$1084                                              00052E GR
+  0 A$pt3_player$1085                                              000530 GR
+  0 A$pt3_player$1086                                              000533 GR
+  0 A$pt3_player$1087                                              000534 GR
+  0 A$pt3_player$1089                                              000535 GR
+  0 A$pt3_player$1090                                              000537 GR
+  0 A$pt3_player$1091                                              000539 GR
+  0 A$pt3_player$1093                                              00053C GR
+  0 A$pt3_player$1094                                              00053F GR
+  0 A$pt3_player$1095                                              000541 GR
+  0 A$pt3_player$1096                                              000542 GR
+  0 A$pt3_player$1097                                              000544 GR
+  0 A$pt3_player$1098                                              000545 GR
+  0 A$pt3_player$1099                                              000546 GR
+  0 A$pt3_player$1100                                              000548 GR
+  0 A$pt3_player$1101                                              00054A GR
+  0 A$pt3_player$1102                                              00054C GR
+  0 A$pt3_player$1103                                              00054F GR
+  0 A$pt3_player$1104                                              000551 GR
+  0 A$pt3_player$1105                                              000553 GR
+  0 A$pt3_player$1107                                              000556 GR
+  0 A$pt3_player$1108                                              000559 GR
+  0 A$pt3_player$1110                                              00055A GR
+  0 A$pt3_player$1111                                              00055B GR
+  0 A$pt3_player$1113                                              00055D GR
+  0 A$pt3_player$1114                                              00055E GR
+  0 A$pt3_player$1115                                              000561 GR
+  0 A$pt3_player$1116                                              000564 GR
+  0 A$pt3_player$1117                                              000566 GR
+  0 A$pt3_player$1118                                              000568 GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 3.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  0 A$pt3_player$1120                                              00056B GR
+  0 A$pt3_player$1121                                              00056C GR
+  0 A$pt3_player$1122                                              00056D GR
+  0 A$pt3_player$1124                                              00056F GR
+  0 A$pt3_player$1125                                              000572 GR
+  0 A$pt3_player$1126                                              000573 GR
+  0 A$pt3_player$1127                                              000574 GR
+  0 A$pt3_player$1128                                              000575 GR
+  0 A$pt3_player$1129                                              000576 GR
+  0 A$pt3_player$1130                                              000577 GR
+  0 A$pt3_player$1131                                              00057A GR
+  0 A$pt3_player$1132                                              00057B GR
+  0 A$pt3_player$1133                                              00057E GR
+  0 A$pt3_player$1134                                              00057F GR
+  0 A$pt3_player$1135                                              000582 GR
+  0 A$pt3_player$1136                                              000585 GR
+  0 A$pt3_player$1137                                              000586 GR
+  0 A$pt3_player$1138                                              000589 GR
+  0 A$pt3_player$1139                                              00058B GR
+  0 A$pt3_player$1141                                              00058E GR
+  0 A$pt3_player$1142                                              000591 GR
+  0 A$pt3_player$1144                                              000592 GR
+  0 A$pt3_player$240                                               000000 GR
+  0 A$pt3_player$253                                               000001 GR
+  0 A$pt3_player$254                                               000004 GR
+  0 A$pt3_player$255                                               000005 GR
+  0 A$pt3_player$256                                               000006 GR
+  0 A$pt3_player$257                                               00000A GR
+  0 A$pt3_player$259                                               00000C GR
+  0 A$pt3_player$260                                               00000D GR
+  0 A$pt3_player$261                                               00000E GR
+  0 A$pt3_player$262                                               00000F GR
+  0 A$pt3_player$263                                               000011 GR
+  0 A$pt3_player$264                                               000012 GR
+  0 A$pt3_player$266                                               000014 GR
+  0 A$pt3_player$267                                               000015 GR
+  0 A$pt3_player$268                                               000016 GR
+  0 A$pt3_player$269                                               000017 GR
+  0 A$pt3_player$270                                               000019 GR
+  0 A$pt3_player$271                                               00001C GR
+  0 A$pt3_player$272                                               00001E GR
+  0 A$pt3_player$273                                               00001F GR
+  0 A$pt3_player$274                                               000021 GR
+  0 A$pt3_player$275                                               000022 GR
+  0 A$pt3_player$276                                               000023 GR
+  0 A$pt3_player$277                                               000025 GR
+  0 A$pt3_player$278                                               000027 GR
+  0 A$pt3_player$280                                               000028 GR
+  0 A$pt3_player$281                                               000029 GR
+  0 A$pt3_player$283                                               00002B GR
+  0 A$pt3_player$284                                               00002C GR
+  0 A$pt3_player$285                                               00002F GR
+  0 A$pt3_player$286                                               000032 GR
+  0 A$pt3_player$287                                               000035 GR
+  0 A$pt3_player$288                                               000038 GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 4.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  0 A$pt3_player$289                                               000039 GR
+  0 A$pt3_player$297                                               00003B GR
+  0 A$pt3_player$310                                               00003C GR
+  0 A$pt3_player$311                                               00003F GR
+  0 A$pt3_player$312                                               000040 GR
+  0 A$pt3_player$313                                               000043 GR
+  0 A$pt3_player$314                                               000044 GR
+  0 A$pt3_player$315                                               000047 GR
+  0 A$pt3_player$316                                               000048 GR
+  0 A$pt3_player$317                                               000049 GR
+  0 A$pt3_player$318                                               00004C GR
+  0 A$pt3_player$319                                               00004F GR
+  0 A$pt3_player$320                                               000050 GR
+  0 A$pt3_player$321                                               000053 GR
+  0 A$pt3_player$322                                               000056 GR
+  0 A$pt3_player$323                                               000057 GR
+  0 A$pt3_player$324                                               00005A GR
+  0 A$pt3_player$325                                               00005D GR
+  0 A$pt3_player$326                                               00005E GR
+  0 A$pt3_player$327                                               000061 GR
+  0 A$pt3_player$328                                               000064 GR
+  0 A$pt3_player$329                                               000068 GR
+  0 A$pt3_player$330                                               00006A GR
+  0 A$pt3_player$331                                               00006D GR
+  0 A$pt3_player$332                                               000070 GR
+  0 A$pt3_player$333                                               000071 GR
+  0 A$pt3_player$334                                               000072 GR
+  0 A$pt3_player$335                                               000075 GR
+  0 A$pt3_player$336                                               000078 GR
+  0 A$pt3_player$337                                               00007B GR
+  0 A$pt3_player$338                                               00007C GR
+  0 A$pt3_player$339                                               00007D GR
+  0 A$pt3_player$340                                               000080 GR
+  0 A$pt3_player$341                                               000081 GR
+  0 A$pt3_player$342                                               000084 GR
+  0 A$pt3_player$343                                               000085 GR
+  0 A$pt3_player$344                                               000088 GR
+  0 A$pt3_player$345                                               00008B GR
+  0 A$pt3_player$346                                               00008D GR
+  0 A$pt3_player$347                                               00008E GR
+  0 A$pt3_player$348                                               000091 GR
+  0 A$pt3_player$349                                               000094 GR
+  0 A$pt3_player$350                                               000097 GR
+  0 A$pt3_player$351                                               00009A GR
+  0 A$pt3_player$352                                               00009D GR
+  0 A$pt3_player$353                                               0000A0 GR
+  0 A$pt3_player$354                                               0000A3 GR
+  0 A$pt3_player$355                                               0000A6 GR
+  0 A$pt3_player$356                                               0000A9 GR
+  0 A$pt3_player$357                                               0000AC GR
+  0 A$pt3_player$358                                               0000AF GR
+  0 A$pt3_player$359                                               0000B2 GR
+  0 A$pt3_player$361                                               0000B5 GR
+  0 A$pt3_player$369                                               0000B8 GR
+  0 A$pt3_player$382                                               0000B9 GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 5.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  0 A$pt3_player$383                                               0000BC GR
+  0 A$pt3_player$384                                               0000BE GR
+  0 A$pt3_player$400                                               0000C1 GR
+  0 A$pt3_player$401                                               0000C4 GR
+  0 A$pt3_player$409                                               0000C6 GR
+  0 A$pt3_player$422                                               0000C7 GR
+  0 A$pt3_player$423                                               0000CA GR
+  0 A$pt3_player$424                                               0000CB GR
+  0 A$pt3_player$425                                               0000CD GR
+  0 A$pt3_player$426                                               0000CF GR
+  0 A$pt3_player$428                                               0000D0 GR
+  0 A$pt3_player$436                                               0000D2 GR
+  0 A$pt3_player$449                                               0000D3 GR
+  0 A$pt3_player$450                                               0000D4 GR
+  0 A$pt3_player$451                                               0000D7 GR
+  0 A$pt3_player$452                                               0000DA GR
+  0 A$pt3_player$453                                               0000DD GR
+  0 A$pt3_player$469                                               0000E0 GR
+  0 A$pt3_player$470                                               0000E3 GR
+  0 A$pt3_player$472                                               0000E4 GR
+  0 A$pt3_player$473                                               0000E6 GR
+  0 A$pt3_player$474                                               0000E9 GR
+  0 A$pt3_player$476                                               0000EC GR
+  0 A$pt3_player$477                                               0000EE GR
+  0 A$pt3_player$478                                               0000F1 GR
+  0 A$pt3_player$480                                               0000F4 GR
+  0 A$pt3_player$481                                               0000F6 GR
+  0 A$pt3_player$482                                               0000F9 GR
+  0 A$pt3_player$484                                               0000FC GR
+  0 A$pt3_player$485                                               0000FF GR
+  0 A$pt3_player$486                                               000101 GR
+  0 A$pt3_player$487                                               000102 GR
+  0 A$pt3_player$488                                               000104 GR
+  0 A$pt3_player$489                                               000106 GR
+  0 A$pt3_player$490                                               000108 GR
+  0 A$pt3_player$491                                               00010A GR
+  0 A$pt3_player$492                                               00010B GR
+  0 A$pt3_player$493                                               00010E GR
+  0 A$pt3_player$494                                               000111 GR
+  0 A$pt3_player$495                                               000113 GR
+  0 A$pt3_player$501                                               000155 GR
+  0 A$pt3_player$502                                               000157 GR
+  0 A$pt3_player$503                                               000158 GR
+  0 A$pt3_player$504                                               000159 GR
+  0 A$pt3_player$505                                               00015A GR
+  0 A$pt3_player$513                                               00015C GR
+  0 A$pt3_player$526                                               00015D GR
+  0 A$pt3_player$527                                               00015E GR
+  0 A$pt3_player$528                                               000161 GR
+  0 A$pt3_player$529                                               000162 GR
+  0 A$pt3_player$531                                               000163 GR
+  0 A$pt3_player$532                                               000166 GR
+  0 A$pt3_player$533                                               000168 GR
+  0 A$pt3_player$534                                               000169 GR
+  0 A$pt3_player$535                                               00016A GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 6.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  0 A$pt3_player$536                                               00016D GR
+  0 A$pt3_player$537                                               000170 GR
+  0 A$pt3_player$538                                               000171 GR
+  0 A$pt3_player$539                                               000174 GR
+  0 A$pt3_player$540                                               000177 GR
+  0 A$pt3_player$541                                               000178 GR
+  0 A$pt3_player$542                                               00017B GR
+  0 A$pt3_player$543                                               00017E GR
+  0 A$pt3_player$544                                               00017F GR
+  0 A$pt3_player$545                                               000181 GR
+  0 A$pt3_player$546                                               000185 GR
+  0 A$pt3_player$547                                               000186 GR
+  0 A$pt3_player$548                                               000187 GR
+  0 A$pt3_player$549                                               000189 GR
+  0 A$pt3_player$550                                               00018A GR
+  0 A$pt3_player$551                                               00018D GR
+  0 A$pt3_player$552                                               000190 GR
+  0 A$pt3_player$553                                               000191 GR
+  0 A$pt3_player$554                                               000192 GR
+  0 A$pt3_player$555                                               000193 GR
+  0 A$pt3_player$556                                               000195 GR
+  0 A$pt3_player$557                                               000198 GR
+  0 A$pt3_player$558                                               00019B GR
+  0 A$pt3_player$559                                               00019C GR
+  0 A$pt3_player$561                                               00019D GR
+  0 A$pt3_player$562                                               0001A0 GR
+  0 A$pt3_player$563                                               0001A1 GR
+  0 A$pt3_player$564                                               0001A2 GR
+  0 A$pt3_player$565                                               0001A3 GR
+  0 A$pt3_player$566                                               0001A5 GR
+  0 A$pt3_player$567                                               0001A8 GR
+  0 A$pt3_player$568                                               0001A9 GR
+  0 A$pt3_player$569                                               0001AD GR
+  0 A$pt3_player$570                                               0001B1 GR
+  0 A$pt3_player$571                                               0001B2 GR
+  0 A$pt3_player$572                                               0001B3 GR
+  0 A$pt3_player$573                                               0001B4 GR
+  0 A$pt3_player$574                                               0001B5 GR
+  0 A$pt3_player$575                                               0001B6 GR
+  0 A$pt3_player$576                                               0001B7 GR
+  0 A$pt3_player$577                                               0001B8 GR
+  0 A$pt3_player$578                                               0001BB GR
+  0 A$pt3_player$579                                               0001BC GR
+  0 A$pt3_player$580                                               0001BD GR
+  0 A$pt3_player$581                                               0001C0 GR
+  0 A$pt3_player$583                                               0001C4 GR
+  0 A$pt3_player$584                                               0001C8 GR
+  0 A$pt3_player$585                                               0001CB GR
+  0 A$pt3_player$587                                               0001CF GR
+  0 A$pt3_player$588                                               0001D2 GR
+  0 A$pt3_player$589                                               0001D3 GR
+  0 A$pt3_player$590                                               0001D5 GR
+  0 A$pt3_player$591                                               0001D9 GR
+  0 A$pt3_player$592                                               0001DD GR
+  0 A$pt3_player$593                                               0001E0 GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 7.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  0 A$pt3_player$595                                               0001E4 GR
+  0 A$pt3_player$596                                               0001E7 GR
+  0 A$pt3_player$597                                               0001E8 GR
+  0 A$pt3_player$598                                               0001EA GR
+  0 A$pt3_player$599                                               0001EE GR
+  0 A$pt3_player$600                                               0001F2 GR
+  0 A$pt3_player$601                                               0001F5 GR
+  0 A$pt3_player$603                                               0001F9 GR
+  0 A$pt3_player$604                                               0001FC GR
+  0 A$pt3_player$606                                               0001FF GR
+  0 A$pt3_player$607                                               000203 GR
+  0 A$pt3_player$608                                               000206 GR
+  0 A$pt3_player$609                                               000209 GR
+  0 A$pt3_player$610                                               00020C GR
+  0 A$pt3_player$611                                               00020F GR
+  0 A$pt3_player$612                                               000212 GR
+  0 A$pt3_player$613                                               000216 GR
+  0 A$pt3_player$614                                               000219 GR
+  0 A$pt3_player$615                                               00021C GR
+  0 A$pt3_player$616                                               00021F GR
+  0 A$pt3_player$617                                               000222 GR
+  0 A$pt3_player$618                                               000225 GR
+  0 A$pt3_player$619                                               000229 GR
+  0 A$pt3_player$620                                               00022C GR
+  0 A$pt3_player$621                                               00022F GR
+  0 A$pt3_player$622                                               000232 GR
+  0 A$pt3_player$623                                               000235 GR
+  0 A$pt3_player$624                                               000236 GR
+  0 A$pt3_player$625                                               000237 GR
+  0 A$pt3_player$626                                               00023A GR
+  0 A$pt3_player$627                                               00023D GR
+  0 A$pt3_player$628                                               00023E GR
+  0 A$pt3_player$629                                               00023F GR
+  0 A$pt3_player$630                                               000240 GR
+  0 A$pt3_player$631                                               000241 GR
+  0 A$pt3_player$632                                               000244 GR
+  0 A$pt3_player$633                                               000245 GR
+  0 A$pt3_player$634                                               000249 GR
+  0 A$pt3_player$635                                               00024A GR
+  0 A$pt3_player$636                                               00024D GR
+  0 A$pt3_player$637                                               00024E GR
+  0 A$pt3_player$638                                               000251 GR
+  0 A$pt3_player$639                                               000252 GR
+  0 A$pt3_player$640                                               000253 GR
+  0 A$pt3_player$641                                               000254 GR
+  0 A$pt3_player$642                                               000255 GR
+  0 A$pt3_player$643                                               000258 GR
+  0 A$pt3_player$644                                               000259 GR
+  0 A$pt3_player$645                                               00025C GR
+  0 A$pt3_player$646                                               00025D GR
+  0 A$pt3_player$650                                               000260 GR
+  0 A$pt3_player$652                                               000261 GR
+  0 A$pt3_player$653                                               000264 GR
+  0 A$pt3_player$654                                               000267 GR
+  0 A$pt3_player$655                                               00026A GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 8.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  0 A$pt3_player$656                                               00026C GR
+  0 A$pt3_player$657                                               00026E GR
+  0 A$pt3_player$658                                               00026F GR
+  0 A$pt3_player$659                                               000270 GR
+  0 A$pt3_player$660                                               000273 GR
+  0 A$pt3_player$661                                               000274 GR
+  0 A$pt3_player$662                                               000277 GR
+  0 A$pt3_player$663                                               000278 GR
+  0 A$pt3_player$665                                               00027B GR
+  0 A$pt3_player$666                                               00027F GR
+  0 A$pt3_player$667                                               000282 GR
+  0 A$pt3_player$668                                               000283 GR
+  0 A$pt3_player$669                                               000284 GR
+  0 A$pt3_player$671                                               000285 GR
+  0 A$pt3_player$673                                               000286 GR
+  0 A$pt3_player$674                                               000287 GR
+  0 A$pt3_player$675                                               000289 GR
+  0 A$pt3_player$676                                               00028C GR
+  0 A$pt3_player$677                                               00028D GR
+  0 A$pt3_player$678                                               00028E GR
+  0 A$pt3_player$679                                               00028F GR
+  0 A$pt3_player$680                                               000290 GR
+  0 A$pt3_player$681                                               000293 GR
+  0 A$pt3_player$682                                               000294 GR
+  0 A$pt3_player$683                                               000297 GR
+  0 A$pt3_player$684                                               00029A GR
+  0 A$pt3_player$686                                               00029C GR
+  0 A$pt3_player$687                                               00029D GR
+  0 A$pt3_player$688                                               00029E GR
+  0 A$pt3_player$689                                               00029F GR
+  0 A$pt3_player$690                                               0002A0 GR
+  0 A$pt3_player$691                                               0002A3 GR
+  0 A$pt3_player$693                                               0002A5 GR
+  0 A$pt3_player$694                                               0002A8 GR
+  0 A$pt3_player$695                                               0002AB GR
+  0 A$pt3_player$697                                               0002AD GR
+  0 A$pt3_player$698                                               0002AE GR
+  0 A$pt3_player$699                                               0002B0 GR
+  0 A$pt3_player$700                                               0002B1 GR
+  0 A$pt3_player$701                                               0002B2 GR
+  0 A$pt3_player$702                                               0002B5 GR
+  0 A$pt3_player$704                                               0002B7 GR
+  0 A$pt3_player$705                                               0002BA GR
+  0 A$pt3_player$707                                               0002BC GR
+  0 A$pt3_player$708                                               0002BF GR
+  0 A$pt3_player$710                                               0002C1 GR
+  0 A$pt3_player$711                                               0002C4 GR
+  0 A$pt3_player$712                                               0002C7 GR
+  0 A$pt3_player$713                                               0002CA GR
+  0 A$pt3_player$714                                               0002CB GR
+  0 A$pt3_player$715                                               0002CC GR
+  0 A$pt3_player$717                                               0002CE GR
+  0 A$pt3_player$718                                               0002D1 GR
+  0 A$pt3_player$719                                               0002D4 GR
+  0 A$pt3_player$720                                               0002D7 GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 9.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  0 A$pt3_player$721                                               0002DA GR
+  0 A$pt3_player$723                                               0002DD GR
+  0 A$pt3_player$725                                               0002E0 GR
+  0 A$pt3_player$726                                               0002E1 GR
+  0 A$pt3_player$727                                               0002E2 GR
+  0 A$pt3_player$728                                               0002E3 GR
+  0 A$pt3_player$729                                               0002E5 GR
+  0 A$pt3_player$730                                               0002E6 GR
+  0 A$pt3_player$731                                               0002E8 GR
+  0 A$pt3_player$732                                               0002EA GR
+  0 A$pt3_player$733                                               0002EB GR
+  0 A$pt3_player$734                                               0002ED GR
+  0 A$pt3_player$735                                               0002EF GR
+  0 A$pt3_player$736                                               0002F0 GR
+  0 A$pt3_player$737                                               0002F2 GR
+  0 A$pt3_player$738                                               0002F4 GR
+  0 A$pt3_player$739                                               0002F6 GR
+  0 A$pt3_player$740                                               0002F8 GR
+  0 A$pt3_player$741                                               0002F9 GR
+  0 A$pt3_player$742                                               0002FB GR
+  0 A$pt3_player$743                                               0002FC GR
+  0 A$pt3_player$744                                               0002FE GR
+  0 A$pt3_player$745                                               0002FF GR
+  0 A$pt3_player$746                                               000301 GR
+  0 A$pt3_player$747                                               000302 GR
+  0 A$pt3_player$748                                               000303 GR
+  0 A$pt3_player$754                                               000306 GR
+  0 A$pt3_player$755                                               000307 GR
+  0 A$pt3_player$756                                               000308 GR
+  0 A$pt3_player$757                                               000309 GR
+  0 A$pt3_player$758                                               00030A GR
+  0 A$pt3_player$759                                               00030B GR
+  0 A$pt3_player$761                                               00030D GR
+  0 A$pt3_player$762                                               000310 GR
+  0 A$pt3_player$764                                               000312 GR
+  0 A$pt3_player$765                                               000316 GR
+  0 A$pt3_player$767                                               000318 GR
+  0 A$pt3_player$768                                               00031B GR
+  0 A$pt3_player$769                                               00031F GR
+  0 A$pt3_player$771                                               000320 GR
+  0 A$pt3_player$772                                               000324 GR
+  0 A$pt3_player$773                                               000326 GR
+  0 A$pt3_player$774                                               000327 GR
+  0 A$pt3_player$775                                               000328 GR
+  0 A$pt3_player$776                                               000329 GR
+  0 A$pt3_player$777                                               00032A GR
+  0 A$pt3_player$778                                               00032B GR
+  0 A$pt3_player$779                                               00032C GR
+  0 A$pt3_player$780                                               00032D GR
+  0 A$pt3_player$781                                               00032E GR
+  0 A$pt3_player$783                                               000332 GR
+  0 A$pt3_player$784                                               000335 GR
+  0 A$pt3_player$785                                               000338 GR
+  0 A$pt3_player$787                                               000339 GR
+  0 A$pt3_player$788                                               00033D GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 10.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  0 A$pt3_player$789                                               00033E GR
+  0 A$pt3_player$792                                               00033F GR
+  0 A$pt3_player$793                                               000340 GR
+  0 A$pt3_player$794                                               000341 GR
+  0 A$pt3_player$795                                               000344 GR
+  0 A$pt3_player$796                                               000347 GR
+  0 A$pt3_player$797                                               00034B GR
+  0 A$pt3_player$798                                               00034E GR
+  0 A$pt3_player$799                                               000351 GR
+  0 A$pt3_player$800                                               000352 GR
+  0 A$pt3_player$801                                               000353 GR
+  0 A$pt3_player$802                                               000355 GR
+  0 A$pt3_player$803                                               000356 GR
+  0 A$pt3_player$804                                               000357 GR
+  0 A$pt3_player$805                                               000358 GR
+  0 A$pt3_player$806                                               000359 GR
+  0 A$pt3_player$807                                               00035A GR
+  0 A$pt3_player$808                                               00035B GR
+  0 A$pt3_player$809                                               00035E GR
+  0 A$pt3_player$810                                               000361 GR
+  0 A$pt3_player$811                                               000362 GR
+  0 A$pt3_player$812                                               000363 GR
+  0 A$pt3_player$813                                               000365 GR
+  0 A$pt3_player$814                                               000366 GR
+  0 A$pt3_player$815                                               000367 GR
+  0 A$pt3_player$816                                               000368 GR
+  0 A$pt3_player$817                                               000369 GR
+  0 A$pt3_player$818                                               00036A GR
+  0 A$pt3_player$819                                               00036C GR
+  0 A$pt3_player$820                                               00036F GR
+  0 A$pt3_player$821                                               000372 GR
+  0 A$pt3_player$822                                               000376 GR
+  0 A$pt3_player$823                                               000379 GR
+  0 A$pt3_player$824                                               00037C GR
+  0 A$pt3_player$825                                               00037D GR
+  0 A$pt3_player$826                                               00037E GR
+  0 A$pt3_player$827                                               00037F GR
+  0 A$pt3_player$828                                               000380 GR
+  0 A$pt3_player$829                                               000381 GR
+  0 A$pt3_player$830                                               000382 GR
+  0 A$pt3_player$831                                               000384 GR
+  0 A$pt3_player$833                                               000385 GR
+  0 A$pt3_player$834                                               000387 GR
+  0 A$pt3_player$835                                               00038A GR
+  0 A$pt3_player$836                                               00038B GR
+  0 A$pt3_player$837                                               00038C GR
+  0 A$pt3_player$838                                               00038E GR
+  0 A$pt3_player$840                                               00038F GR
+  0 A$pt3_player$841                                               000392 GR
+  0 A$pt3_player$842                                               000393 GR
+  0 A$pt3_player$843                                               000396 GR
+  0 A$pt3_player$844                                               00039A GR
+  0 A$pt3_player$846                                               00039B GR
+  0 A$pt3_player$847                                               00039F GR
+  0 A$pt3_player$848                                               0003A0 GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 11.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  0 A$pt3_player$849                                               0003A1 GR
+  0 A$pt3_player$850                                               0003A4 GR
+  0 A$pt3_player$851                                               0003A7 GR
+  0 A$pt3_player$852                                               0003A8 GR
+  0 A$pt3_player$853                                               0003A9 GR
+  0 A$pt3_player$854                                               0003AA GR
+  0 A$pt3_player$855                                               0003AB GR
+  0 A$pt3_player$856                                               0003AC GR
+  0 A$pt3_player$858                                               0003AE GR
+  0 A$pt3_player$859                                               0003AF GR
+  0 A$pt3_player$860                                               0003B0 GR
+  0 A$pt3_player$861                                               0003B3 GR
+  0 A$pt3_player$863                                               0003B4 GR
+  0 A$pt3_player$864                                               0003B5 GR
+  0 A$pt3_player$865                                               0003B6 GR
+  0 A$pt3_player$866                                               0003B9 GR
+  0 A$pt3_player$868                                               0003BA GR
+  0 A$pt3_player$869                                               0003BB GR
+  0 A$pt3_player$870                                               0003BC GR
+  0 A$pt3_player$871                                               0003BF GR
+  0 A$pt3_player$872                                               0003C2 GR
+  0 A$pt3_player$873                                               0003C3 GR
+  0 A$pt3_player$874                                               0003C4 GR
+  0 A$pt3_player$875                                               0003C7 GR
+  0 A$pt3_player$876                                               0003C8 GR
+  0 A$pt3_player$877                                               0003CB GR
+  0 A$pt3_player$878                                               0003CE GR
+  0 A$pt3_player$879                                               0003D1 GR
+  0 A$pt3_player$881                                               0003D2 GR
+  0 A$pt3_player$882                                               0003D3 GR
+  0 A$pt3_player$883                                               0003D4 GR
+  0 A$pt3_player$884                                               0003D7 GR
+  0 A$pt3_player$885                                               0003DA GR
+  0 A$pt3_player$886                                               0003DB GR
+  0 A$pt3_player$887                                               0003DC GR
+  0 A$pt3_player$888                                               0003DD GR
+  0 A$pt3_player$889                                               0003DE GR
+  0 A$pt3_player$890                                               0003DF GR
+  0 A$pt3_player$891                                               0003E0 GR
+  0 A$pt3_player$892                                               0003E3 GR
+  0 A$pt3_player$894                                               0003E4 GR
+  0 A$pt3_player$895                                               0003E5 GR
+  0 A$pt3_player$896                                               0003E6 GR
+  0 A$pt3_player$897                                               0003E9 GR
+  0 A$pt3_player$899                                               0003EA GR
+  0 A$pt3_player$900                                               0003ED GR
+  0 A$pt3_player$901                                               0003F0 GR
+  0 A$pt3_player$902                                               0003F1 GR
+  0 A$pt3_player$903                                               0003F2 GR
+  0 A$pt3_player$904                                               0003F3 GR
+  0 A$pt3_player$905                                               0003F4 GR
+  0 A$pt3_player$906                                               0003F5 GR
+  0 A$pt3_player$907                                               0003F6 GR
+  0 A$pt3_player$908                                               0003F9 GR
+  0 A$pt3_player$909                                               0003FA GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 12.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  0 A$pt3_player$910                                               0003FD GR
+  0 A$pt3_player$911                                               000400 GR
+  0 A$pt3_player$912                                               000401 GR
+  0 A$pt3_player$913                                               000402 GR
+  0 A$pt3_player$915                                               000405 GR
+  0 A$pt3_player$917                                               000406 GR
+  0 A$pt3_player$918                                               000407 GR
+  0 A$pt3_player$919                                               000408 GR
+  0 A$pt3_player$920                                               00040A GR
+  0 A$pt3_player$921                                               00040D GR
+  0 A$pt3_player$922                                               000410 GR
+  0 A$pt3_player$923                                               000411 GR
+  0 A$pt3_player$924                                               000412 GR
+  0 A$pt3_player$925                                               000413 GR
+  0 A$pt3_player$926                                               000414 GR
+  0 A$pt3_player$927                                               000417 GR
+  0 A$pt3_player$928                                               000418 GR
+  0 A$pt3_player$929                                               00041B GR
+  0 A$pt3_player$930                                               00041E GR
+  0 A$pt3_player$951                                               00043F GR
+  0 A$pt3_player$952                                               000440 GR
+  0 A$pt3_player$953                                               000443 GR
+  0 A$pt3_player$954                                               000447 GR
+  0 A$pt3_player$955                                               000448 GR
+  0 A$pt3_player$956                                               00044B GR
+  0 A$pt3_player$957                                               00044F GR
+  0 A$pt3_player$958                                               000452 GR
+  0 A$pt3_player$959                                               000455 GR
+  0 A$pt3_player$960                                               000456 GR
+  0 A$pt3_player$961                                               000457 GR
+  0 A$pt3_player$962                                               000458 GR
+  0 A$pt3_player$963                                               00045B GR
+  0 A$pt3_player$964                                               00045C GR
+  0 A$pt3_player$965                                               00045D GR
+  0 A$pt3_player$966                                               00045E GR
+  0 A$pt3_player$967                                               00045F GR
+  0 A$pt3_player$968                                               000461 GR
+  0 A$pt3_player$970                                               000462 GR
+  0 A$pt3_player$971                                               000465 GR
+  0 A$pt3_player$972                                               000468 GR
+  0 A$pt3_player$973                                               000469 GR
+  0 A$pt3_player$974                                               00046C GR
+  0 A$pt3_player$976                                               00046D GR
+  0 A$pt3_player$977                                               00046F GR
+  0 A$pt3_player$978                                               000471 GR
+  0 A$pt3_player$980                                               000473 GR
+  0 A$pt3_player$981                                               000474 GR
+  0 A$pt3_player$982                                               000475 GR
+  0 A$pt3_player$983                                               000478 GR
+  0 A$pt3_player$984                                               00047B GR
+  0 A$pt3_player$985                                               00047C GR
+  0 A$pt3_player$986                                               00047D GR
+  0 A$pt3_player$987                                               00047F GR
+  0 A$pt3_player$988                                               000482 GR
+  0 A$pt3_player$989                                               000483 GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 13.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  0 A$pt3_player$990                                               000484 GR
+  0 A$pt3_player$991                                               000485 GR
+  0 A$pt3_player$992                                               000486 GR
+  0 A$pt3_player$993                                               000487 GR
+  0 A$pt3_player$994                                               000488 GR
+  0 A$pt3_player$995                                               000489 GR
+  0 A$pt3_player$996                                               00048A GR
+  0 A$pt3_player$997                                               00048B GR
+  0 A$pt3_player$998                                               00048D GR
+  0 C$pt3_player.c$1093$1_0$43                                  =  00015D GR
+  0 C$pt3_player.c$1094$1_0$43                                  =  000597 GR
+  0 C$pt3_player.c$117$0_0$33                                   =  000000 GR
+  0 C$pt3_player.c$134$0_0$34                                   =  000001 GR
+  0 C$pt3_player.c$178$1_0$34                                   =  000001 GR
+  0 C$pt3_player.c$179$1_0$34                                   =  00003B GR
+  0 C$pt3_player.c$185$1_0$36                                   =  00003C GR
+  0 C$pt3_player.c$268$1_0$36                                   =  00003C GR
+  0 C$pt3_player.c$269$1_0$36                                   =  0000B8 GR
+  0 C$pt3_player.c$273$1_0$37                                   =  0000B9 GR
+  0 C$pt3_player.c$280$1_0$37                                   =  0000B9 GR
+  0 C$pt3_player.c$281$1_0$37                                   =  0000C1 GR
+  0 C$pt3_player.c$285$1_0$38                                   =  0000C1 GR
+  0 C$pt3_player.c$290$1_0$38                                   =  0000C1 GR
+  0 C$pt3_player.c$291$1_0$38                                   =  0000C6 GR
+  0 C$pt3_player.c$296$1_0$40                                   =  0000C7 GR
+  0 C$pt3_player.c$310$1_0$40                                   =  0000C7 GR
+  0 C$pt3_player.c$311$1_0$40                                   =  0000D2 GR
+  0 C$pt3_player.c$315$1_0$41                                   =  0000D3 GR
+  0 C$pt3_player.c$324$1_0$41                                   =  0000D3 GR
+  0 C$pt3_player.c$325$1_0$41                                   =  0000E0 GR
+  0 C$pt3_player.c$330$1_0$42                                   =  0000E0 GR
+  0 C$pt3_player.c$387$1_0$42                                   =  0000E0 GR
+  0 C$pt3_player.c$388$1_0$42                                   =  00015C GR
+  0 C$pt3_player.c$392$1_0$43                                   =  00015D GR
   0 CHREGS                                                         00043F R
   0 CH_AMIN                                                        000513 R
   0 CH_AMP                                                         000501 R
@@ -28,6 +778,11 @@ Symbol Table
   0 C_DELAY                                                        0003E4 R
   0 C_ENGLS                                                        0003D2 R
   0 C_GLISS                                                        00039B R
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 14.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
   0 C_NOP                                                          000405 R
   0 C_ORPOS                                                        0003B4 R
   0 C_PORTM                                                        000339 R
@@ -35,6 +790,76 @@ Symbol Table
   0 C_VIBRT                                                        0003BA R
   0 DecodeCheckLoop                                                000261 R
   0 EMPTYSAMORN                                                    000593 R
+  7 Fpt3_player$__xinit_PT3_Finish$0_0$0                        =  000000 GR
+  1 G$AddToNs$0_0$0                                             =  00005C GR
+  1 G$ChanA$0_0$0                                               =  000000 GR
+  1 G$ChanB$0_0$0                                               =  00001D GR
+  1 G$ChanC$0_0$0                                               =  00003A GR
+  1 G$CurEDel$0_0$0                                             =  00005A GR
+  1 G$CurESld$0_0$0                                             =  000058 GR
+  1 G$DelyCnt$0_0$0                                             =  000057 GR
+  0 G$EmptyCB$0$0                                               =  000000 GR
+  1 G$EnvBase$0_0$0                                             =  00006B GR
+  1 G$Ns_Base$0_0$0                                             =  00005B GR
+  1 G$PT3_AdInPtA$0_0$0                                         =  00016F GR
+  1 G$PT3_AdInPtB$0_0$0                                         =  000171 GR
+  1 G$PT3_AdInPtC$0_0$0                                         =  000173 GR
+  1 G$PT3_AddToEn$0_0$0                                         =  00017A GR
+  1 G$PT3_CSP$0_0$0                                             =  000168 GR
+  1 G$PT3_CrPsPtr$0_0$0                                         =  000160 GR
+  0 G$PT3_Decode$0$0                                            =  00015D GR
+  1 G$PT3_Delay$0_0$0                                           =  000179 GR
+  1 G$PT3_ESldAdd$0_0$0                                         =  00017C GR
+  1 G$PT3_Env_Del$0_0$0                                         =  00017B GR
+  2 G$PT3_Finish$0_0$0                                          =  000000 GR
+  0 G$PT3_Init$0$0                                              =  000001 GR
+  0 G$PT3_InitSong$0$0                                          =  00003C GR
+  1 G$PT3_LPosPtr$0_0$0                                         =  000175 GR
+  1 G$PT3_ModAddr$0_0$0                                         =  00015E GR
+  1 G$PT3_NoteTable$0_0$0                                       =  00017E GR
+  1 G$PT3_OrnPtrs$0_0$0                                         =  000164 GR
+  1 G$PT3_PDSP$0_0$0                                            =  000166 GR
+  1 G$PT3_PSP$0_0$0                                             =  00016A GR
+  1 G$PT3_PatsPtr$0_0$0                                         =  000177 GR
+  0 G$PT3_Pause$0$0                                             =  0000B9 GR
+  1 G$PT3_PrNote$0_0$0                                          =  00016C GR
+  1 G$PT3_PrSlide$0_0$0                                         =  00016D GR
+  1 G$PT3_Regs$0_0$0                                            =  00005D GR
+  0 G$PT3_Resume$0$0                                            =  0000C1 GR
+  1 G$PT3_SamPtrs$0_0$0                                         =  000162 GR
+  0 G$PT3_SetLoop$0$0                                           =  0000C7 GR
+  0 G$PT3_Silence$0$0                                           =  0000D3 GR
+  1 G$PT3_SrtCrPsPtr$0_0$0                                      =  000180 GR
+  1 G$PT3_State$0_0$0                                           =  00015D GR
+  0 G$PT3_UpdatePSG$0$0                                         =  0000E0 GR
+  1 G$VAR0END$0_0$0                                             =  00006D GR
+    G$g_MSXAudio_DataPort$0_0$0                                 =  0000C1 G
+    G$g_MSXAudio_DataPort2$0_0$0                                =  0000C3 G
+    G$g_MSXAudio_IndexPort$0_0$0                                =  0000C0 G
+    G$g_MSXAudio_IndexPort2$0_0$0                               =  0000C2 G
+    G$g_MSXMusic_DataPort$0_0$0                                 =  00007D G
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 15.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    G$g_MSXMusic_IndexPort$0_0$0                                =  00007C G
+    G$g_PSG_DataPort$0_0$0                                      =  0000A1 G
+    G$g_PSG_Ext_DataPort$0_0$0                                  =  000011 G
+    G$g_PSG_Ext_RegPort$0_0$0                                   =  000010 G
+    G$g_PSG_Ext_StatPort$0_0$0                                  =  000012 G
+    G$g_PSG_RegPort$0_0$0                                       =  0000A0 G
+    G$g_PSG_StatPort$0_0$0                                      =  0000A2 G
+    G$g_PortAccessKeyboard$0_0$0                                =  0000AA G
+    G$g_PortControl$0_0$0                                       =  0000AB G
+    G$g_PortPrimarySlot$0_0$0                                   =  0000A8 G
+    G$g_PortReadKeyboard$0_0$0                                  =  0000A9 G
+    G$g_RTC_AddrPort$0_0$0                                      =  0000B4 G
+    G$g_RTC_DataPort$0_0$0                                      =  0000B5 G
+    G$g_VDP_AddrPort$0_0$0                                      =  000099 G
+    G$g_VDP_DataPort$0_0$0                                      =  000098 G
+    G$g_VDP_RegPort$0_0$0                                       =  000099 G
+    G$g_VDP_StatPort$0_0$0                                      =  000099 G
   0 INITV1                                                         00000C R
   0 INITV2                                                         000014 R
   0 INITV3                                                         000028 R
@@ -58,11 +883,6 @@ Symbol Table
   0 PD_SAM                                                         000285 R
   0 PD_SAM_                                                        000286 R
   0 PD_SorE                                                        0002AD R
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 2.
-Hexadecimal [24-Bits]
-
-Symbol Table
-
   0 PD_VOL                                                         00029C R
   0 PL1A                                                           0001C4 R
   0 PL1B                                                           0001CF R
@@ -78,8 +898,19 @@ Symbol Table
   0 SPCCOMS                                                        00041F R
   0 UpdatePSGMuteA                                                 0000E4 R
   0 UpdatePSGMuteB                                                 0000EC R
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 16.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
   0 UpdatePSGMuteC                                                 0000F4 R
   0 UpdatePSGMuteEnd                                               0000FC R
+  0 XG$EmptyCB$0$0                                              =  000000 GR
+  0 XG$PT3_Init$0$0                                             =  00003B GR
+  0 XG$PT3_InitSong$0$0                                         =  0000B8 GR
+  0 XG$PT3_Resume$0$0                                           =  0000C6 GR
+  0 XG$PT3_SetLoop$0$0                                          =  0000D2 GR
+  0 XG$PT3_UpdatePSG$0$0                                        =  00015C GR
   1 _AddToNs                                                       00005C GR
   1 _ChanA                                                         000000 GR
   1 _ChanB                                                         00001D GR
@@ -118,11 +949,6 @@ Symbol Table
   1 _PT3_SamPtrs                                                   000162 GR
   0 _PT3_SetLoop                                                   0000C7 GR
   0 _PT3_Silence                                                   0000D3 GR
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 3.
-Hexadecimal [24-Bits]
-
-Symbol Table
-
   1 _PT3_SrtCrPsPtr                                                000180 GR
   1 _PT3_State                                                     00015D GR
   0 _PT3_UpdatePSG                                                 0000E0 GR
@@ -132,6 +958,11 @@ Symbol Table
     _g_MSXAudio_DataPort2                                       =  0000C3 
     _g_MSXAudio_IndexPort                                       =  0000C0 
     _g_MSXAudio_IndexPort2                                      =  0000C2 
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 17.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
     _g_MSXMusic_DataPort                                        =  00007D 
     _g_MSXMusic_IndexPort                                       =  00007C 
     _g_PSG_DataPort                                             =  0000A1 
@@ -152,7 +983,8 @@ Symbol Table
     _g_VDP_StatPort                                             =  000099 
   0 decode_start                                                   000163 R
 
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 4.
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 18.
 Hexadecimal [24-Bits]
 
 Area Table

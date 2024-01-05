@@ -199,479 +199,769 @@
                                     199 ;--------------------------------------------------------
                                     200 ; special function registers
                                     201 ;--------------------------------------------------------
-                           0000A8   202 _g_PortPrimarySlot	=	0x00a8
-                           0000A9   203 _g_PortReadKeyboard	=	0x00a9
-                           0000AA   204 _g_PortAccessKeyboard	=	0x00aa
-                           0000AB   205 _g_PortControl	=	0x00ab
-                           000098   206 _g_VDP_DataPort	=	0x0098
-                           000099   207 _g_VDP_RegPort	=	0x0099
-                           000099   208 _g_VDP_AddrPort	=	0x0099
-                           000099   209 _g_VDP_StatPort	=	0x0099
-                           0000A0   210 _g_PSG_RegPort	=	0x00a0
-                           0000A1   211 _g_PSG_DataPort	=	0x00a1
-                           0000A2   212 _g_PSG_StatPort	=	0x00a2
-                           000010   213 _g_PSG_Ext_RegPort	=	0x0010
-                           000011   214 _g_PSG_Ext_DataPort	=	0x0011
-                           000012   215 _g_PSG_Ext_StatPort	=	0x0012
-                           00007C   216 _g_MSXMusic_IndexPort	=	0x007c
-                           00007D   217 _g_MSXMusic_DataPort	=	0x007d
-                           0000C0   218 _g_MSXAudio_IndexPort	=	0x00c0
-                           0000C1   219 _g_MSXAudio_DataPort	=	0x00c1
-                           0000C2   220 _g_MSXAudio_IndexPort2	=	0x00c2
-                           0000C3   221 _g_MSXAudio_DataPort2	=	0x00c3
-                           0000B4   222 _g_RTC_AddrPort	=	0x00b4
-                           0000B5   223 _g_RTC_DataPort	=	0x00b5
-                                    224 ;--------------------------------------------------------
-                                    225 ; ram data
-                                    226 ;--------------------------------------------------------
-                                    227 	.area _DATA
-                           00F3AE   228 _g_LINL40	=	0xf3ae
-                           00F3AF   229 _g_LINL32	=	0xf3af
-                           00F3B0   230 _g_LINLEN	=	0xf3b0
-                           00F3B1   231 _g_CRTCNT	=	0xf3b1
-                           00F3B2   232 _g_CLMLST	=	0xf3b2
-                           00F3B3   233 _g_TXTNAM	=	0xf3b3
-                           00F3B5   234 _g_TXTCOL	=	0xf3b5
-                           00F3B7   235 _g_TXTCGP	=	0xf3b7
-                           00F3B9   236 _g_TXTATR	=	0xf3b9
-                           00F3BB   237 _g_TXTPAT	=	0xf3bb
-                           00F3BD   238 _g_T32NAM	=	0xf3bd
-                           00F3BF   239 _g_T32COL	=	0xf3bf
-                           00F3C1   240 _g_T32CGP	=	0xf3c1
-                           00F3C3   241 _g_T32ATR	=	0xf3c3
-                           00F3C5   242 _g_T32PAT	=	0xf3c5
-                           00F3C7   243 _g_GRPNAM	=	0xf3c7
-                           00F3C9   244 _g_GRPCOL	=	0xf3c9
-                           00F3CB   245 _g_GRPCGP	=	0xf3cb
-                           00F3CD   246 _g_GRPATR	=	0xf3cd
-                           00F3CF   247 _g_GRPPAT	=	0xf3cf
-                           00F3D1   248 _g_MLTNAM	=	0xf3d1
-                           00F3D3   249 _g_MLTCOL	=	0xf3d3
-                           00F3D5   250 _g_MLTCGP	=	0xf3d5
-                           00F3D7   251 _g_MLTATR	=	0xf3d7
-                           00F3D9   252 _g_MLTPAT	=	0xf3d9
-                           00F3DB   253 _g_CLIKSW	=	0xf3db
-                           00F3DC   254 _g_CSRY	=	0xf3dc
-                           00F3DD   255 _g_CSRX	=	0xf3dd
-                           00F3E9   256 _g_FORCLR	=	0xf3e9
-                           00F3EA   257 _g_BAKCLR	=	0xf3ea
-                           00F3EB   258 _g_BDRCLR	=	0xf3eb
-                           00F3F2   259 _g_ATRBYT	=	0xf3f2
-                           00F87F   260 _g_FNKSTR	=	0xf87f
-                           00F92A   261 _g_CLOC	=	0xf92a
-                           00F92C   262 _g_CMASK	=	0xf92c
-                           00FB02   263 _g_LOGOPR	=	0xfb02
-                           00FCB7   264 _g_GRPACX	=	0xfcb7
-                           00FCB9   265 _g_GRPACY	=	0xfcb9
-                           00FFFF   266 _g_SLTSL	=	0xffff
-                                    267 ;--------------------------------------------------------
-                                    268 ; ram data
-                                    269 ;--------------------------------------------------------
-                                    270 	.area _INITIALIZED
-                                    271 ;--------------------------------------------------------
-                                    272 ; absolute external ram data
-                                    273 ;--------------------------------------------------------
-                                    274 	.area _DABS (ABS)
-                                    275 ;--------------------------------------------------------
-                                    276 ; global & static initialisations
-                                    277 ;--------------------------------------------------------
-                                    278 	.area _HOME
-                                    279 	.area _GSINIT
-                                    280 	.area _GSFINAL
-                                    281 	.area _GSINIT
-                                    282 ;--------------------------------------------------------
-                                    283 ; Home
-                                    284 ;--------------------------------------------------------
-                                    285 	.area _HOME
-                                    286 	.area _HOME
-                                    287 ;--------------------------------------------------------
-                                    288 ; code
-                                    289 ;--------------------------------------------------------
-                                    290 	.area _CODE
-                                    291 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:12: u8 Sys_GetPageSlot(u8 page)
-                                    292 ;	---------------------------------
-                                    293 ; Function Sys_GetPageSlot
-                                    294 ; ---------------------------------
-      000000                        295 _Sys_GetPageSlot::
-      000000 5F               [ 4]  296 	ld	e, a
-                                    297 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:15: u8 slot = (g_PortPrimarySlot >> (page * 2)) & 0x03;
-      000001 CB 23            [ 8]  298 	sla	e
-      000003 43               [ 4]  299 	ld	b, e
-      000004 DB A8            [11]  300 	in	a, (_g_PortPrimarySlot)
-      000006 4F               [ 4]  301 	ld	c, a
-      000007 04               [ 4]  302 	inc	b
-      000008 C3r0Dr00         [10]  303 	jp	00113$
-      00000B                        304 00112$:
-      00000B CB 39            [ 8]  305 	srl	c
-      00000D                        306 00113$:
-      00000D 10 FC            [13]  307 	djnz	00112$
-      00000F 79               [ 4]  308 	ld	a, c
-      000010 E6 03            [ 7]  309 	and	a, #0x03
-      000012 4F               [ 4]  310 	ld	c, a
-                                    311 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:18: if(g_EXPTBL[slot] & SLOT_EXP)
-      000013 21 C1 FC         [10]  312 	ld	hl, #_g_EXPTBL+0
-      000016 06 00            [ 7]  313 	ld	b, #0x00
-      000018 09               [11]  314 	add	hl, bc
-      000019 7E               [ 7]  315 	ld	a, (hl)
-      00001A 07               [ 4]  316 	rlca
-      00001B 30 34            [12]  317 	jr	NC, 00102$
-                                    318 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:20: u8 prevSlot = g_PortPrimarySlot; // Backup current primary slots register
-      00001D DB A8            [11]  319 	in	a, (_g_PortPrimarySlot)
-      00001F 47               [ 4]  320 	ld	b, a
-                                    321 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.h:156: inline void DisableInterrupt() { __asm__("di"); }
-      000020 F3               [ 4]  322 	di
-                                    323 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:22: g_PortPrimarySlot = (prevSlot & 0x3F) | (slot << 6); // Select primary slot in page 3
-      000021 78               [ 4]  324 	ld	a, b
-      000022 E6 3F            [ 7]  325 	and	a, #0x3f
-      000024 6F               [ 4]  326 	ld	l, a
-                                    327 ;	spillPairReg hl
-                                    328 ;	spillPairReg hl
-      000025 79               [ 4]  329 	ld	a, c
-      000026 0F               [ 4]  330 	rrca
-      000027 0F               [ 4]  331 	rrca
-      000028 E6 C0            [ 7]  332 	and	a, #0xc0
-      00002A B5               [ 4]  333 	or	a, l
-      00002B D3 A8            [11]  334 	out	(_g_PortPrimarySlot), a
-                                    335 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:23: slot |= SLOT_EXP;
-      00002D CB F9            [ 8]  336 	set	7, c
-                                    337 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:24: slot |= (((~g_SLTSL) >> (page * 2)) & 0x03) << 2;
-      00002F 3A FF FF         [13]  338 	ld	a, (_g_SLTSL+0)
-      000032 6F               [ 4]  339 	ld	l, a
-                                    340 ;	spillPairReg hl
-                                    341 ;	spillPairReg hl
-      000033 26 00            [ 7]  342 	ld	h, #0x00
-                                    343 ;	spillPairReg hl
-                                    344 ;	spillPairReg hl
-      000035 7D               [ 4]  345 	ld	a, l
-      000036 2F               [ 4]  346 	cpl
-      000037 6F               [ 4]  347 	ld	l, a
-                                    348 ;	spillPairReg hl
-                                    349 ;	spillPairReg hl
-      000038 7C               [ 4]  350 	ld	a, h
-      000039 2F               [ 4]  351 	cpl
-      00003A 67               [ 4]  352 	ld	h, a
-                                    353 ;	spillPairReg hl
-                                    354 ;	spillPairReg hl
-      00003B 1C               [ 4]  355 	inc	e
-      00003C C3r43r00         [10]  356 	jp	00116$
-      00003F                        357 00115$:
-      00003F CB 2C            [ 8]  358 	sra	h
-      000041 CB 1D            [ 8]  359 	rr	l
-      000043                        360 00116$:
-      000043 1D               [ 4]  361 	dec	e
-      000044 20 F9            [12]  362 	jr	NZ, 00115$
-      000046 7D               [ 4]  363 	ld	a, l
-      000047 E6 03            [ 7]  364 	and	a, #0x03
-      000049 87               [ 4]  365 	add	a, a
-      00004A 87               [ 4]  366 	add	a, a
-      00004B B1               [ 4]  367 	or	a, c
-      00004C 4F               [ 4]  368 	ld	c, a
-                                    369 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:25: g_PortPrimarySlot = prevSlot; // Restore primary slots register
-      00004D 78               [ 4]  370 	ld	a, b
-      00004E D3 A8            [11]  371 	out	(_g_PortPrimarySlot), a
-                                    372 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.h:152: inline void EnableInterrupt() { __asm__("ei"); }
-      000050 FB               [ 4]  373 	ei
-                                    374 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:26: EnableInterrupt();
-      000051                        375 00102$:
-                                    376 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:28: return slot;
-      000051 79               [ 4]  377 	ld	a, c
-                                    378 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:29: }
-      000052 C9               [10]  379 	ret
-                           00F380   380 _g_RDPRIM	=	0xf380
-                           00F385   381 _g_WRPRIM	=	0xf385
-                           00F38C   382 _g_CLPRIM	=	0xf38c
-                           00F39A   383 _g_USRTAB	=	0xf39a
-                           00F3DE   384 _g_CNSDFG	=	0xf3de
-                           00F3DF   385 _g_RG0SAV	=	0xf3df
-                           00F3E0   386 _g_RG1SAV	=	0xf3e0
-                           00F3E1   387 _g_RG2SAV	=	0xf3e1
-                           00F3E2   388 _g_RG3SAV	=	0xf3e2
-                           00F3E3   389 _g_RG4SAV	=	0xf3e3
-                           00F3E4   390 _g_RG5SAV	=	0xf3e4
-                           00F3E5   391 _g_RG6SAV	=	0xf3e5
-                           00F3E6   392 _g_RG7SAV	=	0xf3e6
-                           00F3E7   393 _g_STATFL	=	0xf3e7
-                           00F3E8   394 _g_TRGFLG	=	0xf3e8
-                           00F3EC   395 _g_MAXUPD	=	0xf3ec
-                           00F3EF   396 _g_MINUPD	=	0xf3ef
-                           00F3F3   397 _g_QUEUES	=	0xf3f3
-                           00F3F5   398 _g_FRCNEW	=	0xf3f5
-                           00F3F6   399 _g_SCNCNT	=	0xf3f6
-                           00F3F7   400 _g_REPCNT	=	0xf3f7
-                           00F3F8   401 _g_PUTPNT	=	0xf3f8
-                           00F3FA   402 _g_GETPNT	=	0xf3fa
-                           00F3FC   403 _g_CS120	=	0xf3fc
-                           00F401   404 _g_CS240	=	0xf401
-                           00F406   405 _g_LOW	=	0xf406
-                           00F408   406 _g_HIGH	=	0xf408
-                           00F40A   407 _g_HEADER	=	0xf40a
-                           00F40B   408 _g_ASPCT1	=	0xf40b
-                           00F40D   409 _g_ASPCT2	=	0xf40d
-                           00F959   410 _g_QUETAB	=	0xf959
-                           00F971   411 _g_QUEBAK	=	0xf971
-                           00F975   412 _g_VOICAQ	=	0xf975
-                           00F9F5   413 _g_VOICBQ	=	0xf9f5
-                           00FA75   414 _g_VOICCQ	=	0xfa75
-                           00FAF5   415 _g_RS2IQ	=	0xfaf5
-                           00FAF5   416 _g_DPPAGE	=	0xfaf5
-                           00FAF6   417 _g_ACPAGE	=	0xfaf6
-                           00FAF7   418 _g_AVCSAV	=	0xfaf7
-                           00FAF8   419 _g_EXBRSA	=	0xfaf8
-                           00FAF9   420 _g_CHRCNT	=	0xfaf9
-                           00FAFA   421 _g_ROMA	=	0xfafa
-                           00FAFC   422 _g_MODE	=	0xfafc
-                           00FAFD   423 _g_NORUSE	=	0xfafd
-                           00FAFE   424 _g_XSAVE	=	0xfafe
-                           00FB00   425 _g_YSAVE	=	0xfb00
-                           00FB03   426 _g_RSTMP	=	0xfb03
-                           00FB03   427 _g_TOCNT	=	0xfb03
-                           00FB04   428 _g_RSFCB	=	0xfb04
-                           00FB06   429 _g_RSIQLN	=	0xfb06
-                           00FB07   430 _g_MEXBIh	=	0xfb07
-                           00FB0C   431 _g_OLDSTT	=	0xfb0c
-                           00FB0C   432 _g_OLDINT	=	0xfb0c
-                           00FB16   433 _g_DEVNUM	=	0xfb16
-                           00FB17   434 _g_DATCNT	=	0xfb17
-                           00FB1A   435 _g_ERRORS	=	0xfb1a
-                           00FB1B   436 _g_FLAGS	=	0xfb1b
-                           00FB1C   437 _g_ESTBLS	=	0xfb1c
-                           00FB1D   438 _g_COMMSK	=	0xfb1d
-                           00FB1E   439 _g_LSTCOM	=	0xfb1e
-                           00FB1F   440 _g_LSTMOD	=	0xfb1f
-                           00FB35   441 _g_PRSCNT	=	0xfb35
-                           00FB36   442 _g_SAVSP	=	0xfb36
-                           00FB38   443 _g_VOICEN	=	0xfb38
-                           00FB39   444 _g_SAVVOL	=	0xfb39
-                           00FB3B   445 _g_MCLLEN	=	0xfb3b
-                           00FB3C   446 _g_MCLPTR	=	0xfb3c
-                           00FB3E   447 _g_QUEUEN	=	0xfb3e
-                           00FB3F   448 _g_MUSICF	=	0xfb3f
-                           00FB40   449 _g_PLYCNT	=	0xfb40
-                           00FB41   450 _g_VCBA	=	0xfb41
-                           00FB66   451 _g_VCBB	=	0xfb66
-                           00FB8B   452 _g_VCBC	=	0xfb8b
-                           00FBB0   453 _g_ENSTOP	=	0xfbb0
-                           00FBB1   454 _g_BASROM	=	0xfbb1
-                           00FBB2   455 _g_LINTTB	=	0xfbb2
-                           00FBCA   456 _g_FSTPOS	=	0xfbca
-                           00FBCC   457 _g_CODSAV	=	0xfbcc
-                           00FBCD   458 _g_FNKSWI	=	0xfbcd
-                           00FBCE   459 _g_FNKFLG	=	0xfbce
-                           00FBD8   460 _g_ONGSBF	=	0xfbd8
-                           00FBD9   461 _g_CLIKFL	=	0xfbd9
-                           00FBDA   462 _g_OLDKEY	=	0xfbda
-                           00FBE5   463 _g_NEWKEY	=	0xfbe5
-                           00FBF0   464 _g_KEYBUF	=	0xfbf0
-                           00FC18   465 _g_LINWRK	=	0xfc18
-                           00FC40   466 _g_PATWRK	=	0xfc40
-                           00FC48   467 _g_BOTTOM	=	0xfc48
-                           00FC4A   468 _g_HIMEM	=	0xfc4a
-                           00FC4C   469 _g_TRPTBL	=	0xfc4c
-                           00FC9A   470 _g_RTYCNT	=	0xfc9a
-                           00FC9B   471 _g_INTFLG	=	0xfc9b
-                           00FC9C   472 _g_PADY	=	0xfc9c
-                           00FC9D   473 _g_PADX	=	0xfc9d
-                           00FC9E   474 _g_JIFFY	=	0xfc9e
-                           00FCA0   475 _g_INTVAL	=	0xfca0
-                           00FCA2   476 _g_INTCNT	=	0xfca2
-                           00FCA4   477 _g_LOWLIM	=	0xfca4
-                           00FCA5   478 _g_WINWID	=	0xfca5
-                           00FCA6   479 _g_GRPHED	=	0xfca6
-                           00FCA7   480 _g_ESCCNT	=	0xfca7
-                           00FCA8   481 _g_INSFLG	=	0xfca8
-                           00FCA9   482 _g_CSRSW	=	0xfca9
-                           00FCAA   483 _g_CSTYLE	=	0xfcaa
-                           00FCAB   484 _g_CAPST	=	0xfcab
-                           00FCAC   485 _g_KANAST	=	0xfcac
-                           00FCAD   486 _g_KANAMD	=	0xfcad
-                           00FCAE   487 _g_FLBMEM	=	0xfcae
-                           00FCAF   488 _g_SCRMOD	=	0xfcaf
-                           00FCB0   489 _g_OLDSCR	=	0xfcb0
-                           00FCB1   490 _g_CASPRV	=	0xfcb1
-                           00FCB2   491 _g_BRDATR	=	0xfcb2
-                           00FCB3   492 _g_GXPOS	=	0xfcb3
-                           00FCB5   493 _g_GYPOS	=	0xfcb5
-                           00FCBB   494 _g_DRWFLG	=	0xfcbb
-                           00FCBC   495 _g_DRWSCL	=	0xfcbc
-                           00FCBD   496 _g_DRWANG	=	0xfcbd
-                           00FCC1   497 _g_MNROM	=	0xfcc1
-                           00FCC1   498 _g_EXPTBL	=	0xfcc1
-                           00FCC5   499 _g_SLTTBL	=	0xfcc5
-                           00FCC9   500 _g_SLTATR	=	0xfcc9
-                           00FD09   501 _g_SLTWRK	=	0xfd09
-                           00FD89   502 _g_PROCNM	=	0xfd89
-                           00FFE7   503 _g_RG08SAV	=	0xffe7
-                           00FFE8   504 _g_RG09SAV	=	0xffe8
-                           00FFE9   505 _g_RG10SAV	=	0xffe9
-                           00FFEA   506 _g_RG11SAV	=	0xffea
-                           00FFEB   507 _g_RG12SAV	=	0xffeb
-                           00FFEC   508 _g_RG13SAV	=	0xffec
-                           00FFED   509 _g_RG14SAV	=	0xffed
-                           00FFEE   510 _g_RG15SAV	=	0xffee
-                           00FFEF   511 _g_RG16SAV	=	0xffef
-                           00FFF0   512 _g_RG17SAV	=	0xfff0
-                           00FFF1   513 _g_RG18SAV	=	0xfff1
-                           00FFF2   514 _g_RG19SAV	=	0xfff2
-                           00FFF3   515 _g_RG20SAV	=	0xfff3
-                           00FFF4   516 _g_RG21SAV	=	0xfff4
-                           00FFF5   517 _g_RG22SAV	=	0xfff5
-                           00FFF6   518 _g_RG23SAV	=	0xfff6
-                           00FFF7   519 _g_MINROM	=	0xfff7
-                           00FFF8   520 _g_SVFFF8	=	0xfff8
-                           00FFFA   521 _g_RG25SAV	=	0xfffa
-                           00FFFB   522 _g_RG26SAV	=	0xfffb
-                           00FFFC   523 _g_RG27SAV	=	0xfffc
-                           00FFFD   524 _g_SVFFFD	=	0xfffd
-                                    525 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:33: void Sys_SetPageSlot(u8 page, u8 slotId)
-                                    526 ;	---------------------------------
-                                    527 ; Function Sys_SetPageSlot
-                                    528 ; ---------------------------------
-      000053                        529 _Sys_SetPageSlot::
-                                    530 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:36: slotId;
-                                    531 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:60: }
-      000053 C9               [10]  532 	ret
-                                    533 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:64: void Sys_SetPage0Slot(u8 slotId)
-                                    534 ;	---------------------------------
-                                    535 ; Function Sys_SetPage0Slot
-                                    536 ; ---------------------------------
-      000054                        537 _Sys_SetPage0Slot::
-                                    538 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:134: __endasm;
-      000054 4F               [ 4]  539 	ld	c, a
-      000055 E6 80            [ 7]  540 	and	#0b10000000
-      000057 CAr8Br00         [10]  541 	jp	z, SetNonExpendedSlot
-      00005A                        542 	 SetExpendedSlot:
-      00005A 79               [ 4]  543 	ld	a, c
-      00005B E6 03            [ 7]  544 	and	#0b00000011
-      00005D 57               [ 4]  545 	ld	d, a
-      00005E 0F               [ 4]  546 	rrca	
-      00005F 0F               [ 4]  547 	rrca 
-      000060 E6 C0            [ 7]  548 	and a, #0xC0
-      000062 B2               [ 4]  549 	or	d
-      000063 57               [ 4]  550 	ld	d, a
-      000064 DB A8            [11]  551 	in	a, (0xA8)
-      000066 47               [ 4]  552 	ld	b, a
-      000067 E6 3C            [ 7]  553 	and	#0b00111100
-      000069 B2               [ 4]  554 	or	d
-      00006A F3               [ 4]  555 	di
-      00006B D3 A8            [11]  556 	out	(0xA8), a
-      00006D 79               [ 4]  557 	ld	a, c
-      00006E 0F               [ 4]  558 	rrca	
-      00006F 0F               [ 4]  559 	rrca 
-      000070 E6 3F            [ 7]  560 	and a, #0x3F
-      000072 E6 03            [ 7]  561 	and	#0b00000011
-      000074 57               [ 4]  562 	ld	d, a
-      000075 3A FF FF         [13]  563 	ld	a,(0xFFFF)
-      000078 2F               [ 4]  564 	cpl
-      000079 E6 FC            [ 7]  565 	and	#0b11111100
-      00007B B2               [ 4]  566 	or	d
-      00007C 32 FF FF         [13]  567 	ld	(0xFFFF), a
-      00007F 78               [ 4]  568 	ld	a, b
-      000080 E6 C0            [ 7]  569 	and	#0b11000000
-      000082 47               [ 4]  570 	ld	b, a
-      000083 DB A8            [11]  571 	in	a, (0xA8)
-      000085 E6 3F            [ 7]  572 	and	#0b00111111
-      000087 B0               [ 4]  573 	or	b
-      000088 D3 A8            [11]  574 	out	(0xA8), a
-      00008A C9               [10]  575 	ret
-      00008B                        576 	 SetNonExpendedSlot:
-      00008B 79               [ 4]  577 	ld	a, c
-      00008C E6 03            [ 7]  578 	and	#0b00000011
-      00008E 57               [ 4]  579 	ld	d, a
-      00008F DB A8            [11]  580 	in	a, (0xA8)
-      000091 47               [ 4]  581 	ld	b, a
-      000092 E6 FC            [ 7]  582 	and	#0b11111100
-      000094 B2               [ 4]  583 	or	d
-      000095 F3               [ 4]  584 	di
-      000096 D3 A8            [11]  585 	out	(0xA8), a
-      000098 C9               [10]  586 	ret
-                                    587 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:136: }
-      000099 C9               [10]  588 	ret
-                                    589 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:140: u8 Sys_CheckSlot(CheckSlotCallback cb)
-                                    590 ;	---------------------------------
-                                    591 ; Function Sys_CheckSlot
-                                    592 ; ---------------------------------
-      00009A                        593 _Sys_CheckSlot::
-      00009A DD E5            [15]  594 	push	ix
-      00009C DD 21 00 00      [14]  595 	ld	ix,#0
-      0000A0 DD 39            [15]  596 	add	ix,sp
-      0000A2 3B               [ 6]  597 	dec	sp
-                                    598 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:142: for(u8 slot = 0; slot < 4; ++slot)
-      0000A3 01 00 00         [10]  599 	ld	bc, #0x0
-      0000A6                        600 00114$:
-      0000A6 78               [ 4]  601 	ld	a, b
-      0000A7 D6 04            [ 7]  602 	sub	a, #0x04
-      0000A9 30 4D            [12]  603 	jr	NC, 00109$
-                                    604 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:144: if(g_EXPTBL[slot] & SLOT_EXP)
-      0000AB 11 C1 FC         [10]  605 	ld	de, #_g_EXPTBL+0
-      0000AE 7B               [ 4]  606 	ld	a, e
-      0000AF 80               [ 4]  607 	add	a, b
-      0000B0 5F               [ 4]  608 	ld	e, a
-      0000B1 30 01            [12]  609 	jr	NC, 00153$
-      0000B3 14               [ 4]  610 	inc	d
-      0000B4                        611 00153$:
-      0000B4 1A               [ 7]  612 	ld	a, (de)
-      0000B5 07               [ 4]  613 	rlca
-      0000B6 30 2C            [12]  614 	jr	NC, 00107$
-                                    615 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:146: for(u8 sub = 0; sub < 4; ++sub)
-      0000B8 78               [ 4]  616 	ld	a, b
-      0000B9 E6 03            [ 7]  617 	and	a, #0x03
-      0000BB DD 77 FF         [19]  618 	ld	-1 (ix), a
-      0000BE 0E 00            [ 7]  619 	ld	c, #0x00
-      0000C0                        620 00111$:
-                                    621 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:148: u8 slotId = SLOTEX(slot, sub);
-      0000C0 79               [ 4]  622 	ld	a,c
-      0000C1 FE 04            [ 7]  623 	cp	a,#0x04
-      0000C3 30 2E            [12]  624 	jr	NC, 00115$
-      0000C5 E6 03            [ 7]  625 	and	a, #0x03
-      0000C7 87               [ 4]  626 	add	a, a
-      0000C8 87               [ 4]  627 	add	a, a
-      0000C9 DD B6 FF         [19]  628 	or	a, -1 (ix)
-      0000CC 5F               [ 4]  629 	ld	e, a
-      0000CD CB FB            [ 8]  630 	set	7, e
-                                    631 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:149: if(cb(slotId))
-      0000CF E5               [11]  632 	push	hl
-      0000D0 C5               [11]  633 	push	bc
-      0000D1 D5               [11]  634 	push	de
-      0000D2 7B               [ 4]  635 	ld	a, e
-      0000D3 CDr00r00         [17]  636 	call	___sdcc_call_hl
-      0000D6 D1               [10]  637 	pop	de
-      0000D7 C1               [10]  638 	pop	bc
-      0000D8 E1               [10]  639 	pop	hl
-      0000D9 B7               [ 4]  640 	or	a, a
-      0000DA 28 04            [12]  641 	jr	Z, 00112$
-                                    642 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:150: return slotId;
-      0000DC 7B               [ 4]  643 	ld	a, e
-      0000DD C3rFAr00         [10]  644 	jp	00116$
-      0000E0                        645 00112$:
-                                    646 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:146: for(u8 sub = 0; sub < 4; ++sub)
-      0000E0 0C               [ 4]  647 	inc	c
-      0000E1 C3rC0r00         [10]  648 	jp	00111$
-      0000E4                        649 00107$:
-                                    650 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:153: else if(cb(slot))
-      0000E4 E5               [11]  651 	push	hl
-      0000E5 C5               [11]  652 	push	bc
-      0000E6 78               [ 4]  653 	ld	a, b
-      0000E7 CDr00r00         [17]  654 	call	___sdcc_call_hl
-      0000EA C1               [10]  655 	pop	bc
-      0000EB E1               [10]  656 	pop	hl
-      0000EC B7               [ 4]  657 	or	a, a
-      0000ED 28 04            [12]  658 	jr	Z, 00115$
-                                    659 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:154: return slot;
-      0000EF 79               [ 4]  660 	ld	a, c
-      0000F0 C3rFAr00         [10]  661 	jp	00116$
-      0000F3                        662 00115$:
-                                    663 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:142: for(u8 slot = 0; slot < 4; ++slot)
-      0000F3 04               [ 4]  664 	inc	b
-      0000F4 48               [ 4]  665 	ld	c, b
-      0000F5 C3rA6r00         [10]  666 	jp	00114$
-      0000F8                        667 00109$:
-                                    668 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:156: return SLOT_NOTFOUND;
-      0000F8 3E FF            [ 7]  669 	ld	a, #0xff
-      0000FA                        670 00116$:
-                                    671 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:157: }
-      0000FA 33               [ 6]  672 	inc	sp
-      0000FB DD E1            [14]  673 	pop	ix
-      0000FD C9               [10]  674 	ret
-                                    675 	.area _CODE
-                                    676 	.area _INITIALIZER
-                                    677 	.area _CABS (ABS)
+                           0000A8   202 G$g_PortPrimarySlot$0_0$0 == 0x00a8
+                           0000A8   203 _g_PortPrimarySlot	=	0x00a8
+                           0000A9   204 G$g_PortReadKeyboard$0_0$0 == 0x00a9
+                           0000A9   205 _g_PortReadKeyboard	=	0x00a9
+                           0000AA   206 G$g_PortAccessKeyboard$0_0$0 == 0x00aa
+                           0000AA   207 _g_PortAccessKeyboard	=	0x00aa
+                           0000AB   208 G$g_PortControl$0_0$0 == 0x00ab
+                           0000AB   209 _g_PortControl	=	0x00ab
+                           000098   210 G$g_VDP_DataPort$0_0$0 == 0x0098
+                           000098   211 _g_VDP_DataPort	=	0x0098
+                           000099   212 G$g_VDP_RegPort$0_0$0 == 0x0099
+                           000099   213 _g_VDP_RegPort	=	0x0099
+                           000099   214 G$g_VDP_AddrPort$0_0$0 == 0x0099
+                           000099   215 _g_VDP_AddrPort	=	0x0099
+                           000099   216 G$g_VDP_StatPort$0_0$0 == 0x0099
+                           000099   217 _g_VDP_StatPort	=	0x0099
+                           0000A0   218 G$g_PSG_RegPort$0_0$0 == 0x00a0
+                           0000A0   219 _g_PSG_RegPort	=	0x00a0
+                           0000A1   220 G$g_PSG_DataPort$0_0$0 == 0x00a1
+                           0000A1   221 _g_PSG_DataPort	=	0x00a1
+                           0000A2   222 G$g_PSG_StatPort$0_0$0 == 0x00a2
+                           0000A2   223 _g_PSG_StatPort	=	0x00a2
+                           000010   224 G$g_PSG_Ext_RegPort$0_0$0 == 0x0010
+                           000010   225 _g_PSG_Ext_RegPort	=	0x0010
+                           000011   226 G$g_PSG_Ext_DataPort$0_0$0 == 0x0011
+                           000011   227 _g_PSG_Ext_DataPort	=	0x0011
+                           000012   228 G$g_PSG_Ext_StatPort$0_0$0 == 0x0012
+                           000012   229 _g_PSG_Ext_StatPort	=	0x0012
+                           00007C   230 G$g_MSXMusic_IndexPort$0_0$0 == 0x007c
+                           00007C   231 _g_MSXMusic_IndexPort	=	0x007c
+                           00007D   232 G$g_MSXMusic_DataPort$0_0$0 == 0x007d
+                           00007D   233 _g_MSXMusic_DataPort	=	0x007d
+                           0000C0   234 G$g_MSXAudio_IndexPort$0_0$0 == 0x00c0
+                           0000C0   235 _g_MSXAudio_IndexPort	=	0x00c0
+                           0000C1   236 G$g_MSXAudio_DataPort$0_0$0 == 0x00c1
+                           0000C1   237 _g_MSXAudio_DataPort	=	0x00c1
+                           0000C2   238 G$g_MSXAudio_IndexPort2$0_0$0 == 0x00c2
+                           0000C2   239 _g_MSXAudio_IndexPort2	=	0x00c2
+                           0000C3   240 G$g_MSXAudio_DataPort2$0_0$0 == 0x00c3
+                           0000C3   241 _g_MSXAudio_DataPort2	=	0x00c3
+                           0000B4   242 G$g_RTC_AddrPort$0_0$0 == 0x00b4
+                           0000B4   243 _g_RTC_AddrPort	=	0x00b4
+                           0000B5   244 G$g_RTC_DataPort$0_0$0 == 0x00b5
+                           0000B5   245 _g_RTC_DataPort	=	0x00b5
+                                    246 ;--------------------------------------------------------
+                                    247 ; ram data
+                                    248 ;--------------------------------------------------------
+                                    249 	.area _DATA
+                           00F3AE   250 G$g_LINL40$0_0$0 == 0xf3ae
+                           00F3AE   251 _g_LINL40	=	0xf3ae
+                           00F3AF   252 G$g_LINL32$0_0$0 == 0xf3af
+                           00F3AF   253 _g_LINL32	=	0xf3af
+                           00F3B0   254 G$g_LINLEN$0_0$0 == 0xf3b0
+                           00F3B0   255 _g_LINLEN	=	0xf3b0
+                           00F3B1   256 G$g_CRTCNT$0_0$0 == 0xf3b1
+                           00F3B1   257 _g_CRTCNT	=	0xf3b1
+                           00F3B2   258 G$g_CLMLST$0_0$0 == 0xf3b2
+                           00F3B2   259 _g_CLMLST	=	0xf3b2
+                           00F3B3   260 G$g_TXTNAM$0_0$0 == 0xf3b3
+                           00F3B3   261 _g_TXTNAM	=	0xf3b3
+                           00F3B5   262 G$g_TXTCOL$0_0$0 == 0xf3b5
+                           00F3B5   263 _g_TXTCOL	=	0xf3b5
+                           00F3B7   264 G$g_TXTCGP$0_0$0 == 0xf3b7
+                           00F3B7   265 _g_TXTCGP	=	0xf3b7
+                           00F3B9   266 G$g_TXTATR$0_0$0 == 0xf3b9
+                           00F3B9   267 _g_TXTATR	=	0xf3b9
+                           00F3BB   268 G$g_TXTPAT$0_0$0 == 0xf3bb
+                           00F3BB   269 _g_TXTPAT	=	0xf3bb
+                           00F3BD   270 G$g_T32NAM$0_0$0 == 0xf3bd
+                           00F3BD   271 _g_T32NAM	=	0xf3bd
+                           00F3BF   272 G$g_T32COL$0_0$0 == 0xf3bf
+                           00F3BF   273 _g_T32COL	=	0xf3bf
+                           00F3C1   274 G$g_T32CGP$0_0$0 == 0xf3c1
+                           00F3C1   275 _g_T32CGP	=	0xf3c1
+                           00F3C3   276 G$g_T32ATR$0_0$0 == 0xf3c3
+                           00F3C3   277 _g_T32ATR	=	0xf3c3
+                           00F3C5   278 G$g_T32PAT$0_0$0 == 0xf3c5
+                           00F3C5   279 _g_T32PAT	=	0xf3c5
+                           00F3C7   280 G$g_GRPNAM$0_0$0 == 0xf3c7
+                           00F3C7   281 _g_GRPNAM	=	0xf3c7
+                           00F3C9   282 G$g_GRPCOL$0_0$0 == 0xf3c9
+                           00F3C9   283 _g_GRPCOL	=	0xf3c9
+                           00F3CB   284 G$g_GRPCGP$0_0$0 == 0xf3cb
+                           00F3CB   285 _g_GRPCGP	=	0xf3cb
+                           00F3CD   286 G$g_GRPATR$0_0$0 == 0xf3cd
+                           00F3CD   287 _g_GRPATR	=	0xf3cd
+                           00F3CF   288 G$g_GRPPAT$0_0$0 == 0xf3cf
+                           00F3CF   289 _g_GRPPAT	=	0xf3cf
+                           00F3D1   290 G$g_MLTNAM$0_0$0 == 0xf3d1
+                           00F3D1   291 _g_MLTNAM	=	0xf3d1
+                           00F3D3   292 G$g_MLTCOL$0_0$0 == 0xf3d3
+                           00F3D3   293 _g_MLTCOL	=	0xf3d3
+                           00F3D5   294 G$g_MLTCGP$0_0$0 == 0xf3d5
+                           00F3D5   295 _g_MLTCGP	=	0xf3d5
+                           00F3D7   296 G$g_MLTATR$0_0$0 == 0xf3d7
+                           00F3D7   297 _g_MLTATR	=	0xf3d7
+                           00F3D9   298 G$g_MLTPAT$0_0$0 == 0xf3d9
+                           00F3D9   299 _g_MLTPAT	=	0xf3d9
+                           00F3DB   300 G$g_CLIKSW$0_0$0 == 0xf3db
+                           00F3DB   301 _g_CLIKSW	=	0xf3db
+                           00F3DC   302 G$g_CSRY$0_0$0 == 0xf3dc
+                           00F3DC   303 _g_CSRY	=	0xf3dc
+                           00F3DD   304 G$g_CSRX$0_0$0 == 0xf3dd
+                           00F3DD   305 _g_CSRX	=	0xf3dd
+                           00F3E9   306 G$g_FORCLR$0_0$0 == 0xf3e9
+                           00F3E9   307 _g_FORCLR	=	0xf3e9
+                           00F3EA   308 G$g_BAKCLR$0_0$0 == 0xf3ea
+                           00F3EA   309 _g_BAKCLR	=	0xf3ea
+                           00F3EB   310 G$g_BDRCLR$0_0$0 == 0xf3eb
+                           00F3EB   311 _g_BDRCLR	=	0xf3eb
+                           00F3F2   312 G$g_ATRBYT$0_0$0 == 0xf3f2
+                           00F3F2   313 _g_ATRBYT	=	0xf3f2
+                           00F87F   314 G$g_FNKSTR$0_0$0 == 0xf87f
+                           00F87F   315 _g_FNKSTR	=	0xf87f
+                           00F92A   316 G$g_CLOC$0_0$0 == 0xf92a
+                           00F92A   317 _g_CLOC	=	0xf92a
+                           00F92C   318 G$g_CMASK$0_0$0 == 0xf92c
+                           00F92C   319 _g_CMASK	=	0xf92c
+                           00FB02   320 G$g_LOGOPR$0_0$0 == 0xfb02
+                           00FB02   321 _g_LOGOPR	=	0xfb02
+                           00FCB7   322 G$g_GRPACX$0_0$0 == 0xfcb7
+                           00FCB7   323 _g_GRPACX	=	0xfcb7
+                           00FCB9   324 G$g_GRPACY$0_0$0 == 0xfcb9
+                           00FCB9   325 _g_GRPACY	=	0xfcb9
+                           00FFFF   326 G$g_SLTSL$0_0$0 == 0xffff
+                           00FFFF   327 _g_SLTSL	=	0xffff
+                                    328 ;--------------------------------------------------------
+                                    329 ; ram data
+                                    330 ;--------------------------------------------------------
+                                    331 	.area _INITIALIZED
+                                    332 ;--------------------------------------------------------
+                                    333 ; absolute external ram data
+                                    334 ;--------------------------------------------------------
+                                    335 	.area _DABS (ABS)
+                                    336 ;--------------------------------------------------------
+                                    337 ; global & static initialisations
+                                    338 ;--------------------------------------------------------
+                                    339 	.area _HOME
+                                    340 	.area _GSINIT
+                                    341 	.area _GSFINAL
+                                    342 	.area _GSINIT
+                                    343 ;--------------------------------------------------------
+                                    344 ; Home
+                                    345 ;--------------------------------------------------------
+                                    346 	.area _HOME
+                                    347 	.area _HOME
+                                    348 ;--------------------------------------------------------
+                                    349 ; code
+                                    350 ;--------------------------------------------------------
+                                    351 	.area _CODE
+                           000000   352 	G$Sys_GetPageSlot$0$0	= .
+                                    353 	.globl	G$Sys_GetPageSlot$0$0
+                           000000   354 	C$system.c$12$0_0$36	= .
+                                    355 	.globl	C$system.c$12$0_0$36
+                                    356 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:12: u8 Sys_GetPageSlot(u8 page)
+                                    357 ;	---------------------------------
+                                    358 ; Function Sys_GetPageSlot
+                                    359 ; ---------------------------------
+      000000                        360 _Sys_GetPageSlot::
+      000000 5F               [ 4]  361 	ld	e, a
+                           000001   362 	C$system.c$15$1_0$36	= .
+                                    363 	.globl	C$system.c$15$1_0$36
+                                    364 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:15: u8 slot = (g_PortPrimarySlot >> (page * 2)) & 0x03;
+      000001 CB 23            [ 8]  365 	sla	e
+      000003 43               [ 4]  366 	ld	b, e
+      000004 DB A8            [11]  367 	in	a, (_g_PortPrimarySlot)
+      000006 4F               [ 4]  368 	ld	c, a
+      000007 04               [ 4]  369 	inc	b
+      000008 C3r0Dr00         [10]  370 	jp	00113$
+      00000B                        371 00112$:
+      00000B CB 39            [ 8]  372 	srl	c
+      00000D                        373 00113$:
+      00000D 10 FC            [13]  374 	djnz	00112$
+      00000F 79               [ 4]  375 	ld	a, c
+      000010 E6 03            [ 7]  376 	and	a, #0x03
+      000012 4F               [ 4]  377 	ld	c, a
+                           000013   378 	C$system.c$18$1_0$36	= .
+                                    379 	.globl	C$system.c$18$1_0$36
+                                    380 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:18: if(g_EXPTBL[slot] & SLOT_EXP)
+      000013 21 C1 FC         [10]  381 	ld	hl, #_g_EXPTBL+0
+      000016 06 00            [ 7]  382 	ld	b, #0x00
+      000018 09               [11]  383 	add	hl, bc
+      000019 7E               [ 7]  384 	ld	a, (hl)
+      00001A 07               [ 4]  385 	rlca
+      00001B 30 34            [12]  386 	jr	NC, 00102$
+                           00001D   387 	C$system.c$20$3_0$37	= .
+                                    388 	.globl	C$system.c$20$3_0$37
+                                    389 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:20: u8 prevSlot = g_PortPrimarySlot; // Backup current primary slots register
+      00001D DB A8            [11]  390 	in	a, (_g_PortPrimarySlot)
+      00001F 47               [ 4]  391 	ld	b, a
+                                    392 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.h:156: inline void DisableInterrupt() { __asm__("di"); }
+      000020 F3               [ 4]  393 	di
+                           000021   394 	C$system.c$22$2_0$37	= .
+                                    395 	.globl	C$system.c$22$2_0$37
+                                    396 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:22: g_PortPrimarySlot = (prevSlot & 0x3F) | (slot << 6); // Select primary slot in page 3
+      000021 78               [ 4]  397 	ld	a, b
+      000022 E6 3F            [ 7]  398 	and	a, #0x3f
+      000024 6F               [ 4]  399 	ld	l, a
+                                    400 ;	spillPairReg hl
+                                    401 ;	spillPairReg hl
+      000025 79               [ 4]  402 	ld	a, c
+      000026 0F               [ 4]  403 	rrca
+      000027 0F               [ 4]  404 	rrca
+      000028 E6 C0            [ 7]  405 	and	a, #0xc0
+      00002A B5               [ 4]  406 	or	a, l
+      00002B D3 A8            [11]  407 	out	(_g_PortPrimarySlot), a
+                           00002D   408 	C$system.c$23$2_0$37	= .
+                                    409 	.globl	C$system.c$23$2_0$37
+                                    410 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:23: slot |= SLOT_EXP;
+      00002D CB F9            [ 8]  411 	set	7, c
+                           00002F   412 	C$system.c$24$2_0$37	= .
+                                    413 	.globl	C$system.c$24$2_0$37
+                                    414 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:24: slot |= (((~g_SLTSL) >> (page * 2)) & 0x03) << 2;
+      00002F 3A FF FF         [13]  415 	ld	a, (_g_SLTSL+0)
+      000032 6F               [ 4]  416 	ld	l, a
+                                    417 ;	spillPairReg hl
+                                    418 ;	spillPairReg hl
+      000033 26 00            [ 7]  419 	ld	h, #0x00
+                                    420 ;	spillPairReg hl
+                                    421 ;	spillPairReg hl
+      000035 7D               [ 4]  422 	ld	a, l
+      000036 2F               [ 4]  423 	cpl
+      000037 6F               [ 4]  424 	ld	l, a
+                                    425 ;	spillPairReg hl
+                                    426 ;	spillPairReg hl
+      000038 7C               [ 4]  427 	ld	a, h
+      000039 2F               [ 4]  428 	cpl
+      00003A 67               [ 4]  429 	ld	h, a
+                                    430 ;	spillPairReg hl
+                                    431 ;	spillPairReg hl
+      00003B 1C               [ 4]  432 	inc	e
+      00003C C3r43r00         [10]  433 	jp	00116$
+      00003F                        434 00115$:
+      00003F CB 2C            [ 8]  435 	sra	h
+      000041 CB 1D            [ 8]  436 	rr	l
+      000043                        437 00116$:
+      000043 1D               [ 4]  438 	dec	e
+      000044 20 F9            [12]  439 	jr	NZ, 00115$
+      000046 7D               [ 4]  440 	ld	a, l
+      000047 E6 03            [ 7]  441 	and	a, #0x03
+      000049 87               [ 4]  442 	add	a, a
+      00004A 87               [ 4]  443 	add	a, a
+      00004B B1               [ 4]  444 	or	a, c
+      00004C 4F               [ 4]  445 	ld	c, a
+                           00004D   446 	C$system.c$25$2_0$37	= .
+                                    447 	.globl	C$system.c$25$2_0$37
+                                    448 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:25: g_PortPrimarySlot = prevSlot; // Restore primary slots register
+      00004D 78               [ 4]  449 	ld	a, b
+      00004E D3 A8            [11]  450 	out	(_g_PortPrimarySlot), a
+                                    451 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.h:152: inline void EnableInterrupt() { __asm__("ei"); }
+      000050 FB               [ 4]  452 	ei
+                           000051   453 	C$system.c$26$1_0$36	= .
+                                    454 	.globl	C$system.c$26$1_0$36
+                                    455 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:26: EnableInterrupt();
+      000051                        456 00102$:
+                           000051   457 	C$system.c$28$1_0$36	= .
+                                    458 	.globl	C$system.c$28$1_0$36
+                                    459 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:28: return slot;
+      000051 79               [ 4]  460 	ld	a, c
+                           000052   461 	C$system.c$29$1_0$36	= .
+                                    462 	.globl	C$system.c$29$1_0$36
+                                    463 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:29: }
+                           000052   464 	C$system.c$29$1_0$36	= .
+                                    465 	.globl	C$system.c$29$1_0$36
+                           000052   466 	XG$Sys_GetPageSlot$0$0	= .
+                                    467 	.globl	XG$Sys_GetPageSlot$0$0
+      000052 C9               [10]  468 	ret
+                           00F380   469 G$g_RDPRIM$0_0$0 == 0xf380
+                           00F380   470 _g_RDPRIM	=	0xf380
+                           00F385   471 G$g_WRPRIM$0_0$0 == 0xf385
+                           00F385   472 _g_WRPRIM	=	0xf385
+                           00F38C   473 G$g_CLPRIM$0_0$0 == 0xf38c
+                           00F38C   474 _g_CLPRIM	=	0xf38c
+                           00F39A   475 G$g_USRTAB$0_0$0 == 0xf39a
+                           00F39A   476 _g_USRTAB	=	0xf39a
+                           00F3DE   477 G$g_CNSDFG$0_0$0 == 0xf3de
+                           00F3DE   478 _g_CNSDFG	=	0xf3de
+                           00F3DF   479 G$g_RG0SAV$0_0$0 == 0xf3df
+                           00F3DF   480 _g_RG0SAV	=	0xf3df
+                           00F3E0   481 G$g_RG1SAV$0_0$0 == 0xf3e0
+                           00F3E0   482 _g_RG1SAV	=	0xf3e0
+                           00F3E1   483 G$g_RG2SAV$0_0$0 == 0xf3e1
+                           00F3E1   484 _g_RG2SAV	=	0xf3e1
+                           00F3E2   485 G$g_RG3SAV$0_0$0 == 0xf3e2
+                           00F3E2   486 _g_RG3SAV	=	0xf3e2
+                           00F3E3   487 G$g_RG4SAV$0_0$0 == 0xf3e3
+                           00F3E3   488 _g_RG4SAV	=	0xf3e3
+                           00F3E4   489 G$g_RG5SAV$0_0$0 == 0xf3e4
+                           00F3E4   490 _g_RG5SAV	=	0xf3e4
+                           00F3E5   491 G$g_RG6SAV$0_0$0 == 0xf3e5
+                           00F3E5   492 _g_RG6SAV	=	0xf3e5
+                           00F3E6   493 G$g_RG7SAV$0_0$0 == 0xf3e6
+                           00F3E6   494 _g_RG7SAV	=	0xf3e6
+                           00F3E7   495 G$g_STATFL$0_0$0 == 0xf3e7
+                           00F3E7   496 _g_STATFL	=	0xf3e7
+                           00F3E8   497 G$g_TRGFLG$0_0$0 == 0xf3e8
+                           00F3E8   498 _g_TRGFLG	=	0xf3e8
+                           00F3EC   499 G$g_MAXUPD$0_0$0 == 0xf3ec
+                           00F3EC   500 _g_MAXUPD	=	0xf3ec
+                           00F3EF   501 G$g_MINUPD$0_0$0 == 0xf3ef
+                           00F3EF   502 _g_MINUPD	=	0xf3ef
+                           00F3F3   503 G$g_QUEUES$0_0$0 == 0xf3f3
+                           00F3F3   504 _g_QUEUES	=	0xf3f3
+                           00F3F5   505 G$g_FRCNEW$0_0$0 == 0xf3f5
+                           00F3F5   506 _g_FRCNEW	=	0xf3f5
+                           00F3F6   507 G$g_SCNCNT$0_0$0 == 0xf3f6
+                           00F3F6   508 _g_SCNCNT	=	0xf3f6
+                           00F3F7   509 G$g_REPCNT$0_0$0 == 0xf3f7
+                           00F3F7   510 _g_REPCNT	=	0xf3f7
+                           00F3F8   511 G$g_PUTPNT$0_0$0 == 0xf3f8
+                           00F3F8   512 _g_PUTPNT	=	0xf3f8
+                           00F3FA   513 G$g_GETPNT$0_0$0 == 0xf3fa
+                           00F3FA   514 _g_GETPNT	=	0xf3fa
+                           00F3FC   515 G$g_CS120$0_0$0 == 0xf3fc
+                           00F3FC   516 _g_CS120	=	0xf3fc
+                           00F401   517 G$g_CS240$0_0$0 == 0xf401
+                           00F401   518 _g_CS240	=	0xf401
+                           00F406   519 G$g_LOW$0_0$0 == 0xf406
+                           00F406   520 _g_LOW	=	0xf406
+                           00F408   521 G$g_HIGH$0_0$0 == 0xf408
+                           00F408   522 _g_HIGH	=	0xf408
+                           00F40A   523 G$g_HEADER$0_0$0 == 0xf40a
+                           00F40A   524 _g_HEADER	=	0xf40a
+                           00F40B   525 G$g_ASPCT1$0_0$0 == 0xf40b
+                           00F40B   526 _g_ASPCT1	=	0xf40b
+                           00F40D   527 G$g_ASPCT2$0_0$0 == 0xf40d
+                           00F40D   528 _g_ASPCT2	=	0xf40d
+                           00F959   529 G$g_QUETAB$0_0$0 == 0xf959
+                           00F959   530 _g_QUETAB	=	0xf959
+                           00F971   531 G$g_QUEBAK$0_0$0 == 0xf971
+                           00F971   532 _g_QUEBAK	=	0xf971
+                           00F975   533 G$g_VOICAQ$0_0$0 == 0xf975
+                           00F975   534 _g_VOICAQ	=	0xf975
+                           00F9F5   535 G$g_VOICBQ$0_0$0 == 0xf9f5
+                           00F9F5   536 _g_VOICBQ	=	0xf9f5
+                           00FA75   537 G$g_VOICCQ$0_0$0 == 0xfa75
+                           00FA75   538 _g_VOICCQ	=	0xfa75
+                           00FAF5   539 G$g_RS2IQ$0_0$0 == 0xfaf5
+                           00FAF5   540 _g_RS2IQ	=	0xfaf5
+                           00FAF5   541 G$g_DPPAGE$0_0$0 == 0xfaf5
+                           00FAF5   542 _g_DPPAGE	=	0xfaf5
+                           00FAF6   543 G$g_ACPAGE$0_0$0 == 0xfaf6
+                           00FAF6   544 _g_ACPAGE	=	0xfaf6
+                           00FAF7   545 G$g_AVCSAV$0_0$0 == 0xfaf7
+                           00FAF7   546 _g_AVCSAV	=	0xfaf7
+                           00FAF8   547 G$g_EXBRSA$0_0$0 == 0xfaf8
+                           00FAF8   548 _g_EXBRSA	=	0xfaf8
+                           00FAF9   549 G$g_CHRCNT$0_0$0 == 0xfaf9
+                           00FAF9   550 _g_CHRCNT	=	0xfaf9
+                           00FAFA   551 G$g_ROMA$0_0$0 == 0xfafa
+                           00FAFA   552 _g_ROMA	=	0xfafa
+                           00FAFC   553 G$g_MODE$0_0$0 == 0xfafc
+                           00FAFC   554 _g_MODE	=	0xfafc
+                           00FAFD   555 G$g_NORUSE$0_0$0 == 0xfafd
+                           00FAFD   556 _g_NORUSE	=	0xfafd
+                           00FAFE   557 G$g_XSAVE$0_0$0 == 0xfafe
+                           00FAFE   558 _g_XSAVE	=	0xfafe
+                           00FB00   559 G$g_YSAVE$0_0$0 == 0xfb00
+                           00FB00   560 _g_YSAVE	=	0xfb00
+                           00FB03   561 G$g_RSTMP$0_0$0 == 0xfb03
+                           00FB03   562 _g_RSTMP	=	0xfb03
+                           00FB03   563 G$g_TOCNT$0_0$0 == 0xfb03
+                           00FB03   564 _g_TOCNT	=	0xfb03
+                           00FB04   565 G$g_RSFCB$0_0$0 == 0xfb04
+                           00FB04   566 _g_RSFCB	=	0xfb04
+                           00FB06   567 G$g_RSIQLN$0_0$0 == 0xfb06
+                           00FB06   568 _g_RSIQLN	=	0xfb06
+                           00FB07   569 G$g_MEXBIh$0_0$0 == 0xfb07
+                           00FB07   570 _g_MEXBIh	=	0xfb07
+                           00FB0C   571 G$g_OLDSTT$0_0$0 == 0xfb0c
+                           00FB0C   572 _g_OLDSTT	=	0xfb0c
+                           00FB0C   573 G$g_OLDINT$0_0$0 == 0xfb0c
+                           00FB0C   574 _g_OLDINT	=	0xfb0c
+                           00FB16   575 G$g_DEVNUM$0_0$0 == 0xfb16
+                           00FB16   576 _g_DEVNUM	=	0xfb16
+                           00FB17   577 G$g_DATCNT$0_0$0 == 0xfb17
+                           00FB17   578 _g_DATCNT	=	0xfb17
+                           00FB1A   579 G$g_ERRORS$0_0$0 == 0xfb1a
+                           00FB1A   580 _g_ERRORS	=	0xfb1a
+                           00FB1B   581 G$g_FLAGS$0_0$0 == 0xfb1b
+                           00FB1B   582 _g_FLAGS	=	0xfb1b
+                           00FB1C   583 G$g_ESTBLS$0_0$0 == 0xfb1c
+                           00FB1C   584 _g_ESTBLS	=	0xfb1c
+                           00FB1D   585 G$g_COMMSK$0_0$0 == 0xfb1d
+                           00FB1D   586 _g_COMMSK	=	0xfb1d
+                           00FB1E   587 G$g_LSTCOM$0_0$0 == 0xfb1e
+                           00FB1E   588 _g_LSTCOM	=	0xfb1e
+                           00FB1F   589 G$g_LSTMOD$0_0$0 == 0xfb1f
+                           00FB1F   590 _g_LSTMOD	=	0xfb1f
+                           00FB35   591 G$g_PRSCNT$0_0$0 == 0xfb35
+                           00FB35   592 _g_PRSCNT	=	0xfb35
+                           00FB36   593 G$g_SAVSP$0_0$0 == 0xfb36
+                           00FB36   594 _g_SAVSP	=	0xfb36
+                           00FB38   595 G$g_VOICEN$0_0$0 == 0xfb38
+                           00FB38   596 _g_VOICEN	=	0xfb38
+                           00FB39   597 G$g_SAVVOL$0_0$0 == 0xfb39
+                           00FB39   598 _g_SAVVOL	=	0xfb39
+                           00FB3B   599 G$g_MCLLEN$0_0$0 == 0xfb3b
+                           00FB3B   600 _g_MCLLEN	=	0xfb3b
+                           00FB3C   601 G$g_MCLPTR$0_0$0 == 0xfb3c
+                           00FB3C   602 _g_MCLPTR	=	0xfb3c
+                           00FB3E   603 G$g_QUEUEN$0_0$0 == 0xfb3e
+                           00FB3E   604 _g_QUEUEN	=	0xfb3e
+                           00FB3F   605 G$g_MUSICF$0_0$0 == 0xfb3f
+                           00FB3F   606 _g_MUSICF	=	0xfb3f
+                           00FB40   607 G$g_PLYCNT$0_0$0 == 0xfb40
+                           00FB40   608 _g_PLYCNT	=	0xfb40
+                           00FB41   609 G$g_VCBA$0_0$0 == 0xfb41
+                           00FB41   610 _g_VCBA	=	0xfb41
+                           00FB66   611 G$g_VCBB$0_0$0 == 0xfb66
+                           00FB66   612 _g_VCBB	=	0xfb66
+                           00FB8B   613 G$g_VCBC$0_0$0 == 0xfb8b
+                           00FB8B   614 _g_VCBC	=	0xfb8b
+                           00FBB0   615 G$g_ENSTOP$0_0$0 == 0xfbb0
+                           00FBB0   616 _g_ENSTOP	=	0xfbb0
+                           00FBB1   617 G$g_BASROM$0_0$0 == 0xfbb1
+                           00FBB1   618 _g_BASROM	=	0xfbb1
+                           00FBB2   619 G$g_LINTTB$0_0$0 == 0xfbb2
+                           00FBB2   620 _g_LINTTB	=	0xfbb2
+                           00FBCA   621 G$g_FSTPOS$0_0$0 == 0xfbca
+                           00FBCA   622 _g_FSTPOS	=	0xfbca
+                           00FBCC   623 G$g_CODSAV$0_0$0 == 0xfbcc
+                           00FBCC   624 _g_CODSAV	=	0xfbcc
+                           00FBCD   625 G$g_FNKSWI$0_0$0 == 0xfbcd
+                           00FBCD   626 _g_FNKSWI	=	0xfbcd
+                           00FBCE   627 G$g_FNKFLG$0_0$0 == 0xfbce
+                           00FBCE   628 _g_FNKFLG	=	0xfbce
+                           00FBD8   629 G$g_ONGSBF$0_0$0 == 0xfbd8
+                           00FBD8   630 _g_ONGSBF	=	0xfbd8
+                           00FBD9   631 G$g_CLIKFL$0_0$0 == 0xfbd9
+                           00FBD9   632 _g_CLIKFL	=	0xfbd9
+                           00FBDA   633 G$g_OLDKEY$0_0$0 == 0xfbda
+                           00FBDA   634 _g_OLDKEY	=	0xfbda
+                           00FBE5   635 G$g_NEWKEY$0_0$0 == 0xfbe5
+                           00FBE5   636 _g_NEWKEY	=	0xfbe5
+                           00FBF0   637 G$g_KEYBUF$0_0$0 == 0xfbf0
+                           00FBF0   638 _g_KEYBUF	=	0xfbf0
+                           00FC18   639 G$g_LINWRK$0_0$0 == 0xfc18
+                           00FC18   640 _g_LINWRK	=	0xfc18
+                           00FC40   641 G$g_PATWRK$0_0$0 == 0xfc40
+                           00FC40   642 _g_PATWRK	=	0xfc40
+                           00FC48   643 G$g_BOTTOM$0_0$0 == 0xfc48
+                           00FC48   644 _g_BOTTOM	=	0xfc48
+                           00FC4A   645 G$g_HIMEM$0_0$0 == 0xfc4a
+                           00FC4A   646 _g_HIMEM	=	0xfc4a
+                           00FC4C   647 G$g_TRPTBL$0_0$0 == 0xfc4c
+                           00FC4C   648 _g_TRPTBL	=	0xfc4c
+                           00FC9A   649 G$g_RTYCNT$0_0$0 == 0xfc9a
+                           00FC9A   650 _g_RTYCNT	=	0xfc9a
+                           00FC9B   651 G$g_INTFLG$0_0$0 == 0xfc9b
+                           00FC9B   652 _g_INTFLG	=	0xfc9b
+                           00FC9C   653 G$g_PADY$0_0$0 == 0xfc9c
+                           00FC9C   654 _g_PADY	=	0xfc9c
+                           00FC9D   655 G$g_PADX$0_0$0 == 0xfc9d
+                           00FC9D   656 _g_PADX	=	0xfc9d
+                           00FC9E   657 G$g_JIFFY$0_0$0 == 0xfc9e
+                           00FC9E   658 _g_JIFFY	=	0xfc9e
+                           00FCA0   659 G$g_INTVAL$0_0$0 == 0xfca0
+                           00FCA0   660 _g_INTVAL	=	0xfca0
+                           00FCA2   661 G$g_INTCNT$0_0$0 == 0xfca2
+                           00FCA2   662 _g_INTCNT	=	0xfca2
+                           00FCA4   663 G$g_LOWLIM$0_0$0 == 0xfca4
+                           00FCA4   664 _g_LOWLIM	=	0xfca4
+                           00FCA5   665 G$g_WINWID$0_0$0 == 0xfca5
+                           00FCA5   666 _g_WINWID	=	0xfca5
+                           00FCA6   667 G$g_GRPHED$0_0$0 == 0xfca6
+                           00FCA6   668 _g_GRPHED	=	0xfca6
+                           00FCA7   669 G$g_ESCCNT$0_0$0 == 0xfca7
+                           00FCA7   670 _g_ESCCNT	=	0xfca7
+                           00FCA8   671 G$g_INSFLG$0_0$0 == 0xfca8
+                           00FCA8   672 _g_INSFLG	=	0xfca8
+                           00FCA9   673 G$g_CSRSW$0_0$0 == 0xfca9
+                           00FCA9   674 _g_CSRSW	=	0xfca9
+                           00FCAA   675 G$g_CSTYLE$0_0$0 == 0xfcaa
+                           00FCAA   676 _g_CSTYLE	=	0xfcaa
+                           00FCAB   677 G$g_CAPST$0_0$0 == 0xfcab
+                           00FCAB   678 _g_CAPST	=	0xfcab
+                           00FCAC   679 G$g_KANAST$0_0$0 == 0xfcac
+                           00FCAC   680 _g_KANAST	=	0xfcac
+                           00FCAD   681 G$g_KANAMD$0_0$0 == 0xfcad
+                           00FCAD   682 _g_KANAMD	=	0xfcad
+                           00FCAE   683 G$g_FLBMEM$0_0$0 == 0xfcae
+                           00FCAE   684 _g_FLBMEM	=	0xfcae
+                           00FCAF   685 G$g_SCRMOD$0_0$0 == 0xfcaf
+                           00FCAF   686 _g_SCRMOD	=	0xfcaf
+                           00FCB0   687 G$g_OLDSCR$0_0$0 == 0xfcb0
+                           00FCB0   688 _g_OLDSCR	=	0xfcb0
+                           00FCB1   689 G$g_CASPRV$0_0$0 == 0xfcb1
+                           00FCB1   690 _g_CASPRV	=	0xfcb1
+                           00FCB2   691 G$g_BRDATR$0_0$0 == 0xfcb2
+                           00FCB2   692 _g_BRDATR	=	0xfcb2
+                           00FCB3   693 G$g_GXPOS$0_0$0 == 0xfcb3
+                           00FCB3   694 _g_GXPOS	=	0xfcb3
+                           00FCB5   695 G$g_GYPOS$0_0$0 == 0xfcb5
+                           00FCB5   696 _g_GYPOS	=	0xfcb5
+                           00FCBB   697 G$g_DRWFLG$0_0$0 == 0xfcbb
+                           00FCBB   698 _g_DRWFLG	=	0xfcbb
+                           00FCBC   699 G$g_DRWSCL$0_0$0 == 0xfcbc
+                           00FCBC   700 _g_DRWSCL	=	0xfcbc
+                           00FCBD   701 G$g_DRWANG$0_0$0 == 0xfcbd
+                           00FCBD   702 _g_DRWANG	=	0xfcbd
+                           00FCC1   703 G$g_MNROM$0_0$0 == 0xfcc1
+                           00FCC1   704 _g_MNROM	=	0xfcc1
+                           00FCC1   705 G$g_EXPTBL$0_0$0 == 0xfcc1
+                           00FCC1   706 _g_EXPTBL	=	0xfcc1
+                           00FCC5   707 G$g_SLTTBL$0_0$0 == 0xfcc5
+                           00FCC5   708 _g_SLTTBL	=	0xfcc5
+                           00FCC9   709 G$g_SLTATR$0_0$0 == 0xfcc9
+                           00FCC9   710 _g_SLTATR	=	0xfcc9
+                           00FD09   711 G$g_SLTWRK$0_0$0 == 0xfd09
+                           00FD09   712 _g_SLTWRK	=	0xfd09
+                           00FD89   713 G$g_PROCNM$0_0$0 == 0xfd89
+                           00FD89   714 _g_PROCNM	=	0xfd89
+                           00FFE7   715 G$g_RG08SAV$0_0$0 == 0xffe7
+                           00FFE7   716 _g_RG08SAV	=	0xffe7
+                           00FFE8   717 G$g_RG09SAV$0_0$0 == 0xffe8
+                           00FFE8   718 _g_RG09SAV	=	0xffe8
+                           00FFE9   719 G$g_RG10SAV$0_0$0 == 0xffe9
+                           00FFE9   720 _g_RG10SAV	=	0xffe9
+                           00FFEA   721 G$g_RG11SAV$0_0$0 == 0xffea
+                           00FFEA   722 _g_RG11SAV	=	0xffea
+                           00FFEB   723 G$g_RG12SAV$0_0$0 == 0xffeb
+                           00FFEB   724 _g_RG12SAV	=	0xffeb
+                           00FFEC   725 G$g_RG13SAV$0_0$0 == 0xffec
+                           00FFEC   726 _g_RG13SAV	=	0xffec
+                           00FFED   727 G$g_RG14SAV$0_0$0 == 0xffed
+                           00FFED   728 _g_RG14SAV	=	0xffed
+                           00FFEE   729 G$g_RG15SAV$0_0$0 == 0xffee
+                           00FFEE   730 _g_RG15SAV	=	0xffee
+                           00FFEF   731 G$g_RG16SAV$0_0$0 == 0xffef
+                           00FFEF   732 _g_RG16SAV	=	0xffef
+                           00FFF0   733 G$g_RG17SAV$0_0$0 == 0xfff0
+                           00FFF0   734 _g_RG17SAV	=	0xfff0
+                           00FFF1   735 G$g_RG18SAV$0_0$0 == 0xfff1
+                           00FFF1   736 _g_RG18SAV	=	0xfff1
+                           00FFF2   737 G$g_RG19SAV$0_0$0 == 0xfff2
+                           00FFF2   738 _g_RG19SAV	=	0xfff2
+                           00FFF3   739 G$g_RG20SAV$0_0$0 == 0xfff3
+                           00FFF3   740 _g_RG20SAV	=	0xfff3
+                           00FFF4   741 G$g_RG21SAV$0_0$0 == 0xfff4
+                           00FFF4   742 _g_RG21SAV	=	0xfff4
+                           00FFF5   743 G$g_RG22SAV$0_0$0 == 0xfff5
+                           00FFF5   744 _g_RG22SAV	=	0xfff5
+                           00FFF6   745 G$g_RG23SAV$0_0$0 == 0xfff6
+                           00FFF6   746 _g_RG23SAV	=	0xfff6
+                           00FFF7   747 G$g_MINROM$0_0$0 == 0xfff7
+                           00FFF7   748 _g_MINROM	=	0xfff7
+                           00FFF8   749 G$g_SVFFF8$0_0$0 == 0xfff8
+                           00FFF8   750 _g_SVFFF8	=	0xfff8
+                           00FFFA   751 G$g_RG25SAV$0_0$0 == 0xfffa
+                           00FFFA   752 _g_RG25SAV	=	0xfffa
+                           00FFFB   753 G$g_RG26SAV$0_0$0 == 0xfffb
+                           00FFFB   754 _g_RG26SAV	=	0xfffb
+                           00FFFC   755 G$g_RG27SAV$0_0$0 == 0xfffc
+                           00FFFC   756 _g_RG27SAV	=	0xfffc
+                           00FFFD   757 G$g_SVFFFD$0_0$0 == 0xfffd
+                           00FFFD   758 _g_SVFFFD	=	0xfffd
+                           000053   759 	G$Sys_SetPageSlot$0$0	= .
+                                    760 	.globl	G$Sys_SetPageSlot$0$0
+                           000053   761 	C$system.c$33$1_0$45	= .
+                                    762 	.globl	C$system.c$33$1_0$45
+                                    763 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:33: void Sys_SetPageSlot(u8 page, u8 slotId)
+                                    764 ;	---------------------------------
+                                    765 ; Function Sys_SetPageSlot
+                                    766 ; ---------------------------------
+      000053                        767 _Sys_SetPageSlot::
+                           000053   768 	C$system.c$36$1_0$45	= .
+                                    769 	.globl	C$system.c$36$1_0$45
+                                    770 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:36: slotId;
+                           000053   771 	C$system.c$60$1_0$45	= .
+                                    772 	.globl	C$system.c$60$1_0$45
+                                    773 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:60: }
+                           000053   774 	C$system.c$60$1_0$45	= .
+                                    775 	.globl	C$system.c$60$1_0$45
+                           000053   776 	XG$Sys_SetPageSlot$0$0	= .
+                                    777 	.globl	XG$Sys_SetPageSlot$0$0
+      000053 C9               [10]  778 	ret
+                           000054   779 	G$Sys_SetPage0Slot$0$0	= .
+                                    780 	.globl	G$Sys_SetPage0Slot$0$0
+                           000054   781 	C$system.c$64$1_0$47	= .
+                                    782 	.globl	C$system.c$64$1_0$47
+                                    783 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:64: void Sys_SetPage0Slot(u8 slotId)
+                                    784 ;	---------------------------------
+                                    785 ; Function Sys_SetPage0Slot
+                                    786 ; ---------------------------------
+      000054                        787 _Sys_SetPage0Slot::
+                           000054   788 	C$system.c$134$1_0$47	= .
+                                    789 	.globl	C$system.c$134$1_0$47
+                                    790 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:134: __endasm;
+      000054 4F               [ 4]  791 	ld	c, a
+      000055 E6 80            [ 7]  792 	and	#0b10000000
+      000057 CAr8Br00         [10]  793 	jp	z, SetNonExpendedSlot
+      00005A                        794 	 SetExpendedSlot:
+      00005A 79               [ 4]  795 	ld	a, c
+      00005B E6 03            [ 7]  796 	and	#0b00000011
+      00005D 57               [ 4]  797 	ld	d, a
+      00005E 0F               [ 4]  798 	rrca	
+      00005F 0F               [ 4]  799 	rrca 
+      000060 E6 C0            [ 7]  800 	and a, #0xC0
+      000062 B2               [ 4]  801 	or	d
+      000063 57               [ 4]  802 	ld	d, a
+      000064 DB A8            [11]  803 	in	a, (0xA8)
+      000066 47               [ 4]  804 	ld	b, a
+      000067 E6 3C            [ 7]  805 	and	#0b00111100
+      000069 B2               [ 4]  806 	or	d
+      00006A F3               [ 4]  807 	di
+      00006B D3 A8            [11]  808 	out	(0xA8), a
+      00006D 79               [ 4]  809 	ld	a, c
+      00006E 0F               [ 4]  810 	rrca	
+      00006F 0F               [ 4]  811 	rrca 
+      000070 E6 3F            [ 7]  812 	and a, #0x3F
+      000072 E6 03            [ 7]  813 	and	#0b00000011
+      000074 57               [ 4]  814 	ld	d, a
+      000075 3A FF FF         [13]  815 	ld	a,(0xFFFF)
+      000078 2F               [ 4]  816 	cpl
+      000079 E6 FC            [ 7]  817 	and	#0b11111100
+      00007B B2               [ 4]  818 	or	d
+      00007C 32 FF FF         [13]  819 	ld	(0xFFFF), a
+      00007F 78               [ 4]  820 	ld	a, b
+      000080 E6 C0            [ 7]  821 	and	#0b11000000
+      000082 47               [ 4]  822 	ld	b, a
+      000083 DB A8            [11]  823 	in	a, (0xA8)
+      000085 E6 3F            [ 7]  824 	and	#0b00111111
+      000087 B0               [ 4]  825 	or	b
+      000088 D3 A8            [11]  826 	out	(0xA8), a
+      00008A C9               [10]  827 	ret
+      00008B                        828 	 SetNonExpendedSlot:
+      00008B 79               [ 4]  829 	ld	a, c
+      00008C E6 03            [ 7]  830 	and	#0b00000011
+      00008E 57               [ 4]  831 	ld	d, a
+      00008F DB A8            [11]  832 	in	a, (0xA8)
+      000091 47               [ 4]  833 	ld	b, a
+      000092 E6 FC            [ 7]  834 	and	#0b11111100
+      000094 B2               [ 4]  835 	or	d
+      000095 F3               [ 4]  836 	di
+      000096 D3 A8            [11]  837 	out	(0xA8), a
+      000098 C9               [10]  838 	ret
+                           000099   839 	C$system.c$136$1_0$47	= .
+                                    840 	.globl	C$system.c$136$1_0$47
+                                    841 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:136: }
+                           000099   842 	C$system.c$136$1_0$47	= .
+                                    843 	.globl	C$system.c$136$1_0$47
+                           000099   844 	XG$Sys_SetPage0Slot$0$0	= .
+                                    845 	.globl	XG$Sys_SetPage0Slot$0$0
+      000099 C9               [10]  846 	ret
+                           00009A   847 	G$Sys_CheckSlot$0$0	= .
+                                    848 	.globl	G$Sys_CheckSlot$0$0
+                           00009A   849 	C$system.c$140$1_0$49	= .
+                                    850 	.globl	C$system.c$140$1_0$49
+                                    851 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:140: u8 Sys_CheckSlot(CheckSlotCallback cb)
+                                    852 ;	---------------------------------
+                                    853 ; Function Sys_CheckSlot
+                                    854 ; ---------------------------------
+      00009A                        855 _Sys_CheckSlot::
+      00009A DD E5            [15]  856 	push	ix
+      00009C DD 21 00 00      [14]  857 	ld	ix,#0
+      0000A0 DD 39            [15]  858 	add	ix,sp
+      0000A2 3B               [ 6]  859 	dec	sp
+                           0000A3   860 	C$system.c$142$3_0$50	= .
+                                    861 	.globl	C$system.c$142$3_0$50
+                                    862 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:142: for(u8 slot = 0; slot < 4; ++slot)
+      0000A3 01 00 00         [10]  863 	ld	bc, #0x0
+      0000A6                        864 00114$:
+      0000A6 78               [ 4]  865 	ld	a, b
+      0000A7 D6 04            [ 7]  866 	sub	a, #0x04
+      0000A9 30 4D            [12]  867 	jr	NC, 00109$
+                           0000AB   868 	C$system.c$144$3_0$51	= .
+                                    869 	.globl	C$system.c$144$3_0$51
+                                    870 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:144: if(g_EXPTBL[slot] & SLOT_EXP)
+      0000AB 11 C1 FC         [10]  871 	ld	de, #_g_EXPTBL+0
+      0000AE 7B               [ 4]  872 	ld	a, e
+      0000AF 80               [ 4]  873 	add	a, b
+      0000B0 5F               [ 4]  874 	ld	e, a
+      0000B1 30 01            [12]  875 	jr	NC, 00153$
+      0000B3 14               [ 4]  876 	inc	d
+      0000B4                        877 00153$:
+      0000B4 1A               [ 7]  878 	ld	a, (de)
+      0000B5 07               [ 4]  879 	rlca
+      0000B6 30 2C            [12]  880 	jr	NC, 00107$
+                           0000B8   881 	C$system.c$146$6_0$54	= .
+                                    882 	.globl	C$system.c$146$6_0$54
+                                    883 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:146: for(u8 sub = 0; sub < 4; ++sub)
+      0000B8 78               [ 4]  884 	ld	a, b
+      0000B9 E6 03            [ 7]  885 	and	a, #0x03
+      0000BB DD 77 FF         [19]  886 	ld	-1 (ix), a
+      0000BE 0E 00            [ 7]  887 	ld	c, #0x00
+      0000C0                        888 00111$:
+                           0000C0   889 	C$system.c$148$6_0$54	= .
+                                    890 	.globl	C$system.c$148$6_0$54
+                                    891 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:148: u8 slotId = SLOTEX(slot, sub);
+      0000C0 79               [ 4]  892 	ld	a,c
+      0000C1 FE 04            [ 7]  893 	cp	a,#0x04
+      0000C3 30 2E            [12]  894 	jr	NC, 00115$
+      0000C5 E6 03            [ 7]  895 	and	a, #0x03
+      0000C7 87               [ 4]  896 	add	a, a
+      0000C8 87               [ 4]  897 	add	a, a
+      0000C9 DD B6 FF         [19]  898 	or	a, -1 (ix)
+      0000CC 5F               [ 4]  899 	ld	e, a
+      0000CD CB FB            [ 8]  900 	set	7, e
+                           0000CF   901 	C$system.c$149$6_0$54	= .
+                                    902 	.globl	C$system.c$149$6_0$54
+                                    903 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:149: if(cb(slotId))
+      0000CF E5               [11]  904 	push	hl
+      0000D0 C5               [11]  905 	push	bc
+      0000D1 D5               [11]  906 	push	de
+      0000D2 7B               [ 4]  907 	ld	a, e
+      0000D3 CDr00r00         [17]  908 	call	___sdcc_call_hl
+      0000D6 D1               [10]  909 	pop	de
+      0000D7 C1               [10]  910 	pop	bc
+      0000D8 E1               [10]  911 	pop	hl
+      0000D9 B7               [ 4]  912 	or	a, a
+      0000DA 28 04            [12]  913 	jr	Z, 00112$
+                           0000DC   914 	C$system.c$150$6_0$54	= .
+                                    915 	.globl	C$system.c$150$6_0$54
+                                    916 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:150: return slotId;
+      0000DC 7B               [ 4]  917 	ld	a, e
+      0000DD C3rFAr00         [10]  918 	jp	00116$
+      0000E0                        919 00112$:
+                           0000E0   920 	C$system.c$146$5_0$53	= .
+                                    921 	.globl	C$system.c$146$5_0$53
+                                    922 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:146: for(u8 sub = 0; sub < 4; ++sub)
+      0000E0 0C               [ 4]  923 	inc	c
+      0000E1 C3rC0r00         [10]  924 	jp	00111$
+      0000E4                        925 00107$:
+                           0000E4   926 	C$system.c$153$3_0$51	= .
+                                    927 	.globl	C$system.c$153$3_0$51
+                                    928 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:153: else if(cb(slot))
+      0000E4 E5               [11]  929 	push	hl
+      0000E5 C5               [11]  930 	push	bc
+      0000E6 78               [ 4]  931 	ld	a, b
+      0000E7 CDr00r00         [17]  932 	call	___sdcc_call_hl
+      0000EA C1               [10]  933 	pop	bc
+      0000EB E1               [10]  934 	pop	hl
+      0000EC B7               [ 4]  935 	or	a, a
+      0000ED 28 04            [12]  936 	jr	Z, 00115$
+                           0000EF   937 	C$system.c$154$3_0$51	= .
+                                    938 	.globl	C$system.c$154$3_0$51
+                                    939 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:154: return slot;
+      0000EF 79               [ 4]  940 	ld	a, c
+      0000F0 C3rFAr00         [10]  941 	jp	00116$
+      0000F3                        942 00115$:
+                           0000F3   943 	C$system.c$142$2_0$50	= .
+                                    944 	.globl	C$system.c$142$2_0$50
+                                    945 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:142: for(u8 slot = 0; slot < 4; ++slot)
+      0000F3 04               [ 4]  946 	inc	b
+      0000F4 48               [ 4]  947 	ld	c, b
+      0000F5 C3rA6r00         [10]  948 	jp	00114$
+      0000F8                        949 00109$:
+                           0000F8   950 	C$system.c$156$1_0$49	= .
+                                    951 	.globl	C$system.c$156$1_0$49
+                                    952 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:156: return SLOT_NOTFOUND;
+      0000F8 3E FF            [ 7]  953 	ld	a, #0xff
+      0000FA                        954 00116$:
+                           0000FA   955 	C$system.c$157$1_0$49	= .
+                                    956 	.globl	C$system.c$157$1_0$49
+                                    957 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/system.c:157: }
+      0000FA 33               [ 6]  958 	inc	sp
+      0000FB DD E1            [14]  959 	pop	ix
+                           0000FD   960 	C$system.c$157$1_0$49	= .
+                                    961 	.globl	C$system.c$157$1_0$49
+                           0000FD   962 	XG$Sys_CheckSlot$0$0	= .
+                                    963 	.globl	XG$Sys_CheckSlot$0$0
+      0000FD C9               [10]  964 	ret
+                                    965 	.area _CODE
+                                    966 	.area _INITIALIZER
+                                    967 	.area _CABS (ABS)

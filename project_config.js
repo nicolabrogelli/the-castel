@@ -9,19 +9,19 @@
 //*******************************************************************************
 // BUILD STEPS
 //*******************************************************************************
-
+/*
  DoClean   = false;	//-- Clear all intermediate files and exit (boolean)
  DoCompile = true;	//-- Compile all the project and engine source code (boolean). Generate all REL files
  DoMake    = true;	//-- Link all the project and engine source code (boolean). Merge all REL into one IHX file
  DoPackage = true;	//-- Generate final binary file (boolean). Binarize the IHX file
  DoDeploy  = true;	//-- Gathering of all files necessary for the program to work (boolean). Depends on the type of target
  DoRun     = true;	//-- Start the program automatically at the end of the build (boolean)
-
+*/
 //*****************************************************************************
 // TOOLS SETTINGS
 //*****************************************************************************
 
-Emulator = 'C:/Users/87003101/msxgl-workspace/openmsx-19.1/openmsx.exe'; //'C:/Users/87003010/msxgl-workspace/openmsx-19.1/openmsx.exe';
+
 
 //Emulator = `${ToolsDir}openMSX/openmsx`;
 // Emulator = `${ToolsDir}Emulicious/Emulicious`;
@@ -134,7 +134,7 @@ AppID = "TC";
 BuildLibrary = true;
 
 //-- Prepare program for debug (boolean)
-Debug = false;
+Debug = true;
 
 //-- Move debug symbols to deployement folder (boolean)
 DebugSymbols = true;

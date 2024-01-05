@@ -43,6 +43,7 @@
 ;--------------------------------------------------------
 	.area _PAGE0
 	.area _PAGE0
+G$g_DataSprtLayer$0_0$0 == .
 _g_DataSprtLayer:
 	.db #0x5a	; 90	'Z'
 	.db #0x00	; 0
@@ -355,6 +356,7 @@ _g_DataSprtLayer:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0x80	; 128
+G$g_DataBackground_Patterns$0_0$0 == .
 _g_DataBackground_Patterns:
 	.db #0x5f	; 95
 	.db #0x00	; 0
@@ -918,6 +920,7 @@ _g_DataBackground_Patterns:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xfe	; 254
+G$g_DataBackground_Colors$0_0$0 == .
 _g_DataBackground_Colors:
 	.db #0xf1	; 241
 	.db #0xf1	; 241

@@ -51,6 +51,7 @@
 ; ram data
 ;--------------------------------------------------------
 	.area _INITIALIZED
+G$g_Levels$0_0$0==.
 _g_Levels::
 	.ds 1218
 ;--------------------------------------------------------
@@ -73,6 +74,10 @@ _g_Levels::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
+	G$restoreLevel$0$0	= .
+	.globl	G$restoreLevel$0$0
+	C$level_defs.c$86$0_0$3	= .
+	.globl	C$level_defs.c$86$0_0$3
 ;./level_defs.c:86: void restoreLevel()
 ;	---------------------------------
 ; Function restoreLevel
@@ -82,12 +87,16 @@ _restoreLevel::
 	ld	ix,#0
 	add	ix,sp
 	push	af
+	C$level_defs.c$88$5_0$6	= .
+	.globl	C$level_defs.c$88$5_0$6
 ;./level_defs.c:88: for (u8 level = 0; level < (int)(sizeof(g_Levels) / sizeof(g_Levels[0])) - 1; level++)
 	ld	c, #0x00
 00107$:
 	ld	a, c
 	sub	a, #0x14
 	jr	NC, 00109$
+	C$level_defs.c$90$5_0$6	= .
+	.globl	C$level_defs.c$90$5_0$6
 ;./level_defs.c:90: for (u8 element = 0; element < 10; element++)
 	ld	b, #0x00
 	ld	l, c
@@ -109,6 +118,8 @@ _restoreLevel::
 	ex	(sp), hl
 	ld	b, #0x00
 00104$:
+	C$level_defs.c$92$5_0$6	= .
+	.globl	C$level_defs.c$92$5_0$6
 ;./level_defs.c:92: g_Levels[level].MyItems[element].x = 0;
 	ld	a,b
 	cp	a,#0x0a
@@ -122,6 +133,8 @@ _restoreLevel::
 	ld	d, a
 	xor	a, a
 	ld	(de), a
+	C$level_defs.c$93$5_0$6	= .
+	.globl	C$level_defs.c$93$5_0$6
 ;./level_defs.c:93: g_Levels[level].MyItems[element].y = 0;
 	ld	l, e
 ;	spillPairReg hl
@@ -131,6 +144,8 @@ _restoreLevel::
 ;	spillPairReg hl
 	inc	hl
 	ld	(hl), #0x00
+	C$level_defs.c$94$5_0$6	= .
+	.globl	C$level_defs.c$94$5_0$6
 ;./level_defs.c:94: g_Levels[level].MyItems[element].tile = 0;
 	ld	l, e
 ;	spillPairReg hl
@@ -142,23 +157,36 @@ _restoreLevel::
 	inc	hl
 	inc	hl
 	ld	(hl), #0x00
+	C$level_defs.c$95$5_0$6	= .
+	.globl	C$level_defs.c$95$5_0$6
 ;./level_defs.c:95: g_Levels[level].MyItems[element].visible = 0;
 	inc	de
 	inc	de
 	xor	a, a
 	ld	(de), a
+	C$level_defs.c$90$4_0$5	= .
+	.globl	C$level_defs.c$90$4_0$5
 ;./level_defs.c:90: for (u8 element = 0; element < 10; element++)
 	inc	b
 	jp	00104$
 00108$:
+	C$level_defs.c$88$2_0$3	= .
+	.globl	C$level_defs.c$88$2_0$3
 ;./level_defs.c:88: for (u8 level = 0; level < (int)(sizeof(g_Levels) / sizeof(g_Levels[0])) - 1; level++)
 	inc	c
 	jp	00107$
 00109$:
+	C$level_defs.c$98$2_0$3	= .
+	.globl	C$level_defs.c$98$2_0$3
 ;./level_defs.c:98: }
 	ld	sp, ix
 	pop	ix
+	C$level_defs.c$98$2_0$3	= .
+	.globl	C$level_defs.c$98$2_0$3
+	XG$restoreLevel$0$0	= .
+	.globl	XG$restoreLevel$0$0
 	ret
+G$g_Level001$0_0$0 == .
 _g_Level001:
 	.db #0x2f	; 47
 	.db #0x64	; 100	'd'
@@ -361,6 +389,7 @@ _g_Level001:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xf8	; 248
+G$g_Level002$0_0$0 == .
 _g_Level002:
 	.db #0x2f	; 47
 	.db #0x64	; 100	'd'
@@ -590,6 +619,7 @@ _g_Level002:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0x80	; 128
+G$g_Level003$0_0$0 == .
 _g_Level003:
 	.db #0x2f	; 47
 	.db #0x64	; 100	'd'
@@ -810,6 +840,7 @@ _g_Level003:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xf0	; 240
+G$g_Level004$0_0$0 == .
 _g_Level004:
 	.db #0x2f	; 47
 	.db #0x64	; 100	'd'
@@ -1029,6 +1060,7 @@ _g_Level004:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xfc	; 252
+G$g_Level005$0_0$0 == .
 _g_Level005:
 	.db #0x2f	; 47
 	.db #0x64	; 100	'd'
@@ -1204,6 +1236,7 @@ _g_Level005:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xe0	; 224
+G$g_Level006$0_0$0 == .
 _g_Level006:
 	.db #0x2f	; 47
 	.db #0x64	; 100	'd'
@@ -1364,6 +1397,7 @@ _g_Level006:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xf0	; 240
+G$g_Level007$0_0$0 == .
 _g_Level007:
 	.db #0x2f	; 47
 	.db #0x64	; 100	'd'
@@ -1535,6 +1569,7 @@ _g_Level007:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xf8	; 248
+G$g_Level008$0_0$0 == .
 _g_Level008:
 	.db #0x2f	; 47
 	.db #0x64	; 100	'd'
@@ -1714,6 +1749,7 @@ _g_Level008:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xfe	; 254
+G$g_Level009$0_0$0 == .
 _g_Level009:
 	.db #0x2f	; 47
 	.db #0x64	; 100	'd'
@@ -1890,6 +1926,7 @@ _g_Level009:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xf0	; 240
+G$g_Level010$0_0$0 == .
 _g_Level010:
 	.db #0x2f	; 47
 	.db #0x64	; 100	'd'
@@ -2068,6 +2105,7 @@ _g_Level010:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xe0	; 224
+G$g_Level011$0_0$0 == .
 _g_Level011:
 	.db #0x2f	; 47
 	.db #0x64	; 100	'd'
@@ -2240,6 +2278,7 @@ _g_Level011:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xe0	; 224
+G$g_Level012$0_0$0 == .
 _g_Level012:
 	.db #0x2f	; 47
 	.db #0x64	; 100	'd'
@@ -2421,6 +2460,7 @@ _g_Level012:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0x80	; 128
+G$g_Level013$0_0$0 == .
 _g_Level013:
 	.db #0x2f	; 47
 	.db #0x64	; 100	'd'
@@ -2607,6 +2647,7 @@ _g_Level013:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xf8	; 248
+G$g_Level014$0_0$0 == .
 _g_Level014:
 	.db #0x2f	; 47
 	.db #0x64	; 100	'd'
@@ -2838,6 +2879,7 @@ _g_Level014:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xf0	; 240
+G$g_Level015$0_0$0 == .
 _g_Level015:
 	.db #0x2f	; 47
 	.db #0x64	; 100	'd'
@@ -3068,6 +3110,7 @@ _g_Level015:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xfc	; 252
+G$g_Level016$0_0$0 == .
 _g_Level016:
 	.db #0x2f	; 47
 	.db #0x91	; 145
@@ -3292,6 +3335,7 @@ _g_Level016:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xfc	; 252
+G$g_Level017$0_0$0 == .
 _g_Level017:
 	.db #0x2f	; 47
 	.db #0x91	; 145
@@ -3340,6 +3384,7 @@ _g_Level017:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xfe	; 254
+G$g_Level018$0_0$0 == .
 _g_Level018:
 	.db #0x2f	; 47
 	.db #0x91	; 145
@@ -3388,6 +3433,7 @@ _g_Level018:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xfe	; 254
+G$g_Level019$0_0$0 == .
 _g_Level019:
 	.db #0x2f	; 47
 	.db #0x91	; 145
@@ -3436,6 +3482,7 @@ _g_Level019:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xfe	; 254
+G$g_Level020$0_0$0 == .
 _g_Level020:
 	.db #0x2f	; 47
 	.db #0x91	; 145
@@ -3484,6 +3531,7 @@ _g_Level020:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xfe	; 254
+G$g_Level021$0_0$0 == .
 _g_Level021:
 	.db #0x2f	; 47
 	.db #0x91	; 145
@@ -3532,6 +3580,7 @@ _g_Level021:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xfe	; 254
+G$g_Level022$0_0$0 == .
 _g_Level022:
 	.db #0x2f	; 47
 	.db #0x91	; 145
@@ -3580,6 +3629,7 @@ _g_Level022:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xfe	; 254
+G$g_Level023$0_0$0 == .
 _g_Level023:
 	.db #0x2f	; 47
 	.db #0x91	; 145
@@ -3628,6 +3678,7 @@ _g_Level023:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xfe	; 254
+G$g_Level024$0_0$0 == .
 _g_Level024:
 	.db #0x2f	; 47
 	.db #0x91	; 145
@@ -3676,6 +3727,7 @@ _g_Level024:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xfe	; 254
+G$g_Level025$0_0$0 == .
 _g_Level025:
 	.db #0x2f	; 47
 	.db #0x91	; 145
@@ -3839,6 +3891,7 @@ _g_Level025:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0x80	; 128
+G$g_Level026$0_0$0 == .
 _g_Level026:
 	.db #0x2f	; 47
 	.db #0x91	; 145
@@ -4025,6 +4078,7 @@ _g_Level026:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xff	; 255
+G$g_Level027$0_0$0 == .
 _g_Level027:
 	.db #0x2f	; 47
 	.db #0x91	; 145
@@ -4175,6 +4229,7 @@ _g_Level027:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xf0	; 240
+G$g_Level028$0_0$0 == .
 _g_Level028:
 	.db #0x2f	; 47
 	.db #0x91	; 145
@@ -4223,6 +4278,7 @@ _g_Level028:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xfe	; 254
+G$g_Level029$0_0$0 == .
 _g_Level029:
 	.db #0x5f	; 95
 	.db #0x00	; 0
@@ -4324,6 +4380,7 @@ _g_Level029:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.db #0xf8	; 248
+G$g_Level030$0_0$0 == .
 _g_Level030:
 	.db #0x5f	; 95
 	.db #0x00	; 0
@@ -4459,64 +4516,84 @@ _g_Level030:
 	.db #0xff	; 255
 	.db #0xff	; 255
 	.area _CODE
+Flevel_defs$__str_0$0_0$0 == .
 ___str_0:
 	.ascii "STRAT GAME"
 	.db 0x00
+Flevel_defs$__str_1$0_0$0 == .
 ___str_1:
 	.ascii "Level: 01"
 	.db 0x00
+Flevel_defs$__str_2$0_0$0 == .
 ___str_2:
 	.ascii "Level: 02"
 	.db 0x00
+Flevel_defs$__str_3$0_0$0 == .
 ___str_3:
 	.ascii "Level: 03"
 	.db 0x00
+Flevel_defs$__str_4$0_0$0 == .
 ___str_4:
 	.ascii "Level: 04"
 	.db 0x00
+Flevel_defs$__str_5$0_0$0 == .
 ___str_5:
 	.ascii "Level: 06"
 	.db 0x00
+Flevel_defs$__str_6$0_0$0 == .
 ___str_6:
 	.ascii "Level: 07"
 	.db 0x00
+Flevel_defs$__str_7$0_0$0 == .
 ___str_7:
 	.ascii "Level: 05"
 	.db 0x00
+Flevel_defs$__str_8$0_0$0 == .
 ___str_8:
 	.ascii "Level: 08"
 	.db 0x00
+Flevel_defs$__str_9$0_0$0 == .
 ___str_9:
 	.ascii "Level: 09"
 	.db 0x00
+Flevel_defs$__str_10$0_0$0 == .
 ___str_10:
 	.ascii "Level: 10"
 	.db 0x00
+Flevel_defs$__str_11$0_0$0 == .
 ___str_11:
 	.ascii "Level: 11"
 	.db 0x00
+Flevel_defs$__str_12$0_0$0 == .
 ___str_12:
 	.ascii "Level: 12"
 	.db 0x00
+Flevel_defs$__str_13$0_0$0 == .
 ___str_13:
 	.ascii "Level: 13"
 	.db 0x00
+Flevel_defs$__str_14$0_0$0 == .
 ___str_14:
 	.ascii "Level: 14"
 	.db 0x00
+Flevel_defs$__str_15$0_0$0 == .
 ___str_15:
 	.ascii "Level: 15"
 	.db 0x00
+Flevel_defs$__str_16$0_0$0 == .
 ___str_16:
 	.ascii "level: 16"
 	.db 0x00
+Flevel_defs$__str_17$0_0$0 == .
 ___str_17:
 	.ascii "Level: 00"
 	.db 0x00
+Flevel_defs$__str_18$0_0$0 == .
 ___str_18:
 	.ascii "GAME OVER"
 	.db 0x00
 	.area _INITIALIZER
+Flevel_defs$__xinit_g_Levels$0_0$0 == .
 __xinit__g_Levels:
 	.db #0x00	; 0
 	.db #0x00	; 0

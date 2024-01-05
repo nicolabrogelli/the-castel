@@ -1,5 +1,5 @@
 XL3
-H A areas 4 global symbols
+H A areas 7 global symbols
 M the_castel_p0
 O -mz80
 S .__.ABS. Def000000
@@ -12,8 +12,11 @@ A _GSINIT size 0 flags 0 addr 0
 A _GSFINAL size 0 flags 0 addr 0
 A _PAGE0 size 389 flags 0 addr 0
 S _g_DataSprtLayer Def000000
+S G$g_DataSprtLayer$0_0$0 Def000000
 S _g_DataBackground_Patterns Def000137
+S G$g_DataBackground_Patterns$0_0$0 Def000137
 S _g_DataBackground_Colors Def000369
+S G$g_DataBackground_Colors$0_0$0 Def000369
 A _INITIALIZER size 0 flags 0 addr 0
 A _CABS size 0 flags 8 addr 0
 T 00 00 00

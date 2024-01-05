@@ -1,5 +1,6 @@
 -mjwx
 -i C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/the-castel.ihx
+-y
 -b _CODE = 0x4000
 -b _DATA = 0xc000
 -b_PAGE0=0x0100

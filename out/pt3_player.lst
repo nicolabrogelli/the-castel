@@ -53,318 +53,451 @@
                                      53 ;--------------------------------------------------------
                                      54 ; special function registers
                                      55 ;--------------------------------------------------------
-                           0000A8    56 _g_PortPrimarySlot	=	0x00a8
-                           0000A9    57 _g_PortReadKeyboard	=	0x00a9
-                           0000AA    58 _g_PortAccessKeyboard	=	0x00aa
-                           0000AB    59 _g_PortControl	=	0x00ab
-                           000098    60 _g_VDP_DataPort	=	0x0098
-                           000099    61 _g_VDP_RegPort	=	0x0099
-                           000099    62 _g_VDP_AddrPort	=	0x0099
-                           000099    63 _g_VDP_StatPort	=	0x0099
-                           0000A0    64 _g_PSG_RegPort	=	0x00a0
-                           0000A1    65 _g_PSG_DataPort	=	0x00a1
-                           0000A2    66 _g_PSG_StatPort	=	0x00a2
-                           000010    67 _g_PSG_Ext_RegPort	=	0x0010
-                           000011    68 _g_PSG_Ext_DataPort	=	0x0011
-                           000012    69 _g_PSG_Ext_StatPort	=	0x0012
-                           00007C    70 _g_MSXMusic_IndexPort	=	0x007c
-                           00007D    71 _g_MSXMusic_DataPort	=	0x007d
-                           0000C0    72 _g_MSXAudio_IndexPort	=	0x00c0
-                           0000C1    73 _g_MSXAudio_DataPort	=	0x00c1
-                           0000C2    74 _g_MSXAudio_IndexPort2	=	0x00c2
-                           0000C3    75 _g_MSXAudio_DataPort2	=	0x00c3
-                           0000B4    76 _g_RTC_AddrPort	=	0x00b4
-                           0000B5    77 _g_RTC_DataPort	=	0x00b5
-                                     78 ;--------------------------------------------------------
-                                     79 ; ram data
-                                     80 ;--------------------------------------------------------
-                                     81 	.area _DATA
-      000000                         82 _ChanA::
-      000000                         83 	.ds 29
-      00001D                         84 _ChanB::
-      00001D                         85 	.ds 29
-      00003A                         86 _ChanC::
-      00003A                         87 	.ds 29
-      000057                         88 _DelyCnt::
-      000057                         89 	.ds 1
-      000058                         90 _CurESld::
-      000058                         91 	.ds 2
-      00005A                         92 _CurEDel::
-      00005A                         93 	.ds 1
-      00005B                         94 _Ns_Base::
-      00005B                         95 	.ds 1
-      00005C                         96 _AddToNs::
-      00005C                         97 	.ds 1
-      00005D                         98 _PT3_Regs::
-      00005D                         99 	.ds 14
-      00006B                        100 _EnvBase::
-      00006B                        101 	.ds 2
-      00006D                        102 _VAR0END::
-      00006D                        103 	.ds 240
-      00015D                        104 _PT3_State::
-      00015D                        105 	.ds 1
-      00015E                        106 _PT3_ModAddr::
-      00015E                        107 	.ds 2
-      000160                        108 _PT3_CrPsPtr::
-      000160                        109 	.ds 2
-      000162                        110 _PT3_SamPtrs::
-      000162                        111 	.ds 2
-      000164                        112 _PT3_OrnPtrs::
-      000164                        113 	.ds 2
-      000166                        114 _PT3_PDSP::
-      000166                        115 	.ds 2
-      000168                        116 _PT3_CSP::
-      000168                        117 	.ds 2
-      00016A                        118 _PT3_PSP::
-      00016A                        119 	.ds 2
-      00016C                        120 _PT3_PrNote::
-      00016C                        121 	.ds 1
-      00016D                        122 _PT3_PrSlide::
-      00016D                        123 	.ds 2
-      00016F                        124 _PT3_AdInPtA::
-      00016F                        125 	.ds 2
-      000171                        126 _PT3_AdInPtB::
-      000171                        127 	.ds 2
-      000173                        128 _PT3_AdInPtC::
-      000173                        129 	.ds 2
-      000175                        130 _PT3_LPosPtr::
-      000175                        131 	.ds 2
-      000177                        132 _PT3_PatsPtr::
-      000177                        133 	.ds 2
-      000179                        134 _PT3_Delay::
-      000179                        135 	.ds 1
-      00017A                        136 _PT3_AddToEn::
-      00017A                        137 	.ds 1
-      00017B                        138 _PT3_Env_Del::
-      00017B                        139 	.ds 1
-      00017C                        140 _PT3_ESldAdd::
-      00017C                        141 	.ds 2
-      00017E                        142 _PT3_NoteTable::
-      00017E                        143 	.ds 2
-      000180                        144 _PT3_SrtCrPsPtr::
-      000180                        145 	.ds 2
-                                    146 ;--------------------------------------------------------
-                                    147 ; ram data
-                                    148 ;--------------------------------------------------------
-                                    149 	.area _INITIALIZED
-      000000                        150 _PT3_Finish::
-      000000                        151 	.ds 2
-                                    152 ;--------------------------------------------------------
-                                    153 ; absolute external ram data
-                                    154 ;--------------------------------------------------------
-                                    155 	.area _DABS (ABS)
-                                    156 ;--------------------------------------------------------
-                                    157 ; global & static initialisations
-                                    158 ;--------------------------------------------------------
-                                    159 	.area _HOME
-                                    160 	.area _GSINIT
-                                    161 	.area _GSFINAL
-                                    162 	.area _GSINIT
-                                    163 ;--------------------------------------------------------
-                                    164 ; Home
-                                    165 ;--------------------------------------------------------
-                                    166 	.area _HOME
-                                    167 	.area _HOME
-                                    168 ;--------------------------------------------------------
-                                    169 ; code
-                                    170 ;--------------------------------------------------------
-                                    171 	.area _CODE
-                                    172 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:117: void EmptyCB() {}
-                                    173 ;	---------------------------------
-                                    174 ; Function EmptyCB
-                                    175 ; ---------------------------------
-      000000                        176 _EmptyCB::
-      000000 C9               [10]  177 	ret
-                                    178 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:134: void PT3_Init()
-                                    179 ;	---------------------------------
-                                    180 ; Function PT3_Init
-                                    181 ; ---------------------------------
-      000001                        182 _PT3_Init::
-                                    183 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:178: __endasm;
-      000001 21 11 00         [10]  184 	ld	HL, #0x11
-      000004 54               [ 4]  185 	ld	D, H
-      000005 5C               [ 4]  186 	ld	E, H
-      000006 FD 21r6Dr00      [14]  187 	ld	IY, #_VAR0END ;_VT_ + 16
-      00000A 06 0F            [ 7]  188 	ld	B, #15
-      00000C                        189 	INITV1:
-      00000C E5               [11]  190 	push	HL
-      00000D 19               [11]  191 	add	HL, DE
-      00000E EB               [ 4]  192 	ex	DE, HL
-      00000F ED 62            [15]  193 	sbc	HL, HL
-      000011 48               [ 4]  194 	ld	C, B
-      000012 06 10            [ 7]  195 	ld	B, #16
-      000014                        196 	INITV2:
-      000014 7D               [ 4]  197 	ld	A, L
-      000015 17               [ 4]  198 	rla
-      000016 7C               [ 4]  199 	ld	A, H
-      000017 CE 00            [ 7]  200 	adc	A, #0
-      000019 FD 77 00         [19]  201 	ld	(IY), A
-      00001C FD 23            [10]  202 	inc	IY
-      00001E 19               [11]  203 	add	HL, DE
-      00001F 10 F3            [13]  204 	djnz	INITV2
-      000021 E1               [10]  205 	pop	HL
-      000022 7B               [ 4]  206 	ld	A, E
-      000023 FE 77            [ 7]  207 	cp	#0x77
-      000025 20 01            [12]  208 	jr	NZ, INITV3
-      000027 1C               [ 4]  209 	inc	E
-      000028                        210 	INITV3:
-      000028 41               [ 4]  211 	ld	B, C
-      000029 10 E1            [13]  212 	djnz	INITV1
-      00002B                        213 	InitClearRegs:
-      00002B AF               [ 4]  214 	xor	A
-      00002C 32r5Dr01         [13]  215 	ld	(#_PT3_State), A
-      00002F 21r5Dr00         [10]  216 	ld	HL, #_PT3_Regs
-      000032 11r5Er00         [10]  217 	ld	DE, #_PT3_Regs + 1
-      000035 01 0D 00         [10]  218 	ld	BC, #13
-      000038 77               [ 7]  219 	ld	(HL), A
-      000039 ED B0            [21]  220 	ldir
-                                    221 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:179: }
-      00003B C9               [10]  222 	ret
-                                    223 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:185: void PT3_InitSong(const void* songAddr)
-                                    224 ;	---------------------------------
-                                    225 ; Function PT3_InitSong
-                                    226 ; ---------------------------------
-      00003C                        227 _PT3_InitSong::
-                                    228 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:268: __endasm;
-      00003C 11 9C FF         [10]  229 	ld	DE, #-100
-      00003F 19               [11]  230 	add	HL, DE
-      000040 22r5Er01         [16]  231 	ld	(#_PT3_ModAddr), HL
-      000043 EB               [ 4]  232 	ex	DE, HL
-      000044 21 64 00         [10]  233 	ld	HL, #100
-      000047 19               [11]  234 	add	HL, DE
-      000048 7E               [ 7]  235 	ld	A, (HL)
-      000049 32r79r01         [13]  236 	ld	(#_PT3_Delay), A
-      00004C 21 69 00         [10]  237 	ld	HL, #105
-      00004F 19               [11]  238 	add	HL, DE
-      000050 22r62r01         [16]  239 	ld	(#_PT3_SamPtrs), HL
-      000053 21 A9 00         [10]  240 	ld	HL, #169
-      000056 19               [11]  241 	add	HL, DE
-      000057 22r64r01         [16]  242 	ld	(#_PT3_OrnPtrs), HL
-      00005A 21 C8 00         [10]  243 	ld	HL, #200
-      00005D 19               [11]  244 	add	HL, DE
-      00005E 22r60r01         [16]  245 	ld	(#_PT3_CrPsPtr), HL
-      000061 22r80r01         [16]  246 	ld	(#_PT3_SrtCrPsPtr), HL
-      000064 FD 2Ar5Er01      [20]  247 	ld	IY, (#_PT3_ModAddr)
-      000068 06 00            [ 7]  248 	ld	B, #0
-      00006A FD 4E 66         [19]  249 	ld	C, 102(IY)
-      00006D 21 C9 00         [10]  250 	ld	HL, #201
-      000070 19               [11]  251 	add	HL, DE
-      000071 09               [11]  252 	add	HL, BC
-      000072 22r75r01         [16]  253 	ld	(#_PT3_LPosPtr), HL
-      000075 FD 46 68         [19]  254 	ld	B, 104(IY)
-      000078 FD 4E 67         [19]  255 	ld	C, 103(IY)
-      00007B EB               [ 4]  256 	ex	DE, HL
-      00007C 09               [11]  257 	add	HL, BC
-      00007D 22r77r01         [16]  258 	ld	(#_PT3_PatsPtr), HL
-      000080 AF               [ 4]  259 	xor	A
-      000081 21r00r00         [10]  260 	ld	HL, #_ChanA ; VARS
-      000084 77               [ 7]  261 	ld	(HL), A
-      000085 11r01r00         [10]  262 	ld	DE, #_ChanA + 1 ; VARS+1
-      000088 01 6C 00         [10]  263 	ld	BC, #_VAR0END - _ChanA -1 ;_PT3_Regs - _ChanA -1
-      00008B ED B0            [21]  264 	ldir
-      00008D 3C               [ 4]  265 	inc	A
-      00008E 32r57r00         [13]  266 	ld	(#_DelyCnt), A
-      000091 21 01 F0         [10]  267 	ld	HL, #0xF001 ; H - 28, L - 27
-      000094 22r1Br00         [16]  268 	ld	(#_ChanA + 27), HL
-      000097 22r38r00         [16]  269 	ld	(#_ChanB + 27), HL
-      00009A 22r55r00         [16]  270 	ld	(#_ChanC + 27), HL
-      00009D 21r93r05         [10]  271 	ld	HL, #EMPTYSAMORN
-      0000A0 22r6Fr01         [16]  272 	ld	(#_PT3_AdInPtA), HL ; ptr to zero ; # chg
-      0000A3 22r0Dr00         [16]  273 	ld	(#_ChanA + 13), HL ;ornament 0 is "0,1,0"
-      0000A6 22r2Ar00         [16]  274 	ld	(#_ChanB + 13), HL ;in all versions from
-      0000A9 22r47r00         [16]  275 	ld	(#_ChanC + 13), HL ;3.xx to 3.6x and VTII
-      0000AC 22r0Fr00         [16]  276 	ld	(#_ChanA + 15), HL ;S1 There is no default
-      0000AF 22r2Cr00         [16]  277 	ld	(#_ChanB + 15), HL ;S2 sample in PT3, so, you
-      0000B2 22r49r00         [16]  278 	ld	(#_ChanC + 15), HL ;S3 can comment S1,2,3; see
-                                    279 ;	also EMPTYSAMORN comment
-      0000B5 C3rC1r00         [10]  280 	jp	_PT3_Resume
-                                    281 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:269: }
-      0000B8 C9               [10]  282 	ret
-                                    283 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:273: void PT3_Pause() __naked
-                                    284 ;	---------------------------------
-                                    285 ; Function PT3_Pause
-                                    286 ; ---------------------------------
-      0000B9                        287 _PT3_Pause::
-                                    288 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:280: __endasm;
-      0000B9 21r5Dr01         [10]  289 	ld	HL, #_PT3_State
-      0000BC CB 86            [15]  290 	res	0, (HL)
-      0000BE C3rD3r00         [10]  291 	jp	_PT3_Silence
-                                    292 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:281: }
-                                    293 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:285: void PT3_Resume()
-                                    294 ;	---------------------------------
-                                    295 ; Function PT3_Resume
-                                    296 ; ---------------------------------
-      0000C1                        297 _PT3_Resume::
-                                    298 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:290: __endasm;
-      0000C1 21r5Dr01         [10]  299 	ld	HL, #_PT3_State
-      0000C4 CB C6            [15]  300 	set	0, (HL)
-                                    301 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:291: }
-      0000C6 C9               [10]  302 	ret
-                                    303 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:296: void PT3_SetLoop(u8 loop)
-                                    304 ;	---------------------------------
-                                    305 ; Function PT3_SetLoop
-                                    306 ; ---------------------------------
-      0000C7                        307 _PT3_SetLoop::
-                                    308 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:310: __endasm;
-      0000C7 21r5Dr01         [10]  309 	ld	HL, #_PT3_State
-      0000CA B7               [ 4]  310 	or	A
-      0000CB 20 03            [12]  311 	jr	NZ, LoopON
-      0000CD CB A6            [15]  312 	res	4, (HL)
-      0000CF C9               [10]  313 	ret
-      0000D0                        314 	LoopON:
-      0000D0 CB E6            [15]  315 	set	4, (HL)
-                                    316 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:311: }
-      0000D2 C9               [10]  317 	ret
-                                    318 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:315: void PT3_Silence() __naked
-                                    319 ;	---------------------------------
-                                    320 ; Function PT3_Silence
-                                    321 ; ---------------------------------
-      0000D3                        322 _PT3_Silence::
-                                    323 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:324: __endasm;
-      0000D3 AF               [ 4]  324 	xor	A
-      0000D4 32r65r00         [13]  325 	ld	(#_PT3_Regs + 8), A
-      0000D7 32r66r00         [13]  326 	ld	(#_PT3_Regs + 9), A
-      0000DA 32r67r00         [13]  327 	ld	(#_PT3_Regs + 10), A
-      0000DD C3rE0r00         [10]  328 	jp	_PT3_UpdatePSG ;ROUT_A0
-                                    329 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:325: }
-                                    330 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:330: void PT3_UpdatePSG()
-                                    331 ;	---------------------------------
-                                    332 ; Function PT3_UpdatePSG
-                                    333 ; ---------------------------------
-      0000E0                        334 _PT3_UpdatePSG::
-                                    335 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:387: __endasm;
-      0000E0 21r5Dr01         [10]  336 	ld	HL, #_PT3_State
-      0000E3 AF               [ 4]  337 	xor	A
-      0000E4                        338 	UpdatePSGMuteA:
-      0000E4 CB 4E            [12]  339 	bit	1, (HL)
-      0000E6 CArECr00         [10]  340 	jp	z, UpdatePSGMuteB
-      0000E9 32r65r00         [13]  341 	ld	(#_PT3_Regs + 8), A
-      0000EC                        342 	UpdatePSGMuteB:
-      0000EC CB 56            [12]  343 	bit	2, (HL)
-      0000EE CArF4r00         [10]  344 	jp	z, UpdatePSGMuteC
-      0000F1 32r66r00         [13]  345 	ld	(#_PT3_Regs + 9), A
-      0000F4                        346 	UpdatePSGMuteC:
-      0000F4 CB 5E            [12]  347 	bit	3, (HL)
-      0000F6 CArFCr00         [10]  348 	jp	z, UpdatePSGMuteEnd
-      0000F9 32r67r00         [13]  349 	ld	(#_PT3_Regs + 10), A
-      0000FC                        350 	UpdatePSGMuteEnd:
-      0000FC 3Ar64r00         [13]  351 	ld	A, (#_PT3_Regs + 7)
-      0000FF E6 3F            [ 7]  352 	and	#0b00111111
-      000101 47               [ 4]  353 	ld	B, A
-      000102 3E 07            [ 7]  354 	ld	A, #7
-      000104 D3 A0            [11]  355 	out	(#0xA0), A
-      000106 DB A2            [11]  356 	in	A, (#0xA2)
-      000108 E6 C0            [ 7]  357 	and	#0b11000000
-      00010A B0               [ 4]  358 	or	B
-      00010B 32r64r00         [13]  359 	ld	(#_PT3_Regs + 7), A
-      00010E 21r5Dr00         [10]  360 	ld	HL, #_PT3_Regs
-      000111 0E A1            [ 7]  361 	ld	C, #0xA1
-      000113 AF               [ 4]  362 	xor	A
-                                    363 	.rept	13
-                                    364 	out	(0xA0), A
-                                    365 	outi
-                                    366 	inc	A
-                                    367 	.endm
+                           0000A8    56 G$g_PortPrimarySlot$0_0$0 == 0x00a8
+                           0000A8    57 _g_PortPrimarySlot	=	0x00a8
+                           0000A9    58 G$g_PortReadKeyboard$0_0$0 == 0x00a9
+                           0000A9    59 _g_PortReadKeyboard	=	0x00a9
+                           0000AA    60 G$g_PortAccessKeyboard$0_0$0 == 0x00aa
+                           0000AA    61 _g_PortAccessKeyboard	=	0x00aa
+                           0000AB    62 G$g_PortControl$0_0$0 == 0x00ab
+                           0000AB    63 _g_PortControl	=	0x00ab
+                           000098    64 G$g_VDP_DataPort$0_0$0 == 0x0098
+                           000098    65 _g_VDP_DataPort	=	0x0098
+                           000099    66 G$g_VDP_RegPort$0_0$0 == 0x0099
+                           000099    67 _g_VDP_RegPort	=	0x0099
+                           000099    68 G$g_VDP_AddrPort$0_0$0 == 0x0099
+                           000099    69 _g_VDP_AddrPort	=	0x0099
+                           000099    70 G$g_VDP_StatPort$0_0$0 == 0x0099
+                           000099    71 _g_VDP_StatPort	=	0x0099
+                           0000A0    72 G$g_PSG_RegPort$0_0$0 == 0x00a0
+                           0000A0    73 _g_PSG_RegPort	=	0x00a0
+                           0000A1    74 G$g_PSG_DataPort$0_0$0 == 0x00a1
+                           0000A1    75 _g_PSG_DataPort	=	0x00a1
+                           0000A2    76 G$g_PSG_StatPort$0_0$0 == 0x00a2
+                           0000A2    77 _g_PSG_StatPort	=	0x00a2
+                           000010    78 G$g_PSG_Ext_RegPort$0_0$0 == 0x0010
+                           000010    79 _g_PSG_Ext_RegPort	=	0x0010
+                           000011    80 G$g_PSG_Ext_DataPort$0_0$0 == 0x0011
+                           000011    81 _g_PSG_Ext_DataPort	=	0x0011
+                           000012    82 G$g_PSG_Ext_StatPort$0_0$0 == 0x0012
+                           000012    83 _g_PSG_Ext_StatPort	=	0x0012
+                           00007C    84 G$g_MSXMusic_IndexPort$0_0$0 == 0x007c
+                           00007C    85 _g_MSXMusic_IndexPort	=	0x007c
+                           00007D    86 G$g_MSXMusic_DataPort$0_0$0 == 0x007d
+                           00007D    87 _g_MSXMusic_DataPort	=	0x007d
+                           0000C0    88 G$g_MSXAudio_IndexPort$0_0$0 == 0x00c0
+                           0000C0    89 _g_MSXAudio_IndexPort	=	0x00c0
+                           0000C1    90 G$g_MSXAudio_DataPort$0_0$0 == 0x00c1
+                           0000C1    91 _g_MSXAudio_DataPort	=	0x00c1
+                           0000C2    92 G$g_MSXAudio_IndexPort2$0_0$0 == 0x00c2
+                           0000C2    93 _g_MSXAudio_IndexPort2	=	0x00c2
+                           0000C3    94 G$g_MSXAudio_DataPort2$0_0$0 == 0x00c3
+                           0000C3    95 _g_MSXAudio_DataPort2	=	0x00c3
+                           0000B4    96 G$g_RTC_AddrPort$0_0$0 == 0x00b4
+                           0000B4    97 _g_RTC_AddrPort	=	0x00b4
+                           0000B5    98 G$g_RTC_DataPort$0_0$0 == 0x00b5
+                           0000B5    99 _g_RTC_DataPort	=	0x00b5
+                                    100 ;--------------------------------------------------------
+                                    101 ; ram data
+                                    102 ;--------------------------------------------------------
+                                    103 	.area _DATA
+                           000000   104 G$ChanA$0_0$0==.
+      000000                        105 _ChanA::
+      000000                        106 	.ds 29
+                           00001D   107 G$ChanB$0_0$0==.
+      00001D                        108 _ChanB::
+      00001D                        109 	.ds 29
+                           00003A   110 G$ChanC$0_0$0==.
+      00003A                        111 _ChanC::
+      00003A                        112 	.ds 29
+                           000057   113 G$DelyCnt$0_0$0==.
+      000057                        114 _DelyCnt::
+      000057                        115 	.ds 1
+                           000058   116 G$CurESld$0_0$0==.
+      000058                        117 _CurESld::
+      000058                        118 	.ds 2
+                           00005A   119 G$CurEDel$0_0$0==.
+      00005A                        120 _CurEDel::
+      00005A                        121 	.ds 1
+                           00005B   122 G$Ns_Base$0_0$0==.
+      00005B                        123 _Ns_Base::
+      00005B                        124 	.ds 1
+                           00005C   125 G$AddToNs$0_0$0==.
+      00005C                        126 _AddToNs::
+      00005C                        127 	.ds 1
+                           00005D   128 G$PT3_Regs$0_0$0==.
+      00005D                        129 _PT3_Regs::
+      00005D                        130 	.ds 14
+                           00006B   131 G$EnvBase$0_0$0==.
+      00006B                        132 _EnvBase::
+      00006B                        133 	.ds 2
+                           00006D   134 G$VAR0END$0_0$0==.
+      00006D                        135 _VAR0END::
+      00006D                        136 	.ds 240
+                           00015D   137 G$PT3_State$0_0$0==.
+      00015D                        138 _PT3_State::
+      00015D                        139 	.ds 1
+                           00015E   140 G$PT3_ModAddr$0_0$0==.
+      00015E                        141 _PT3_ModAddr::
+      00015E                        142 	.ds 2
+                           000160   143 G$PT3_CrPsPtr$0_0$0==.
+      000160                        144 _PT3_CrPsPtr::
+      000160                        145 	.ds 2
+                           000162   146 G$PT3_SamPtrs$0_0$0==.
+      000162                        147 _PT3_SamPtrs::
+      000162                        148 	.ds 2
+                           000164   149 G$PT3_OrnPtrs$0_0$0==.
+      000164                        150 _PT3_OrnPtrs::
+      000164                        151 	.ds 2
+                           000166   152 G$PT3_PDSP$0_0$0==.
+      000166                        153 _PT3_PDSP::
+      000166                        154 	.ds 2
+                           000168   155 G$PT3_CSP$0_0$0==.
+      000168                        156 _PT3_CSP::
+      000168                        157 	.ds 2
+                           00016A   158 G$PT3_PSP$0_0$0==.
+      00016A                        159 _PT3_PSP::
+      00016A                        160 	.ds 2
+                           00016C   161 G$PT3_PrNote$0_0$0==.
+      00016C                        162 _PT3_PrNote::
+      00016C                        163 	.ds 1
+                           00016D   164 G$PT3_PrSlide$0_0$0==.
+      00016D                        165 _PT3_PrSlide::
+      00016D                        166 	.ds 2
+                           00016F   167 G$PT3_AdInPtA$0_0$0==.
+      00016F                        168 _PT3_AdInPtA::
+      00016F                        169 	.ds 2
+                           000171   170 G$PT3_AdInPtB$0_0$0==.
+      000171                        171 _PT3_AdInPtB::
+      000171                        172 	.ds 2
+                           000173   173 G$PT3_AdInPtC$0_0$0==.
+      000173                        174 _PT3_AdInPtC::
+      000173                        175 	.ds 2
+                           000175   176 G$PT3_LPosPtr$0_0$0==.
+      000175                        177 _PT3_LPosPtr::
+      000175                        178 	.ds 2
+                           000177   179 G$PT3_PatsPtr$0_0$0==.
+      000177                        180 _PT3_PatsPtr::
+      000177                        181 	.ds 2
+                           000179   182 G$PT3_Delay$0_0$0==.
+      000179                        183 _PT3_Delay::
+      000179                        184 	.ds 1
+                           00017A   185 G$PT3_AddToEn$0_0$0==.
+      00017A                        186 _PT3_AddToEn::
+      00017A                        187 	.ds 1
+                           00017B   188 G$PT3_Env_Del$0_0$0==.
+      00017B                        189 _PT3_Env_Del::
+      00017B                        190 	.ds 1
+                           00017C   191 G$PT3_ESldAdd$0_0$0==.
+      00017C                        192 _PT3_ESldAdd::
+      00017C                        193 	.ds 2
+                           00017E   194 G$PT3_NoteTable$0_0$0==.
+      00017E                        195 _PT3_NoteTable::
+      00017E                        196 	.ds 2
+                           000180   197 G$PT3_SrtCrPsPtr$0_0$0==.
+      000180                        198 _PT3_SrtCrPsPtr::
+      000180                        199 	.ds 2
+                                    200 ;--------------------------------------------------------
+                                    201 ; ram data
+                                    202 ;--------------------------------------------------------
+                                    203 	.area _INITIALIZED
+                           000000   204 G$PT3_Finish$0_0$0==.
+      000000                        205 _PT3_Finish::
+      000000                        206 	.ds 2
+                                    207 ;--------------------------------------------------------
+                                    208 ; absolute external ram data
+                                    209 ;--------------------------------------------------------
+                                    210 	.area _DABS (ABS)
+                                    211 ;--------------------------------------------------------
+                                    212 ; global & static initialisations
+                                    213 ;--------------------------------------------------------
+                                    214 	.area _HOME
+                                    215 	.area _GSINIT
+                                    216 	.area _GSFINAL
+                                    217 	.area _GSINIT
+                                    218 ;--------------------------------------------------------
+                                    219 ; Home
+                                    220 ;--------------------------------------------------------
+                                    221 	.area _HOME
+                                    222 	.area _HOME
+                                    223 ;--------------------------------------------------------
+                                    224 ; code
+                                    225 ;--------------------------------------------------------
+                                    226 	.area _CODE
+                           000000   227 	G$EmptyCB$0$0	= .
+                                    228 	.globl	G$EmptyCB$0$0
+                           000000   229 	C$pt3_player.c$117$0_0$33	= .
+                                    230 	.globl	C$pt3_player.c$117$0_0$33
+                                    231 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:117: void EmptyCB() {}
+                                    232 ;	---------------------------------
+                                    233 ; Function EmptyCB
+                                    234 ; ---------------------------------
+      000000                        235 _EmptyCB::
+                           000000   236 	C$pt3_player.c$117$0_0$33	= .
+                                    237 	.globl	C$pt3_player.c$117$0_0$33
+                           000000   238 	XG$EmptyCB$0$0	= .
+                                    239 	.globl	XG$EmptyCB$0$0
+      000000 C9               [10]  240 	ret
+                           000001   241 	G$PT3_Init$0$0	= .
+                                    242 	.globl	G$PT3_Init$0$0
+                           000001   243 	C$pt3_player.c$134$0_0$34	= .
+                                    244 	.globl	C$pt3_player.c$134$0_0$34
+                                    245 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:134: void PT3_Init()
+                                    246 ;	---------------------------------
+                                    247 ; Function PT3_Init
+                                    248 ; ---------------------------------
+      000001                        249 _PT3_Init::
+                           000001   250 	C$pt3_player.c$178$1_0$34	= .
+                                    251 	.globl	C$pt3_player.c$178$1_0$34
+                                    252 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:178: __endasm;
+      000001 21 11 00         [10]  253 	ld	HL, #0x11
+      000004 54               [ 4]  254 	ld	D, H
+      000005 5C               [ 4]  255 	ld	E, H
+      000006 FD 21r6Dr00      [14]  256 	ld	IY, #_VAR0END ;_VT_ + 16
+      00000A 06 0F            [ 7]  257 	ld	B, #15
+      00000C                        258 	INITV1:
+      00000C E5               [11]  259 	push	HL
+      00000D 19               [11]  260 	add	HL, DE
+      00000E EB               [ 4]  261 	ex	DE, HL
+      00000F ED 62            [15]  262 	sbc	HL, HL
+      000011 48               [ 4]  263 	ld	C, B
+      000012 06 10            [ 7]  264 	ld	B, #16
+      000014                        265 	INITV2:
+      000014 7D               [ 4]  266 	ld	A, L
+      000015 17               [ 4]  267 	rla
+      000016 7C               [ 4]  268 	ld	A, H
+      000017 CE 00            [ 7]  269 	adc	A, #0
+      000019 FD 77 00         [19]  270 	ld	(IY), A
+      00001C FD 23            [10]  271 	inc	IY
+      00001E 19               [11]  272 	add	HL, DE
+      00001F 10 F3            [13]  273 	djnz	INITV2
+      000021 E1               [10]  274 	pop	HL
+      000022 7B               [ 4]  275 	ld	A, E
+      000023 FE 77            [ 7]  276 	cp	#0x77
+      000025 20 01            [12]  277 	jr	NZ, INITV3
+      000027 1C               [ 4]  278 	inc	E
+      000028                        279 	INITV3:
+      000028 41               [ 4]  280 	ld	B, C
+      000029 10 E1            [13]  281 	djnz	INITV1
+      00002B                        282 	InitClearRegs:
+      00002B AF               [ 4]  283 	xor	A
+      00002C 32r5Dr01         [13]  284 	ld	(#_PT3_State), A
+      00002F 21r5Dr00         [10]  285 	ld	HL, #_PT3_Regs
+      000032 11r5Er00         [10]  286 	ld	DE, #_PT3_Regs + 1
+      000035 01 0D 00         [10]  287 	ld	BC, #13
+      000038 77               [ 7]  288 	ld	(HL), A
+      000039 ED B0            [21]  289 	ldir
+                           00003B   290 	C$pt3_player.c$179$1_0$34	= .
+                                    291 	.globl	C$pt3_player.c$179$1_0$34
+                                    292 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:179: }
+                           00003B   293 	C$pt3_player.c$179$1_0$34	= .
+                                    294 	.globl	C$pt3_player.c$179$1_0$34
+                           00003B   295 	XG$PT3_Init$0$0	= .
+                                    296 	.globl	XG$PT3_Init$0$0
+      00003B C9               [10]  297 	ret
+                           00003C   298 	G$PT3_InitSong$0$0	= .
+                                    299 	.globl	G$PT3_InitSong$0$0
+                           00003C   300 	C$pt3_player.c$185$1_0$36	= .
+                                    301 	.globl	C$pt3_player.c$185$1_0$36
+                                    302 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:185: void PT3_InitSong(const void* songAddr)
+                                    303 ;	---------------------------------
+                                    304 ; Function PT3_InitSong
+                                    305 ; ---------------------------------
+      00003C                        306 _PT3_InitSong::
+                           00003C   307 	C$pt3_player.c$268$1_0$36	= .
+                                    308 	.globl	C$pt3_player.c$268$1_0$36
+                                    309 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:268: __endasm;
+      00003C 11 9C FF         [10]  310 	ld	DE, #-100
+      00003F 19               [11]  311 	add	HL, DE
+      000040 22r5Er01         [16]  312 	ld	(#_PT3_ModAddr), HL
+      000043 EB               [ 4]  313 	ex	DE, HL
+      000044 21 64 00         [10]  314 	ld	HL, #100
+      000047 19               [11]  315 	add	HL, DE
+      000048 7E               [ 7]  316 	ld	A, (HL)
+      000049 32r79r01         [13]  317 	ld	(#_PT3_Delay), A
+      00004C 21 69 00         [10]  318 	ld	HL, #105
+      00004F 19               [11]  319 	add	HL, DE
+      000050 22r62r01         [16]  320 	ld	(#_PT3_SamPtrs), HL
+      000053 21 A9 00         [10]  321 	ld	HL, #169
+      000056 19               [11]  322 	add	HL, DE
+      000057 22r64r01         [16]  323 	ld	(#_PT3_OrnPtrs), HL
+      00005A 21 C8 00         [10]  324 	ld	HL, #200
+      00005D 19               [11]  325 	add	HL, DE
+      00005E 22r60r01         [16]  326 	ld	(#_PT3_CrPsPtr), HL
+      000061 22r80r01         [16]  327 	ld	(#_PT3_SrtCrPsPtr), HL
+      000064 FD 2Ar5Er01      [20]  328 	ld	IY, (#_PT3_ModAddr)
+      000068 06 00            [ 7]  329 	ld	B, #0
+      00006A FD 4E 66         [19]  330 	ld	C, 102(IY)
+      00006D 21 C9 00         [10]  331 	ld	HL, #201
+      000070 19               [11]  332 	add	HL, DE
+      000071 09               [11]  333 	add	HL, BC
+      000072 22r75r01         [16]  334 	ld	(#_PT3_LPosPtr), HL
+      000075 FD 46 68         [19]  335 	ld	B, 104(IY)
+      000078 FD 4E 67         [19]  336 	ld	C, 103(IY)
+      00007B EB               [ 4]  337 	ex	DE, HL
+      00007C 09               [11]  338 	add	HL, BC
+      00007D 22r77r01         [16]  339 	ld	(#_PT3_PatsPtr), HL
+      000080 AF               [ 4]  340 	xor	A
+      000081 21r00r00         [10]  341 	ld	HL, #_ChanA ; VARS
+      000084 77               [ 7]  342 	ld	(HL), A
+      000085 11r01r00         [10]  343 	ld	DE, #_ChanA + 1 ; VARS+1
+      000088 01 6C 00         [10]  344 	ld	BC, #_VAR0END - _ChanA -1 ;_PT3_Regs - _ChanA -1
+      00008B ED B0            [21]  345 	ldir
+      00008D 3C               [ 4]  346 	inc	A
+      00008E 32r57r00         [13]  347 	ld	(#_DelyCnt), A
+      000091 21 01 F0         [10]  348 	ld	HL, #0xF001 ; H - 28, L - 27
+      000094 22r1Br00         [16]  349 	ld	(#_ChanA + 27), HL
+      000097 22r38r00         [16]  350 	ld	(#_ChanB + 27), HL
+      00009A 22r55r00         [16]  351 	ld	(#_ChanC + 27), HL
+      00009D 21r93r05         [10]  352 	ld	HL, #EMPTYSAMORN
+      0000A0 22r6Fr01         [16]  353 	ld	(#_PT3_AdInPtA), HL ; ptr to zero ; # chg
+      0000A3 22r0Dr00         [16]  354 	ld	(#_ChanA + 13), HL ;ornament 0 is "0,1,0"
+      0000A6 22r2Ar00         [16]  355 	ld	(#_ChanB + 13), HL ;in all versions from
+      0000A9 22r47r00         [16]  356 	ld	(#_ChanC + 13), HL ;3.xx to 3.6x and VTII
+      0000AC 22r0Fr00         [16]  357 	ld	(#_ChanA + 15), HL ;S1 There is no default
+      0000AF 22r2Cr00         [16]  358 	ld	(#_ChanB + 15), HL ;S2 sample in PT3, so, you
+      0000B2 22r49r00         [16]  359 	ld	(#_ChanC + 15), HL ;S3 can comment S1,2,3; see
+                                    360 ;	also EMPTYSAMORN comment
+      0000B5 C3rC1r00         [10]  361 	jp	_PT3_Resume
+                           0000B8   362 	C$pt3_player.c$269$1_0$36	= .
+                                    363 	.globl	C$pt3_player.c$269$1_0$36
+                                    364 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:269: }
+                           0000B8   365 	C$pt3_player.c$269$1_0$36	= .
+                                    366 	.globl	C$pt3_player.c$269$1_0$36
+                           0000B8   367 	XG$PT3_InitSong$0$0	= .
+                                    368 	.globl	XG$PT3_InitSong$0$0
+      0000B8 C9               [10]  369 	ret
+                           0000B9   370 	G$PT3_Pause$0$0	= .
+                                    371 	.globl	G$PT3_Pause$0$0
+                           0000B9   372 	C$pt3_player.c$273$1_0$37	= .
+                                    373 	.globl	C$pt3_player.c$273$1_0$37
+                                    374 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:273: void PT3_Pause() __naked
+                                    375 ;	---------------------------------
+                                    376 ; Function PT3_Pause
+                                    377 ; ---------------------------------
+      0000B9                        378 _PT3_Pause::
+                           0000B9   379 	C$pt3_player.c$280$1_0$37	= .
+                                    380 	.globl	C$pt3_player.c$280$1_0$37
+                                    381 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:280: __endasm;
+      0000B9 21r5Dr01         [10]  382 	ld	HL, #_PT3_State
+      0000BC CB 86            [15]  383 	res	0, (HL)
+      0000BE C3rD3r00         [10]  384 	jp	_PT3_Silence
+                           0000C1   385 	C$pt3_player.c$281$1_0$37	= .
+                                    386 	.globl	C$pt3_player.c$281$1_0$37
+                                    387 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:281: }
+                           0000C1   388 	G$PT3_Resume$0$0	= .
+                                    389 	.globl	G$PT3_Resume$0$0
+                           0000C1   390 	C$pt3_player.c$285$1_0$38	= .
+                                    391 	.globl	C$pt3_player.c$285$1_0$38
+                                    392 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:285: void PT3_Resume()
+                                    393 ;	---------------------------------
+                                    394 ; Function PT3_Resume
+                                    395 ; ---------------------------------
+      0000C1                        396 _PT3_Resume::
+                           0000C1   397 	C$pt3_player.c$290$1_0$38	= .
+                                    398 	.globl	C$pt3_player.c$290$1_0$38
+                                    399 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:290: __endasm;
+      0000C1 21r5Dr01         [10]  400 	ld	HL, #_PT3_State
+      0000C4 CB C6            [15]  401 	set	0, (HL)
+                           0000C6   402 	C$pt3_player.c$291$1_0$38	= .
+                                    403 	.globl	C$pt3_player.c$291$1_0$38
+                                    404 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:291: }
+                           0000C6   405 	C$pt3_player.c$291$1_0$38	= .
+                                    406 	.globl	C$pt3_player.c$291$1_0$38
+                           0000C6   407 	XG$PT3_Resume$0$0	= .
+                                    408 	.globl	XG$PT3_Resume$0$0
+      0000C6 C9               [10]  409 	ret
+                           0000C7   410 	G$PT3_SetLoop$0$0	= .
+                                    411 	.globl	G$PT3_SetLoop$0$0
+                           0000C7   412 	C$pt3_player.c$296$1_0$40	= .
+                                    413 	.globl	C$pt3_player.c$296$1_0$40
+                                    414 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:296: void PT3_SetLoop(u8 loop)
+                                    415 ;	---------------------------------
+                                    416 ; Function PT3_SetLoop
+                                    417 ; ---------------------------------
+      0000C7                        418 _PT3_SetLoop::
+                           0000C7   419 	C$pt3_player.c$310$1_0$40	= .
+                                    420 	.globl	C$pt3_player.c$310$1_0$40
+                                    421 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:310: __endasm;
+      0000C7 21r5Dr01         [10]  422 	ld	HL, #_PT3_State
+      0000CA B7               [ 4]  423 	or	A
+      0000CB 20 03            [12]  424 	jr	NZ, LoopON
+      0000CD CB A6            [15]  425 	res	4, (HL)
+      0000CF C9               [10]  426 	ret
+      0000D0                        427 	LoopON:
+      0000D0 CB E6            [15]  428 	set	4, (HL)
+                           0000D2   429 	C$pt3_player.c$311$1_0$40	= .
+                                    430 	.globl	C$pt3_player.c$311$1_0$40
+                                    431 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:311: }
+                           0000D2   432 	C$pt3_player.c$311$1_0$40	= .
+                                    433 	.globl	C$pt3_player.c$311$1_0$40
+                           0000D2   434 	XG$PT3_SetLoop$0$0	= .
+                                    435 	.globl	XG$PT3_SetLoop$0$0
+      0000D2 C9               [10]  436 	ret
+                           0000D3   437 	G$PT3_Silence$0$0	= .
+                                    438 	.globl	G$PT3_Silence$0$0
+                           0000D3   439 	C$pt3_player.c$315$1_0$41	= .
+                                    440 	.globl	C$pt3_player.c$315$1_0$41
+                                    441 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:315: void PT3_Silence() __naked
+                                    442 ;	---------------------------------
+                                    443 ; Function PT3_Silence
+                                    444 ; ---------------------------------
+      0000D3                        445 _PT3_Silence::
+                           0000D3   446 	C$pt3_player.c$324$1_0$41	= .
+                                    447 	.globl	C$pt3_player.c$324$1_0$41
+                                    448 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:324: __endasm;
+      0000D3 AF               [ 4]  449 	xor	A
+      0000D4 32r65r00         [13]  450 	ld	(#_PT3_Regs + 8), A
+      0000D7 32r66r00         [13]  451 	ld	(#_PT3_Regs + 9), A
+      0000DA 32r67r00         [13]  452 	ld	(#_PT3_Regs + 10), A
+      0000DD C3rE0r00         [10]  453 	jp	_PT3_UpdatePSG ;ROUT_A0
+                           0000E0   454 	C$pt3_player.c$325$1_0$41	= .
+                                    455 	.globl	C$pt3_player.c$325$1_0$41
+                                    456 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:325: }
+                           0000E0   457 	G$PT3_UpdatePSG$0$0	= .
+                                    458 	.globl	G$PT3_UpdatePSG$0$0
+                           0000E0   459 	C$pt3_player.c$330$1_0$42	= .
+                                    460 	.globl	C$pt3_player.c$330$1_0$42
+                                    461 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:330: void PT3_UpdatePSG()
+                                    462 ;	---------------------------------
+                                    463 ; Function PT3_UpdatePSG
+                                    464 ; ---------------------------------
+      0000E0                        465 _PT3_UpdatePSG::
+                           0000E0   466 	C$pt3_player.c$387$1_0$42	= .
+                                    467 	.globl	C$pt3_player.c$387$1_0$42
+                                    468 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:387: __endasm;
+      0000E0 21r5Dr01         [10]  469 	ld	HL, #_PT3_State
+      0000E3 AF               [ 4]  470 	xor	A
+      0000E4                        471 	UpdatePSGMuteA:
+      0000E4 CB 4E            [12]  472 	bit	1, (HL)
+      0000E6 CArECr00         [10]  473 	jp	z, UpdatePSGMuteB
+      0000E9 32r65r00         [13]  474 	ld	(#_PT3_Regs + 8), A
+      0000EC                        475 	UpdatePSGMuteB:
+      0000EC CB 56            [12]  476 	bit	2, (HL)
+      0000EE CArF4r00         [10]  477 	jp	z, UpdatePSGMuteC
+      0000F1 32r66r00         [13]  478 	ld	(#_PT3_Regs + 9), A
+      0000F4                        479 	UpdatePSGMuteC:
+      0000F4 CB 5E            [12]  480 	bit	3, (HL)
+      0000F6 CArFCr00         [10]  481 	jp	z, UpdatePSGMuteEnd
+      0000F9 32r67r00         [13]  482 	ld	(#_PT3_Regs + 10), A
+      0000FC                        483 	UpdatePSGMuteEnd:
+      0000FC 3Ar64r00         [13]  484 	ld	A, (#_PT3_Regs + 7)
+      0000FF E6 3F            [ 7]  485 	and	#0b00111111
+      000101 47               [ 4]  486 	ld	B, A
+      000102 3E 07            [ 7]  487 	ld	A, #7
+      000104 D3 A0            [11]  488 	out	(#0xA0), A
+      000106 DB A2            [11]  489 	in	A, (#0xA2)
+      000108 E6 C0            [ 7]  490 	and	#0b11000000
+      00010A B0               [ 4]  491 	or	B
+      00010B 32r64r00         [13]  492 	ld	(#_PT3_Regs + 7), A
+      00010E 21r5Dr00         [10]  493 	ld	HL, #_PT3_Regs
+      000111 0E A1            [ 7]  494 	ld	C, #0xA1
+      000113 AF               [ 4]  495 	xor	A
+                                    496 	.rept	13
+                                    497 	out	(0xA0), A
+                                    498 	outi
+                                    499 	inc	A
+                                    500 	.endm
       000114 D3 A0            [11]    1 	out	(0xA0), A
       000116 ED A3            [16]    2 	outi
       000118 3C               [ 4]    3 	inc	A
@@ -404,645 +537,660 @@
       000150 D3 A0            [11]    1 	out	(0xA0), A
       000152 ED A3            [16]    2 	outi
       000154 3C               [ 4]    3 	inc	A
-      000155 D3 A0            [11]  368 	out	(0xA0), A
-      000157 7E               [ 7]  369 	ld	A, (HL)
-      000158 A7               [ 4]  370 	and	A
-      000159 F8               [11]  371 	ret	M
-      00015A D3 A1            [11]  372 	out	(0xA1), A
-                                    373 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:388: }
-      00015C C9               [10]  374 	ret
-                                    375 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:392: void PT3_Decode() __naked
-                                    376 ;	---------------------------------
-                                    377 ; Function PT3_Decode
-                                    378 ; ---------------------------------
-      00015D                        379 _PT3_Decode::
-                                    380 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:1093: __endasm;
-      00015D F3               [ 4]  381 	di
-      00015E CDr63r01         [17]  382 	call	decode_start
-      000161 FB               [ 4]  383 	ei
-      000162 C9               [10]  384 	ret
-      000163                        385 	 decode_start:
-      000163 21r5Dr01         [10]  386 	ld	HL, #_PT3_State
-      000166 CB 46            [12]  387 	bit	0, (HL)
-      000168 C8               [11]  388 	ret	Z
-      000169 AF               [ 4]  389 	xor	A
-      00016A 32r7Ar01         [13]  390 	ld	(#_PT3_AddToEn), A
-      00016D 32r64r00         [13]  391 	ld	(#_PT3_Regs + 7), A
-      000170 3D               [ 4]  392 	dec	A
-      000171 32r6Ar00         [13]  393 	ld	(#_PT3_Regs + 13), A
-      000174 21r57r00         [10]  394 	LD	HL,#_DelyCnt
-      000177 35               [11]  395 	DEC	(HL)
-      000178 C2rFFr01         [10]  396 	JP	NZ,PL2
-      00017B 21r1Br00         [10]  397 	LD	HL,#_ChanA + 27
-      00017E 35               [11]  398 	DEC	(HL)
-      00017F 20 4E            [12]  399 	JR	NZ,PL1B
-      000181 ED 4Br6Fr01      [20]  400 	ld	BC,(#_PT3_AdInPtA)
-      000185 0A               [ 7]  401 	LD	A,(BC)
-      000186 A7               [ 4]  402 	AND	A
-      000187 20 3B            [12]  403 	JR	NZ,PL1A
-      000189 57               [ 4]  404 	LD	D,A
-      00018A 32r5Br00         [13]  405 	LD	(#_Ns_Base),A
-      00018D 2Ar60r01         [16]  406 	LD	HL,(#_PT3_CrPsPtr)
-      000190 23               [ 6]  407 	INC	HL
-      000191 7E               [ 7]  408 	LD	A,(HL)
-      000192 3C               [ 4]  409 	INC	A
-      000193 20 08            [12]  410 	JR	NZ,PLNLP
-      000195 CDr61r02         [17]  411 	CALL	DecodeCheckLoop
-      000198 2Ar75r01         [16]  412 	ld	HL,(#_PT3_LPosPtr)
-      00019B 7E               [ 7]  413 	LD	A,(HL)
-      00019C 3C               [ 4]  414 	INC	A
-      00019D                        415 	PLNLP:
-      00019D 22r60r01         [16]  416 	LD	(#_PT3_CrPsPtr),HL
-      0001A0 3D               [ 4]  417 	DEC	A
-      0001A1 87               [ 4]  418 	ADD	A,A
-      0001A2 5F               [ 4]  419 	LD	E,A
-      0001A3 CB 12            [ 8]  420 	RL	D
-      0001A5 2Ar77r01         [16]  421 	ld	HL,(#_PT3_PatsPtr)
-      0001A8 19               [11]  422 	ADD	HL,DE
-      0001A9 ED 5Br5Er01      [20]  423 	LD	DE,(#_PT3_ModAddr)
-      0001AD ED 73r6Ar01      [20]  424 	ld	(#_PT3_PSP),SP
-      0001B1 F9               [ 6]  425 	LD	SP,HL
-      0001B2 E1               [10]  426 	POP	HL
-      0001B3 19               [11]  427 	ADD	HL,DE
-      0001B4 44               [ 4]  428 	LD	B,H
-      0001B5 4D               [ 4]  429 	LD	C,L
-      0001B6 E1               [10]  430 	POP	HL
-      0001B7 19               [11]  431 	ADD	HL,DE
-      0001B8 22r71r01         [16]  432 	LD	(#_PT3_AdInPtB),HL
-      0001BB E1               [10]  433 	POP	HL
-      0001BC 19               [11]  434 	ADD	HL,DE
-      0001BD 22r73r01         [16]  435 	LD	(#_PT3_AdInPtC),HL
-      0001C0 ED 7Br6Ar01      [20]  436 	ld	SP,(#_PT3_PSP)
-      0001C4                        437 	PL1A:
-      0001C4 FD 21r0Cr00      [14]  438 	LD	IY,#_ChanA + 12
-      0001C8 CDrCEr02         [17]  439 	CALL	PTDECOD
-      0001CB ED 43r6Fr01      [20]  440 	LD	(#_PT3_AdInPtA),BC
-      0001CF                        441 	PL1B:
-      0001CF 21r38r00         [10]  442 	LD	HL,#_ChanB + 27
-      0001D2 35               [11]  443 	DEC	(HL)
-      0001D3 20 0F            [12]  444 	JR	NZ,PL1C
-      0001D5 FD 21r29r00      [14]  445 	LD	IY,#_ChanB + 12
-      0001D9 ED 4Br71r01      [20]  446 	ld	BC,(#_PT3_AdInPtB)
-      0001DD CDrCEr02         [17]  447 	CALL	PTDECOD
-      0001E0 ED 43r71r01      [20]  448 	LD	(#_PT3_AdInPtB),BC
-      0001E4                        449 	PL1C:
-      0001E4 21r55r00         [10]  450 	LD	HL,#_ChanC + 27
-      0001E7 35               [11]  451 	DEC	(HL)
-      0001E8 20 0F            [12]  452 	JR	NZ,PL1D
-      0001EA FD 21r46r00      [14]  453 	LD	IY,#_ChanC + 12
-      0001EE ED 4Br73r01      [20]  454 	ld	BC,(#_PT3_AdInPtC)
-      0001F2 CDrCEr02         [17]  455 	CALL	PTDECOD
-      0001F5 ED 43r73r01      [20]  456 	LD	(#_PT3_AdInPtC),BC
-      0001F9                        457 	PL1D:
-      0001F9 3Ar79r01         [13]  458 	ld	A,(#_PT3_Delay)
-      0001FC 32r57r00         [13]  459 	ld	(#_DelyCnt),A
-      0001FF                        460 	PL2:
-      0001FF FD 21r00r00      [14]  461 	LD	IY,#_ChanA
-      000203 2Ar5Dr00         [16]  462 	LD	HL,(#_PT3_Regs + 0)
-      000206 CDr3Fr04         [17]  463 	CALL	CHREGS
-      000209 22r5Dr00         [16]  464 	LD	(#_PT3_Regs + 0),HL
-      00020C 3Ar67r00         [13]  465 	LD	A,(#_PT3_Regs + 10)
-      00020F 32r65r00         [13]  466 	LD	(#_PT3_Regs + 8),A
-      000212 FD 21r1Dr00      [14]  467 	LD	IY,#_ChanB
-      000216 2Ar5Fr00         [16]  468 	LD	HL,(#_PT3_Regs + 2)
-      000219 CDr3Fr04         [17]  469 	CALL	CHREGS
-      00021C 22r5Fr00         [16]  470 	LD	(#_PT3_Regs + 2),HL
-      00021F 3Ar67r00         [13]  471 	LD	A,(#_PT3_Regs + 10)
-      000222 32r66r00         [13]  472 	LD	(#_PT3_Regs + 9),A
-      000225 FD 21r3Ar00      [14]  473 	LD	IY,#_ChanC
-      000229 2Ar61r00         [16]  474 	LD	HL,(#_PT3_Regs + 4)
-      00022C CDr3Fr04         [17]  475 	CALL	CHREGS
-      00022F 22r61r00         [16]  476 	LD	(#_PT3_Regs + 4),HL
-      000232 2Ar5Br00         [16]  477 	LD	HL,(#_Ns_Base) ;Ns_Base_AddToNs
-      000235 7C               [ 4]  478 	LD	A,H
-      000236 85               [ 4]  479 	ADD	A,L
-      000237 32r63r00         [13]  480 	LD	(#_PT3_Regs + 6),A
-      00023A 3Ar7Ar01         [13]  481 	ld	A,(#_PT3_AddToEn)
-      00023D 5F               [ 4]  482 	LD	E,A
-      00023E 87               [ 4]  483 	ADD	A,A
-      00023F 9F               [ 4]  484 	SBC	A,A
-      000240 57               [ 4]  485 	LD	D,A
-      000241 2Ar6Br00         [16]  486 	LD	HL,(#_EnvBase)
-      000244 19               [11]  487 	ADD	HL,DE
-      000245 ED 5Br58r00      [20]  488 	LD	DE,(#_CurESld)
-      000249 19               [11]  489 	ADD	HL,DE
-      00024A 22r68r00         [16]  490 	LD	(#_PT3_Regs + 11),HL
-      00024D AF               [ 4]  491 	XOR	A
-      00024E 21r5Ar00         [10]  492 	LD	HL,#_CurEDel
-      000251 B6               [ 7]  493 	OR	(HL)
-      000252 C8               [11]  494 	RET	Z
-      000253 35               [11]  495 	DEC	(HL)
-      000254 C0               [11]  496 	RET	NZ
-      000255 3Ar7Br01         [13]  497 	LD	A,(#_PT3_Env_Del)
-      000258 77               [ 7]  498 	LD	(HL),A
-      000259 2Ar7Cr01         [16]  499 	LD	HL,(#_PT3_ESldAdd)
-      00025C 19               [11]  500 	ADD	HL,DE
-      00025D 22r58r00         [16]  501 	LD	(#_CurESld),HL
-                                    502 ;	LD HL,#_PT3_State
-                                    503 ;	BIT 0,(HL) ; pause mode
-                                    504 ;	JP Z,_PT3_Silence
-      000260 C9               [10]  505 	RET
-      000261                        506 	DecodeCheckLoop:
-      000261 2Ar00r00         [16]  507 	ld	HL, (_PT3_Finish)
-      000264 CDr92r05         [17]  508 	call	PT3_CALL_HL
-      000267 21r5Dr01         [10]  509 	ld	HL, #_PT3_State
-      00026A CB EE            [15]  510 	set	5, (HL)
-      00026C CB 66            [12]  511 	bit	4, (HL)
-      00026E C0               [11]  512 	ret	NZ
-      00026F E1               [10]  513 	POP	HL
-      000270 21r57r00         [10]  514 	LD	HL,#_DelyCnt
-      000273 34               [11]  515 	INC	(HL)
-      000274 21r1Br00         [10]  516 	LD	HL,#_ChanA + 27
-      000277 34               [11]  517 	INC	(HL)
-      000278 C3rB9r00         [10]  518 	jp	_PT3_Pause
-      00027B                        519 	PD_OrSm:
-      00027B FD 36 08 00      [19]  520 	LD	-12 + 20(IY),#0
-      00027F CDr06r04         [17]  521 	CALL	SETORN
-      000282 0A               [ 7]  522 	LD	A,(BC)
-      000283 03               [ 6]  523 	INC	BC
-      000284 0F               [ 4]  524 	RRCA
-      000285                        525 	PD_SAM:
-      000285 87               [ 4]  526 	ADD	A,A
-      000286                        527 	PD_SAM_:
-      000286 5F               [ 4]  528 	LD	E,A
-      000287 16 00            [ 7]  529 	LD	D,#0
-      000289 2Ar62r01         [16]  530 	ld	HL,(#_PT3_SamPtrs)
-      00028C 19               [11]  531 	ADD	HL,DE
-      00028D 5E               [ 7]  532 	LD	E,(HL)
-      00028E 23               [ 6]  533 	INC	HL
-      00028F 56               [ 7]  534 	LD	D,(HL)
-      000290 2Ar5Er01         [16]  535 	ld	HL,(#_PT3_ModAddr)
-      000293 19               [11]  536 	ADD	HL,DE
-      000294 FD 75 03         [19]  537 	LD	-12 + 15(IY),L
-      000297 FD 74 04         [19]  538 	LD	-12 + 15 + 1(IY),H
-      00029A 18 41            [12]  539 	JR	PD_LOOP
-      00029C                        540 	PD_VOL:
-      00029C 07               [ 4]  541 	RLCA
-      00029D 07               [ 4]  542 	RLCA
-      00029E 07               [ 4]  543 	RLCA
-      00029F 07               [ 4]  544 	RLCA
-      0002A0 FD 77 10         [19]  545 	LD	-12 + 28(IY),A
-      0002A3 18 3B            [12]  546 	JR	PD_LP2
-      0002A5                        547 	PD_EOff:
-      0002A5 FD 77 08         [19]  548 	LD	-12 + 20(IY),A
-      0002A8 FD 77 F4         [19]  549 	LD	-12 + 0(IY),A
-      0002AB 18 33            [12]  550 	JR	PD_LP2
-      0002AD                        551 	PD_SorE:
-      0002AD 3D               [ 4]  552 	DEC	A
-      0002AE 20 07            [12]  553 	JR	NZ,PD_ENV
-      0002B0 0A               [ 7]  554 	LD	A,(BC)
-      0002B1 03               [ 6]  555 	INC	BC
-      0002B2 FD 77 05         [19]  556 	LD	-12 + 17(IY),A
-      0002B5 18 29            [12]  557 	JR	PD_LP2
-      0002B7                        558 	PD_ENV:
-      0002B7 CDrEAr03         [17]  559 	CALL	SETENV
-      0002BA 18 24            [12]  560 	JR	PD_LP2
-      0002BC                        561 	PD_ORN:
-      0002BC CDr06r04         [17]  562 	CALL	SETORN
-      0002BF 18 1C            [12]  563 	JR	PD_LOOP
-      0002C1                        564 	PD_ESAM:
-      0002C1 FD 77 08         [19]  565 	LD	-12 + 20(IY),A
-      0002C4 FD 77 F4         [19]  566 	LD	-12 + 0(IY),A
-      0002C7 C4rEAr03         [17]  567 	CALL	NZ,SETENV
-      0002CA 0A               [ 7]  568 	LD	A,(BC)
-      0002CB 03               [ 6]  569 	INC	BC
-      0002CC 18 B8            [12]  570 	JR	PD_SAM_
-      0002CE                        571 	PTDECOD:
-      0002CE FD 7E 06         [19]  572 	LD	A,-12 + 18(IY)
-      0002D1 32r6Cr01         [13]  573 	LD	(#_PT3_PrNote),A ;LD (#PrNote + 1),A
-      0002D4 FD 6E FA         [19]  574 	LD	L,6 -12(IY)
-      0002D7 FD 66 FB         [19]  575 	LD	H,6 + 1-12(IY)
-      0002DA 22r6Dr01         [16]  576 	LD	(#_PT3_PrSlide),HL
-      0002DD                        577 	PD_LOOP:
-      0002DD 11 10 20         [10]  578 	ld	DE,#0x2010
-      0002E0                        579 	PD_LP2:
-      0002E0 0A               [ 7]  580 	ld	A,(BC)
-      0002E1 03               [ 6]  581 	inc	BC
-      0002E2 83               [ 4]  582 	ADD	A,E
-      0002E3 38 96            [12]  583 	JR	C,PD_OrSm
-      0002E5 82               [ 4]  584 	ADD	A,D
-      0002E6 28 4A            [12]  585 	JR	Z,PD_FIN
-      0002E8 38 9B            [12]  586 	JR	C,PD_SAM
-      0002EA 83               [ 4]  587 	ADD	A,E
-      0002EB 28 25            [12]  588 	JR	Z,PD_REL
-      0002ED 38 AD            [12]  589 	JR	C,PD_VOL
-      0002EF 83               [ 4]  590 	ADD	A,E
-      0002F0 28 B3            [12]  591 	JR	Z,PD_EOff
-      0002F2 38 B9            [12]  592 	JR	C,PD_SorE
-      0002F4 C6 60            [ 7]  593 	ADD	A,#96
-      0002F6 38 20            [12]  594 	JR	C,PD_NOTE
-      0002F8 83               [ 4]  595 	ADD	A,E
-      0002F9 38 C1            [12]  596 	JR	C,PD_ORN
-      0002FB 82               [ 4]  597 	ADD	A,D
-      0002FC 38 0F            [12]  598 	JR	C,PD_NOIS
-      0002FE 83               [ 4]  599 	ADD	A,E
-      0002FF 38 C0            [12]  600 	JR	C,PD_ESAM
-      000301 87               [ 4]  601 	ADD	A,A
-      000302 5F               [ 4]  602 	LD	E,A
-      000303 21r3FrE3         [10]  603 	LD	HL,#(SPCCOMS + 0xDF20) ;LD HL,((SPCCOMS + $DF20) % 65536)
-                                    604 ;	PUSH DE
-                                    605 ;	LD DE,#0xDF20
-                                    606 ;	LD HL,#SPCCOMS
-                                    607 ;	ADD HL,DE
-                                    608 ;	POP DE
-      000306 19               [11]  609 	ADD	HL,DE
-      000307 5E               [ 7]  610 	LD	E,(HL)
-      000308 23               [ 6]  611 	INC	HL
-      000309 56               [ 7]  612 	LD	D,(HL)
-      00030A D5               [11]  613 	PUSH	DE
-      00030B 18 D0            [12]  614 	JR	PD_LOOP
-      00030D                        615 	PD_NOIS:
-      00030D 32r5Br00         [13]  616 	LD	(#_Ns_Base),A
-      000310 18 CE            [12]  617 	JR	PD_LP2
-      000312                        618 	PD_REL:
-      000312 FD CB 09 86      [23]  619 	RES	0,-12 + 21(IY)
-      000316 18 08            [12]  620 	JR	PD_RES
-      000318                        621 	PD_NOTE:
-      000318 FD 77 06         [19]  622 	ld	-12 + 18(IY),A
-      00031B FD CB 09 C6      [23]  623 	SET	0,-12 + 21(IY)
-      00031F AF               [ 4]  624 	XOR	A
-      000320                        625 	PD_RES:
-      000320 ED 73r66r01      [20]  626 	LD	(#_PT3_PDSP),SP
-      000324 FD F9            [10]  627 	LD	SP,IY
-      000326 67               [ 4]  628 	LD	H,A
-      000327 6F               [ 4]  629 	LD	L,A
-      000328 E5               [11]  630 	PUSH	HL
-      000329 E5               [11]  631 	PUSH	HL
-      00032A E5               [11]  632 	PUSH	HL
-      00032B E5               [11]  633 	PUSH	HL
-      00032C E5               [11]  634 	PUSH	HL
-      00032D E5               [11]  635 	PUSH	HL
-      00032E ED 7Br66r01      [20]  636 	LD	SP,(#_PT3_PDSP)
-      000332                        637 	PD_FIN:
-      000332 FD 7E 05         [19]  638 	ld	A,-12 + 17(IY)
-      000335 FD 77 0F         [19]  639 	ld	-12 + 27(IY),A
-      000338 C9               [10]  640 	ret
-      000339                        641 	C_PORTM:
-      000339 FD CB 09 96      [23]  642 	RES	2,-12 + 21(IY)
-      00033D 0A               [ 7]  643 	LD	A,(BC)
-      00033E 03               [ 6]  644 	INC	BC
-                                    645 ;SKIP	PRECALCULATED TONE DELTA (BECAUSE
-                                    646 ;CANNOT	BE RIGHT AFTER PT3 COMPILATION)
-      00033F 03               [ 6]  647 	INC	BC
-      000340 03               [ 6]  648 	INC	BC
-      000341 FD 77 0A         [19]  649 	LD	-12 + 22(IY),A
-      000344 FD 77 F9         [19]  650 	LD	-12 + 5(IY),A
-      000347 ED 5Br7Er01      [20]  651 	LD	DE,(#_PT3_NoteTable)
-      00034B FD 7E 06         [19]  652 	LD	A,-12 + 18(IY)
-      00034E FD 77 07         [19]  653 	LD	-12 + 19(IY),A
-      000351 87               [ 4]  654 	ADD	A,A
-      000352 6F               [ 4]  655 	LD	L,A
-      000353 26 00            [ 7]  656 	LD	H,#0
-      000355 19               [11]  657 	ADD	HL,DE
-      000356 7E               [ 7]  658 	LD	A,(HL)
-      000357 23               [ 6]  659 	INC	HL
-      000358 66               [ 7]  660 	LD	H,(HL)
-      000359 6F               [ 4]  661 	LD	L,A
-      00035A E5               [11]  662 	PUSH	HL
-      00035B 3Ar6Cr01         [13]  663 	LD	A,(#_PT3_PrNote) ;<--- LD A,#0x3E
-      00035E FD 77 06         [19]  664 	LD	-12 + 18(IY),A
-      000361 87               [ 4]  665 	ADD	A,A
-      000362 6F               [ 4]  666 	LD	L,A
-      000363 26 00            [ 7]  667 	LD	H,#0
-      000365 19               [11]  668 	ADD	HL,DE
-      000366 5E               [ 7]  669 	LD	E,(HL)
-      000367 23               [ 6]  670 	INC	HL
-      000368 56               [ 7]  671 	LD	D,(HL)
-      000369 E1               [10]  672 	POP	HL
-      00036A ED 52            [15]  673 	SBC	HL,DE
-      00036C FD 75 0D         [19]  674 	LD	-12 + 25(IY),L
-      00036F FD 74 0E         [19]  675 	LD	-12 + 25 + 1(IY),H
-      000372 ED 5Br6Dr01      [20]  676 	LD	DE,(#_PT3_PrSlide) ;<--- change to Kun version
-      000376 FD 73 FA         [19]  677 	LD	-12 + 6(IY),E ;<---
-      000379 FD 72 FB         [19]  678 	LD	-12 + 6 + 1(IY),D ;<---
-      00037C 0A               [ 7]  679 	LD	A,(BC) ;SIGNED TONE STEP
-      00037D 03               [ 6]  680 	INC	BC
-      00037E 08               [ 4]  681 	EX	AF,AF
-      00037F 0A               [ 7]  682 	LD	A,(BC)
-      000380 03               [ 6]  683 	INC	BC
-      000381 A7               [ 4]  684 	AND	A
-      000382 28 01            [12]  685 	JR	Z,NOSIG
-      000384 EB               [ 4]  686 	EX	DE,HL
-      000385                        687 	NOSIG:
-      000385 ED 52            [15]  688 	SBC	HL,DE
-      000387 F2r8Fr03         [10]  689 	JP	P,SET_STP
-      00038A 2F               [ 4]  690 	CPL
-      00038B 08               [ 4]  691 	EX	AF,AF
-      00038C ED 44            [ 8]  692 	NEG
-      00038E 08               [ 4]  693 	EX	AF,AF
-      00038F                        694 	SET_STP:
-      00038F FD 77 0C         [19]  695 	LD	-12 + 23 + 1(IY),A
-      000392 08               [ 4]  696 	EX	AF,AF
-      000393 FD 77 0B         [19]  697 	ld	-12 + 23(IY),A
-      000396 FD 36 FE 00      [19]  698 	ld	-12 + 10(IY),#0
-      00039A C9               [10]  699 	ret
-      00039B                        700 	C_GLISS:
-      00039B FD CB 09 D6      [23]  701 	SET	2,-12 + 21(IY)
-      00039F 0A               [ 7]  702 	LD	A,(BC)
-      0003A0 03               [ 6]  703 	INC	BC
-      0003A1 FD 77 0A         [19]  704 	LD	-12 + 22(IY),A
-      0003A4 FD 77 F9         [19]  705 	LD	-12 + 5(IY),A
-      0003A7 0A               [ 7]  706 	LD	A,(BC)
-      0003A8 03               [ 6]  707 	INC	BC
-      0003A9 08               [ 4]  708 	EX	AF,AF
-      0003AA 0A               [ 7]  709 	LD	A,(BC)
-      0003AB 03               [ 6]  710 	INC	BC
-      0003AC 18 E1            [12]  711 	JR	SET_STP
-      0003AE                        712 	C_SMPOS:
-      0003AE 0A               [ 7]  713 	LD	A,(BC)
-      0003AF 03               [ 6]  714 	INC	BC
-      0003B0 FD 77 F5         [19]  715 	LD	-12 + 1(IY),A
-      0003B3 C9               [10]  716 	RET
-      0003B4                        717 	C_ORPOS:
-      0003B4 0A               [ 7]  718 	LD	A,(BC)
-      0003B5 03               [ 6]  719 	INC	BC
-      0003B6 FD 77 F4         [19]  720 	LD	-12 + 0(IY),A
-      0003B9 C9               [10]  721 	RET
-      0003BA                        722 	C_VIBRT:
-      0003BA 0A               [ 7]  723 	LD	A,(BC)
-      0003BB 03               [ 6]  724 	INC	BC
-      0003BC FD 77 FF         [19]  725 	LD	-12 + 11(IY),A
-      0003BF FD 77 FE         [19]  726 	LD	-12 + 10(IY),A
-      0003C2 0A               [ 7]  727 	LD	A,(BC)
-      0003C3 03               [ 6]  728 	INC	BC
-      0003C4 FD 77 00         [19]  729 	LD	-12 + 12(IY),A
-      0003C7 AF               [ 4]  730 	XOR	A
-      0003C8 FD 77 F9         [19]  731 	LD	-12 + 5(IY),A
-      0003CB FD 77 FA         [19]  732 	LD	-12 + 6(IY),A
-      0003CE FD 77 FB         [19]  733 	LD	-12 + 6 + 1(IY),A
-      0003D1 C9               [10]  734 	RET
-      0003D2                        735 	C_ENGLS:
-      0003D2 0A               [ 7]  736 	LD	A,(BC)
-      0003D3 03               [ 6]  737 	INC	BC
-      0003D4 32r7Br01         [13]  738 	LD	(#_PT3_Env_Del),A
-      0003D7 32r5Ar00         [13]  739 	LD	(#_CurEDel),A
-      0003DA 0A               [ 7]  740 	LD	A,(BC)
-      0003DB 03               [ 6]  741 	INC	BC
-      0003DC 6F               [ 4]  742 	LD	L,A
-      0003DD 0A               [ 7]  743 	LD	A,(BC)
-      0003DE 03               [ 6]  744 	INC	BC
-      0003DF 67               [ 4]  745 	LD	H,A
-      0003E0 22r7Cr01         [16]  746 	LD	(#_PT3_ESldAdd),HL
-      0003E3 C9               [10]  747 	RET
-      0003E4                        748 	C_DELAY:
-      0003E4 0A               [ 7]  749 	LD	A,(BC)
-      0003E5 03               [ 6]  750 	INC	BC
-      0003E6 32r79r01         [13]  751 	LD	(#_PT3_Delay),A
-      0003E9 C9               [10]  752 	RET
-      0003EA                        753 	SETENV:
-      0003EA FD 73 08         [19]  754 	LD	-12 + 20(IY),E
-      0003ED 32r6Ar00         [13]  755 	LD	(#_PT3_Regs + 13),A
-      0003F0 0A               [ 7]  756 	LD	A,(BC)
-      0003F1 03               [ 6]  757 	INC	BC
-      0003F2 67               [ 4]  758 	LD	H,A
-      0003F3 0A               [ 7]  759 	LD	A,(BC)
-      0003F4 03               [ 6]  760 	INC	BC
-      0003F5 6F               [ 4]  761 	LD	L,A
-      0003F6 22r6Br00         [16]  762 	LD	(#_EnvBase),HL
-      0003F9 AF               [ 4]  763 	XOR	A
-      0003FA FD 77 F4         [19]  764 	LD	-12 + 0(IY),A
-      0003FD 32r5Ar00         [13]  765 	LD	(#_CurEDel),A
-      000400 67               [ 4]  766 	LD	H,A
-      000401 6F               [ 4]  767 	LD	L,A
-      000402 22r58r00         [16]  768 	LD	(#_CurESld),HL
-      000405                        769 	C_NOP:
-      000405 C9               [10]  770 	RET
-      000406                        771 	SETORN:
-      000406 87               [ 4]  772 	ADD	A,A
-      000407 5F               [ 4]  773 	LD	E,A
-      000408 16 00            [ 7]  774 	LD	D,#0
-      00040A FD 72 F4         [19]  775 	LD	-12 + 0(IY),D
-      00040D 2Ar64r01         [16]  776 	ld	HL,(#_PT3_OrnPtrs)
-      000410 19               [11]  777 	ADD	HL,DE
-      000411 5E               [ 7]  778 	LD	E,(HL)
-      000412 23               [ 6]  779 	INC	HL
-      000413 56               [ 7]  780 	LD	D,(HL)
-      000414 2Ar5Er01         [16]  781 	ld	HL,(#_PT3_ModAddr)
-      000417 19               [11]  782 	ADD	HL,DE
-      000418 FD 75 01         [19]  783 	LD	-12 + 13(IY),L
-      00041B FD 74 02         [19]  784 	LD	-12 + 13 + 1(IY),H
-      00041E C9               [10]  785 	RET
-                                    786 ;-------------------------------------------------------------------------------
-                                    787 ;	ALL 16 ADDRESSES TO PROTECT FROM BROKEN PT3 MODULES
-      00041F                        788 	SPCCOMS:
-      00041Fr05r04                  789 	.dw	C_NOP ; ## CHECK THAT IT IS NOT AUTOMODIF
-      000421r9Br03                  790 	.dw	C_GLISS ; (nothing seems to touch it)
-      000423r39r03                  791 	.dw	C_PORTM
-      000425rAEr03                  792 	.dw	C_SMPOS
-      000427rB4r03                  793 	.dw	C_ORPOS
-      000429rBAr03                  794 	.dw	C_VIBRT
-      00042Br05r04                  795 	.dw	C_NOP
-      00042Dr05r04                  796 	.dw	C_NOP
-      00042FrD2r03                  797 	.dw	C_ENGLS
-      000431rE4r03                  798 	.dw	C_DELAY
-      000433r05r04                  799 	.dw	C_NOP
-      000435r05r04                  800 	.dw	C_NOP
-      000437r05r04                  801 	.dw	C_NOP
-      000439r05r04                  802 	.dw	C_NOP
-      00043Br05r04                  803 	.dw	C_NOP
-      00043Dr05r04                  804 	.dw	C_NOP
-      00043F                        805 	CHREGS:
-      00043F AF               [ 4]  806 	XOR	A
-      000440 32r67r00         [13]  807 	LD	(#_PT3_Regs + 10),A
-      000443 FD CB 15 46      [20]  808 	BIT	0,21(IY)
-      000447 E5               [11]  809 	PUSH	HL
-      000448 CAr6Fr05         [10]  810 	JP	Z,CH_EXIT
-      00044B ED 73r68r01      [20]  811 	ld	(#_PT3_CSP),sp
-      00044F FD 6E 0D         [19]  812 	LD	L,13(IY)
-      000452 FD 66 0E         [19]  813 	LD	H,13 + 1(IY)
-      000455 F9               [ 6]  814 	LD	SP,HL
-      000456 D1               [10]  815 	POP	DE
-      000457 67               [ 4]  816 	LD	H,A
-      000458 FD 7E 00         [19]  817 	LD	A,0(IY)
-      00045B 6F               [ 4]  818 	LD	L,A
-      00045C 39               [11]  819 	ADD	HL,SP
-      00045D 3C               [ 4]  820 	INC	A
-      00045E BA               [ 4]  821 	CP	D
-      00045F 38 01            [12]  822 	JR	C,CH_ORPS
-      000461 7B               [ 4]  823 	LD	A,E
-      000462                        824 	CH_ORPS:
-      000462 FD 77 00         [19]  825 	LD	0(IY),A
-      000465 FD 7E 12         [19]  826 	LD	A,18(IY)
-      000468 86               [ 7]  827 	ADD	A,(HL)
-      000469 F2r6Dr04         [10]  828 	JP	P,CH_NTP
-      00046C AF               [ 4]  829 	XOR	A
-      00046D                        830 	CH_NTP:
-      00046D FE 60            [ 7]  831 	CP	#96
-      00046F 38 02            [12]  832 	JR	C,CH_NOK
-      000471 3E 5F            [ 7]  833 	LD	A,#95
-      000473                        834 	CH_NOK:
-      000473 87               [ 4]  835 	ADD	A,A
-      000474 08               [ 4]  836 	EX	AF,AF
-      000475 FD 6E 0F         [19]  837 	LD	L,15(IY)
-      000478 FD 66 10         [19]  838 	LD	H,15 + 1(IY)
-      00047B F9               [ 6]  839 	LD	SP,HL
-      00047C D1               [10]  840 	POP	DE
-      00047D 26 00            [ 7]  841 	LD	H,#0
-      00047F FD 7E 01         [19]  842 	LD	A,1(IY)
-      000482 47               [ 4]  843 	LD	B,A
-      000483 87               [ 4]  844 	ADD	A,A
-      000484 87               [ 4]  845 	ADD	A,A
-      000485 6F               [ 4]  846 	LD	L,A
-      000486 39               [11]  847 	ADD	HL,SP
-      000487 F9               [ 6]  848 	LD	SP,HL
-      000488 78               [ 4]  849 	LD	A,B
-      000489 3C               [ 4]  850 	INC	A
-      00048A BA               [ 4]  851 	CP	D
-      00048B 38 01            [12]  852 	JR	C,CH_SMPS
-      00048D 7B               [ 4]  853 	LD	A,E
-      00048E                        854 	CH_SMPS:
-      00048E FD 77 01         [19]  855 	LD	1(IY),A
-      000491 C1               [10]  856 	POP	BC
-      000492 E1               [10]  857 	POP	HL
-      000493 FD 5E 08         [19]  858 	LD	E,8(IY)
-      000496 FD 56 09         [19]  859 	LD	D,8 + 1(IY)
-      000499 19               [11]  860 	ADD	HL,DE
-      00049A CB 70            [ 8]  861 	BIT	6,B
-      00049C 28 06            [12]  862 	JR	Z,CH_NOAC
-      00049E FD 75 08         [19]  863 	LD	8(IY),L
-      0004A1 FD 74 09         [19]  864 	LD	8 + 1(IY),H
-      0004A4                        865 	CH_NOAC:
-      0004A4 EB               [ 4]  866 	EX	DE,HL
-      0004A5 08               [ 4]  867 	EX	AF,AF
-      0004A6 6F               [ 4]  868 	LD	L,A
-      0004A7 26 00            [ 7]  869 	LD	H,#0
-      0004A9 ED 7Br7Er01      [20]  870 	LD	SP,(#_PT3_NoteTable)
-      0004AD 39               [11]  871 	ADD	HL,SP
-      0004AE F9               [ 6]  872 	LD	SP,HL
-      0004AF E1               [10]  873 	POP	HL
-      0004B0 19               [11]  874 	ADD	HL,DE
-      0004B1 FD 5E 06         [19]  875 	LD	E,6(IY)
-      0004B4 FD 56 07         [19]  876 	LD	D,6 + 1(IY)
-      0004B7 19               [11]  877 	ADD	HL,DE
-      0004B8 ED 7Br68r01      [20]  878 	ld	SP,(#_PT3_CSP)
-      0004BC E3               [19]  879 	EX	(SP),HL
-      0004BD AF               [ 4]  880 	XOR	A
-      0004BE FD B6 05         [19]  881 	OR	5(IY)
-      0004C1 28 3E            [12]  882 	JR	Z,CH_AMP
-      0004C3 FD 35 05         [23]  883 	DEC	5(IY)
-      0004C6 20 39            [12]  884 	JR	NZ,CH_AMP
-      0004C8 FD 7E 16         [19]  885 	LD	A,22(IY)
-      0004CB FD 77 05         [19]  886 	LD	5(IY),A
-      0004CE FD 6E 17         [19]  887 	LD	L,23(IY)
-      0004D1 FD 66 18         [19]  888 	LD	H,23 + 1(IY)
-      0004D4 7C               [ 4]  889 	LD	A,H
-      0004D5 19               [11]  890 	ADD	HL,DE
-      0004D6 FD 75 06         [19]  891 	LD	6(IY),L
-      0004D9 FD 74 07         [19]  892 	LD	6 + 1(IY),H
-      0004DC FD CB 15 56      [20]  893 	BIT	2,21(IY)
-      0004E0 20 1F            [12]  894 	JR	NZ,CH_AMP
-      0004E2 FD 5E 19         [19]  895 	LD	E,25(IY)
-      0004E5 FD 56 1A         [19]  896 	LD	D,25 + 1(IY)
-      0004E8 A7               [ 4]  897 	AND	A
-      0004E9 28 01            [12]  898 	JR	Z,CH_STPP
-      0004EB EB               [ 4]  899 	EX	DE,HL
-      0004EC                        900 	CH_STPP:
-      0004EC ED 52            [15]  901 	SBC	HL,DE
-      0004EE FAr01r05         [10]  902 	JP	M,CH_AMP
-      0004F1 FD 7E 13         [19]  903 	LD	A,19(IY)
-      0004F4 FD 77 12         [19]  904 	LD	18(IY),A
-      0004F7 AF               [ 4]  905 	XOR	A
-      0004F8 FD 77 05         [19]  906 	LD	5(IY),A
-      0004FB FD 77 06         [19]  907 	LD	6(IY),A
-      0004FE FD 77 07         [19]  908 	LD	6 + 1(IY),A
-      000501                        909 	CH_AMP:
-      000501 FD 7E 02         [19]  910 	LD	A,2(IY)
-      000504 CB 79            [ 8]  911 	BIT	7,C
-      000506 28 13            [12]  912 	JR	Z,CH_NOAM
-      000508 CB 71            [ 8]  913 	BIT	6,C
-      00050A 28 07            [12]  914 	JR	Z,CH_AMIN
-      00050C FE 0F            [ 7]  915 	CP	#15
-      00050E 28 0B            [12]  916 	JR	Z,CH_NOAM
-      000510 3C               [ 4]  917 	INC	A
-      000511 18 05            [12]  918 	JR	CH_SVAM
-      000513                        919 	CH_AMIN:
-      000513 FE F1            [ 7]  920 	CP	#-15
-      000515 28 04            [12]  921 	JR	Z,CH_NOAM
-      000517 3D               [ 4]  922 	DEC	A
-      000518                        923 	CH_SVAM:
-      000518 FD 77 02         [19]  924 	LD	2(IY),A
-      00051B                        925 	CH_NOAM:
-      00051B 6F               [ 4]  926 	LD	L,A
-      00051C 78               [ 4]  927 	LD	A,B
-      00051D E6 0F            [ 7]  928 	AND	#15
-      00051F 85               [ 4]  929 	ADD	A,L
-      000520 F2r24r05         [10]  930 	JP	P,CH_APOS
-      000523 AF               [ 4]  931 	XOR	A
-      000524                        932 	CH_APOS:
-      000524 FE 10            [ 7]  933 	CP	#16
-      000526 38 02            [12]  934 	JR	C,CH_VOL
-      000528 3E 0F            [ 7]  935 	LD	A,#15
-      00052A                        936 	CH_VOL:
-      00052A FD B6 1C         [19]  937 	OR	28(IY)
-      00052D 6F               [ 4]  938 	LD	L,A
-      00052E 26 00            [ 7]  939 	LD	H,#0
-      000530 11r5Dr00         [10]  940 	LD	DE,#_PT3_Regs ;_VT_
-      000533 19               [11]  941 	ADD	HL,DE
-      000534 7E               [ 7]  942 	LD	A,(HL)
-      000535                        943 	CH_ENV:
-      000535 CB 41            [ 8]  944 	BIT	0,C
-      000537 20 03            [12]  945 	JR	NZ,CH_NOEN
-      000539 FD B6 14         [19]  946 	OR	20(IY)
-      00053C                        947 	CH_NOEN:
-      00053C 32r67r00         [13]  948 	LD	(#_PT3_Regs + 10),A
-      00053F CB 78            [ 8]  949 	BIT	7,B
-      000541 79               [ 4]  950 	LD	A,C
-      000542 28 19            [12]  951 	JR	Z,NO_ENSL
-      000544 17               [ 4]  952 	RLA
-      000545 17               [ 4]  953 	RLA
-      000546 CB 2F            [ 8]  954 	SRA	A
-      000548 CB 2F            [ 8]  955 	SRA	A
-      00054A CB 2F            [ 8]  956 	SRA	A
-      00054C FD 86 04         [19]  957 	ADD	A,4(IY) ;SEE COMMENT BELOW
-      00054F CB 68            [ 8]  958 	BIT	5,B
-      000551 28 03            [12]  959 	JR	Z,NO_ENAC
-      000553 FD 77 04         [19]  960 	LD	4(IY),A
-      000556                        961 	NO_ENAC:
-      000556 21r7Ar01         [10]  962 	ld	HL,#_PT3_AddToEn
-      000559 86               [ 7]  963 	ADD	A,(HL) ;BUG IN PT3 - NEED WORD HERE.
-                                    964 ;FIX	IT IN NEXT VERSION?
-      00055A 77               [ 7]  965 	LD	(HL),A
-      00055B 18 0E            [12]  966 	JR	CH_MIX
-      00055D                        967 	NO_ENSL:
-      00055D 1F               [ 4]  968 	RRA
-      00055E FD 86 03         [19]  969 	ADD	A,3(IY)
-      000561 32r5Cr00         [13]  970 	LD	(#_AddToNs),A
-      000564 CB 68            [ 8]  971 	BIT	5,B
-      000566 28 03            [12]  972 	JR	Z,CH_MIX
-      000568 FD 77 03         [19]  973 	LD	3(IY),A
-      00056B                        974 	CH_MIX:
-      00056B 78               [ 4]  975 	LD	A,B
-      00056C 1F               [ 4]  976 	RRA
-      00056D E6 48            [ 7]  977 	AND	#0x48
-      00056F                        978 	CH_EXIT:
-      00056F 21r64r00         [10]  979 	LD	HL,#_PT3_Regs + 7
-      000572 B6               [ 7]  980 	OR	(HL)
-      000573 0F               [ 4]  981 	RRCA
-      000574 77               [ 7]  982 	LD	(HL),A
-      000575 E1               [10]  983 	POP	HL
-      000576 AF               [ 4]  984 	XOR	A
-      000577 FD B6 0A         [19]  985 	OR	10(IY)
-      00057A C8               [11]  986 	RET	Z
-      00057B FD 35 0A         [23]  987 	DEC	10(IY)
-      00057E C0               [11]  988 	RET	NZ
-      00057F FD AE 15         [19]  989 	XOR	21(IY)
-      000582 FD 77 15         [19]  990 	LD	21(IY),A
-      000585 1F               [ 4]  991 	RRA
-      000586 FD 7E 0B         [19]  992 	LD	A,11(IY)
-      000589 38 03            [12]  993 	JR	C,CH_ONDL
-      00058B FD 7E 0C         [19]  994 	LD	A,12(IY)
-      00058E                        995 	CH_ONDL:
-      00058E FD 77 0A         [19]  996 	LD	10(IY),A
-      000591 C9               [10]  997 	RET
-      000592                        998 	PT3_CALL_HL:
-      000592 E9               [ 4]  999 	jp	(hl)
-                                   1000 ;-------------------------------------------------------------------------------	DATAS
-      000593                       1001 	EMPTYSAMORN:
-      000593 00 01 00 90           1002 	.db	0,1,0,0x90
-                                   1003 ;delete	$90 if you dont need default sample ; # pongo el 0 aqui
-                                   1004 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:1094: }
-                                   1005 	.area _CODE
-                                   1006 	.area _INITIALIZER
-      000000                       1007 __xinit__PT3_Finish:
-      000000r00r00                 1008 	.dw _EmptyCB
-                                   1009 	.area _CABS (ABS)
+      000155 D3 A0            [11]  501 	out	(0xA0), A
+      000157 7E               [ 7]  502 	ld	A, (HL)
+      000158 A7               [ 4]  503 	and	A
+      000159 F8               [11]  504 	ret	M
+      00015A D3 A1            [11]  505 	out	(0xA1), A
+                           00015C   506 	C$pt3_player.c$388$1_0$42	= .
+                                    507 	.globl	C$pt3_player.c$388$1_0$42
+                                    508 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:388: }
+                           00015C   509 	C$pt3_player.c$388$1_0$42	= .
+                                    510 	.globl	C$pt3_player.c$388$1_0$42
+                           00015C   511 	XG$PT3_UpdatePSG$0$0	= .
+                                    512 	.globl	XG$PT3_UpdatePSG$0$0
+      00015C C9               [10]  513 	ret
+                           00015D   514 	G$PT3_Decode$0$0	= .
+                                    515 	.globl	G$PT3_Decode$0$0
+                           00015D   516 	C$pt3_player.c$392$1_0$43	= .
+                                    517 	.globl	C$pt3_player.c$392$1_0$43
+                                    518 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:392: void PT3_Decode() __naked
+                                    519 ;	---------------------------------
+                                    520 ; Function PT3_Decode
+                                    521 ; ---------------------------------
+      00015D                        522 _PT3_Decode::
+                           00015D   523 	C$pt3_player.c$1093$1_0$43	= .
+                                    524 	.globl	C$pt3_player.c$1093$1_0$43
+                                    525 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:1093: __endasm;
+      00015D F3               [ 4]  526 	di
+      00015E CDr63r01         [17]  527 	call	decode_start
+      000161 FB               [ 4]  528 	ei
+      000162 C9               [10]  529 	ret
+      000163                        530 	 decode_start:
+      000163 21r5Dr01         [10]  531 	ld	HL, #_PT3_State
+      000166 CB 46            [12]  532 	bit	0, (HL)
+      000168 C8               [11]  533 	ret	Z
+      000169 AF               [ 4]  534 	xor	A
+      00016A 32r7Ar01         [13]  535 	ld	(#_PT3_AddToEn), A
+      00016D 32r64r00         [13]  536 	ld	(#_PT3_Regs + 7), A
+      000170 3D               [ 4]  537 	dec	A
+      000171 32r6Ar00         [13]  538 	ld	(#_PT3_Regs + 13), A
+      000174 21r57r00         [10]  539 	LD	HL,#_DelyCnt
+      000177 35               [11]  540 	DEC	(HL)
+      000178 C2rFFr01         [10]  541 	JP	NZ,PL2
+      00017B 21r1Br00         [10]  542 	LD	HL,#_ChanA + 27
+      00017E 35               [11]  543 	DEC	(HL)
+      00017F 20 4E            [12]  544 	JR	NZ,PL1B
+      000181 ED 4Br6Fr01      [20]  545 	ld	BC,(#_PT3_AdInPtA)
+      000185 0A               [ 7]  546 	LD	A,(BC)
+      000186 A7               [ 4]  547 	AND	A
+      000187 20 3B            [12]  548 	JR	NZ,PL1A
+      000189 57               [ 4]  549 	LD	D,A
+      00018A 32r5Br00         [13]  550 	LD	(#_Ns_Base),A
+      00018D 2Ar60r01         [16]  551 	LD	HL,(#_PT3_CrPsPtr)
+      000190 23               [ 6]  552 	INC	HL
+      000191 7E               [ 7]  553 	LD	A,(HL)
+      000192 3C               [ 4]  554 	INC	A
+      000193 20 08            [12]  555 	JR	NZ,PLNLP
+      000195 CDr61r02         [17]  556 	CALL	DecodeCheckLoop
+      000198 2Ar75r01         [16]  557 	ld	HL,(#_PT3_LPosPtr)
+      00019B 7E               [ 7]  558 	LD	A,(HL)
+      00019C 3C               [ 4]  559 	INC	A
+      00019D                        560 	PLNLP:
+      00019D 22r60r01         [16]  561 	LD	(#_PT3_CrPsPtr),HL
+      0001A0 3D               [ 4]  562 	DEC	A
+      0001A1 87               [ 4]  563 	ADD	A,A
+      0001A2 5F               [ 4]  564 	LD	E,A
+      0001A3 CB 12            [ 8]  565 	RL	D
+      0001A5 2Ar77r01         [16]  566 	ld	HL,(#_PT3_PatsPtr)
+      0001A8 19               [11]  567 	ADD	HL,DE
+      0001A9 ED 5Br5Er01      [20]  568 	LD	DE,(#_PT3_ModAddr)
+      0001AD ED 73r6Ar01      [20]  569 	ld	(#_PT3_PSP),SP
+      0001B1 F9               [ 6]  570 	LD	SP,HL
+      0001B2 E1               [10]  571 	POP	HL
+      0001B3 19               [11]  572 	ADD	HL,DE
+      0001B4 44               [ 4]  573 	LD	B,H
+      0001B5 4D               [ 4]  574 	LD	C,L
+      0001B6 E1               [10]  575 	POP	HL
+      0001B7 19               [11]  576 	ADD	HL,DE
+      0001B8 22r71r01         [16]  577 	LD	(#_PT3_AdInPtB),HL
+      0001BB E1               [10]  578 	POP	HL
+      0001BC 19               [11]  579 	ADD	HL,DE
+      0001BD 22r73r01         [16]  580 	LD	(#_PT3_AdInPtC),HL
+      0001C0 ED 7Br6Ar01      [20]  581 	ld	SP,(#_PT3_PSP)
+      0001C4                        582 	PL1A:
+      0001C4 FD 21r0Cr00      [14]  583 	LD	IY,#_ChanA + 12
+      0001C8 CDrCEr02         [17]  584 	CALL	PTDECOD
+      0001CB ED 43r6Fr01      [20]  585 	LD	(#_PT3_AdInPtA),BC
+      0001CF                        586 	PL1B:
+      0001CF 21r38r00         [10]  587 	LD	HL,#_ChanB + 27
+      0001D2 35               [11]  588 	DEC	(HL)
+      0001D3 20 0F            [12]  589 	JR	NZ,PL1C
+      0001D5 FD 21r29r00      [14]  590 	LD	IY,#_ChanB + 12
+      0001D9 ED 4Br71r01      [20]  591 	ld	BC,(#_PT3_AdInPtB)
+      0001DD CDrCEr02         [17]  592 	CALL	PTDECOD
+      0001E0 ED 43r71r01      [20]  593 	LD	(#_PT3_AdInPtB),BC
+      0001E4                        594 	PL1C:
+      0001E4 21r55r00         [10]  595 	LD	HL,#_ChanC + 27
+      0001E7 35               [11]  596 	DEC	(HL)
+      0001E8 20 0F            [12]  597 	JR	NZ,PL1D
+      0001EA FD 21r46r00      [14]  598 	LD	IY,#_ChanC + 12
+      0001EE ED 4Br73r01      [20]  599 	ld	BC,(#_PT3_AdInPtC)
+      0001F2 CDrCEr02         [17]  600 	CALL	PTDECOD
+      0001F5 ED 43r73r01      [20]  601 	LD	(#_PT3_AdInPtC),BC
+      0001F9                        602 	PL1D:
+      0001F9 3Ar79r01         [13]  603 	ld	A,(#_PT3_Delay)
+      0001FC 32r57r00         [13]  604 	ld	(#_DelyCnt),A
+      0001FF                        605 	PL2:
+      0001FF FD 21r00r00      [14]  606 	LD	IY,#_ChanA
+      000203 2Ar5Dr00         [16]  607 	LD	HL,(#_PT3_Regs + 0)
+      000206 CDr3Fr04         [17]  608 	CALL	CHREGS
+      000209 22r5Dr00         [16]  609 	LD	(#_PT3_Regs + 0),HL
+      00020C 3Ar67r00         [13]  610 	LD	A,(#_PT3_Regs + 10)
+      00020F 32r65r00         [13]  611 	LD	(#_PT3_Regs + 8),A
+      000212 FD 21r1Dr00      [14]  612 	LD	IY,#_ChanB
+      000216 2Ar5Fr00         [16]  613 	LD	HL,(#_PT3_Regs + 2)
+      000219 CDr3Fr04         [17]  614 	CALL	CHREGS
+      00021C 22r5Fr00         [16]  615 	LD	(#_PT3_Regs + 2),HL
+      00021F 3Ar67r00         [13]  616 	LD	A,(#_PT3_Regs + 10)
+      000222 32r66r00         [13]  617 	LD	(#_PT3_Regs + 9),A
+      000225 FD 21r3Ar00      [14]  618 	LD	IY,#_ChanC
+      000229 2Ar61r00         [16]  619 	LD	HL,(#_PT3_Regs + 4)
+      00022C CDr3Fr04         [17]  620 	CALL	CHREGS
+      00022F 22r61r00         [16]  621 	LD	(#_PT3_Regs + 4),HL
+      000232 2Ar5Br00         [16]  622 	LD	HL,(#_Ns_Base) ;Ns_Base_AddToNs
+      000235 7C               [ 4]  623 	LD	A,H
+      000236 85               [ 4]  624 	ADD	A,L
+      000237 32r63r00         [13]  625 	LD	(#_PT3_Regs + 6),A
+      00023A 3Ar7Ar01         [13]  626 	ld	A,(#_PT3_AddToEn)
+      00023D 5F               [ 4]  627 	LD	E,A
+      00023E 87               [ 4]  628 	ADD	A,A
+      00023F 9F               [ 4]  629 	SBC	A,A
+      000240 57               [ 4]  630 	LD	D,A
+      000241 2Ar6Br00         [16]  631 	LD	HL,(#_EnvBase)
+      000244 19               [11]  632 	ADD	HL,DE
+      000245 ED 5Br58r00      [20]  633 	LD	DE,(#_CurESld)
+      000249 19               [11]  634 	ADD	HL,DE
+      00024A 22r68r00         [16]  635 	LD	(#_PT3_Regs + 11),HL
+      00024D AF               [ 4]  636 	XOR	A
+      00024E 21r5Ar00         [10]  637 	LD	HL,#_CurEDel
+      000251 B6               [ 7]  638 	OR	(HL)
+      000252 C8               [11]  639 	RET	Z
+      000253 35               [11]  640 	DEC	(HL)
+      000254 C0               [11]  641 	RET	NZ
+      000255 3Ar7Br01         [13]  642 	LD	A,(#_PT3_Env_Del)
+      000258 77               [ 7]  643 	LD	(HL),A
+      000259 2Ar7Cr01         [16]  644 	LD	HL,(#_PT3_ESldAdd)
+      00025C 19               [11]  645 	ADD	HL,DE
+      00025D 22r58r00         [16]  646 	LD	(#_CurESld),HL
+                                    647 ;	LD HL,#_PT3_State
+                                    648 ;	BIT 0,(HL) ; pause mode
+                                    649 ;	JP Z,_PT3_Silence
+      000260 C9               [10]  650 	RET
+      000261                        651 	DecodeCheckLoop:
+      000261 2Ar00r00         [16]  652 	ld	HL, (_PT3_Finish)
+      000264 CDr92r05         [17]  653 	call	PT3_CALL_HL
+      000267 21r5Dr01         [10]  654 	ld	HL, #_PT3_State
+      00026A CB EE            [15]  655 	set	5, (HL)
+      00026C CB 66            [12]  656 	bit	4, (HL)
+      00026E C0               [11]  657 	ret	NZ
+      00026F E1               [10]  658 	POP	HL
+      000270 21r57r00         [10]  659 	LD	HL,#_DelyCnt
+      000273 34               [11]  660 	INC	(HL)
+      000274 21r1Br00         [10]  661 	LD	HL,#_ChanA + 27
+      000277 34               [11]  662 	INC	(HL)
+      000278 C3rB9r00         [10]  663 	jp	_PT3_Pause
+      00027B                        664 	PD_OrSm:
+      00027B FD 36 08 00      [19]  665 	LD	-12 + 20(IY),#0
+      00027F CDr06r04         [17]  666 	CALL	SETORN
+      000282 0A               [ 7]  667 	LD	A,(BC)
+      000283 03               [ 6]  668 	INC	BC
+      000284 0F               [ 4]  669 	RRCA
+      000285                        670 	PD_SAM:
+      000285 87               [ 4]  671 	ADD	A,A
+      000286                        672 	PD_SAM_:
+      000286 5F               [ 4]  673 	LD	E,A
+      000287 16 00            [ 7]  674 	LD	D,#0
+      000289 2Ar62r01         [16]  675 	ld	HL,(#_PT3_SamPtrs)
+      00028C 19               [11]  676 	ADD	HL,DE
+      00028D 5E               [ 7]  677 	LD	E,(HL)
+      00028E 23               [ 6]  678 	INC	HL
+      00028F 56               [ 7]  679 	LD	D,(HL)
+      000290 2Ar5Er01         [16]  680 	ld	HL,(#_PT3_ModAddr)
+      000293 19               [11]  681 	ADD	HL,DE
+      000294 FD 75 03         [19]  682 	LD	-12 + 15(IY),L
+      000297 FD 74 04         [19]  683 	LD	-12 + 15 + 1(IY),H
+      00029A 18 41            [12]  684 	JR	PD_LOOP
+      00029C                        685 	PD_VOL:
+      00029C 07               [ 4]  686 	RLCA
+      00029D 07               [ 4]  687 	RLCA
+      00029E 07               [ 4]  688 	RLCA
+      00029F 07               [ 4]  689 	RLCA
+      0002A0 FD 77 10         [19]  690 	LD	-12 + 28(IY),A
+      0002A3 18 3B            [12]  691 	JR	PD_LP2
+      0002A5                        692 	PD_EOff:
+      0002A5 FD 77 08         [19]  693 	LD	-12 + 20(IY),A
+      0002A8 FD 77 F4         [19]  694 	LD	-12 + 0(IY),A
+      0002AB 18 33            [12]  695 	JR	PD_LP2
+      0002AD                        696 	PD_SorE:
+      0002AD 3D               [ 4]  697 	DEC	A
+      0002AE 20 07            [12]  698 	JR	NZ,PD_ENV
+      0002B0 0A               [ 7]  699 	LD	A,(BC)
+      0002B1 03               [ 6]  700 	INC	BC
+      0002B2 FD 77 05         [19]  701 	LD	-12 + 17(IY),A
+      0002B5 18 29            [12]  702 	JR	PD_LP2
+      0002B7                        703 	PD_ENV:
+      0002B7 CDrEAr03         [17]  704 	CALL	SETENV
+      0002BA 18 24            [12]  705 	JR	PD_LP2
+      0002BC                        706 	PD_ORN:
+      0002BC CDr06r04         [17]  707 	CALL	SETORN
+      0002BF 18 1C            [12]  708 	JR	PD_LOOP
+      0002C1                        709 	PD_ESAM:
+      0002C1 FD 77 08         [19]  710 	LD	-12 + 20(IY),A
+      0002C4 FD 77 F4         [19]  711 	LD	-12 + 0(IY),A
+      0002C7 C4rEAr03         [17]  712 	CALL	NZ,SETENV
+      0002CA 0A               [ 7]  713 	LD	A,(BC)
+      0002CB 03               [ 6]  714 	INC	BC
+      0002CC 18 B8            [12]  715 	JR	PD_SAM_
+      0002CE                        716 	PTDECOD:
+      0002CE FD 7E 06         [19]  717 	LD	A,-12 + 18(IY)
+      0002D1 32r6Cr01         [13]  718 	LD	(#_PT3_PrNote),A ;LD (#PrNote + 1),A
+      0002D4 FD 6E FA         [19]  719 	LD	L,6 -12(IY)
+      0002D7 FD 66 FB         [19]  720 	LD	H,6 + 1-12(IY)
+      0002DA 22r6Dr01         [16]  721 	LD	(#_PT3_PrSlide),HL
+      0002DD                        722 	PD_LOOP:
+      0002DD 11 10 20         [10]  723 	ld	DE,#0x2010
+      0002E0                        724 	PD_LP2:
+      0002E0 0A               [ 7]  725 	ld	A,(BC)
+      0002E1 03               [ 6]  726 	inc	BC
+      0002E2 83               [ 4]  727 	ADD	A,E
+      0002E3 38 96            [12]  728 	JR	C,PD_OrSm
+      0002E5 82               [ 4]  729 	ADD	A,D
+      0002E6 28 4A            [12]  730 	JR	Z,PD_FIN
+      0002E8 38 9B            [12]  731 	JR	C,PD_SAM
+      0002EA 83               [ 4]  732 	ADD	A,E
+      0002EB 28 25            [12]  733 	JR	Z,PD_REL
+      0002ED 38 AD            [12]  734 	JR	C,PD_VOL
+      0002EF 83               [ 4]  735 	ADD	A,E
+      0002F0 28 B3            [12]  736 	JR	Z,PD_EOff
+      0002F2 38 B9            [12]  737 	JR	C,PD_SorE
+      0002F4 C6 60            [ 7]  738 	ADD	A,#96
+      0002F6 38 20            [12]  739 	JR	C,PD_NOTE
+      0002F8 83               [ 4]  740 	ADD	A,E
+      0002F9 38 C1            [12]  741 	JR	C,PD_ORN
+      0002FB 82               [ 4]  742 	ADD	A,D
+      0002FC 38 0F            [12]  743 	JR	C,PD_NOIS
+      0002FE 83               [ 4]  744 	ADD	A,E
+      0002FF 38 C0            [12]  745 	JR	C,PD_ESAM
+      000301 87               [ 4]  746 	ADD	A,A
+      000302 5F               [ 4]  747 	LD	E,A
+      000303 21r3FrE3         [10]  748 	LD	HL,#(SPCCOMS + 0xDF20) ;LD HL,((SPCCOMS + $DF20) % 65536)
+                                    749 ;	PUSH DE
+                                    750 ;	LD DE,#0xDF20
+                                    751 ;	LD HL,#SPCCOMS
+                                    752 ;	ADD HL,DE
+                                    753 ;	POP DE
+      000306 19               [11]  754 	ADD	HL,DE
+      000307 5E               [ 7]  755 	LD	E,(HL)
+      000308 23               [ 6]  756 	INC	HL
+      000309 56               [ 7]  757 	LD	D,(HL)
+      00030A D5               [11]  758 	PUSH	DE
+      00030B 18 D0            [12]  759 	JR	PD_LOOP
+      00030D                        760 	PD_NOIS:
+      00030D 32r5Br00         [13]  761 	LD	(#_Ns_Base),A
+      000310 18 CE            [12]  762 	JR	PD_LP2
+      000312                        763 	PD_REL:
+      000312 FD CB 09 86      [23]  764 	RES	0,-12 + 21(IY)
+      000316 18 08            [12]  765 	JR	PD_RES
+      000318                        766 	PD_NOTE:
+      000318 FD 77 06         [19]  767 	ld	-12 + 18(IY),A
+      00031B FD CB 09 C6      [23]  768 	SET	0,-12 + 21(IY)
+      00031F AF               [ 4]  769 	XOR	A
+      000320                        770 	PD_RES:
+      000320 ED 73r66r01      [20]  771 	LD	(#_PT3_PDSP),SP
+      000324 FD F9            [10]  772 	LD	SP,IY
+      000326 67               [ 4]  773 	LD	H,A
+      000327 6F               [ 4]  774 	LD	L,A
+      000328 E5               [11]  775 	PUSH	HL
+      000329 E5               [11]  776 	PUSH	HL
+      00032A E5               [11]  777 	PUSH	HL
+      00032B E5               [11]  778 	PUSH	HL
+      00032C E5               [11]  779 	PUSH	HL
+      00032D E5               [11]  780 	PUSH	HL
+      00032E ED 7Br66r01      [20]  781 	LD	SP,(#_PT3_PDSP)
+      000332                        782 	PD_FIN:
+      000332 FD 7E 05         [19]  783 	ld	A,-12 + 17(IY)
+      000335 FD 77 0F         [19]  784 	ld	-12 + 27(IY),A
+      000338 C9               [10]  785 	ret
+      000339                        786 	C_PORTM:
+      000339 FD CB 09 96      [23]  787 	RES	2,-12 + 21(IY)
+      00033D 0A               [ 7]  788 	LD	A,(BC)
+      00033E 03               [ 6]  789 	INC	BC
+                                    790 ;SKIP	PRECALCULATED TONE DELTA (BECAUSE
+                                    791 ;CANNOT	BE RIGHT AFTER PT3 COMPILATION)
+      00033F 03               [ 6]  792 	INC	BC
+      000340 03               [ 6]  793 	INC	BC
+      000341 FD 77 0A         [19]  794 	LD	-12 + 22(IY),A
+      000344 FD 77 F9         [19]  795 	LD	-12 + 5(IY),A
+      000347 ED 5Br7Er01      [20]  796 	LD	DE,(#_PT3_NoteTable)
+      00034B FD 7E 06         [19]  797 	LD	A,-12 + 18(IY)
+      00034E FD 77 07         [19]  798 	LD	-12 + 19(IY),A
+      000351 87               [ 4]  799 	ADD	A,A
+      000352 6F               [ 4]  800 	LD	L,A
+      000353 26 00            [ 7]  801 	LD	H,#0
+      000355 19               [11]  802 	ADD	HL,DE
+      000356 7E               [ 7]  803 	LD	A,(HL)
+      000357 23               [ 6]  804 	INC	HL
+      000358 66               [ 7]  805 	LD	H,(HL)
+      000359 6F               [ 4]  806 	LD	L,A
+      00035A E5               [11]  807 	PUSH	HL
+      00035B 3Ar6Cr01         [13]  808 	LD	A,(#_PT3_PrNote) ;<--- LD A,#0x3E
+      00035E FD 77 06         [19]  809 	LD	-12 + 18(IY),A
+      000361 87               [ 4]  810 	ADD	A,A
+      000362 6F               [ 4]  811 	LD	L,A
+      000363 26 00            [ 7]  812 	LD	H,#0
+      000365 19               [11]  813 	ADD	HL,DE
+      000366 5E               [ 7]  814 	LD	E,(HL)
+      000367 23               [ 6]  815 	INC	HL
+      000368 56               [ 7]  816 	LD	D,(HL)
+      000369 E1               [10]  817 	POP	HL
+      00036A ED 52            [15]  818 	SBC	HL,DE
+      00036C FD 75 0D         [19]  819 	LD	-12 + 25(IY),L
+      00036F FD 74 0E         [19]  820 	LD	-12 + 25 + 1(IY),H
+      000372 ED 5Br6Dr01      [20]  821 	LD	DE,(#_PT3_PrSlide) ;<--- change to Kun version
+      000376 FD 73 FA         [19]  822 	LD	-12 + 6(IY),E ;<---
+      000379 FD 72 FB         [19]  823 	LD	-12 + 6 + 1(IY),D ;<---
+      00037C 0A               [ 7]  824 	LD	A,(BC) ;SIGNED TONE STEP
+      00037D 03               [ 6]  825 	INC	BC
+      00037E 08               [ 4]  826 	EX	AF,AF
+      00037F 0A               [ 7]  827 	LD	A,(BC)
+      000380 03               [ 6]  828 	INC	BC
+      000381 A7               [ 4]  829 	AND	A
+      000382 28 01            [12]  830 	JR	Z,NOSIG
+      000384 EB               [ 4]  831 	EX	DE,HL
+      000385                        832 	NOSIG:
+      000385 ED 52            [15]  833 	SBC	HL,DE
+      000387 F2r8Fr03         [10]  834 	JP	P,SET_STP
+      00038A 2F               [ 4]  835 	CPL
+      00038B 08               [ 4]  836 	EX	AF,AF
+      00038C ED 44            [ 8]  837 	NEG
+      00038E 08               [ 4]  838 	EX	AF,AF
+      00038F                        839 	SET_STP:
+      00038F FD 77 0C         [19]  840 	LD	-12 + 23 + 1(IY),A
+      000392 08               [ 4]  841 	EX	AF,AF
+      000393 FD 77 0B         [19]  842 	ld	-12 + 23(IY),A
+      000396 FD 36 FE 00      [19]  843 	ld	-12 + 10(IY),#0
+      00039A C9               [10]  844 	ret
+      00039B                        845 	C_GLISS:
+      00039B FD CB 09 D6      [23]  846 	SET	2,-12 + 21(IY)
+      00039F 0A               [ 7]  847 	LD	A,(BC)
+      0003A0 03               [ 6]  848 	INC	BC
+      0003A1 FD 77 0A         [19]  849 	LD	-12 + 22(IY),A
+      0003A4 FD 77 F9         [19]  850 	LD	-12 + 5(IY),A
+      0003A7 0A               [ 7]  851 	LD	A,(BC)
+      0003A8 03               [ 6]  852 	INC	BC
+      0003A9 08               [ 4]  853 	EX	AF,AF
+      0003AA 0A               [ 7]  854 	LD	A,(BC)
+      0003AB 03               [ 6]  855 	INC	BC
+      0003AC 18 E1            [12]  856 	JR	SET_STP
+      0003AE                        857 	C_SMPOS:
+      0003AE 0A               [ 7]  858 	LD	A,(BC)
+      0003AF 03               [ 6]  859 	INC	BC
+      0003B0 FD 77 F5         [19]  860 	LD	-12 + 1(IY),A
+      0003B3 C9               [10]  861 	RET
+      0003B4                        862 	C_ORPOS:
+      0003B4 0A               [ 7]  863 	LD	A,(BC)
+      0003B5 03               [ 6]  864 	INC	BC
+      0003B6 FD 77 F4         [19]  865 	LD	-12 + 0(IY),A
+      0003B9 C9               [10]  866 	RET
+      0003BA                        867 	C_VIBRT:
+      0003BA 0A               [ 7]  868 	LD	A,(BC)
+      0003BB 03               [ 6]  869 	INC	BC
+      0003BC FD 77 FF         [19]  870 	LD	-12 + 11(IY),A
+      0003BF FD 77 FE         [19]  871 	LD	-12 + 10(IY),A
+      0003C2 0A               [ 7]  872 	LD	A,(BC)
+      0003C3 03               [ 6]  873 	INC	BC
+      0003C4 FD 77 00         [19]  874 	LD	-12 + 12(IY),A
+      0003C7 AF               [ 4]  875 	XOR	A
+      0003C8 FD 77 F9         [19]  876 	LD	-12 + 5(IY),A
+      0003CB FD 77 FA         [19]  877 	LD	-12 + 6(IY),A
+      0003CE FD 77 FB         [19]  878 	LD	-12 + 6 + 1(IY),A
+      0003D1 C9               [10]  879 	RET
+      0003D2                        880 	C_ENGLS:
+      0003D2 0A               [ 7]  881 	LD	A,(BC)
+      0003D3 03               [ 6]  882 	INC	BC
+      0003D4 32r7Br01         [13]  883 	LD	(#_PT3_Env_Del),A
+      0003D7 32r5Ar00         [13]  884 	LD	(#_CurEDel),A
+      0003DA 0A               [ 7]  885 	LD	A,(BC)
+      0003DB 03               [ 6]  886 	INC	BC
+      0003DC 6F               [ 4]  887 	LD	L,A
+      0003DD 0A               [ 7]  888 	LD	A,(BC)
+      0003DE 03               [ 6]  889 	INC	BC
+      0003DF 67               [ 4]  890 	LD	H,A
+      0003E0 22r7Cr01         [16]  891 	LD	(#_PT3_ESldAdd),HL
+      0003E3 C9               [10]  892 	RET
+      0003E4                        893 	C_DELAY:
+      0003E4 0A               [ 7]  894 	LD	A,(BC)
+      0003E5 03               [ 6]  895 	INC	BC
+      0003E6 32r79r01         [13]  896 	LD	(#_PT3_Delay),A
+      0003E9 C9               [10]  897 	RET
+      0003EA                        898 	SETENV:
+      0003EA FD 73 08         [19]  899 	LD	-12 + 20(IY),E
+      0003ED 32r6Ar00         [13]  900 	LD	(#_PT3_Regs + 13),A
+      0003F0 0A               [ 7]  901 	LD	A,(BC)
+      0003F1 03               [ 6]  902 	INC	BC
+      0003F2 67               [ 4]  903 	LD	H,A
+      0003F3 0A               [ 7]  904 	LD	A,(BC)
+      0003F4 03               [ 6]  905 	INC	BC
+      0003F5 6F               [ 4]  906 	LD	L,A
+      0003F6 22r6Br00         [16]  907 	LD	(#_EnvBase),HL
+      0003F9 AF               [ 4]  908 	XOR	A
+      0003FA FD 77 F4         [19]  909 	LD	-12 + 0(IY),A
+      0003FD 32r5Ar00         [13]  910 	LD	(#_CurEDel),A
+      000400 67               [ 4]  911 	LD	H,A
+      000401 6F               [ 4]  912 	LD	L,A
+      000402 22r58r00         [16]  913 	LD	(#_CurESld),HL
+      000405                        914 	C_NOP:
+      000405 C9               [10]  915 	RET
+      000406                        916 	SETORN:
+      000406 87               [ 4]  917 	ADD	A,A
+      000407 5F               [ 4]  918 	LD	E,A
+      000408 16 00            [ 7]  919 	LD	D,#0
+      00040A FD 72 F4         [19]  920 	LD	-12 + 0(IY),D
+      00040D 2Ar64r01         [16]  921 	ld	HL,(#_PT3_OrnPtrs)
+      000410 19               [11]  922 	ADD	HL,DE
+      000411 5E               [ 7]  923 	LD	E,(HL)
+      000412 23               [ 6]  924 	INC	HL
+      000413 56               [ 7]  925 	LD	D,(HL)
+      000414 2Ar5Er01         [16]  926 	ld	HL,(#_PT3_ModAddr)
+      000417 19               [11]  927 	ADD	HL,DE
+      000418 FD 75 01         [19]  928 	LD	-12 + 13(IY),L
+      00041B FD 74 02         [19]  929 	LD	-12 + 13 + 1(IY),H
+      00041E C9               [10]  930 	RET
+                                    931 ;-------------------------------------------------------------------------------
+                                    932 ;	ALL 16 ADDRESSES TO PROTECT FROM BROKEN PT3 MODULES
+      00041F                        933 	SPCCOMS:
+      00041Fr05r04                  934 	.dw	C_NOP ; ## CHECK THAT IT IS NOT AUTOMODIF
+      000421r9Br03                  935 	.dw	C_GLISS ; (nothing seems to touch it)
+      000423r39r03                  936 	.dw	C_PORTM
+      000425rAEr03                  937 	.dw	C_SMPOS
+      000427rB4r03                  938 	.dw	C_ORPOS
+      000429rBAr03                  939 	.dw	C_VIBRT
+      00042Br05r04                  940 	.dw	C_NOP
+      00042Dr05r04                  941 	.dw	C_NOP
+      00042FrD2r03                  942 	.dw	C_ENGLS
+      000431rE4r03                  943 	.dw	C_DELAY
+      000433r05r04                  944 	.dw	C_NOP
+      000435r05r04                  945 	.dw	C_NOP
+      000437r05r04                  946 	.dw	C_NOP
+      000439r05r04                  947 	.dw	C_NOP
+      00043Br05r04                  948 	.dw	C_NOP
+      00043Dr05r04                  949 	.dw	C_NOP
+      00043F                        950 	CHREGS:
+      00043F AF               [ 4]  951 	XOR	A
+      000440 32r67r00         [13]  952 	LD	(#_PT3_Regs + 10),A
+      000443 FD CB 15 46      [20]  953 	BIT	0,21(IY)
+      000447 E5               [11]  954 	PUSH	HL
+      000448 CAr6Fr05         [10]  955 	JP	Z,CH_EXIT
+      00044B ED 73r68r01      [20]  956 	ld	(#_PT3_CSP),sp
+      00044F FD 6E 0D         [19]  957 	LD	L,13(IY)
+      000452 FD 66 0E         [19]  958 	LD	H,13 + 1(IY)
+      000455 F9               [ 6]  959 	LD	SP,HL
+      000456 D1               [10]  960 	POP	DE
+      000457 67               [ 4]  961 	LD	H,A
+      000458 FD 7E 00         [19]  962 	LD	A,0(IY)
+      00045B 6F               [ 4]  963 	LD	L,A
+      00045C 39               [11]  964 	ADD	HL,SP
+      00045D 3C               [ 4]  965 	INC	A
+      00045E BA               [ 4]  966 	CP	D
+      00045F 38 01            [12]  967 	JR	C,CH_ORPS
+      000461 7B               [ 4]  968 	LD	A,E
+      000462                        969 	CH_ORPS:
+      000462 FD 77 00         [19]  970 	LD	0(IY),A
+      000465 FD 7E 12         [19]  971 	LD	A,18(IY)
+      000468 86               [ 7]  972 	ADD	A,(HL)
+      000469 F2r6Dr04         [10]  973 	JP	P,CH_NTP
+      00046C AF               [ 4]  974 	XOR	A
+      00046D                        975 	CH_NTP:
+      00046D FE 60            [ 7]  976 	CP	#96
+      00046F 38 02            [12]  977 	JR	C,CH_NOK
+      000471 3E 5F            [ 7]  978 	LD	A,#95
+      000473                        979 	CH_NOK:
+      000473 87               [ 4]  980 	ADD	A,A
+      000474 08               [ 4]  981 	EX	AF,AF
+      000475 FD 6E 0F         [19]  982 	LD	L,15(IY)
+      000478 FD 66 10         [19]  983 	LD	H,15 + 1(IY)
+      00047B F9               [ 6]  984 	LD	SP,HL
+      00047C D1               [10]  985 	POP	DE
+      00047D 26 00            [ 7]  986 	LD	H,#0
+      00047F FD 7E 01         [19]  987 	LD	A,1(IY)
+      000482 47               [ 4]  988 	LD	B,A
+      000483 87               [ 4]  989 	ADD	A,A
+      000484 87               [ 4]  990 	ADD	A,A
+      000485 6F               [ 4]  991 	LD	L,A
+      000486 39               [11]  992 	ADD	HL,SP
+      000487 F9               [ 6]  993 	LD	SP,HL
+      000488 78               [ 4]  994 	LD	A,B
+      000489 3C               [ 4]  995 	INC	A
+      00048A BA               [ 4]  996 	CP	D
+      00048B 38 01            [12]  997 	JR	C,CH_SMPS
+      00048D 7B               [ 4]  998 	LD	A,E
+      00048E                        999 	CH_SMPS:
+      00048E FD 77 01         [19] 1000 	LD	1(IY),A
+      000491 C1               [10] 1001 	POP	BC
+      000492 E1               [10] 1002 	POP	HL
+      000493 FD 5E 08         [19] 1003 	LD	E,8(IY)
+      000496 FD 56 09         [19] 1004 	LD	D,8 + 1(IY)
+      000499 19               [11] 1005 	ADD	HL,DE
+      00049A CB 70            [ 8] 1006 	BIT	6,B
+      00049C 28 06            [12] 1007 	JR	Z,CH_NOAC
+      00049E FD 75 08         [19] 1008 	LD	8(IY),L
+      0004A1 FD 74 09         [19] 1009 	LD	8 + 1(IY),H
+      0004A4                       1010 	CH_NOAC:
+      0004A4 EB               [ 4] 1011 	EX	DE,HL
+      0004A5 08               [ 4] 1012 	EX	AF,AF
+      0004A6 6F               [ 4] 1013 	LD	L,A
+      0004A7 26 00            [ 7] 1014 	LD	H,#0
+      0004A9 ED 7Br7Er01      [20] 1015 	LD	SP,(#_PT3_NoteTable)
+      0004AD 39               [11] 1016 	ADD	HL,SP
+      0004AE F9               [ 6] 1017 	LD	SP,HL
+      0004AF E1               [10] 1018 	POP	HL
+      0004B0 19               [11] 1019 	ADD	HL,DE
+      0004B1 FD 5E 06         [19] 1020 	LD	E,6(IY)
+      0004B4 FD 56 07         [19] 1021 	LD	D,6 + 1(IY)
+      0004B7 19               [11] 1022 	ADD	HL,DE
+      0004B8 ED 7Br68r01      [20] 1023 	ld	SP,(#_PT3_CSP)
+      0004BC E3               [19] 1024 	EX	(SP),HL
+      0004BD AF               [ 4] 1025 	XOR	A
+      0004BE FD B6 05         [19] 1026 	OR	5(IY)
+      0004C1 28 3E            [12] 1027 	JR	Z,CH_AMP
+      0004C3 FD 35 05         [23] 1028 	DEC	5(IY)
+      0004C6 20 39            [12] 1029 	JR	NZ,CH_AMP
+      0004C8 FD 7E 16         [19] 1030 	LD	A,22(IY)
+      0004CB FD 77 05         [19] 1031 	LD	5(IY),A
+      0004CE FD 6E 17         [19] 1032 	LD	L,23(IY)
+      0004D1 FD 66 18         [19] 1033 	LD	H,23 + 1(IY)
+      0004D4 7C               [ 4] 1034 	LD	A,H
+      0004D5 19               [11] 1035 	ADD	HL,DE
+      0004D6 FD 75 06         [19] 1036 	LD	6(IY),L
+      0004D9 FD 74 07         [19] 1037 	LD	6 + 1(IY),H
+      0004DC FD CB 15 56      [20] 1038 	BIT	2,21(IY)
+      0004E0 20 1F            [12] 1039 	JR	NZ,CH_AMP
+      0004E2 FD 5E 19         [19] 1040 	LD	E,25(IY)
+      0004E5 FD 56 1A         [19] 1041 	LD	D,25 + 1(IY)
+      0004E8 A7               [ 4] 1042 	AND	A
+      0004E9 28 01            [12] 1043 	JR	Z,CH_STPP
+      0004EB EB               [ 4] 1044 	EX	DE,HL
+      0004EC                       1045 	CH_STPP:
+      0004EC ED 52            [15] 1046 	SBC	HL,DE
+      0004EE FAr01r05         [10] 1047 	JP	M,CH_AMP
+      0004F1 FD 7E 13         [19] 1048 	LD	A,19(IY)
+      0004F4 FD 77 12         [19] 1049 	LD	18(IY),A
+      0004F7 AF               [ 4] 1050 	XOR	A
+      0004F8 FD 77 05         [19] 1051 	LD	5(IY),A
+      0004FB FD 77 06         [19] 1052 	LD	6(IY),A
+      0004FE FD 77 07         [19] 1053 	LD	6 + 1(IY),A
+      000501                       1054 	CH_AMP:
+      000501 FD 7E 02         [19] 1055 	LD	A,2(IY)
+      000504 CB 79            [ 8] 1056 	BIT	7,C
+      000506 28 13            [12] 1057 	JR	Z,CH_NOAM
+      000508 CB 71            [ 8] 1058 	BIT	6,C
+      00050A 28 07            [12] 1059 	JR	Z,CH_AMIN
+      00050C FE 0F            [ 7] 1060 	CP	#15
+      00050E 28 0B            [12] 1061 	JR	Z,CH_NOAM
+      000510 3C               [ 4] 1062 	INC	A
+      000511 18 05            [12] 1063 	JR	CH_SVAM
+      000513                       1064 	CH_AMIN:
+      000513 FE F1            [ 7] 1065 	CP	#-15
+      000515 28 04            [12] 1066 	JR	Z,CH_NOAM
+      000517 3D               [ 4] 1067 	DEC	A
+      000518                       1068 	CH_SVAM:
+      000518 FD 77 02         [19] 1069 	LD	2(IY),A
+      00051B                       1070 	CH_NOAM:
+      00051B 6F               [ 4] 1071 	LD	L,A
+      00051C 78               [ 4] 1072 	LD	A,B
+      00051D E6 0F            [ 7] 1073 	AND	#15
+      00051F 85               [ 4] 1074 	ADD	A,L
+      000520 F2r24r05         [10] 1075 	JP	P,CH_APOS
+      000523 AF               [ 4] 1076 	XOR	A
+      000524                       1077 	CH_APOS:
+      000524 FE 10            [ 7] 1078 	CP	#16
+      000526 38 02            [12] 1079 	JR	C,CH_VOL
+      000528 3E 0F            [ 7] 1080 	LD	A,#15
+      00052A                       1081 	CH_VOL:
+      00052A FD B6 1C         [19] 1082 	OR	28(IY)
+      00052D 6F               [ 4] 1083 	LD	L,A
+      00052E 26 00            [ 7] 1084 	LD	H,#0
+      000530 11r5Dr00         [10] 1085 	LD	DE,#_PT3_Regs ;_VT_
+      000533 19               [11] 1086 	ADD	HL,DE
+      000534 7E               [ 7] 1087 	LD	A,(HL)
+      000535                       1088 	CH_ENV:
+      000535 CB 41            [ 8] 1089 	BIT	0,C
+      000537 20 03            [12] 1090 	JR	NZ,CH_NOEN
+      000539 FD B6 14         [19] 1091 	OR	20(IY)
+      00053C                       1092 	CH_NOEN:
+      00053C 32r67r00         [13] 1093 	LD	(#_PT3_Regs + 10),A
+      00053F CB 78            [ 8] 1094 	BIT	7,B
+      000541 79               [ 4] 1095 	LD	A,C
+      000542 28 19            [12] 1096 	JR	Z,NO_ENSL
+      000544 17               [ 4] 1097 	RLA
+      000545 17               [ 4] 1098 	RLA
+      000546 CB 2F            [ 8] 1099 	SRA	A
+      000548 CB 2F            [ 8] 1100 	SRA	A
+      00054A CB 2F            [ 8] 1101 	SRA	A
+      00054C FD 86 04         [19] 1102 	ADD	A,4(IY) ;SEE COMMENT BELOW
+      00054F CB 68            [ 8] 1103 	BIT	5,B
+      000551 28 03            [12] 1104 	JR	Z,NO_ENAC
+      000553 FD 77 04         [19] 1105 	LD	4(IY),A
+      000556                       1106 	NO_ENAC:
+      000556 21r7Ar01         [10] 1107 	ld	HL,#_PT3_AddToEn
+      000559 86               [ 7] 1108 	ADD	A,(HL) ;BUG IN PT3 - NEED WORD HERE.
+                                   1109 ;FIX	IT IN NEXT VERSION?
+      00055A 77               [ 7] 1110 	LD	(HL),A
+      00055B 18 0E            [12] 1111 	JR	CH_MIX
+      00055D                       1112 	NO_ENSL:
+      00055D 1F               [ 4] 1113 	RRA
+      00055E FD 86 03         [19] 1114 	ADD	A,3(IY)
+      000561 32r5Cr00         [13] 1115 	LD	(#_AddToNs),A
+      000564 CB 68            [ 8] 1116 	BIT	5,B
+      000566 28 03            [12] 1117 	JR	Z,CH_MIX
+      000568 FD 77 03         [19] 1118 	LD	3(IY),A
+      00056B                       1119 	CH_MIX:
+      00056B 78               [ 4] 1120 	LD	A,B
+      00056C 1F               [ 4] 1121 	RRA
+      00056D E6 48            [ 7] 1122 	AND	#0x48
+      00056F                       1123 	CH_EXIT:
+      00056F 21r64r00         [10] 1124 	LD	HL,#_PT3_Regs + 7
+      000572 B6               [ 7] 1125 	OR	(HL)
+      000573 0F               [ 4] 1126 	RRCA
+      000574 77               [ 7] 1127 	LD	(HL),A
+      000575 E1               [10] 1128 	POP	HL
+      000576 AF               [ 4] 1129 	XOR	A
+      000577 FD B6 0A         [19] 1130 	OR	10(IY)
+      00057A C8               [11] 1131 	RET	Z
+      00057B FD 35 0A         [23] 1132 	DEC	10(IY)
+      00057E C0               [11] 1133 	RET	NZ
+      00057F FD AE 15         [19] 1134 	XOR	21(IY)
+      000582 FD 77 15         [19] 1135 	LD	21(IY),A
+      000585 1F               [ 4] 1136 	RRA
+      000586 FD 7E 0B         [19] 1137 	LD	A,11(IY)
+      000589 38 03            [12] 1138 	JR	C,CH_ONDL
+      00058B FD 7E 0C         [19] 1139 	LD	A,12(IY)
+      00058E                       1140 	CH_ONDL:
+      00058E FD 77 0A         [19] 1141 	LD	10(IY),A
+      000591 C9               [10] 1142 	RET
+      000592                       1143 	PT3_CALL_HL:
+      000592 E9               [ 4] 1144 	jp	(hl)
+                                   1145 ;-------------------------------------------------------------------------------	DATAS
+      000593                       1146 	EMPTYSAMORN:
+      000593 00 01 00 90           1147 	.db	0,1,0,0x90
+                                   1148 ;delete	$90 if you dont need default sample ; # pongo el 0 aqui
+                           000597  1149 	C$pt3_player.c$1094$1_0$43	= .
+                                   1150 	.globl	C$pt3_player.c$1094$1_0$43
+                                   1151 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:1094: }
+                                   1152 	.area _CODE
+                                   1153 	.area _INITIALIZER
+                           000000  1154 Fpt3_player$__xinit_PT3_Finish$0_0$0 == .
+      000000                       1155 __xinit__PT3_Finish:
+      000000r00r00                 1156 	.dw _EmptyCB
+                                   1157 	.area _CABS (ABS)

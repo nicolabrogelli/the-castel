@@ -197,523 +197,749 @@
                                     197 ;--------------------------------------------------------
                                     198 ; special function registers
                                     199 ;--------------------------------------------------------
-                           0000A8   200 _g_PortPrimarySlot	=	0x00a8
-                           0000A9   201 _g_PortReadKeyboard	=	0x00a9
-                           0000AA   202 _g_PortAccessKeyboard	=	0x00aa
-                           0000AB   203 _g_PortControl	=	0x00ab
-                           000098   204 _g_VDP_DataPort	=	0x0098
-                           000099   205 _g_VDP_RegPort	=	0x0099
-                           000099   206 _g_VDP_AddrPort	=	0x0099
-                           000099   207 _g_VDP_StatPort	=	0x0099
-                           0000A0   208 _g_PSG_RegPort	=	0x00a0
-                           0000A1   209 _g_PSG_DataPort	=	0x00a1
-                           0000A2   210 _g_PSG_StatPort	=	0x00a2
-                           000010   211 _g_PSG_Ext_RegPort	=	0x0010
-                           000011   212 _g_PSG_Ext_DataPort	=	0x0011
-                           000012   213 _g_PSG_Ext_StatPort	=	0x0012
-                           00007C   214 _g_MSXMusic_IndexPort	=	0x007c
-                           00007D   215 _g_MSXMusic_DataPort	=	0x007d
-                           0000C0   216 _g_MSXAudio_IndexPort	=	0x00c0
-                           0000C1   217 _g_MSXAudio_DataPort	=	0x00c1
-                           0000C2   218 _g_MSXAudio_IndexPort2	=	0x00c2
-                           0000C3   219 _g_MSXAudio_DataPort2	=	0x00c3
-                           0000B4   220 _g_RTC_AddrPort	=	0x00b4
-                           0000B5   221 _g_RTC_DataPort	=	0x00b5
-                                    222 ;--------------------------------------------------------
-                                    223 ; ram data
-                                    224 ;--------------------------------------------------------
-                                    225 	.area _DATA
-                           00F3AE   226 _g_LINL40	=	0xf3ae
-                           00F3AF   227 _g_LINL32	=	0xf3af
-                           00F3B0   228 _g_LINLEN	=	0xf3b0
-                           00F3B1   229 _g_CRTCNT	=	0xf3b1
-                           00F3B2   230 _g_CLMLST	=	0xf3b2
-                           00F3B3   231 _g_TXTNAM	=	0xf3b3
-                           00F3B5   232 _g_TXTCOL	=	0xf3b5
-                           00F3B7   233 _g_TXTCGP	=	0xf3b7
-                           00F3B9   234 _g_TXTATR	=	0xf3b9
-                           00F3BB   235 _g_TXTPAT	=	0xf3bb
-                           00F3BD   236 _g_T32NAM	=	0xf3bd
-                           00F3BF   237 _g_T32COL	=	0xf3bf
-                           00F3C1   238 _g_T32CGP	=	0xf3c1
-                           00F3C3   239 _g_T32ATR	=	0xf3c3
-                           00F3C5   240 _g_T32PAT	=	0xf3c5
-                           00F3C7   241 _g_GRPNAM	=	0xf3c7
-                           00F3C9   242 _g_GRPCOL	=	0xf3c9
-                           00F3CB   243 _g_GRPCGP	=	0xf3cb
-                           00F3CD   244 _g_GRPATR	=	0xf3cd
-                           00F3CF   245 _g_GRPPAT	=	0xf3cf
-                           00F3D1   246 _g_MLTNAM	=	0xf3d1
-                           00F3D3   247 _g_MLTCOL	=	0xf3d3
-                           00F3D5   248 _g_MLTCGP	=	0xf3d5
-                           00F3D7   249 _g_MLTATR	=	0xf3d7
-                           00F3D9   250 _g_MLTPAT	=	0xf3d9
-                           00F3DB   251 _g_CLIKSW	=	0xf3db
-                           00F3DC   252 _g_CSRY	=	0xf3dc
-                           00F3DD   253 _g_CSRX	=	0xf3dd
-                           00F3E9   254 _g_FORCLR	=	0xf3e9
-                           00F3EA   255 _g_BAKCLR	=	0xf3ea
-                           00F3EB   256 _g_BDRCLR	=	0xf3eb
-                           00F3F2   257 _g_ATRBYT	=	0xf3f2
-                           00F87F   258 _g_FNKSTR	=	0xf87f
-                           00F92A   259 _g_CLOC	=	0xf92a
-                           00F92C   260 _g_CMASK	=	0xf92c
-                           00FB02   261 _g_LOGOPR	=	0xfb02
-                           00FCB7   262 _g_GRPACX	=	0xfcb7
-                           00FCB9   263 _g_GRPACY	=	0xfcb9
-                           00FFFF   264 _g_SLTSL	=	0xffff
-                                    265 ;--------------------------------------------------------
-                                    266 ; ram data
-                                    267 ;--------------------------------------------------------
-                                    268 	.area _INITIALIZED
-                                    269 ;--------------------------------------------------------
-                                    270 ; absolute external ram data
-                                    271 ;--------------------------------------------------------
-                                    272 	.area _DABS (ABS)
-                                    273 ;--------------------------------------------------------
-                                    274 ; global & static initialisations
-                                    275 ;--------------------------------------------------------
-                                    276 	.area _HOME
-                                    277 	.area _GSINIT
-                                    278 	.area _GSFINAL
-                                    279 	.area _GSINIT
-                                    280 ;--------------------------------------------------------
-                                    281 ; Home
-                                    282 ;--------------------------------------------------------
-                                    283 	.area _HOME
-                                    284 	.area _HOME
-                                    285 ;--------------------------------------------------------
-                                    286 ; code
-                                    287 ;--------------------------------------------------------
-                                    288 	.area _CODE
-                                    289 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/compress/pletter.c:72: void Pletter_UnpackToRAM(const void* source, void* dest) __naked
-                                    290 ;	---------------------------------
-                                    291 ; Function Pletter_UnpackToRAM
-                                    292 ; ---------------------------------
-      000000                        293 _Pletter_UnpackToRAM::
-                                    294 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/compress/pletter.c:217: __endasm;
-      000000 DD E5            [15]  295 	push	ix
-      000002 CDr08r00         [17]  296 	call	unpack
-      000005 DD E1            [14]  297 	pop	ix
-      000007 C9               [10]  298 	ret
-      000008                        299 	unpack:
-      000008 7E               [ 7]  300 	ld	a, (hl)
-      000009 23               [ 6]  301 	inc	hl
-      00000A D9               [ 4]  302 	exx
-      00000B 11 00 00         [10]  303 	ld	de, #0
-      00000E 87               [ 4]  304 	add	a, a
-      00000F 3C               [ 4]  305 	inc	a
-      000010 CB 13            [ 8]  306 	rl	e
-      000012 87               [ 4]  307 	add	a, a
-      000013 CB 13            [ 8]  308 	rl	e
-      000015 87               [ 4]  309 	add	a, a
-      000016 CB 13            [ 8]  310 	rl	e
-      000018 CB 13            [ 8]  311 	rl	e
-      00001A 21rA6r00         [10]  312 	ld	hl, #modes
-      00001D 19               [11]  313 	add	hl, de
-      00001E 5E               [ 7]  314 	ld	e, (hl)
-      00001F DD 6B                  315 	.db	0xDD, 0x6B
-      000021 23               [ 6]  316 	inc	hl
-      000022 5E               [ 7]  317 	ld	e, (hl)
-      000023 DD 63                  318 	.db	0xDD, 0x63
-      000025 1E 01            [ 7]  319 	ld	e, #1
-      000027 D9               [ 4]  320 	exx
-      000028 FD 21r2Er00      [14]  321 	ld	iy, #loop
-      00002C                        322 	literal:
-      00002C ED A0            [16]  323 	ldi
-      00002E                        324 	loop:
-      00002E 87               [ 4]  325 	add	a, a
-      00002F CCr9Cr00         [17]  326 	call	z, getbit
-      000032 30 F8            [12]  327 	jr	nc, literal
-      000034 D9               [ 4]  328 	exx
-      000035 62               [ 4]  329 	ld	h, d
-      000036 6B               [ 4]  330 	ld	l, e
-      000037                        331 	getlen:
-      000037 87               [ 4]  332 	add	a
-      000038 CCrA0r00         [17]  333 	call	z, getbitexx
-      00003B 30 1B            [12]  334 	jr	nc, getlen_lenok
-      00003D                        335 	getlen_lus:
-      00003D 87               [ 4]  336 	add	a
-      00003E CCrA0r00         [17]  337 	call	z, getbitexx
-      000041 ED 6A            [15]  338 	adc	hl, hl
-      000043 D8               [11]  339 	ret	c
-      000044 87               [ 4]  340 	add	a
-      000045 CCrA0r00         [17]  341 	call	z, getbitexx
-      000048 30 0E            [12]  342 	jr	nc, getlen_lenok
-      00004A 87               [ 4]  343 	add	a
-      00004B CCrA0r00         [17]  344 	call	z, getbitexx
-      00004E ED 6A            [15]  345 	adc	hl, hl
-      000050 D8               [11]  346 	ret	c
-      000051 87               [ 4]  347 	add	a
-      000052 CCrA0r00         [17]  348 	call	z, getbitexx
-      000055 DAr3Dr00         [10]  349 	jp	c, getlen_lus
-      000058                        350 	getlen_lenok:
-      000058 23               [ 6]  351 	inc	hl
-      000059 D9               [ 4]  352 	exx
-      00005A 4E               [ 7]  353 	ld	c, (hl)
-      00005B 23               [ 6]  354 	inc	hl
-      00005C 06 00            [ 7]  355 	ld	b, #0
-      00005E CB 79            [ 8]  356 	bit	7, c
-      000060 CAr8Dr00         [10]  357 	jp	z, offsok
-      000063 DD E9            [ 8]  358 	jp	(ix)
-      000065                        359 	mode6:
-      000065 87               [ 4]  360 	add	a
-      000066 CCr9Cr00         [17]  361 	call	z, getbit
-      000069 CB 10            [ 8]  362 	rl	b
-      00006B                        363 	mode5:
-      00006B 87               [ 4]  364 	add	a
-      00006C CCr9Cr00         [17]  365 	call	z, getbit
-      00006F CB 10            [ 8]  366 	rl	b
-      000071                        367 	mode4:
-      000071 87               [ 4]  368 	add	a
-      000072 CCr9Cr00         [17]  369 	call	z, getbit
-      000075 CB 10            [ 8]  370 	rl	b
-      000077                        371 	mode3:
-      000077 87               [ 4]  372 	add	a
-      000078 CCr9Cr00         [17]  373 	call	z, getbit
-      00007B CB 10            [ 8]  374 	rl	b
-      00007D                        375 	mode2:
-      00007D 87               [ 4]  376 	add	a
-      00007E CCr9Cr00         [17]  377 	call	z, getbit
-      000081 CB 10            [ 8]  378 	rl	b
-      000083 87               [ 4]  379 	add	a
-      000084 CCr9Cr00         [17]  380 	call	z, getbit
-      000087 30 04            [12]  381 	jr	nc, offsok
-      000089 B7               [ 4]  382 	or	a
-      00008A 04               [ 4]  383 	inc	b
-      00008B CB B9            [ 8]  384 	res	7, c
-      00008D                        385 	offsok:
-      00008D 03               [ 6]  386 	inc	bc
-      00008E E5               [11]  387 	push	hl
-      00008F D9               [ 4]  388 	exx
-      000090 E5               [11]  389 	push	hl
-      000091 D9               [ 4]  390 	exx
-      000092 6B               [ 4]  391 	ld	l, e
-      000093 62               [ 4]  392 	ld	h, d
-      000094 ED 42            [15]  393 	sbc	hl, bc
-      000096 C1               [10]  394 	pop	bc
-      000097 ED B0            [21]  395 	ldir
-      000099 E1               [10]  396 	pop	hl
-      00009A FD E9            [ 8]  397 	jp	(iy)
-      00009C                        398 	getbit:
-      00009C 7E               [ 7]  399 	ld	a, (hl)
-      00009D 23               [ 6]  400 	inc	hl
-      00009E 17               [ 4]  401 	rla
-      00009F C9               [10]  402 	ret
-      0000A0                        403 	getbitexx:
-      0000A0 D9               [ 4]  404 	exx
-      0000A1 7E               [ 7]  405 	ld	a, (hl)
-      0000A2 23               [ 6]  406 	inc	hl
-      0000A3 D9               [ 4]  407 	exx
-      0000A4 17               [ 4]  408 	rla
-      0000A5 C9               [10]  409 	ret
-      0000A6                        410 	modes:
-      0000A6r8Dr00                  411 	.dw	offsok
-      0000A8r7Dr00                  412 	.dw	mode2
-      0000AAr77r00                  413 	.dw	mode3
-      0000ACr71r00                  414 	.dw	mode4
-      0000AEr6Br00                  415 	.dw	mode5
-      0000B0r65r00                  416 	.dw	mode6
-                                    417 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/compress/pletter.c:218: }
-                                    418 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/compress/pletter.c:223: void Pletter_UnpackToVRAM(const void* source, u16 dest)
-                                    419 ;	---------------------------------
-                                    420 ; Function Pletter_UnpackToVRAM
-                                    421 ; ---------------------------------
-      0000B2                        422 _Pletter_UnpackToVRAM::
-                                    423 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/compress/pletter.c:418: __endasm;
-      0000B2 DD E5            [15]  424 	push	ix
-      0000B4 7B               [ 4]  425 	ld	a, e
-      0000B5 D3 99            [11]  426 	out	(0x99), a
-      0000B7 7A               [ 4]  427 	ld	a, d
-      0000B8 F6 40            [ 7]  428 	or	#0x40
-      0000BA D3 99            [11]  429 	out	(0x99), a
-      0000BC 7E               [ 7]  430 	ld	a, (hl)
-      0000BD 23               [ 6]  431 	inc	hl
-      0000BE D9               [ 4]  432 	exx
-      0000BF 11 00 00         [10]  433 	ld	de, #0
-      0000C2 87               [ 4]  434 	add	a, a
-      0000C3 3C               [ 4]  435 	inc	a
-      0000C4 CB 13            [ 8]  436 	rl	e
-      0000C6 87               [ 4]  437 	add	a, a
-      0000C7 CB 13            [ 8]  438 	rl	e
-      0000C9 87               [ 4]  439 	add	a, a
-      0000CA CB 13            [ 8]  440 	rl	e
-      0000CC CB 13            [ 8]  441 	rl	e
-      0000CE 21r7Fr01         [10]  442 	ld	hl, #v_modes
-      0000D1 19               [11]  443 	add	hl, de
-      0000D2 5E               [ 7]  444 	ld	e, (hl)
-      0000D3 DD 6B                  445 	.db	0xDD, 0x6B
-      0000D5 23               [ 6]  446 	inc	hl
-      0000D6 5E               [ 7]  447 	ld	e, (hl)
-      0000D7 DD 63                  448 	.db	0xDD, 0x63
-      0000D9 1E 01            [ 7]  449 	ld	e, #1
-      0000DB D9               [ 4]  450 	exx
-      0000DC FD 21rE5r00      [14]  451 	ld	iy, #v_loop
-      0000E0                        452 	v_literal:
-      0000E0 0E 98            [ 7]  453 	ld	c, #0x98
-      0000E2 ED A3            [16]  454 	outi
-      0000E4 13               [ 6]  455 	inc	de
-      0000E5                        456 	v_loop:
-      0000E5 87               [ 4]  457 	add	a, a
-      0000E6 CCr9Cr00         [17]  458 	call	z, getbit
-      0000E9 30 F5            [12]  459 	jr	nc, v_literal
-      0000EB D9               [ 4]  460 	exx
-      0000EC 62               [ 4]  461 	ld	h, d
-      0000ED 6B               [ 4]  462 	ld	l, e
-      0000EE                        463 	v_getlen:
-      0000EE 87               [ 4]  464 	add	a, a
-      0000EF CCrA0r00         [17]  465 	call	z, getbitexx
-      0000F2 30 1D            [12]  466 	jr	nc, v_lenok
-      0000F4                        467 	v_lus:
-      0000F4 87               [ 4]  468 	add	a, a
-      0000F5 CCrA0r00         [17]  469 	call	z, getbitexx
-      0000F8 ED 6A            [15]  470 	adc	hl, hl
-      0000FA D8               [11]  471 	ret	c
-      0000FB 87               [ 4]  472 	add	a, a
-      0000FC CCrA0r00         [17]  473 	call	z, getbitexx
-      0000FF 30 10            [12]  474 	jr	nc, v_lenok
-      000101 87               [ 4]  475 	add	a, a
-      000102 CCrA0r00         [17]  476 	call	z, getbitexx
-      000105 ED 6A            [15]  477 	adc	hl, hl
-      000107 DAr7Br01         [10]  478 	jp	c, v_Depack_out
-      00010A 87               [ 4]  479 	add	a, a
-      00010B CCrA0r00         [17]  480 	call	z, getbitexx
-      00010E DArF4r00         [10]  481 	jp	c, v_lus
-      000111                        482 	v_lenok:
-      000111 23               [ 6]  483 	inc	hl
-      000112 D9               [ 4]  484 	exx
-      000113 4E               [ 7]  485 	ld	c, (hl)
-      000114 23               [ 6]  486 	inc	hl
-      000115 06 00            [ 7]  487 	ld	b, #0
-      000117 CB 79            [ 8]  488 	bit	7, c
-      000119 CAr4Cr01         [10]  489 	jp	z, v_offsok
-      00011C DD E9            [ 8]  490 	jp	(ix)
-      00011E                        491 	v_mode7:
-      00011E 87               [ 4]  492 	add	a, a
-      00011F CCr9Cr00         [17]  493 	call	z, getbit
-      000122 CB 10            [ 8]  494 	rl	b
-      000124                        495 	v_mode6:
-      000124 87               [ 4]  496 	add	a, a
-      000125 CCr9Cr00         [17]  497 	call	z, getbit
-      000128 CB 10            [ 8]  498 	rl	b
-      00012A                        499 	v_mode5:
-      00012A 87               [ 4]  500 	add	a, a
-      00012B CCr9Cr00         [17]  501 	call	z, getbit
-      00012E CB 10            [ 8]  502 	rl	b
-      000130                        503 	v_mode4:
-      000130 87               [ 4]  504 	add	a, a
-      000131 CCr9Cr00         [17]  505 	call	z, getbit
-      000134 CB 10            [ 8]  506 	rl	b
-      000136                        507 	v_mode3:
-      000136 87               [ 4]  508 	add	a, a
-      000137 CCr9Cr00         [17]  509 	call	z, getbit
-      00013A CB 10            [ 8]  510 	rl	b
-      00013C                        511 	v_mode2:
-      00013C 87               [ 4]  512 	add	a, a
-      00013D CCr9Cr00         [17]  513 	call	z, getbit
-      000140 CB 10            [ 8]  514 	rl	b
-      000142 87               [ 4]  515 	add	a, a
-      000143 CCr9Cr00         [17]  516 	call	z, getbit
-      000146 30 04            [12]  517 	jr	nc, v_offsok
-      000148 B7               [ 4]  518 	or	a
-      000149 04               [ 4]  519 	inc	b
-      00014A CB B9            [ 8]  520 	res	7, c
-      00014C                        521 	v_offsok:
-      00014C 03               [ 6]  522 	inc	bc
-      00014D E5               [11]  523 	push	hl
-      00014E D9               [ 4]  524 	exx
-      00014F E5               [11]  525 	push	hl
-      000150 D9               [ 4]  526 	exx
-      000151 6B               [ 4]  527 	ld	l, e
-      000152 62               [ 4]  528 	ld	h, d
-      000153 ED 42            [15]  529 	sbc	hl, bc
-      000155 C1               [10]  530 	pop	bc
-      000156 F5               [11]  531 	push	af
-      000157                        532 	v_offsok_loop:
-      000157 7D               [ 4]  533 	ld	a, l
-      000158 F3               [ 4]  534 	di
-      000159 D3 99            [11]  535 	out	(0x99), a
-      00015B 7C               [ 4]  536 	ld	a, h
-      00015C 00               [ 4]  537 	nop
-      00015D D3 99            [11]  538 	out	(0x99), a
-      00015F 00               [ 4]  539 	nop
-      000160 00               [ 4]  540 	nop
-      000161 DB 98            [11]  541 	in	a, (0x98)
-      000163 08               [ 4]  542 	ex	af, af' ;'
-      000164 7B               [ 4]  543 	ld	a, e
-      000165 D3 99            [11]  544 	out	(0x99), a
-      000167 7A               [ 4]  545 	ld	a, d
-      000168 F6 40            [ 7]  546 	or	#0x40
-      00016A D3 99            [11]  547 	out	(0x99), a
-      00016C 08               [ 4]  548 	ex	af, af'			;'
-      00016D 00               [ 4]  549 	nop
-      00016E FB               [ 4]  550 	ei
-      00016F D3 98            [11]  551 	out	(0x98), a
-      000171 13               [ 6]  552 	inc	de
-      000172 ED A1            [16]  553 	cpi
-      000174 EAr57r01         [10]  554 	jp	pe, v_offsok_loop
-      000177 F1               [10]  555 	pop	af
-      000178 E1               [10]  556 	pop	hl
-      000179 FD E9            [ 8]  557 	jp	(iy)
-      00017B                        558 	v_Depack_out:
-      00017B DD E1            [14]  559 	pop	ix
-      00017D FB               [ 4]  560 	ei
-      00017E C9               [10]  561 	ret
-      00017F                        562 	v_modes:
-      00017Fr4Cr01                  563 	.dw	v_offsok
-      000181r3Cr01                  564 	.dw	v_mode2
-      000183r36r01                  565 	.dw	v_mode3
-      000185r30r01                  566 	.dw	v_mode4
-      000187r2Ar01                  567 	.dw	v_mode5
-      000189r24r01                  568 	.dw	v_mode6
-      00018Br1Er01                  569 	.dw	v_mode7
-                                    570 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/compress/pletter.c:419: }
-      00018D C9               [10]  571 	ret
-                           00F380   572 _g_RDPRIM	=	0xf380
-                           00F385   573 _g_WRPRIM	=	0xf385
-                           00F38C   574 _g_CLPRIM	=	0xf38c
-                           00F39A   575 _g_USRTAB	=	0xf39a
-                           00F3DE   576 _g_CNSDFG	=	0xf3de
-                           00F3DF   577 _g_RG0SAV	=	0xf3df
-                           00F3E0   578 _g_RG1SAV	=	0xf3e0
-                           00F3E1   579 _g_RG2SAV	=	0xf3e1
-                           00F3E2   580 _g_RG3SAV	=	0xf3e2
-                           00F3E3   581 _g_RG4SAV	=	0xf3e3
-                           00F3E4   582 _g_RG5SAV	=	0xf3e4
-                           00F3E5   583 _g_RG6SAV	=	0xf3e5
-                           00F3E6   584 _g_RG7SAV	=	0xf3e6
-                           00F3E7   585 _g_STATFL	=	0xf3e7
-                           00F3E8   586 _g_TRGFLG	=	0xf3e8
-                           00F3EC   587 _g_MAXUPD	=	0xf3ec
-                           00F3EF   588 _g_MINUPD	=	0xf3ef
-                           00F3F3   589 _g_QUEUES	=	0xf3f3
-                           00F3F5   590 _g_FRCNEW	=	0xf3f5
-                           00F3F6   591 _g_SCNCNT	=	0xf3f6
-                           00F3F7   592 _g_REPCNT	=	0xf3f7
-                           00F3F8   593 _g_PUTPNT	=	0xf3f8
-                           00F3FA   594 _g_GETPNT	=	0xf3fa
-                           00F3FC   595 _g_CS120	=	0xf3fc
-                           00F401   596 _g_CS240	=	0xf401
-                           00F406   597 _g_LOW	=	0xf406
-                           00F408   598 _g_HIGH	=	0xf408
-                           00F40A   599 _g_HEADER	=	0xf40a
-                           00F40B   600 _g_ASPCT1	=	0xf40b
-                           00F40D   601 _g_ASPCT2	=	0xf40d
-                           00F959   602 _g_QUETAB	=	0xf959
-                           00F971   603 _g_QUEBAK	=	0xf971
-                           00F975   604 _g_VOICAQ	=	0xf975
-                           00F9F5   605 _g_VOICBQ	=	0xf9f5
-                           00FA75   606 _g_VOICCQ	=	0xfa75
-                           00FAF5   607 _g_RS2IQ	=	0xfaf5
-                           00FAF5   608 _g_DPPAGE	=	0xfaf5
-                           00FAF6   609 _g_ACPAGE	=	0xfaf6
-                           00FAF7   610 _g_AVCSAV	=	0xfaf7
-                           00FAF8   611 _g_EXBRSA	=	0xfaf8
-                           00FAF9   612 _g_CHRCNT	=	0xfaf9
-                           00FAFA   613 _g_ROMA	=	0xfafa
-                           00FAFC   614 _g_MODE	=	0xfafc
-                           00FAFD   615 _g_NORUSE	=	0xfafd
-                           00FAFE   616 _g_XSAVE	=	0xfafe
-                           00FB00   617 _g_YSAVE	=	0xfb00
-                           00FB03   618 _g_RSTMP	=	0xfb03
-                           00FB03   619 _g_TOCNT	=	0xfb03
-                           00FB04   620 _g_RSFCB	=	0xfb04
-                           00FB06   621 _g_RSIQLN	=	0xfb06
-                           00FB07   622 _g_MEXBIh	=	0xfb07
-                           00FB0C   623 _g_OLDSTT	=	0xfb0c
-                           00FB0C   624 _g_OLDINT	=	0xfb0c
-                           00FB16   625 _g_DEVNUM	=	0xfb16
-                           00FB17   626 _g_DATCNT	=	0xfb17
-                           00FB1A   627 _g_ERRORS	=	0xfb1a
-                           00FB1B   628 _g_FLAGS	=	0xfb1b
-                           00FB1C   629 _g_ESTBLS	=	0xfb1c
-                           00FB1D   630 _g_COMMSK	=	0xfb1d
-                           00FB1E   631 _g_LSTCOM	=	0xfb1e
-                           00FB1F   632 _g_LSTMOD	=	0xfb1f
-                           00FB35   633 _g_PRSCNT	=	0xfb35
-                           00FB36   634 _g_SAVSP	=	0xfb36
-                           00FB38   635 _g_VOICEN	=	0xfb38
-                           00FB39   636 _g_SAVVOL	=	0xfb39
-                           00FB3B   637 _g_MCLLEN	=	0xfb3b
-                           00FB3C   638 _g_MCLPTR	=	0xfb3c
-                           00FB3E   639 _g_QUEUEN	=	0xfb3e
-                           00FB3F   640 _g_MUSICF	=	0xfb3f
-                           00FB40   641 _g_PLYCNT	=	0xfb40
-                           00FB41   642 _g_VCBA	=	0xfb41
-                           00FB66   643 _g_VCBB	=	0xfb66
-                           00FB8B   644 _g_VCBC	=	0xfb8b
-                           00FBB0   645 _g_ENSTOP	=	0xfbb0
-                           00FBB1   646 _g_BASROM	=	0xfbb1
-                           00FBB2   647 _g_LINTTB	=	0xfbb2
-                           00FBCA   648 _g_FSTPOS	=	0xfbca
-                           00FBCC   649 _g_CODSAV	=	0xfbcc
-                           00FBCD   650 _g_FNKSWI	=	0xfbcd
-                           00FBCE   651 _g_FNKFLG	=	0xfbce
-                           00FBD8   652 _g_ONGSBF	=	0xfbd8
-                           00FBD9   653 _g_CLIKFL	=	0xfbd9
-                           00FBDA   654 _g_OLDKEY	=	0xfbda
-                           00FBE5   655 _g_NEWKEY	=	0xfbe5
-                           00FBF0   656 _g_KEYBUF	=	0xfbf0
-                           00FC18   657 _g_LINWRK	=	0xfc18
-                           00FC40   658 _g_PATWRK	=	0xfc40
-                           00FC48   659 _g_BOTTOM	=	0xfc48
-                           00FC4A   660 _g_HIMEM	=	0xfc4a
-                           00FC4C   661 _g_TRPTBL	=	0xfc4c
-                           00FC9A   662 _g_RTYCNT	=	0xfc9a
-                           00FC9B   663 _g_INTFLG	=	0xfc9b
-                           00FC9C   664 _g_PADY	=	0xfc9c
-                           00FC9D   665 _g_PADX	=	0xfc9d
-                           00FC9E   666 _g_JIFFY	=	0xfc9e
-                           00FCA0   667 _g_INTVAL	=	0xfca0
-                           00FCA2   668 _g_INTCNT	=	0xfca2
-                           00FCA4   669 _g_LOWLIM	=	0xfca4
-                           00FCA5   670 _g_WINWID	=	0xfca5
-                           00FCA6   671 _g_GRPHED	=	0xfca6
-                           00FCA7   672 _g_ESCCNT	=	0xfca7
-                           00FCA8   673 _g_INSFLG	=	0xfca8
-                           00FCA9   674 _g_CSRSW	=	0xfca9
-                           00FCAA   675 _g_CSTYLE	=	0xfcaa
-                           00FCAB   676 _g_CAPST	=	0xfcab
-                           00FCAC   677 _g_KANAST	=	0xfcac
-                           00FCAD   678 _g_KANAMD	=	0xfcad
-                           00FCAE   679 _g_FLBMEM	=	0xfcae
-                           00FCAF   680 _g_SCRMOD	=	0xfcaf
-                           00FCB0   681 _g_OLDSCR	=	0xfcb0
-                           00FCB1   682 _g_CASPRV	=	0xfcb1
-                           00FCB2   683 _g_BRDATR	=	0xfcb2
-                           00FCB3   684 _g_GXPOS	=	0xfcb3
-                           00FCB5   685 _g_GYPOS	=	0xfcb5
-                           00FCBB   686 _g_DRWFLG	=	0xfcbb
-                           00FCBC   687 _g_DRWSCL	=	0xfcbc
-                           00FCBD   688 _g_DRWANG	=	0xfcbd
-                           00FCC1   689 _g_MNROM	=	0xfcc1
-                           00FCC1   690 _g_EXPTBL	=	0xfcc1
-                           00FCC5   691 _g_SLTTBL	=	0xfcc5
-                           00FCC9   692 _g_SLTATR	=	0xfcc9
-                           00FD09   693 _g_SLTWRK	=	0xfd09
-                           00FD89   694 _g_PROCNM	=	0xfd89
-                           00FFE7   695 _g_RG08SAV	=	0xffe7
-                           00FFE8   696 _g_RG09SAV	=	0xffe8
-                           00FFE9   697 _g_RG10SAV	=	0xffe9
-                           00FFEA   698 _g_RG11SAV	=	0xffea
-                           00FFEB   699 _g_RG12SAV	=	0xffeb
-                           00FFEC   700 _g_RG13SAV	=	0xffec
-                           00FFED   701 _g_RG14SAV	=	0xffed
-                           00FFEE   702 _g_RG15SAV	=	0xffee
-                           00FFEF   703 _g_RG16SAV	=	0xffef
-                           00FFF0   704 _g_RG17SAV	=	0xfff0
-                           00FFF1   705 _g_RG18SAV	=	0xfff1
-                           00FFF2   706 _g_RG19SAV	=	0xfff2
-                           00FFF3   707 _g_RG20SAV	=	0xfff3
-                           00FFF4   708 _g_RG21SAV	=	0xfff4
-                           00FFF5   709 _g_RG22SAV	=	0xfff5
-                           00FFF6   710 _g_RG23SAV	=	0xfff6
-                           00FFF7   711 _g_MINROM	=	0xfff7
-                           00FFF8   712 _g_SVFFF8	=	0xfff8
-                           00FFFA   713 _g_RG25SAV	=	0xfffa
-                           00FFFB   714 _g_RG26SAV	=	0xfffb
-                           00FFFC   715 _g_RG27SAV	=	0xfffc
-                           00FFFD   716 _g_SVFFFD	=	0xfffd
-                                    717 	.area _CODE
-                                    718 	.area _INITIALIZER
-                                    719 	.area _CABS (ABS)
+                           0000A8   200 G$g_PortPrimarySlot$0_0$0 == 0x00a8
+                           0000A8   201 _g_PortPrimarySlot	=	0x00a8
+                           0000A9   202 G$g_PortReadKeyboard$0_0$0 == 0x00a9
+                           0000A9   203 _g_PortReadKeyboard	=	0x00a9
+                           0000AA   204 G$g_PortAccessKeyboard$0_0$0 == 0x00aa
+                           0000AA   205 _g_PortAccessKeyboard	=	0x00aa
+                           0000AB   206 G$g_PortControl$0_0$0 == 0x00ab
+                           0000AB   207 _g_PortControl	=	0x00ab
+                           000098   208 G$g_VDP_DataPort$0_0$0 == 0x0098
+                           000098   209 _g_VDP_DataPort	=	0x0098
+                           000099   210 G$g_VDP_RegPort$0_0$0 == 0x0099
+                           000099   211 _g_VDP_RegPort	=	0x0099
+                           000099   212 G$g_VDP_AddrPort$0_0$0 == 0x0099
+                           000099   213 _g_VDP_AddrPort	=	0x0099
+                           000099   214 G$g_VDP_StatPort$0_0$0 == 0x0099
+                           000099   215 _g_VDP_StatPort	=	0x0099
+                           0000A0   216 G$g_PSG_RegPort$0_0$0 == 0x00a0
+                           0000A0   217 _g_PSG_RegPort	=	0x00a0
+                           0000A1   218 G$g_PSG_DataPort$0_0$0 == 0x00a1
+                           0000A1   219 _g_PSG_DataPort	=	0x00a1
+                           0000A2   220 G$g_PSG_StatPort$0_0$0 == 0x00a2
+                           0000A2   221 _g_PSG_StatPort	=	0x00a2
+                           000010   222 G$g_PSG_Ext_RegPort$0_0$0 == 0x0010
+                           000010   223 _g_PSG_Ext_RegPort	=	0x0010
+                           000011   224 G$g_PSG_Ext_DataPort$0_0$0 == 0x0011
+                           000011   225 _g_PSG_Ext_DataPort	=	0x0011
+                           000012   226 G$g_PSG_Ext_StatPort$0_0$0 == 0x0012
+                           000012   227 _g_PSG_Ext_StatPort	=	0x0012
+                           00007C   228 G$g_MSXMusic_IndexPort$0_0$0 == 0x007c
+                           00007C   229 _g_MSXMusic_IndexPort	=	0x007c
+                           00007D   230 G$g_MSXMusic_DataPort$0_0$0 == 0x007d
+                           00007D   231 _g_MSXMusic_DataPort	=	0x007d
+                           0000C0   232 G$g_MSXAudio_IndexPort$0_0$0 == 0x00c0
+                           0000C0   233 _g_MSXAudio_IndexPort	=	0x00c0
+                           0000C1   234 G$g_MSXAudio_DataPort$0_0$0 == 0x00c1
+                           0000C1   235 _g_MSXAudio_DataPort	=	0x00c1
+                           0000C2   236 G$g_MSXAudio_IndexPort2$0_0$0 == 0x00c2
+                           0000C2   237 _g_MSXAudio_IndexPort2	=	0x00c2
+                           0000C3   238 G$g_MSXAudio_DataPort2$0_0$0 == 0x00c3
+                           0000C3   239 _g_MSXAudio_DataPort2	=	0x00c3
+                           0000B4   240 G$g_RTC_AddrPort$0_0$0 == 0x00b4
+                           0000B4   241 _g_RTC_AddrPort	=	0x00b4
+                           0000B5   242 G$g_RTC_DataPort$0_0$0 == 0x00b5
+                           0000B5   243 _g_RTC_DataPort	=	0x00b5
+                                    244 ;--------------------------------------------------------
+                                    245 ; ram data
+                                    246 ;--------------------------------------------------------
+                                    247 	.area _DATA
+                           00F3AE   248 G$g_LINL40$0_0$0 == 0xf3ae
+                           00F3AE   249 _g_LINL40	=	0xf3ae
+                           00F3AF   250 G$g_LINL32$0_0$0 == 0xf3af
+                           00F3AF   251 _g_LINL32	=	0xf3af
+                           00F3B0   252 G$g_LINLEN$0_0$0 == 0xf3b0
+                           00F3B0   253 _g_LINLEN	=	0xf3b0
+                           00F3B1   254 G$g_CRTCNT$0_0$0 == 0xf3b1
+                           00F3B1   255 _g_CRTCNT	=	0xf3b1
+                           00F3B2   256 G$g_CLMLST$0_0$0 == 0xf3b2
+                           00F3B2   257 _g_CLMLST	=	0xf3b2
+                           00F3B3   258 G$g_TXTNAM$0_0$0 == 0xf3b3
+                           00F3B3   259 _g_TXTNAM	=	0xf3b3
+                           00F3B5   260 G$g_TXTCOL$0_0$0 == 0xf3b5
+                           00F3B5   261 _g_TXTCOL	=	0xf3b5
+                           00F3B7   262 G$g_TXTCGP$0_0$0 == 0xf3b7
+                           00F3B7   263 _g_TXTCGP	=	0xf3b7
+                           00F3B9   264 G$g_TXTATR$0_0$0 == 0xf3b9
+                           00F3B9   265 _g_TXTATR	=	0xf3b9
+                           00F3BB   266 G$g_TXTPAT$0_0$0 == 0xf3bb
+                           00F3BB   267 _g_TXTPAT	=	0xf3bb
+                           00F3BD   268 G$g_T32NAM$0_0$0 == 0xf3bd
+                           00F3BD   269 _g_T32NAM	=	0xf3bd
+                           00F3BF   270 G$g_T32COL$0_0$0 == 0xf3bf
+                           00F3BF   271 _g_T32COL	=	0xf3bf
+                           00F3C1   272 G$g_T32CGP$0_0$0 == 0xf3c1
+                           00F3C1   273 _g_T32CGP	=	0xf3c1
+                           00F3C3   274 G$g_T32ATR$0_0$0 == 0xf3c3
+                           00F3C3   275 _g_T32ATR	=	0xf3c3
+                           00F3C5   276 G$g_T32PAT$0_0$0 == 0xf3c5
+                           00F3C5   277 _g_T32PAT	=	0xf3c5
+                           00F3C7   278 G$g_GRPNAM$0_0$0 == 0xf3c7
+                           00F3C7   279 _g_GRPNAM	=	0xf3c7
+                           00F3C9   280 G$g_GRPCOL$0_0$0 == 0xf3c9
+                           00F3C9   281 _g_GRPCOL	=	0xf3c9
+                           00F3CB   282 G$g_GRPCGP$0_0$0 == 0xf3cb
+                           00F3CB   283 _g_GRPCGP	=	0xf3cb
+                           00F3CD   284 G$g_GRPATR$0_0$0 == 0xf3cd
+                           00F3CD   285 _g_GRPATR	=	0xf3cd
+                           00F3CF   286 G$g_GRPPAT$0_0$0 == 0xf3cf
+                           00F3CF   287 _g_GRPPAT	=	0xf3cf
+                           00F3D1   288 G$g_MLTNAM$0_0$0 == 0xf3d1
+                           00F3D1   289 _g_MLTNAM	=	0xf3d1
+                           00F3D3   290 G$g_MLTCOL$0_0$0 == 0xf3d3
+                           00F3D3   291 _g_MLTCOL	=	0xf3d3
+                           00F3D5   292 G$g_MLTCGP$0_0$0 == 0xf3d5
+                           00F3D5   293 _g_MLTCGP	=	0xf3d5
+                           00F3D7   294 G$g_MLTATR$0_0$0 == 0xf3d7
+                           00F3D7   295 _g_MLTATR	=	0xf3d7
+                           00F3D9   296 G$g_MLTPAT$0_0$0 == 0xf3d9
+                           00F3D9   297 _g_MLTPAT	=	0xf3d9
+                           00F3DB   298 G$g_CLIKSW$0_0$0 == 0xf3db
+                           00F3DB   299 _g_CLIKSW	=	0xf3db
+                           00F3DC   300 G$g_CSRY$0_0$0 == 0xf3dc
+                           00F3DC   301 _g_CSRY	=	0xf3dc
+                           00F3DD   302 G$g_CSRX$0_0$0 == 0xf3dd
+                           00F3DD   303 _g_CSRX	=	0xf3dd
+                           00F3E9   304 G$g_FORCLR$0_0$0 == 0xf3e9
+                           00F3E9   305 _g_FORCLR	=	0xf3e9
+                           00F3EA   306 G$g_BAKCLR$0_0$0 == 0xf3ea
+                           00F3EA   307 _g_BAKCLR	=	0xf3ea
+                           00F3EB   308 G$g_BDRCLR$0_0$0 == 0xf3eb
+                           00F3EB   309 _g_BDRCLR	=	0xf3eb
+                           00F3F2   310 G$g_ATRBYT$0_0$0 == 0xf3f2
+                           00F3F2   311 _g_ATRBYT	=	0xf3f2
+                           00F87F   312 G$g_FNKSTR$0_0$0 == 0xf87f
+                           00F87F   313 _g_FNKSTR	=	0xf87f
+                           00F92A   314 G$g_CLOC$0_0$0 == 0xf92a
+                           00F92A   315 _g_CLOC	=	0xf92a
+                           00F92C   316 G$g_CMASK$0_0$0 == 0xf92c
+                           00F92C   317 _g_CMASK	=	0xf92c
+                           00FB02   318 G$g_LOGOPR$0_0$0 == 0xfb02
+                           00FB02   319 _g_LOGOPR	=	0xfb02
+                           00FCB7   320 G$g_GRPACX$0_0$0 == 0xfcb7
+                           00FCB7   321 _g_GRPACX	=	0xfcb7
+                           00FCB9   322 G$g_GRPACY$0_0$0 == 0xfcb9
+                           00FCB9   323 _g_GRPACY	=	0xfcb9
+                           00FFFF   324 G$g_SLTSL$0_0$0 == 0xffff
+                           00FFFF   325 _g_SLTSL	=	0xffff
+                                    326 ;--------------------------------------------------------
+                                    327 ; ram data
+                                    328 ;--------------------------------------------------------
+                                    329 	.area _INITIALIZED
+                                    330 ;--------------------------------------------------------
+                                    331 ; absolute external ram data
+                                    332 ;--------------------------------------------------------
+                                    333 	.area _DABS (ABS)
+                                    334 ;--------------------------------------------------------
+                                    335 ; global & static initialisations
+                                    336 ;--------------------------------------------------------
+                                    337 	.area _HOME
+                                    338 	.area _GSINIT
+                                    339 	.area _GSFINAL
+                                    340 	.area _GSINIT
+                                    341 ;--------------------------------------------------------
+                                    342 ; Home
+                                    343 ;--------------------------------------------------------
+                                    344 	.area _HOME
+                                    345 	.area _HOME
+                                    346 ;--------------------------------------------------------
+                                    347 ; code
+                                    348 ;--------------------------------------------------------
+                                    349 	.area _CODE
+                           000000   350 	G$Pletter_UnpackToRAM$0$0	= .
+                                    351 	.globl	G$Pletter_UnpackToRAM$0$0
+                           000000   352 	C$pletter.c$72$0_0$70	= .
+                                    353 	.globl	C$pletter.c$72$0_0$70
+                                    354 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/compress/pletter.c:72: void Pletter_UnpackToRAM(const void* source, void* dest) __naked
+                                    355 ;	---------------------------------
+                                    356 ; Function Pletter_UnpackToRAM
+                                    357 ; ---------------------------------
+      000000                        358 _Pletter_UnpackToRAM::
+                           000000   359 	C$pletter.c$217$1_0$70	= .
+                                    360 	.globl	C$pletter.c$217$1_0$70
+                                    361 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/compress/pletter.c:217: __endasm;
+      000000 DD E5            [15]  362 	push	ix
+      000002 CDr08r00         [17]  363 	call	unpack
+      000005 DD E1            [14]  364 	pop	ix
+      000007 C9               [10]  365 	ret
+      000008                        366 	unpack:
+      000008 7E               [ 7]  367 	ld	a, (hl)
+      000009 23               [ 6]  368 	inc	hl
+      00000A D9               [ 4]  369 	exx
+      00000B 11 00 00         [10]  370 	ld	de, #0
+      00000E 87               [ 4]  371 	add	a, a
+      00000F 3C               [ 4]  372 	inc	a
+      000010 CB 13            [ 8]  373 	rl	e
+      000012 87               [ 4]  374 	add	a, a
+      000013 CB 13            [ 8]  375 	rl	e
+      000015 87               [ 4]  376 	add	a, a
+      000016 CB 13            [ 8]  377 	rl	e
+      000018 CB 13            [ 8]  378 	rl	e
+      00001A 21rA6r00         [10]  379 	ld	hl, #modes
+      00001D 19               [11]  380 	add	hl, de
+      00001E 5E               [ 7]  381 	ld	e, (hl)
+      00001F DD 6B                  382 	.db	0xDD, 0x6B
+      000021 23               [ 6]  383 	inc	hl
+      000022 5E               [ 7]  384 	ld	e, (hl)
+      000023 DD 63                  385 	.db	0xDD, 0x63
+      000025 1E 01            [ 7]  386 	ld	e, #1
+      000027 D9               [ 4]  387 	exx
+      000028 FD 21r2Er00      [14]  388 	ld	iy, #loop
+      00002C                        389 	literal:
+      00002C ED A0            [16]  390 	ldi
+      00002E                        391 	loop:
+      00002E 87               [ 4]  392 	add	a, a
+      00002F CCr9Cr00         [17]  393 	call	z, getbit
+      000032 30 F8            [12]  394 	jr	nc, literal
+      000034 D9               [ 4]  395 	exx
+      000035 62               [ 4]  396 	ld	h, d
+      000036 6B               [ 4]  397 	ld	l, e
+      000037                        398 	getlen:
+      000037 87               [ 4]  399 	add	a
+      000038 CCrA0r00         [17]  400 	call	z, getbitexx
+      00003B 30 1B            [12]  401 	jr	nc, getlen_lenok
+      00003D                        402 	getlen_lus:
+      00003D 87               [ 4]  403 	add	a
+      00003E CCrA0r00         [17]  404 	call	z, getbitexx
+      000041 ED 6A            [15]  405 	adc	hl, hl
+      000043 D8               [11]  406 	ret	c
+      000044 87               [ 4]  407 	add	a
+      000045 CCrA0r00         [17]  408 	call	z, getbitexx
+      000048 30 0E            [12]  409 	jr	nc, getlen_lenok
+      00004A 87               [ 4]  410 	add	a
+      00004B CCrA0r00         [17]  411 	call	z, getbitexx
+      00004E ED 6A            [15]  412 	adc	hl, hl
+      000050 D8               [11]  413 	ret	c
+      000051 87               [ 4]  414 	add	a
+      000052 CCrA0r00         [17]  415 	call	z, getbitexx
+      000055 DAr3Dr00         [10]  416 	jp	c, getlen_lus
+      000058                        417 	getlen_lenok:
+      000058 23               [ 6]  418 	inc	hl
+      000059 D9               [ 4]  419 	exx
+      00005A 4E               [ 7]  420 	ld	c, (hl)
+      00005B 23               [ 6]  421 	inc	hl
+      00005C 06 00            [ 7]  422 	ld	b, #0
+      00005E CB 79            [ 8]  423 	bit	7, c
+      000060 CAr8Dr00         [10]  424 	jp	z, offsok
+      000063 DD E9            [ 8]  425 	jp	(ix)
+      000065                        426 	mode6:
+      000065 87               [ 4]  427 	add	a
+      000066 CCr9Cr00         [17]  428 	call	z, getbit
+      000069 CB 10            [ 8]  429 	rl	b
+      00006B                        430 	mode5:
+      00006B 87               [ 4]  431 	add	a
+      00006C CCr9Cr00         [17]  432 	call	z, getbit
+      00006F CB 10            [ 8]  433 	rl	b
+      000071                        434 	mode4:
+      000071 87               [ 4]  435 	add	a
+      000072 CCr9Cr00         [17]  436 	call	z, getbit
+      000075 CB 10            [ 8]  437 	rl	b
+      000077                        438 	mode3:
+      000077 87               [ 4]  439 	add	a
+      000078 CCr9Cr00         [17]  440 	call	z, getbit
+      00007B CB 10            [ 8]  441 	rl	b
+      00007D                        442 	mode2:
+      00007D 87               [ 4]  443 	add	a
+      00007E CCr9Cr00         [17]  444 	call	z, getbit
+      000081 CB 10            [ 8]  445 	rl	b
+      000083 87               [ 4]  446 	add	a
+      000084 CCr9Cr00         [17]  447 	call	z, getbit
+      000087 30 04            [12]  448 	jr	nc, offsok
+      000089 B7               [ 4]  449 	or	a
+      00008A 04               [ 4]  450 	inc	b
+      00008B CB B9            [ 8]  451 	res	7, c
+      00008D                        452 	offsok:
+      00008D 03               [ 6]  453 	inc	bc
+      00008E E5               [11]  454 	push	hl
+      00008F D9               [ 4]  455 	exx
+      000090 E5               [11]  456 	push	hl
+      000091 D9               [ 4]  457 	exx
+      000092 6B               [ 4]  458 	ld	l, e
+      000093 62               [ 4]  459 	ld	h, d
+      000094 ED 42            [15]  460 	sbc	hl, bc
+      000096 C1               [10]  461 	pop	bc
+      000097 ED B0            [21]  462 	ldir
+      000099 E1               [10]  463 	pop	hl
+      00009A FD E9            [ 8]  464 	jp	(iy)
+      00009C                        465 	getbit:
+      00009C 7E               [ 7]  466 	ld	a, (hl)
+      00009D 23               [ 6]  467 	inc	hl
+      00009E 17               [ 4]  468 	rla
+      00009F C9               [10]  469 	ret
+      0000A0                        470 	getbitexx:
+      0000A0 D9               [ 4]  471 	exx
+      0000A1 7E               [ 7]  472 	ld	a, (hl)
+      0000A2 23               [ 6]  473 	inc	hl
+      0000A3 D9               [ 4]  474 	exx
+      0000A4 17               [ 4]  475 	rla
+      0000A5 C9               [10]  476 	ret
+      0000A6                        477 	modes:
+      0000A6r8Dr00                  478 	.dw	offsok
+      0000A8r7Dr00                  479 	.dw	mode2
+      0000AAr77r00                  480 	.dw	mode3
+      0000ACr71r00                  481 	.dw	mode4
+      0000AEr6Br00                  482 	.dw	mode5
+      0000B0r65r00                  483 	.dw	mode6
+                           0000B2   484 	C$pletter.c$218$1_0$70	= .
+                                    485 	.globl	C$pletter.c$218$1_0$70
+                                    486 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/compress/pletter.c:218: }
+                           0000B2   487 	G$Pletter_UnpackToVRAM$0$0	= .
+                                    488 	.globl	G$Pletter_UnpackToVRAM$0$0
+                           0000B2   489 	C$pletter.c$223$1_0$72	= .
+                                    490 	.globl	C$pletter.c$223$1_0$72
+                                    491 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/compress/pletter.c:223: void Pletter_UnpackToVRAM(const void* source, u16 dest)
+                                    492 ;	---------------------------------
+                                    493 ; Function Pletter_UnpackToVRAM
+                                    494 ; ---------------------------------
+      0000B2                        495 _Pletter_UnpackToVRAM::
+                           0000B2   496 	C$pletter.c$418$1_0$72	= .
+                                    497 	.globl	C$pletter.c$418$1_0$72
+                                    498 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/compress/pletter.c:418: __endasm;
+      0000B2 DD E5            [15]  499 	push	ix
+      0000B4 7B               [ 4]  500 	ld	a, e
+      0000B5 D3 99            [11]  501 	out	(0x99), a
+      0000B7 7A               [ 4]  502 	ld	a, d
+      0000B8 F6 40            [ 7]  503 	or	#0x40
+      0000BA D3 99            [11]  504 	out	(0x99), a
+      0000BC 7E               [ 7]  505 	ld	a, (hl)
+      0000BD 23               [ 6]  506 	inc	hl
+      0000BE D9               [ 4]  507 	exx
+      0000BF 11 00 00         [10]  508 	ld	de, #0
+      0000C2 87               [ 4]  509 	add	a, a
+      0000C3 3C               [ 4]  510 	inc	a
+      0000C4 CB 13            [ 8]  511 	rl	e
+      0000C6 87               [ 4]  512 	add	a, a
+      0000C7 CB 13            [ 8]  513 	rl	e
+      0000C9 87               [ 4]  514 	add	a, a
+      0000CA CB 13            [ 8]  515 	rl	e
+      0000CC CB 13            [ 8]  516 	rl	e
+      0000CE 21r7Fr01         [10]  517 	ld	hl, #v_modes
+      0000D1 19               [11]  518 	add	hl, de
+      0000D2 5E               [ 7]  519 	ld	e, (hl)
+      0000D3 DD 6B                  520 	.db	0xDD, 0x6B
+      0000D5 23               [ 6]  521 	inc	hl
+      0000D6 5E               [ 7]  522 	ld	e, (hl)
+      0000D7 DD 63                  523 	.db	0xDD, 0x63
+      0000D9 1E 01            [ 7]  524 	ld	e, #1
+      0000DB D9               [ 4]  525 	exx
+      0000DC FD 21rE5r00      [14]  526 	ld	iy, #v_loop
+      0000E0                        527 	v_literal:
+      0000E0 0E 98            [ 7]  528 	ld	c, #0x98
+      0000E2 ED A3            [16]  529 	outi
+      0000E4 13               [ 6]  530 	inc	de
+      0000E5                        531 	v_loop:
+      0000E5 87               [ 4]  532 	add	a, a
+      0000E6 CCr9Cr00         [17]  533 	call	z, getbit
+      0000E9 30 F5            [12]  534 	jr	nc, v_literal
+      0000EB D9               [ 4]  535 	exx
+      0000EC 62               [ 4]  536 	ld	h, d
+      0000ED 6B               [ 4]  537 	ld	l, e
+      0000EE                        538 	v_getlen:
+      0000EE 87               [ 4]  539 	add	a, a
+      0000EF CCrA0r00         [17]  540 	call	z, getbitexx
+      0000F2 30 1D            [12]  541 	jr	nc, v_lenok
+      0000F4                        542 	v_lus:
+      0000F4 87               [ 4]  543 	add	a, a
+      0000F5 CCrA0r00         [17]  544 	call	z, getbitexx
+      0000F8 ED 6A            [15]  545 	adc	hl, hl
+      0000FA D8               [11]  546 	ret	c
+      0000FB 87               [ 4]  547 	add	a, a
+      0000FC CCrA0r00         [17]  548 	call	z, getbitexx
+      0000FF 30 10            [12]  549 	jr	nc, v_lenok
+      000101 87               [ 4]  550 	add	a, a
+      000102 CCrA0r00         [17]  551 	call	z, getbitexx
+      000105 ED 6A            [15]  552 	adc	hl, hl
+      000107 DAr7Br01         [10]  553 	jp	c, v_Depack_out
+      00010A 87               [ 4]  554 	add	a, a
+      00010B CCrA0r00         [17]  555 	call	z, getbitexx
+      00010E DArF4r00         [10]  556 	jp	c, v_lus
+      000111                        557 	v_lenok:
+      000111 23               [ 6]  558 	inc	hl
+      000112 D9               [ 4]  559 	exx
+      000113 4E               [ 7]  560 	ld	c, (hl)
+      000114 23               [ 6]  561 	inc	hl
+      000115 06 00            [ 7]  562 	ld	b, #0
+      000117 CB 79            [ 8]  563 	bit	7, c
+      000119 CAr4Cr01         [10]  564 	jp	z, v_offsok
+      00011C DD E9            [ 8]  565 	jp	(ix)
+      00011E                        566 	v_mode7:
+      00011E 87               [ 4]  567 	add	a, a
+      00011F CCr9Cr00         [17]  568 	call	z, getbit
+      000122 CB 10            [ 8]  569 	rl	b
+      000124                        570 	v_mode6:
+      000124 87               [ 4]  571 	add	a, a
+      000125 CCr9Cr00         [17]  572 	call	z, getbit
+      000128 CB 10            [ 8]  573 	rl	b
+      00012A                        574 	v_mode5:
+      00012A 87               [ 4]  575 	add	a, a
+      00012B CCr9Cr00         [17]  576 	call	z, getbit
+      00012E CB 10            [ 8]  577 	rl	b
+      000130                        578 	v_mode4:
+      000130 87               [ 4]  579 	add	a, a
+      000131 CCr9Cr00         [17]  580 	call	z, getbit
+      000134 CB 10            [ 8]  581 	rl	b
+      000136                        582 	v_mode3:
+      000136 87               [ 4]  583 	add	a, a
+      000137 CCr9Cr00         [17]  584 	call	z, getbit
+      00013A CB 10            [ 8]  585 	rl	b
+      00013C                        586 	v_mode2:
+      00013C 87               [ 4]  587 	add	a, a
+      00013D CCr9Cr00         [17]  588 	call	z, getbit
+      000140 CB 10            [ 8]  589 	rl	b
+      000142 87               [ 4]  590 	add	a, a
+      000143 CCr9Cr00         [17]  591 	call	z, getbit
+      000146 30 04            [12]  592 	jr	nc, v_offsok
+      000148 B7               [ 4]  593 	or	a
+      000149 04               [ 4]  594 	inc	b
+      00014A CB B9            [ 8]  595 	res	7, c
+      00014C                        596 	v_offsok:
+      00014C 03               [ 6]  597 	inc	bc
+      00014D E5               [11]  598 	push	hl
+      00014E D9               [ 4]  599 	exx
+      00014F E5               [11]  600 	push	hl
+      000150 D9               [ 4]  601 	exx
+      000151 6B               [ 4]  602 	ld	l, e
+      000152 62               [ 4]  603 	ld	h, d
+      000153 ED 42            [15]  604 	sbc	hl, bc
+      000155 C1               [10]  605 	pop	bc
+      000156 F5               [11]  606 	push	af
+      000157                        607 	v_offsok_loop:
+      000157 7D               [ 4]  608 	ld	a, l
+      000158 F3               [ 4]  609 	di
+      000159 D3 99            [11]  610 	out	(0x99), a
+      00015B 7C               [ 4]  611 	ld	a, h
+      00015C 00               [ 4]  612 	nop
+      00015D D3 99            [11]  613 	out	(0x99), a
+      00015F 00               [ 4]  614 	nop
+      000160 00               [ 4]  615 	nop
+      000161 DB 98            [11]  616 	in	a, (0x98)
+      000163 08               [ 4]  617 	ex	af, af' ;'
+      000164 7B               [ 4]  618 	ld	a, e
+      000165 D3 99            [11]  619 	out	(0x99), a
+      000167 7A               [ 4]  620 	ld	a, d
+      000168 F6 40            [ 7]  621 	or	#0x40
+      00016A D3 99            [11]  622 	out	(0x99), a
+      00016C 08               [ 4]  623 	ex	af, af'			;'
+      00016D 00               [ 4]  624 	nop
+      00016E FB               [ 4]  625 	ei
+      00016F D3 98            [11]  626 	out	(0x98), a
+      000171 13               [ 6]  627 	inc	de
+      000172 ED A1            [16]  628 	cpi
+      000174 EAr57r01         [10]  629 	jp	pe, v_offsok_loop
+      000177 F1               [10]  630 	pop	af
+      000178 E1               [10]  631 	pop	hl
+      000179 FD E9            [ 8]  632 	jp	(iy)
+      00017B                        633 	v_Depack_out:
+      00017B DD E1            [14]  634 	pop	ix
+      00017D FB               [ 4]  635 	ei
+      00017E C9               [10]  636 	ret
+      00017F                        637 	v_modes:
+      00017Fr4Cr01                  638 	.dw	v_offsok
+      000181r3Cr01                  639 	.dw	v_mode2
+      000183r36r01                  640 	.dw	v_mode3
+      000185r30r01                  641 	.dw	v_mode4
+      000187r2Ar01                  642 	.dw	v_mode5
+      000189r24r01                  643 	.dw	v_mode6
+      00018Br1Er01                  644 	.dw	v_mode7
+                           00018D   645 	C$pletter.c$419$1_0$72	= .
+                                    646 	.globl	C$pletter.c$419$1_0$72
+                                    647 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/compress/pletter.c:419: }
+                           00018D   648 	C$pletter.c$419$1_0$72	= .
+                                    649 	.globl	C$pletter.c$419$1_0$72
+                           00018D   650 	XG$Pletter_UnpackToVRAM$0$0	= .
+                                    651 	.globl	XG$Pletter_UnpackToVRAM$0$0
+      00018D C9               [10]  652 	ret
+                           00F380   653 G$g_RDPRIM$0_0$0 == 0xf380
+                           00F380   654 _g_RDPRIM	=	0xf380
+                           00F385   655 G$g_WRPRIM$0_0$0 == 0xf385
+                           00F385   656 _g_WRPRIM	=	0xf385
+                           00F38C   657 G$g_CLPRIM$0_0$0 == 0xf38c
+                           00F38C   658 _g_CLPRIM	=	0xf38c
+                           00F39A   659 G$g_USRTAB$0_0$0 == 0xf39a
+                           00F39A   660 _g_USRTAB	=	0xf39a
+                           00F3DE   661 G$g_CNSDFG$0_0$0 == 0xf3de
+                           00F3DE   662 _g_CNSDFG	=	0xf3de
+                           00F3DF   663 G$g_RG0SAV$0_0$0 == 0xf3df
+                           00F3DF   664 _g_RG0SAV	=	0xf3df
+                           00F3E0   665 G$g_RG1SAV$0_0$0 == 0xf3e0
+                           00F3E0   666 _g_RG1SAV	=	0xf3e0
+                           00F3E1   667 G$g_RG2SAV$0_0$0 == 0xf3e1
+                           00F3E1   668 _g_RG2SAV	=	0xf3e1
+                           00F3E2   669 G$g_RG3SAV$0_0$0 == 0xf3e2
+                           00F3E2   670 _g_RG3SAV	=	0xf3e2
+                           00F3E3   671 G$g_RG4SAV$0_0$0 == 0xf3e3
+                           00F3E3   672 _g_RG4SAV	=	0xf3e3
+                           00F3E4   673 G$g_RG5SAV$0_0$0 == 0xf3e4
+                           00F3E4   674 _g_RG5SAV	=	0xf3e4
+                           00F3E5   675 G$g_RG6SAV$0_0$0 == 0xf3e5
+                           00F3E5   676 _g_RG6SAV	=	0xf3e5
+                           00F3E6   677 G$g_RG7SAV$0_0$0 == 0xf3e6
+                           00F3E6   678 _g_RG7SAV	=	0xf3e6
+                           00F3E7   679 G$g_STATFL$0_0$0 == 0xf3e7
+                           00F3E7   680 _g_STATFL	=	0xf3e7
+                           00F3E8   681 G$g_TRGFLG$0_0$0 == 0xf3e8
+                           00F3E8   682 _g_TRGFLG	=	0xf3e8
+                           00F3EC   683 G$g_MAXUPD$0_0$0 == 0xf3ec
+                           00F3EC   684 _g_MAXUPD	=	0xf3ec
+                           00F3EF   685 G$g_MINUPD$0_0$0 == 0xf3ef
+                           00F3EF   686 _g_MINUPD	=	0xf3ef
+                           00F3F3   687 G$g_QUEUES$0_0$0 == 0xf3f3
+                           00F3F3   688 _g_QUEUES	=	0xf3f3
+                           00F3F5   689 G$g_FRCNEW$0_0$0 == 0xf3f5
+                           00F3F5   690 _g_FRCNEW	=	0xf3f5
+                           00F3F6   691 G$g_SCNCNT$0_0$0 == 0xf3f6
+                           00F3F6   692 _g_SCNCNT	=	0xf3f6
+                           00F3F7   693 G$g_REPCNT$0_0$0 == 0xf3f7
+                           00F3F7   694 _g_REPCNT	=	0xf3f7
+                           00F3F8   695 G$g_PUTPNT$0_0$0 == 0xf3f8
+                           00F3F8   696 _g_PUTPNT	=	0xf3f8
+                           00F3FA   697 G$g_GETPNT$0_0$0 == 0xf3fa
+                           00F3FA   698 _g_GETPNT	=	0xf3fa
+                           00F3FC   699 G$g_CS120$0_0$0 == 0xf3fc
+                           00F3FC   700 _g_CS120	=	0xf3fc
+                           00F401   701 G$g_CS240$0_0$0 == 0xf401
+                           00F401   702 _g_CS240	=	0xf401
+                           00F406   703 G$g_LOW$0_0$0 == 0xf406
+                           00F406   704 _g_LOW	=	0xf406
+                           00F408   705 G$g_HIGH$0_0$0 == 0xf408
+                           00F408   706 _g_HIGH	=	0xf408
+                           00F40A   707 G$g_HEADER$0_0$0 == 0xf40a
+                           00F40A   708 _g_HEADER	=	0xf40a
+                           00F40B   709 G$g_ASPCT1$0_0$0 == 0xf40b
+                           00F40B   710 _g_ASPCT1	=	0xf40b
+                           00F40D   711 G$g_ASPCT2$0_0$0 == 0xf40d
+                           00F40D   712 _g_ASPCT2	=	0xf40d
+                           00F959   713 G$g_QUETAB$0_0$0 == 0xf959
+                           00F959   714 _g_QUETAB	=	0xf959
+                           00F971   715 G$g_QUEBAK$0_0$0 == 0xf971
+                           00F971   716 _g_QUEBAK	=	0xf971
+                           00F975   717 G$g_VOICAQ$0_0$0 == 0xf975
+                           00F975   718 _g_VOICAQ	=	0xf975
+                           00F9F5   719 G$g_VOICBQ$0_0$0 == 0xf9f5
+                           00F9F5   720 _g_VOICBQ	=	0xf9f5
+                           00FA75   721 G$g_VOICCQ$0_0$0 == 0xfa75
+                           00FA75   722 _g_VOICCQ	=	0xfa75
+                           00FAF5   723 G$g_RS2IQ$0_0$0 == 0xfaf5
+                           00FAF5   724 _g_RS2IQ	=	0xfaf5
+                           00FAF5   725 G$g_DPPAGE$0_0$0 == 0xfaf5
+                           00FAF5   726 _g_DPPAGE	=	0xfaf5
+                           00FAF6   727 G$g_ACPAGE$0_0$0 == 0xfaf6
+                           00FAF6   728 _g_ACPAGE	=	0xfaf6
+                           00FAF7   729 G$g_AVCSAV$0_0$0 == 0xfaf7
+                           00FAF7   730 _g_AVCSAV	=	0xfaf7
+                           00FAF8   731 G$g_EXBRSA$0_0$0 == 0xfaf8
+                           00FAF8   732 _g_EXBRSA	=	0xfaf8
+                           00FAF9   733 G$g_CHRCNT$0_0$0 == 0xfaf9
+                           00FAF9   734 _g_CHRCNT	=	0xfaf9
+                           00FAFA   735 G$g_ROMA$0_0$0 == 0xfafa
+                           00FAFA   736 _g_ROMA	=	0xfafa
+                           00FAFC   737 G$g_MODE$0_0$0 == 0xfafc
+                           00FAFC   738 _g_MODE	=	0xfafc
+                           00FAFD   739 G$g_NORUSE$0_0$0 == 0xfafd
+                           00FAFD   740 _g_NORUSE	=	0xfafd
+                           00FAFE   741 G$g_XSAVE$0_0$0 == 0xfafe
+                           00FAFE   742 _g_XSAVE	=	0xfafe
+                           00FB00   743 G$g_YSAVE$0_0$0 == 0xfb00
+                           00FB00   744 _g_YSAVE	=	0xfb00
+                           00FB03   745 G$g_RSTMP$0_0$0 == 0xfb03
+                           00FB03   746 _g_RSTMP	=	0xfb03
+                           00FB03   747 G$g_TOCNT$0_0$0 == 0xfb03
+                           00FB03   748 _g_TOCNT	=	0xfb03
+                           00FB04   749 G$g_RSFCB$0_0$0 == 0xfb04
+                           00FB04   750 _g_RSFCB	=	0xfb04
+                           00FB06   751 G$g_RSIQLN$0_0$0 == 0xfb06
+                           00FB06   752 _g_RSIQLN	=	0xfb06
+                           00FB07   753 G$g_MEXBIh$0_0$0 == 0xfb07
+                           00FB07   754 _g_MEXBIh	=	0xfb07
+                           00FB0C   755 G$g_OLDSTT$0_0$0 == 0xfb0c
+                           00FB0C   756 _g_OLDSTT	=	0xfb0c
+                           00FB0C   757 G$g_OLDINT$0_0$0 == 0xfb0c
+                           00FB0C   758 _g_OLDINT	=	0xfb0c
+                           00FB16   759 G$g_DEVNUM$0_0$0 == 0xfb16
+                           00FB16   760 _g_DEVNUM	=	0xfb16
+                           00FB17   761 G$g_DATCNT$0_0$0 == 0xfb17
+                           00FB17   762 _g_DATCNT	=	0xfb17
+                           00FB1A   763 G$g_ERRORS$0_0$0 == 0xfb1a
+                           00FB1A   764 _g_ERRORS	=	0xfb1a
+                           00FB1B   765 G$g_FLAGS$0_0$0 == 0xfb1b
+                           00FB1B   766 _g_FLAGS	=	0xfb1b
+                           00FB1C   767 G$g_ESTBLS$0_0$0 == 0xfb1c
+                           00FB1C   768 _g_ESTBLS	=	0xfb1c
+                           00FB1D   769 G$g_COMMSK$0_0$0 == 0xfb1d
+                           00FB1D   770 _g_COMMSK	=	0xfb1d
+                           00FB1E   771 G$g_LSTCOM$0_0$0 == 0xfb1e
+                           00FB1E   772 _g_LSTCOM	=	0xfb1e
+                           00FB1F   773 G$g_LSTMOD$0_0$0 == 0xfb1f
+                           00FB1F   774 _g_LSTMOD	=	0xfb1f
+                           00FB35   775 G$g_PRSCNT$0_0$0 == 0xfb35
+                           00FB35   776 _g_PRSCNT	=	0xfb35
+                           00FB36   777 G$g_SAVSP$0_0$0 == 0xfb36
+                           00FB36   778 _g_SAVSP	=	0xfb36
+                           00FB38   779 G$g_VOICEN$0_0$0 == 0xfb38
+                           00FB38   780 _g_VOICEN	=	0xfb38
+                           00FB39   781 G$g_SAVVOL$0_0$0 == 0xfb39
+                           00FB39   782 _g_SAVVOL	=	0xfb39
+                           00FB3B   783 G$g_MCLLEN$0_0$0 == 0xfb3b
+                           00FB3B   784 _g_MCLLEN	=	0xfb3b
+                           00FB3C   785 G$g_MCLPTR$0_0$0 == 0xfb3c
+                           00FB3C   786 _g_MCLPTR	=	0xfb3c
+                           00FB3E   787 G$g_QUEUEN$0_0$0 == 0xfb3e
+                           00FB3E   788 _g_QUEUEN	=	0xfb3e
+                           00FB3F   789 G$g_MUSICF$0_0$0 == 0xfb3f
+                           00FB3F   790 _g_MUSICF	=	0xfb3f
+                           00FB40   791 G$g_PLYCNT$0_0$0 == 0xfb40
+                           00FB40   792 _g_PLYCNT	=	0xfb40
+                           00FB41   793 G$g_VCBA$0_0$0 == 0xfb41
+                           00FB41   794 _g_VCBA	=	0xfb41
+                           00FB66   795 G$g_VCBB$0_0$0 == 0xfb66
+                           00FB66   796 _g_VCBB	=	0xfb66
+                           00FB8B   797 G$g_VCBC$0_0$0 == 0xfb8b
+                           00FB8B   798 _g_VCBC	=	0xfb8b
+                           00FBB0   799 G$g_ENSTOP$0_0$0 == 0xfbb0
+                           00FBB0   800 _g_ENSTOP	=	0xfbb0
+                           00FBB1   801 G$g_BASROM$0_0$0 == 0xfbb1
+                           00FBB1   802 _g_BASROM	=	0xfbb1
+                           00FBB2   803 G$g_LINTTB$0_0$0 == 0xfbb2
+                           00FBB2   804 _g_LINTTB	=	0xfbb2
+                           00FBCA   805 G$g_FSTPOS$0_0$0 == 0xfbca
+                           00FBCA   806 _g_FSTPOS	=	0xfbca
+                           00FBCC   807 G$g_CODSAV$0_0$0 == 0xfbcc
+                           00FBCC   808 _g_CODSAV	=	0xfbcc
+                           00FBCD   809 G$g_FNKSWI$0_0$0 == 0xfbcd
+                           00FBCD   810 _g_FNKSWI	=	0xfbcd
+                           00FBCE   811 G$g_FNKFLG$0_0$0 == 0xfbce
+                           00FBCE   812 _g_FNKFLG	=	0xfbce
+                           00FBD8   813 G$g_ONGSBF$0_0$0 == 0xfbd8
+                           00FBD8   814 _g_ONGSBF	=	0xfbd8
+                           00FBD9   815 G$g_CLIKFL$0_0$0 == 0xfbd9
+                           00FBD9   816 _g_CLIKFL	=	0xfbd9
+                           00FBDA   817 G$g_OLDKEY$0_0$0 == 0xfbda
+                           00FBDA   818 _g_OLDKEY	=	0xfbda
+                           00FBE5   819 G$g_NEWKEY$0_0$0 == 0xfbe5
+                           00FBE5   820 _g_NEWKEY	=	0xfbe5
+                           00FBF0   821 G$g_KEYBUF$0_0$0 == 0xfbf0
+                           00FBF0   822 _g_KEYBUF	=	0xfbf0
+                           00FC18   823 G$g_LINWRK$0_0$0 == 0xfc18
+                           00FC18   824 _g_LINWRK	=	0xfc18
+                           00FC40   825 G$g_PATWRK$0_0$0 == 0xfc40
+                           00FC40   826 _g_PATWRK	=	0xfc40
+                           00FC48   827 G$g_BOTTOM$0_0$0 == 0xfc48
+                           00FC48   828 _g_BOTTOM	=	0xfc48
+                           00FC4A   829 G$g_HIMEM$0_0$0 == 0xfc4a
+                           00FC4A   830 _g_HIMEM	=	0xfc4a
+                           00FC4C   831 G$g_TRPTBL$0_0$0 == 0xfc4c
+                           00FC4C   832 _g_TRPTBL	=	0xfc4c
+                           00FC9A   833 G$g_RTYCNT$0_0$0 == 0xfc9a
+                           00FC9A   834 _g_RTYCNT	=	0xfc9a
+                           00FC9B   835 G$g_INTFLG$0_0$0 == 0xfc9b
+                           00FC9B   836 _g_INTFLG	=	0xfc9b
+                           00FC9C   837 G$g_PADY$0_0$0 == 0xfc9c
+                           00FC9C   838 _g_PADY	=	0xfc9c
+                           00FC9D   839 G$g_PADX$0_0$0 == 0xfc9d
+                           00FC9D   840 _g_PADX	=	0xfc9d
+                           00FC9E   841 G$g_JIFFY$0_0$0 == 0xfc9e
+                           00FC9E   842 _g_JIFFY	=	0xfc9e
+                           00FCA0   843 G$g_INTVAL$0_0$0 == 0xfca0
+                           00FCA0   844 _g_INTVAL	=	0xfca0
+                           00FCA2   845 G$g_INTCNT$0_0$0 == 0xfca2
+                           00FCA2   846 _g_INTCNT	=	0xfca2
+                           00FCA4   847 G$g_LOWLIM$0_0$0 == 0xfca4
+                           00FCA4   848 _g_LOWLIM	=	0xfca4
+                           00FCA5   849 G$g_WINWID$0_0$0 == 0xfca5
+                           00FCA5   850 _g_WINWID	=	0xfca5
+                           00FCA6   851 G$g_GRPHED$0_0$0 == 0xfca6
+                           00FCA6   852 _g_GRPHED	=	0xfca6
+                           00FCA7   853 G$g_ESCCNT$0_0$0 == 0xfca7
+                           00FCA7   854 _g_ESCCNT	=	0xfca7
+                           00FCA8   855 G$g_INSFLG$0_0$0 == 0xfca8
+                           00FCA8   856 _g_INSFLG	=	0xfca8
+                           00FCA9   857 G$g_CSRSW$0_0$0 == 0xfca9
+                           00FCA9   858 _g_CSRSW	=	0xfca9
+                           00FCAA   859 G$g_CSTYLE$0_0$0 == 0xfcaa
+                           00FCAA   860 _g_CSTYLE	=	0xfcaa
+                           00FCAB   861 G$g_CAPST$0_0$0 == 0xfcab
+                           00FCAB   862 _g_CAPST	=	0xfcab
+                           00FCAC   863 G$g_KANAST$0_0$0 == 0xfcac
+                           00FCAC   864 _g_KANAST	=	0xfcac
+                           00FCAD   865 G$g_KANAMD$0_0$0 == 0xfcad
+                           00FCAD   866 _g_KANAMD	=	0xfcad
+                           00FCAE   867 G$g_FLBMEM$0_0$0 == 0xfcae
+                           00FCAE   868 _g_FLBMEM	=	0xfcae
+                           00FCAF   869 G$g_SCRMOD$0_0$0 == 0xfcaf
+                           00FCAF   870 _g_SCRMOD	=	0xfcaf
+                           00FCB0   871 G$g_OLDSCR$0_0$0 == 0xfcb0
+                           00FCB0   872 _g_OLDSCR	=	0xfcb0
+                           00FCB1   873 G$g_CASPRV$0_0$0 == 0xfcb1
+                           00FCB1   874 _g_CASPRV	=	0xfcb1
+                           00FCB2   875 G$g_BRDATR$0_0$0 == 0xfcb2
+                           00FCB2   876 _g_BRDATR	=	0xfcb2
+                           00FCB3   877 G$g_GXPOS$0_0$0 == 0xfcb3
+                           00FCB3   878 _g_GXPOS	=	0xfcb3
+                           00FCB5   879 G$g_GYPOS$0_0$0 == 0xfcb5
+                           00FCB5   880 _g_GYPOS	=	0xfcb5
+                           00FCBB   881 G$g_DRWFLG$0_0$0 == 0xfcbb
+                           00FCBB   882 _g_DRWFLG	=	0xfcbb
+                           00FCBC   883 G$g_DRWSCL$0_0$0 == 0xfcbc
+                           00FCBC   884 _g_DRWSCL	=	0xfcbc
+                           00FCBD   885 G$g_DRWANG$0_0$0 == 0xfcbd
+                           00FCBD   886 _g_DRWANG	=	0xfcbd
+                           00FCC1   887 G$g_MNROM$0_0$0 == 0xfcc1
+                           00FCC1   888 _g_MNROM	=	0xfcc1
+                           00FCC1   889 G$g_EXPTBL$0_0$0 == 0xfcc1
+                           00FCC1   890 _g_EXPTBL	=	0xfcc1
+                           00FCC5   891 G$g_SLTTBL$0_0$0 == 0xfcc5
+                           00FCC5   892 _g_SLTTBL	=	0xfcc5
+                           00FCC9   893 G$g_SLTATR$0_0$0 == 0xfcc9
+                           00FCC9   894 _g_SLTATR	=	0xfcc9
+                           00FD09   895 G$g_SLTWRK$0_0$0 == 0xfd09
+                           00FD09   896 _g_SLTWRK	=	0xfd09
+                           00FD89   897 G$g_PROCNM$0_0$0 == 0xfd89
+                           00FD89   898 _g_PROCNM	=	0xfd89
+                           00FFE7   899 G$g_RG08SAV$0_0$0 == 0xffe7
+                           00FFE7   900 _g_RG08SAV	=	0xffe7
+                           00FFE8   901 G$g_RG09SAV$0_0$0 == 0xffe8
+                           00FFE8   902 _g_RG09SAV	=	0xffe8
+                           00FFE9   903 G$g_RG10SAV$0_0$0 == 0xffe9
+                           00FFE9   904 _g_RG10SAV	=	0xffe9
+                           00FFEA   905 G$g_RG11SAV$0_0$0 == 0xffea
+                           00FFEA   906 _g_RG11SAV	=	0xffea
+                           00FFEB   907 G$g_RG12SAV$0_0$0 == 0xffeb
+                           00FFEB   908 _g_RG12SAV	=	0xffeb
+                           00FFEC   909 G$g_RG13SAV$0_0$0 == 0xffec
+                           00FFEC   910 _g_RG13SAV	=	0xffec
+                           00FFED   911 G$g_RG14SAV$0_0$0 == 0xffed
+                           00FFED   912 _g_RG14SAV	=	0xffed
+                           00FFEE   913 G$g_RG15SAV$0_0$0 == 0xffee
+                           00FFEE   914 _g_RG15SAV	=	0xffee
+                           00FFEF   915 G$g_RG16SAV$0_0$0 == 0xffef
+                           00FFEF   916 _g_RG16SAV	=	0xffef
+                           00FFF0   917 G$g_RG17SAV$0_0$0 == 0xfff0
+                           00FFF0   918 _g_RG17SAV	=	0xfff0
+                           00FFF1   919 G$g_RG18SAV$0_0$0 == 0xfff1
+                           00FFF1   920 _g_RG18SAV	=	0xfff1
+                           00FFF2   921 G$g_RG19SAV$0_0$0 == 0xfff2
+                           00FFF2   922 _g_RG19SAV	=	0xfff2
+                           00FFF3   923 G$g_RG20SAV$0_0$0 == 0xfff3
+                           00FFF3   924 _g_RG20SAV	=	0xfff3
+                           00FFF4   925 G$g_RG21SAV$0_0$0 == 0xfff4
+                           00FFF4   926 _g_RG21SAV	=	0xfff4
+                           00FFF5   927 G$g_RG22SAV$0_0$0 == 0xfff5
+                           00FFF5   928 _g_RG22SAV	=	0xfff5
+                           00FFF6   929 G$g_RG23SAV$0_0$0 == 0xfff6
+                           00FFF6   930 _g_RG23SAV	=	0xfff6
+                           00FFF7   931 G$g_MINROM$0_0$0 == 0xfff7
+                           00FFF7   932 _g_MINROM	=	0xfff7
+                           00FFF8   933 G$g_SVFFF8$0_0$0 == 0xfff8
+                           00FFF8   934 _g_SVFFF8	=	0xfff8
+                           00FFFA   935 G$g_RG25SAV$0_0$0 == 0xfffa
+                           00FFFA   936 _g_RG25SAV	=	0xfffa
+                           00FFFB   937 G$g_RG26SAV$0_0$0 == 0xfffb
+                           00FFFB   938 _g_RG26SAV	=	0xfffb
+                           00FFFC   939 G$g_RG27SAV$0_0$0 == 0xfffc
+                           00FFFC   940 _g_RG27SAV	=	0xfffc
+                           00FFFD   941 G$g_SVFFFD$0_0$0 == 0xfffd
+                           00FFFD   942 _g_SVFFFD	=	0xfffd
+                                    943 	.area _CODE
+                                    944 	.area _INITIALIZER
+                                    945 	.area _CABS (ABS)

@@ -219,425 +219,738 @@
                                     219 ;--------------------------------------------------------
                                     220 ; special function registers
                                     221 ;--------------------------------------------------------
-                           0000A8   222 _g_PortPrimarySlot	=	0x00a8
-                           0000A9   223 _g_PortReadKeyboard	=	0x00a9
-                           0000AA   224 _g_PortAccessKeyboard	=	0x00aa
-                           0000AB   225 _g_PortControl	=	0x00ab
-                           000098   226 _g_VDP_DataPort	=	0x0098
-                           000099   227 _g_VDP_RegPort	=	0x0099
-                           000099   228 _g_VDP_AddrPort	=	0x0099
-                           000099   229 _g_VDP_StatPort	=	0x0099
-                           0000A0   230 _g_PSG_RegPort	=	0x00a0
-                           0000A1   231 _g_PSG_DataPort	=	0x00a1
-                           0000A2   232 _g_PSG_StatPort	=	0x00a2
-                           000010   233 _g_PSG_Ext_RegPort	=	0x0010
-                           000011   234 _g_PSG_Ext_DataPort	=	0x0011
-                           000012   235 _g_PSG_Ext_StatPort	=	0x0012
-                           00007C   236 _g_MSXMusic_IndexPort	=	0x007c
-                           00007D   237 _g_MSXMusic_DataPort	=	0x007d
-                           0000C0   238 _g_MSXAudio_IndexPort	=	0x00c0
-                           0000C1   239 _g_MSXAudio_DataPort	=	0x00c1
-                           0000C2   240 _g_MSXAudio_IndexPort2	=	0x00c2
-                           0000C3   241 _g_MSXAudio_DataPort2	=	0x00c3
-                           0000B4   242 _g_RTC_AddrPort	=	0x00b4
-                           0000B5   243 _g_RTC_DataPort	=	0x00b5
-                                    244 ;--------------------------------------------------------
-                                    245 ; ram data
-                                    246 ;--------------------------------------------------------
-                                    247 	.area _DATA
-                           00F3AE   248 _g_LINL40	=	0xf3ae
-                           00F3AF   249 _g_LINL32	=	0xf3af
-                           00F3B0   250 _g_LINLEN	=	0xf3b0
-                           00F3B1   251 _g_CRTCNT	=	0xf3b1
-                           00F3B2   252 _g_CLMLST	=	0xf3b2
-                           00F3B3   253 _g_TXTNAM	=	0xf3b3
-                           00F3B5   254 _g_TXTCOL	=	0xf3b5
-                           00F3B7   255 _g_TXTCGP	=	0xf3b7
-                           00F3B9   256 _g_TXTATR	=	0xf3b9
-                           00F3BB   257 _g_TXTPAT	=	0xf3bb
-                           00F3BD   258 _g_T32NAM	=	0xf3bd
-                           00F3BF   259 _g_T32COL	=	0xf3bf
-                           00F3C1   260 _g_T32CGP	=	0xf3c1
-                           00F3C3   261 _g_T32ATR	=	0xf3c3
-                           00F3C5   262 _g_T32PAT	=	0xf3c5
-                           00F3C7   263 _g_GRPNAM	=	0xf3c7
-                           00F3C9   264 _g_GRPCOL	=	0xf3c9
-                           00F3CB   265 _g_GRPCGP	=	0xf3cb
-                           00F3CD   266 _g_GRPATR	=	0xf3cd
-                           00F3CF   267 _g_GRPPAT	=	0xf3cf
-                           00F3D1   268 _g_MLTNAM	=	0xf3d1
-                           00F3D3   269 _g_MLTCOL	=	0xf3d3
-                           00F3D5   270 _g_MLTCGP	=	0xf3d5
-                           00F3D7   271 _g_MLTATR	=	0xf3d7
-                           00F3D9   272 _g_MLTPAT	=	0xf3d9
-                           00F3DB   273 _g_CLIKSW	=	0xf3db
-                           00F3DC   274 _g_CSRY	=	0xf3dc
-                           00F3DD   275 _g_CSRX	=	0xf3dd
-                           00F3E9   276 _g_FORCLR	=	0xf3e9
-                           00F3EA   277 _g_BAKCLR	=	0xf3ea
-                           00F3EB   278 _g_BDRCLR	=	0xf3eb
-                           00F3F2   279 _g_ATRBYT	=	0xf3f2
-                           00F87F   280 _g_FNKSTR	=	0xf87f
-                           00F92A   281 _g_CLOC	=	0xf92a
-                           00F92C   282 _g_CMASK	=	0xf92c
-                           00FB02   283 _g_LOGOPR	=	0xfb02
-                           00FCB7   284 _g_GRPACX	=	0xfcb7
-                           00FCB9   285 _g_GRPACY	=	0xfcb9
-                           00FFFF   286 _g_SLTSL	=	0xffff
-                                    287 ;--------------------------------------------------------
-                                    288 ; ram data
-                                    289 ;--------------------------------------------------------
-                                    290 	.area _INITIALIZED
-                                    291 ;--------------------------------------------------------
-                                    292 ; absolute external ram data
-                                    293 ;--------------------------------------------------------
-                                    294 	.area _DABS (ABS)
-                                    295 ;--------------------------------------------------------
-                                    296 ; global & static initialisations
-                                    297 ;--------------------------------------------------------
-                                    298 	.area _HOME
-                                    299 	.area _GSINIT
-                                    300 	.area _GSFINAL
-                                    301 	.area _GSINIT
-                                    302 ;--------------------------------------------------------
-                                    303 ; Home
-                                    304 ;--------------------------------------------------------
-                                    305 	.area _HOME
-                                    306 	.area _HOME
-                                    307 ;--------------------------------------------------------
-                                    308 ; code
-                                    309 ;--------------------------------------------------------
-                                    310 	.area _CODE
-                                    311 ;./control.c:13: bool isMoveRight(u8 row8, u8 input)
-                                    312 ;	---------------------------------
-                                    313 ; Function isMoveRight
-                                    314 ; ---------------------------------
-      000000                        315 _isMoveRight::
-      000000 67               [ 4]  316 	ld	h, a
-                                    317 ;	spillPairReg hl
-                                    318 ;	spillPairReg hl
-                                    319 ;./control.c:15: bool isRight = FALSE;
-      000001 0E 00            [ 7]  320 	ld	c, #0x00
-                                    321 ;./control.c:16: if (IS_KEY_PRESSED(row8, KEY_RIGHT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_RIGHT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_RIGHT))
-      000003 29               [11]  322 	add	hl, hl
-      000004 30 1A            [12]  323 	jr	NC, 00101$
-                                    324 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:160: u8 in = ~Joystick_Read(port);
-      000006 2E 03            [ 7]  325 	ld	l, #0x03
-                                    326 ;	spillPairReg hl
-                                    327 ;	spillPairReg hl
-      000008 CDr00r00         [17]  328 	call	_Joystick_Read
-      00000B 7D               [ 4]  329 	ld	a, l
-      00000C 2F               [ 4]  330 	cpl
-                                    331 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:161: return (in & JOY_INPUT_DIR_MASK);
-      00000D E6 0F            [ 7]  332 	and	a, #0x0f
-                                    333 ;./control.c:16: if (IS_KEY_PRESSED(row8, KEY_RIGHT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_RIGHT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_RIGHT))
-      00000F D6 08            [ 7]  334 	sub	a, #0x08
-      000011 28 0D            [12]  335 	jr	Z, 00101$
-                                    336 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:160: u8 in = ~Joystick_Read(port);
-      000013 2E 4C            [ 7]  337 	ld	l, #0x4c
-                                    338 ;	spillPairReg hl
-                                    339 ;	spillPairReg hl
-      000015 CDr00r00         [17]  340 	call	_Joystick_Read
-      000018 7D               [ 4]  341 	ld	a, l
-      000019 2F               [ 4]  342 	cpl
-                                    343 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:161: return (in & JOY_INPUT_DIR_MASK);
-      00001A E6 0F            [ 7]  344 	and	a, #0x0f
-                                    345 ;./control.c:16: if (IS_KEY_PRESSED(row8, KEY_RIGHT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_RIGHT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_RIGHT))
-      00001C D6 08            [ 7]  346 	sub	a, #0x08
-      00001E 20 02            [12]  347 	jr	NZ, 00102$
-      000020                        348 00101$:
-                                    349 ;./control.c:19: isRight = TRUE;
-      000020 0E 01            [ 7]  350 	ld	c, #0x01
-      000022                        351 00102$:
-                                    352 ;./control.c:22: return isRight;
-      000022 79               [ 4]  353 	ld	a, c
-                                    354 ;./control.c:23: }
-      000023 C9               [10]  355 	ret
-                           00F380   356 _g_RDPRIM	=	0xf380
-                           00F385   357 _g_WRPRIM	=	0xf385
-                           00F38C   358 _g_CLPRIM	=	0xf38c
-                           00F39A   359 _g_USRTAB	=	0xf39a
-                           00F3DE   360 _g_CNSDFG	=	0xf3de
-                           00F3DF   361 _g_RG0SAV	=	0xf3df
-                           00F3E0   362 _g_RG1SAV	=	0xf3e0
-                           00F3E1   363 _g_RG2SAV	=	0xf3e1
-                           00F3E2   364 _g_RG3SAV	=	0xf3e2
-                           00F3E3   365 _g_RG4SAV	=	0xf3e3
-                           00F3E4   366 _g_RG5SAV	=	0xf3e4
-                           00F3E5   367 _g_RG6SAV	=	0xf3e5
-                           00F3E6   368 _g_RG7SAV	=	0xf3e6
-                           00F3E7   369 _g_STATFL	=	0xf3e7
-                           00F3E8   370 _g_TRGFLG	=	0xf3e8
-                           00F3EC   371 _g_MAXUPD	=	0xf3ec
-                           00F3EF   372 _g_MINUPD	=	0xf3ef
-                           00F3F3   373 _g_QUEUES	=	0xf3f3
-                           00F3F5   374 _g_FRCNEW	=	0xf3f5
-                           00F3F6   375 _g_SCNCNT	=	0xf3f6
-                           00F3F7   376 _g_REPCNT	=	0xf3f7
-                           00F3F8   377 _g_PUTPNT	=	0xf3f8
-                           00F3FA   378 _g_GETPNT	=	0xf3fa
-                           00F3FC   379 _g_CS120	=	0xf3fc
-                           00F401   380 _g_CS240	=	0xf401
-                           00F406   381 _g_LOW	=	0xf406
-                           00F408   382 _g_HIGH	=	0xf408
-                           00F40A   383 _g_HEADER	=	0xf40a
-                           00F40B   384 _g_ASPCT1	=	0xf40b
-                           00F40D   385 _g_ASPCT2	=	0xf40d
-                           00F959   386 _g_QUETAB	=	0xf959
-                           00F971   387 _g_QUEBAK	=	0xf971
-                           00F975   388 _g_VOICAQ	=	0xf975
-                           00F9F5   389 _g_VOICBQ	=	0xf9f5
-                           00FA75   390 _g_VOICCQ	=	0xfa75
-                           00FAF5   391 _g_RS2IQ	=	0xfaf5
-                           00FAF5   392 _g_DPPAGE	=	0xfaf5
-                           00FAF6   393 _g_ACPAGE	=	0xfaf6
-                           00FAF7   394 _g_AVCSAV	=	0xfaf7
-                           00FAF8   395 _g_EXBRSA	=	0xfaf8
-                           00FAF9   396 _g_CHRCNT	=	0xfaf9
-                           00FAFA   397 _g_ROMA	=	0xfafa
-                           00FAFC   398 _g_MODE	=	0xfafc
-                           00FAFD   399 _g_NORUSE	=	0xfafd
-                           00FAFE   400 _g_XSAVE	=	0xfafe
-                           00FB00   401 _g_YSAVE	=	0xfb00
-                           00FB03   402 _g_RSTMP	=	0xfb03
-                           00FB03   403 _g_TOCNT	=	0xfb03
-                           00FB04   404 _g_RSFCB	=	0xfb04
-                           00FB06   405 _g_RSIQLN	=	0xfb06
-                           00FB07   406 _g_MEXBIh	=	0xfb07
-                           00FB0C   407 _g_OLDSTT	=	0xfb0c
-                           00FB0C   408 _g_OLDINT	=	0xfb0c
-                           00FB16   409 _g_DEVNUM	=	0xfb16
-                           00FB17   410 _g_DATCNT	=	0xfb17
-                           00FB1A   411 _g_ERRORS	=	0xfb1a
-                           00FB1B   412 _g_FLAGS	=	0xfb1b
-                           00FB1C   413 _g_ESTBLS	=	0xfb1c
-                           00FB1D   414 _g_COMMSK	=	0xfb1d
-                           00FB1E   415 _g_LSTCOM	=	0xfb1e
-                           00FB1F   416 _g_LSTMOD	=	0xfb1f
-                           00FB35   417 _g_PRSCNT	=	0xfb35
-                           00FB36   418 _g_SAVSP	=	0xfb36
-                           00FB38   419 _g_VOICEN	=	0xfb38
-                           00FB39   420 _g_SAVVOL	=	0xfb39
-                           00FB3B   421 _g_MCLLEN	=	0xfb3b
-                           00FB3C   422 _g_MCLPTR	=	0xfb3c
-                           00FB3E   423 _g_QUEUEN	=	0xfb3e
-                           00FB3F   424 _g_MUSICF	=	0xfb3f
-                           00FB40   425 _g_PLYCNT	=	0xfb40
-                           00FB41   426 _g_VCBA	=	0xfb41
-                           00FB66   427 _g_VCBB	=	0xfb66
-                           00FB8B   428 _g_VCBC	=	0xfb8b
-                           00FBB0   429 _g_ENSTOP	=	0xfbb0
-                           00FBB1   430 _g_BASROM	=	0xfbb1
-                           00FBB2   431 _g_LINTTB	=	0xfbb2
-                           00FBCA   432 _g_FSTPOS	=	0xfbca
-                           00FBCC   433 _g_CODSAV	=	0xfbcc
-                           00FBCD   434 _g_FNKSWI	=	0xfbcd
-                           00FBCE   435 _g_FNKFLG	=	0xfbce
-                           00FBD8   436 _g_ONGSBF	=	0xfbd8
-                           00FBD9   437 _g_CLIKFL	=	0xfbd9
-                           00FBDA   438 _g_OLDKEY	=	0xfbda
-                           00FBE5   439 _g_NEWKEY	=	0xfbe5
-                           00FBF0   440 _g_KEYBUF	=	0xfbf0
-                           00FC18   441 _g_LINWRK	=	0xfc18
-                           00FC40   442 _g_PATWRK	=	0xfc40
-                           00FC48   443 _g_BOTTOM	=	0xfc48
-                           00FC4A   444 _g_HIMEM	=	0xfc4a
-                           00FC4C   445 _g_TRPTBL	=	0xfc4c
-                           00FC9A   446 _g_RTYCNT	=	0xfc9a
-                           00FC9B   447 _g_INTFLG	=	0xfc9b
-                           00FC9C   448 _g_PADY	=	0xfc9c
-                           00FC9D   449 _g_PADX	=	0xfc9d
-                           00FC9E   450 _g_JIFFY	=	0xfc9e
-                           00FCA0   451 _g_INTVAL	=	0xfca0
-                           00FCA2   452 _g_INTCNT	=	0xfca2
-                           00FCA4   453 _g_LOWLIM	=	0xfca4
-                           00FCA5   454 _g_WINWID	=	0xfca5
-                           00FCA6   455 _g_GRPHED	=	0xfca6
-                           00FCA7   456 _g_ESCCNT	=	0xfca7
-                           00FCA8   457 _g_INSFLG	=	0xfca8
-                           00FCA9   458 _g_CSRSW	=	0xfca9
-                           00FCAA   459 _g_CSTYLE	=	0xfcaa
-                           00FCAB   460 _g_CAPST	=	0xfcab
-                           00FCAC   461 _g_KANAST	=	0xfcac
-                           00FCAD   462 _g_KANAMD	=	0xfcad
-                           00FCAE   463 _g_FLBMEM	=	0xfcae
-                           00FCAF   464 _g_SCRMOD	=	0xfcaf
-                           00FCB0   465 _g_OLDSCR	=	0xfcb0
-                           00FCB1   466 _g_CASPRV	=	0xfcb1
-                           00FCB2   467 _g_BRDATR	=	0xfcb2
-                           00FCB3   468 _g_GXPOS	=	0xfcb3
-                           00FCB5   469 _g_GYPOS	=	0xfcb5
-                           00FCBB   470 _g_DRWFLG	=	0xfcbb
-                           00FCBC   471 _g_DRWSCL	=	0xfcbc
-                           00FCBD   472 _g_DRWANG	=	0xfcbd
-                           00FCC1   473 _g_MNROM	=	0xfcc1
-                           00FCC1   474 _g_EXPTBL	=	0xfcc1
-                           00FCC5   475 _g_SLTTBL	=	0xfcc5
-                           00FCC9   476 _g_SLTATR	=	0xfcc9
-                           00FD09   477 _g_SLTWRK	=	0xfd09
-                           00FD89   478 _g_PROCNM	=	0xfd89
-                           00FFE7   479 _g_RG08SAV	=	0xffe7
-                           00FFE8   480 _g_RG09SAV	=	0xffe8
-                           00FFE9   481 _g_RG10SAV	=	0xffe9
-                           00FFEA   482 _g_RG11SAV	=	0xffea
-                           00FFEB   483 _g_RG12SAV	=	0xffeb
-                           00FFEC   484 _g_RG13SAV	=	0xffec
-                           00FFED   485 _g_RG14SAV	=	0xffed
-                           00FFEE   486 _g_RG15SAV	=	0xffee
-                           00FFEF   487 _g_RG16SAV	=	0xffef
-                           00FFF0   488 _g_RG17SAV	=	0xfff0
-                           00FFF1   489 _g_RG18SAV	=	0xfff1
-                           00FFF2   490 _g_RG19SAV	=	0xfff2
-                           00FFF3   491 _g_RG20SAV	=	0xfff3
-                           00FFF4   492 _g_RG21SAV	=	0xfff4
-                           00FFF5   493 _g_RG22SAV	=	0xfff5
-                           00FFF6   494 _g_RG23SAV	=	0xfff6
-                           00FFF7   495 _g_MINROM	=	0xfff7
-                           00FFF8   496 _g_SVFFF8	=	0xfff8
-                           00FFFA   497 _g_RG25SAV	=	0xfffa
-                           00FFFB   498 _g_RG26SAV	=	0xfffb
-                           00FFFC   499 _g_RG27SAV	=	0xfffc
-                           00FFFD   500 _g_SVFFFD	=	0xfffd
-                           000004   501 _g_CGTABL	=	0x0004
-                           000006   502 _g_VDP_DR	=	0x0006
-                           000007   503 _g_VDP_DW	=	0x0007
-                           00002B   504 _g_BASRVN	=	0x002b
-                           00002B   505 _g_ROMVersion	=	0x002b
-                           00002D   506 _g_MSXVER	=	0x002d
-                           00002E   507 _g_MSXMID	=	0x002e
-                           000034   508 _g_CHAR_16	=	0x0034
-                           000000   509 _g_SUBRID	=	0x0000
-                           000002   510 _g_STRSRC	=	0x0002
-                           00F30F   511 _g_KANJTABLE	=	0xf30f
-                           00F323   512 _g_DISKVE	=	0xf323
-                           00F325   513 _g_BREAKV	=	0xf325
-                           00F341   514 _g_RAMAD0	=	0xf341
-                           00F342   515 _g_RAMAD1	=	0xf342
-                           00F343   516 _g_RAMAD2	=	0xf343
-                           00F344   517 _g_RAMAD3	=	0xf344
-                           00F348   518 _g_MASTER	=	0xf348
-                           00F37D   519 _g_BDOS	=	0xf37d
-                                    520 ;./control.c:31: bool isMoveLeft(u8 row8, u8 input)
-                                    521 ;	---------------------------------
-                                    522 ; Function isMoveLeft
-                                    523 ; ---------------------------------
-      000024                        524 _isMoveLeft::
-      000024 47               [ 4]  525 	ld	b, a
-                                    526 ;./control.c:33: bool isLeft = FALSE;
-      000025 0E 00            [ 7]  527 	ld	c, #0x00
-                                    528 ;./control.c:34: if (IS_KEY_PRESSED(row8, KEY_LEFT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_LEFT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_LEFT))
-      000027 CB 60            [ 8]  529 	bit	4, b
-      000029 28 1A            [12]  530 	jr	Z, 00101$
-                                    531 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:160: u8 in = ~Joystick_Read(port);
-      00002B 2E 03            [ 7]  532 	ld	l, #0x03
-                                    533 ;	spillPairReg hl
-                                    534 ;	spillPairReg hl
-      00002D CDr00r00         [17]  535 	call	_Joystick_Read
-      000030 7D               [ 4]  536 	ld	a, l
-      000031 2F               [ 4]  537 	cpl
-                                    538 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:161: return (in & JOY_INPUT_DIR_MASK);
-      000032 E6 0F            [ 7]  539 	and	a, #0x0f
-                                    540 ;./control.c:34: if (IS_KEY_PRESSED(row8, KEY_LEFT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_LEFT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_LEFT))
-      000034 D6 04            [ 7]  541 	sub	a, #0x04
-      000036 28 0D            [12]  542 	jr	Z, 00101$
-                                    543 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:160: u8 in = ~Joystick_Read(port);
-      000038 2E 4C            [ 7]  544 	ld	l, #0x4c
-                                    545 ;	spillPairReg hl
-                                    546 ;	spillPairReg hl
-      00003A CDr00r00         [17]  547 	call	_Joystick_Read
-      00003D 7D               [ 4]  548 	ld	a, l
-      00003E 2F               [ 4]  549 	cpl
-                                    550 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:161: return (in & JOY_INPUT_DIR_MASK);
-      00003F E6 0F            [ 7]  551 	and	a, #0x0f
-                                    552 ;./control.c:34: if (IS_KEY_PRESSED(row8, KEY_LEFT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_LEFT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_LEFT))
-      000041 D6 04            [ 7]  553 	sub	a, #0x04
-      000043 20 02            [12]  554 	jr	NZ, 00102$
-      000045                        555 00101$:
-                                    556 ;./control.c:37: isLeft = TRUE;
-      000045 0E 01            [ 7]  557 	ld	c, #0x01
-      000047                        558 00102$:
-                                    559 ;./control.c:40: return isLeft;
-      000047 79               [ 4]  560 	ld	a, c
-                                    561 ;./control.c:41: }
-      000048 C9               [10]  562 	ret
-                                    563 ;./control.c:49: bool isMoveJump(u8 row8, u8 input)
-                                    564 ;	---------------------------------
-                                    565 ; Function isMoveJump
-                                    566 ; ---------------------------------
-      000049                        567 _isMoveJump::
-      000049 47               [ 4]  568 	ld	b, a
-                                    569 ;./control.c:51: bool isJump = FALSE;
-      00004A 0E 00            [ 7]  570 	ld	c, #0x00
-                                    571 ;./control.c:52: if (IS_KEY_PRESSED(row8, KEY_UP) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_A)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_A)))
-      00004C CB 68            [ 8]  572 	bit	5, b
-      00004E 28 14            [12]  573 	jr	Z, 00101$
-                                    574 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:167: u8 in = Joystick_Read(port);
-      000050 2E 03            [ 7]  575 	ld	l, #0x03
-                                    576 ;	spillPairReg hl
-                                    577 ;	spillPairReg hl
-      000052 CDr00r00         [17]  578 	call	_Joystick_Read
-      000055 7D               [ 4]  579 	ld	a, l
-                                    580 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:168: return ((in & trigger) == 0);
-      000056 E6 10            [ 7]  581 	and	a,#0x10
-      000058 28 0A            [12]  582 	jr	Z, 00101$
-                                    583 ;./control.c:52: if (IS_KEY_PRESSED(row8, KEY_UP) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_A)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_A)))
-                                    584 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:167: u8 in = Joystick_Read(port);
-      00005A 2E 4C            [ 7]  585 	ld	l, #0x4c
-                                    586 ;	spillPairReg hl
-                                    587 ;	spillPairReg hl
-      00005C CDr00r00         [17]  588 	call	_Joystick_Read
-      00005F 7D               [ 4]  589 	ld	a, l
-                                    590 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:168: return ((in & trigger) == 0);
-      000060 E6 10            [ 7]  591 	and	a,#0x10
-      000062 20 02            [12]  592 	jr	NZ, 00102$
-                                    593 ;./control.c:52: if (IS_KEY_PRESSED(row8, KEY_UP) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_A)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_A)))
-      000064                        594 00101$:
-                                    595 ;./control.c:55: isJump = TRUE;
-      000064 0E 01            [ 7]  596 	ld	c, #0x01
-      000066                        597 00102$:
-                                    598 ;./control.c:58: return isJump;
-      000066 79               [ 4]  599 	ld	a, c
-                                    600 ;./control.c:59: }
-      000067 C9               [10]  601 	ret
-                                    602 ;./control.c:67: bool isInteractObject(u8 row8, u8 input)
-                                    603 ;	---------------------------------
-                                    604 ; Function isInteractObject
-                                    605 ; ---------------------------------
-      000068                        606 _isInteractObject::
-      000068 47               [ 4]  607 	ld	b, a
-                                    608 ;./control.c:69: bool isGet = FALSE;
-      000069 0E 00            [ 7]  609 	ld	c, #0x00
-                                    610 ;./control.c:70: if (IS_KEY_PRESSED(row8, KEY_SPACE) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_B)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_B)))
-      00006B CB 40            [ 8]  611 	bit	0, b
-      00006D 28 14            [12]  612 	jr	Z, 00101$
-                                    613 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:167: u8 in = Joystick_Read(port);
-      00006F 2E 03            [ 7]  614 	ld	l, #0x03
-                                    615 ;	spillPairReg hl
-                                    616 ;	spillPairReg hl
-      000071 CDr00r00         [17]  617 	call	_Joystick_Read
-      000074 7D               [ 4]  618 	ld	a, l
-                                    619 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:168: return ((in & trigger) == 0);
-      000075 E6 20            [ 7]  620 	and	a,#0x20
-      000077 28 0A            [12]  621 	jr	Z, 00101$
-                                    622 ;./control.c:70: if (IS_KEY_PRESSED(row8, KEY_SPACE) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_B)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_B)))
-                                    623 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:167: u8 in = Joystick_Read(port);
-      000079 2E 4C            [ 7]  624 	ld	l, #0x4c
-                                    625 ;	spillPairReg hl
-                                    626 ;	spillPairReg hl
-      00007B CDr00r00         [17]  627 	call	_Joystick_Read
-      00007E 7D               [ 4]  628 	ld	a, l
-                                    629 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:168: return ((in & trigger) == 0);
-      00007F E6 20            [ 7]  630 	and	a,#0x20
-      000081 20 02            [12]  631 	jr	NZ, 00102$
-                                    632 ;./control.c:70: if (IS_KEY_PRESSED(row8, KEY_SPACE) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_B)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_B)))
-      000083                        633 00101$:
-                                    634 ;./control.c:73: isGet = TRUE;
-      000083 0E 01            [ 7]  635 	ld	c, #0x01
-      000085                        636 00102$:
-                                    637 ;./control.c:76: return isGet;
-      000085 79               [ 4]  638 	ld	a, c
-                                    639 ;./control.c:77: }
-      000086 C9               [10]  640 	ret
-                                    641 	.area _CODE
-                                    642 	.area _INITIALIZER
-                                    643 	.area _CABS (ABS)
+                           0000A8   222 G$g_PortPrimarySlot$0_0$0 == 0x00a8
+                           0000A8   223 _g_PortPrimarySlot	=	0x00a8
+                           0000A9   224 G$g_PortReadKeyboard$0_0$0 == 0x00a9
+                           0000A9   225 _g_PortReadKeyboard	=	0x00a9
+                           0000AA   226 G$g_PortAccessKeyboard$0_0$0 == 0x00aa
+                           0000AA   227 _g_PortAccessKeyboard	=	0x00aa
+                           0000AB   228 G$g_PortControl$0_0$0 == 0x00ab
+                           0000AB   229 _g_PortControl	=	0x00ab
+                           000098   230 G$g_VDP_DataPort$0_0$0 == 0x0098
+                           000098   231 _g_VDP_DataPort	=	0x0098
+                           000099   232 G$g_VDP_RegPort$0_0$0 == 0x0099
+                           000099   233 _g_VDP_RegPort	=	0x0099
+                           000099   234 G$g_VDP_AddrPort$0_0$0 == 0x0099
+                           000099   235 _g_VDP_AddrPort	=	0x0099
+                           000099   236 G$g_VDP_StatPort$0_0$0 == 0x0099
+                           000099   237 _g_VDP_StatPort	=	0x0099
+                           0000A0   238 G$g_PSG_RegPort$0_0$0 == 0x00a0
+                           0000A0   239 _g_PSG_RegPort	=	0x00a0
+                           0000A1   240 G$g_PSG_DataPort$0_0$0 == 0x00a1
+                           0000A1   241 _g_PSG_DataPort	=	0x00a1
+                           0000A2   242 G$g_PSG_StatPort$0_0$0 == 0x00a2
+                           0000A2   243 _g_PSG_StatPort	=	0x00a2
+                           000010   244 G$g_PSG_Ext_RegPort$0_0$0 == 0x0010
+                           000010   245 _g_PSG_Ext_RegPort	=	0x0010
+                           000011   246 G$g_PSG_Ext_DataPort$0_0$0 == 0x0011
+                           000011   247 _g_PSG_Ext_DataPort	=	0x0011
+                           000012   248 G$g_PSG_Ext_StatPort$0_0$0 == 0x0012
+                           000012   249 _g_PSG_Ext_StatPort	=	0x0012
+                           00007C   250 G$g_MSXMusic_IndexPort$0_0$0 == 0x007c
+                           00007C   251 _g_MSXMusic_IndexPort	=	0x007c
+                           00007D   252 G$g_MSXMusic_DataPort$0_0$0 == 0x007d
+                           00007D   253 _g_MSXMusic_DataPort	=	0x007d
+                           0000C0   254 G$g_MSXAudio_IndexPort$0_0$0 == 0x00c0
+                           0000C0   255 _g_MSXAudio_IndexPort	=	0x00c0
+                           0000C1   256 G$g_MSXAudio_DataPort$0_0$0 == 0x00c1
+                           0000C1   257 _g_MSXAudio_DataPort	=	0x00c1
+                           0000C2   258 G$g_MSXAudio_IndexPort2$0_0$0 == 0x00c2
+                           0000C2   259 _g_MSXAudio_IndexPort2	=	0x00c2
+                           0000C3   260 G$g_MSXAudio_DataPort2$0_0$0 == 0x00c3
+                           0000C3   261 _g_MSXAudio_DataPort2	=	0x00c3
+                           0000B4   262 G$g_RTC_AddrPort$0_0$0 == 0x00b4
+                           0000B4   263 _g_RTC_AddrPort	=	0x00b4
+                           0000B5   264 G$g_RTC_DataPort$0_0$0 == 0x00b5
+                           0000B5   265 _g_RTC_DataPort	=	0x00b5
+                                    266 ;--------------------------------------------------------
+                                    267 ; ram data
+                                    268 ;--------------------------------------------------------
+                                    269 	.area _DATA
+                           00F3AE   270 G$g_LINL40$0_0$0 == 0xf3ae
+                           00F3AE   271 _g_LINL40	=	0xf3ae
+                           00F3AF   272 G$g_LINL32$0_0$0 == 0xf3af
+                           00F3AF   273 _g_LINL32	=	0xf3af
+                           00F3B0   274 G$g_LINLEN$0_0$0 == 0xf3b0
+                           00F3B0   275 _g_LINLEN	=	0xf3b0
+                           00F3B1   276 G$g_CRTCNT$0_0$0 == 0xf3b1
+                           00F3B1   277 _g_CRTCNT	=	0xf3b1
+                           00F3B2   278 G$g_CLMLST$0_0$0 == 0xf3b2
+                           00F3B2   279 _g_CLMLST	=	0xf3b2
+                           00F3B3   280 G$g_TXTNAM$0_0$0 == 0xf3b3
+                           00F3B3   281 _g_TXTNAM	=	0xf3b3
+                           00F3B5   282 G$g_TXTCOL$0_0$0 == 0xf3b5
+                           00F3B5   283 _g_TXTCOL	=	0xf3b5
+                           00F3B7   284 G$g_TXTCGP$0_0$0 == 0xf3b7
+                           00F3B7   285 _g_TXTCGP	=	0xf3b7
+                           00F3B9   286 G$g_TXTATR$0_0$0 == 0xf3b9
+                           00F3B9   287 _g_TXTATR	=	0xf3b9
+                           00F3BB   288 G$g_TXTPAT$0_0$0 == 0xf3bb
+                           00F3BB   289 _g_TXTPAT	=	0xf3bb
+                           00F3BD   290 G$g_T32NAM$0_0$0 == 0xf3bd
+                           00F3BD   291 _g_T32NAM	=	0xf3bd
+                           00F3BF   292 G$g_T32COL$0_0$0 == 0xf3bf
+                           00F3BF   293 _g_T32COL	=	0xf3bf
+                           00F3C1   294 G$g_T32CGP$0_0$0 == 0xf3c1
+                           00F3C1   295 _g_T32CGP	=	0xf3c1
+                           00F3C3   296 G$g_T32ATR$0_0$0 == 0xf3c3
+                           00F3C3   297 _g_T32ATR	=	0xf3c3
+                           00F3C5   298 G$g_T32PAT$0_0$0 == 0xf3c5
+                           00F3C5   299 _g_T32PAT	=	0xf3c5
+                           00F3C7   300 G$g_GRPNAM$0_0$0 == 0xf3c7
+                           00F3C7   301 _g_GRPNAM	=	0xf3c7
+                           00F3C9   302 G$g_GRPCOL$0_0$0 == 0xf3c9
+                           00F3C9   303 _g_GRPCOL	=	0xf3c9
+                           00F3CB   304 G$g_GRPCGP$0_0$0 == 0xf3cb
+                           00F3CB   305 _g_GRPCGP	=	0xf3cb
+                           00F3CD   306 G$g_GRPATR$0_0$0 == 0xf3cd
+                           00F3CD   307 _g_GRPATR	=	0xf3cd
+                           00F3CF   308 G$g_GRPPAT$0_0$0 == 0xf3cf
+                           00F3CF   309 _g_GRPPAT	=	0xf3cf
+                           00F3D1   310 G$g_MLTNAM$0_0$0 == 0xf3d1
+                           00F3D1   311 _g_MLTNAM	=	0xf3d1
+                           00F3D3   312 G$g_MLTCOL$0_0$0 == 0xf3d3
+                           00F3D3   313 _g_MLTCOL	=	0xf3d3
+                           00F3D5   314 G$g_MLTCGP$0_0$0 == 0xf3d5
+                           00F3D5   315 _g_MLTCGP	=	0xf3d5
+                           00F3D7   316 G$g_MLTATR$0_0$0 == 0xf3d7
+                           00F3D7   317 _g_MLTATR	=	0xf3d7
+                           00F3D9   318 G$g_MLTPAT$0_0$0 == 0xf3d9
+                           00F3D9   319 _g_MLTPAT	=	0xf3d9
+                           00F3DB   320 G$g_CLIKSW$0_0$0 == 0xf3db
+                           00F3DB   321 _g_CLIKSW	=	0xf3db
+                           00F3DC   322 G$g_CSRY$0_0$0 == 0xf3dc
+                           00F3DC   323 _g_CSRY	=	0xf3dc
+                           00F3DD   324 G$g_CSRX$0_0$0 == 0xf3dd
+                           00F3DD   325 _g_CSRX	=	0xf3dd
+                           00F3E9   326 G$g_FORCLR$0_0$0 == 0xf3e9
+                           00F3E9   327 _g_FORCLR	=	0xf3e9
+                           00F3EA   328 G$g_BAKCLR$0_0$0 == 0xf3ea
+                           00F3EA   329 _g_BAKCLR	=	0xf3ea
+                           00F3EB   330 G$g_BDRCLR$0_0$0 == 0xf3eb
+                           00F3EB   331 _g_BDRCLR	=	0xf3eb
+                           00F3F2   332 G$g_ATRBYT$0_0$0 == 0xf3f2
+                           00F3F2   333 _g_ATRBYT	=	0xf3f2
+                           00F87F   334 G$g_FNKSTR$0_0$0 == 0xf87f
+                           00F87F   335 _g_FNKSTR	=	0xf87f
+                           00F92A   336 G$g_CLOC$0_0$0 == 0xf92a
+                           00F92A   337 _g_CLOC	=	0xf92a
+                           00F92C   338 G$g_CMASK$0_0$0 == 0xf92c
+                           00F92C   339 _g_CMASK	=	0xf92c
+                           00FB02   340 G$g_LOGOPR$0_0$0 == 0xfb02
+                           00FB02   341 _g_LOGOPR	=	0xfb02
+                           00FCB7   342 G$g_GRPACX$0_0$0 == 0xfcb7
+                           00FCB7   343 _g_GRPACX	=	0xfcb7
+                           00FCB9   344 G$g_GRPACY$0_0$0 == 0xfcb9
+                           00FCB9   345 _g_GRPACY	=	0xfcb9
+                           00FFFF   346 G$g_SLTSL$0_0$0 == 0xffff
+                           00FFFF   347 _g_SLTSL	=	0xffff
+                                    348 ;--------------------------------------------------------
+                                    349 ; ram data
+                                    350 ;--------------------------------------------------------
+                                    351 	.area _INITIALIZED
+                                    352 ;--------------------------------------------------------
+                                    353 ; absolute external ram data
+                                    354 ;--------------------------------------------------------
+                                    355 	.area _DABS (ABS)
+                                    356 ;--------------------------------------------------------
+                                    357 ; global & static initialisations
+                                    358 ;--------------------------------------------------------
+                                    359 	.area _HOME
+                                    360 	.area _GSINIT
+                                    361 	.area _GSFINAL
+                                    362 	.area _GSINIT
+                                    363 ;--------------------------------------------------------
+                                    364 ; Home
+                                    365 ;--------------------------------------------------------
+                                    366 	.area _HOME
+                                    367 	.area _HOME
+                                    368 ;--------------------------------------------------------
+                                    369 ; code
+                                    370 ;--------------------------------------------------------
+                                    371 	.area _CODE
+                           000000   372 	G$isMoveRight$0$0	= .
+                                    373 	.globl	G$isMoveRight$0$0
+                           000000   374 	C$control.c$13$0_0$476	= .
+                                    375 	.globl	C$control.c$13$0_0$476
+                                    376 ;./control.c:13: bool isMoveRight(u8 row8, u8 input)
+                                    377 ;	---------------------------------
+                                    378 ; Function isMoveRight
+                                    379 ; ---------------------------------
+      000000                        380 _isMoveRight::
+      000000 67               [ 4]  381 	ld	h, a
+                                    382 ;	spillPairReg hl
+                                    383 ;	spillPairReg hl
+                           000001   384 	C$control.c$15$2_0$476	= .
+                                    385 	.globl	C$control.c$15$2_0$476
+                                    386 ;./control.c:15: bool isRight = FALSE;
+      000001 0E 00            [ 7]  387 	ld	c, #0x00
+                           000003   388 	C$control.c$16$1_0$476	= .
+                                    389 	.globl	C$control.c$16$1_0$476
+                                    390 ;./control.c:16: if (IS_KEY_PRESSED(row8, KEY_RIGHT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_RIGHT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_RIGHT))
+      000003 29               [11]  391 	add	hl, hl
+      000004 30 1A            [12]  392 	jr	NC, 00101$
+                                    393 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:160: u8 in = ~Joystick_Read(port);
+      000006 2E 03            [ 7]  394 	ld	l, #0x03
+                                    395 ;	spillPairReg hl
+                                    396 ;	spillPairReg hl
+      000008 CDr00r00         [17]  397 	call	_Joystick_Read
+      00000B 7D               [ 4]  398 	ld	a, l
+      00000C 2F               [ 4]  399 	cpl
+                                    400 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:161: return (in & JOY_INPUT_DIR_MASK);
+      00000D E6 0F            [ 7]  401 	and	a, #0x0f
+                           00000F   402 	C$control.c$16$3_0$479	= .
+                                    403 	.globl	C$control.c$16$3_0$479
+                                    404 ;./control.c:16: if (IS_KEY_PRESSED(row8, KEY_RIGHT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_RIGHT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_RIGHT))
+      00000F D6 08            [ 7]  405 	sub	a, #0x08
+      000011 28 0D            [12]  406 	jr	Z, 00101$
+                                    407 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:160: u8 in = ~Joystick_Read(port);
+      000013 2E 4C            [ 7]  408 	ld	l, #0x4c
+                                    409 ;	spillPairReg hl
+                                    410 ;	spillPairReg hl
+      000015 CDr00r00         [17]  411 	call	_Joystick_Read
+      000018 7D               [ 4]  412 	ld	a, l
+      000019 2F               [ 4]  413 	cpl
+                                    414 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:161: return (in & JOY_INPUT_DIR_MASK);
+      00001A E6 0F            [ 7]  415 	and	a, #0x0f
+                           00001C   416 	C$control.c$16$3_0$482	= .
+                                    417 	.globl	C$control.c$16$3_0$482
+                                    418 ;./control.c:16: if (IS_KEY_PRESSED(row8, KEY_RIGHT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_RIGHT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_RIGHT))
+      00001C D6 08            [ 7]  419 	sub	a, #0x08
+      00001E 20 02            [12]  420 	jr	NZ, 00102$
+      000020                        421 00101$:
+                           000020   422 	C$control.c$19$2_0$477	= .
+                                    423 	.globl	C$control.c$19$2_0$477
+                                    424 ;./control.c:19: isRight = TRUE;
+      000020 0E 01            [ 7]  425 	ld	c, #0x01
+      000022                        426 00102$:
+                           000022   427 	C$control.c$22$1_0$476	= .
+                                    428 	.globl	C$control.c$22$1_0$476
+                                    429 ;./control.c:22: return isRight;
+      000022 79               [ 4]  430 	ld	a, c
+                           000023   431 	C$control.c$23$1_0$476	= .
+                                    432 	.globl	C$control.c$23$1_0$476
+                                    433 ;./control.c:23: }
+                           000023   434 	C$control.c$23$1_0$476	= .
+                                    435 	.globl	C$control.c$23$1_0$476
+                           000023   436 	XG$isMoveRight$0$0	= .
+                                    437 	.globl	XG$isMoveRight$0$0
+      000023 C9               [10]  438 	ret
+                           00F380   439 G$g_RDPRIM$0_0$0 == 0xf380
+                           00F380   440 _g_RDPRIM	=	0xf380
+                           00F385   441 G$g_WRPRIM$0_0$0 == 0xf385
+                           00F385   442 _g_WRPRIM	=	0xf385
+                           00F38C   443 G$g_CLPRIM$0_0$0 == 0xf38c
+                           00F38C   444 _g_CLPRIM	=	0xf38c
+                           00F39A   445 G$g_USRTAB$0_0$0 == 0xf39a
+                           00F39A   446 _g_USRTAB	=	0xf39a
+                           00F3DE   447 G$g_CNSDFG$0_0$0 == 0xf3de
+                           00F3DE   448 _g_CNSDFG	=	0xf3de
+                           00F3DF   449 G$g_RG0SAV$0_0$0 == 0xf3df
+                           00F3DF   450 _g_RG0SAV	=	0xf3df
+                           00F3E0   451 G$g_RG1SAV$0_0$0 == 0xf3e0
+                           00F3E0   452 _g_RG1SAV	=	0xf3e0
+                           00F3E1   453 G$g_RG2SAV$0_0$0 == 0xf3e1
+                           00F3E1   454 _g_RG2SAV	=	0xf3e1
+                           00F3E2   455 G$g_RG3SAV$0_0$0 == 0xf3e2
+                           00F3E2   456 _g_RG3SAV	=	0xf3e2
+                           00F3E3   457 G$g_RG4SAV$0_0$0 == 0xf3e3
+                           00F3E3   458 _g_RG4SAV	=	0xf3e3
+                           00F3E4   459 G$g_RG5SAV$0_0$0 == 0xf3e4
+                           00F3E4   460 _g_RG5SAV	=	0xf3e4
+                           00F3E5   461 G$g_RG6SAV$0_0$0 == 0xf3e5
+                           00F3E5   462 _g_RG6SAV	=	0xf3e5
+                           00F3E6   463 G$g_RG7SAV$0_0$0 == 0xf3e6
+                           00F3E6   464 _g_RG7SAV	=	0xf3e6
+                           00F3E7   465 G$g_STATFL$0_0$0 == 0xf3e7
+                           00F3E7   466 _g_STATFL	=	0xf3e7
+                           00F3E8   467 G$g_TRGFLG$0_0$0 == 0xf3e8
+                           00F3E8   468 _g_TRGFLG	=	0xf3e8
+                           00F3EC   469 G$g_MAXUPD$0_0$0 == 0xf3ec
+                           00F3EC   470 _g_MAXUPD	=	0xf3ec
+                           00F3EF   471 G$g_MINUPD$0_0$0 == 0xf3ef
+                           00F3EF   472 _g_MINUPD	=	0xf3ef
+                           00F3F3   473 G$g_QUEUES$0_0$0 == 0xf3f3
+                           00F3F3   474 _g_QUEUES	=	0xf3f3
+                           00F3F5   475 G$g_FRCNEW$0_0$0 == 0xf3f5
+                           00F3F5   476 _g_FRCNEW	=	0xf3f5
+                           00F3F6   477 G$g_SCNCNT$0_0$0 == 0xf3f6
+                           00F3F6   478 _g_SCNCNT	=	0xf3f6
+                           00F3F7   479 G$g_REPCNT$0_0$0 == 0xf3f7
+                           00F3F7   480 _g_REPCNT	=	0xf3f7
+                           00F3F8   481 G$g_PUTPNT$0_0$0 == 0xf3f8
+                           00F3F8   482 _g_PUTPNT	=	0xf3f8
+                           00F3FA   483 G$g_GETPNT$0_0$0 == 0xf3fa
+                           00F3FA   484 _g_GETPNT	=	0xf3fa
+                           00F3FC   485 G$g_CS120$0_0$0 == 0xf3fc
+                           00F3FC   486 _g_CS120	=	0xf3fc
+                           00F401   487 G$g_CS240$0_0$0 == 0xf401
+                           00F401   488 _g_CS240	=	0xf401
+                           00F406   489 G$g_LOW$0_0$0 == 0xf406
+                           00F406   490 _g_LOW	=	0xf406
+                           00F408   491 G$g_HIGH$0_0$0 == 0xf408
+                           00F408   492 _g_HIGH	=	0xf408
+                           00F40A   493 G$g_HEADER$0_0$0 == 0xf40a
+                           00F40A   494 _g_HEADER	=	0xf40a
+                           00F40B   495 G$g_ASPCT1$0_0$0 == 0xf40b
+                           00F40B   496 _g_ASPCT1	=	0xf40b
+                           00F40D   497 G$g_ASPCT2$0_0$0 == 0xf40d
+                           00F40D   498 _g_ASPCT2	=	0xf40d
+                           00F959   499 G$g_QUETAB$0_0$0 == 0xf959
+                           00F959   500 _g_QUETAB	=	0xf959
+                           00F971   501 G$g_QUEBAK$0_0$0 == 0xf971
+                           00F971   502 _g_QUEBAK	=	0xf971
+                           00F975   503 G$g_VOICAQ$0_0$0 == 0xf975
+                           00F975   504 _g_VOICAQ	=	0xf975
+                           00F9F5   505 G$g_VOICBQ$0_0$0 == 0xf9f5
+                           00F9F5   506 _g_VOICBQ	=	0xf9f5
+                           00FA75   507 G$g_VOICCQ$0_0$0 == 0xfa75
+                           00FA75   508 _g_VOICCQ	=	0xfa75
+                           00FAF5   509 G$g_RS2IQ$0_0$0 == 0xfaf5
+                           00FAF5   510 _g_RS2IQ	=	0xfaf5
+                           00FAF5   511 G$g_DPPAGE$0_0$0 == 0xfaf5
+                           00FAF5   512 _g_DPPAGE	=	0xfaf5
+                           00FAF6   513 G$g_ACPAGE$0_0$0 == 0xfaf6
+                           00FAF6   514 _g_ACPAGE	=	0xfaf6
+                           00FAF7   515 G$g_AVCSAV$0_0$0 == 0xfaf7
+                           00FAF7   516 _g_AVCSAV	=	0xfaf7
+                           00FAF8   517 G$g_EXBRSA$0_0$0 == 0xfaf8
+                           00FAF8   518 _g_EXBRSA	=	0xfaf8
+                           00FAF9   519 G$g_CHRCNT$0_0$0 == 0xfaf9
+                           00FAF9   520 _g_CHRCNT	=	0xfaf9
+                           00FAFA   521 G$g_ROMA$0_0$0 == 0xfafa
+                           00FAFA   522 _g_ROMA	=	0xfafa
+                           00FAFC   523 G$g_MODE$0_0$0 == 0xfafc
+                           00FAFC   524 _g_MODE	=	0xfafc
+                           00FAFD   525 G$g_NORUSE$0_0$0 == 0xfafd
+                           00FAFD   526 _g_NORUSE	=	0xfafd
+                           00FAFE   527 G$g_XSAVE$0_0$0 == 0xfafe
+                           00FAFE   528 _g_XSAVE	=	0xfafe
+                           00FB00   529 G$g_YSAVE$0_0$0 == 0xfb00
+                           00FB00   530 _g_YSAVE	=	0xfb00
+                           00FB03   531 G$g_RSTMP$0_0$0 == 0xfb03
+                           00FB03   532 _g_RSTMP	=	0xfb03
+                           00FB03   533 G$g_TOCNT$0_0$0 == 0xfb03
+                           00FB03   534 _g_TOCNT	=	0xfb03
+                           00FB04   535 G$g_RSFCB$0_0$0 == 0xfb04
+                           00FB04   536 _g_RSFCB	=	0xfb04
+                           00FB06   537 G$g_RSIQLN$0_0$0 == 0xfb06
+                           00FB06   538 _g_RSIQLN	=	0xfb06
+                           00FB07   539 G$g_MEXBIh$0_0$0 == 0xfb07
+                           00FB07   540 _g_MEXBIh	=	0xfb07
+                           00FB0C   541 G$g_OLDSTT$0_0$0 == 0xfb0c
+                           00FB0C   542 _g_OLDSTT	=	0xfb0c
+                           00FB0C   543 G$g_OLDINT$0_0$0 == 0xfb0c
+                           00FB0C   544 _g_OLDINT	=	0xfb0c
+                           00FB16   545 G$g_DEVNUM$0_0$0 == 0xfb16
+                           00FB16   546 _g_DEVNUM	=	0xfb16
+                           00FB17   547 G$g_DATCNT$0_0$0 == 0xfb17
+                           00FB17   548 _g_DATCNT	=	0xfb17
+                           00FB1A   549 G$g_ERRORS$0_0$0 == 0xfb1a
+                           00FB1A   550 _g_ERRORS	=	0xfb1a
+                           00FB1B   551 G$g_FLAGS$0_0$0 == 0xfb1b
+                           00FB1B   552 _g_FLAGS	=	0xfb1b
+                           00FB1C   553 G$g_ESTBLS$0_0$0 == 0xfb1c
+                           00FB1C   554 _g_ESTBLS	=	0xfb1c
+                           00FB1D   555 G$g_COMMSK$0_0$0 == 0xfb1d
+                           00FB1D   556 _g_COMMSK	=	0xfb1d
+                           00FB1E   557 G$g_LSTCOM$0_0$0 == 0xfb1e
+                           00FB1E   558 _g_LSTCOM	=	0xfb1e
+                           00FB1F   559 G$g_LSTMOD$0_0$0 == 0xfb1f
+                           00FB1F   560 _g_LSTMOD	=	0xfb1f
+                           00FB35   561 G$g_PRSCNT$0_0$0 == 0xfb35
+                           00FB35   562 _g_PRSCNT	=	0xfb35
+                           00FB36   563 G$g_SAVSP$0_0$0 == 0xfb36
+                           00FB36   564 _g_SAVSP	=	0xfb36
+                           00FB38   565 G$g_VOICEN$0_0$0 == 0xfb38
+                           00FB38   566 _g_VOICEN	=	0xfb38
+                           00FB39   567 G$g_SAVVOL$0_0$0 == 0xfb39
+                           00FB39   568 _g_SAVVOL	=	0xfb39
+                           00FB3B   569 G$g_MCLLEN$0_0$0 == 0xfb3b
+                           00FB3B   570 _g_MCLLEN	=	0xfb3b
+                           00FB3C   571 G$g_MCLPTR$0_0$0 == 0xfb3c
+                           00FB3C   572 _g_MCLPTR	=	0xfb3c
+                           00FB3E   573 G$g_QUEUEN$0_0$0 == 0xfb3e
+                           00FB3E   574 _g_QUEUEN	=	0xfb3e
+                           00FB3F   575 G$g_MUSICF$0_0$0 == 0xfb3f
+                           00FB3F   576 _g_MUSICF	=	0xfb3f
+                           00FB40   577 G$g_PLYCNT$0_0$0 == 0xfb40
+                           00FB40   578 _g_PLYCNT	=	0xfb40
+                           00FB41   579 G$g_VCBA$0_0$0 == 0xfb41
+                           00FB41   580 _g_VCBA	=	0xfb41
+                           00FB66   581 G$g_VCBB$0_0$0 == 0xfb66
+                           00FB66   582 _g_VCBB	=	0xfb66
+                           00FB8B   583 G$g_VCBC$0_0$0 == 0xfb8b
+                           00FB8B   584 _g_VCBC	=	0xfb8b
+                           00FBB0   585 G$g_ENSTOP$0_0$0 == 0xfbb0
+                           00FBB0   586 _g_ENSTOP	=	0xfbb0
+                           00FBB1   587 G$g_BASROM$0_0$0 == 0xfbb1
+                           00FBB1   588 _g_BASROM	=	0xfbb1
+                           00FBB2   589 G$g_LINTTB$0_0$0 == 0xfbb2
+                           00FBB2   590 _g_LINTTB	=	0xfbb2
+                           00FBCA   591 G$g_FSTPOS$0_0$0 == 0xfbca
+                           00FBCA   592 _g_FSTPOS	=	0xfbca
+                           00FBCC   593 G$g_CODSAV$0_0$0 == 0xfbcc
+                           00FBCC   594 _g_CODSAV	=	0xfbcc
+                           00FBCD   595 G$g_FNKSWI$0_0$0 == 0xfbcd
+                           00FBCD   596 _g_FNKSWI	=	0xfbcd
+                           00FBCE   597 G$g_FNKFLG$0_0$0 == 0xfbce
+                           00FBCE   598 _g_FNKFLG	=	0xfbce
+                           00FBD8   599 G$g_ONGSBF$0_0$0 == 0xfbd8
+                           00FBD8   600 _g_ONGSBF	=	0xfbd8
+                           00FBD9   601 G$g_CLIKFL$0_0$0 == 0xfbd9
+                           00FBD9   602 _g_CLIKFL	=	0xfbd9
+                           00FBDA   603 G$g_OLDKEY$0_0$0 == 0xfbda
+                           00FBDA   604 _g_OLDKEY	=	0xfbda
+                           00FBE5   605 G$g_NEWKEY$0_0$0 == 0xfbe5
+                           00FBE5   606 _g_NEWKEY	=	0xfbe5
+                           00FBF0   607 G$g_KEYBUF$0_0$0 == 0xfbf0
+                           00FBF0   608 _g_KEYBUF	=	0xfbf0
+                           00FC18   609 G$g_LINWRK$0_0$0 == 0xfc18
+                           00FC18   610 _g_LINWRK	=	0xfc18
+                           00FC40   611 G$g_PATWRK$0_0$0 == 0xfc40
+                           00FC40   612 _g_PATWRK	=	0xfc40
+                           00FC48   613 G$g_BOTTOM$0_0$0 == 0xfc48
+                           00FC48   614 _g_BOTTOM	=	0xfc48
+                           00FC4A   615 G$g_HIMEM$0_0$0 == 0xfc4a
+                           00FC4A   616 _g_HIMEM	=	0xfc4a
+                           00FC4C   617 G$g_TRPTBL$0_0$0 == 0xfc4c
+                           00FC4C   618 _g_TRPTBL	=	0xfc4c
+                           00FC9A   619 G$g_RTYCNT$0_0$0 == 0xfc9a
+                           00FC9A   620 _g_RTYCNT	=	0xfc9a
+                           00FC9B   621 G$g_INTFLG$0_0$0 == 0xfc9b
+                           00FC9B   622 _g_INTFLG	=	0xfc9b
+                           00FC9C   623 G$g_PADY$0_0$0 == 0xfc9c
+                           00FC9C   624 _g_PADY	=	0xfc9c
+                           00FC9D   625 G$g_PADX$0_0$0 == 0xfc9d
+                           00FC9D   626 _g_PADX	=	0xfc9d
+                           00FC9E   627 G$g_JIFFY$0_0$0 == 0xfc9e
+                           00FC9E   628 _g_JIFFY	=	0xfc9e
+                           00FCA0   629 G$g_INTVAL$0_0$0 == 0xfca0
+                           00FCA0   630 _g_INTVAL	=	0xfca0
+                           00FCA2   631 G$g_INTCNT$0_0$0 == 0xfca2
+                           00FCA2   632 _g_INTCNT	=	0xfca2
+                           00FCA4   633 G$g_LOWLIM$0_0$0 == 0xfca4
+                           00FCA4   634 _g_LOWLIM	=	0xfca4
+                           00FCA5   635 G$g_WINWID$0_0$0 == 0xfca5
+                           00FCA5   636 _g_WINWID	=	0xfca5
+                           00FCA6   637 G$g_GRPHED$0_0$0 == 0xfca6
+                           00FCA6   638 _g_GRPHED	=	0xfca6
+                           00FCA7   639 G$g_ESCCNT$0_0$0 == 0xfca7
+                           00FCA7   640 _g_ESCCNT	=	0xfca7
+                           00FCA8   641 G$g_INSFLG$0_0$0 == 0xfca8
+                           00FCA8   642 _g_INSFLG	=	0xfca8
+                           00FCA9   643 G$g_CSRSW$0_0$0 == 0xfca9
+                           00FCA9   644 _g_CSRSW	=	0xfca9
+                           00FCAA   645 G$g_CSTYLE$0_0$0 == 0xfcaa
+                           00FCAA   646 _g_CSTYLE	=	0xfcaa
+                           00FCAB   647 G$g_CAPST$0_0$0 == 0xfcab
+                           00FCAB   648 _g_CAPST	=	0xfcab
+                           00FCAC   649 G$g_KANAST$0_0$0 == 0xfcac
+                           00FCAC   650 _g_KANAST	=	0xfcac
+                           00FCAD   651 G$g_KANAMD$0_0$0 == 0xfcad
+                           00FCAD   652 _g_KANAMD	=	0xfcad
+                           00FCAE   653 G$g_FLBMEM$0_0$0 == 0xfcae
+                           00FCAE   654 _g_FLBMEM	=	0xfcae
+                           00FCAF   655 G$g_SCRMOD$0_0$0 == 0xfcaf
+                           00FCAF   656 _g_SCRMOD	=	0xfcaf
+                           00FCB0   657 G$g_OLDSCR$0_0$0 == 0xfcb0
+                           00FCB0   658 _g_OLDSCR	=	0xfcb0
+                           00FCB1   659 G$g_CASPRV$0_0$0 == 0xfcb1
+                           00FCB1   660 _g_CASPRV	=	0xfcb1
+                           00FCB2   661 G$g_BRDATR$0_0$0 == 0xfcb2
+                           00FCB2   662 _g_BRDATR	=	0xfcb2
+                           00FCB3   663 G$g_GXPOS$0_0$0 == 0xfcb3
+                           00FCB3   664 _g_GXPOS	=	0xfcb3
+                           00FCB5   665 G$g_GYPOS$0_0$0 == 0xfcb5
+                           00FCB5   666 _g_GYPOS	=	0xfcb5
+                           00FCBB   667 G$g_DRWFLG$0_0$0 == 0xfcbb
+                           00FCBB   668 _g_DRWFLG	=	0xfcbb
+                           00FCBC   669 G$g_DRWSCL$0_0$0 == 0xfcbc
+                           00FCBC   670 _g_DRWSCL	=	0xfcbc
+                           00FCBD   671 G$g_DRWANG$0_0$0 == 0xfcbd
+                           00FCBD   672 _g_DRWANG	=	0xfcbd
+                           00FCC1   673 G$g_MNROM$0_0$0 == 0xfcc1
+                           00FCC1   674 _g_MNROM	=	0xfcc1
+                           00FCC1   675 G$g_EXPTBL$0_0$0 == 0xfcc1
+                           00FCC1   676 _g_EXPTBL	=	0xfcc1
+                           00FCC5   677 G$g_SLTTBL$0_0$0 == 0xfcc5
+                           00FCC5   678 _g_SLTTBL	=	0xfcc5
+                           00FCC9   679 G$g_SLTATR$0_0$0 == 0xfcc9
+                           00FCC9   680 _g_SLTATR	=	0xfcc9
+                           00FD09   681 G$g_SLTWRK$0_0$0 == 0xfd09
+                           00FD09   682 _g_SLTWRK	=	0xfd09
+                           00FD89   683 G$g_PROCNM$0_0$0 == 0xfd89
+                           00FD89   684 _g_PROCNM	=	0xfd89
+                           00FFE7   685 G$g_RG08SAV$0_0$0 == 0xffe7
+                           00FFE7   686 _g_RG08SAV	=	0xffe7
+                           00FFE8   687 G$g_RG09SAV$0_0$0 == 0xffe8
+                           00FFE8   688 _g_RG09SAV	=	0xffe8
+                           00FFE9   689 G$g_RG10SAV$0_0$0 == 0xffe9
+                           00FFE9   690 _g_RG10SAV	=	0xffe9
+                           00FFEA   691 G$g_RG11SAV$0_0$0 == 0xffea
+                           00FFEA   692 _g_RG11SAV	=	0xffea
+                           00FFEB   693 G$g_RG12SAV$0_0$0 == 0xffeb
+                           00FFEB   694 _g_RG12SAV	=	0xffeb
+                           00FFEC   695 G$g_RG13SAV$0_0$0 == 0xffec
+                           00FFEC   696 _g_RG13SAV	=	0xffec
+                           00FFED   697 G$g_RG14SAV$0_0$0 == 0xffed
+                           00FFED   698 _g_RG14SAV	=	0xffed
+                           00FFEE   699 G$g_RG15SAV$0_0$0 == 0xffee
+                           00FFEE   700 _g_RG15SAV	=	0xffee
+                           00FFEF   701 G$g_RG16SAV$0_0$0 == 0xffef
+                           00FFEF   702 _g_RG16SAV	=	0xffef
+                           00FFF0   703 G$g_RG17SAV$0_0$0 == 0xfff0
+                           00FFF0   704 _g_RG17SAV	=	0xfff0
+                           00FFF1   705 G$g_RG18SAV$0_0$0 == 0xfff1
+                           00FFF1   706 _g_RG18SAV	=	0xfff1
+                           00FFF2   707 G$g_RG19SAV$0_0$0 == 0xfff2
+                           00FFF2   708 _g_RG19SAV	=	0xfff2
+                           00FFF3   709 G$g_RG20SAV$0_0$0 == 0xfff3
+                           00FFF3   710 _g_RG20SAV	=	0xfff3
+                           00FFF4   711 G$g_RG21SAV$0_0$0 == 0xfff4
+                           00FFF4   712 _g_RG21SAV	=	0xfff4
+                           00FFF5   713 G$g_RG22SAV$0_0$0 == 0xfff5
+                           00FFF5   714 _g_RG22SAV	=	0xfff5
+                           00FFF6   715 G$g_RG23SAV$0_0$0 == 0xfff6
+                           00FFF6   716 _g_RG23SAV	=	0xfff6
+                           00FFF7   717 G$g_MINROM$0_0$0 == 0xfff7
+                           00FFF7   718 _g_MINROM	=	0xfff7
+                           00FFF8   719 G$g_SVFFF8$0_0$0 == 0xfff8
+                           00FFF8   720 _g_SVFFF8	=	0xfff8
+                           00FFFA   721 G$g_RG25SAV$0_0$0 == 0xfffa
+                           00FFFA   722 _g_RG25SAV	=	0xfffa
+                           00FFFB   723 G$g_RG26SAV$0_0$0 == 0xfffb
+                           00FFFB   724 _g_RG26SAV	=	0xfffb
+                           00FFFC   725 G$g_RG27SAV$0_0$0 == 0xfffc
+                           00FFFC   726 _g_RG27SAV	=	0xfffc
+                           00FFFD   727 G$g_SVFFFD$0_0$0 == 0xfffd
+                           00FFFD   728 _g_SVFFFD	=	0xfffd
+                           000004   729 G$g_CGTABL$0_0$0 == 0x0004
+                           000004   730 _g_CGTABL	=	0x0004
+                           000006   731 G$g_VDP_DR$0_0$0 == 0x0006
+                           000006   732 _g_VDP_DR	=	0x0006
+                           000007   733 G$g_VDP_DW$0_0$0 == 0x0007
+                           000007   734 _g_VDP_DW	=	0x0007
+                           00002B   735 G$g_BASRVN$0_0$0 == 0x002b
+                           00002B   736 _g_BASRVN	=	0x002b
+                           00002B   737 G$g_ROMVersion$0_0$0 == 0x002b
+                           00002B   738 _g_ROMVersion	=	0x002b
+                           00002D   739 G$g_MSXVER$0_0$0 == 0x002d
+                           00002D   740 _g_MSXVER	=	0x002d
+                           00002E   741 G$g_MSXMID$0_0$0 == 0x002e
+                           00002E   742 _g_MSXMID	=	0x002e
+                           000034   743 G$g_CHAR_16$0_0$0 == 0x0034
+                           000034   744 _g_CHAR_16	=	0x0034
+                           000000   745 G$g_SUBRID$0_0$0 == 0x0000
+                           000000   746 _g_SUBRID	=	0x0000
+                           000002   747 G$g_STRSRC$0_0$0 == 0x0002
+                           000002   748 _g_STRSRC	=	0x0002
+                           00F30F   749 G$g_KANJTABLE$0_0$0 == 0xf30f
+                           00F30F   750 _g_KANJTABLE	=	0xf30f
+                           00F323   751 G$g_DISKVE$0_0$0 == 0xf323
+                           00F323   752 _g_DISKVE	=	0xf323
+                           00F325   753 G$g_BREAKV$0_0$0 == 0xf325
+                           00F325   754 _g_BREAKV	=	0xf325
+                           00F341   755 G$g_RAMAD0$0_0$0 == 0xf341
+                           00F341   756 _g_RAMAD0	=	0xf341
+                           00F342   757 G$g_RAMAD1$0_0$0 == 0xf342
+                           00F342   758 _g_RAMAD1	=	0xf342
+                           00F343   759 G$g_RAMAD2$0_0$0 == 0xf343
+                           00F343   760 _g_RAMAD2	=	0xf343
+                           00F344   761 G$g_RAMAD3$0_0$0 == 0xf344
+                           00F344   762 _g_RAMAD3	=	0xf344
+                           00F348   763 G$g_MASTER$0_0$0 == 0xf348
+                           00F348   764 _g_MASTER	=	0xf348
+                           00F37D   765 G$g_BDOS$0_0$0 == 0xf37d
+                           00F37D   766 _g_BDOS	=	0xf37d
+                           000024   767 	G$isMoveLeft$0$0	= .
+                                    768 	.globl	G$isMoveLeft$0$0
+                           000024   769 	C$control.c$31$1_0$485	= .
+                                    770 	.globl	C$control.c$31$1_0$485
+                                    771 ;./control.c:31: bool isMoveLeft(u8 row8, u8 input)
+                                    772 ;	---------------------------------
+                                    773 ; Function isMoveLeft
+                                    774 ; ---------------------------------
+      000024                        775 _isMoveLeft::
+      000024 47               [ 4]  776 	ld	b, a
+                           000025   777 	C$control.c$33$2_0$485	= .
+                                    778 	.globl	C$control.c$33$2_0$485
+                                    779 ;./control.c:33: bool isLeft = FALSE;
+      000025 0E 00            [ 7]  780 	ld	c, #0x00
+                           000027   781 	C$control.c$34$1_0$485	= .
+                                    782 	.globl	C$control.c$34$1_0$485
+                                    783 ;./control.c:34: if (IS_KEY_PRESSED(row8, KEY_LEFT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_LEFT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_LEFT))
+      000027 CB 60            [ 8]  784 	bit	4, b
+      000029 28 1A            [12]  785 	jr	Z, 00101$
+                                    786 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:160: u8 in = ~Joystick_Read(port);
+      00002B 2E 03            [ 7]  787 	ld	l, #0x03
+                                    788 ;	spillPairReg hl
+                                    789 ;	spillPairReg hl
+      00002D CDr00r00         [17]  790 	call	_Joystick_Read
+      000030 7D               [ 4]  791 	ld	a, l
+      000031 2F               [ 4]  792 	cpl
+                                    793 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:161: return (in & JOY_INPUT_DIR_MASK);
+      000032 E6 0F            [ 7]  794 	and	a, #0x0f
+                           000034   795 	C$control.c$34$3_0$488	= .
+                                    796 	.globl	C$control.c$34$3_0$488
+                                    797 ;./control.c:34: if (IS_KEY_PRESSED(row8, KEY_LEFT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_LEFT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_LEFT))
+      000034 D6 04            [ 7]  798 	sub	a, #0x04
+      000036 28 0D            [12]  799 	jr	Z, 00101$
+                                    800 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:160: u8 in = ~Joystick_Read(port);
+      000038 2E 4C            [ 7]  801 	ld	l, #0x4c
+                                    802 ;	spillPairReg hl
+                                    803 ;	spillPairReg hl
+      00003A CDr00r00         [17]  804 	call	_Joystick_Read
+      00003D 7D               [ 4]  805 	ld	a, l
+      00003E 2F               [ 4]  806 	cpl
+                                    807 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:161: return (in & JOY_INPUT_DIR_MASK);
+      00003F E6 0F            [ 7]  808 	and	a, #0x0f
+                           000041   809 	C$control.c$34$3_0$491	= .
+                                    810 	.globl	C$control.c$34$3_0$491
+                                    811 ;./control.c:34: if (IS_KEY_PRESSED(row8, KEY_LEFT) || (Joystick_GetDirection(JOY_PORT_1) == JOY_INPUT_DIR_LEFT) || (Joystick_GetDirection(JOY_PORT_2) == JOY_INPUT_DIR_LEFT))
+      000041 D6 04            [ 7]  812 	sub	a, #0x04
+      000043 20 02            [12]  813 	jr	NZ, 00102$
+      000045                        814 00101$:
+                           000045   815 	C$control.c$37$2_0$486	= .
+                                    816 	.globl	C$control.c$37$2_0$486
+                                    817 ;./control.c:37: isLeft = TRUE;
+      000045 0E 01            [ 7]  818 	ld	c, #0x01
+      000047                        819 00102$:
+                           000047   820 	C$control.c$40$1_0$485	= .
+                                    821 	.globl	C$control.c$40$1_0$485
+                                    822 ;./control.c:40: return isLeft;
+      000047 79               [ 4]  823 	ld	a, c
+                           000048   824 	C$control.c$41$1_0$485	= .
+                                    825 	.globl	C$control.c$41$1_0$485
+                                    826 ;./control.c:41: }
+                           000048   827 	C$control.c$41$1_0$485	= .
+                                    828 	.globl	C$control.c$41$1_0$485
+                           000048   829 	XG$isMoveLeft$0$0	= .
+                                    830 	.globl	XG$isMoveLeft$0$0
+      000048 C9               [10]  831 	ret
+                           000049   832 	G$isMoveJump$0$0	= .
+                                    833 	.globl	G$isMoveJump$0$0
+                           000049   834 	C$control.c$49$1_0$494	= .
+                                    835 	.globl	C$control.c$49$1_0$494
+                                    836 ;./control.c:49: bool isMoveJump(u8 row8, u8 input)
+                                    837 ;	---------------------------------
+                                    838 ; Function isMoveJump
+                                    839 ; ---------------------------------
+      000049                        840 _isMoveJump::
+      000049 47               [ 4]  841 	ld	b, a
+                           00004A   842 	C$control.c$51$2_0$494	= .
+                                    843 	.globl	C$control.c$51$2_0$494
+                                    844 ;./control.c:51: bool isJump = FALSE;
+      00004A 0E 00            [ 7]  845 	ld	c, #0x00
+                           00004C   846 	C$control.c$52$1_0$494	= .
+                                    847 	.globl	C$control.c$52$1_0$494
+                                    848 ;./control.c:52: if (IS_KEY_PRESSED(row8, KEY_UP) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_A)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_A)))
+      00004C CB 68            [ 8]  849 	bit	5, b
+      00004E 28 14            [12]  850 	jr	Z, 00101$
+                                    851 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:167: u8 in = Joystick_Read(port);
+      000050 2E 03            [ 7]  852 	ld	l, #0x03
+                                    853 ;	spillPairReg hl
+                                    854 ;	spillPairReg hl
+      000052 CDr00r00         [17]  855 	call	_Joystick_Read
+      000055 7D               [ 4]  856 	ld	a, l
+                                    857 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:168: return ((in & trigger) == 0);
+      000056 E6 10            [ 7]  858 	and	a,#0x10
+      000058 28 0A            [12]  859 	jr	Z, 00101$
+                           00005A   860 	C$control.c$52$3_0$497	= .
+                                    861 	.globl	C$control.c$52$3_0$497
+                                    862 ;./control.c:52: if (IS_KEY_PRESSED(row8, KEY_UP) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_A)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_A)))
+                                    863 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:167: u8 in = Joystick_Read(port);
+      00005A 2E 4C            [ 7]  864 	ld	l, #0x4c
+                                    865 ;	spillPairReg hl
+                                    866 ;	spillPairReg hl
+      00005C CDr00r00         [17]  867 	call	_Joystick_Read
+      00005F 7D               [ 4]  868 	ld	a, l
+                                    869 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:168: return ((in & trigger) == 0);
+      000060 E6 10            [ 7]  870 	and	a,#0x10
+      000062 20 02            [12]  871 	jr	NZ, 00102$
+                           000064   872 	C$control.c$52$3_0$500	= .
+                                    873 	.globl	C$control.c$52$3_0$500
+                                    874 ;./control.c:52: if (IS_KEY_PRESSED(row8, KEY_UP) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_A)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_A)))
+      000064                        875 00101$:
+                           000064   876 	C$control.c$55$2_0$495	= .
+                                    877 	.globl	C$control.c$55$2_0$495
+                                    878 ;./control.c:55: isJump = TRUE;
+      000064 0E 01            [ 7]  879 	ld	c, #0x01
+      000066                        880 00102$:
+                           000066   881 	C$control.c$58$1_0$494	= .
+                                    882 	.globl	C$control.c$58$1_0$494
+                                    883 ;./control.c:58: return isJump;
+      000066 79               [ 4]  884 	ld	a, c
+                           000067   885 	C$control.c$59$1_0$494	= .
+                                    886 	.globl	C$control.c$59$1_0$494
+                                    887 ;./control.c:59: }
+                           000067   888 	C$control.c$59$1_0$494	= .
+                                    889 	.globl	C$control.c$59$1_0$494
+                           000067   890 	XG$isMoveJump$0$0	= .
+                                    891 	.globl	XG$isMoveJump$0$0
+      000067 C9               [10]  892 	ret
+                           000068   893 	G$isInteractObject$0$0	= .
+                                    894 	.globl	G$isInteractObject$0$0
+                           000068   895 	C$control.c$67$1_0$503	= .
+                                    896 	.globl	C$control.c$67$1_0$503
+                                    897 ;./control.c:67: bool isInteractObject(u8 row8, u8 input)
+                                    898 ;	---------------------------------
+                                    899 ; Function isInteractObject
+                                    900 ; ---------------------------------
+      000068                        901 _isInteractObject::
+      000068 47               [ 4]  902 	ld	b, a
+                           000069   903 	C$control.c$69$2_0$503	= .
+                                    904 	.globl	C$control.c$69$2_0$503
+                                    905 ;./control.c:69: bool isGet = FALSE;
+      000069 0E 00            [ 7]  906 	ld	c, #0x00
+                           00006B   907 	C$control.c$70$1_0$503	= .
+                                    908 	.globl	C$control.c$70$1_0$503
+                                    909 ;./control.c:70: if (IS_KEY_PRESSED(row8, KEY_SPACE) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_B)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_B)))
+      00006B CB 40            [ 8]  910 	bit	0, b
+      00006D 28 14            [12]  911 	jr	Z, 00101$
+                                    912 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:167: u8 in = Joystick_Read(port);
+      00006F 2E 03            [ 7]  913 	ld	l, #0x03
+                                    914 ;	spillPairReg hl
+                                    915 ;	spillPairReg hl
+      000071 CDr00r00         [17]  916 	call	_Joystick_Read
+      000074 7D               [ 4]  917 	ld	a, l
+                                    918 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:168: return ((in & trigger) == 0);
+      000075 E6 20            [ 7]  919 	and	a,#0x20
+      000077 28 0A            [12]  920 	jr	Z, 00101$
+                           000079   921 	C$control.c$70$3_0$506	= .
+                                    922 	.globl	C$control.c$70$3_0$506
+                                    923 ;./control.c:70: if (IS_KEY_PRESSED(row8, KEY_SPACE) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_B)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_B)))
+                                    924 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:167: u8 in = Joystick_Read(port);
+      000079 2E 4C            [ 7]  925 	ld	l, #0x4c
+                                    926 ;	spillPairReg hl
+                                    927 ;	spillPairReg hl
+      00007B CDr00r00         [17]  928 	call	_Joystick_Read
+      00007E 7D               [ 4]  929 	ld	a, l
+                                    930 ;C:/Users/nicol/msxgl-workspace/the-castel/MSXgl/engine/src/input.h:168: return ((in & trigger) == 0);
+      00007F E6 20            [ 7]  931 	and	a,#0x20
+      000081 20 02            [12]  932 	jr	NZ, 00102$
+                           000083   933 	C$control.c$70$3_0$509	= .
+                                    934 	.globl	C$control.c$70$3_0$509
+                                    935 ;./control.c:70: if (IS_KEY_PRESSED(row8, KEY_SPACE) || (Joystick_IsButtonPressed(JOY_PORT_1, JOY_INPUT_TRIGGER_B)) || (Joystick_IsButtonPressed(JOY_PORT_2, JOY_INPUT_TRIGGER_B)))
+      000083                        936 00101$:
+                           000083   937 	C$control.c$73$2_0$504	= .
+                                    938 	.globl	C$control.c$73$2_0$504
+                                    939 ;./control.c:73: isGet = TRUE;
+      000083 0E 01            [ 7]  940 	ld	c, #0x01
+      000085                        941 00102$:
+                           000085   942 	C$control.c$76$1_0$503	= .
+                                    943 	.globl	C$control.c$76$1_0$503
+                                    944 ;./control.c:76: return isGet;
+      000085 79               [ 4]  945 	ld	a, c
+                           000086   946 	C$control.c$77$1_0$503	= .
+                                    947 	.globl	C$control.c$77$1_0$503
+                                    948 ;./control.c:77: }
+                           000086   949 	C$control.c$77$1_0$503	= .
+                                    950 	.globl	C$control.c$77$1_0$503
+                           000086   951 	XG$isInteractObject$0$0	= .
+                                    952 	.globl	XG$isInteractObject$0$0
+      000086 C9               [10]  953 	ret
+                                    954 	.area _CODE
+                                    955 	.area _INITIALIZER
+                                    956 	.area _CABS (ABS)

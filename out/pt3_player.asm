@@ -53,100 +53,155 @@
 ;--------------------------------------------------------
 ; special function registers
 ;--------------------------------------------------------
+G$g_PortPrimarySlot$0_0$0 == 0x00a8
 _g_PortPrimarySlot	=	0x00a8
+G$g_PortReadKeyboard$0_0$0 == 0x00a9
 _g_PortReadKeyboard	=	0x00a9
+G$g_PortAccessKeyboard$0_0$0 == 0x00aa
 _g_PortAccessKeyboard	=	0x00aa
+G$g_PortControl$0_0$0 == 0x00ab
 _g_PortControl	=	0x00ab
+G$g_VDP_DataPort$0_0$0 == 0x0098
 _g_VDP_DataPort	=	0x0098
+G$g_VDP_RegPort$0_0$0 == 0x0099
 _g_VDP_RegPort	=	0x0099
+G$g_VDP_AddrPort$0_0$0 == 0x0099
 _g_VDP_AddrPort	=	0x0099
+G$g_VDP_StatPort$0_0$0 == 0x0099
 _g_VDP_StatPort	=	0x0099
+G$g_PSG_RegPort$0_0$0 == 0x00a0
 _g_PSG_RegPort	=	0x00a0
+G$g_PSG_DataPort$0_0$0 == 0x00a1
 _g_PSG_DataPort	=	0x00a1
+G$g_PSG_StatPort$0_0$0 == 0x00a2
 _g_PSG_StatPort	=	0x00a2
+G$g_PSG_Ext_RegPort$0_0$0 == 0x0010
 _g_PSG_Ext_RegPort	=	0x0010
+G$g_PSG_Ext_DataPort$0_0$0 == 0x0011
 _g_PSG_Ext_DataPort	=	0x0011
+G$g_PSG_Ext_StatPort$0_0$0 == 0x0012
 _g_PSG_Ext_StatPort	=	0x0012
+G$g_MSXMusic_IndexPort$0_0$0 == 0x007c
 _g_MSXMusic_IndexPort	=	0x007c
+G$g_MSXMusic_DataPort$0_0$0 == 0x007d
 _g_MSXMusic_DataPort	=	0x007d
+G$g_MSXAudio_IndexPort$0_0$0 == 0x00c0
 _g_MSXAudio_IndexPort	=	0x00c0
+G$g_MSXAudio_DataPort$0_0$0 == 0x00c1
 _g_MSXAudio_DataPort	=	0x00c1
+G$g_MSXAudio_IndexPort2$0_0$0 == 0x00c2
 _g_MSXAudio_IndexPort2	=	0x00c2
+G$g_MSXAudio_DataPort2$0_0$0 == 0x00c3
 _g_MSXAudio_DataPort2	=	0x00c3
+G$g_RTC_AddrPort$0_0$0 == 0x00b4
 _g_RTC_AddrPort	=	0x00b4
+G$g_RTC_DataPort$0_0$0 == 0x00b5
 _g_RTC_DataPort	=	0x00b5
 ;--------------------------------------------------------
 ; ram data
 ;--------------------------------------------------------
 	.area _DATA
+G$ChanA$0_0$0==.
 _ChanA::
 	.ds 29
+G$ChanB$0_0$0==.
 _ChanB::
 	.ds 29
+G$ChanC$0_0$0==.
 _ChanC::
 	.ds 29
+G$DelyCnt$0_0$0==.
 _DelyCnt::
 	.ds 1
+G$CurESld$0_0$0==.
 _CurESld::
 	.ds 2
+G$CurEDel$0_0$0==.
 _CurEDel::
 	.ds 1
+G$Ns_Base$0_0$0==.
 _Ns_Base::
 	.ds 1
+G$AddToNs$0_0$0==.
 _AddToNs::
 	.ds 1
+G$PT3_Regs$0_0$0==.
 _PT3_Regs::
 	.ds 14
+G$EnvBase$0_0$0==.
 _EnvBase::
 	.ds 2
+G$VAR0END$0_0$0==.
 _VAR0END::
 	.ds 240
+G$PT3_State$0_0$0==.
 _PT3_State::
 	.ds 1
+G$PT3_ModAddr$0_0$0==.
 _PT3_ModAddr::
 	.ds 2
+G$PT3_CrPsPtr$0_0$0==.
 _PT3_CrPsPtr::
 	.ds 2
+G$PT3_SamPtrs$0_0$0==.
 _PT3_SamPtrs::
 	.ds 2
+G$PT3_OrnPtrs$0_0$0==.
 _PT3_OrnPtrs::
 	.ds 2
+G$PT3_PDSP$0_0$0==.
 _PT3_PDSP::
 	.ds 2
+G$PT3_CSP$0_0$0==.
 _PT3_CSP::
 	.ds 2
+G$PT3_PSP$0_0$0==.
 _PT3_PSP::
 	.ds 2
+G$PT3_PrNote$0_0$0==.
 _PT3_PrNote::
 	.ds 1
+G$PT3_PrSlide$0_0$0==.
 _PT3_PrSlide::
 	.ds 2
+G$PT3_AdInPtA$0_0$0==.
 _PT3_AdInPtA::
 	.ds 2
+G$PT3_AdInPtB$0_0$0==.
 _PT3_AdInPtB::
 	.ds 2
+G$PT3_AdInPtC$0_0$0==.
 _PT3_AdInPtC::
 	.ds 2
+G$PT3_LPosPtr$0_0$0==.
 _PT3_LPosPtr::
 	.ds 2
+G$PT3_PatsPtr$0_0$0==.
 _PT3_PatsPtr::
 	.ds 2
+G$PT3_Delay$0_0$0==.
 _PT3_Delay::
 	.ds 1
+G$PT3_AddToEn$0_0$0==.
 _PT3_AddToEn::
 	.ds 1
+G$PT3_Env_Del$0_0$0==.
 _PT3_Env_Del::
 	.ds 1
+G$PT3_ESldAdd$0_0$0==.
 _PT3_ESldAdd::
 	.ds 2
+G$PT3_NoteTable$0_0$0==.
 _PT3_NoteTable::
 	.ds 2
+G$PT3_SrtCrPsPtr$0_0$0==.
 _PT3_SrtCrPsPtr::
 	.ds 2
 ;--------------------------------------------------------
 ; ram data
 ;--------------------------------------------------------
 	.area _INITIALIZED
+G$PT3_Finish$0_0$0==.
 _PT3_Finish::
 	.ds 2
 ;--------------------------------------------------------
@@ -169,17 +224,31 @@ _PT3_Finish::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
+	G$EmptyCB$0$0	= .
+	.globl	G$EmptyCB$0$0
+	C$pt3_player.c$117$0_0$33	= .
+	.globl	C$pt3_player.c$117$0_0$33
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:117: void EmptyCB() {}
 ;	---------------------------------
 ; Function EmptyCB
 ; ---------------------------------
 _EmptyCB::
+	C$pt3_player.c$117$0_0$33	= .
+	.globl	C$pt3_player.c$117$0_0$33
+	XG$EmptyCB$0$0	= .
+	.globl	XG$EmptyCB$0$0
 	ret
+	G$PT3_Init$0$0	= .
+	.globl	G$PT3_Init$0$0
+	C$pt3_player.c$134$0_0$34	= .
+	.globl	C$pt3_player.c$134$0_0$34
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:134: void PT3_Init()
 ;	---------------------------------
 ; Function PT3_Init
 ; ---------------------------------
 _PT3_Init::
+	C$pt3_player.c$178$1_0$34	= .
+	.globl	C$pt3_player.c$178$1_0$34
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:178: __endasm;
 	ld	HL, #0x11
 	ld	D, H
@@ -218,13 +287,25 @@ _PT3_Init::
 	ld	BC, #13
 	ld	(HL), A
 	ldir
+	C$pt3_player.c$179$1_0$34	= .
+	.globl	C$pt3_player.c$179$1_0$34
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:179: }
+	C$pt3_player.c$179$1_0$34	= .
+	.globl	C$pt3_player.c$179$1_0$34
+	XG$PT3_Init$0$0	= .
+	.globl	XG$PT3_Init$0$0
 	ret
+	G$PT3_InitSong$0$0	= .
+	.globl	G$PT3_InitSong$0$0
+	C$pt3_player.c$185$1_0$36	= .
+	.globl	C$pt3_player.c$185$1_0$36
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:185: void PT3_InitSong(const void* songAddr)
 ;	---------------------------------
 ; Function PT3_InitSong
 ; ---------------------------------
 _PT3_InitSong::
+	C$pt3_player.c$268$1_0$36	= .
+	.globl	C$pt3_player.c$268$1_0$36
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:268: __endasm;
 	ld	DE, #-100
 	add	HL, DE
@@ -278,33 +359,65 @@ _PT3_InitSong::
 	ld	(#_ChanC + 15), HL ;S3 can comment S1,2,3; see
 ;	also EMPTYSAMORN comment
 	jp	_PT3_Resume
+	C$pt3_player.c$269$1_0$36	= .
+	.globl	C$pt3_player.c$269$1_0$36
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:269: }
+	C$pt3_player.c$269$1_0$36	= .
+	.globl	C$pt3_player.c$269$1_0$36
+	XG$PT3_InitSong$0$0	= .
+	.globl	XG$PT3_InitSong$0$0
 	ret
+	G$PT3_Pause$0$0	= .
+	.globl	G$PT3_Pause$0$0
+	C$pt3_player.c$273$1_0$37	= .
+	.globl	C$pt3_player.c$273$1_0$37
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:273: void PT3_Pause() __naked
 ;	---------------------------------
 ; Function PT3_Pause
 ; ---------------------------------
 _PT3_Pause::
+	C$pt3_player.c$280$1_0$37	= .
+	.globl	C$pt3_player.c$280$1_0$37
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:280: __endasm;
 	ld	HL, #_PT3_State
 	res	0, (HL)
 	jp	_PT3_Silence
+	C$pt3_player.c$281$1_0$37	= .
+	.globl	C$pt3_player.c$281$1_0$37
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:281: }
+	G$PT3_Resume$0$0	= .
+	.globl	G$PT3_Resume$0$0
+	C$pt3_player.c$285$1_0$38	= .
+	.globl	C$pt3_player.c$285$1_0$38
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:285: void PT3_Resume()
 ;	---------------------------------
 ; Function PT3_Resume
 ; ---------------------------------
 _PT3_Resume::
+	C$pt3_player.c$290$1_0$38	= .
+	.globl	C$pt3_player.c$290$1_0$38
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:290: __endasm;
 	ld	HL, #_PT3_State
 	set	0, (HL)
+	C$pt3_player.c$291$1_0$38	= .
+	.globl	C$pt3_player.c$291$1_0$38
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:291: }
+	C$pt3_player.c$291$1_0$38	= .
+	.globl	C$pt3_player.c$291$1_0$38
+	XG$PT3_Resume$0$0	= .
+	.globl	XG$PT3_Resume$0$0
 	ret
+	G$PT3_SetLoop$0$0	= .
+	.globl	G$PT3_SetLoop$0$0
+	C$pt3_player.c$296$1_0$40	= .
+	.globl	C$pt3_player.c$296$1_0$40
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:296: void PT3_SetLoop(u8 loop)
 ;	---------------------------------
 ; Function PT3_SetLoop
 ; ---------------------------------
 _PT3_SetLoop::
+	C$pt3_player.c$310$1_0$40	= .
+	.globl	C$pt3_player.c$310$1_0$40
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:310: __endasm;
 	ld	HL, #_PT3_State
 	or	A
@@ -313,25 +426,45 @@ _PT3_SetLoop::
 	ret
 	LoopON:
 	set	4, (HL)
+	C$pt3_player.c$311$1_0$40	= .
+	.globl	C$pt3_player.c$311$1_0$40
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:311: }
+	C$pt3_player.c$311$1_0$40	= .
+	.globl	C$pt3_player.c$311$1_0$40
+	XG$PT3_SetLoop$0$0	= .
+	.globl	XG$PT3_SetLoop$0$0
 	ret
+	G$PT3_Silence$0$0	= .
+	.globl	G$PT3_Silence$0$0
+	C$pt3_player.c$315$1_0$41	= .
+	.globl	C$pt3_player.c$315$1_0$41
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:315: void PT3_Silence() __naked
 ;	---------------------------------
 ; Function PT3_Silence
 ; ---------------------------------
 _PT3_Silence::
+	C$pt3_player.c$324$1_0$41	= .
+	.globl	C$pt3_player.c$324$1_0$41
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:324: __endasm;
 	xor	A
 	ld	(#_PT3_Regs + 8), A
 	ld	(#_PT3_Regs + 9), A
 	ld	(#_PT3_Regs + 10), A
 	jp	_PT3_UpdatePSG ;ROUT_A0
+	C$pt3_player.c$325$1_0$41	= .
+	.globl	C$pt3_player.c$325$1_0$41
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:325: }
+	G$PT3_UpdatePSG$0$0	= .
+	.globl	G$PT3_UpdatePSG$0$0
+	C$pt3_player.c$330$1_0$42	= .
+	.globl	C$pt3_player.c$330$1_0$42
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:330: void PT3_UpdatePSG()
 ;	---------------------------------
 ; Function PT3_UpdatePSG
 ; ---------------------------------
 _PT3_UpdatePSG::
+	C$pt3_player.c$387$1_0$42	= .
+	.globl	C$pt3_player.c$387$1_0$42
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:387: __endasm;
 	ld	HL, #_PT3_State
 	xor	A
@@ -370,13 +503,25 @@ _PT3_UpdatePSG::
 	and	A
 	ret	M
 	out	(0xA1), A
+	C$pt3_player.c$388$1_0$42	= .
+	.globl	C$pt3_player.c$388$1_0$42
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:388: }
+	C$pt3_player.c$388$1_0$42	= .
+	.globl	C$pt3_player.c$388$1_0$42
+	XG$PT3_UpdatePSG$0$0	= .
+	.globl	XG$PT3_UpdatePSG$0$0
 	ret
+	G$PT3_Decode$0$0	= .
+	.globl	G$PT3_Decode$0$0
+	C$pt3_player.c$392$1_0$43	= .
+	.globl	C$pt3_player.c$392$1_0$43
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:392: void PT3_Decode() __naked
 ;	---------------------------------
 ; Function PT3_Decode
 ; ---------------------------------
 _PT3_Decode::
+	C$pt3_player.c$1093$1_0$43	= .
+	.globl	C$pt3_player.c$1093$1_0$43
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:1093: __endasm;
 	di
 	call	decode_start
@@ -1001,9 +1146,12 @@ _PT3_Decode::
 	EMPTYSAMORN:
 	.db	0,1,0,0x90
 ;delete	$90 if you dont need default sample ; # pongo el 0 aqui
+	C$pt3_player.c$1094$1_0$43	= .
+	.globl	C$pt3_player.c$1094$1_0$43
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/pt3/pt3_player.c:1094: }
 	.area _CODE
 	.area _INITIALIZER
+Fpt3_player$__xinit_PT3_Finish$0_0$0 == .
 __xinit__PT3_Finish:
 	.dw _EmptyCB
 	.area _CABS (ABS)

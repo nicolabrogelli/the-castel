@@ -1,32 +1,230 @@
+;!FILE C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out\ayfx_player.asm
 XL3
-H 9 areas 11 global symbols
+H 9 areas D6 global symbols
 M ayfx_player
 O -mz80
+S G$g_MSXAudio_IndexPort2$0_0$0 Def0000C2
+S G$g_MSXAudio_DataPort2$0_0$0 Def0000C3
+S G$g_PSG_Ext_StatPort$0_0$0 Def000012
+S G$g_PSG_Ext_RegPort$0_0$0 Def000010
+S G$g_MSXAudio_IndexPort$0_0$0 Def0000C0
+S G$g_RTC_DataPort$0_0$0 Def0000B5
+S G$g_RTC_AddrPort$0_0$0 Def0000B4
+S G$g_MSXAudio_DataPort$0_0$0 Def0000C1
+S G$g_PSG_DataPort$0_0$0 Def0000A1
+S G$g_VDP_DataPort$0_0$0 Def000098
+S G$g_PortAccessKeyboard$0_0$0 Def0000AA
+S G$g_VDP_AddrPort$0_0$0 Def000099
+S G$g_PortPrimarySlot$0_0$0 Def0000A8
+S G$g_MSXMusic_IndexPort$0_0$0 Def00007C
 S .__.ABS. Def000000
+S G$g_MSXMusic_DataPort$0_0$0 Def00007D
+S G$g_PSG_Ext_DataPort$0_0$0 Def000011
 S _PT3_Regs Ref000000
+S G$g_PortControl$0_0$0 Def0000AB
+S G$g_PSG_StatPort$0_0$0 Def0000A2
+S G$g_VDP_StatPort$0_0$0 Def000099
+S G$g_PSG_RegPort$0_0$0 Def0000A0
+S G$g_VDP_RegPort$0_0$0 Def000099
+S G$g_PortReadKeyboard$0_0$0 Def0000A9
 A _CODE size F7 flags 0 addr 0
+S A$ayfx_player$300 Def0000A9
+S A$ayfx_player$210 Def000035
+S G$ayFX_Play$0$0 Def000035
+S A$ayfx_player$310 Def0000B9
+S A$ayfx_player$301 Def0000AC
+S A$ayfx_player$220 Def00003C
+S A$ayfx_player$211 Def000038
+S A$ayfx_player$320 Def0000CB
+S A$ayfx_player$311 Def0000BC
+S A$ayfx_player$302 Def0000AF
+S A$ayfx_player$212 Def000039
+S A$ayfx_player$140 Def000000
+S C$ayfx_player.c$322$1_0$30 Def00003D
+S A$ayfx_player$321 Def0000CC
+S A$ayfx_player$312 Def0000BF
+S A$ayfx_player$303 Def0000B1
+S A$ayfx_player$240 Def000049
+S C$ayfx_player.c$323$1_0$30 Def0000D6
+S A$ayfx_player$322 Def0000CF
+S A$ayfx_player$313 Def0000C1
+S A$ayfx_player$304 Def0000B2
+S A$ayfx_player$250 Def00005A
+S A$ayfx_player$241 Def00004C
+S A$ayfx_player$332 Def0000D6
+S A$ayfx_player$323 Def0000D2
+S A$ayfx_player$314 Def0000C2
+S A$ayfx_player$305 Def0000B5
+S A$ayfx_player$260 Def000068
+S A$ayfx_player$251 Def00005B
+S A$ayfx_player$242 Def00004D
+S A$ayfx_player$233 Def00003D
+S A$ayfx_player$170 Def00000F
+S A$ayfx_player$161 Def000004
+S G$ayFX_Mute$0$0 Def0000D7
+S C$ayfx_player.c$190$1_0$30 Def00003D
+S A$ayfx_player$351 Def0000E1
+S A$ayfx_player$324 Def0000D5
+S A$ayfx_player$315 Def0000C5
+S A$ayfx_player$270 Def000079
+S A$ayfx_player$261 Def00006A
+S A$ayfx_player$252 Def00005C
+S A$ayfx_player$243 Def00004F
+S A$ayfx_player$234 Def000040
+S A$ayfx_player$180 Def00001F
+S A$ayfx_player$171 Def000011
+S A$ayfx_player$162 Def000005
+S C$ayfx_player.c$352$1_0$31 Def0000D7
 S _ayFX_InitBank Def000000
+S A$ayfx_player$352 Def0000E3
+S A$ayfx_player$307 Def0000B6
+S A$ayfx_player$280 Def00008C
+S A$ayfx_player$271 Def00007C
+S A$ayfx_player$262 Def00006C
+S A$ayfx_player$253 Def00005D
+S A$ayfx_player$235 Def000041
+S A$ayfx_player$190 Def00002F
+S A$ayfx_player$181 Def000022
+S A$ayfx_player$163 Def000006
+S C$ayfx_player.c$353$1_0$31 Def0000F0
+S A$ayfx_player$380 Def0000F1
+S A$ayfx_player$353 Def0000E6
+S A$ayfx_player$317 Def0000C6
+S A$ayfx_player$308 Def0000B8
+S A$ayfx_player$290 Def00009A
+S A$ayfx_player$281 Def00008D
+S A$ayfx_player$272 Def00007D
+S A$ayfx_player$263 Def00006F
+S A$ayfx_player$254 Def00005E
+S A$ayfx_player$245 Def000051
+S A$ayfx_player$236 Def000042
+S A$ayfx_player$191 Def000030
+S A$ayfx_player$182 Def000026
+S A$ayfx_player$173 Def000013
+S A$ayfx_player$164 Def000009
+S C$ayfx_player.c$327$1_0$31 Def0000D7
 S _ayFX_PlayBank Def000004
+S A$ayfx_player$381 Def0000F3
+S A$ayfx_player$345 Def0000D7
+S A$ayfx_player$318 Def0000C7
+S A$ayfx_player$291 Def00009D
+S A$ayfx_player$282 Def00008E
+S A$ayfx_player$273 Def00007F
+S A$ayfx_player$246 Def000054
+S A$ayfx_player$237 Def000045
+S A$ayfx_player$192 Def000033
+S A$ayfx_player$183 Def000027
+S A$ayfx_player$174 Def000014
+S A$ayfx_player$165 Def00000A
+S C$ayfx_player.c$363$1_0$32 Def0000F1
+S A$ayfx_player$355 Def0000E7
+S A$ayfx_player$346 Def0000D9
+S A$ayfx_player$319 Def0000CA
+S A$ayfx_player$292 Def00009F
+S A$ayfx_player$283 Def00008F
+S A$ayfx_player$274 Def000081
+S A$ayfx_player$265 Def000070
+S A$ayfx_player$256 Def000062
+S A$ayfx_player$247 Def000055
+S A$ayfx_player$238 Def000047
+S A$ayfx_player$184 Def000028
+S A$ayfx_player$175 Def000017
+S A$ayfx_player$166 Def00000B
+S A$ayfx_player$148 Def000003
+S C$ayfx_player.c$364$1_0$32 Def0000F6
+S A$ayfx_player$356 Def0000E9
+S A$ayfx_player$347 Def0000DC
+S A$ayfx_player$293 Def0000A0
+S A$ayfx_player$284 Def000091
+S A$ayfx_player$275 Def000084
+S A$ayfx_player$257 Def000064
+S A$ayfx_player$248 Def000056
+S A$ayfx_player$194 Def000034
+S A$ayfx_player$185 Def00002A
+S A$ayfx_player$176 Def000018
+S C$ayfx_player.c$172$1_0$27 Def000004
+S A$ayfx_player$357 Def0000EC
+S A$ayfx_player$348 Def0000DF
+S A$ayfx_player$294 Def0000A3
+S A$ayfx_player$285 Def000094
+S A$ayfx_player$267 Def000073
+S A$ayfx_player$258 Def000066
+S A$ayfx_player$249 Def000058
+S A$ayfx_player$186 Def00002B
+S A$ayfx_player$177 Def00001A
+S A$ayfx_player$168 Def00000D
+S C$ayfx_player.c$357$1_0$32 Def0000F1
+S C$ayfx_player.c$173$1_0$27 Def000035
 S _ayFX_Play Def000035
+S A$ayfx_player$367 Def0000F0
+S A$ayfx_player$349 Def0000E0
+S A$ayfx_player$277 Def000087
+S A$ayfx_player$268 Def000076
+S A$ayfx_player$259 Def000067
+S A$ayfx_player$187 Def00002C
+S A$ayfx_player$178 Def00001C
+S A$ayfx_player$169 Def00000E
+S G$ayFX_Update$0$0 Def00003D
+S A$ayfx_player$359 Def0000ED
+S A$ayfx_player$296 Def0000A4
+S A$ayfx_player$287 Def000095
+S A$ayfx_player$278 Def000088
+S A$ayfx_player$269 Def000077
+S A$ayfx_player$188 Def00002D
+S A$ayfx_player$179 Def00001D
+S A$ayfx_player$297 Def0000A6
+S A$ayfx_player$279 Def00008A
+S A$ayfx_player$189 Def00002E
+S A$ayfx_player$298 Def0000A7
+S A$ayfx_player$289 Def000097
+S G$ayFX_Stop$0$0 Def0000F1
+S A$ayfx_player$389 Def0000F6
+S C$ayfx_player.c$185$1_0$29 Def000035
 S _ayFX_Mute Def0000D7
+S C$ayfx_player.c$186$1_0$29 Def00003C
+S XG$ayFX_InitBank$0$0 Def000003
+S C$ayfx_player.c$178$1_0$29 Def000035
+S C$ayfx_player.c$71$0_0$25 Def000000
+S XG$ayFX_Play$0$0 Def00003C
 S _ayFX_Update Def00003D
+S C$ayfx_player.c$84$1_0$25 Def000000
+S C$ayfx_player.c$92$1_0$27 Def000004
+S C$ayfx_player.c$85$1_0$25 Def000003
 S _ayFX_Stop Def0000F1
+S XG$ayFX_Mute$0$0 Def0000F0
+S XG$ayFX_Update$0$0 Def0000D6
+S XG$ayFX_Stop$0$0 Def0000F6
+S G$ayFX_InitBank$0$0 Def000000
+S G$ayFX_PlayBank$0$0 Def000004
 A _DATA size 8 flags 0 addr 0
 S _ayFX_Tone Def000004
+S G$ayFX_Tone$0_0$0 Def000004
 S _ayFX_Pointer Def000002
+S G$ayFX_Pointer$0_0$0 Def000002
 S _ayFX_Volume Def000007
+S G$ayFX_Volume$0_0$0 Def000007
 S _ayFX_Bank Def000000
 S _ayFX_Noise Def000006
+S G$ayFX_Bank$0_0$0 Def000000
+S G$ayFX_Noise$0_0$0 Def000006
 A _INITIALIZED size 5 flags 0 addr 0
 S _ayFX_Finish Def000003
 S _ayFX_Priority Def000001
+S G$ayFX_Finish$0_0$0 Def000003
+S G$ayFX_Priority$0_0$0 Def000001
 S _ayFX_Channel Def000002
+S G$ayFX_Channel$0_0$0 Def000002
 S _ayFX_Mode Def000000
+S G$ayFX_Mode$0_0$0 Def000000
 A _DABS size 0 flags 8 addr 0
 A _HOME size 0 flags 0 addr 0
 A _GSINIT size 0 flags 0 addr 0
 A _GSFINAL size 0 flags 0 addr 0
 A _INITIALIZER size 5 flags 0 addr 0
+S Fayfx_player$__xinit_ayFX_Finish$0_0$0 Def000003
+S Fayfx_player$__xinit_ayFX_Priority$0_0$0 Def000001
+S Fayfx_player$__xinit_ayFX_Channel$0_0$0 Def000002
+S Fayfx_player$__xinit_ayFX_Mode$0_0$0 Def000000
 A _CABS size 0 flags 8 addr 0
 T 00 00 00
 R 00 00 01 00
@@ -121,7 +319,7 @@ R 00 00 00 00
 T 73 00 00 22 02 00 79 E6 0F 32 07 00 C8 CB 79 20
 R 00 00 00 00 00 04 01 00 00 0A 01 00
 T 80 00 00 06 3A 06 00 32 06 00
-R 00 00 00 00 00 05 01 00 02 08 01 00
+R 00 00 00 00 00 05 01 00 02 08 11 00
 T 87 00 00
 R 00 00 00 00
 T 87 00 00 79 E6 90 FE 90 C8 0F 0F 16 DB 21 02 00
@@ -135,7 +333,7 @@ R 00 00 00 00
 T 97 00 00
 R 00 00 00 00
 T 97 00 00 CD C6 00 32 0A 00 CB 51 C0 22 04 00 C9
-R 00 00 00 00 00 04 00 00 02 07 01 00 02 0D 01 00
+R 00 00 00 00 00 04 00 00 02 07 11 00 02 0D 11 00
 T A4 00 00
 R 00 00 00 00
 T A4 00 00 CB 0A 0F 10 0D
@@ -143,7 +341,7 @@ R 00 00 00 00
 T A9 00 00
 R 00 00 00 00
 T A9 00 00 CD C6 00 32 09 00 CB 49 C0 22 02 00 C9
-R 00 00 00 00 00 04 00 00 02 07 01 00 02 0D 01 00
+R 00 00 00 00 00 04 00 00 02 07 11 00 02 0D 11 00
 T B6 00 00
 R 00 00 00 00
 T B6 00 00 CB 0A 0F
@@ -151,11 +349,11 @@ R 00 00 00 00
 T B9 00 00
 R 00 00 00 00
 T B9 00 00 CD C6 00 32 08 00 CB 41 C0 22 00 00 C9
-R 00 00 00 00 00 04 00 00 02 07 01 00 02 0D 01 00
+R 00 00 00 00 00 04 00 00 02 07 11 00 02 0D 11 00
 T C6 00 00
 R 00 00 00 00
 T C6 00 00 4F 3A 07 00 A2 B1 32 07 00 3A 07 00 2A
-R 00 00 00 00 02 05 01 00 02 0A 01 00 00 0D 01 00
+R 00 00 00 00 02 05 11 00 02 0A 11 00 00 0D 01 00
 T D3 00 00 04 00 C9 C9
 R 00 00 00 00 00 03 01 00
 T D7 00 00
@@ -165,15 +363,15 @@ R 00 00 00 00 00 06 02 00 00 09 02 00
 T E1 00 00
 R 00 00 00 00
 T E1 00 00 10 04 32 0A 00 C9
-R 00 00 00 00 02 06 01 00
+R 00 00 00 00 02 06 11 00
 T E7 00 00
 R 00 00 00 00
 T E7 00 00 10 04 32 09 00 C9
-R 00 00 00 00 02 06 01 00
+R 00 00 00 00 02 06 11 00
 T ED 00 00
 R 00 00 00 00
 T ED 00 00 32 08 00 C9
-R 00 00 00 00 02 04 01 00
+R 00 00 00 00 02 04 11 00
 T F1 00 00
 R 00 00 00 00
 T F1 00 00 3E FF 32 01 00 C9

@@ -7,6 +7,383 @@ Symbol Table
     .__.ABS.                                                    =  000000 G
     .__.CPU.                                                    =  000000 L
     .__.H$L.                                                    =  000000 L
+  0 A$memory$105                                                   000011 GR
+  0 A$memory$109                                                   000012 GR
+  0 A$memory$110                                                   000015 GR
+  0 A$memory$111                                                   000016 GR
+  0 A$memory$112                                                   000017 GR
+  0 A$memory$113                                                   000018 GR
+  0 A$memory$114                                                   000019 GR
+  0 A$memory$115                                                   00001A GR
+  0 A$memory$116                                                   00001B GR
+  0 A$memory$124                                                   00001C GR
+  0 A$memory$137                                                   00001D GR
+  0 A$memory$138                                                   00001F GR
+  0 A$memory$139                                                   000020 GR
+  0 A$memory$141                                                   000022 GR
+  0 A$memory$157                                                   000024 GR
+  0 A$memory$158                                                   000025 GR
+  0 A$memory$159                                                   000026 GR
+  0 A$memory$160                                                   000027 GR
+  0 A$memory$161                                                   000028 GR
+  0 A$memory$162                                                   00002A GR
+  0 A$memory$163                                                   00002B GR
+  0 A$memory$164                                                   00002C GR
+  0 A$memory$166                                                   00002E GR
+  0 A$memory$182                                                   000030 GR
+  0 A$memory$183                                                   000031 GR
+  0 A$memory$184                                                   000032 GR
+  0 A$memory$185                                                   000033 GR
+  0 A$memory$186                                                   000034 GR
+  0 A$memory$187                                                   000035 GR
+  0 A$memory$188                                                   000036 GR
+  0 A$memory$189                                                   000037 GR
+  0 A$memory$190                                                   000038 GR
+  0 A$memory$191                                                   00003A GR
+  0 A$memory$192                                                   00003B GR
+  0 A$memory$193                                                   00003C GR
+  0 A$memory$194                                                   00003D GR
+  0 A$memory$196                                                   00003F GR
+  0 A$memory$200                                                   000041 GR
+  0 A$memory$201                                                   000042 GR
+  0 A$memory$202                                                   000043 GR
+  0 A$memory$218                                                   000044 GR
+  0 A$memory$219                                                   000047 GR
+  0 A$memory$220                                                   000048 GR
+  0 A$memory$221                                                   00004A GR
+  0 A$memory$222                                                   00004B GR
+  0 A$memory$223                                                   00004C GR
+  0 A$memory$224                                                   00004E GR
+  0 A$memory$225                                                   00004F GR
+  0 A$memory$226                                                   000051 GR
+  0 A$memory$227                                                   000052 GR
+  0 A$memory$228                                                   000053 GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 2.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  0 A$memory$232                                                   000054 GR
+  0 A$memory$233                                                   000057 GR
+  0 A$memory$234                                                   000058 GR
+  0 A$memory$235                                                   000059 GR
+  0 A$memory$236                                                   00005A GR
+  0 A$memory$237                                                   00005B GR
+  0 A$memory$238                                                   00005C GR
+  0 A$memory$246                                                   00005D GR
+  0 A$memory$256                                                   00005E GR
+  0 A$memory$257                                                   000060 GR
+  0 A$memory$258                                                   000064 GR
+  0 A$memory$259                                                   000066 GR
+  0 A$memory$260                                                   00006A GR
+  0 A$memory$261                                                   00006C GR
+  0 A$memory$262                                                   00006E GR
+  0 A$memory$263                                                   000071 GR
+  0 A$memory$267                                                   000074 GR
+  0 A$memory$272                                                   000078 GR
+  0 A$memory$273                                                   000079 GR
+  0 A$memory$274                                                   00007A GR
+  0 A$memory$278                                                   00007D GR
+  0 A$memory$279                                                   00007E GR
+  0 A$memory$280                                                   00007F GR
+  0 A$memory$281                                                   000080 GR
+  0 A$memory$282                                                   000081 GR
+  0 A$memory$283                                                   000082 GR
+  0 A$memory$286                                                   000083 GR
+  0 A$memory$292                                                   000084 GR
+  0 A$memory$293                                                   000086 GR
+  0 A$memory$297                                                   000089 GR
+  0 A$memory$301                                                   00008B GR
+  0 A$memory$302                                                   00008C GR
+  0 A$memory$303                                                   00008F GR
+  0 A$memory$304                                                   000091 GR
+  0 A$memory$305                                                   000092 GR
+  0 A$memory$306                                                   000095 GR
+  0 A$memory$310                                                   000097 GR
+  0 A$memory$311                                                   000099 GR
+  0 A$memory$312                                                   00009A GR
+  0 A$memory$313                                                   00009B GR
+  0 A$memory$314                                                   00009C GR
+  0 A$memory$315                                                   00009D GR
+  0 A$memory$319                                                   00009E GR
+  0 A$memory$320                                                   00009F GR
+  0 A$memory$321                                                   0000A0 GR
+  0 A$memory$322                                                   0000A1 GR
+  0 A$memory$323                                                   0000A2 GR
+  0 A$memory$328                                                   0000A5 GR
+  0 A$memory$329                                                   0000A8 GR
+  0 A$memory$330                                                   0000AB GR
+  0 A$memory$331                                                   0000AC GR
+  0 A$memory$332                                                   0000AD GR
+  0 A$memory$333                                                   0000AE GR
+  0 A$memory$337                                                   0000AF GR
+  0 A$memory$338                                                   0000B0 GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 3.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  0 A$memory$339                                                   0000B1 GR
+  0 A$memory$340                                                   0000B2 GR
+  0 A$memory$341                                                   0000B3 GR
+  0 A$memory$345                                                   0000B5 GR
+  0 A$memory$346                                                   0000B6 GR
+  0 A$memory$347                                                   0000B8 GR
+  0 A$memory$348                                                   0000BA GR
+  0 A$memory$349                                                   0000BC GR
+  0 A$memory$350                                                   0000BE GR
+  0 A$memory$351                                                   0000BF GR
+  0 A$memory$352                                                   0000C0 GR
+  0 A$memory$356                                                   0000C2 GR
+  0 A$memory$357                                                   0000C3 GR
+  0 A$memory$358                                                   0000C5 GR
+  0 A$memory$359                                                   0000C6 GR
+  0 A$memory$360                                                   0000C7 GR
+  0 A$memory$361                                                   0000C9 GR
+  0 A$memory$362                                                   0000CA GR
+  0 A$memory$363                                                   0000CB GR
+  0 A$memory$364                                                   0000CC GR
+  0 A$memory$365                                                   0000CD GR
+  0 A$memory$369                                                   0000CE GR
+  0 A$memory$370                                                   0000D1 GR
+  0 A$memory$371                                                   0000D3 GR
+  0 A$memory$372                                                   0000D6 GR
+  0 A$memory$373                                                   0000D9 GR
+  0 A$memory$374                                                   0000DB GR
+  0 A$memory$375                                                   0000DE GR
+  0 A$memory$376                                                   0000DF GR
+  0 A$memory$377                                                   0000E0 GR
+  0 A$memory$378                                                   0000E1 GR
+  0 A$memory$379                                                   0000E2 GR
+  0 A$memory$380                                                   0000E3 GR
+  0 A$memory$381                                                   0000E6 GR
+  0 A$memory$382                                                   0000E7 GR
+  0 A$memory$383                                                   0000E8 GR
+  0 A$memory$384                                                   0000EB GR
+  0 A$memory$385                                                   0000EC GR
+  0 A$memory$386                                                   0000EF GR
+  0 A$memory$387                                                   0000F2 GR
+  0 A$memory$388                                                   0000F5 GR
+  0 A$memory$389                                                   0000F6 GR
+  0 A$memory$390                                                   0000F7 GR
+  0 A$memory$391                                                   0000FA GR
+  0 A$memory$395                                                   0000FB GR
+  0 A$memory$396                                                   0000FC GR
+  0 A$memory$397                                                   0000FD GR
+  0 A$memory$398                                                   000100 GR
+  0 A$memory$399                                                   000101 GR
+  0 A$memory$400                                                   000102 GR
+  0 A$memory$401                                                   000105 GR
+  0 A$memory$405                                                   000106 GR
+  0 A$memory$406                                                   000109 GR
+  0 A$memory$407                                                   00010A GR
+  0 A$memory$408                                                   00010B GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 4.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  0 A$memory$409                                                   00010E GR
+  0 A$memory$413                                                   00010F GR
+  0 A$memory$414                                                   000110 GR
+  0 A$memory$415                                                   000111 GR
+  0 A$memory$416                                                   000112 GR
+  0 A$memory$417                                                   000113 GR
+  0 A$memory$422                                                   000116 GR
+  0 A$memory$423                                                   000117 GR
+  0 A$memory$424                                                   000118 GR
+  0 A$memory$425                                                   000119 GR
+  0 A$memory$426                                                   00011A GR
+  0 A$memory$427                                                   00011B GR
+  0 A$memory$428                                                   00011C GR
+  0 A$memory$433                                                   00011F GR
+  0 A$memory$438                                                   000122 GR
+  0 A$memory$439                                                   000124 GR
+  0 A$memory$444                                                   000126 GR
+  0 A$memory$454                                                   000127 GR
+  0 A$memory$455                                                   000129 GR
+  0 A$memory$456                                                   00012D GR
+  0 A$memory$457                                                   00012F GR
+  0 A$memory$458                                                   000130 GR
+  0 A$memory$462                                                   000131 GR
+  0 A$memory$467                                                   000135 GR
+  0 A$memory$468                                                   000136 GR
+  0 A$memory$469                                                   000137 GR
+  0 A$memory$473                                                   000139 GR
+  0 A$memory$474                                                   00013C GR
+  0 A$memory$475                                                   00013D GR
+  0 A$memory$476                                                   00013E GR
+  0 A$memory$477                                                   00013F GR
+  0 A$memory$478                                                   000140 GR
+  0 A$memory$479                                                   000141 GR
+  0 A$memory$480                                                   000144 GR
+  0 A$memory$481                                                   000145 GR
+  0 A$memory$485                                                   000146 GR
+  0 A$memory$486                                                   000149 GR
+  0 A$memory$487                                                   00014C GR
+  0 A$memory$488                                                   00014E GR
+  0 A$memory$489                                                   00014F GR
+  0 A$memory$490                                                   000150 GR
+  0 A$memory$491                                                   000151 GR
+  0 A$memory$492                                                   000152 GR
+  0 A$memory$493                                                   000153 GR
+  0 A$memory$494                                                   000155 GR
+  0 A$memory$495                                                   000157 GR
+  0 A$memory$496                                                   00015A GR
+  0 A$memory$497                                                   00015D GR
+  0 A$memory$498                                                   00015E GR
+  0 A$memory$499                                                   00015F GR
+  0 A$memory$501                                                   000160 GR
+  0 A$memory$504                                                   000161 GR
+  0 A$memory$505                                                   000163 GR
+  0 A$memory$509                                                   000165 GR
+  0 A$memory$510                                                   000166 GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 5.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  0 A$memory$511                                                   000167 GR
+  0 A$memory$512                                                   000168 GR
+  0 A$memory$513                                                   000169 GR
+  0 A$memory$514                                                   00016A GR
+  0 A$memory$515                                                   00016B GR
+  0 A$memory$516                                                   00016C GR
+  0 A$memory$517                                                   00016D GR
+  0 A$memory$518                                                   00016E GR
+  0 A$memory$519                                                   00016F GR
+  0 A$memory$523                                                   000170 GR
+  0 A$memory$526                                                   000173 GR
+  0 A$memory$529                                                   000176 GR
+  0 A$memory$530                                                   000177 GR
+  0 A$memory$531                                                   000178 GR
+  0 A$memory$532                                                   000179 GR
+  0 A$memory$533                                                   00017A GR
+  0 A$memory$534                                                   00017B GR
+  0 A$memory$535                                                   00017C GR
+  0 A$memory$536                                                   00017D GR
+  0 A$memory$537                                                   00017E GR
+  0 A$memory$538                                                   00017F GR
+  0 A$memory$543                                                   000180 GR
+  0 A$memory$544                                                   000181 GR
+  0 A$memory$545                                                   000182 GR
+  0 A$memory$546                                                   000183 GR
+  0 A$memory$547                                                   000184 GR
+  0 A$memory$548                                                   000185 GR
+  0 A$memory$553                                                   000188 GR
+  0 A$memory$554                                                   00018A GR
+  0 A$memory$559                                                   00018C GR
+  0 A$memory$572                                                   00018D GR
+  0 A$memory$573                                                   00018E GR
+  0 A$memory$574                                                   000190 GR
+  0 A$memory$577                                                   000191 GR
+  0 A$memory$578                                                   000192 GR
+  0 A$memory$579                                                   000194 GR
+  0 A$memory$585                                                   000195 GR
+  0 A$memory$586                                                   000196 GR
+  0 A$memory$587                                                   000197 GR
+  0 A$memory$588                                                   000198 GR
+  0 A$memory$589                                                   000199 GR
+  0 A$memory$590                                                   00019B GR
+  0 A$memory$591                                                   00019C GR
+  0 A$memory$592                                                   00019D GR
+  0 A$memory$603                                                   00019E GR
+  0 A$memory$68                                                    000000 GR
+  0 A$memory$69                                                    000001 GR
+  0 A$memory$73                                                    000002 GR
+  0 A$memory$77                                                    000006 GR
+  0 A$memory$78                                                    000009 GR
+  0 A$memory$79                                                    00000A GR
+  0 A$memory$80                                                    00000B GR
+  0 A$memory$81                                                    00000C GR
+  0 A$memory$82                                                    00000D GR
+  0 A$memory$83                                                    00000E GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 6.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  0 A$memory$84                                                    00000F GR
+  0 A$memory$95                                                    000010 GR
+  0 C$memory.c$111$1_0$32                                       =  000024 GR
+  0 C$memory.c$138$1_0$32                                       =  000024 GR
+  0 C$memory.c$139$1_0$32                                       =  000030 GR
+  0 C$memory.c$143$1_0$34                                       =  000030 GR
+  0 C$memory.c$177$1_0$34                                       =  000030 GR
+  0 C$memory.c$178$1_0$34                                       =  000041 GR
+  0 C$memory.c$24$0_0$26                                        =  000000 GR
+  0 C$memory.c$249$1_0$36                                       =  000044 GR
+  0 C$memory.c$251$1_0$36                                       =  000044 GR
+  0 C$memory.c$252$1_0$36                                       =  000044 GR
+  0 C$memory.c$253$1_0$36                                       =  000054 GR
+  0 C$memory.c$254$1_0$36                                       =  00005D GR
+  0 C$memory.c$258$1_0$38                                       =  00005E GR
+  0 C$memory.c$26$2_0$26                                        =  000002 GR
+  0 C$memory.c$265$2_0$38                                       =  000074 GR
+  0 C$memory.c$266$1_0$38                                       =  000078 GR
+  0 C$memory.c$268$2_0$39                                       =  00007D GR
+  0 C$memory.c$269$2_0$39                                       =  000084 GR
+  0 C$memory.c$27$1_0$26                                        =  000006 GR
+  0 C$memory.c$271$3_0$40                                       =  000089 GR
+  0 C$memory.c$272$3_0$40                                       =  00008B GR
+  0 C$memory.c$274$4_0$41                                       =  000097 GR
+  0 C$memory.c$275$4_0$41                                       =  00009E GR
+  0 C$memory.c$277$3_1$42                                       =  0000A5 GR
+  0 C$memory.c$278$3_1$42                                       =  0000AF GR
+  0 C$memory.c$28$1_0$26                                        =  000010 GR
+  0 C$memory.c$280$4_1$43                                       =  0000B5 GR
+  0 C$memory.c$281$4_1$43                                       =  0000C2 GR
+  0 C$memory.c$282$4_1$43                                       =  0000CE GR
+  0 C$memory.c$284$4_1$43                                       =  0000FB GR
+  0 C$memory.c$285$4_1$43                                       =  000106 GR
+  0 C$memory.c$287$4_1$43                                       =  00010F GR
+  0 C$memory.c$29$1_0$26                                        =  000010 GR
+  0 C$memory.c$290$2_0$39                                       =  000116 GR
+  0 C$memory.c$292$1_0$38                                       =  00011F GR
+  0 C$memory.c$293$1_0$38                                       =  000126 GR
+  0 C$memory.c$297$1_0$44                                       =  000127 GR
+  0 C$memory.c$299$2_0$44                                       =  000131 GR
+  0 C$memory.c$300$1_0$44                                       =  000135 GR
+  0 C$memory.c$302$1_0$44                                       =  000139 GR
+  0 C$memory.c$303$2_0$45                                       =  000146 GR
+  0 C$memory.c$305$3_0$46                                       =  000165 GR
+  0 C$memory.c$306$3_0$46                                       =  000170 GR
+  0 C$memory.c$308$2_0$45                                       =  000180 GR
+  0 C$memory.c$310$1_0$44                                       =  00018C GR
+  0 C$memory.c$314$1_0$48                                       =  00018D GR
+  0 C$memory.c$316$1_0$48                                       =  00018D GR
+  0 C$memory.c$317$1_0$48                                       =  000195 GR
+  0 C$memory.c$318$1_0$48                                       =  00019E GR
+  0 C$memory.c$319$1_0$48                                       =  00019E GR
+  0 C$memory.c$33$1_0$28                                        =  000011 GR
+  0 C$memory.c$35$1_0$28                                        =  000012 GR
+  0 C$memory.c$36$1_0$28                                        =  00001C GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 7.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  0 C$memory.c$40$1_0$30                                        =  00001D GR
+  0 C$memory.c$59$1_0$30                                        =  00001D GR
+  0 C$memory.c$60$1_0$30                                        =  000024 GR
+  7 Fmemory$__xinit_g_MemChunkRoot$0_0$0                        =  000000 GR
+  0 G$Mem_Copy$0$0                                              =  00001D GR
+  0 G$Mem_DynamicAlloc$0$0                                      =  00005E GR
+  0 G$Mem_DynamicFree$0$0                                       =  00018D GR
+  0 G$Mem_DynamicInitialize$0$0                                 =  000044 GR
+  0 G$Mem_DynamicMerge$0$0                                      =  000127 GR
+  0 G$Mem_HeapAlloc$0$0                                         =  000000 GR
+  0 G$Mem_HeapFree$0$0                                          =  000011 GR
+  0 G$Mem_Set$0$0                                               =  000024 GR
+  0 G$Mem_Set_16b$0$0                                           =  000030 GR
+  2 G$g_MemChunkRoot$0_0$0                                      =  000000 GR
+  1 G$g_StackAddress$0_0$0                                      =  000000 GR
+  0 XG$Mem_DynamicAlloc$0$0                                     =  000126 GR
+  0 XG$Mem_DynamicFree$0$0                                      =  00019E GR
+  0 XG$Mem_DynamicInitialize$0$0                                =  00005D GR
+  0 XG$Mem_DynamicMerge$0$0                                     =  00018C GR
+  0 XG$Mem_HeapAlloc$0$0                                        =  000010 GR
+  0 XG$Mem_HeapFree$0$0                                         =  00001C GR
   0 _Mem_Copy                                                      00001D GR
   0 _Mem_DynamicAlloc                                              00005E GR
   0 _Mem_DynamicFree                                               00018D GR
@@ -25,7 +402,7 @@ Symbol Table
   0 mem_fill_end                                                   00002E R
 
 
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 2.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 8.
 Hexadecimal [24-Bits]
 
 Area Table

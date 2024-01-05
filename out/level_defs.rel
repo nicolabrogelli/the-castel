@@ -1,10 +1,55 @@
+;!FILE C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out\level_defs.asm
 XL3
-H 9 areas 21 global symbols
+H 9 areas 9C global symbols
 M level_defs
 O -mz80
 S .__.ABS. Def000000
 A _CODE size 11C5 flags 0 addr 0
+S A$level_defs$176 Def000050
+S A$level_defs$158 Def000045
+S A$level_defs$177 Def000051
+S A$level_defs$159 Def000046
+S A$level_defs$188 Def000058
+S A$level_defs$93 Def000009
+S G$restoreLevel$0$0 Def000000
+S A$level_defs$95 Def00000B
+S A$level_defs$86 Def000000
+S A$level_defs$96 Def00000C
+S A$level_defs$87 Def000002
+S Flevel_defs$__str_10$0_0$0 Def00116B
+S A$level_defs$97 Def00000E
+S A$level_defs$88 Def000006
+S Flevel_defs$__str_11$0_0$0 Def001175
+S A$level_defs$89 Def000008
+S Flevel_defs$__str_12$0_0$0 Def00117F
+S Flevel_defs$__str_13$0_0$0 Def001189
+S Flevel_defs$__str_14$0_0$0 Def001193
+S Flevel_defs$__str_15$0_0$0 Def00119D
+S Flevel_defs$__str_16$0_0$0 Def0011A7
+S Flevel_defs$__str_17$0_0$0 Def0011B1
+S Flevel_defs$__str_18$0_0$0 Def0011BB
 S _restoreLevel Def000000
+S C$level_defs.c$86$0_0$3 Def000000
+S C$level_defs.c$90$4_0$5 Def00004C
+S Flevel_defs$__str_0$0_0$0 Def001106
+S C$level_defs.c$90$5_0$6 Def000010
+S Flevel_defs$__str_1$0_0$0 Def001111
+S C$level_defs.c$88$2_0$3 Def000050
+S Flevel_defs$__str_2$0_0$0 Def00111B
+S C$level_defs.c$98$2_0$3 Def000058
+S C$level_defs.c$92$5_0$6 Def000029
+S Flevel_defs$__str_3$0_0$0 Def001125
+S C$level_defs.c$93$5_0$6 Def00003C
+S Flevel_defs$__str_4$0_0$0 Def00112F
+S C$level_defs.c$94$5_0$6 Def000041
+S Flevel_defs$__str_5$0_0$0 Def001139
+S C$level_defs.c$95$5_0$6 Def000048
+S Flevel_defs$__str_6$0_0$0 Def001143
+S Flevel_defs$__str_7$0_0$0 Def00114D
+S XG$restoreLevel$0$0 Def000058
+S C$level_defs.c$88$5_0$6 Def000009
+S Flevel_defs$__str_8$0_0$0 Def001157
+S Flevel_defs$__str_9$0_0$0 Def001161
 S _g_Level001 Def000059
 S _g_Level010 Def000713
 S _g_Level002 Def000122
@@ -14,35 +59,114 @@ S _g_Level003 Def000206
 S _g_Level012 Def00086F
 S _g_Level021 Def000D42
 S _g_Level030 Def001081
+S G$g_Level010$0_0$0 Def000713
+S G$g_Level001$0_0$0 Def000059
 S _g_Level004 Def0002E1
 S _g_Level013 Def000923
 S _g_Level022 Def000D71
+S G$g_Level020$0_0$0 Def000D13
+S G$g_Level011$0_0$0 Def0007C4
+S G$g_Level002$0_0$0 Def000122
 S _g_Level005 Def0003BB
 S _g_Level014 Def0009DC
 S _g_Level023 Def000DA0
+S G$g_Level030$0_0$0 Def001081
+S G$g_Level021$0_0$0 Def000D42
+S G$g_Level012$0_0$0 Def00086F
+S G$g_Level003$0_0$0 Def000206
 S _g_Level006 Def000469
 S _g_Level015 Def000AC2
 S _g_Level024 Def000DCF
+S A$level_defs$110 Def00001A
+S A$level_defs$101 Def000010
+S G$g_Level022$0_0$0 Def000D71
+S G$g_Level013$0_0$0 Def000923
+S G$g_Level004$0_0$0 Def0002E1
 S _g_Level007 Def000508
 S _g_Level016 Def000BA7
 S _g_Level025 Def000DFE
+S A$level_defs$111 Def00001B
+S A$level_defs$102 Def000012
+S G$g_Level023$0_0$0 Def000DA0
+S G$g_Level014$0_0$0 Def0009DC
+S G$g_Level005$0_0$0 Def0003BB
 S _g_Level008 Def0005B2
 S _g_Level017 Def000C86
 S _g_Level026 Def000EA0
+S A$level_defs$130 Def000033
+S A$level_defs$112 Def00001C
+S A$level_defs$103 Def000013
+S G$g_Level024$0_0$0 Def000DCF
+S G$g_Level015$0_0$0 Def000AC2
+S G$g_Level006$0_0$0 Def000469
 S _g_Level009 Def000664
 S _g_Level018 Def000CB5
 S _g_Level027 Def000F59
+S A$level_defs$131 Def000034
+S A$level_defs$113 Def00001D
+S A$level_defs$104 Def000014
+S G$g_Level025$0_0$0 Def000DFE
+S G$g_Level016$0_0$0 Def000BA7
+S G$g_Level007$0_0$0 Def000508
 S _g_Level019 Def000CE4
 S _g_Level028 Def000FEE
+S A$level_defs$150 Def000041
+S A$level_defs$132 Def000036
+S A$level_defs$114 Def000020
+S A$level_defs$105 Def000015
+S G$g_Level026$0_0$0 Def000EA0
+S G$g_Level017$0_0$0 Def000C86
+S G$g_Level008$0_0$0 Def0005B2
 S _g_Level029 Def00101D
+S A$level_defs$142 Def00003D
+S A$level_defs$133 Def000039
+S A$level_defs$124 Def000029
+S A$level_defs$115 Def000021
+S A$level_defs$106 Def000016
+S G$g_Level027$0_0$0 Def000F59
+S G$g_Level018$0_0$0 Def000CB5
+S G$g_Level009$0_0$0 Def000664
+S A$level_defs$170 Def00004C
+S A$level_defs$134 Def00003A
+S A$level_defs$125 Def00002A
+S A$level_defs$116 Def000022
+S A$level_defs$107 Def000017
+S G$g_Level028$0_0$0 Def000FEE
+S G$g_Level019$0_0$0 Def000CE4
+S A$level_defs$171 Def00004D
+S A$level_defs$153 Def000042
+S A$level_defs$135 Def00003B
+S A$level_defs$126 Def00002C
+S A$level_defs$117 Def000025
+S A$level_defs$108 Def000018
+S G$g_Level029$0_0$0 Def00101D
+S A$level_defs$163 Def000048
+S A$level_defs$145 Def00003E
+S A$level_defs$127 Def00002E
+S A$level_defs$118 Def000026
+S A$level_defs$109 Def000019
+S A$level_defs$182 Def000054
+S A$level_defs$164 Def000049
+S A$level_defs$146 Def00003F
+S A$level_defs$128 Def00002F
+S A$level_defs$119 Def000027
+S A$level_defs$183 Def000056
+S A$level_defs$165 Def00004A
+S A$level_defs$156 Def000043
+S A$level_defs$129 Def000030
+S A$level_defs$166 Def00004B
+S A$level_defs$157 Def000044
+S A$level_defs$139 Def00003C
 A _DATA size 0 flags 0 addr 0
 A _INITIALIZED size 4C2 flags 0 addr 0
 S _g_Levels Def000000
+S G$g_Levels$0_0$0 Def000000
 A _DABS size 0 flags 8 addr 0
 A _HOME size 0 flags 0 addr 0
 A _GSINIT size 0 flags 0 addr 0
 A _GSFINAL size 0 flags 0 addr 0
 A _INITIALIZER size 4C2 flags 0 addr 0
+S Flevel_defs$__xinit_g_Levels$0_0$0 Def000000
 A _CABS size 0 flags 8 addr 0
 T 00 00 00
 R 00 00 02 00

@@ -7,6 +7,9 @@ Symbol Table
     .__.ABS.                                                    =  000000 G
     .__.CPU.                                                    =  000000 L
     .__.H$L.                                                    =  000000 L
+  7 G$g_DataBackground_Colors$0_0$0                             =  000369 GR
+  7 G$g_DataBackground_Patterns$0_0$0                           =  000137 GR
+  7 G$g_DataSprtLayer$0_0$0                                     =  000000 GR
   7 _g_DataBackground_Colors                                       000369 GR
   7 _g_DataBackground_Patterns                                     000137 GR
   7 _g_DataSprtLayer                                               000000 GR
