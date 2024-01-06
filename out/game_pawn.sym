@@ -821,16 +821,16 @@ Symbol Table
   0 A$game_pawn$2106                                               0007A1 GR
   0 A$game_pawn$2107                                               0007A4 GR
   0 A$game_pawn$2111                                               0007A5 GR
-  0 A$game_pawn$2115                                               0007A8 GR
-  0 A$game_pawn$2116                                               0007AB GR
-  0 A$game_pawn$2120                                               0007AC GR
-  0 A$game_pawn$2124                                               0007AE GR
-  0 A$game_pawn$2128                                               0007B2 GR
-  0 A$game_pawn$2129                                               0007B5 GR
-  0 A$game_pawn$2130                                               0007B6 GR
-  0 A$game_pawn$2134                                               0007B7 GR
-  0 A$game_pawn$2135                                               0007B8 GR
-  0 A$game_pawn$2136                                               0007BA GR
+  0 A$game_pawn$2115                                               0007A9 GR
+  0 A$game_pawn$2116                                               0007AC GR
+  0 A$game_pawn$2117                                               0007AD GR
+  0 A$game_pawn$2121                                               0007AE GR
+  0 A$game_pawn$2122                                               0007AF GR
+  0 A$game_pawn$2123                                               0007B1 GR
+  0 A$game_pawn$2127                                               0007B2 GR
+  0 A$game_pawn$2131                                               0007B5 GR
+  0 A$game_pawn$2132                                               0007B8 GR
+  0 A$game_pawn$2136                                               0007B9 GR
   0 A$game_pawn$2141                                               0007BB GR
   0 A$game_pawn$2142                                               0007BD GR
   0 A$game_pawn$2147                                               0007BF GR
@@ -1252,11 +1252,11 @@ Symbol Table
   0 C$game_pawn.c$101$2_0$111                                   =  0000D1 GR
   0 C$game_pawn.c$103$1_0$110                                   =  0000D8 GR
   0 C$game_pawn.c$107$1_0$113                                   =  0000DC GR
-  0 C$game_pawn.c$110$1_2$113                                   =  0007AE GR
+  0 C$game_pawn.c$110$1_2$113                                   =  0007B2 GR
   0 C$game_pawn.c$113$1_2$113                                   =  00010C GR
   0 C$game_pawn.c$115$2_1$115                                   =  00013B GR
   0 C$game_pawn.c$116$2_1$115                                   =  00013D GR
-  0 C$game_pawn.c$117$1_2$113                                   =  0007B2 GR
+  0 C$game_pawn.c$117$1_2$113                                   =  0007B5 GR
   0 C$game_pawn.c$121$1_1$114                                   =  000155 GR
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 22.
 Hexadecimal [24-Bits]
@@ -1350,8 +1350,8 @@ Symbol Table
   0 C$game_pawn.c$389$5_2$145                                   =  000784 GR
   0 C$game_pawn.c$394$2_2$120                                   =  00078F GR
   0 C$game_pawn.c$395$2_2$120                                   =  00079A GR
-  0 C$game_pawn.c$396$2_2$120                                   =  0007AC GR
-  0 C$game_pawn.c$397$2_2$120                                   =  0007B7 GR
+  0 C$game_pawn.c$396$2_2$120                                   =  0007AE GR
+  0 C$game_pawn.c$397$2_2$120                                   =  0007B9 GR
   0 C$game_pawn.c$400$1_2$113                                   =  0007BF GR
   0 C$game_pawn.c$404$1_2$147                                   =  0007C0 GR
   0 C$game_pawn.c$407$1_0$147                                   =  00082F GR

@@ -390,6 +390,8 @@ S A$game_pawn$2222 Def000809
 S A$game_pawn$2213 Def0007FF
 S A$game_pawn$2204 Def0007F1
 S A$game_pawn$2141 Def0007BB
+S A$game_pawn$2132 Def0007B8
+S A$game_pawn$2123 Def0007B1
 S A$game_pawn$2105 Def0007A0
 S A$game_pawn$2060 Def000768
 S A$game_pawn$2051 Def00075D
@@ -435,8 +437,7 @@ S A$game_pawn$2214 Def000800
 S A$game_pawn$2205 Def0007F4
 S A$game_pawn$2160 Def0007C8
 S A$game_pawn$2142 Def0007BD
-S A$game_pawn$2124 Def0007AE
-S A$game_pawn$2115 Def0007A8
+S A$game_pawn$2115 Def0007A9
 S A$game_pawn$2106 Def0007A1
 S A$game_pawn$2070 Def000774
 S A$game_pawn$2061 Def000769
@@ -490,8 +491,7 @@ S A$game_pawn$2224 Def00080B
 S A$game_pawn$2215 Def000802
 S A$game_pawn$2206 Def0007F5
 S A$game_pawn$2161 Def0007C9
-S A$game_pawn$2134 Def0007B7
-S A$game_pawn$2116 Def0007AB
+S A$game_pawn$2116 Def0007AC
 S A$game_pawn$2107 Def0007A4
 S A$game_pawn$2080 Def00077F
 S A$game_pawn$2071 Def000777
@@ -551,7 +551,7 @@ S A$game_pawn$2252 Def000825
 S A$game_pawn$2243 Def00081B
 S A$game_pawn$2225 Def00080C
 S A$game_pawn$2180 Def0007DD
-S A$game_pawn$2135 Def0007B8
+S A$game_pawn$2117 Def0007AD
 S A$game_pawn$2090 Def00078C
 S A$game_pawn$2081 Def000781
 S A$game_pawn$2072 Def000778
@@ -604,7 +604,7 @@ S C$game_pawn.c$421$4_0$150 Def000814
 S C$game_pawn.c$251$3_2$130 Def0003D7
 S C$game_pawn.c$154$2_2$120 Def000285
 S C$game_pawn.c$123$2_1$116 Def00016C
-S C$game_pawn.c$117$1_2$113 Def0007B2
+S C$game_pawn.c$117$1_2$113 Def0007B5
 S C$game_pawn.c$115$2_1$115 Def00013B
 S G$GamePawn_SetPosition$0$0 Def000073
 S _GamePawn_InitializePhysics Def0008CB
@@ -616,7 +616,8 @@ S A$game_pawn$2253 Def000826
 S A$game_pawn$2244 Def00081D
 S A$game_pawn$2235 Def000814
 S A$game_pawn$2181 Def0007DE
-S A$game_pawn$2136 Def0007BA
+S A$game_pawn$2136 Def0007B9
+S A$game_pawn$2127 Def0007B2
 S A$game_pawn$2073 Def000779
 S A$game_pawn$2064 Def00076E
 S A$game_pawn$2055 Def00075E
@@ -682,7 +683,6 @@ S A$game_pawn$2254 Def000827
 S A$game_pawn$2236 Def000815
 S A$game_pawn$2182 Def0007E1
 S A$game_pawn$2173 Def0007D7
-S A$game_pawn$2128 Def0007B2
 S A$game_pawn$2074 Def00077A
 S A$game_pawn$2065 Def00076F
 S A$game_pawn$2056 Def000762
@@ -760,7 +760,6 @@ S A$game_pawn$2192 Def0007E9
 S A$game_pawn$2183 Def0007E2
 S A$game_pawn$2165 Def0007CC
 S A$game_pawn$2147 Def0007BF
-S A$game_pawn$2129 Def0007B5
 S A$game_pawn$2075 Def00077B
 S A$game_pawn$2048 Def000757
 S A$game_pawn$1940 Def0006C7
@@ -1158,7 +1157,7 @@ S C$game_pawn.c$442$3_2$154 Def000876
 S C$game_pawn.c$431$3_0$149 Def00083D
 S C$game_pawn.c$428$4_0$151 Def00082D
 S C$game_pawn.c$408$1_0$147 Def0007D7
-S C$game_pawn.c$396$2_2$120 Def0007AC
+S C$game_pawn.c$396$2_2$120 Def0007AE
 S C$game_pawn.c$356$4_2$140 Def00064F
 S C$game_pawn.c$316$4_2$135 Def0004FE
 S C$game_pawn.c$265$4_2$132 Def000409
@@ -1203,7 +1202,7 @@ S C$game_pawn.c$463$1_0$156 Def0008B8
 S C$game_pawn.c$454$1_0$147 Def0008A8
 S C$game_pawn.c$432$3_0$149 Def000848
 S C$game_pawn.c$423$3_0$149 Def00081B
-S C$game_pawn.c$397$2_2$120 Def0007B7
+S C$game_pawn.c$397$2_2$120 Def0007B9
 S C$game_pawn.c$357$4_2$140 Def000672
 S C$game_pawn.c$335$4_2$135 Def0005D9
 S C$game_pawn.c$317$4_2$135 Def000539
@@ -1614,10 +1613,9 @@ S A$game_pawn$2020 Def000733
 S A$game_pawn$2002 Def00071A
 S A$game_pawn$1300 Def00033C
 S A$game_pawn$1120 Def000218
-S C$game_pawn.c$110$1_2$113 Def0007AE
+S C$game_pawn.c$110$1_2$113 Def0007B2
 S A$game_pawn$2300 Def000849
 S A$game_pawn$2210 Def0007F8
-S A$game_pawn$2120 Def0007AC
 S A$game_pawn$2111 Def0007A5
 S A$game_pawn$2030 Def000740
 S A$game_pawn$1400 Def0003B7
@@ -1633,7 +1631,7 @@ S A$game_pawn$2301 Def00084B
 S A$game_pawn$2220 Def000805
 S A$game_pawn$2211 Def0007FB
 S A$game_pawn$2202 Def0007EF
-S A$game_pawn$2130 Def0007B6
+S A$game_pawn$2121 Def0007AE
 S A$game_pawn$2103 Def00079A
 S A$game_pawn$2040 Def00074A
 S A$game_pawn$2031 Def000742
@@ -1661,6 +1659,8 @@ S A$game_pawn$2230 Def000812
 S A$game_pawn$2221 Def000806
 S A$game_pawn$2212 Def0007FE
 S A$game_pawn$2203 Def0007F0
+S A$game_pawn$2131 Def0007B5
+S A$game_pawn$2122 Def0007AF
 S A$game_pawn$2104 Def00079D
 S A$game_pawn$2050 Def00075A
 S A$game_pawn$2041 Def00074B
@@ -2136,12 +2136,12 @@ T 8F 07 00
 R 00 00 00 00
 T 8F 07 00 2A 03 00 01 05 00 09 DD 7E F9 77 2A
 R 00 00 00 00 00 04 01 00
-T 9B 07 00 03 00 01 06 00 09 DD 7E FA 77 2A 03 00
-R 00 00 00 00 00 03 01 00 00 0E 01 00
-T A8 07 00 01 0B 00 09 CB C6 ED 4B 03 00 21 0B 00
-R 00 00 00 00 00 0B 01 00
-T B5 07 00 09 EB 1A CB A7 12
-R 00 00 00 00
+T 9B 07 00 03 00 01 06 00 09 DD 7E FA 77 ED 4B
+R 00 00 00 00 00 03 01 00
+T A7 07 00 03 00 21 0B 00 09 EB 1A CB C7 12 2A
+R 00 00 00 00 00 03 01 00
+T B3 07 00 03 00 01 0B 00 09 CB A6
+R 00 00 00 00 00 03 01 00
 T BB 07 00
 R 00 00 00 00
 T BB 07 00 DD F9 DD E1 C9
