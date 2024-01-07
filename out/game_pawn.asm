@@ -2108,6 +2108,19 @@ _GamePawn_Update::
 	C$game_pawn.c$110$1_2$113	= .
 	.globl	C$game_pawn.c$110$1_2$113
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:110: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
+	ld	hl, (_g_Pawn)
+	C$game_pawn.c$117$1_2$113	= .
+	.globl	C$game_pawn.c$117$1_2$113
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:117: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
+	ld	bc, #0x000b
+	add	hl, bc
+	C$game_pawn.c$396$2_2$120	= .
+	.globl	C$game_pawn.c$396$2_2$120
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:396: g_Pawn->Update |= PAWN_UPDATE_POSITION;
+	set	0, (hl)
+	C$game_pawn.c$110$1_2$113	= .
+	.globl	C$game_pawn.c$110$1_2$113
+;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:110: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
 	ld	bc, (_g_Pawn)
 	C$game_pawn.c$117$1_2$113	= .
 	.globl	C$game_pawn.c$117$1_2$113
@@ -2115,25 +2128,12 @@ _GamePawn_Update::
 	ld	hl, #0x000b
 	add	hl, bc
 	ex	de, hl
-	C$game_pawn.c$396$2_2$120	= .
-	.globl	C$game_pawn.c$396$2_2$120
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:396: g_Pawn->Update |= PAWN_UPDATE_POSITION;
-	ld	a, (de)
-	set	0, a
-	ld	(de), a
-	C$game_pawn.c$110$1_2$113	= .
-	.globl	C$game_pawn.c$110$1_2$113
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:110: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
-	ld	hl, (_g_Pawn)
-	C$game_pawn.c$117$1_2$113	= .
-	.globl	C$game_pawn.c$117$1_2$113
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:117: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
-	ld	bc, #0x000b
-	add	hl, bc
 	C$game_pawn.c$397$2_2$120	= .
 	.globl	C$game_pawn.c$397$2_2$120
 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:397: g_Pawn->Update &= ~PAWN_UPDATE_COLLISION;
-	res	4, (hl)
+	ld	a, (de)
+	res	4, a
+	ld	(de), a
 00158$:
 	C$game_pawn.c$400$1_2$113	= .
 	.globl	C$game_pawn.c$400$1_2$113

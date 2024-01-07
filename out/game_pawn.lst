@@ -2108,32 +2108,32 @@
                            0007A5  2108 	C$game_pawn.c$110$1_2$113	= .
                                    2109 	.globl	C$game_pawn.c$110$1_2$113
                                    2110 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:110: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
-      0007A5 ED 4Br03r00      [20] 2111 	ld	bc, (_g_Pawn)
-                           0007A9  2112 	C$game_pawn.c$117$1_2$113	= .
+      0007A5 2Ar03r00         [16] 2111 	ld	hl, (_g_Pawn)
+                           0007A8  2112 	C$game_pawn.c$117$1_2$113	= .
                                    2113 	.globl	C$game_pawn.c$117$1_2$113
                                    2114 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:117: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
-      0007A9 21 0B 00         [10] 2115 	ld	hl, #0x000b
-      0007AC 09               [11] 2116 	add	hl, bc
-      0007AD EB               [ 4] 2117 	ex	de, hl
-                           0007AE  2118 	C$game_pawn.c$396$2_2$120	= .
-                                   2119 	.globl	C$game_pawn.c$396$2_2$120
-                                   2120 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:396: g_Pawn->Update |= PAWN_UPDATE_POSITION;
-      0007AE 1A               [ 7] 2121 	ld	a, (de)
-      0007AF CB C7            [ 8] 2122 	set	0, a
-      0007B1 12               [ 7] 2123 	ld	(de), a
-                           0007B2  2124 	C$game_pawn.c$110$1_2$113	= .
-                                   2125 	.globl	C$game_pawn.c$110$1_2$113
-                                   2126 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:110: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
-      0007B2 2Ar03r00         [16] 2127 	ld	hl, (_g_Pawn)
-                           0007B5  2128 	C$game_pawn.c$117$1_2$113	= .
-                                   2129 	.globl	C$game_pawn.c$117$1_2$113
-                                   2130 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:117: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
-      0007B5 01 0B 00         [10] 2131 	ld	bc, #0x000b
-      0007B8 09               [11] 2132 	add	hl, bc
-                           0007B9  2133 	C$game_pawn.c$397$2_2$120	= .
-                                   2134 	.globl	C$game_pawn.c$397$2_2$120
-                                   2135 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:397: g_Pawn->Update &= ~PAWN_UPDATE_COLLISION;
-      0007B9 CB A6            [15] 2136 	res	4, (hl)
+      0007A8 01 0B 00         [10] 2115 	ld	bc, #0x000b
+      0007AB 09               [11] 2116 	add	hl, bc
+                           0007AC  2117 	C$game_pawn.c$396$2_2$120	= .
+                                   2118 	.globl	C$game_pawn.c$396$2_2$120
+                                   2119 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:396: g_Pawn->Update |= PAWN_UPDATE_POSITION;
+      0007AC CB C6            [15] 2120 	set	0, (hl)
+                           0007AE  2121 	C$game_pawn.c$110$1_2$113	= .
+                                   2122 	.globl	C$game_pawn.c$110$1_2$113
+                                   2123 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:110: const Game_Action* act = &g_Pawn->ActionList[g_Pawn->ActionId];
+      0007AE ED 4Br03r00      [20] 2124 	ld	bc, (_g_Pawn)
+                           0007B2  2125 	C$game_pawn.c$117$1_2$113	= .
+                                   2126 	.globl	C$game_pawn.c$117$1_2$113
+                                   2127 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:117: g_Pawn->Update |= PAWN_UPDATE_PATTERN;
+      0007B2 21 0B 00         [10] 2128 	ld	hl, #0x000b
+      0007B5 09               [11] 2129 	add	hl, bc
+      0007B6 EB               [ 4] 2130 	ex	de, hl
+                           0007B7  2131 	C$game_pawn.c$397$2_2$120	= .
+                                   2132 	.globl	C$game_pawn.c$397$2_2$120
+                                   2133 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/game_pawn.c:397: g_Pawn->Update &= ~PAWN_UPDATE_COLLISION;
+      0007B7 1A               [ 7] 2134 	ld	a, (de)
+      0007B8 CB A7            [ 8] 2135 	res	4, a
+      0007BA 12               [ 7] 2136 	ld	(de), a
       0007BB                       2137 00158$:
                            0007BB  2138 	C$game_pawn.c$400$1_2$113	= .
                                    2139 	.globl	C$game_pawn.c$400$1_2$113
