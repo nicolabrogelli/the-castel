@@ -4,8 +4,10 @@
 
 #define COMPRESSO             1
 
-
+#define BASE_X_LIFE            190
+#define OFFSET_X_LIFE            8 // Solo multipli di 8
 #define TILE_EMPTY 		  	     0
+#define TIME_TO_DEATH           40
 
 #define MAX_ENEMY                3
 #define MAX_GHOST                3
@@ -119,6 +121,8 @@ void VDP_LoadPattern_GM1_Pletter(const u8 *src, u8 offset);
 u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, u8 idxSprite, u8 bo, u8 riga, u8 colonna, u8 levelIdx, c8 *Name, u8 movHV);
 bool isDanger(u8 x, u8 y, u8 t);
 u8 isUnderDunger(u8 x, u8 y);
+void messageInGame(char *message);
+void VDP_ReplacementPartialArea(u8 riga);
 
 void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask);
 void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 enemyNumber);

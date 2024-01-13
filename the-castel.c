@@ -38,7 +38,7 @@ struct Character
 	i8 DX;
 	i8 DY;
 	u8 Input;
-	u8 Score;
+	u16 Score;
 	u8 Life;
 	Game_Pawn Pawn;
 };
@@ -177,6 +177,8 @@ u8 g_CatchEnemy = 0;
 u8 g_DelayCatchEnemy = 0;
 bool isCatch = FALSE;
 u8 g_Fire = 1;
+bool g_RefreshInventary = FALSE;
+u8 g_TimetoDeath = TIME_TO_DEATH;
 
 unsigned char g_Lives[MAX_LIVES] = {0, 0, 0};
 
@@ -261,7 +263,7 @@ bool addLife()
 			g_Player.Life++;
 			g_Lives[i] = TILE_HEART;
 
-			setTile(220 + i * 16, (u8)(4), TILE_HEART);
+			setTile(BASE_X_LIFE + i * OFFSET_X_LIFE, (u8)(4), TILE_HEART);
 			return TRUE;
 		}
 	}
@@ -295,7 +297,7 @@ bool removeLife()
 		if (g_Lives[i] == TILE_HEART)
 		{
 			g_Lives[i] = EMPTY_ITEM;
-			setTile(220 + i * 16, (u8)(4), 0);
+			setTile(BASE_X_LIFE + i * OFFSET_X_LIFE, (u8)(4), 0);
 			g_Player.Life--;
 			return (i > 0);
 		}
@@ -329,7 +331,7 @@ void displayLife()
 {
 	for (u8 i = 0; i < MAX_LIVES; i++)
 	{
-		setTile(220 + i * 16, (u8)(4), g_Lives[i]);
+		setTile(BASE_X_LIFE + i * OFFSET_X_LIFE, (u8)(4), g_Lives[i]); // 220
 	}
 }
 
@@ -558,6 +560,8 @@ void foo(u8 x, u8 y, u8 tile, u8 visible)
 bool interact(u8 x, u8 y)
 {
 	u8 tile = getTile(x, y);
+	if(tile < 68 )
+		return FALSE;
 	// DEBUG_LOGNUM("Intercat", tile);
 
 	// TODO: Ottimizzare il case!!
@@ -581,12 +585,30 @@ bool interact(u8 x, u8 y)
 		drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.NextDoorLevel);
 		return TRUE;
 	case TILE_DOOR1:
+
 		if (hasItemInInventory(TILE_KEY1))
 		{
 			changeLevel(x, y, TILE_KEY1, TILE_MASK_DOOR1);
 		}
+		else
+		{
+			messageInGame("is colosed");
+		}
+
 		return TRUE;
 	case TILE_DOOR2:
+
+		if (hasItemInInventory(TILE_KEY2))
+		{
+			changeLevel(x, y, TILE_KEY2, TILE_MASK_DOOR2);
+		}
+		else
+		{
+			messageInGame("is colosed");
+		}
+
+		return TRUE;
+	case TILE_DOOR3:
 		if (g_CurrRoomIdx == LAST_LEVEL)
 		{
 			stopMusicPlayback();
@@ -594,16 +616,14 @@ bool interact(u8 x, u8 y)
 		}
 		else
 		{
-			if (hasItemInInventory(TILE_KEY2))
+			if (hasItemInInventory(TILE_KEY3))
 			{
-				changeLevel(x, y, TILE_KEY2, TILE_MASK_DOOR2);
+				changeLevel(x, y, TILE_KEY3, TILE_MASK_DOOR3);
 			}
-		}
-		return TRUE;
-	case TILE_DOOR3:
-		if (hasItemInInventory(TILE_KEY3))
-		{
-			changeLevel(x, y, TILE_KEY3, TILE_MASK_DOOR3);
+			else
+			{
+				messageInGame("is colosed");
+			}
 		}
 		return TRUE;
 	case TILE_DOOR_PREV:
@@ -678,12 +698,28 @@ bool interact(u8 x, u8 y)
 }
 
 /**
+ * @brief Stampa un messaggio a video
+ * @param char* message Messaggio da stampare
+ * @return void
+ */
+void messageInGame(char *message)
+{
+	c8 StrFormat[20];
+	String_Format(StrFormat, "%s", message);
+	Print_SetPosition(12, 22);
+	Print_DrawText(StrFormat);
+
+	g_RefreshInventary = TRUE;
+}
+
+/**
  * @brief rimuove la tile, sostituendola con una maschera e mette l'oggetto corrspondente nell'inventario.
  * 		  Questa funzione anche se ridondante mi permette di risparmiare qulache bit :)
  * @param u8 x Coordinata x
  * @param u8 y Coordinata y
  * @param u8 tile Tile da inserire nell'inventario
  * @param u8 tileMask Maschera per sostituire la tile
+ * @return void
  */
 void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask)
 {
@@ -805,15 +841,21 @@ void updateScore()
 		Print_DrawText(g_Levels[g_CurrRoomIdx].Name);
 
 		// Stampa il punteggio
-		Print_SetPosition(10, 0);
+		Print_SetPosition(7, 0);
 		Print_DrawText("SCORE:");
 		String_Format(StrFormat, "%04i", g_Player.Score);
-		Print_SetPosition(16, 0);
+		Print_SetPosition(13, 0);
 		Print_DrawText(StrFormat);
 
 		// Stampa il punteggio
-		Print_SetPosition(22, 0);
+		Print_SetPosition(18, 0);
 		Print_DrawText("LIFE:");
+
+		Print_SetPosition(28, 0);
+		Print_DrawText("T:");
+		String_Format(StrFormat, "%02i", g_TimetoDeath);
+		Print_SetPosition(30, 0);
+		Print_DrawText(StrFormat);
 	}
 }
 
@@ -837,6 +879,7 @@ void drawLevel(u8 levelIdx)
 	g_CountItem = 0; // Iniziaizza il cobtatore degli oggetti raccolti
 	g_SlideCountH = 0;
 	g_SlideCountV = 0;
+	g_TimetoDeath = TIME_TO_DEATH;
 
 	DEBUG_LOGNUM("----- Livello", g_CurrRoomIdx);
 	DEBUG_LOGNUM("----- CONFIGURATO Skeletor Number", g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber);
@@ -945,7 +988,6 @@ void drawLevel(u8 levelIdx)
 		}
 	}
 
-
 	hideSprite(g_PawnCount, MAX_ENEMY, FIRST_ID_SKELETOR);
 	hideSprite(g_GhostCount, MAX_GHOST, FIRST_ID_GHOST);
 	hideSprite(g_SpiderCount, MAX_SPIDER, FIRST_ID_SPIDER);
@@ -962,9 +1004,10 @@ void drawLevel(u8 levelIdx)
 		updateScore();
 
 		if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER)
+		{
 			displayItemToInventory(g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
-
-		displayLife();
+			displayLife();
+		}
 	}
 
 	// Terminato il disegno del livello elimino gli oggetti già recuperati
@@ -1083,7 +1126,7 @@ void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape)
 	//   index - Indice dello sprite nella tabella degli attributi.
 	//   x     - Coordinata X iniziale dello schermo.
 	//   y     - Coordinata Y iniziale dello schermo.
-	//VDP_SetSpritePosition(baseSprite + enemyCount, x * 8, (y - 1) * 8);
+	// VDP_SetSpritePosition(baseSprite + enemyCount, x * 8, (y - 1) * 8);
 }
 
 /**
@@ -1354,10 +1397,12 @@ void genericControl()
 		// Modifico al volo il livello di gioco, cosi non sono costretto
 		// a creare una cache dei livelli.
 		g_CountItem++;
-		g_Player.Score++;
+		g_Player.Score += 100;
 		updateScore();
 
 		PlayBankSFX(11, 15);
+
+		// messageInGame("Get Money!");
 	}
 
 	// Controllo se il player è in una situazione di pericola
@@ -1506,33 +1551,47 @@ bool State_Game()
 		g_CatchEnemy++;
 		g_Frame = 0;
 
+		// TODO: Serve per aggiorare il tempo rimanente per terminare il livello senza perdere una vita
+		if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER)
+		{
+			g_TimetoDeath--;
 
-/* 		DEBUG_LOGNUM("SCHELETOR", g_PawnCount);
-		DEBUG_LOGNUM("GHOST", g_GhostCount);
-		DEBUG_LOGNUM("SPIDER", g_SpiderCount);
-		DEBUG_LOGNUM("BAT", g_BatCount);
-		DEBUG_LOGNUM("SLIDER H", g_SlideCountH);
-		DEBUG_LOGNUM("SLIDER V", g_SlideCountV); */
+			c8 StrFormat[20];
+			Print_SetPosition(28, 0);
+			Print_DrawText("T:");
+			String_Format(StrFormat, "%02i", g_TimetoDeath);
+			Print_SetPosition(30, 0);
+			Print_DrawText(StrFormat);
+
+			if (g_TimetoDeath == 0)
+			{
+				if (removeLife() == TRUE)
+				{
+					displayLife();
+					PlayBankSFX(9, 0);
+					VDP_HideAllSprites();
+					drawLevel(g_CurrRoomIdx); // Inizia nuovamente dalla stanza in cui siamo
+				}
+				else
+				{
+					stopMusicPlayback();
+					Game_SetState(State_GameOver);
+				}
+			}
+
+			// TODO: FUnziona ma l'aggiornamento non è constante. Vedere se possiamo migliorare
+			if (g_RefreshInventary)
+			{
+				u8 riga = 22;
+				VDP_ReplacementPartialArea(riga);
+				displayItemToInventory(g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+				g_RefreshInventary = FALSE;
+			}
+		}
 	}
 
 	if (g_GameFrame % 2 == 0)
 	{
-
-		/* 		// Controllo se è stato premuto fire
-				u8 row3 = Keyboard_Read(3);
-				u8 fireMask = 0;
-				if (row3 == 247)
-				{
-					Game_Pawn *pawn = &g_Player.Pawn;
-					if (getTile(pawn->PositionX + g_Fire, pawn->PositionY) == 0)
-					{
-						setTile(pawn->PositionX + g_Fire, pawn->PositionY, TILE_CRUCIFIX);
-						fireMask = g_Fire - 1;
-						g_Fire++;
-						setTile(pawn->PositionX + fireMask, pawn->PositionY, 0);
-
-					}
-				}  */
 
 		g_DangerCounter++;
 
@@ -1672,6 +1731,41 @@ bool State_GameOver()
 	Game_SetState(State_Preset);
 
 	return TRUE;
+}
+
+/**
+ * @brief Ripristina la riga dello schermo specificata
+ * @param u8 riga Numero di riga
+ * @return void
+ */
+void VDP_ReplacementPartialArea(u8 riga)
+{
+	// Funzione: VDP_WriteVRAM_16K
+	// Scrivere dati dalla RAM alla VRAM. [MSX1/2/2+/TR]
+	//
+	// Parametri:
+	//   src   - Indirizzo dei dati sorgente nella RAM
+	//   dest  - Indirizzo di destianzione nella VRAM (indirizzo a 14 bit per 16KB VRAM)
+	//   count - Numero di byte da copiare nella VRAM. Nota: Un valore 0 significa 65536
+	//
+	// Nota:
+	//    Ad ogni iterazione copia una riga del livello di gioco per, per chiarezza riporto i vari parametri utilizzati dalla funzione
+	//	  perchè g_Levels[levelIdx].Layout + g_Levels[levelIdx].Width * riga scarta la parte già copiata in precedentza e lascia tutto
+	//    il resto del livello.
+	//
+	//    src   - g_Levels[levelIdx].Layout + g_Levels[levelIdx].Width * riga
+	//    dest  - g_ScreenLayoutLow + (32 * (riga + g_Levels[levelIdx].Y)) + (g_Levels[levelIdx].X)
+	//    count - g_Levels[levelIdx].Width il numero di byte da copiare
+	//
+	// Attenzione alla prima iterazione viene preso tutto il layout , ma visto che la massima lunghezza della copia è espressa da g_Levels[levelIdx].Width
+	// viene copiata solamente la proma riga. Nelle iterazioni successive, il valore di riga incrementa e di conseguenza viene scartata la porzione del layout
+	// precedente (di dimesnione g_Levels[levelIdx].Width), e quindi viene copiata la parte che ci interessa. Tutto questo fino a che non si è completata
+	// la copia.
+	// for (u8 riga = 22; riga < g_CacheLevel[0].Height; ++riga)
+	//{
+	VDP_WriteVRAM_16K(g_CacheLevel[0].Layout + g_CacheLevel[0].Width * riga,
+					  g_ScreenLayoutLow + (32 * (riga + g_CacheLevel[0].Y)) + (g_CacheLevel[0].X), g_CacheLevel[0].Width);
+	//}
 }
 
 //=============================================================================

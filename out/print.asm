@@ -347,68 +347,68 @@ _g_PrintInvalid::
 	.area _CODE
 	G$Print_Initialize$0$0	= .
 	.globl	G$Print_Initialize$0$0
-	C$print.c$156$0_0$242	= .
-	.globl	C$print.c$156$0_0$242
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:156: bool Print_Initialize()
+	C$print.c$153$0_0$188	= .
+	.globl	C$print.c$153$0_0$188
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:153: bool Print_Initialize()
 ;	---------------------------------
 ; Function Print_Initialize
 ; ---------------------------------
 _Print_Initialize::
-	C$print.c$158$1_0$242	= .
-	.globl	C$print.c$158$1_0$242
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:158: Print_SetColor(0xF, 0x0);
+	C$print.c$155$1_0$188	= .
+	.globl	C$print.c$155$1_0$188
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:155: Print_SetColor(0xF, 0x0);
 	ld	l, #0x00
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, #0x0f
 	call	_Print_SetColor
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:226: g_PrintData.CursorX = x;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:226: g_PrintData.CursorX = x;
 	ld	hl, #(_g_PrintData + 5)
 	ld	(hl), #0x00
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:227: g_PrintData.CursorY = y;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:227: g_PrintData.CursorY = y;
 	ld	hl, #(_g_PrintData + 6)
 	ld	(hl), #0x00
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.h:447: inline u8 VDP_GetMode() { return g_VDP_Data.Mode; }
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.h:447: inline u8 VDP_GetMode() { return g_VDP_Data.Mode; }
 	ld	a, (#_g_VDP_Data + 0)
-	C$print.c$167$3_0$248	= .
-	.globl	C$print.c$167$3_0$248
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:167: switch(VDP_GetMode()) // Screen mode specific initialization
+	C$print.c$164$3_0$194	= .
+	.globl	C$print.c$164$3_0$194
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:164: switch(VDP_GetMode()) // Screen mode specific initialization
 	sub	a, #0x02
 	jr	NZ, 00102$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:249: g_PrintData.TabSize = size;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:249: g_PrintData.TabSize = size;
 	ld	hl, #(_g_PrintData + 4)
 	ld	(hl), #0x03
-	C$print.c$182$2_0$243	= .
-	.globl	C$print.c$182$2_0$243
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:182: g_PrintData.ScreenWidth = 32;
+	C$print.c$179$2_0$189	= .
+	.globl	C$print.c$179$2_0$189
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:179: g_PrintData.ScreenWidth = 32;
 	ld	hl, #0x0020
 	ld	((_g_PrintData + 26)), hl
-	C$print.c$183$2_0$243	= .
-	.globl	C$print.c$183$2_0$243
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:183: break;
+	C$print.c$180$2_0$189	= .
+	.globl	C$print.c$180$2_0$189
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:180: break;
 	jp	00103$
-	C$print.c$234$2_0$243	= .
-	.globl	C$print.c$234$2_0$243
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:234: default:
+	C$print.c$231$2_0$189	= .
+	.globl	C$print.c$231$2_0$189
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:231: default:
 00102$:
-	C$print.c$236$2_0$243	= .
-	.globl	C$print.c$236$2_0$243
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:236: return FALSE;
+	C$print.c$233$2_0$189	= .
+	.globl	C$print.c$233$2_0$189
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:233: return FALSE;
 	xor	a, a
 	ret
-	C$print.c$237$1_0$242	= .
-	.globl	C$print.c$237$1_0$242
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:237: }
+	C$print.c$234$1_0$188	= .
+	.globl	C$print.c$234$1_0$188
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:234: }
 00103$:
-	C$print.c$241$1_0$242	= .
-	.globl	C$print.c$241$1_0$242
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:241: return TRUE;
+	C$print.c$238$1_0$188	= .
+	.globl	C$print.c$238$1_0$188
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:238: return TRUE;
 	ld	a, #0x01
-	C$print.c$242$1_0$242	= .
-	.globl	C$print.c$242$1_0$242
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:242: }
-	C$print.c$242$1_0$242	= .
-	.globl	C$print.c$242$1_0$242
+	C$print.c$239$1_0$188	= .
+	.globl	C$print.c$239$1_0$188
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:239: }
+	C$print.c$239$1_0$188	= .
+	.globl	C$print.c$239$1_0$188
 	XG$Print_Initialize$0$0	= .
 	.globl	XG$Print_Initialize$0$0
 	ret
@@ -738,49 +738,49 @@ _g_HexChar:
 	.db #0x46	; 70	'F'
 	G$Print_SetMode$0$0	= .
 	.globl	G$Print_SetMode$0$0
-	C$print.c$246$1_0$254	= .
-	.globl	C$print.c$246$1_0$254
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:246: void Print_SetMode(u8 mode)
+	C$print.c$243$1_0$200	= .
+	.globl	C$print.c$243$1_0$200
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:243: void Print_SetMode(u8 mode)
 ;	---------------------------------
 ; Function Print_SetMode
 ; ---------------------------------
 _Print_SetMode::
 	ld	c, a
-	C$print.c$248$1_0$254	= .
-	.globl	C$print.c$248$1_0$254
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:248: g_PrintData.SourceMode = mode;
+	C$print.c$245$1_0$200	= .
+	.globl	C$print.c$245$1_0$200
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:245: g_PrintData.SourceMode = mode;
 	ld	hl, #_g_PrintData + 25
 	rrd
 	ld	a, c
 	rld
-	C$print.c$250$1_0$254	= .
-	.globl	C$print.c$250$1_0$254
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:250: switch(g_PrintData.SourceMode)
+	C$print.c$247$1_0$200	= .
+	.globl	C$print.c$247$1_0$200
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:247: switch(g_PrintData.SourceMode)
 	ld	a, (hl)
 	and	a, #0x0f
 	sub	a, #0x04
 	ret	NZ
-	C$print.c$315$3_0$256	= .
-	.globl	C$print.c$315$3_0$256
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:315: g_PrintData.DrawChar = DrawChar_Layout;
+	C$print.c$312$3_0$202	= .
+	.globl	C$print.c$312$3_0$202
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:312: g_PrintData.DrawChar = DrawChar_Layout;
 	ld	hl, #_DrawChar_Layout
 	ld	((_g_PrintData + 23)), hl
-	C$print.c$319$1_0$254	= .
-	.globl	C$print.c$319$1_0$254
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:319: };
-	C$print.c$320$1_0$254	= .
-	.globl	C$print.c$320$1_0$254
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:320: }
-	C$print.c$320$1_0$254	= .
-	.globl	C$print.c$320$1_0$254
+	C$print.c$316$1_0$200	= .
+	.globl	C$print.c$316$1_0$200
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:316: };
+	C$print.c$317$1_0$200	= .
+	.globl	C$print.c$317$1_0$200
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:317: }
+	C$print.c$317$1_0$200	= .
+	.globl	C$print.c$317$1_0$200
 	XG$Print_SetMode$0$0	= .
 	.globl	XG$Print_SetMode$0$0
 	ret
 	G$Print_SetFont$0$0	= .
 	.globl	G$Print_SetFont$0$0
-	C$print.c$325$1_0$258	= .
-	.globl	C$print.c$325$1_0$258
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:325: void Print_SetFont(const u8* font)
+	C$print.c$322$1_0$204	= .
+	.globl	C$print.c$322$1_0$204
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:322: void Print_SetFont(const u8* font)
 ;	---------------------------------
 ; Function Print_SetFont
 ; ---------------------------------
@@ -791,42 +791,42 @@ _Print_SetFont::
 	push	af
 	push	af
 	ex	de, hl
-	C$print.c$327$1_0$258	= .
-	.globl	C$print.c$327$1_0$258
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:327: if(font == NULL) // Use Bios font (if any)
+	C$print.c$324$1_0$204	= .
+	.globl	C$print.c$324$1_0$204
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:324: if(font == NULL) // Use Bios font (if any)
 	ld	a, d
 	or	a, e
 	jr	NZ, 00102$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:328: Print_SetFontEx(8, 8, 6, 8, 1, 255, (const u8*)g_CGTABL + 8);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:325: Print_SetFontEx(8, 8, 6, 8, 1, 255, (const u8*)g_CGTABL + 8);
 	ld	bc, (_g_CGTABL)
 	ld	hl, #0x0008
 	add	hl, bc
 	ex	de, hl
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:197: g_PrintData.PatternX     = patternX;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:197: g_PrintData.PatternX     = patternX;
 	ld	hl, #_g_PrintData
 	ld	(hl), #0x08
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:198: g_PrintData.PatternY     = patternY;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:198: g_PrintData.PatternY     = patternY;
 	ld	bc, #_g_PrintData + 1
 	ld	a, #0x08
 	ld	(bc), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:199: g_PrintData.UnitX        = sizeX;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:199: g_PrintData.UnitX        = sizeX;
 	ld	hl, #(_g_PrintData + 2)
 	ld	(hl), #0x06
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:200: g_PrintData.UnitY        = sizeY;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:200: g_PrintData.UnitY        = sizeY;
 	ld	hl, #(_g_PrintData + 3)
 	ld	(hl), #0x08
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:201: g_PrintData.CharFirst    = firstChr;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:201: g_PrintData.CharFirst    = firstChr;
 	ld	hl, #(_g_PrintData + 20)
 	ld	(hl), #0x01
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:202: g_PrintData.CharLast     = lastChr;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:202: g_PrintData.CharLast     = lastChr;
 	ld	hl, #(_g_PrintData + 21)
 	ld	(hl), #0xff
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:203: g_PrintData.CharCount    = lastChr - firstChr + 1;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:203: g_PrintData.CharCount    = lastChr - firstChr + 1;
 	ld	hl, #(_g_PrintData + 22)
 	ld	(hl), #0xff
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:204: g_PrintData.FontPatterns = patterns;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:204: g_PrintData.FontPatterns = patterns;
 	ld	((_g_PrintData + 28)), de
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:205: g_PrintData.FontAddr     = g_PrintData.FontPatterns - (firstChr * g_PrintData.PatternY); // pre-compute address of the virtual index 0 character (used to quick drawing in PutChar_GX functions)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:205: g_PrintData.FontAddr     = g_PrintData.FontPatterns - (firstChr * g_PrintData.PatternY); // pre-compute address of the virtual index 0 character (used to quick drawing in PutChar_GX functions)
 	ld	a, (bc)
 	ld	c, a
 	ld	b, #0x00
@@ -837,12 +837,12 @@ _Print_SetFont::
 	sbc	a, b
 	ld	b, a
 	ld	((_g_PrintData + 30)), bc
-	C$print.c$328$1_0$258	= .
-	.globl	C$print.c$328$1_0$258
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:328: Print_SetFontEx(8, 8, 6, 8, 1, 255, (const u8*)g_CGTABL + 8);
+	C$print.c$325$1_0$204	= .
+	.globl	C$print.c$325$1_0$204
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:325: Print_SetFontEx(8, 8, 6, 8, 1, 255, (const u8*)g_CGTABL + 8);
 	jp	00106$
 00102$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:330: Print_SetFontEx(font[0] >> 4, font[0] & 0x0F, font[1] >> 4, font[1] & 0x0F, font[2], font[3], font+4);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:327: Print_SetFontEx(font[0] >> 4, font[0] & 0x0F, font[1] >> 4, font[1] & 0x0F, font[2], font[3], font+4);
 	ld	hl, #0x0004
 	add	hl, de
 	ld	c, l
@@ -897,36 +897,36 @@ _Print_SetFont::
 	rlca
 	and	a, #0x0f
 	ld	d, a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:197: g_PrintData.PatternX     = patternX;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:197: g_PrintData.PatternX     = patternX;
 	ld	hl, #_g_PrintData
 	ld	(hl), d
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:198: g_PrintData.PatternY     = patternY;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:198: g_PrintData.PatternY     = patternY;
 	ld	hl, #(_g_PrintData + 1)
 	ld	(hl), e
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:199: g_PrintData.UnitX        = sizeX;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:199: g_PrintData.UnitX        = sizeX;
 	ld	hl, #(_g_PrintData + 2)
 	ld	a, -1 (ix)
 	ld	(hl), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:200: g_PrintData.UnitY        = sizeY;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:200: g_PrintData.UnitY        = sizeY;
 	ld	hl, #(_g_PrintData + 3)
 	ld	a, -2 (ix)
 	ld	(hl), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:201: g_PrintData.CharFirst    = firstChr;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:201: g_PrintData.CharFirst    = firstChr;
 	ld	hl, #(_g_PrintData + 20)
 	ld	a, -3 (ix)
 	ld	(hl), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:202: g_PrintData.CharLast     = lastChr;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:202: g_PrintData.CharLast     = lastChr;
 	ld	hl, #(_g_PrintData + 21)
 	ld	a, -4 (ix)
 	ld	(hl), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:203: g_PrintData.CharCount    = lastChr - firstChr + 1;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:203: g_PrintData.CharCount    = lastChr - firstChr + 1;
 	ld	a, -4 (ix)
 	sub	a, -3 (ix)
 	inc	a
 	ld	(#(_g_PrintData + 22)),a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:204: g_PrintData.FontPatterns = patterns;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:204: g_PrintData.FontPatterns = patterns;
 	ld	((_g_PrintData + 28)), bc
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:205: g_PrintData.FontAddr     = g_PrintData.FontPatterns - (firstChr * g_PrintData.PatternY); // pre-compute address of the virtual index 0 character (used to quick drawing in PutChar_GX functions)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:205: g_PrintData.FontAddr     = g_PrintData.FontPatterns - (firstChr * g_PrintData.PatternY); // pre-compute address of the virtual index 0 character (used to quick drawing in PutChar_GX functions)
 	push	bc
 	ld	h, -3 (ix)
 ;	spillPairReg hl
@@ -948,97 +948,97 @@ _Print_SetFont::
 	sbc	a, h
 	ld	b, a
 	ld	((_g_PrintData + 30)), bc
-	C$print.c$330$1_0$258	= .
-	.globl	C$print.c$330$1_0$258
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:330: Print_SetFontEx(font[0] >> 4, font[0] & 0x0F, font[1] >> 4, font[1] & 0x0F, font[2], font[3], font+4);
+	C$print.c$327$1_0$204	= .
+	.globl	C$print.c$327$1_0$204
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:327: Print_SetFontEx(font[0] >> 4, font[0] & 0x0F, font[1] >> 4, font[1] & 0x0F, font[2], font[3], font+4);
 00106$:
-	C$print.c$331$1_0$258	= .
-	.globl	C$print.c$331$1_0$258
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:331: }
+	C$print.c$328$1_0$204	= .
+	.globl	C$print.c$328$1_0$204
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:328: }
 	ld	sp, ix
 	pop	ix
-	C$print.c$331$1_0$258	= .
-	.globl	C$print.c$331$1_0$258
+	C$print.c$328$1_0$204	= .
+	.globl	C$print.c$328$1_0$204
 	XG$Print_SetFont$0$0	= .
 	.globl	XG$Print_SetFont$0$0
 	ret
 	G$Print_SetColor$0$0	= .
 	.globl	G$Print_SetColor$0$0
-	C$print.c$394$1_0$266	= .
-	.globl	C$print.c$394$1_0$266
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:394: void Print_SetColor(u8 text, u8 bg)
+	C$print.c$391$1_0$212	= .
+	.globl	C$print.c$391$1_0$212
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:391: void Print_SetColor(u8 text, u8 bg)
 ;	---------------------------------
 ; Function Print_SetColor
 ; ---------------------------------
 _Print_SetColor::
-	C$print.c$424$2_0$268	= .
-	.globl	C$print.c$424$2_0$268
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:424: u8 col = text << 4 | bg;
+	C$print.c$421$2_0$214	= .
+	.globl	C$print.c$421$2_0$214
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:421: u8 col = text << 4 | bg;
 	add	a, a
 	add	a, a
 	add	a, a
 	add	a, a
 	or	a, l
 	ld	c, a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.h:447: inline u8 VDP_GetMode() { return g_VDP_Data.Mode; }
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/vdp.h:447: inline u8 VDP_GetMode() { return g_VDP_Data.Mode; }
 	ld	a, (#_g_VDP_Data + 0)
-	C$print.c$425$4_0$277	= .
-	.globl	C$print.c$425$4_0$277
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:425: switch(VDP_GetMode())
+	C$print.c$422$4_0$223	= .
+	.globl	C$print.c$422$4_0$223
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:422: switch(VDP_GetMode())
 	sub	a, #0x02
 	ret	NZ
-	C$print.c$439$3_0$269	= .
-	.globl	C$print.c$439$3_0$269
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:439: VDP_FillVRAM(col, g_ScreenColorLow, 0, 32);
+	C$print.c$436$3_0$215	= .
+	.globl	C$print.c$436$3_0$215
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:436: VDP_FillVRAM(col, g_ScreenColorLow, 0, 32);
 	ld	hl, #0x0020
 	push	hl
 	ld	de, (_g_ScreenColorLow)
 	ld	a, c
 	call	_VDP_FillVRAM_16K
-	C$print.c$459$1_0$266	= .
-	.globl	C$print.c$459$1_0$266
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:459: };
-	C$print.c$462$1_0$266	= .
-	.globl	C$print.c$462$1_0$266
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:462: }
-	C$print.c$462$1_0$266	= .
-	.globl	C$print.c$462$1_0$266
+	C$print.c$456$1_0$212	= .
+	.globl	C$print.c$456$1_0$212
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:456: };
+	C$print.c$459$1_0$212	= .
+	.globl	C$print.c$459$1_0$212
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:459: }
+	C$print.c$459$1_0$212	= .
+	.globl	C$print.c$459$1_0$212
 	XG$Print_SetColor$0$0	= .
 	.globl	XG$Print_SetColor$0$0
 	ret
 	G$Print_SetColorShade$0$0	= .
 	.globl	G$Print_SetColorShade$0$0
-	C$print.c$467$1_0$280	= .
-	.globl	C$print.c$467$1_0$280
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:467: void Print_SetColorShade(const u8* shade)
+	C$print.c$464$1_0$226	= .
+	.globl	C$print.c$464$1_0$226
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:464: void Print_SetColorShade(const u8* shade)
 ;	---------------------------------
 ; Function Print_SetColorShade
 ; ---------------------------------
 _Print_SetColorShade::
-	C$print.c$506$1_0$280	= .
-	.globl	C$print.c$506$1_0$280
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:506: };
-	C$print.c$509$1_0$280	= .
-	.globl	C$print.c$509$1_0$280
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:509: }
-	C$print.c$509$1_0$280	= .
-	.globl	C$print.c$509$1_0$280
+	C$print.c$503$1_0$226	= .
+	.globl	C$print.c$503$1_0$226
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:503: };
+	C$print.c$506$1_0$226	= .
+	.globl	C$print.c$506$1_0$226
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:506: }
+	C$print.c$506$1_0$226	= .
+	.globl	C$print.c$506$1_0$226
 	XG$Print_SetColorShade$0$0	= .
 	.globl	XG$Print_SetColorShade$0$0
 	ret
 	G$Print_ValidateChar$0$0	= .
 	.globl	G$Print_ValidateChar$0$0
-	C$print.c$523$1_0$294	= .
-	.globl	C$print.c$523$1_0$294
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:523: u8 Print_ValidateChar(u8 chr)
+	C$print.c$520$1_0$240	= .
+	.globl	C$print.c$520$1_0$240
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:520: u8 Print_ValidateChar(u8 chr)
 ;	---------------------------------
 ; Function Print_ValidateChar
 ; ---------------------------------
 _Print_ValidateChar::
 	ld	c, a
-	C$print.c$525$1_0$294	= .
-	.globl	C$print.c$525$1_0$294
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:525: if((chr < g_PrintData.CharFirst) || (chr > g_PrintData.CharLast))
+	C$print.c$522$1_0$240	= .
+	.globl	C$print.c$522$1_0$240
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:522: if((chr < g_PrintData.CharFirst) || (chr > g_PrintData.CharLast))
 	ld	hl, #_g_PrintData + 20
 	ld	b, (hl)
 	ld	a, c
@@ -1048,9 +1048,9 @@ _Print_ValidateChar::
 	sub	a, c
 	jr	NC, 00114$
 00113$:
-	C$print.c$527$2_0$295	= .
-	.globl	C$print.c$527$2_0$295
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:527: if((chr >= 'a') && (chr <= 'z') && (g_PrintData.CharFirst <= 'A') && (g_PrintData.CharLast >= 'Z')) // try to remap to upper case letter
+	C$print.c$524$2_0$241	= .
+	.globl	C$print.c$524$2_0$241
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:524: if((chr >= 'a') && (chr <= 'z') && (g_PrintData.CharFirst <= 'A') && (g_PrintData.CharLast >= 'Z')) // try to remap to upper case letter
 	ld	a, c
 	sub	a, #0x61
 	jr	C, 00108$
@@ -1063,17 +1063,17 @@ _Print_ValidateChar::
 	ld	a, (#_g_PrintData + 21)
 	sub	a, #0x5a
 	jr	C, 00108$
-	C$print.c$529$3_0$296	= .
-	.globl	C$print.c$529$3_0$296
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:529: chr = chr - 'a' + 'A';
+	C$print.c$526$3_0$242	= .
+	.globl	C$print.c$526$3_0$242
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:526: chr = chr - 'a' + 'A';
 	ld	a, c
 	add	a, #0xe0
 	ld	c, a
 	jp	00114$
 00108$:
-	C$print.c$531$2_0$295	= .
-	.globl	C$print.c$531$2_0$295
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:531: else if((chr >= 'A') && (chr <= 'Z') && (g_PrintData.CharFirst <= 'a') && (g_PrintData.CharLast >= 'z')) // try to remap to lower case letter
+	C$print.c$528$2_0$241	= .
+	.globl	C$print.c$528$2_0$241
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:528: else if((chr >= 'A') && (chr <= 'Z') && (g_PrintData.CharFirst <= 'a') && (g_PrintData.CharLast >= 'z')) // try to remap to lower case letter
 	ld	a, c
 	sub	a, #0x41
 	jr	C, 00102$
@@ -1086,36 +1086,36 @@ _Print_ValidateChar::
 	ld	a, (#_g_PrintData + 21)
 	sub	a, #0x7a
 	jr	C, 00102$
-	C$print.c$533$3_0$297	= .
-	.globl	C$print.c$533$3_0$297
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:533: chr = chr - 'A' + 'a';
+	C$print.c$530$3_0$243	= .
+	.globl	C$print.c$530$3_0$243
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:530: chr = chr - 'A' + 'a';
 	ld	a, c
 	add	a, #0x20
 	ld	c, a
 	jp	00114$
 00102$:
-	C$print.c$536$2_0$295	= .
-	.globl	C$print.c$536$2_0$295
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:536: chr = g_PrintData.CharFirst;
+	C$print.c$533$2_0$241	= .
+	.globl	C$print.c$533$2_0$241
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:533: chr = g_PrintData.CharFirst;
 	ld	c, b
 00114$:
-	C$print.c$538$1_0$294	= .
-	.globl	C$print.c$538$1_0$294
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:538: return chr;
+	C$print.c$535$1_0$240	= .
+	.globl	C$print.c$535$1_0$240
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:535: return chr;
 	ld	a, c
-	C$print.c$539$1_0$294	= .
-	.globl	C$print.c$539$1_0$294
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:539: }
-	C$print.c$539$1_0$294	= .
-	.globl	C$print.c$539$1_0$294
+	C$print.c$536$1_0$240	= .
+	.globl	C$print.c$536$1_0$240
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:536: }
+	C$print.c$536$1_0$240	= .
+	.globl	C$print.c$536$1_0$240
 	XG$Print_ValidateChar$0$0	= .
 	.globl	XG$Print_ValidateChar$0$0
 	ret
 	G$Print_ValidatePattern$0$0	= .
 	.globl	G$Print_ValidatePattern$0$0
-	C$print.c$544$1_0$299	= .
-	.globl	C$print.c$544$1_0$299
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:544: u8 Print_ValidatePattern(u8 chr, const c8** patterns)
+	C$print.c$541$1_0$245	= .
+	.globl	C$print.c$541$1_0$245
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:541: u8 Print_ValidatePattern(u8 chr, const c8** patterns)
 ;	---------------------------------
 ; Function Print_ValidatePattern
 ; ---------------------------------
@@ -1128,9 +1128,9 @@ _Print_ValidatePattern::
 	ld	c, a
 	ld	-2 (ix), e
 	ld	-1 (ix), d
-	C$print.c$546$1_0$299	= .
-	.globl	C$print.c$546$1_0$299
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:546: if((chr < g_PrintData.CharFirst) || (chr > g_PrintData.CharLast))
+	C$print.c$543$1_0$245	= .
+	.globl	C$print.c$543$1_0$245
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:543: if((chr < g_PrintData.CharFirst) || (chr > g_PrintData.CharLast))
 	ld	hl, #_g_PrintData + 20
 	ld	e, (hl)
 	ld	a, c
@@ -1140,9 +1140,9 @@ _Print_ValidatePattern::
 	sub	a, c
 	jp	NC, 00114$
 00113$:
-	C$print.c$548$2_0$300	= .
-	.globl	C$print.c$548$2_0$300
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:548: if((chr >= 'a') && (chr <= 'z') && (g_PrintData.CharFirst <= 'A') && (g_PrintData.CharLast >= 'Z')) // try to remap to upper case letter
+	C$print.c$545$2_0$246	= .
+	.globl	C$print.c$545$2_0$246
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:545: if((chr >= 'a') && (chr <= 'z') && (g_PrintData.CharFirst <= 'A') && (g_PrintData.CharLast >= 'Z')) // try to remap to upper case letter
 	ld	a, c
 	sub	a, #0x61
 	jr	C, 00108$
@@ -1155,15 +1155,15 @@ _Print_ValidatePattern::
 	ld	a, (#_g_PrintData + 21)
 	sub	a, #0x5a
 	jr	C, 00108$
-	C$print.c$550$3_0$301	= .
-	.globl	C$print.c$550$3_0$301
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:550: chr = chr - 'a' + 'A';
+	C$print.c$547$3_0$247	= .
+	.globl	C$print.c$547$3_0$247
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:547: chr = chr - 'a' + 'A';
 	ld	a, c
 	add	a, #0xe0
 	ld	c, a
-	C$print.c$551$3_0$301	= .
-	.globl	C$print.c$551$3_0$301
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:551: *patterns = g_PrintData.FontPatterns + g_PrintData.PatternY * (chr - g_PrintData.CharFirst);
+	C$print.c$548$3_0$247	= .
+	.globl	C$print.c$548$3_0$247
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:548: *patterns = g_PrintData.FontPatterns + g_PrintData.PatternY * (chr - g_PrintData.CharFirst);
 	ld	hl, #_g_PrintData + 28
 	ld	a, (hl)
 	ld	-4 (ix), a
@@ -1204,9 +1204,9 @@ _Print_ValidatePattern::
 	ld	(hl), e
 	jp	00114$
 00108$:
-	C$print.c$553$2_0$300	= .
-	.globl	C$print.c$553$2_0$300
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:553: else if((chr >= 'A') && (chr <= 'Z') && (g_PrintData.CharFirst <= 'a') && (g_PrintData.CharLast >= 'z')) // try to remap to lower case letter
+	C$print.c$550$2_0$246	= .
+	.globl	C$print.c$550$2_0$246
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:550: else if((chr >= 'A') && (chr <= 'Z') && (g_PrintData.CharFirst <= 'a') && (g_PrintData.CharLast >= 'z')) // try to remap to lower case letter
 	ld	a, c
 	sub	a, #0x41
 	jr	C, 00102$
@@ -1219,15 +1219,15 @@ _Print_ValidatePattern::
 	ld	a, (#_g_PrintData + 21)
 	sub	a, #0x7a
 	jr	C, 00102$
-	C$print.c$555$3_0$302	= .
-	.globl	C$print.c$555$3_0$302
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:555: chr = chr - 'A' + 'a';
+	C$print.c$552$3_0$248	= .
+	.globl	C$print.c$552$3_0$248
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:552: chr = chr - 'A' + 'a';
 	ld	a, c
 	add	a, #0x20
 	ld	c, a
-	C$print.c$556$3_0$302	= .
-	.globl	C$print.c$556$3_0$302
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:556: *patterns = g_PrintData.FontPatterns + g_PrintData.PatternY * (chr - g_PrintData.CharFirst);
+	C$print.c$553$3_0$248	= .
+	.globl	C$print.c$553$3_0$248
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:553: *patterns = g_PrintData.FontPatterns + g_PrintData.PatternY * (chr - g_PrintData.CharFirst);
 	ld	hl, #_g_PrintData + 28
 	ld	a, (hl)
 	ld	-4 (ix), a
@@ -1268,9 +1268,9 @@ _Print_ValidatePattern::
 	ld	(hl), e
 	jp	00114$
 00102$:
-	C$print.c$559$2_0$300	= .
-	.globl	C$print.c$559$2_0$300
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:559: *patterns = g_PrintInvalid;
+	C$print.c$556$2_0$246	= .
+	.globl	C$print.c$556$2_0$246
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:556: *patterns = g_PrintInvalid;
 	pop	de
 	pop	hl
 	push	hl
@@ -1279,25 +1279,25 @@ _Print_ValidatePattern::
 	inc	hl
 	ld	(hl), #>(_g_PrintInvalid)
 00114$:
-	C$print.c$561$1_0$299	= .
-	.globl	C$print.c$561$1_0$299
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:561: return chr;
+	C$print.c$558$1_0$245	= .
+	.globl	C$print.c$558$1_0$245
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:558: return chr;
 	ld	a, c
-	C$print.c$562$1_0$299	= .
-	.globl	C$print.c$562$1_0$299
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:562: }
+	C$print.c$559$1_0$245	= .
+	.globl	C$print.c$559$1_0$245
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:559: }
 	ld	sp, ix
 	pop	ix
-	C$print.c$562$1_0$299	= .
-	.globl	C$print.c$562$1_0$299
+	C$print.c$559$1_0$245	= .
+	.globl	C$print.c$559$1_0$245
 	XG$Print_ValidatePattern$0$0	= .
 	.globl	XG$Print_ValidatePattern$0$0
 	ret
 	G$CopyNo8HeightFontData$0$0	= .
 	.globl	G$CopyNo8HeightFontData$0$0
-	C$print.c$863$1_0$305	= .
-	.globl	C$print.c$863$1_0$305
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:863: void CopyNo8HeightFontData(const u8* src, u16 dst, u8 height)
+	C$print.c$860$1_0$251	= .
+	.globl	C$print.c$860$1_0$251
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:860: void CopyNo8HeightFontData(const u8* src, u16 dst, u8 height)
 ;	---------------------------------
 ; Function CopyNo8HeightFontData
 ; ---------------------------------
@@ -1310,9 +1310,9 @@ _CopyNo8HeightFontData::
 	ex	(sp), hl
 	ld	c, e
 	ld	b, d
-	C$print.c$865$2_0$305	= .
-	.globl	C$print.c$865$2_0$305
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:865: for(u8 i = 0; i < g_PrintData.CharCount; ++i)
+	C$print.c$862$2_0$251	= .
+	.globl	C$print.c$862$2_0$251
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:862: for(u8 i = 0; i < g_PrintData.CharCount; ++i)
 	ld	-1 (ix), #0x00
 00103$:
 	ld	hl, #(_g_PrintData + 22)
@@ -1320,9 +1320,9 @@ _CopyNo8HeightFontData::
 	ld	a, -1 (ix)
 	sub	a, e
 	jr	NC, 00105$
-	C$print.c$867$3_0$306	= .
-	.globl	C$print.c$867$3_0$306
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:867: VDP_FillVRAM(0, dst, 0, 8);
+	C$print.c$864$3_0$252	= .
+	.globl	C$print.c$864$3_0$252
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:864: VDP_FillVRAM(0, dst, 0, 8);
 	push	bc
 	ld	hl, #0x0008
 	push	hl
@@ -1331,9 +1331,9 @@ _CopyNo8HeightFontData::
 	xor	a, a
 	call	_VDP_FillVRAM_16K
 	pop	bc
-	C$print.c$868$3_0$306	= .
-	.globl	C$print.c$868$3_0$306
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:868: VDP_WriteVRAM(src, dst, 0, height);
+	C$print.c$865$3_0$252	= .
+	.globl	C$print.c$865$3_0$252
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:865: VDP_WriteVRAM(src, dst, 0, height);
 	ld	e, 4 (ix)
 	ld	d, #0x00
 	push	bc
@@ -1348,31 +1348,31 @@ _CopyNo8HeightFontData::
 ;	spillPairReg hl
 	call	_VDP_WriteVRAM_16K
 	pop	bc
-	C$print.c$869$3_0$306	= .
-	.globl	C$print.c$869$3_0$306
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:869: src += height;
+	C$print.c$866$3_0$252	= .
+	.globl	C$print.c$866$3_0$252
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:866: src += height;
 	ld	a, -3 (ix)
 	add	a, 4 (ix)
 	ld	-3 (ix), a
 	jr	NC, 00118$
 	inc	-2 (ix)
 00118$:
-	C$print.c$870$3_0$306	= .
-	.globl	C$print.c$870$3_0$306
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:870: dst += 8;
+	C$print.c$867$3_0$252	= .
+	.globl	C$print.c$867$3_0$252
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:867: dst += 8;
 	ld	hl, #0x0008
 	add	hl, bc
 	ld	c, l
 	ld	b, h
-	C$print.c$865$2_0$305	= .
-	.globl	C$print.c$865$2_0$305
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:865: for(u8 i = 0; i < g_PrintData.CharCount; ++i)
+	C$print.c$862$2_0$251	= .
+	.globl	C$print.c$862$2_0$251
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:862: for(u8 i = 0; i < g_PrintData.CharCount; ++i)
 	inc	-1 (ix)
 	jp	00103$
 00105$:
-	C$print.c$872$2_0$305	= .
-	.globl	C$print.c$872$2_0$305
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:872: }
+	C$print.c$869$2_0$251	= .
+	.globl	C$print.c$869$2_0$251
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:869: }
 	ld	sp, ix
 	pop	ix
 	pop	hl
@@ -1380,9 +1380,9 @@ _CopyNo8HeightFontData::
 	jp	(hl)
 	G$Print_SetTextFont$0$0	= .
 	.globl	G$Print_SetTextFont$0$0
-	C$print.c$877$2_0$308	= .
-	.globl	C$print.c$877$2_0$308
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:877: void Print_SetTextFont(const u8* fontData, u8 offset)
+	C$print.c$874$2_0$254	= .
+	.globl	C$print.c$874$2_0$254
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:874: void Print_SetTextFont(const u8* fontData, u8 offset)
 ;	---------------------------------
 ; Function Print_SetTextFont
 ; ---------------------------------
@@ -1395,58 +1395,58 @@ _Print_SetTextFont::
 	push	af
 	ld	c, l
 	ld	b, h
-	C$print.c$879$1_0$308	= .
-	.globl	C$print.c$879$1_0$308
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:879: g_PrintData.PatternOffset = offset;
+	C$print.c$876$1_0$254	= .
+	.globl	C$print.c$876$1_0$254
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:876: g_PrintData.PatternOffset = offset;
 	ld	hl, #(_g_PrintData + 32)
 	ld	a, 4 (ix)
 	ld	(hl), a
-	C$print.c$882$1_0$308	= .
-	.globl	C$print.c$882$1_0$308
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:882: if(fontData == NULL) // Use Bios font (if any)
+	C$print.c$879$1_0$254	= .
+	.globl	C$print.c$879$1_0$254
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:879: if(fontData == NULL) // Use Bios font (if any)
 	ld	a, b
 	or	a, c
 	jr	NZ, 00102$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:883: Print_SetFontEx(8, 8, 1, 1, 1, 255, (const u8*)g_CGTABL + 8); // @todo Should be [1, 255] to include all characters
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:880: Print_SetFontEx(8, 8, 1, 1, 1, 255, (const u8*)g_CGTABL + 8); // @todo Should be [1, 255] to include all characters
 	ld	de, (_g_CGTABL)
 	ld	hl, #0x0008
 	add	hl, de
 	ex	de, hl
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:197: g_PrintData.PatternX     = patternX;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:197: g_PrintData.PatternX     = patternX;
 	ld	hl, #_g_PrintData
 	ld	(hl), #0x08
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:198: g_PrintData.PatternY     = patternY;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:198: g_PrintData.PatternY     = patternY;
 	ld	hl, #(_g_PrintData + 1)
 	ld	(hl), #0x08
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:199: g_PrintData.UnitX        = sizeX;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:199: g_PrintData.UnitX        = sizeX;
 	ld	hl, #(_g_PrintData + 2)
 	ld	(hl), #0x01
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:200: g_PrintData.UnitY        = sizeY;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:200: g_PrintData.UnitY        = sizeY;
 	ld	hl, #(_g_PrintData + 3)
 	ld	(hl), #0x01
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:201: g_PrintData.CharFirst    = firstChr;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:201: g_PrintData.CharFirst    = firstChr;
 	ld	hl, #(_g_PrintData + 20)
 	ld	(hl), #0x01
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:202: g_PrintData.CharLast     = lastChr;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:202: g_PrintData.CharLast     = lastChr;
 	ld	hl, #(_g_PrintData + 21)
 	ld	(hl), #0xff
-	C$print.h$203$1_1$308	= .
-	.globl	C$print.h$203$1_1$308
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:203: g_PrintData.CharCount    = lastChr - firstChr + 1;
+	C$print.h$203$1_1$254	= .
+	.globl	C$print.h$203$1_1$254
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:203: g_PrintData.CharCount    = lastChr - firstChr + 1;
 	ld	hl, #_g_PrintData + 22
 	ld	-4 (ix), l
 	ld	-3 (ix), h
 	ld	(hl), #0xff
-	C$print.h$204$1_1$308	= .
-	.globl	C$print.h$204$1_1$308
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:204: g_PrintData.FontPatterns = patterns;
+	C$print.h$204$1_1$254	= .
+	.globl	C$print.h$204$1_1$254
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:204: g_PrintData.FontPatterns = patterns;
 	ld	hl, #_g_PrintData + 28
 	ld	-2 (ix), l
 	ld	-1 (ix), h
 	ld	(hl), e
 	inc	hl
 	ld	(hl), d
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:205: g_PrintData.FontAddr     = g_PrintData.FontPatterns - (firstChr * g_PrintData.PatternY); // pre-compute address of the virtual index 0 character (used to quick drawing in PutChar_GX functions)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:205: g_PrintData.FontAddr     = g_PrintData.FontPatterns - (firstChr * g_PrintData.PatternY); // pre-compute address of the virtual index 0 character (used to quick drawing in PutChar_GX functions)
 	ld	a, (#(_g_PrintData + 1) + 0)
 	ld	l, a
 ;	spillPairReg hl
@@ -1461,12 +1461,12 @@ _Print_SetTextFont::
 	sbc	a, h
 	ld	d, a
 	ld	((_g_PrintData + 30)), de
-	C$print.c$883$1_0$308	= .
-	.globl	C$print.c$883$1_0$308
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:883: Print_SetFontEx(8, 8, 1, 1, 1, 255, (const u8*)g_CGTABL + 8); // @todo Should be [1, 255] to include all characters
+	C$print.c$880$1_0$254	= .
+	.globl	C$print.c$880$1_0$254
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:880: Print_SetFontEx(8, 8, 1, 1, 1, 255, (const u8*)g_CGTABL + 8); // @todo Should be [1, 255] to include all characters
 	jp	00103$
 00102$:
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:885: Print_SetFontEx(8, 8, 1, 1, fontData[2], fontData[3], fontData+4);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:882: Print_SetFontEx(8, 8, 1, 1, fontData[2], fontData[3], fontData+4);
 	ld	hl, #0x0004
 	add	hl, bc
 	ex	(sp), hl
@@ -1489,27 +1489,27 @@ _Print_SetTextFont::
 	inc	hl
 	inc	hl
 	ld	d, (hl)
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:197: g_PrintData.PatternX     = patternX;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:197: g_PrintData.PatternX     = patternX;
 	ld	hl, #_g_PrintData
 	ld	(hl), #0x08
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:198: g_PrintData.PatternY     = patternY;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:198: g_PrintData.PatternY     = patternY;
 	ld	hl, #(_g_PrintData + 1)
 	ld	(hl), #0x08
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:199: g_PrintData.UnitX        = sizeX;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:199: g_PrintData.UnitX        = sizeX;
 	ld	hl, #(_g_PrintData + 2)
 	ld	(hl), #0x01
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:200: g_PrintData.UnitY        = sizeY;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:200: g_PrintData.UnitY        = sizeY;
 	ld	hl, #(_g_PrintData + 3)
 	ld	(hl), #0x01
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:201: g_PrintData.CharFirst    = firstChr;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:201: g_PrintData.CharFirst    = firstChr;
 	ld	hl, #(_g_PrintData + 20)
 	ld	(hl), d
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:202: g_PrintData.CharLast     = lastChr;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:202: g_PrintData.CharLast     = lastChr;
 	ld	hl, #(_g_PrintData + 21)
 	ld	(hl), e
-	C$print.h$203$1_1$308	= .
-	.globl	C$print.h$203$1_1$308
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:203: g_PrintData.CharCount    = lastChr - firstChr + 1;
+	C$print.h$203$1_1$254	= .
+	.globl	C$print.h$203$1_1$254
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:203: g_PrintData.CharCount    = lastChr - firstChr + 1;
 	ld	hl, #_g_PrintData + 22
 	ld	-4 (ix), l
 	ld	-3 (ix), h
@@ -1519,9 +1519,9 @@ _Print_SetTextFont::
 	ld	l, -4 (ix)
 	ld	h, -3 (ix)
 	ld	(hl), a
-	C$print.h$204$1_1$308	= .
-	.globl	C$print.h$204$1_1$308
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:204: g_PrintData.FontPatterns = patterns;
+	C$print.h$204$1_1$254	= .
+	.globl	C$print.h$204$1_1$254
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:204: g_PrintData.FontPatterns = patterns;
 	ld	hl, #_g_PrintData + 28
 	ld	-2 (ix), l
 	ld	-1 (ix), h
@@ -1530,7 +1530,7 @@ _Print_SetTextFont::
 	inc	hl
 	ld	a, -5 (ix)
 	ld	(hl), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:205: g_PrintData.FontAddr     = g_PrintData.FontPatterns - (firstChr * g_PrintData.PatternY); // pre-compute address of the virtual index 0 character (used to quick drawing in PutChar_GX functions)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:205: g_PrintData.FontAddr     = g_PrintData.FontPatterns - (firstChr * g_PrintData.PatternY); // pre-compute address of the virtual index 0 character (used to quick drawing in PutChar_GX functions)
 	ld	a, (#(_g_PrintData + 1) + 0)
 	push	bc
 	ld	e, a
@@ -1554,21 +1554,21 @@ _Print_SetTextFont::
 	sbc	a, h
 	ld	d, a
 	ld	((_g_PrintData + 30)), de
-	C$print.c$885$1_0$308	= .
-	.globl	C$print.c$885$1_0$308
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:885: Print_SetFontEx(8, 8, 1, 1, fontData[2], fontData[3], fontData+4);
+	C$print.c$882$1_0$254	= .
+	.globl	C$print.c$882$1_0$254
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:882: Print_SetFontEx(8, 8, 1, 1, fontData[2], fontData[3], fontData+4);
 00103$:
-	C$print.c$886$1_0$308	= .
-	.globl	C$print.c$886$1_0$308
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:886: Print_Initialize();
+	C$print.c$883$1_0$254	= .
+	.globl	C$print.c$883$1_0$254
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:883: Print_Initialize();
 	push	bc
 	call	_Print_Initialize
 	ld	a, #0x04
 	call	_Print_SetMode
 	pop	bc
-	C$print.c$890$1_1$309	= .
-	.globl	C$print.c$890$1_1$309
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:890: const u8* src = g_PrintData.FontPatterns;
+	C$print.c$887$1_1$255	= .
+	.globl	C$print.c$887$1_1$255
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:887: const u8* src = g_PrintData.FontPatterns;
 	ld	l, -2 (ix)
 	ld	h, -1 (ix)
 	ld	a, (hl)
@@ -1576,9 +1576,9 @@ _Print_SetTextFont::
 	inc	hl
 	ld	a, (hl)
 	ld	-1 (ix), a
-	C$print.c$891$1_1$309	= .
-	.globl	C$print.c$891$1_1$309
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:891: u16 dst = (u16)g_ScreenPatternLow + (offset * 8);
+	C$print.c$888$1_1$255	= .
+	.globl	C$print.c$888$1_1$255
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:888: u16 dst = (u16)g_ScreenPatternLow + (offset * 8);
 	ld	l, 4 (ix)
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -1591,15 +1591,15 @@ _Print_SetTextFont::
 	ld	de, (_g_ScreenPatternLow)
 	add	hl, de
 	ex	de, hl
-	C$print.c$893$1_1$309	= .
-	.globl	C$print.c$893$1_1$309
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:893: if(fontData != NULL)
+	C$print.c$890$1_1$255	= .
+	.globl	C$print.c$890$1_1$255
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:890: if(fontData != NULL)
 	ld	a, b
 	or	a, c
 	jr	Z, 00105$
-	C$print.c$894$1_1$309	= .
-	.globl	C$print.c$894$1_1$309
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:894: CopyNo8HeightFontData(src, dst, fontData[0] & 0x0F);
+	C$print.c$891$1_1$255	= .
+	.globl	C$print.c$891$1_1$255
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:891: CopyNo8HeightFontData(src, dst, fontData[0] & 0x0F);
 	ld	a, (bc)
 	and	a, #0x0f
 	push	af
@@ -1613,9 +1613,9 @@ _Print_SetTextFont::
 	call	_CopyNo8HeightFontData
 	jp	00111$
 00105$:
-	C$print.c$897$1_1$309	= .
-	.globl	C$print.c$897$1_1$309
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:897: VDP_WriteVRAM(src, dst, 0, g_PrintData.CharCount * 8);
+	C$print.c$894$1_1$255	= .
+	.globl	C$print.c$894$1_1$255
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:894: VDP_WriteVRAM(src, dst, 0, g_PrintData.CharCount * 8);
 	ld	l, -4 (ix)
 	ld	h, -3 (ix)
 	ld	l, (hl)
@@ -1634,13 +1634,13 @@ _Print_SetTextFont::
 ;	spillPairReg hl
 ;	spillPairReg hl
 	call	_VDP_WriteVRAM_16K
-	C$print.c$924$1_1$308	= .
-	.globl	C$print.c$924$1_1$308
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:924: };
+	C$print.c$921$1_1$254	= .
+	.globl	C$print.c$921$1_1$254
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:921: };
 00111$:
-	C$print.c$925$1_1$308	= .
-	.globl	C$print.c$925$1_1$308
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:925: }
+	C$print.c$922$1_1$254	= .
+	.globl	C$print.c$922$1_1$254
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:922: }
 	ld	sp, ix
 	pop	ix
 	pop	hl
@@ -1648,9 +1648,9 @@ _Print_SetTextFont::
 	jp	(hl)
 	G$DrawChar_Layout$0$0	= .
 	.globl	G$DrawChar_Layout$0$0
-	C$print.c$930$1_1$321	= .
-	.globl	C$print.c$930$1_1$321
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:930: void DrawChar_Layout(u8 chr)
+	C$print.c$927$1_1$267	= .
+	.globl	C$print.c$927$1_1$267
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:927: void DrawChar_Layout(u8 chr)
 ;	---------------------------------
 ; Function DrawChar_Layout
 ; ---------------------------------
@@ -1659,14 +1659,14 @@ _DrawChar_Layout::
 	ld	ix,#0
 	add	ix,sp
 	dec	sp
-	C$print.c$933$1_0$321	= .
-	.globl	C$print.c$933$1_0$321
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:933: chr = Print_ValidateChar(chr);
+	C$print.c$930$1_0$267	= .
+	.globl	C$print.c$930$1_0$267
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:930: chr = Print_ValidateChar(chr);
 	call	_Print_ValidateChar
 	ld	c, a
-	C$print.c$935$1_1$322	= .
-	.globl	C$print.c$935$1_1$322
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:935: u8 shape = chr - g_PrintData.CharFirst + g_PrintData.PatternOffset;
+	C$print.c$932$1_1$268	= .
+	.globl	C$print.c$932$1_1$268
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:932: u8 shape = chr - g_PrintData.CharFirst + g_PrintData.PatternOffset;
 	ld	hl, #_g_PrintData + 20
 	ld	b, (hl)
 	ld	a, c
@@ -1675,9 +1675,9 @@ _DrawChar_Layout::
 	ld	c, (hl)
 	add	a, c
 	ld	-1 (ix), a
-	C$print.c$936$1_1$322	= .
-	.globl	C$print.c$936$1_1$322
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:936: u16 dst = (u16)g_ScreenLayoutLow + (g_PrintData.CursorY * g_PrintData.ScreenWidth) + g_PrintData.CursorX;
+	C$print.c$933$1_1$268	= .
+	.globl	C$print.c$933$1_1$268
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:933: u16 dst = (u16)g_ScreenLayoutLow + (g_PrintData.CursorY * g_PrintData.ScreenWidth) + g_PrintData.CursorX;
 	ld	hl, #_g_PrintData + 6
 	ld	c, (hl)
 	ld	de, (#_g_PrintData + 26)
@@ -1701,33 +1701,33 @@ _DrawChar_Layout::
 	pop	bc
 	add	hl, bc
 	ex	de, hl
-	C$print.c$937$1_1$322	= .
-	.globl	C$print.c$937$1_1$322
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:937: VDP_Poke(shape, dst, g_ScreenLayoutHigh);
+	C$print.c$934$1_1$268	= .
+	.globl	C$print.c$934$1_1$268
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:934: VDP_Poke(shape, dst, g_ScreenLayoutHigh);
 	ld	a, -1 (ix)
 	call	_VDP_Poke_16K
-	C$print.c$938$1_1$321	= .
-	.globl	C$print.c$938$1_1$321
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:938: }
+	C$print.c$935$1_1$267	= .
+	.globl	C$print.c$935$1_1$267
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:935: }
 	inc	sp
 	pop	ix
-	C$print.c$938$1_1$321	= .
-	.globl	C$print.c$938$1_1$321
+	C$print.c$935$1_1$267	= .
+	.globl	C$print.c$935$1_1$267
 	XG$DrawChar_Layout$0$0	= .
 	.globl	XG$DrawChar_Layout$0$0
 	ret
 	G$Print_Clear$0$0	= .
 	.globl	G$Print_Clear$0$0
-	C$print.c$1103$1_1$323	= .
-	.globl	C$print.c$1103$1_1$323
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1103: void Print_Clear()
+	C$print.c$1100$1_1$269	= .
+	.globl	C$print.c$1100$1_1$269
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1100: void Print_Clear()
 ;	---------------------------------
 ; Function Print_Clear
 ; ---------------------------------
 _Print_Clear::
-	C$print.c$1116$2_0$325	= .
-	.globl	C$print.c$1116$2_0$325
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1116: VDP_FillVRAM(0, g_ScreenLayoutLow, g_ScreenLayoutHigh, 24 * g_PrintData.ScreenWidth);
+	C$print.c$1113$2_0$271	= .
+	.globl	C$print.c$1113$2_0$271
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1113: VDP_FillVRAM(0, g_ScreenLayoutLow, g_ScreenLayoutHigh, 24 * g_PrintData.ScreenWidth);
 	ld	hl, (#(_g_PrintData + 26) + 0)
 	ld	c, l
 	ld	b, h
@@ -1740,19 +1740,19 @@ _Print_Clear::
 	ld	de, (_g_ScreenLayoutLow)
 	xor	a, a
 	call	_VDP_FillVRAM_16K
-	C$print.c$1119$1_0$323	= .
-	.globl	C$print.c$1119$1_0$323
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1119: }
-	C$print.c$1119$1_0$323	= .
-	.globl	C$print.c$1119$1_0$323
+	C$print.c$1116$1_0$269	= .
+	.globl	C$print.c$1116$1_0$269
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1116: }
+	C$print.c$1116$1_0$269	= .
+	.globl	C$print.c$1116$1_0$269
 	XG$Print_Clear$0$0	= .
 	.globl	XG$Print_Clear$0$0
 	ret
 	G$Print_Backspace$0$0	= .
 	.globl	G$Print_Backspace$0$0
-	C$print.c$1124$1_0$333	= .
-	.globl	C$print.c$1124$1_0$333
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1124: void Print_Backspace(u8 num)
+	C$print.c$1121$1_0$279	= .
+	.globl	C$print.c$1121$1_0$279
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1121: void Print_Backspace(u8 num)
 ;	---------------------------------
 ; Function Print_Backspace
 ; ---------------------------------
@@ -1762,9 +1762,9 @@ _Print_Backspace::
 	add	ix,sp
 	dec	sp
 	ld	-1 (ix), a
-	C$print.c$1144$2_0$335	= .
-	.globl	C$print.c$1144$2_0$335
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1144: u16 dst = g_ScreenLayoutLow + (g_PrintData.CursorY * g_PrintData.ScreenWidth) + g_PrintData.CursorX - num;
+	C$print.c$1141$2_0$281	= .
+	.globl	C$print.c$1141$2_0$281
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1141: u16 dst = g_ScreenLayoutLow + (g_PrintData.CursorY * g_PrintData.ScreenWidth) + g_PrintData.CursorX - num;
 	ld	hl, #_g_PrintData + 6
 	ld	c, (hl)
 	ld	de, (#_g_PrintData + 26)
@@ -1787,9 +1787,9 @@ _Print_Backspace::
 	cp	a, a
 	sbc	hl, de
 	ex	de, hl
-	C$print.c$1145$2_0$335	= .
-	.globl	C$print.c$1145$2_0$335
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1145: VDP_FillVRAM(0, dst, g_ScreenLayoutHigh, num);
+	C$print.c$1142$2_0$281	= .
+	.globl	C$print.c$1142$2_0$281
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1142: VDP_FillVRAM(0, dst, g_ScreenLayoutHigh, num);
 	ld	l, -1 (ix)
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -1801,27 +1801,27 @@ _Print_Backspace::
 	xor	a, a
 	call	_VDP_FillVRAM_16K
 	pop	bc
-	C$print.c$1146$2_0$335	= .
-	.globl	C$print.c$1146$2_0$335
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1146: g_PrintData.CursorX -= num;
+	C$print.c$1143$2_0$281	= .
+	.globl	C$print.c$1143$2_0$281
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1143: g_PrintData.CursorX -= num;
 	ld	a, (bc)
 	sub	a, -1 (ix)
 	ld	(bc), a
-	C$print.c$1149$1_0$333	= .
-	.globl	C$print.c$1149$1_0$333
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1149: }
+	C$print.c$1146$1_0$279	= .
+	.globl	C$print.c$1146$1_0$279
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1146: }
 	inc	sp
 	pop	ix
-	C$print.c$1149$1_0$333	= .
-	.globl	C$print.c$1149$1_0$333
+	C$print.c$1146$1_0$279	= .
+	.globl	C$print.c$1146$1_0$279
 	XG$Print_Backspace$0$0	= .
 	.globl	XG$Print_Backspace$0$0
 	ret
 	G$Print_DrawChar$0$0	= .
 	.globl	G$Print_DrawChar$0$0
-	C$print.c$1154$1_0$343	= .
-	.globl	C$print.c$1154$1_0$343
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1154: void Print_DrawChar(u8 chr)
+	C$print.c$1151$1_0$289	= .
+	.globl	C$print.c$1151$1_0$289
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1151: void Print_DrawChar(u8 chr)
 ;	---------------------------------
 ; Function Print_DrawChar
 ; ---------------------------------
@@ -1831,9 +1831,9 @@ _Print_DrawChar::
 	add	ix,sp
 	dec	sp
 	ld	-1 (ix), a
-	C$print.c$1157$1_0$343	= .
-	.globl	C$print.c$1157$1_0$343
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1157: if(g_PrintData.CursorX + PRINT_W(g_PrintData.UnitX) > g_PrintData.ScreenWidth) // Handle automatic new-line when 
+	C$print.c$1154$1_0$289	= .
+	.globl	C$print.c$1154$1_0$289
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1154: if(g_PrintData.CursorX + PRINT_W(g_PrintData.UnitX) > g_PrintData.ScreenWidth) // Handle automatic new-line when 
 	ld	bc, #_g_PrintData + 5
 	ld	a, (bc)
 	ld	e, a
@@ -1843,103 +1843,103 @@ _Print_DrawChar::
 	xor	a, a
 	sbc	hl, de
 	jr	NC, 00102$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:431: g_PrintData.CursorX = 0;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:431: g_PrintData.CursorX = 0;
 	xor	a, a
 	ld	(bc), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:432: g_PrintData.CursorY += PRINT_H(g_PrintData.UnitY);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:432: g_PrintData.CursorY += PRINT_H(g_PrintData.UnitY);
 	ld	de, #_g_PrintData + 6
 	ld	a, (de)
 	inc	a
 	ld	(de), a
-	C$print.c$1158$1_0$343	= .
-	.globl	C$print.c$1158$1_0$343
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1158: Print_Return();
+	C$print.c$1155$1_0$289	= .
+	.globl	C$print.c$1155$1_0$289
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1155: Print_Return();
 00102$:
-	C$print.c$1163$1_0$343	= .
-	.globl	C$print.c$1163$1_0$343
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1163: g_PrintData.DrawChar(chr);
+	C$print.c$1160$1_0$289	= .
+	.globl	C$print.c$1160$1_0$289
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1160: g_PrintData.DrawChar(chr);
 	ld	hl, (#_g_PrintData + 23)
 	push	bc
 	ld	a, -1 (ix)
 	call	___sdcc_call_hl
 	pop	bc
-	C$print.c$1166$1_0$343	= .
-	.globl	C$print.c$1166$1_0$343
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1166: g_PrintData.CursorX += PRINT_W(g_PrintData.UnitX);
+	C$print.c$1163$1_0$289	= .
+	.globl	C$print.c$1163$1_0$289
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1163: g_PrintData.CursorX += PRINT_W(g_PrintData.UnitX);
 	ld	a, (bc)
 	inc	a
 	ld	(bc), a
-	C$print.c$1167$1_0$343	= .
-	.globl	C$print.c$1167$1_0$343
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1167: }
+	C$print.c$1164$1_0$289	= .
+	.globl	C$print.c$1164$1_0$289
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1164: }
 	inc	sp
 	pop	ix
-	C$print.c$1167$1_0$343	= .
-	.globl	C$print.c$1167$1_0$343
+	C$print.c$1164$1_0$289	= .
+	.globl	C$print.c$1164$1_0$289
 	XG$Print_DrawChar$0$0	= .
 	.globl	XG$Print_DrawChar$0$0
 	ret
 	G$Print_DrawCharX$0$0	= .
 	.globl	G$Print_DrawCharX$0$0
-	C$print.c$1173$1_0$349	= .
-	.globl	C$print.c$1173$1_0$349
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1173: void Print_DrawCharX(c8 chr, u8 num)
+	C$print.c$1170$1_0$295	= .
+	.globl	C$print.c$1170$1_0$295
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1170: void Print_DrawCharX(c8 chr, u8 num)
 ;	---------------------------------
 ; Function Print_DrawCharX
 ; ---------------------------------
 _Print_DrawCharX::
 	ld	c, a
-	C$print.c$1175$2_0$349	= .
-	.globl	C$print.c$1175$2_0$349
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1175: for(u8 i = 0; i < num; ++i)
+	C$print.c$1172$2_0$295	= .
+	.globl	C$print.c$1172$2_0$295
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1172: for(u8 i = 0; i < num; ++i)
 	ld	b, #0x00
 00103$:
 	ld	a, b
 	sub	a, l
 	ret	NC
-	C$print.c$1176$2_0$349	= .
-	.globl	C$print.c$1176$2_0$349
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1176: Print_DrawChar(chr);
+	C$print.c$1173$2_0$295	= .
+	.globl	C$print.c$1173$2_0$295
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1173: Print_DrawChar(chr);
 	push	hl
 	push	bc
 	ld	a, c
 	call	_Print_DrawChar
 	pop	bc
 	pop	hl
-	C$print.c$1175$2_0$349	= .
-	.globl	C$print.c$1175$2_0$349
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1175: for(u8 i = 0; i < num; ++i)
+	C$print.c$1172$2_0$295	= .
+	.globl	C$print.c$1172$2_0$295
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1172: for(u8 i = 0; i < num; ++i)
 	inc	b
-	C$print.c$1177$2_0$349	= .
-	.globl	C$print.c$1177$2_0$349
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1177: }
-	C$print.c$1177$2_0$349	= .
-	.globl	C$print.c$1177$2_0$349
+	C$print.c$1174$2_0$295	= .
+	.globl	C$print.c$1174$2_0$295
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1174: }
+	C$print.c$1174$2_0$295	= .
+	.globl	C$print.c$1174$2_0$295
 	XG$Print_DrawCharX$0$0	= .
 	.globl	XG$Print_DrawCharX$0$0
 	jp	00103$
 	G$Print_DrawText$0$0	= .
 	.globl	G$Print_DrawText$0$0
-	C$print.c$1182$2_0$351	= .
-	.globl	C$print.c$1182$2_0$351
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1182: void Print_DrawText(const c8* str)
+	C$print.c$1179$2_0$297	= .
+	.globl	C$print.c$1179$2_0$297
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1179: void Print_DrawText(const c8* str)
 ;	---------------------------------
 ; Function Print_DrawText
 ; ---------------------------------
 _Print_DrawText::
 	ex	de, hl
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1184: while(*str != 0)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1181: while(*str != 0)
 00107$:
 	ld	a, (de)
-	C$print.c$1186$2_0$352	= .
-	.globl	C$print.c$1186$2_0$352
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1186: if(*str == '\t')
+	C$print.c$1183$2_0$298	= .
+	.globl	C$print.c$1183$2_0$298
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1183: if(*str == '\t')
 	ld	c,a
 	or	a,a
 	ret	Z
 	sub	a, #0x09
 	jr	NZ, 00105$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:423: g_PrintData.CursorX += PRINT_W(g_PrintData.UnitX) + g_PrintData.TabSize - 1;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:423: g_PrintData.CursorX += PRINT_W(g_PrintData.UnitX) + g_PrintData.TabSize - 1;
 	ld	bc, #_g_PrintData + 5
 	ld	a, (bc)
 	ld	hl, #(_g_PrintData + 4)
@@ -1947,7 +1947,7 @@ _Print_DrawText::
 ;	spillPairReg hl
 	add	a, l
 	ld	(bc), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:424: g_PrintData.CursorX &= ~(g_PrintData.TabSize - 1);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:424: g_PrintData.CursorX &= ~(g_PrintData.TabSize - 1);
 	ld	hl, #(_g_PrintData + 4)
 	ld	l, (hl)
 ;	spillPairReg hl
@@ -1961,55 +1961,55 @@ _Print_DrawText::
 	pop	af
 	and	a, l
 	ld	(bc), a
-	C$print.c$1187$2_0$352	= .
-	.globl	C$print.c$1187$2_0$352
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1187: Print_Tab();
+	C$print.c$1184$2_0$298	= .
+	.globl	C$print.c$1184$2_0$298
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1184: Print_Tab();
 	jp	00106$
 00105$:
-	C$print.c$1188$2_0$352	= .
-	.globl	C$print.c$1188$2_0$352
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1188: else if(*str == '\n')
+	C$print.c$1185$2_0$298	= .
+	.globl	C$print.c$1185$2_0$298
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1185: else if(*str == '\n')
 	ld	a, c
 	sub	a, #0x0a
 	jr	NZ, 00102$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:431: g_PrintData.CursorX = 0;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:431: g_PrintData.CursorX = 0;
 	ld	hl, #(_g_PrintData + 5)
 	ld	(hl), #0x00
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:432: g_PrintData.CursorY += PRINT_H(g_PrintData.UnitY);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:432: g_PrintData.CursorY += PRINT_H(g_PrintData.UnitY);
 	ld	bc, #_g_PrintData + 6
 	ld	a, (bc)
 	inc	a
 	ld	(bc), a
-	C$print.c$1189$2_0$352	= .
-	.globl	C$print.c$1189$2_0$352
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1189: Print_Return();
+	C$print.c$1186$2_0$298	= .
+	.globl	C$print.c$1186$2_0$298
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1186: Print_Return();
 	jp	00106$
 00102$:
-	C$print.c$1195$2_0$352	= .
-	.globl	C$print.c$1195$2_0$352
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1195: Print_DrawChar(*str);
+	C$print.c$1192$2_0$298	= .
+	.globl	C$print.c$1192$2_0$298
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1192: Print_DrawChar(*str);
 	push	de
 	ld	a, c
 	call	_Print_DrawChar
 	pop	de
 00106$:
-	C$print.c$1196$2_0$352	= .
-	.globl	C$print.c$1196$2_0$352
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1196: str++;
+	C$print.c$1193$2_0$298	= .
+	.globl	C$print.c$1193$2_0$298
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1193: str++;
 	inc	de
-	C$print.c$1198$1_0$351	= .
-	.globl	C$print.c$1198$1_0$351
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1198: }
-	C$print.c$1198$1_0$351	= .
-	.globl	C$print.c$1198$1_0$351
+	C$print.c$1195$1_0$297	= .
+	.globl	C$print.c$1195$1_0$297
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1195: }
+	C$print.c$1195$1_0$297	= .
+	.globl	C$print.c$1195$1_0$297
 	XG$Print_DrawText$0$0	= .
 	.globl	XG$Print_DrawText$0$0
 	jp	00107$
 	G$Print_DrawBin8$0$0	= .
 	.globl	G$Print_DrawBin8$0$0
-	C$print.c$1203$1_0$361	= .
-	.globl	C$print.c$1203$1_0$361
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1203: void Print_DrawBin8(u8 value)
+	C$print.c$1200$1_0$307	= .
+	.globl	C$print.c$1200$1_0$307
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1200: void Print_DrawBin8(u8 value)
 ;	---------------------------------
 ; Function Print_DrawBin8
 ; ---------------------------------
@@ -2017,20 +2017,20 @@ _Print_DrawBin8::
 	ld	l, a
 ;	spillPairReg hl
 ;	spillPairReg hl
-	C$print.c$1205$2_0$361	= .
-	.globl	C$print.c$1205$2_0$361
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1205: u8 flag = (u8)(1 << 7);
-	C$print.c$1206$2_0$361	= .
-	.globl	C$print.c$1206$2_0$361
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1206: for(u8 i = 0; i < 8; ++i)
+	C$print.c$1202$2_0$307	= .
+	.globl	C$print.c$1202$2_0$307
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1202: u8 flag = (u8)(1 << 7);
+	C$print.c$1203$2_0$307	= .
+	.globl	C$print.c$1203$2_0$307
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1203: for(u8 i = 0; i < 8; ++i)
 	ld	bc, #0x80
 00103$:
 	ld	a, b
 	sub	a, #0x08
 	ret	NC
-	C$print.c$1208$3_0$362	= .
-	.globl	C$print.c$1208$3_0$362
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1208: Print_DrawChar((value & flag) ? '1' : '0');
+	C$print.c$1205$3_0$308	= .
+	.globl	C$print.c$1205$3_0$308
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1205: Print_DrawChar((value & flag) ? '1' : '0');
 	ld	a, l
 	and	a,c
 	jr	Z, 00107$
@@ -2045,35 +2045,35 @@ _Print_DrawBin8::
 	call	_Print_DrawChar
 	pop	bc
 	pop	hl
-	C$print.c$1209$3_0$362	= .
-	.globl	C$print.c$1209$3_0$362
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1209: flag >>= 1;
+	C$print.c$1206$3_0$308	= .
+	.globl	C$print.c$1206$3_0$308
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1206: flag >>= 1;
 	srl	c
-	C$print.c$1206$2_0$361	= .
-	.globl	C$print.c$1206$2_0$361
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1206: for(u8 i = 0; i < 8; ++i)
+	C$print.c$1203$2_0$307	= .
+	.globl	C$print.c$1203$2_0$307
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1203: for(u8 i = 0; i < 8; ++i)
 	inc	b
-	C$print.c$1214$2_0$361	= .
-	.globl	C$print.c$1214$2_0$361
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1214: }
-	C$print.c$1214$2_0$361	= .
-	.globl	C$print.c$1214$2_0$361
+	C$print.c$1211$2_0$307	= .
+	.globl	C$print.c$1211$2_0$307
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1211: }
+	C$print.c$1211$2_0$307	= .
+	.globl	C$print.c$1211$2_0$307
 	XG$Print_DrawBin8$0$0	= .
 	.globl	XG$Print_DrawBin8$0$0
 	jp	00103$
 	G$Print_DrawHex8$0$0	= .
 	.globl	G$Print_DrawHex8$0$0
-	C$print.c$1219$2_0$364	= .
-	.globl	C$print.c$1219$2_0$364
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1219: void Print_DrawHex8(u8 value)
+	C$print.c$1216$2_0$310	= .
+	.globl	C$print.c$1216$2_0$310
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1216: void Print_DrawHex8(u8 value)
 ;	---------------------------------
 ; Function Print_DrawHex8
 ; ---------------------------------
 _Print_DrawHex8::
 	ld	e, a
-	C$print.c$1221$1_0$364	= .
-	.globl	C$print.c$1221$1_0$364
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1221: Print_DrawChar(g_HexChar[(value >> 4) & 0x000F]);
+	C$print.c$1218$1_0$310	= .
+	.globl	C$print.c$1218$1_0$310
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1218: Print_DrawChar(g_HexChar[(value >> 4) & 0x000F]);
 	ld	bc, #_g_HexChar+0
 	ld	a, e
 	rlca
@@ -2099,9 +2099,9 @@ _Print_DrawHex8::
 	call	_Print_DrawChar
 	pop	de
 	pop	bc
-	C$print.c$1222$1_0$364	= .
-	.globl	C$print.c$1222$1_0$364
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1222: Print_DrawChar(g_HexChar[value & 0x000F]);
+	C$print.c$1219$1_0$310	= .
+	.globl	C$print.c$1219$1_0$310
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1219: Print_DrawChar(g_HexChar[value & 0x000F]);
 	ld	d, #0x00
 	ld	a, e
 	and	a, #0x0f
@@ -2114,55 +2114,55 @@ _Print_DrawHex8::
 	add	hl, bc
 	ld	c, (hl)
 	ld	a, c
-	C$print.c$1226$1_0$364	= .
-	.globl	C$print.c$1226$1_0$364
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1226: }
-	C$print.c$1226$1_0$364	= .
-	.globl	C$print.c$1226$1_0$364
+	C$print.c$1223$1_0$310	= .
+	.globl	C$print.c$1223$1_0$310
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1223: }
+	C$print.c$1223$1_0$310	= .
+	.globl	C$print.c$1223$1_0$310
 	XG$Print_DrawHex8$0$0	= .
 	.globl	XG$Print_DrawHex8$0$0
 	jp	_Print_DrawChar
 	G$Print_DrawHex16$0$0	= .
 	.globl	G$Print_DrawHex16$0$0
-	C$print.c$1231$1_0$366	= .
-	.globl	C$print.c$1231$1_0$366
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1231: void Print_DrawHex16(u16 value)
+	C$print.c$1228$1_0$312	= .
+	.globl	C$print.c$1228$1_0$312
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1228: void Print_DrawHex16(u16 value)
 ;	---------------------------------
 ; Function Print_DrawHex16
 ; ---------------------------------
 _Print_DrawHex16::
-	C$print.c$1233$1_0$366	= .
-	.globl	C$print.c$1233$1_0$366
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1233: Print_DrawHex8(value >> 8);
+	C$print.c$1230$1_0$312	= .
+	.globl	C$print.c$1230$1_0$312
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1230: Print_DrawHex8(value >> 8);
 	ld	c, h
 	push	hl
 	ld	a, c
 	call	_Print_DrawHex8
 	pop	hl
-	C$print.c$1234$1_0$366	= .
-	.globl	C$print.c$1234$1_0$366
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1234: Print_DrawHex8((u8)value);
+	C$print.c$1231$1_0$312	= .
+	.globl	C$print.c$1231$1_0$312
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1231: Print_DrawHex8((u8)value);
 	ld	a, l
-	C$print.c$1235$1_0$366	= .
-	.globl	C$print.c$1235$1_0$366
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1235: }
-	C$print.c$1235$1_0$366	= .
-	.globl	C$print.c$1235$1_0$366
+	C$print.c$1232$1_0$312	= .
+	.globl	C$print.c$1232$1_0$312
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1232: }
+	C$print.c$1232$1_0$312	= .
+	.globl	C$print.c$1232$1_0$312
 	XG$Print_DrawHex16$0$0	= .
 	.globl	XG$Print_DrawHex16$0$0
 	jp	_Print_DrawHex8
 	G$Print_DrawHex32$0$0	= .
 	.globl	G$Print_DrawHex32$0$0
-	C$print.c$1241$1_0$368	= .
-	.globl	C$print.c$1241$1_0$368
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1241: void Print_DrawHex32(u32 value)
+	C$print.c$1238$1_0$314	= .
+	.globl	C$print.c$1238$1_0$314
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1238: void Print_DrawHex32(u32 value)
 ;	---------------------------------
 ; Function Print_DrawHex32
 ; ---------------------------------
 _Print_DrawHex32::
-	C$print.c$1243$1_0$368	= .
-	.globl	C$print.c$1243$1_0$368
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1243: Print_DrawHex16(value >> 16);
+	C$print.c$1240$1_0$314	= .
+	.globl	C$print.c$1240$1_0$314
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1240: Print_DrawHex16(value >> 16);
 ;	spillPairReg hl
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -2172,23 +2172,23 @@ _Print_DrawHex32::
 	call	_Print_DrawHex16
 	pop	de
 	pop	bc
-	C$print.c$1244$1_0$368	= .
-	.globl	C$print.c$1244$1_0$368
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1244: Print_DrawHex16((u16)value);
+	C$print.c$1241$1_0$314	= .
+	.globl	C$print.c$1241$1_0$314
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1241: Print_DrawHex16((u16)value);
 	ex	de, hl
-	C$print.c$1245$1_0$368	= .
-	.globl	C$print.c$1245$1_0$368
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1245: }
-	C$print.c$1245$1_0$368	= .
-	.globl	C$print.c$1245$1_0$368
+	C$print.c$1242$1_0$314	= .
+	.globl	C$print.c$1242$1_0$314
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1242: }
+	C$print.c$1242$1_0$314	= .
+	.globl	C$print.c$1242$1_0$314
 	XG$Print_DrawHex32$0$0	= .
 	.globl	XG$Print_DrawHex32$0$0
 	jp	_Print_DrawHex16
 	G$Print_DrawInt$0$0	= .
 	.globl	G$Print_DrawInt$0$0
-	C$print.c$1252$1_0$370	= .
-	.globl	C$print.c$1252$1_0$370
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1252: void Print_DrawInt(i32 value)
+	C$print.c$1249$1_0$316	= .
+	.globl	C$print.c$1249$1_0$316
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1249: void Print_DrawInt(i32 value)
 ;	---------------------------------
 ; Function Print_DrawInt
 ; ---------------------------------
@@ -2203,19 +2203,19 @@ _Print_DrawInt::
 	ld	-3 (ix), d
 	ld	-2 (ix), l
 	ld	-1 (ix), h
-	C$print.c$1259$1_0$370	= .
-	.globl	C$print.c$1259$1_0$370
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1259: if(value < 0)
+	C$print.c$1256$1_0$316	= .
+	.globl	C$print.c$1256$1_0$316
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1256: if(value < 0)
 	bit	7, -1 (ix)
 	jr	Z, 00102$
-	C$print.c$1261$2_0$371	= .
-	.globl	C$print.c$1261$2_0$371
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1261: Print_DrawChar('-');
+	C$print.c$1258$2_0$317	= .
+	.globl	C$print.c$1258$2_0$317
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1258: Print_DrawChar('-');
 	ld	a, #0x2d
 	call	_Print_DrawChar
-	C$print.c$1262$2_0$371	= .
-	.globl	C$print.c$1262$2_0$371
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1262: value = -value;
+	C$print.c$1259$2_0$317	= .
+	.globl	C$print.c$1259$2_0$317
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1259: value = -value;
 	xor	a, a
 	sub	a, -4 (ix)
 	ld	-4 (ix), a
@@ -2229,25 +2229,25 @@ _Print_DrawInt::
 	sub	a, -1 (ix)
 	ld	-1 (ix), a
 00102$:
-	C$print.c$1266$2_0$372	= .
-	.globl	C$print.c$1266$2_0$372
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1266: c8* ptr = str;
+	C$print.c$1263$2_0$318	= .
+	.globl	C$print.c$1263$2_0$318
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1263: c8* ptr = str;
 	ld	hl, #0
 	add	hl, sp
 	ld	c, l
 	ld	b, h
-	C$print.c$1267$1_1$372	= .
-	.globl	C$print.c$1267$1_1$372
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1267: *ptr = 0;
+	C$print.c$1264$1_1$318	= .
+	.globl	C$print.c$1264$1_1$318
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1264: *ptr = 0;
 	xor	a, a
 	ld	(bc), a
-	C$print.c$1268$1_1$370	= .
-	.globl	C$print.c$1268$1_1$370
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1268: while(value >= 10)
+	C$print.c$1265$1_1$316	= .
+	.globl	C$print.c$1265$1_1$316
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1265: while(value >= 10)
 00103$:
-	C$print.c$1270$1_1$370	= .
-	.globl	C$print.c$1270$1_1$370
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1270: *++ptr = '0' + (value % 10);
+	C$print.c$1267$1_1$316	= .
+	.globl	C$print.c$1267$1_1$316
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1267: *++ptr = '0' + (value % 10);
 	ld	l, c
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -2255,9 +2255,9 @@ _Print_DrawInt::
 ;	spillPairReg hl
 ;	spillPairReg hl
 	inc	hl
-	C$print.c$1268$1_1$372	= .
-	.globl	C$print.c$1268$1_1$372
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1268: while(value >= 10)
+	C$print.c$1265$1_1$318	= .
+	.globl	C$print.c$1265$1_1$318
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1265: while(value >= 10)
 	ld	a, -4 (ix)
 	sub	a, #0x0a
 	ld	a, -3 (ix)
@@ -2270,9 +2270,9 @@ _Print_DrawInt::
 	rra
 	sbc	a, #0x80
 	jr	C, 00105$
-	C$print.c$1270$2_1$373	= .
-	.globl	C$print.c$1270$2_1$373
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1270: *++ptr = '0' + (value % 10);
+	C$print.c$1267$2_1$319	= .
+	.globl	C$print.c$1267$2_1$319
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1267: *++ptr = '0' + (value % 10);
 	ld	c, l
 	ld	b, h
 	push	hl
@@ -2298,9 +2298,9 @@ _Print_DrawInt::
 	ld	a, e
 	add	a, #0x30
 	ld	(hl), a
-	C$print.c$1271$1_1$370	= .
-	.globl	C$print.c$1271$1_1$370
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1271: value /= 10;
+	C$print.c$1268$1_1$316	= .
+	.globl	C$print.c$1268$1_1$316
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1268: value /= 10;
 	push	bc
 	ld	hl, #0x0000
 	push	hl
@@ -2324,22 +2324,22 @@ _Print_DrawInt::
 	ld	-1 (ix), h
 	jp	00103$
 00105$:
-	C$print.c$1273$1_1$372	= .
-	.globl	C$print.c$1273$1_1$372
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1273: *++ptr = '0' + value;
+	C$print.c$1270$1_1$318	= .
+	.globl	C$print.c$1270$1_1$318
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1270: *++ptr = '0' + value;
 	ld	a, -4 (ix)
 	add	a, #0x30
 	ld	(hl), a
-	C$print.c$1274$1_1$370	= .
-	.globl	C$print.c$1274$1_1$370
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1274: while(*ptr != 0)
+	C$print.c$1271$1_1$316	= .
+	.globl	C$print.c$1271$1_1$316
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1271: while(*ptr != 0)
 00106$:
 	ld	a, (hl)
 	or	a, a
 	jr	Z, 00109$
-	C$print.c$1275$1_1$372	= .
-	.globl	C$print.c$1275$1_1$372
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1275: Print_DrawChar(*ptr--);	
+	C$print.c$1272$1_1$318	= .
+	.globl	C$print.c$1272$1_1$318
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1272: Print_DrawChar(*ptr--);	
 	dec	hl
 	ld	c, a
 	push	hl
@@ -2348,21 +2348,21 @@ _Print_DrawInt::
 	pop	hl
 	jp	00106$
 00109$:
-	C$print.c$1276$1_1$370	= .
-	.globl	C$print.c$1276$1_1$370
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1276: }
+	C$print.c$1273$1_1$316	= .
+	.globl	C$print.c$1273$1_1$316
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1273: }
 	ld	sp, ix
 	pop	ix
-	C$print.c$1276$1_1$370	= .
-	.globl	C$print.c$1276$1_1$370
+	C$print.c$1273$1_1$316	= .
+	.globl	C$print.c$1273$1_1$316
 	XG$Print_DrawInt$0$0	= .
 	.globl	XG$Print_DrawInt$0$0
 	ret
 	G$Print_DrawFormat$0$0	= .
 	.globl	G$Print_DrawFormat$0$0
-	C$print.c$1285$1_1$375	= .
-	.globl	C$print.c$1285$1_1$375
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1285: void Print_DrawFormat(const c8* format, ...)
+	C$print.c$1282$1_1$321	= .
+	.globl	C$print.c$1282$1_1$321
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1282: void Print_DrawFormat(const c8* format, ...)
 ;	---------------------------------
 ; Function Print_DrawFormat
 ; ---------------------------------
@@ -2373,23 +2373,23 @@ _Print_DrawFormat::
 	ld	hl, #-20
 	add	hl, sp
 	ld	sp, hl
-	C$print.c$1290$2_0$376	= .
-	.globl	C$print.c$1290$2_0$376
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1290: va_start(args, format);
+	C$print.c$1287$2_0$322	= .
+	.globl	C$print.c$1287$2_0$322
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1287: va_start(args, format);
 	ld	hl, #26
 	add	hl, sp
 	ld	-8 (ix), l
 	ld	-7 (ix), h
-	C$print.c$1292$2_0$377	= .
-	.globl	C$print.c$1292$2_0$377
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1292: const c8* ptr = format;
+	C$print.c$1289$2_0$323	= .
+	.globl	C$print.c$1289$2_0$323
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1289: const c8* ptr = format;
 	ld	a, 4 (ix)
 	ld	-4 (ix), a
 	ld	a, 5 (ix)
 	ld	-3 (ix), a
-	C$print.c$1293$4_3$386	= .
-	.globl	C$print.c$1293$4_3$386
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1293: while(*ptr != 0)
+	C$print.c$1290$4_3$332	= .
+	.globl	C$print.c$1290$4_3$332
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1290: while(*ptr != 0)
 00194$:
 	ld	l, -4 (ix)
 	ld	h, -3 (ix)
@@ -2397,25 +2397,25 @@ _Print_DrawFormat::
 	ld	-1 (ix), a
 	or	a, a
 	jp	Z, 00200$
-	C$print.c$1295$2_1$378	= .
-	.globl	C$print.c$1295$2_1$378
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1295: if(*ptr == '%')
+	C$print.c$1292$2_1$324	= .
+	.globl	C$print.c$1292$2_1$324
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1292: if(*ptr == '%')
 	ld	a, -1 (ix)
 	sub	a, #0x25
 	jp	NZ,00192$
-	C$print.c$1297$3_1$379	= .
-	.globl	C$print.c$1297$3_1$379
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1297: ptr++;
+	C$print.c$1294$3_1$325	= .
+	.globl	C$print.c$1294$3_1$325
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1294: ptr++;
 	ld	c, -4 (ix)
 	ld	b, -3 (ix)
 	inc	bc
-	C$print.c$1300$4_1$380	= .
-	.globl	C$print.c$1300$4_1$380
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1300: u8 len = 0;
+	C$print.c$1297$4_1$326	= .
+	.globl	C$print.c$1297$4_1$326
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1297: u8 len = 0;
 	ld	-1 (ix), #0x00
-	C$print.c$1301$3_2$380	= .
-	.globl	C$print.c$1301$3_2$380
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1301: if((*ptr >= '0') && (*ptr <= '9'))
+	C$print.c$1298$3_2$326	= .
+	.globl	C$print.c$1298$3_2$326
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1298: if((*ptr >= '0') && (*ptr <= '9'))
 	ld	a, (bc)
 	ld	e, a
 	sub	a, #0x30
@@ -2423,19 +2423,19 @@ _Print_DrawFormat::
 	ld	a, #0x39
 	sub	a, e
 	jr	C, 00208$
-	C$print.c$1303$4_2$381	= .
-	.globl	C$print.c$1303$4_2$381
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1303: len = *ptr - '0';
+	C$print.c$1300$4_2$327	= .
+	.globl	C$print.c$1300$4_2$327
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1300: len = *ptr - '0';
 	ld	a, e
 	add	a, #0xd0
 	ld	-1 (ix), a
-	C$print.c$1304$4_2$381	= .
-	.globl	C$print.c$1304$4_2$381
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1304: ptr++;
+	C$print.c$1301$4_2$327	= .
+	.globl	C$print.c$1301$4_2$327
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1301: ptr++;
 	inc	bc
-	C$print.c$1306$2_1$375	= .
-	.globl	C$print.c$1306$2_1$375
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1306: while((*ptr >= '0') && (*ptr <= '9'))
+	C$print.c$1303$2_1$321	= .
+	.globl	C$print.c$1303$2_1$321
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1303: while((*ptr >= '0') && (*ptr <= '9'))
 00208$:
 	ld	-10 (ix), c
 	ld	-9 (ix), b
@@ -2449,9 +2449,9 @@ _Print_DrawFormat::
 	ld	a, #0x39
 	sub	a, -2 (ix)
 	jr	C, 00244$
-	C$print.c$1308$4_2$382	= .
-	.globl	C$print.c$1308$4_2$382
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1308: len *= 10;
+	C$print.c$1305$4_2$328	= .
+	.globl	C$print.c$1305$4_2$328
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1305: len *= 10;
 	ld	l, -1 (ix)
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -2460,16 +2460,16 @@ _Print_DrawFormat::
 	add	hl, hl
 	add	hl, bc
 	add	hl, hl
-	C$print.c$1309$4_2$382	= .
-	.globl	C$print.c$1309$4_2$382
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1309: len += *ptr - '0';
+	C$print.c$1306$4_2$328	= .
+	.globl	C$print.c$1306$4_2$328
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1306: len += *ptr - '0';
 	ld	a, -2 (ix)
 	add	a, #0xd0
 	add	a, l
 	ld	-1 (ix), a
-	C$print.c$1310$4_2$382	= .
-	.globl	C$print.c$1310$4_2$382
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1310: ptr++;
+	C$print.c$1307$4_2$328	= .
+	.globl	C$print.c$1307$4_2$328
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1307: ptr++;
 	inc	-10 (ix)
 	jr	NZ, 00105$
 	inc	-9 (ix)
@@ -2479,9 +2479,9 @@ _Print_DrawFormat::
 	ld	-4 (ix), a
 	ld	a, -9 (ix)
 	ld	-3 (ix), a
-	C$print.c$1314$3_2$380	= .
-	.globl	C$print.c$1314$3_2$380
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1314: if((*ptr == 'i') || (*ptr == 'd'))
+	C$print.c$1311$3_2$326	= .
+	.globl	C$print.c$1311$3_2$326
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1311: if((*ptr == 'i') || (*ptr == 'd'))
 	ld	a, -2 (ix)
 	sub	a, #0x69
 	jr	Z, 00178$
@@ -2489,9 +2489,9 @@ _Print_DrawFormat::
 	sub	a, #0x64
 	jr	NZ, 00179$
 00178$:
-	C$print.c$1316$4_2$383	= .
-	.globl	C$print.c$1316$4_2$383
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1316: i16 val = (i16)va_arg(args, i16);
+	C$print.c$1313$4_2$329	= .
+	.globl	C$print.c$1313$4_2$329
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1313: i16 val = (i16)va_arg(args, i16);
 	ld	a, -8 (ix)
 	add	a, #0x02
 	ld	-6 (ix), a
@@ -2515,9 +2515,9 @@ _Print_DrawFormat::
 	inc	hl
 	ld	a, (hl)
 	ld	-1 (ix), a
-	C$print.c$1317$4_2$383	= .
-	.globl	C$print.c$1317$4_2$383
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1317: Print_DrawInt(val);
+	C$print.c$1314$4_2$329	= .
+	.globl	C$print.c$1314$4_2$329
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1314: Print_DrawInt(val);
 	ld	a, -2 (ix)
 	ld	-12 (ix), a
 	ld	a, -1 (ix)
@@ -2537,15 +2537,15 @@ _Print_DrawFormat::
 	call	_Print_DrawInt
 	jp	00193$
 00179$:
-	C$print.c$1319$3_2$380	= .
-	.globl	C$print.c$1319$3_2$380
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1319: else if(*ptr == 'u')
+	C$print.c$1316$3_2$326	= .
+	.globl	C$print.c$1316$3_2$326
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1316: else if(*ptr == 'u')
 	ld	a, -2 (ix)
 	sub	a, #0x75
 	jr	NZ, 00176$
-	C$print.c$1321$4_2$384	= .
-	.globl	C$print.c$1321$4_2$384
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1321: u16 val = (u16)va_arg(args, u16);
+	C$print.c$1318$4_2$330	= .
+	.globl	C$print.c$1318$4_2$330
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1318: u16 val = (u16)va_arg(args, u16);
 	ld	a, -8 (ix)
 	add	a, #0x02
 	ld	-6 (ix), a
@@ -2569,9 +2569,9 @@ _Print_DrawFormat::
 	inc	hl
 	ld	a, (hl)
 	ld	-1 (ix), a
-	C$print.c$1322$4_2$384	= .
-	.globl	C$print.c$1322$4_2$384
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1322: Print_DrawInt(val);
+	C$print.c$1319$4_2$330	= .
+	.globl	C$print.c$1319$4_2$330
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1319: Print_DrawInt(val);
 	ld	a, -2 (ix)
 	ld	-12 (ix), a
 	ld	a, -1 (ix)
@@ -2590,26 +2590,26 @@ _Print_DrawFormat::
 	call	_Print_DrawInt
 	jp	00193$
 00176$:
-	C$print.c$1324$3_2$380	= .
-	.globl	C$print.c$1324$3_2$380
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1324: else if(*ptr == 'x')
+	C$print.c$1321$3_2$326	= .
+	.globl	C$print.c$1321$3_2$326
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1321: else if(*ptr == 'x')
 	ld	a, -2 (ix)
 	sub	a, #0x78
 	jp	NZ,00173$
-	C$print.c$1326$4_2$385	= .
-	.globl	C$print.c$1326$4_2$385
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1326: if(len == 0)
+	C$print.c$1323$4_2$331	= .
+	.globl	C$print.c$1323$4_2$331
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1323: if(len == 0)
 	ld	a, -1 (ix)
 	or	a, a
 	jr	NZ, 00109$
-	C$print.c$1327$4_2$385	= .
-	.globl	C$print.c$1327$4_2$385
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1327: len = 4;
+	C$print.c$1324$4_2$331	= .
+	.globl	C$print.c$1324$4_2$331
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1324: len = 4;
 	ld	-1 (ix), #0x04
 00109$:
-	C$print.c$1328$4_3$386	= .
-	.globl	C$print.c$1328$4_3$386
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1328: u16 val = (u16)va_arg(args, u16);
+	C$print.c$1325$4_3$332	= .
+	.globl	C$print.c$1325$4_3$332
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1325: u16 val = (u16)va_arg(args, u16);
 	ld	a, -8 (ix)
 	add	a, #0x02
 	ld	-10 (ix), a
@@ -2633,15 +2633,15 @@ _Print_DrawFormat::
 	inc	hl
 	ld	a, (hl)
 	ld	-11 (ix), a
-	C$print.c$1329$4_3$386	= .
-	.globl	C$print.c$1329$4_3$386
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1329: if(len > 3)
+	C$print.c$1326$4_3$332	= .
+	.globl	C$print.c$1326$4_3$332
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1326: if(len > 3)
 	ld	a, #0x03
 	sub	a, -1 (ix)
 	jr	NC, 00111$
-	C$print.c$1330$4_3$386	= .
-	.globl	C$print.c$1330$4_3$386
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1330: Print_DrawChar(g_HexChar[(val >> 12) & 0x000F]);
+	C$print.c$1327$4_3$332	= .
+	.globl	C$print.c$1327$4_3$332
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1327: Print_DrawChar(g_HexChar[(val >> 12) & 0x000F]);
 	ld	a, -11 (ix)
 	rlca
 	rlca
@@ -2665,15 +2665,15 @@ _Print_DrawFormat::
 	ld	a, (hl)
 	call	_Print_DrawChar
 00111$:
-	C$print.c$1331$4_3$386	= .
-	.globl	C$print.c$1331$4_3$386
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1331: if(len > 2)
+	C$print.c$1328$4_3$332	= .
+	.globl	C$print.c$1328$4_3$332
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1328: if(len > 2)
 	ld	a, #0x02
 	sub	a, -1 (ix)
 	jr	NC, 00113$
-	C$print.c$1332$4_3$386	= .
-	.globl	C$print.c$1332$4_3$386
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1332: Print_DrawChar(g_HexChar[(val >> 8) & 0x000F]);
+	C$print.c$1329$4_3$332	= .
+	.globl	C$print.c$1329$4_3$332
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1329: Print_DrawChar(g_HexChar[(val >> 8) & 0x000F]);
 	ld	a, -11 (ix)
 	ld	-2 (ix), a
 	ld	-6 (ix), a
@@ -2693,15 +2693,15 @@ _Print_DrawFormat::
 	ld	a, (hl)
 	call	_Print_DrawChar
 00113$:
-	C$print.c$1333$4_3$386	= .
-	.globl	C$print.c$1333$4_3$386
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1333: if(len > 1)
+	C$print.c$1330$4_3$332	= .
+	.globl	C$print.c$1330$4_3$332
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1330: if(len > 1)
 	ld	a, #0x01
 	sub	a, -1 (ix)
 	jr	NC, 00115$
-	C$print.c$1334$4_3$386	= .
-	.globl	C$print.c$1334$4_3$386
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1334: Print_DrawChar(g_HexChar[(val >> 4) & 0x000F]);
+	C$print.c$1331$4_3$332	= .
+	.globl	C$print.c$1331$4_3$332
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1331: Print_DrawChar(g_HexChar[(val >> 4) & 0x000F]);
 	ld	a, -12 (ix)
 	ld	-2 (ix), a
 	ld	a, -11 (ix)
@@ -2729,9 +2729,9 @@ _Print_DrawFormat::
 	ld	a, (hl)
 	call	_Print_DrawChar
 00115$:
-	C$print.c$1335$4_3$386	= .
-	.globl	C$print.c$1335$4_3$386
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1335: Print_DrawChar(g_HexChar[val & 0x000F]);
+	C$print.c$1332$4_3$332	= .
+	.globl	C$print.c$1332$4_3$332
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1332: Print_DrawChar(g_HexChar[val & 0x000F]);
 	ld	a, -12 (ix)
 	ld	-2 (ix), a
 	ld	a, -11 (ix)
@@ -2752,26 +2752,26 @@ _Print_DrawFormat::
 	call	_Print_DrawChar
 	jp	00193$
 00173$:
-	C$print.c$1337$3_2$380	= .
-	.globl	C$print.c$1337$3_2$380
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1337: else if(*ptr == 'b')
+	C$print.c$1334$3_2$326	= .
+	.globl	C$print.c$1334$3_2$326
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1334: else if(*ptr == 'b')
 	ld	a, -2 (ix)
 	sub	a, #0x62
 	jp	NZ,00170$
-	C$print.c$1339$4_2$387	= .
-	.globl	C$print.c$1339$4_2$387
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1339: if(len == 0)
+	C$print.c$1336$4_2$333	= .
+	.globl	C$print.c$1336$4_2$333
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1336: if(len == 0)
 	ld	a, -1 (ix)
 	or	a, a
 	jr	NZ, 00117$
-	C$print.c$1340$4_2$387	= .
-	.globl	C$print.c$1340$4_2$387
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1340: len = 16;
+	C$print.c$1337$4_2$333	= .
+	.globl	C$print.c$1337$4_2$333
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1337: len = 16;
 	ld	-1 (ix), #0x10
 00117$:
-	C$print.c$1341$4_3$388	= .
-	.globl	C$print.c$1341$4_3$388
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1341: u16 val = (u16)va_arg(args, u16);
+	C$print.c$1338$4_3$334	= .
+	.globl	C$print.c$1338$4_3$334
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1338: u16 val = (u16)va_arg(args, u16);
 	ld	a, -8 (ix)
 	add	a, #0x02
 	ld	-10 (ix), a
@@ -2795,9 +2795,9 @@ _Print_DrawFormat::
 	inc	hl
 	ld	a, (hl)
 	ld	-5 (ix), a
-	C$print.c$1342$4_3$388	= .
-	.globl	C$print.c$1342$4_3$388
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1342: u16 bit = 1 << (len - 1);
+	C$print.c$1339$4_3$334	= .
+	.globl	C$print.c$1339$4_3$334
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1339: u16 bit = 1 << (len - 1);
 	dec	-1 (ix)
 	ld	b, -1 (ix)
 	ld	-2 (ix), #0x01
@@ -2809,16 +2809,16 @@ _Print_DrawFormat::
 	rl	-1 (ix)
 00426$:
 	djnz	00425$
-	C$print.c$1343$4_3$388	= .
-	.globl	C$print.c$1343$4_3$388
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1343: while(bit)
+	C$print.c$1340$4_3$334	= .
+	.globl	C$print.c$1340$4_3$334
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1340: while(bit)
 00121$:
 	ld	a, -1 (ix)
 	or	a, -2 (ix)
 	jp	Z, 00193$
-	C$print.c$1345$5_3$389	= .
-	.globl	C$print.c$1345$5_3$389
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1345: if(val & bit)
+	C$print.c$1342$5_3$335	= .
+	.globl	C$print.c$1342$5_3$335
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1342: if(val & bit)
 	ld	a, -6 (ix)
 	and	a, -2 (ix)
 	ld	-10 (ix), a
@@ -2827,29 +2827,29 @@ _Print_DrawFormat::
 	ld	-9 (ix), a
 	or	a, -10 (ix)
 	jr	Z, 00119$
-	C$print.c$1346$5_3$389	= .
-	.globl	C$print.c$1346$5_3$389
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1346: Print_DrawChar('1');
+	C$print.c$1343$5_3$335	= .
+	.globl	C$print.c$1343$5_3$335
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1343: Print_DrawChar('1');
 	ld	a, #0x31
 	call	_Print_DrawChar
 	jp	00120$
 00119$:
-	C$print.c$1348$5_3$389	= .
-	.globl	C$print.c$1348$5_3$389
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1348: Print_DrawChar('0');
+	C$print.c$1345$5_3$335	= .
+	.globl	C$print.c$1345$5_3$335
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1345: Print_DrawChar('0');
 	ld	a, #0x30
 	call	_Print_DrawChar
 00120$:
-	C$print.c$1349$5_3$389	= .
-	.globl	C$print.c$1349$5_3$389
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1349: bit >>= 1;
+	C$print.c$1346$5_3$335	= .
+	.globl	C$print.c$1346$5_3$335
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1346: bit >>= 1;
 	srl	-1 (ix)
 	rr	-2 (ix)
 	jp	00121$
 00170$:
-	C$print.c$1353$3_2$380	= .
-	.globl	C$print.c$1353$3_2$380
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1353: else if((*ptr == 'I') || (*ptr == 'D'))
+	C$print.c$1350$3_2$326	= .
+	.globl	C$print.c$1350$3_2$326
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1350: else if((*ptr == 'I') || (*ptr == 'D'))
 	ld	a, -2 (ix)
 	sub	a, #0x49
 	jr	Z, 00165$
@@ -2857,9 +2857,9 @@ _Print_DrawFormat::
 	sub	a, #0x44
 	jr	NZ, 00166$
 00165$:
-	C$print.c$1355$4_2$390	= .
-	.globl	C$print.c$1355$4_2$390
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1355: i32 val = (i32)va_arg(args, i32);
+	C$print.c$1352$4_2$336	= .
+	.globl	C$print.c$1352$4_2$336
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1352: i32 val = (i32)va_arg(args, i32);
 	ld	l, -8 (ix)
 	ld	h, -7 (ix)
 	ld	de, #0x0004
@@ -2884,24 +2884,24 @@ _Print_DrawFormat::
 	inc	hl
 	ld	h, (hl)
 ;	spillPairReg hl
-	C$print.c$1356$4_2$390	= .
-	.globl	C$print.c$1356$4_2$390
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1356: Print_DrawInt(val);
+	C$print.c$1353$4_2$336	= .
+	.globl	C$print.c$1353$4_2$336
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1353: Print_DrawInt(val);
 	ld	l, c
 ;	spillPairReg hl
 ;	spillPairReg hl
 	call	_Print_DrawInt
 	jp	00193$
 00166$:
-	C$print.c$1358$3_2$380	= .
-	.globl	C$print.c$1358$3_2$380
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1358: else if(*ptr == 'U')
+	C$print.c$1355$3_2$326	= .
+	.globl	C$print.c$1355$3_2$326
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1355: else if(*ptr == 'U')
 	ld	a, -2 (ix)
 	sub	a, #0x55
 	jr	NZ, 00163$
-	C$print.c$1360$4_2$391	= .
-	.globl	C$print.c$1360$4_2$391
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1360: u32 val = (u32)va_arg(args, u32);
+	C$print.c$1357$4_2$337	= .
+	.globl	C$print.c$1357$4_2$337
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1357: u32 val = (u32)va_arg(args, u32);
 	ld	l, -8 (ix)
 	ld	h, -7 (ix)
 	ld	de, #0x0004
@@ -2926,35 +2926,35 @@ _Print_DrawFormat::
 	inc	hl
 	ld	h, (hl)
 ;	spillPairReg hl
-	C$print.c$1361$4_2$391	= .
-	.globl	C$print.c$1361$4_2$391
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1361: Print_DrawInt(val);
+	C$print.c$1358$4_2$337	= .
+	.globl	C$print.c$1358$4_2$337
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1358: Print_DrawInt(val);
 	ld	l, c
 ;	spillPairReg hl
 ;	spillPairReg hl
 	call	_Print_DrawInt
 	jp	00193$
 00163$:
-	C$print.c$1363$3_2$380	= .
-	.globl	C$print.c$1363$3_2$380
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1363: else if(*ptr == 'X')
+	C$print.c$1360$3_2$326	= .
+	.globl	C$print.c$1360$3_2$326
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1360: else if(*ptr == 'X')
 	ld	a, -2 (ix)
 	sub	a, #0x58
 	jp	NZ,00160$
-	C$print.c$1365$4_2$392	= .
-	.globl	C$print.c$1365$4_2$392
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1365: if(len == 0)
+	C$print.c$1362$4_2$338	= .
+	.globl	C$print.c$1362$4_2$338
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1362: if(len == 0)
 	ld	a, -1 (ix)
 	or	a, a
 	jr	NZ, 00125$
-	C$print.c$1366$4_2$392	= .
-	.globl	C$print.c$1366$4_2$392
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1366: len = 8;
+	C$print.c$1363$4_2$338	= .
+	.globl	C$print.c$1363$4_2$338
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1363: len = 8;
 	ld	-1 (ix), #0x08
 00125$:
-	C$print.c$1367$4_3$393	= .
-	.globl	C$print.c$1367$4_3$393
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1367: u32 val = (u32)va_arg(args, u32);
+	C$print.c$1364$4_3$339	= .
+	.globl	C$print.c$1364$4_3$339
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1364: u32 val = (u32)va_arg(args, u32);
 	ld	l, -8 (ix)
 	ld	h, -7 (ix)
 	ld	de, #0x0004
@@ -2978,15 +2978,15 @@ _Print_DrawFormat::
 	ld	e, (hl)
 	inc	hl
 	ld	d, (hl)
-	C$print.c$1369$4_3$393	= .
-	.globl	C$print.c$1369$4_3$393
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1369: if(len > 7)
+	C$print.c$1366$4_3$339	= .
+	.globl	C$print.c$1366$4_3$339
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1366: if(len > 7)
 	ld	a, #0x07
 	sub	a, -1 (ix)
 	jr	NC, 00127$
-	C$print.c$1370$4_3$393	= .
-	.globl	C$print.c$1370$4_3$393
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1370: Print_DrawChar(g_HexChar[(val >> 28) & 0xF]);
+	C$print.c$1367$4_3$339	= .
+	.globl	C$print.c$1367$4_3$339
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1367: Print_DrawChar(g_HexChar[(val >> 28) & 0xF]);
 	ld	-12 (ix), d
 	xor	a, a
 	ld	-11 (ix), a
@@ -3020,15 +3020,15 @@ _Print_DrawFormat::
 	pop	de
 	pop	bc
 00127$:
-	C$print.c$1371$4_3$393	= .
-	.globl	C$print.c$1371$4_3$393
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1371: if(len > 6)
+	C$print.c$1368$4_3$339	= .
+	.globl	C$print.c$1368$4_3$339
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1368: if(len > 6)
 	ld	a, #0x06
 	sub	a, -1 (ix)
 	jr	NC, 00129$
-	C$print.c$1372$4_3$393	= .
-	.globl	C$print.c$1372$4_3$393
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1372: Print_DrawChar(g_HexChar[(val >> 24) & 0xF]);
+	C$print.c$1369$4_3$339	= .
+	.globl	C$print.c$1369$4_3$339
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1369: Print_DrawChar(g_HexChar[(val >> 24) & 0xF]);
 	ld	a, d
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -3052,15 +3052,15 @@ _Print_DrawFormat::
 	pop	de
 	pop	bc
 00129$:
-	C$print.c$1373$4_3$393	= .
-	.globl	C$print.c$1373$4_3$393
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1373: if(len > 5)
+	C$print.c$1370$4_3$339	= .
+	.globl	C$print.c$1370$4_3$339
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1370: if(len > 5)
 	ld	a, #0x05
 	sub	a, -1 (ix)
 	jr	NC, 00131$
-	C$print.c$1374$4_3$393	= .
-	.globl	C$print.c$1374$4_3$393
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1374: Print_DrawChar(g_HexChar[(val >> 20) & 0xF]);
+	C$print.c$1371$4_3$339	= .
+	.globl	C$print.c$1371$4_3$339
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1371: Print_DrawChar(g_HexChar[(val >> 20) & 0xF]);
 	ld	-12 (ix), e
 	ld	-11 (ix), d
 	xor	a, a
@@ -3095,15 +3095,15 @@ _Print_DrawFormat::
 	pop	de
 	pop	bc
 00131$:
-	C$print.c$1375$4_3$393	= .
-	.globl	C$print.c$1375$4_3$393
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1375: if(len > 4)
+	C$print.c$1372$4_3$339	= .
+	.globl	C$print.c$1372$4_3$339
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1372: if(len > 4)
 	ld	a, #0x04
 	sub	a, -1 (ix)
 	jr	NC, 00133$
-	C$print.c$1376$4_3$393	= .
-	.globl	C$print.c$1376$4_3$393
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1376: Print_DrawChar(g_HexChar[(val >> 16) & 0xF]);
+	C$print.c$1373$4_3$339	= .
+	.globl	C$print.c$1373$4_3$339
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1373: Print_DrawChar(g_HexChar[(val >> 16) & 0xF]);
 	ld	a, e
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -3127,15 +3127,15 @@ _Print_DrawFormat::
 	pop	de
 	pop	bc
 00133$:
-	C$print.c$1377$4_3$393	= .
-	.globl	C$print.c$1377$4_3$393
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1377: if(len > 3)
+	C$print.c$1374$4_3$339	= .
+	.globl	C$print.c$1374$4_3$339
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1374: if(len > 3)
 	ld	a, #0x03
 	sub	a, -1 (ix)
 	jr	NC, 00135$
-	C$print.c$1378$4_3$393	= .
-	.globl	C$print.c$1378$4_3$393
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1378: Print_DrawChar(g_HexChar[(val >> 12) & 0xF]);
+	C$print.c$1375$4_3$339	= .
+	.globl	C$print.c$1375$4_3$339
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1375: Print_DrawChar(g_HexChar[(val >> 12) & 0xF]);
 	ld	-12 (ix), b
 	ld	-11 (ix), e
 	ld	-10 (ix), d
@@ -3170,15 +3170,15 @@ _Print_DrawFormat::
 	pop	de
 	pop	bc
 00135$:
-	C$print.c$1379$4_3$393	= .
-	.globl	C$print.c$1379$4_3$393
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1379: if(len > 2)
+	C$print.c$1376$4_3$339	= .
+	.globl	C$print.c$1376$4_3$339
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1376: if(len > 2)
 	ld	a, #0x02
 	sub	a, -1 (ix)
 	jr	NC, 00137$
-	C$print.c$1380$4_3$393	= .
-	.globl	C$print.c$1380$4_3$393
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1380: Print_DrawChar(g_HexChar[(val >> 8) & 0xF]);
+	C$print.c$1377$4_3$339	= .
+	.globl	C$print.c$1377$4_3$339
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1377: Print_DrawChar(g_HexChar[(val >> 8) & 0xF]);
 	ld	a, b
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -3202,15 +3202,15 @@ _Print_DrawFormat::
 	pop	de
 	pop	bc
 00137$:
-	C$print.c$1381$4_3$393	= .
-	.globl	C$print.c$1381$4_3$393
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1381: if(len > 1)
+	C$print.c$1378$4_3$339	= .
+	.globl	C$print.c$1378$4_3$339
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1378: if(len > 1)
 	ld	a, #0x01
 	sub	a, -1 (ix)
 	jr	NC, 00139$
-	C$print.c$1382$4_3$393	= .
-	.globl	C$print.c$1382$4_3$393
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1382: Print_DrawChar(g_HexChar[(val >> 4) & 0xF]);
+	C$print.c$1379$4_3$339	= .
+	.globl	C$print.c$1379$4_3$339
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1379: Print_DrawChar(g_HexChar[(val >> 4) & 0xF]);
 	ld	-12 (ix), c
 	ld	-11 (ix), b
 	ld	-10 (ix), e
@@ -3246,9 +3246,9 @@ _Print_DrawFormat::
 	pop	de
 	pop	bc
 00139$:
-	C$print.c$1383$2_1$375	= .
-	.globl	C$print.c$1383$2_1$375
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1383: Print_DrawChar(g_HexChar[val & 0xF]);
+	C$print.c$1380$2_1$321	= .
+	.globl	C$print.c$1380$2_1$321
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1380: Print_DrawChar(g_HexChar[val & 0xF]);
 	ld	a, c
 	and	a, #0x0f
 	ld	c, a
@@ -3259,26 +3259,26 @@ _Print_DrawFormat::
 	call	_Print_DrawChar
 	jp	00193$
 00160$:
-	C$print.c$1385$3_2$380	= .
-	.globl	C$print.c$1385$3_2$380
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1385: else if(*ptr == 'B')
+	C$print.c$1382$3_2$326	= .
+	.globl	C$print.c$1382$3_2$326
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1382: else if(*ptr == 'B')
 	ld	a, -2 (ix)
 	sub	a, #0x42
 	jp	NZ,00157$
-	C$print.c$1387$4_2$394	= .
-	.globl	C$print.c$1387$4_2$394
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1387: if(len == 0)
+	C$print.c$1384$4_2$340	= .
+	.globl	C$print.c$1384$4_2$340
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1384: if(len == 0)
 	ld	a, -1 (ix)
 	or	a, a
 	jr	NZ, 00141$
-	C$print.c$1388$4_2$394	= .
-	.globl	C$print.c$1388$4_2$394
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1388: len = 16;
+	C$print.c$1385$4_2$340	= .
+	.globl	C$print.c$1385$4_2$340
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1385: len = 16;
 	ld	-1 (ix), #0x10
 00141$:
-	C$print.c$1389$4_3$395	= .
-	.globl	C$print.c$1389$4_3$395
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1389: u32 val = (u32)va_arg(args, u32);
+	C$print.c$1386$4_3$341	= .
+	.globl	C$print.c$1386$4_3$341
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1386: u32 val = (u32)va_arg(args, u32);
 	ld	l, -8 (ix)
 	ld	h, -7 (ix)
 	ld	de, #0x0004
@@ -3293,9 +3293,9 @@ _Print_DrawFormat::
 	ex	de, hl
 	ld	bc, #0x0004
 	ldir
-	C$print.c$1390$4_3$395	= .
-	.globl	C$print.c$1390$4_3$395
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1390: u32 bit = 1 << (len - 1);
+	C$print.c$1387$4_3$341	= .
+	.globl	C$print.c$1387$4_3$341
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1387: u32 bit = 1 << (len - 1);
 	ld	b, -1 (ix)
 	dec	b
 	ld	hl, #0x0001
@@ -3312,18 +3312,18 @@ _Print_DrawFormat::
 	sbc	a, a
 	ld	-10 (ix), a
 	ld	-9 (ix), a
-	C$print.c$1391$4_3$395	= .
-	.globl	C$print.c$1391$4_3$395
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1391: while(bit)
+	C$print.c$1388$4_3$341	= .
+	.globl	C$print.c$1388$4_3$341
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1388: while(bit)
 00145$:
 	ld	a, -9 (ix)
 	or	a, -10 (ix)
 	or	a, -11 (ix)
 	or	a, -12 (ix)
 	jp	Z, 00193$
-	C$print.c$1393$5_3$396	= .
-	.globl	C$print.c$1393$5_3$396
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1393: if(val & bit)
+	C$print.c$1390$5_3$342	= .
+	.globl	C$print.c$1390$5_3$342
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1390: if(val & bit)
 	ld	a, -16 (ix)
 	and	a, -12 (ix)
 	ld	-20 (ix), a
@@ -3340,37 +3340,37 @@ _Print_DrawFormat::
 	or	a, -19 (ix)
 	or	a, -20 (ix)
 	jr	Z, 00143$
-	C$print.c$1394$5_3$396	= .
-	.globl	C$print.c$1394$5_3$396
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1394: Print_DrawChar('1');
+	C$print.c$1391$5_3$342	= .
+	.globl	C$print.c$1391$5_3$342
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1391: Print_DrawChar('1');
 	ld	a, #0x31
 	call	_Print_DrawChar
 	jp	00144$
 00143$:
-	C$print.c$1396$5_3$396	= .
-	.globl	C$print.c$1396$5_3$396
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1396: Print_DrawChar('0');
+	C$print.c$1393$5_3$342	= .
+	.globl	C$print.c$1393$5_3$342
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1393: Print_DrawChar('0');
 	ld	a, #0x30
 	call	_Print_DrawChar
 00144$:
-	C$print.c$1397$5_3$396	= .
-	.globl	C$print.c$1397$5_3$396
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1397: bit >>= 1;
+	C$print.c$1394$5_3$342	= .
+	.globl	C$print.c$1394$5_3$342
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1394: bit >>= 1;
 	srl	-9 (ix)
 	rr	-10 (ix)
 	rr	-11 (ix)
 	rr	-12 (ix)
 	jp	00145$
 00157$:
-	C$print.c$1401$3_2$380	= .
-	.globl	C$print.c$1401$3_2$380
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1401: else if(*ptr == 'c')
+	C$print.c$1398$3_2$326	= .
+	.globl	C$print.c$1398$3_2$326
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1398: else if(*ptr == 'c')
 	ld	a, -2 (ix)
 	sub	a, #0x63
 	jr	NZ, 00154$
-	C$print.c$1403$4_2$397	= .
-	.globl	C$print.c$1403$4_2$397
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1403: c8 val = (c8)va_arg(args, u16);
+	C$print.c$1400$4_2$343	= .
+	.globl	C$print.c$1400$4_2$343
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1400: c8 val = (c8)va_arg(args, u16);
 	ld	l, -8 (ix)
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -3383,22 +3383,22 @@ _Print_DrawFormat::
 	ld	-7 (ix), h
 	dec	hl
 	dec	hl
-	C$print.c$1404$4_2$397	= .
-	.globl	C$print.c$1404$4_2$397
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1404: Print_DrawChar(val);
+	C$print.c$1401$4_2$343	= .
+	.globl	C$print.c$1401$4_2$343
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1401: Print_DrawChar(val);
 	ld	a, (hl)
 	call	_Print_DrawChar
 	jp	00193$
 00154$:
-	C$print.c$1406$3_2$380	= .
-	.globl	C$print.c$1406$3_2$380
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1406: else if(*ptr == 's')
+	C$print.c$1403$3_2$326	= .
+	.globl	C$print.c$1403$3_2$326
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1403: else if(*ptr == 's')
 	ld	a, -2 (ix)
 	sub	a, #0x73
 	jr	NZ, 00151$
-	C$print.c$1408$4_2$398	= .
-	.globl	C$print.c$1408$4_2$398
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1408: const c8* val = (const c8*)va_arg(args, const c8*);
+	C$print.c$1405$4_2$344	= .
+	.globl	C$print.c$1405$4_2$344
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1405: const c8* val = (const c8*)va_arg(args, const c8*);
 	ld	l, -8 (ix)
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -3415,35 +3415,35 @@ _Print_DrawFormat::
 	inc	hl
 	ld	h, (hl)
 ;	spillPairReg hl
-	C$print.c$1409$4_2$398	= .
-	.globl	C$print.c$1409$4_2$398
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1409: Print_DrawText(val);
+	C$print.c$1406$4_2$344	= .
+	.globl	C$print.c$1406$4_2$344
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1406: Print_DrawText(val);
 	ld	l, c
 ;	spillPairReg hl
 ;	spillPairReg hl
 	call	_Print_DrawText
 	jp	00193$
 00151$:
-	C$print.c$1411$3_2$380	= .
-	.globl	C$print.c$1411$3_2$380
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1411: else if(*ptr == '%')
+	C$print.c$1408$3_2$326	= .
+	.globl	C$print.c$1408$3_2$326
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1408: else if(*ptr == '%')
 	ld	a, -2 (ix)
 	sub	a, #0x25
 	jr	NZ, 00193$
-	C$print.c$1413$4_2$399	= .
-	.globl	C$print.c$1413$4_2$399
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1413: Print_DrawChar('%');
+	C$print.c$1410$4_2$345	= .
+	.globl	C$print.c$1410$4_2$345
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1410: Print_DrawChar('%');
 	ld	a, #0x25
 	call	_Print_DrawChar
 	jp	00193$
 00192$:
-	C$print.c$1417$2_1$378	= .
-	.globl	C$print.c$1417$2_1$378
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1417: else if(*ptr == '\t')
+	C$print.c$1414$2_1$324	= .
+	.globl	C$print.c$1414$2_1$324
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1414: else if(*ptr == '\t')
 	ld	a, -1 (ix)
 	sub	a, #0x09
 	jr	NZ, 00189$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:423: g_PrintData.CursorX += PRINT_W(g_PrintData.UnitX) + g_PrintData.TabSize - 1;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:423: g_PrintData.CursorX += PRINT_W(g_PrintData.UnitX) + g_PrintData.TabSize - 1;
 	ld	bc, #_g_PrintData + 5
 	ld	a, (bc)
 	ld	hl, #(_g_PrintData + 4)
@@ -3451,84 +3451,84 @@ _Print_DrawFormat::
 	add	a, e
 	ld	e, a
 	ld	(bc), a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:424: g_PrintData.CursorX &= ~(g_PrintData.TabSize - 1);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:424: g_PrintData.CursorX &= ~(g_PrintData.TabSize - 1);
 	ld	a, (#(_g_PrintData + 4) + 0)
 	dec	a
 	cpl
 	and	a, e
 	ld	(bc), a
-	C$print.c$1418$2_1$378	= .
-	.globl	C$print.c$1418$2_1$378
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1418: Print_Tab();
+	C$print.c$1415$2_1$324	= .
+	.globl	C$print.c$1415$2_1$324
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1415: Print_Tab();
 	jp	00193$
 00189$:
-	C$print.c$1419$2_1$378	= .
-	.globl	C$print.c$1419$2_1$378
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1419: else if(*ptr == '\n')
+	C$print.c$1416$2_1$324	= .
+	.globl	C$print.c$1416$2_1$324
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1416: else if(*ptr == '\n')
 	ld	a, -1 (ix)
 	sub	a, #0x0a
 	jr	NZ, 00186$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:431: g_PrintData.CursorX = 0;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:431: g_PrintData.CursorX = 0;
 	ld	hl, #(_g_PrintData + 5)
 	ld	(hl), #0x00
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:432: g_PrintData.CursorY += PRINT_H(g_PrintData.UnitY);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:432: g_PrintData.CursorY += PRINT_H(g_PrintData.UnitY);
 	ld	bc, #_g_PrintData + 6
 	ld	a, (bc)
 	inc	a
 	ld	(bc), a
-	C$print.c$1420$2_1$378	= .
-	.globl	C$print.c$1420$2_1$378
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1420: Print_Return();
+	C$print.c$1417$2_1$324	= .
+	.globl	C$print.c$1417$2_1$324
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1417: Print_Return();
 	jp	00193$
 00186$:
-	C$print.c$1421$2_1$378	= .
-	.globl	C$print.c$1421$2_1$378
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1421: else if(*ptr == ' ')
+	C$print.c$1418$2_1$324	= .
+	.globl	C$print.c$1418$2_1$324
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1418: else if(*ptr == ' ')
 	ld	a, -1 (ix)
 	sub	a, #0x20
 	jr	NZ, 00183$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:416: g_PrintData.CursorX += PRINT_W(g_PrintData.UnitX);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:416: g_PrintData.CursorX += PRINT_W(g_PrintData.UnitX);
 	ld	bc, #_g_PrintData + 5
 	ld	a, (bc)
 	inc	a
 	ld	(bc), a
-	C$print.c$1422$2_1$378	= .
-	.globl	C$print.c$1422$2_1$378
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1422: Print_Space();
+	C$print.c$1419$2_1$324	= .
+	.globl	C$print.c$1419$2_1$324
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1419: Print_Space();
 	jp	00193$
 00183$:
-	C$print.c$1424$2_1$378	= .
-	.globl	C$print.c$1424$2_1$378
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1424: Print_DrawChar(*ptr);
+	C$print.c$1421$2_1$324	= .
+	.globl	C$print.c$1421$2_1$324
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1421: Print_DrawChar(*ptr);
 	ld	a, -1 (ix)
 	call	_Print_DrawChar
 00193$:
-	C$print.c$1426$2_1$378	= .
-	.globl	C$print.c$1426$2_1$378
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1426: ptr++;
+	C$print.c$1423$2_1$324	= .
+	.globl	C$print.c$1423$2_1$324
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1423: ptr++;
 	inc	-4 (ix)
 	jp	NZ,00194$
 	inc	-3 (ix)
 	jp	00194$
-	C$print.c$1429$2_1$375	= .
-	.globl	C$print.c$1429$2_1$375
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1429: va_end(args);
+	C$print.c$1426$2_1$321	= .
+	.globl	C$print.c$1426$2_1$321
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1426: va_end(args);
 00200$:
-	C$print.c$1430$2_1$375	= .
-	.globl	C$print.c$1430$2_1$375
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1430: }
+	C$print.c$1427$2_1$321	= .
+	.globl	C$print.c$1427$2_1$321
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1427: }
 	ld	sp, ix
 	pop	ix
-	C$print.c$1430$2_1$375	= .
-	.globl	C$print.c$1430$2_1$375
+	C$print.c$1427$2_1$321	= .
+	.globl	C$print.c$1427$2_1$321
 	XG$Print_DrawFormat$0$0	= .
 	.globl	XG$Print_DrawFormat$0$0
 	ret
 	G$Print_DrawLineH$0$0	= .
 	.globl	G$Print_DrawLineH$0$0
-	C$print.c$1440$2_1$411	= .
-	.globl	C$print.c$1440$2_1$411
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1440: void Print_DrawLineH(u8 x, u8 y, u8 len)
+	C$print.c$1437$2_1$357	= .
+	.globl	C$print.c$1437$2_1$357
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1437: void Print_DrawLineH(u8 x, u8 y, u8 len)
 ;	---------------------------------
 ; Function Print_DrawLineH
 ; ---------------------------------
@@ -3538,32 +3538,32 @@ _Print_DrawLineH::
 	add	ix,sp
 	ld	b, a
 	ld	c, l
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:226: g_PrintData.CursorX = x;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:226: g_PrintData.CursorX = x;
 	ld	hl, #(_g_PrintData + 5)
 	ld	(hl), b
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:227: g_PrintData.CursorY = y;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:227: g_PrintData.CursorY = y;
 	ld	hl, #(_g_PrintData + 6)
 	ld	(hl), c
-	C$print.c$1443$1_0$411	= .
-	.globl	C$print.c$1443$1_0$411
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1443: Print_DrawCharX(0x17, len);
+	C$print.c$1440$1_0$357	= .
+	.globl	C$print.c$1440$1_0$357
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1440: Print_DrawCharX(0x17, len);
 	ld	l, 4 (ix)
 ;	spillPairReg hl
 ;	spillPairReg hl
 	ld	a, #0x17
 	call	_Print_DrawCharX
-	C$print.c$1444$1_0$411	= .
-	.globl	C$print.c$1444$1_0$411
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1444: }
+	C$print.c$1441$1_0$357	= .
+	.globl	C$print.c$1441$1_0$357
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1441: }
 	pop	ix
 	pop	hl
 	inc	sp
 	jp	(hl)
 	G$Print_DrawLineV$0$0	= .
 	.globl	G$Print_DrawLineV$0$0
-	C$print.c$1448$1_0$417	= .
-	.globl	C$print.c$1448$1_0$417
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1448: void Print_DrawLineV(u8 x, u8 y, u8 len)
+	C$print.c$1445$1_0$363	= .
+	.globl	C$print.c$1445$1_0$363
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1445: void Print_DrawLineV(u8 x, u8 y, u8 len)
 ;	---------------------------------
 ; Function Print_DrawLineV
 ; ---------------------------------
@@ -3574,38 +3574,38 @@ _Print_DrawLineV::
 	dec	sp
 	ld	c, a
 	ld	-1 (ix), l
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1450: for(u8 i = 0; i < len; i++)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1447: for(u8 i = 0; i < len; i++)
 	ld	b, #0x00
 00104$:
 	ld	a, b
 	sub	a, 4 (ix)
 	jr	NC, 00106$
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1452: Print_SetPosition(x, y + i);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1449: Print_SetPosition(x, y + i);
 	ld	a, -1 (ix)
 	add	a, b
 	ld	e, a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:226: g_PrintData.CursorX = x;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:226: g_PrintData.CursorX = x;
 	ld	hl, #(_g_PrintData + 5)
 	ld	(hl), c
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:227: g_PrintData.CursorY = y;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:227: g_PrintData.CursorY = y;
 	ld	hl, #(_g_PrintData + 6)
 	ld	(hl), e
-	C$print.c$1453$3_0$418	= .
-	.globl	C$print.c$1453$3_0$418
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1453: Print_DrawChar(0x16);
+	C$print.c$1450$3_0$364	= .
+	.globl	C$print.c$1450$3_0$364
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1450: Print_DrawChar(0x16);
 	push	bc
 	ld	a, #0x16
 	call	_Print_DrawChar
 	pop	bc
-	C$print.c$1450$2_0$417	= .
-	.globl	C$print.c$1450$2_0$417
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1450: for(u8 i = 0; i < len; i++)
+	C$print.c$1447$2_0$363	= .
+	.globl	C$print.c$1447$2_0$363
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1447: for(u8 i = 0; i < len; i++)
 	inc	b
 	jp	00104$
 00106$:
-	C$print.c$1455$2_0$417	= .
-	.globl	C$print.c$1455$2_0$417
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1455: }
+	C$print.c$1452$2_0$363	= .
+	.globl	C$print.c$1452$2_0$363
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1452: }
 	inc	sp
 	pop	ix
 	pop	hl
@@ -3613,9 +3613,9 @@ _Print_DrawLineV::
 	jp	(hl)
 	G$Print_DrawBox$0$0	= .
 	.globl	G$Print_DrawBox$0$0
-	C$print.c$1459$2_0$423	= .
-	.globl	C$print.c$1459$2_0$423
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1459: void Print_DrawBox(u8 x, u8 y, u8 width, u8 height)
+	C$print.c$1456$2_0$369	= .
+	.globl	C$print.c$1456$2_0$369
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1456: void Print_DrawBox(u8 x, u8 y, u8 width, u8 height)
 ;	---------------------------------
 ; Function Print_DrawBox
 ; ---------------------------------
@@ -3626,75 +3626,75 @@ _Print_DrawBox::
 	dec	sp
 	ld	d, a
 	ld	e, l
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:226: g_PrintData.CursorX = x;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:226: g_PrintData.CursorX = x;
 	ld	hl, #(_g_PrintData + 5)
 	ld	(hl), d
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:227: g_PrintData.CursorY = y;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:227: g_PrintData.CursorY = y;
 	ld	hl, #(_g_PrintData + 6)
 	ld	(hl), e
-	C$print.c$1463$1_0$423	= .
-	.globl	C$print.c$1463$1_0$423
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1463: Print_DrawChar(0x18);
+	C$print.c$1460$1_0$369	= .
+	.globl	C$print.c$1460$1_0$369
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1460: Print_DrawChar(0x18);
 	push	de
 	ld	a, #0x18
 	call	_Print_DrawChar
 	pop	de
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1464: Print_SetPosition(x + width - 1, y);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1461: Print_SetPosition(x + width - 1, y);
 	ld	a, d
 	add	a, 4 (ix)
 	dec	a
 	ld	c, a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:226: g_PrintData.CursorX = x;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:226: g_PrintData.CursorX = x;
 	ld	(#(_g_PrintData + 5)),a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:227: g_PrintData.CursorY = y;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:227: g_PrintData.CursorY = y;
 	ld	hl, #(_g_PrintData + 6)
 	ld	(hl), e
-	C$print.c$1465$1_0$423	= .
-	.globl	C$print.c$1465$1_0$423
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1465: Print_DrawChar(0x19);
+	C$print.c$1462$1_0$369	= .
+	.globl	C$print.c$1462$1_0$369
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1462: Print_DrawChar(0x19);
 	push	bc
 	push	de
 	ld	a, #0x19
 	call	_Print_DrawChar
 	pop	de
 	pop	bc
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1466: Print_SetPosition(x, y + height - 1);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1463: Print_SetPosition(x, y + height - 1);
 	ld	a, e
 	add	a, 5 (ix)
 	dec	a
 	ld	b, a
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:226: g_PrintData.CursorX = x;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:226: g_PrintData.CursorX = x;
 	ld	hl, #(_g_PrintData + 5)
 	ld	(hl), d
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:227: g_PrintData.CursorY = y;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:227: g_PrintData.CursorY = y;
 	ld	(#(_g_PrintData + 6)),a
-	C$print.c$1467$1_0$423	= .
-	.globl	C$print.c$1467$1_0$423
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1467: Print_DrawChar(0x1A);
+	C$print.c$1464$1_0$369	= .
+	.globl	C$print.c$1464$1_0$369
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1464: Print_DrawChar(0x1A);
 	push	bc
 	push	de
 	ld	a, #0x1a
 	call	_Print_DrawChar
 	pop	de
 	pop	bc
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:226: g_PrintData.CursorX = x;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:226: g_PrintData.CursorX = x;
 	ld	hl, #(_g_PrintData + 5)
 	ld	(hl), c
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:227: g_PrintData.CursorY = y;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.h:227: g_PrintData.CursorY = y;
 	ld	hl, #(_g_PrintData + 6)
 	ld	(hl), b
-	C$print.c$1469$1_0$423	= .
-	.globl	C$print.c$1469$1_0$423
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1469: Print_DrawChar(0x1B);
+	C$print.c$1466$1_0$369	= .
+	.globl	C$print.c$1466$1_0$369
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1466: Print_DrawChar(0x1B);
 	push	bc
 	push	de
 	ld	a, #0x1b
 	call	_Print_DrawChar
 	pop	de
 	pop	bc
-	C$print.c$1472$1_0$423	= .
-	.globl	C$print.c$1472$1_0$423
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1472: Print_DrawLineH(x + 1, y,              width - 2);
+	C$print.c$1469$1_0$369	= .
+	.globl	C$print.c$1469$1_0$369
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1469: Print_DrawLineH(x + 1, y,              width - 2);
 	ld	a, 4 (ix)
 	add	a, #0xfe
 	ld	-1 (ix), a
@@ -3716,9 +3716,9 @@ _Print_DrawBox::
 	pop	de
 	pop	bc
 	pop	hl
-	C$print.c$1473$1_0$423	= .
-	.globl	C$print.c$1473$1_0$423
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1473: Print_DrawLineH(x + 1, y + height - 1, width - 2);
+	C$print.c$1470$1_0$369	= .
+	.globl	C$print.c$1470$1_0$369
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1470: Print_DrawLineH(x + 1, y + height - 1, width - 2);
 	push	bc
 	push	de
 	ld	a, -1 (ix)
@@ -3731,9 +3731,9 @@ _Print_DrawBox::
 	call	_Print_DrawLineH
 	pop	de
 	pop	bc
-	C$print.c$1476$1_0$423	= .
-	.globl	C$print.c$1476$1_0$423
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1476: Print_DrawLineV(x,             y + 1, height - 2);
+	C$print.c$1473$1_0$369	= .
+	.globl	C$print.c$1473$1_0$369
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1473: Print_DrawLineV(x,             y + 1, height - 2);
 	ld	b, 5 (ix)
 	dec	b
 	dec	b
@@ -3749,9 +3749,9 @@ _Print_DrawBox::
 	call	_Print_DrawLineV
 	pop	de
 	pop	bc
-	C$print.c$1477$1_0$423	= .
-	.globl	C$print.c$1477$1_0$423
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1477: Print_DrawLineV(x + width - 1, y + 1, height - 2);
+	C$print.c$1474$1_0$369	= .
+	.globl	C$print.c$1474$1_0$369
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1474: Print_DrawLineV(x + width - 1, y + 1, height - 2);
 	push	bc
 	inc	sp
 	ld	l, e
@@ -3759,9 +3759,9 @@ _Print_DrawBox::
 ;	spillPairReg hl
 	ld	a, c
 	call	_Print_DrawLineV
-	C$print.c$1478$1_0$423	= .
-	.globl	C$print.c$1478$1_0$423
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1478: }
+	C$print.c$1475$1_0$369	= .
+	.globl	C$print.c$1475$1_0$369
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/print.c:1475: }
 	inc	sp
 	pop	ix
 	pop	hl

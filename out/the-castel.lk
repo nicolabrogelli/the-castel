@@ -1,20 +1,20 @@
 -mjwx
--i C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/the-castel.ihx
+-i C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/the-castel.ihx
 -y
 -b _CODE = 0x4000
 -b _DATA = 0xc000
 -b_PAGE0=0x0100
--k C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\tools/sdcc/lib/z80
--k C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\tools/sdcc/bin\..\lib\z80
--l C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
+-k C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\tools/sdcc/lib/z80
+-k C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\tools/sdcc/bin\..\lib\z80
+-l C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
 -l z80
-C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/crt0_rom48_isr.rel
-C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/the-castel.rel
-C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/tiles.rel
-C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/inventory.rel
-C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/control.rel
-C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/music.rel
-C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/level_defs.rel
-C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/the-castel_p0.rel
+C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/crt0_rom48_isr.rel
+C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/the-castel.rel
+C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/tiles.rel
+C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/inventory.rel
+C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/control.rel
+C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/music.rel
+C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/level_defs.rel
+C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/the-castel_p0.rel
 
 -e

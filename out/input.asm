@@ -350,16 +350,16 @@ _g_SLTSL	=	0xffff
 	.area _CODE
 	G$Joystick_Read$0$0	= .
 	.globl	G$Joystick_Read$0$0
-	C$input.c$40$0_0$33	= .
-	.globl	C$input.c$40$0_0$33
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:40: u8 Joystick_Read(u8 port) __FASTCALL __PRESERVES(b, c, d, e, h, iyl, iyh)
+	C$input.c$39$0_0$10	= .
+	.globl	C$input.c$39$0_0$10
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:39: u8 Joystick_Read(u8 port) __FASTCALL __PRESERVES(b, c, d, e, h, iyl, iyh)
 ;	---------------------------------
 ; Function Joystick_Read
 ; ---------------------------------
 _Joystick_Read::
-	C$input.c$57$1_0$33	= .
-	.globl	C$input.c$57$1_0$33
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:57: __endasm;
+	C$input.c$56$1_0$10	= .
+	.globl	C$input.c$56$1_0$10
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:56: __endasm;
 	ld	a, #15
 	di
 	out	(0xA0), a
@@ -372,11 +372,11 @@ _Joystick_Read::
 	ei
 	in	a, (0xA2)
 	ld	l, a
-	C$input.c$58$1_0$33	= .
-	.globl	C$input.c$58$1_0$33
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:58: }
-	C$input.c$58$1_0$33	= .
-	.globl	C$input.c$58$1_0$33
+	C$input.c$57$1_0$10	= .
+	.globl	C$input.c$57$1_0$10
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:57: }
+	C$input.c$57$1_0$10	= .
+	.globl	C$input.c$57$1_0$10
 	XG$Joystick_Read$0$0	= .
 	.globl	XG$Joystick_Read$0$0
 	ret
@@ -672,42 +672,42 @@ G$g_SVFFFD$0_0$0 == 0xfffd
 _g_SVFFFD	=	0xfffd
 	G$Keyboard_Read$0$0	= .
 	.globl	G$Keyboard_Read$0$0
-	C$input.c$239$1_0$35	= .
-	.globl	C$input.c$239$1_0$35
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:239: u8 Keyboard_Read(u8 row) __FASTCALL __PRESERVES(b, c, d, e, h, iyl, iyh)
+	C$input.c$238$1_0$12	= .
+	.globl	C$input.c$238$1_0$12
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:238: u8 Keyboard_Read(u8 row) __FASTCALL __PRESERVES(b, c, d, e, h, iyl, iyh)
 ;	---------------------------------
 ; Function Keyboard_Read
 ; ---------------------------------
 _Keyboard_Read::
-	C$input.c$249$1_0$35	= .
-	.globl	C$input.c$249$1_0$35
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:249: __endasm;
+	C$input.c$248$1_0$12	= .
+	.globl	C$input.c$248$1_0$12
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:248: __endasm;
 	in	a, (0xAA)
 	and	#0xF0
 	or	l
 	out	(0xAA), a
 	in	a, (0xA9)
 	ld	l, a
-	C$input.c$250$1_0$35	= .
-	.globl	C$input.c$250$1_0$35
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:250: }
-	C$input.c$250$1_0$35	= .
-	.globl	C$input.c$250$1_0$35
+	C$input.c$249$1_0$12	= .
+	.globl	C$input.c$249$1_0$12
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:249: }
+	C$input.c$249$1_0$12	= .
+	.globl	C$input.c$249$1_0$12
 	XG$Keyboard_Read$0$0	= .
 	.globl	XG$Keyboard_Read$0$0
 	ret
 	G$Keyboard_IsKeyPressed$0$0	= .
 	.globl	G$Keyboard_IsKeyPressed$0$0
-	C$input.c$291$1_0$37	= .
-	.globl	C$input.c$291$1_0$37
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:291: u8 Keyboard_IsKeyPressed(u8 key)
+	C$input.c$290$1_0$14	= .
+	.globl	C$input.c$290$1_0$14
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:290: u8 Keyboard_IsKeyPressed(u8 key)
 ;	---------------------------------
 ; Function Keyboard_IsKeyPressed
 ; ---------------------------------
 _Keyboard_IsKeyPressed::
-	C$input.c$293$1_0$37	= .
-	.globl	C$input.c$293$1_0$37
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:293: return (Keyboard_Read(KEY_ROW(key)) & (1 << KEY_IDX(key))) == 0;
+	C$input.c$292$1_0$14	= .
+	.globl	C$input.c$292$1_0$14
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:292: return (Keyboard_Read(KEY_ROW(key)) & (1 << KEY_IDX(key))) == 0;
 	ld	e, a
 	and	a, #0x0f
 	ld	l, a
@@ -740,11 +740,11 @@ _Keyboard_IsKeyPressed::
 	ld	a, #0x01
 	ret	Z
 	xor	a, a
-	C$input.c$294$1_0$37	= .
-	.globl	C$input.c$294$1_0$37
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:294: }
-	C$input.c$294$1_0$37	= .
-	.globl	C$input.c$294$1_0$37
+	C$input.c$293$1_0$14	= .
+	.globl	C$input.c$293$1_0$14
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:293: }
+	C$input.c$293$1_0$14	= .
+	.globl	C$input.c$293$1_0$14
 	XG$Keyboard_IsKeyPressed$0$0	= .
 	.globl	XG$Keyboard_IsKeyPressed$0$0
 	ret

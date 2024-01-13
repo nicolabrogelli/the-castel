@@ -350,16 +350,16 @@
                                     350 	.area _CODE
                            000000   351 	G$Joystick_Read$0$0	= .
                                     352 	.globl	G$Joystick_Read$0$0
-                           000000   353 	C$input.c$40$0_0$33	= .
-                                    354 	.globl	C$input.c$40$0_0$33
-                                    355 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:40: u8 Joystick_Read(u8 port) __FASTCALL __PRESERVES(b, c, d, e, h, iyl, iyh)
+                           000000   353 	C$input.c$39$0_0$10	= .
+                                    354 	.globl	C$input.c$39$0_0$10
+                                    355 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:39: u8 Joystick_Read(u8 port) __FASTCALL __PRESERVES(b, c, d, e, h, iyl, iyh)
                                     356 ;	---------------------------------
                                     357 ; Function Joystick_Read
                                     358 ; ---------------------------------
       000000                        359 _Joystick_Read::
-                           000000   360 	C$input.c$57$1_0$33	= .
-                                    361 	.globl	C$input.c$57$1_0$33
-                                    362 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:57: __endasm;
+                           000000   360 	C$input.c$56$1_0$10	= .
+                                    361 	.globl	C$input.c$56$1_0$10
+                                    362 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:56: __endasm;
       000000 3E 0F            [ 7]  363 	ld	a, #15
       000002 F3               [ 4]  364 	di
       000003 D3 A0            [11]  365 	out	(0xA0), a
@@ -372,11 +372,11 @@
       000010 FB               [ 4]  372 	ei
       000011 DB A2            [11]  373 	in	a, (0xA2)
       000013 6F               [ 4]  374 	ld	l, a
-                           000014   375 	C$input.c$58$1_0$33	= .
-                                    376 	.globl	C$input.c$58$1_0$33
-                                    377 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:58: }
-                           000014   378 	C$input.c$58$1_0$33	= .
-                                    379 	.globl	C$input.c$58$1_0$33
+                           000014   375 	C$input.c$57$1_0$10	= .
+                                    376 	.globl	C$input.c$57$1_0$10
+                                    377 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:57: }
+                           000014   378 	C$input.c$57$1_0$10	= .
+                                    379 	.globl	C$input.c$57$1_0$10
                            000014   380 	XG$Joystick_Read$0$0	= .
                                     381 	.globl	XG$Joystick_Read$0$0
       000014 C9               [10]  382 	ret
@@ -672,42 +672,42 @@
                            00FFFD   672 _g_SVFFFD	=	0xfffd
                            000015   673 	G$Keyboard_Read$0$0	= .
                                     674 	.globl	G$Keyboard_Read$0$0
-                           000015   675 	C$input.c$239$1_0$35	= .
-                                    676 	.globl	C$input.c$239$1_0$35
-                                    677 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:239: u8 Keyboard_Read(u8 row) __FASTCALL __PRESERVES(b, c, d, e, h, iyl, iyh)
+                           000015   675 	C$input.c$238$1_0$12	= .
+                                    676 	.globl	C$input.c$238$1_0$12
+                                    677 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:238: u8 Keyboard_Read(u8 row) __FASTCALL __PRESERVES(b, c, d, e, h, iyl, iyh)
                                     678 ;	---------------------------------
                                     679 ; Function Keyboard_Read
                                     680 ; ---------------------------------
       000015                        681 _Keyboard_Read::
-                           000015   682 	C$input.c$249$1_0$35	= .
-                                    683 	.globl	C$input.c$249$1_0$35
-                                    684 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:249: __endasm;
+                           000015   682 	C$input.c$248$1_0$12	= .
+                                    683 	.globl	C$input.c$248$1_0$12
+                                    684 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:248: __endasm;
       000015 DB AA            [11]  685 	in	a, (0xAA)
       000017 E6 F0            [ 7]  686 	and	#0xF0
       000019 B5               [ 4]  687 	or	l
       00001A D3 AA            [11]  688 	out	(0xAA), a
       00001C DB A9            [11]  689 	in	a, (0xA9)
       00001E 6F               [ 4]  690 	ld	l, a
-                           00001F   691 	C$input.c$250$1_0$35	= .
-                                    692 	.globl	C$input.c$250$1_0$35
-                                    693 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:250: }
-                           00001F   694 	C$input.c$250$1_0$35	= .
-                                    695 	.globl	C$input.c$250$1_0$35
+                           00001F   691 	C$input.c$249$1_0$12	= .
+                                    692 	.globl	C$input.c$249$1_0$12
+                                    693 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:249: }
+                           00001F   694 	C$input.c$249$1_0$12	= .
+                                    695 	.globl	C$input.c$249$1_0$12
                            00001F   696 	XG$Keyboard_Read$0$0	= .
                                     697 	.globl	XG$Keyboard_Read$0$0
       00001F C9               [10]  698 	ret
                            000020   699 	G$Keyboard_IsKeyPressed$0$0	= .
                                     700 	.globl	G$Keyboard_IsKeyPressed$0$0
-                           000020   701 	C$input.c$291$1_0$37	= .
-                                    702 	.globl	C$input.c$291$1_0$37
-                                    703 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:291: u8 Keyboard_IsKeyPressed(u8 key)
+                           000020   701 	C$input.c$290$1_0$14	= .
+                                    702 	.globl	C$input.c$290$1_0$14
+                                    703 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:290: u8 Keyboard_IsKeyPressed(u8 key)
                                     704 ;	---------------------------------
                                     705 ; Function Keyboard_IsKeyPressed
                                     706 ; ---------------------------------
       000020                        707 _Keyboard_IsKeyPressed::
-                           000020   708 	C$input.c$293$1_0$37	= .
-                                    709 	.globl	C$input.c$293$1_0$37
-                                    710 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:293: return (Keyboard_Read(KEY_ROW(key)) & (1 << KEY_IDX(key))) == 0;
+                           000020   708 	C$input.c$292$1_0$14	= .
+                                    709 	.globl	C$input.c$292$1_0$14
+                                    710 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:292: return (Keyboard_Read(KEY_ROW(key)) & (1 << KEY_IDX(key))) == 0;
       000020 5F               [ 4]  711 	ld	e, a
       000021 E6 0F            [ 7]  712 	and	a, #0x0f
       000023 6F               [ 4]  713 	ld	l, a
@@ -740,11 +740,11 @@
       000046 3E 01            [ 7]  740 	ld	a, #0x01
       000048 C8               [11]  741 	ret	Z
       000049 AF               [ 4]  742 	xor	a, a
-                           00004A   743 	C$input.c$294$1_0$37	= .
-                                    744 	.globl	C$input.c$294$1_0$37
-                                    745 ;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:294: }
-                           00004A   746 	C$input.c$294$1_0$37	= .
-                                    747 	.globl	C$input.c$294$1_0$37
+                           00004A   743 	C$input.c$293$1_0$14	= .
+                                    744 	.globl	C$input.c$293$1_0$14
+                                    745 ;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/input.c:293: }
+                           00004A   746 	C$input.c$293$1_0$14	= .
+                                    747 	.globl	C$input.c$293$1_0$14
                            00004A   748 	XG$Keyboard_IsKeyPressed$0$0	= .
                                     749 	.globl	XG$Keyboard_IsKeyPressed$0$0
       00004A C9               [10]  750 	ret

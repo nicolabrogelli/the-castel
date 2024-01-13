@@ -82,129 +82,132 @@ Symbol Table
   0 C$level_defs.c$94$5_0$6                                     =  000041 GR
   0 C$level_defs.c$95$5_0$6                                     =  000048 GR
   0 C$level_defs.c$98$2_0$3                                     =  000058 GR
-  0 Flevel_defs$__str_0$0_0$0                                   =  0010F7 GR
-  0 Flevel_defs$__str_1$0_0$0                                   =  001102 GR
-  0 Flevel_defs$__str_10$0_0$0                                  =  00115C GR
-  0 Flevel_defs$__str_11$0_0$0                                  =  001166 GR
-  0 Flevel_defs$__str_12$0_0$0                                  =  001170 GR
-  0 Flevel_defs$__str_13$0_0$0                                  =  00117A GR
-  0 Flevel_defs$__str_14$0_0$0                                  =  001184 GR
-  0 Flevel_defs$__str_15$0_0$0                                  =  00118E GR
-  0 Flevel_defs$__str_16$0_0$0                                  =  001198 GR
-  0 Flevel_defs$__str_17$0_0$0                                  =  0011A2 GR
-  0 Flevel_defs$__str_18$0_0$0                                  =  0011AC GR
-  0 Flevel_defs$__str_2$0_0$0                                   =  00110C GR
-  0 Flevel_defs$__str_3$0_0$0                                   =  001116 GR
-  0 Flevel_defs$__str_4$0_0$0                                   =  001120 GR
-  0 Flevel_defs$__str_5$0_0$0                                   =  00112A GR
-  0 Flevel_defs$__str_6$0_0$0                                   =  001134 GR
-  0 Flevel_defs$__str_7$0_0$0                                   =  00113E GR
-  0 Flevel_defs$__str_8$0_0$0                                   =  001148 GR
-  0 Flevel_defs$__str_9$0_0$0                                   =  001152 GR
+  0 Flevel_defs$__str_0$0_0$0                                   =  0010FB GR
+  0 Flevel_defs$__str_1$0_0$0                                   =  001106 GR
+  0 Flevel_defs$__str_10$0_0$0                                  =  001145 GR
+  0 Flevel_defs$__str_11$0_0$0                                  =  00114C GR
+  0 Flevel_defs$__str_12$0_0$0                                  =  001153 GR
+  0 Flevel_defs$__str_13$0_0$0                                  =  00115A GR
+  0 Flevel_defs$__str_14$0_0$0                                  =  001161 GR
+  0 Flevel_defs$__str_15$0_0$0                                  =  001168 GR
+  0 Flevel_defs$__str_16$0_0$0                                  =  00116F GR
+  0 Flevel_defs$__str_17$0_0$0                                  =  001176 GR
+  0 Flevel_defs$__str_18$0_0$0                                  =  00117D GR
+  0 Flevel_defs$__str_19$0_0$0                                  =  001184 GR
+  0 Flevel_defs$__str_2$0_0$0                                   =  00110D GR
+  0 Flevel_defs$__str_20$0_0$0                                  =  00118B GR
+  0 Flevel_defs$__str_3$0_0$0                                   =  001114 GR
+  0 Flevel_defs$__str_4$0_0$0                                   =  00111B GR
+  0 Flevel_defs$__str_5$0_0$0                                   =  001122 GR
+  0 Flevel_defs$__str_6$0_0$0                                   =  001129 GR
+  0 Flevel_defs$__str_7$0_0$0                                   =  001130 GR
+  0 Flevel_defs$__str_8$0_0$0                                   =  001137 GR
+  0 Flevel_defs$__str_9$0_0$0                                   =  00113E GR
   7 Flevel_defs$__xinit_g_Levels$0_0$0                          =  000000 GR
   0 G$g_Level001$0_0$0                                          =  000059 GR
   0 G$g_Level002$0_0$0                                          =  000122 GR
   0 G$g_Level003$0_0$0                                          =  000206 GR
-  0 G$g_Level004$0_0$0                                          =  0002E1 GR
-  0 G$g_Level005$0_0$0                                          =  0003BB GR
-  0 G$g_Level006$0_0$0                                          =  000469 GR
-  0 G$g_Level007$0_0$0                                          =  000508 GR
-  0 G$g_Level008$0_0$0                                          =  0005B1 GR
-  0 G$g_Level009$0_0$0                                          =  000663 GR
-  0 G$g_Level010$0_0$0                                          =  000712 GR
-  0 G$g_Level011$0_0$0                                          =  0007C3 GR
-  0 G$g_Level012$0_0$0                                          =  00086E GR
-  0 G$g_Level013$0_0$0                                          =  000922 GR
-  0 G$g_Level014$0_0$0                                          =  0009DE GR
-  0 G$g_Level015$0_0$0                                          =  000AB3 GR
-  0 G$g_Level016$0_0$0                                          =  000B98 GR
+  0 G$g_Level004$0_0$0                                          =  0002E4 GR
+  0 G$g_Level005$0_0$0                                          =  0003BE GR
+  0 G$g_Level006$0_0$0                                          =  00046C GR
+  0 G$g_Level007$0_0$0                                          =  00050B GR
+  0 G$g_Level008$0_0$0                                          =  0005B7 GR
+  0 G$g_Level009$0_0$0                                          =  000669 GR
+  0 G$g_Level010$0_0$0                                          =  000718 GR
+  0 G$g_Level011$0_0$0                                          =  0007C9 GR
+  0 G$g_Level012$0_0$0                                          =  000876 GR
+  0 G$g_Level013$0_0$0                                          =  000926 GR
+  0 G$g_Level014$0_0$0                                          =  0009E2 GR
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 3.
 Hexadecimal [24-Bits]
 
 Symbol Table
 
-  0 G$g_Level017$0_0$0                                          =  000C77 GR
-  0 G$g_Level018$0_0$0                                          =  000CA6 GR
-  0 G$g_Level019$0_0$0                                          =  000CD5 GR
-  0 G$g_Level020$0_0$0                                          =  000D04 GR
-  0 G$g_Level021$0_0$0                                          =  000D33 GR
-  0 G$g_Level022$0_0$0                                          =  000D62 GR
-  0 G$g_Level023$0_0$0                                          =  000D91 GR
-  0 G$g_Level024$0_0$0                                          =  000DC0 GR
-  0 G$g_Level025$0_0$0                                          =  000DEF GR
-  0 G$g_Level026$0_0$0                                          =  000E91 GR
-  0 G$g_Level027$0_0$0                                          =  000F4A GR
-  0 G$g_Level028$0_0$0                                          =  000FDF GR
-  0 G$g_Level029$0_0$0                                          =  00100E GR
-  0 G$g_Level030$0_0$0                                          =  001072 GR
+  0 G$g_Level015$0_0$0                                          =  000AB7 GR
+  0 G$g_Level016$0_0$0                                          =  000B9C GR
+  0 G$g_Level017$0_0$0                                          =  000C7B GR
+  0 G$g_Level018$0_0$0                                          =  000CAA GR
+  0 G$g_Level019$0_0$0                                          =  000CD9 GR
+  0 G$g_Level020$0_0$0                                          =  000D08 GR
+  0 G$g_Level021$0_0$0                                          =  000D37 GR
+  0 G$g_Level022$0_0$0                                          =  000D66 GR
+  0 G$g_Level023$0_0$0                                          =  000D95 GR
+  0 G$g_Level024$0_0$0                                          =  000DC4 GR
+  0 G$g_Level025$0_0$0                                          =  000DF3 GR
+  0 G$g_Level026$0_0$0                                          =  000E95 GR
+  0 G$g_Level027$0_0$0                                          =  000F4E GR
+  0 G$g_Level028$0_0$0                                          =  000FE3 GR
+  0 G$g_Level029$0_0$0                                          =  001012 GR
+  0 G$g_Level030$0_0$0                                          =  001076 GR
   2 G$g_Levels$0_0$0                                            =  000000 GR
   0 G$restoreLevel$0$0                                          =  000000 GR
   0 XG$restoreLevel$0$0                                         =  000058 GR
-  0 ___str_0                                                       0010F7 R
-  0 ___str_1                                                       001102 R
-  0 ___str_10                                                      00115C R
-  0 ___str_11                                                      001166 R
-  0 ___str_12                                                      001170 R
-  0 ___str_13                                                      00117A R
-  0 ___str_14                                                      001184 R
-  0 ___str_15                                                      00118E R
-  0 ___str_16                                                      001198 R
-  0 ___str_17                                                      0011A2 R
-  0 ___str_18                                                      0011AC R
-  0 ___str_2                                                       00110C R
-  0 ___str_3                                                       001116 R
-  0 ___str_4                                                       001120 R
-  0 ___str_5                                                       00112A R
-  0 ___str_6                                                       001134 R
-  0 ___str_7                                                       00113E R
-  0 ___str_8                                                       001148 R
-  0 ___str_9                                                       001152 R
+  0 ___str_0                                                       0010FB R
+  0 ___str_1                                                       001106 R
+  0 ___str_10                                                      001145 R
+  0 ___str_11                                                      00114C R
+  0 ___str_12                                                      001153 R
+  0 ___str_13                                                      00115A R
+  0 ___str_14                                                      001161 R
+  0 ___str_15                                                      001168 R
+  0 ___str_16                                                      00116F R
+  0 ___str_17                                                      001176 R
+  0 ___str_18                                                      00117D R
+  0 ___str_19                                                      001184 R
+  0 ___str_2                                                       00110D R
+  0 ___str_20                                                      00118B R
+  0 ___str_3                                                       001114 R
+  0 ___str_4                                                       00111B R
+  0 ___str_5                                                       001122 R
+  0 ___str_6                                                       001129 R
+  0 ___str_7                                                       001130 R
+  0 ___str_8                                                       001137 R
+  0 ___str_9                                                       00113E R
   7 __xinit__g_Levels                                              000000 R
   0 _g_Level001                                                    000059 GR
   0 _g_Level002                                                    000122 GR
   0 _g_Level003                                                    000206 GR
-  0 _g_Level004                                                    0002E1 GR
-  0 _g_Level005                                                    0003BB GR
-  0 _g_Level006                                                    000469 GR
-  0 _g_Level007                                                    000508 GR
-  0 _g_Level008                                                    0005B1 GR
-  0 _g_Level009                                                    000663 GR
-  0 _g_Level010                                                    000712 GR
-  0 _g_Level011                                                    0007C3 GR
-  0 _g_Level012                                                    00086E GR
-  0 _g_Level013                                                    000922 GR
-  0 _g_Level014                                                    0009DE GR
-  0 _g_Level015                                                    000AB3 GR
-  0 _g_Level016                                                    000B98 GR
-  0 _g_Level017                                                    000C77 GR
-  0 _g_Level018                                                    000CA6 GR
+  0 _g_Level004                                                    0002E4 GR
+  0 _g_Level005                                                    0003BE GR
+  0 _g_Level006                                                    00046C GR
+  0 _g_Level007                                                    00050B GR
+  0 _g_Level008                                                    0005B7 GR
+  0 _g_Level009                                                    000669 GR
+  0 _g_Level010                                                    000718 GR
+  0 _g_Level011                                                    0007C9 GR
+  0 _g_Level012                                                    000876 GR
+  0 _g_Level013                                                    000926 GR
+  0 _g_Level014                                                    0009E2 GR
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 4.
 Hexadecimal [24-Bits]
 
 Symbol Table
 
-  0 _g_Level019                                                    000CD5 GR
-  0 _g_Level020                                                    000D04 GR
-  0 _g_Level021                                                    000D33 GR
-  0 _g_Level022                                                    000D62 GR
-  0 _g_Level023                                                    000D91 GR
-  0 _g_Level024                                                    000DC0 GR
-  0 _g_Level025                                                    000DEF GR
-  0 _g_Level026                                                    000E91 GR
-  0 _g_Level027                                                    000F4A GR
-  0 _g_Level028                                                    000FDF GR
-  0 _g_Level029                                                    00100E GR
-  0 _g_Level030                                                    001072 GR
+  0 _g_Level015                                                    000AB7 GR
+  0 _g_Level016                                                    000B9C GR
+  0 _g_Level017                                                    000C7B GR
+  0 _g_Level018                                                    000CAA GR
+  0 _g_Level019                                                    000CD9 GR
+  0 _g_Level020                                                    000D08 GR
+  0 _g_Level021                                                    000D37 GR
+  0 _g_Level022                                                    000D66 GR
+  0 _g_Level023                                                    000D95 GR
+  0 _g_Level024                                                    000DC4 GR
+  0 _g_Level025                                                    000DF3 GR
+  0 _g_Level026                                                    000E95 GR
+  0 _g_Level027                                                    000F4E GR
+  0 _g_Level028                                                    000FE3 GR
+  0 _g_Level029                                                    001012 GR
+  0 _g_Level030                                                    001076 GR
   2 _g_Levels                                                      000000 GR
   0 _restoreLevel                                                  000000 GR
-
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 5.
 Hexadecimal [24-Bits]
 
 Area Table
 
-   0 _CODE                                      size   11B6   flags    0
+   0 _CODE                                      size   1195   flags    0
    1 _DATA                                      size      0   flags    0
    2 _INITIALIZED                               size    4C2   flags    0
    3 _DABS                                      size      0   flags    8

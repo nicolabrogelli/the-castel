@@ -1,4 +1,4 @@
-;!FILE C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out\input.asm
+;!FILE C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out\input.asm
 XL3
 H 9 areas 1CA global symbols
 M input
@@ -402,29 +402,34 @@ S A$input$730 Def00003B
 S A$input$721 Def00002E
 S A$input$712 Def000021
 S A$input$370 Def00000C
-S C$input.c$250$1_0$35 Def00001F
 S A$input$740 Def000046
 S A$input$731 Def00003D
 S A$input$722 Def000030
 S A$input$713 Def000023
 S A$input$371 Def00000E
+S C$input.c$290$1_0$14 Def000020
+S C$input.c$238$1_0$12 Def000015
 S A$input$750 Def00004A
 S A$input$741 Def000048
 S A$input$732 Def00003E
 S A$input$723 Def000033
 S A$input$372 Def000010
 S A$input$363 Def000000
+S C$input.c$248$1_0$12 Def000015
 S A$input$742 Def000049
 S A$input$733 Def00003F
 S A$input$724 Def000034
 S A$input$382 Def000014
 S A$input$373 Def000011
 S A$input$364 Def000002
+S C$input.c$292$1_0$14 Def000020
+S C$input.c$249$1_0$12 Def00001F
 S XG$Joystick_Read$0$0 Def000014
 S A$input$734 Def000040
 S A$input$716 Def000024
 S A$input$374 Def000013
 S A$input$365 Def000003
+S C$input.c$293$1_0$14 Def00004A
 S A$input$735 Def000041
 S A$input$726 Def000037
 S A$input$717 Def000027
@@ -437,26 +442,21 @@ S A$input$737 Def000043
 S A$input$728 Def000038
 S A$input$719 Def00002A
 S A$input$368 Def000009
-S C$input.c$291$1_0$37 Def000020
-S C$input.c$239$1_0$35 Def000015
 S A$input$738 Def000044
 S A$input$729 Def000039
 S A$input$369 Def00000A
-S C$input.c$249$1_0$35 Def000015
 S A$input$739 Def000045
 S A$input$685 Def000015
-S C$input.c$293$1_0$37 Def000020
 S A$input$686 Def000017
-S C$input.c$294$1_0$37 Def00004A
-S C$input.c$40$0_0$33 Def000000
 S A$input$687 Def000019
 S G$Keyboard_IsKeyPressed$0$0 Def000020
 S A$input$688 Def00001A
 S G$Keyboard_Read$0$0 Def000015
 S A$input$698 Def00001F
 S A$input$689 Def00001C
-S C$input.c$57$1_0$33 Def000000
-S C$input.c$58$1_0$33 Def000014
+S C$input.c$56$1_0$10 Def000000
+S C$input.c$39$0_0$10 Def000000
+S C$input.c$57$1_0$10 Def000014
 S _Keyboard_IsKeyPressed Def000020
 S _Keyboard_Read Def000015
 S XG$Keyboard_IsKeyPressed$0$0 Def00004A

@@ -56,20 +56,20 @@ Symbol Table
   0 A$input$741                                                    000048 GR
   0 A$input$742                                                    000049 GR
   0 A$input$750                                                    00004A GR
-  0 C$input.c$239$1_0$35                                        =  000015 GR
-  0 C$input.c$249$1_0$35                                        =  000015 GR
+  0 C$input.c$238$1_0$12                                        =  000015 GR
+  0 C$input.c$248$1_0$12                                        =  000015 GR
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 2.
 Hexadecimal [24-Bits]
 
 Symbol Table
 
-  0 C$input.c$250$1_0$35                                        =  00001F GR
-  0 C$input.c$291$1_0$37                                        =  000020 GR
-  0 C$input.c$293$1_0$37                                        =  000020 GR
-  0 C$input.c$294$1_0$37                                        =  00004A GR
-  0 C$input.c$40$0_0$33                                         =  000000 GR
-  0 C$input.c$57$1_0$33                                         =  000000 GR
-  0 C$input.c$58$1_0$33                                         =  000014 GR
+  0 C$input.c$249$1_0$12                                        =  00001F GR
+  0 C$input.c$290$1_0$14                                        =  000020 GR
+  0 C$input.c$292$1_0$14                                        =  000020 GR
+  0 C$input.c$293$1_0$14                                        =  00004A GR
+  0 C$input.c$39$0_0$10                                         =  000000 GR
+  0 C$input.c$56$1_0$10                                         =  000000 GR
+  0 C$input.c$57$1_0$10                                         =  000014 GR
   0 G$Joystick_Read$0$0                                         =  000000 GR
   0 G$Keyboard_IsKeyPressed$0$0                                 =  000020 GR
   0 G$Keyboard_Read$0$0                                         =  000015 GR

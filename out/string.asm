@@ -48,20 +48,20 @@
 	.globl	G$String_FromUInt8ZT$0$0
 	C$string.c$29$0_0$24	= .
 	.globl	C$string.c$29$0_0$24
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:29: void String_FromUInt8ZT(u8 value, c8* string)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:29: void String_FromUInt8ZT(u8 value, c8* string)
 ;	---------------------------------
 ; Function String_FromUInt8ZT
 ; ---------------------------------
 _String_FromUInt8ZT::
 	C$string.c$37$1_0$24	= .
 	.globl	C$string.c$37$1_0$24
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:37: __endasm;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:37: __endasm;
 	call	_String_FromUInt8
 	xor	a
 	ld	(de), a
 	C$string.c$38$1_0$24	= .
 	.globl	C$string.c$38$1_0$24
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:38: }
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:38: }
 	C$string.c$38$1_0$24	= .
 	.globl	C$string.c$38$1_0$24
 	XG$String_FromUInt8ZT$0$0	= .
@@ -89,14 +89,14 @@ _g_HexChar:
 	.globl	G$String_FromUInt8$0$0
 	C$string.c$42$1_0$26	= .
 	.globl	C$string.c$42$1_0$26
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:42: void String_FromUInt8(u8 value, c8* string)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:42: void String_FromUInt8(u8 value, c8* string)
 ;	---------------------------------
 ; Function String_FromUInt8
 ; ---------------------------------
 _String_FromUInt8::
 	C$string.c$67$1_0$26	= .
 	.globl	C$string.c$67$1_0$26
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:67: __endasm;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:67: __endasm;
 	DispA:
 	ld	c, #-100
 	call	Na1
@@ -118,7 +118,7 @@ _String_FromUInt8::
 	ret
 	C$string.c$69$1_0$26	= .
 	.globl	C$string.c$69$1_0$26
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:69: }
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:69: }
 	C$string.c$69$1_0$26	= .
 	.globl	C$string.c$69$1_0$26
 	XG$String_FromUInt8$0$0	= .
@@ -128,20 +128,20 @@ _String_FromUInt8::
 	.globl	G$String_FromUInt16ZT$0$0
 	C$string.c$76$1_0$28	= .
 	.globl	C$string.c$76$1_0$28
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:76: void String_FromUInt16ZT(u16 value, c8* string)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:76: void String_FromUInt16ZT(u16 value, c8* string)
 ;	---------------------------------
 ; Function String_FromUInt16ZT
 ; ---------------------------------
 _String_FromUInt16ZT::
 	C$string.c$84$1_0$28	= .
 	.globl	C$string.c$84$1_0$28
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:84: __endasm;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:84: __endasm;
 	call	_String_FromUInt16
 	xor	a
 	ld	(de), a
 	C$string.c$85$1_0$28	= .
 	.globl	C$string.c$85$1_0$28
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:85: }
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:85: }
 	C$string.c$85$1_0$28	= .
 	.globl	C$string.c$85$1_0$28
 	XG$String_FromUInt16ZT$0$0	= .
@@ -151,14 +151,14 @@ _String_FromUInt16ZT::
 	.globl	G$String_FromUInt16$0$0
 	C$string.c$89$1_0$30	= .
 	.globl	C$string.c$89$1_0$30
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:89: void String_FromUInt16(u16 value, c8* string)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:89: void String_FromUInt16(u16 value, c8* string)
 ;	---------------------------------
 ; Function String_FromUInt16
 ; ---------------------------------
 _String_FromUInt16::
 	C$string.c$116$1_0$30	= .
 	.globl	C$string.c$116$1_0$30
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:116: __endasm;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:116: __endasm;
 	Num2Dec:
 	ld	bc, #-10000
 	call	Num1
@@ -181,7 +181,7 @@ _String_FromUInt16::
 	ret
 	C$string.c$117$1_0$30	= .
 	.globl	C$string.c$117$1_0$30
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:117: }
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:117: }
 	C$string.c$117$1_0$30	= .
 	.globl	C$string.c$117$1_0$30
 	XG$String_FromUInt16$0$0	= .
@@ -191,7 +191,7 @@ _String_FromUInt16::
 	.globl	G$String_Format$0$0
 	C$string.c$129$1_0$32	= .
 	.globl	C$string.c$129$1_0$32
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:129: void String_Format(c8* dest, const c8* format, ...)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:129: void String_Format(c8* dest, const c8* format, ...)
 ;	---------------------------------
 ; Function String_Format
 ; ---------------------------------
@@ -204,21 +204,21 @@ _String_Format::
 	ld	sp, hl
 	C$string.c$132$2_0$33	= .
 	.globl	C$string.c$132$2_0$33
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:132: va_start(args, format);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:132: va_start(args, format);
 	ld	hl, #43
 	add	hl, sp
 	ld	-19 (ix), l
 	ld	-18 (ix), h
 	C$string.c$135$2_0$34	= .
 	.globl	C$string.c$135$2_0$34
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:135: const c8* ptr = format;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:135: const c8* ptr = format;
 	ld	a, 6 (ix)
 	ld	-7 (ix), a
 	ld	a, 7 (ix)
 	ld	-6 (ix), a
 	C$string.c$136$6_2$44	= .
 	.globl	C$string.c$136$6_2$44
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:136: while(*ptr != 0)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:136: while(*ptr != 0)
 00166$:
 	ld	l, -7 (ix)
 	ld	h, -6 (ix)
@@ -228,44 +228,44 @@ _String_Format::
 	jp	Z, 00168$
 	C$string.c$138$2_1$35	= .
 	.globl	C$string.c$138$2_1$35
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:138: if(*ptr == '%')
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:138: if(*ptr == '%')
 	ld	a, -1 (ix)
 	sub	a, #0x25
 	jp	NZ,00164$
 	C$string.c$140$3_1$36	= .
 	.globl	C$string.c$140$3_1$36
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:140: ptr++;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:140: ptr++;
 	ld	c, -7 (ix)
 	ld	b, -6 (ix)
 	inc	bc
 	C$string.c$143$4_1$37	= .
 	.globl	C$string.c$143$4_1$37
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:143: u8 pad = STRINT_PAD_NONE;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:143: u8 pad = STRINT_PAD_NONE;
 	ld	-17 (ix), #0x00
 	C$string.c$144$4_1$37	= .
 	.globl	C$string.c$144$4_1$37
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:144: u8 len = 0;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:144: u8 len = 0;
 	ld	-16 (ix), #0x00
 	C$string.c$145$3_2$37	= .
 	.globl	C$string.c$145$3_2$37
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:145: if(*ptr == '0')
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:145: if(*ptr == '0')
 	ld	a, (bc)
 	ld	e, a
 	sub	a, #0x30
 	jr	NZ, 00105$
 	C$string.c$147$4_2$38	= .
 	.globl	C$string.c$147$4_2$38
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:147: pad = STRINT_PAD_ZERO;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:147: pad = STRINT_PAD_ZERO;
 	ld	-17 (ix), #0x01
 	C$string.c$148$4_2$38	= .
 	.globl	C$string.c$148$4_2$38
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:148: ptr++;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:148: ptr++;
 	inc	bc
 	jp	00190$
 00105$:
 	C$string.c$150$3_2$37	= .
 	.globl	C$string.c$150$3_2$37
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:150: else if((*ptr >= '1') && (*ptr <= '9'))
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:150: else if((*ptr >= '1') && (*ptr <= '9'))
 	ld	a, e
 	sub	a, #0x31
 	jr	C, 00190$
@@ -274,21 +274,21 @@ _String_Format::
 	jr	C, 00190$
 	C$string.c$152$4_2$39	= .
 	.globl	C$string.c$152$4_2$39
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:152: pad = STRINT_PAD_SPACE;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:152: pad = STRINT_PAD_SPACE;
 	ld	-17 (ix), #0x02
 	C$string.c$153$4_2$39	= .
 	.globl	C$string.c$153$4_2$39
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:153: len = *ptr - '0';
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:153: len = *ptr - '0';
 	ld	a, e
 	add	a, #0xd0
 	ld	-16 (ix), a
 	C$string.c$154$4_2$39	= .
 	.globl	C$string.c$154$4_2$39
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:154: ptr++;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:154: ptr++;
 	inc	bc
 	C$string.c$156$2_1$32	= .
 	.globl	C$string.c$156$2_1$32
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:156: while((*ptr >= '0') && (*ptr <= '9'))
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:156: while((*ptr >= '0') && (*ptr <= '9'))
 00190$:
 	ld	-2 (ix), c
 	ld	-1 (ix), b
@@ -304,7 +304,7 @@ _String_Format::
 	jr	C, 00229$
 	C$string.c$158$4_2$40	= .
 	.globl	C$string.c$158$4_2$40
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:158: len *= 10;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:158: len *= 10;
 	ld	l, -16 (ix)
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -315,14 +315,14 @@ _String_Format::
 	add	hl, hl
 	C$string.c$159$4_2$40	= .
 	.globl	C$string.c$159$4_2$40
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:159: len += *ptr - '0';
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:159: len += *ptr - '0';
 	ld	a, c
 	add	a, #0xd0
 	add	a, l
 	ld	-16 (ix), a
 	C$string.c$160$4_2$40	= .
 	.globl	C$string.c$160$4_2$40
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:160: ptr++;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:160: ptr++;
 	inc	-2 (ix)
 	jr	NZ, 00108$
 	inc	-1 (ix)
@@ -334,7 +334,7 @@ _String_Format::
 	ld	-6 (ix), a
 	C$string.c$164$3_2$37	= .
 	.globl	C$string.c$164$3_2$37
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:164: switch(*ptr)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:164: switch(*ptr)
 	ld	a,c
 	cp	a,#0x25
 	jr	Z, 00111$
@@ -361,11 +361,11 @@ _String_Format::
 	jp	00165$
 	C$string.c$166$4_2$41	= .
 	.globl	C$string.c$166$4_2$41
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:166: case '%':
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:166: case '%':
 00111$:
 	C$string.c$167$4_2$41	= .
 	.globl	C$string.c$167$4_2$41
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:167: *dest++ = '%';
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:167: *dest++ = '%';
 	ld	l, 4 (ix)
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -378,15 +378,15 @@ _String_Format::
 	ld	5 (ix), h
 	C$string.c$168$4_2$41	= .
 	.globl	C$string.c$168$4_2$41
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:168: break;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:168: break;
 	jp	00165$
 	C$string.c$176$4_2$41	= .
 	.globl	C$string.c$176$4_2$41
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:176: case 'd':
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:176: case 'd':
 00115$:
 	C$string.c$180$5_2$42	= .
 	.globl	C$string.c$180$5_2$42
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:180: if((*ptr == 'I') || (*ptr == 'D'))
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:180: if((*ptr == 'I') || (*ptr == 'D'))
 	ld	l, -7 (ix)
 	ld	h, -6 (ix)
 	ld	a, (hl)
@@ -399,7 +399,7 @@ _String_Format::
 00116$:
 	C$string.c$181$5_2$42	= .
 	.globl	C$string.c$181$5_2$42
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:181: val = (i32)va_arg(args, i32);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:181: val = (i32)va_arg(args, i32);
 	ld	a, -19 (ix)
 	add	a, #0x04
 	ld	-4 (ix), a
@@ -431,7 +431,7 @@ _String_Format::
 00117$:
 	C$string.c$183$5_2$42	= .
 	.globl	C$string.c$183$5_2$42
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:183: val = (i32)va_arg(args, i16);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:183: val = (i32)va_arg(args, i16);
 	ld	a, -19 (ix)
 	add	a, #0x02
 	ld	-4 (ix), a
@@ -466,12 +466,12 @@ _String_Format::
 00118$:
 	C$string.c$188$5_2$42	= .
 	.globl	C$string.c$188$5_2$42
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:188: if(val < 0)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:188: if(val < 0)
 	bit	7, -2 (ix)
 	jr	Z, 00121$
 	C$string.c$190$6_2$43	= .
 	.globl	C$string.c$190$6_2$43
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:190: *dest++ = '-';
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:190: *dest++ = '-';
 	ld	l, 4 (ix)
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -484,7 +484,7 @@ _String_Format::
 	ld	5 (ix), h
 	C$string.c$191$6_2$43	= .
 	.globl	C$string.c$191$6_2$43
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:191: val = -val;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:191: val = -val;
 	xor	a, a
 	sub	a, -5 (ix)
 	ld	-5 (ix), a
@@ -500,14 +500,14 @@ _String_Format::
 00121$:
 	C$string.c$194$6_2$44	= .
 	.globl	C$string.c$194$6_2$44
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:194: c8* ptr = str;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:194: c8* ptr = str;
 	C$string.c$195$5_3$44	= .
 	.globl	C$string.c$195$5_3$44
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:195: *ptr = 0;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:195: *ptr = 0;
 	ld	-35 (ix), #0x00
 	C$string.c$197$2_1$32	= .
 	.globl	C$string.c$197$2_1$32
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:197: while(val >= 10)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:197: while(val >= 10)
 	push	hl
 	push	af
 	ld	hl, #4
@@ -522,7 +522,7 @@ _String_Format::
 00122$:
 	C$string.c$199$2_1$32	= .
 	.globl	C$string.c$199$2_1$32
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:199: *++ptr = '0' + (val % 10);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:199: *++ptr = '0' + (val % 10);
 	ld	a, -15 (ix)
 	add	a, #0x01
 	ld	-13 (ix), a
@@ -531,7 +531,7 @@ _String_Format::
 	ld	-12 (ix), a
 	C$string.c$197$5_4$45	= .
 	.globl	C$string.c$197$5_4$45
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:197: while(val >= 10)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:197: while(val >= 10)
 	ld	a, -5 (ix)
 	sub	a, #0x0a
 	ld	a, -4 (ix)
@@ -546,7 +546,7 @@ _String_Format::
 	jr	C, 00230$
 	C$string.c$199$6_4$46	= .
 	.globl	C$string.c$199$6_4$46
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:199: *++ptr = '0' + (val % 10);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:199: *++ptr = '0' + (val % 10);
 	ld	a, -13 (ix)
 	ld	-15 (ix), a
 	ld	a, -12 (ix)
@@ -578,7 +578,7 @@ _String_Format::
 	ld	(hl), a
 	C$string.c$200$2_1$32	= .
 	.globl	C$string.c$200$2_1$32
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:200: val /= 10;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:200: val /= 10;
 	ld	hl, #0x0000
 	push	hl
 	ld	l, #0x0a
@@ -600,7 +600,7 @@ _String_Format::
 	ld	-2 (ix), h
 	C$string.c$201$6_4$46	= .
 	.globl	C$string.c$201$6_4$46
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:201: digit++;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:201: digit++;
 	inc	-1 (ix)
 	jp	00122$
 00230$:
@@ -608,7 +608,7 @@ _String_Format::
 	ld	-10 (ix), a
 	C$string.c$203$5_4$45	= .
 	.globl	C$string.c$203$5_4$45
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:203: *++ptr = '0' + val;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:203: *++ptr = '0' + val;
 	ld	a, -13 (ix)
 	ld	-9 (ix), a
 	ld	a, -12 (ix)
@@ -621,13 +621,13 @@ _String_Format::
 	ld	(hl), a
 	C$string.c$205$5_4$45	= .
 	.globl	C$string.c$205$5_4$45
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:205: if(len > digit)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:205: if(len > digit)
 	ld	a, -1 (ix)
 	sub	a, -16 (ix)
 	jr	NC, 00211$
 	C$string.c$207$6_4$47	= .
 	.globl	C$string.c$207$6_4$47
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:207: c8 padChr = (pad == STRINT_PAD_ZERO) ? '0' : ' ';
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:207: c8 padChr = (pad == STRINT_PAD_ZERO) ? '0' : ' ';
 	ld	a, -17 (ix)
 	dec	a
 	jr	NZ, 00181$
@@ -639,7 +639,7 @@ _String_Format::
 	ld	-2 (ix), c
 	C$string.c$208$2_1$32	= .
 	.globl	C$string.c$208$2_1$32
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:208: for(u8 i = 0; i < len - digit; ++i)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:208: for(u8 i = 0; i < len - digit; ++i)
 	ld	c, 4 (ix)
 	ld	b, 5 (ix)
 	ld	-1 (ix), #0x00
@@ -665,18 +665,18 @@ _String_Format::
 	jp	P, 00231$
 	C$string.c$209$7_4$48	= .
 	.globl	C$string.c$209$7_4$48
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:209: *dest++ = padChr;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:209: *dest++ = padChr;
 	ld	a, -2 (ix)
 	ld	(bc), a
 	inc	bc
 	C$string.c$208$7_4$48	= .
 	.globl	C$string.c$208$7_4$48
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:208: for(u8 i = 0; i < len - digit; ++i)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:208: for(u8 i = 0; i < len - digit; ++i)
 	inc	-1 (ix)
 	jp	00174$
 	C$string.c$212$2_1$32	= .
 	.globl	C$string.c$212$2_1$32
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:212: while(*ptr != 0)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:212: while(*ptr != 0)
 00231$:
 	ld	4 (ix), c
 	ld	5 (ix), b
@@ -693,7 +693,7 @@ _String_Format::
 	jp	Z, 00232$
 	C$string.c$213$5_4$45	= .
 	.globl	C$string.c$213$5_4$45
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:213: *dest++ = *ptr--;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:213: *dest++ = *ptr--;
 	dec	bc
 	ld	l, -2 (ix)
 	ld	h, -1 (ix)
@@ -704,22 +704,22 @@ _String_Format::
 	jp	00128$
 	C$string.c$226$4_2$41	= .
 	.globl	C$string.c$226$4_2$41
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:226: case 'X':
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:226: case 'X':
 00133$:
 	C$string.c$228$5_2$49	= .
 	.globl	C$string.c$228$5_2$49
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:228: if(len == 0)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:228: if(len == 0)
 	ld	a, -16 (ix)
 	or	a, a
 	jr	NZ, 00135$
 	C$string.c$229$5_2$49	= .
 	.globl	C$string.c$229$5_2$49
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:229: len = 8;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:229: len = 8;
 	ld	-16 (ix), #0x08
 00135$:
 	C$string.c$230$5_3$50	= .
 	.globl	C$string.c$230$5_3$50
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:230: u32 val = (u32)va_arg(args, u32);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:230: u32 val = (u32)va_arg(args, u32);
 	ld	l, -19 (ix)
 	ld	h, -18 (ix)
 	ld	de, #0x0004
@@ -736,13 +736,13 @@ _String_Format::
 	ldir
 	C$string.c$232$5_3$50	= .
 	.globl	C$string.c$232$5_3$50
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:232: if(len > 7)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:232: if(len > 7)
 	ld	a, #0x07
 	sub	a, -16 (ix)
 	jr	NC, 00137$
 	C$string.c$233$5_3$50	= .
 	.globl	C$string.c$233$5_3$50
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:233: *dest++ = g_HexChar[(val >> 28) & 0xF];
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:233: *dest++ = g_HexChar[(val >> 28) & 0xF];
 	ld	c, 4 (ix)
 	ld	b, 5 (ix)
 	ld	e, -1 (ix)
@@ -765,13 +765,13 @@ _String_Format::
 00137$:
 	C$string.c$234$5_3$50	= .
 	.globl	C$string.c$234$5_3$50
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:234: if(len > 6)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:234: if(len > 6)
 	ld	a, #0x06
 	sub	a, -16 (ix)
 	jr	NC, 00139$
 	C$string.c$235$5_3$50	= .
 	.globl	C$string.c$235$5_3$50
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:235: *dest++ = g_HexChar[(val >> 24) & 0xF];
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:235: *dest++ = g_HexChar[(val >> 24) & 0xF];
 	ld	c, 4 (ix)
 	ld	b, 5 (ix)
 	ld	a, -1 (ix)
@@ -788,13 +788,13 @@ _String_Format::
 00139$:
 	C$string.c$236$5_3$50	= .
 	.globl	C$string.c$236$5_3$50
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:236: if(len > 5)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:236: if(len > 5)
 	ld	a, #0x05
 	sub	a, -16 (ix)
 	jr	NC, 00141$
 	C$string.c$237$5_3$50	= .
 	.globl	C$string.c$237$5_3$50
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:237: *dest++ = g_HexChar[(val >> 20) & 0xF];
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:237: *dest++ = g_HexChar[(val >> 20) & 0xF];
 	ld	c, 4 (ix)
 	ld	b, 5 (ix)
 	ld	e, -2 (ix)
@@ -819,13 +819,13 @@ _String_Format::
 00141$:
 	C$string.c$238$5_3$50	= .
 	.globl	C$string.c$238$5_3$50
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:238: if(len > 4)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:238: if(len > 4)
 	ld	a, #0x04
 	sub	a, -16 (ix)
 	jr	NC, 00143$
 	C$string.c$239$5_3$50	= .
 	.globl	C$string.c$239$5_3$50
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:239: *dest++ = g_HexChar[(val >> 16) & 0xF];
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:239: *dest++ = g_HexChar[(val >> 16) & 0xF];
 	ld	c, 4 (ix)
 	ld	b, 5 (ix)
 	ld	a, -2 (ix)
@@ -842,13 +842,13 @@ _String_Format::
 00143$:
 	C$string.c$240$5_3$50	= .
 	.globl	C$string.c$240$5_3$50
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:240: if(len > 3)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:240: if(len > 3)
 	ld	a, #0x03
 	sub	a, -16 (ix)
 	jr	NC, 00145$
 	C$string.c$241$5_3$50	= .
 	.globl	C$string.c$241$5_3$50
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:241: *dest++ = g_HexChar[(val >> 12) & 0xF];
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:241: *dest++ = g_HexChar[(val >> 12) & 0xF];
 	ld	c, 4 (ix)
 	ld	b, 5 (ix)
 	ld	e, -3 (ix)
@@ -879,13 +879,13 @@ _String_Format::
 00145$:
 	C$string.c$242$5_3$50	= .
 	.globl	C$string.c$242$5_3$50
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:242: if(len > 2)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:242: if(len > 2)
 	ld	a, #0x02
 	sub	a, -16 (ix)
 	jr	NC, 00147$
 	C$string.c$243$5_3$50	= .
 	.globl	C$string.c$243$5_3$50
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:243: *dest++ = g_HexChar[(val >> 8) & 0xF];
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:243: *dest++ = g_HexChar[(val >> 8) & 0xF];
 	ld	c, 4 (ix)
 	ld	b, 5 (ix)
 	ld	a, -3 (ix)
@@ -902,13 +902,13 @@ _String_Format::
 00147$:
 	C$string.c$244$5_3$50	= .
 	.globl	C$string.c$244$5_3$50
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:244: if(len > 1)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:244: if(len > 1)
 	ld	a, #0x01
 	sub	a, -16 (ix)
 	jr	NC, 00149$
 	C$string.c$245$5_3$50	= .
 	.globl	C$string.c$245$5_3$50
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:245: *dest++ = g_HexChar[(val >> 4) & 0xF];
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:245: *dest++ = g_HexChar[(val >> 4) & 0xF];
 	ld	c, 4 (ix)
 	ld	b, 5 (ix)
 	ld	e, -4 (ix)
@@ -941,7 +941,7 @@ _String_Format::
 00149$:
 	C$string.c$246$5_3$50	= .
 	.globl	C$string.c$246$5_3$50
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:246: *dest++ = g_HexChar[val & 0xF];
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:246: *dest++ = g_HexChar[val & 0xF];
 	ld	c, 4 (ix)
 	ld	b, 5 (ix)
 	ld	a, -4 (ix)
@@ -957,26 +957,26 @@ _String_Format::
 	ld	5 (ix), b
 	C$string.c$247$5_3$50	= .
 	.globl	C$string.c$247$5_3$50
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:247: break;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:247: break;
 	jp	00165$
 	C$string.c$252$4_2$41	= .
 	.globl	C$string.c$252$4_2$41
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:252: case 'x':
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:252: case 'x':
 00150$:
 	C$string.c$254$5_2$51	= .
 	.globl	C$string.c$254$5_2$51
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:254: if(len == 0)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:254: if(len == 0)
 	ld	a, -16 (ix)
 	or	a, a
 	jr	NZ, 00152$
 	C$string.c$255$5_2$51	= .
 	.globl	C$string.c$255$5_2$51
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:255: len = 4;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:255: len = 4;
 	ld	-16 (ix), #0x04
 00152$:
 	C$string.c$256$5_3$52	= .
 	.globl	C$string.c$256$5_3$52
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:256: u16 val = (u16)va_arg(args, u16);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:256: u16 val = (u16)va_arg(args, u16);
 	ld	c, -19 (ix)
 	ld	b, -18 (ix)
 	inc	bc
@@ -992,13 +992,13 @@ _String_Format::
 	ld	-10 (ix), a
 	C$string.c$257$5_3$52	= .
 	.globl	C$string.c$257$5_3$52
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:257: if(len > 3)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:257: if(len > 3)
 	ld	a, #0x03
 	sub	a, -16 (ix)
 	jr	NC, 00154$
 	C$string.c$258$5_3$52	= .
 	.globl	C$string.c$258$5_3$52
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:258: *dest++ = g_HexChar[(val >> 12) & 0xF];
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:258: *dest++ = g_HexChar[(val >> 12) & 0xF];
 	ld	a, 4 (ix)
 	ld	-9 (ix), a
 	ld	a, 5 (ix)
@@ -1036,13 +1036,13 @@ _String_Format::
 00154$:
 	C$string.c$259$5_3$52	= .
 	.globl	C$string.c$259$5_3$52
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:259: if(len > 2)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:259: if(len > 2)
 	ld	a, #0x02
 	sub	a, -16 (ix)
 	jr	NC, 00156$
 	C$string.c$260$5_3$52	= .
 	.globl	C$string.c$260$5_3$52
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:260: *dest++ = g_HexChar[(val >> 8) & 0xF];
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:260: *dest++ = g_HexChar[(val >> 8) & 0xF];
 	ld	a, 4 (ix)
 	ld	-9 (ix), a
 	ld	a, 5 (ix)
@@ -1076,13 +1076,13 @@ _String_Format::
 00156$:
 	C$string.c$261$5_3$52	= .
 	.globl	C$string.c$261$5_3$52
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:261: if(len > 1)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:261: if(len > 1)
 	ld	a, #0x01
 	sub	a, -16 (ix)
 	jr	NC, 00158$
 	C$string.c$262$5_3$52	= .
 	.globl	C$string.c$262$5_3$52
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:262: *dest++ = g_HexChar[(val >> 4) & 0xF];
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:262: *dest++ = g_HexChar[(val >> 4) & 0xF];
 	ld	a, 4 (ix)
 	ld	-9 (ix), a
 	ld	a, 5 (ix)
@@ -1124,7 +1124,7 @@ _String_Format::
 00158$:
 	C$string.c$263$5_3$52	= .
 	.globl	C$string.c$263$5_3$52
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:263: *dest++ = g_HexChar[val & 0xF];
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:263: *dest++ = g_HexChar[val & 0xF];
 	ld	c, 4 (ix)
 	ld	b, 5 (ix)
 	ld	a, -11 (ix)
@@ -1144,15 +1144,15 @@ _String_Format::
 	ld	5 (ix), b
 	C$string.c$264$5_3$52	= .
 	.globl	C$string.c$264$5_3$52
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:264: break;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:264: break;
 	jp	00165$
 	C$string.c$268$4_2$41	= .
 	.globl	C$string.c$268$4_2$41
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:268: case 'c':
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:268: case 'c':
 00159$:
 	C$string.c$270$5_2$53	= .
 	.globl	C$string.c$270$5_2$53
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:270: c8 val = (c8)va_arg(args, c8);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:270: c8 val = (c8)va_arg(args, c8);
 	ld	c, -19 (ix)
 	ld	b, -18 (ix)
 	inc	bc
@@ -1162,7 +1162,7 @@ _String_Format::
 	ld	a, (bc)
 	C$string.c$271$5_2$53	= .
 	.globl	C$string.c$271$5_2$53
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:271: *dest++ = val;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:271: *dest++ = val;
 	ld	c, 4 (ix)
 	ld	b, 5 (ix)
 	ld	(bc), a
@@ -1171,15 +1171,15 @@ _String_Format::
 	ld	5 (ix), b
 	C$string.c$272$5_2$53	= .
 	.globl	C$string.c$272$5_2$53
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:272: break;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:272: break;
 	jp	00165$
 	C$string.c$276$4_2$41	= .
 	.globl	C$string.c$276$4_2$41
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:276: case 's':
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:276: case 's':
 00160$:
 	C$string.c$278$5_2$54	= .
 	.globl	C$string.c$278$5_2$54
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:278: const c8* val = (const c8*)va_arg(args, const c8*);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:278: const c8* val = (const c8*)va_arg(args, const c8*);
 	ld	l, -19 (ix)
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -1197,7 +1197,7 @@ _String_Format::
 	ld	b, (hl)
 	C$string.c$279$2_1$32	= .
 	.globl	C$string.c$279$2_1$32
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:279: u8 len = String_Length(val);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:279: u8 len = String_Length(val);
 	ld	e, #0x00
 	ld	l, c
 ;	spillPairReg hl
@@ -1215,7 +1215,7 @@ _String_Format::
 00171$:
 	C$string.c$280$2_1$32	= .
 	.globl	C$string.c$280$2_1$32
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:280: for(u8 i = 0; i < len; i++)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:280: for(u8 i = 0; i < len; i++)
 	push	bc
 	pop	iy
 	ld	c, 4 (ix)
@@ -1227,23 +1227,23 @@ _String_Format::
 	jr	NC, 00234$
 	C$string.c$281$6_2$55	= .
 	.globl	C$string.c$281$6_2$55
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:281: *dest++ = *val++;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:281: *dest++ = *val++;
 	ld	a, 0 (iy)
 	inc	iy
 	ld	(bc), a
 	inc	bc
 	C$string.c$280$6_2$55	= .
 	.globl	C$string.c$280$6_2$55
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:280: for(u8 i = 0; i < len; i++)
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:280: for(u8 i = 0; i < len; i++)
 	inc	d
 	jp	00177$
 	C$string.c$284$2_1$35	= .
 	.globl	C$string.c$284$2_1$35
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:284: }
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:284: }
 00164$:
 	C$string.c$287$2_1$35	= .
 	.globl	C$string.c$287$2_1$35
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:287: *dest++ = *ptr;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:287: *dest++ = *ptr;
 	ld	c, 4 (ix)
 	ld	b, 5 (ix)
 	ld	a, -1 (ix)
@@ -1253,11 +1253,11 @@ _String_Format::
 	ld	5 (ix), b
 	C$string.c$293$2_1$32	= .
 	.globl	C$string.c$293$2_1$32
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:293: va_end(args);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:293: va_end(args);
 	jp	00165$
 	C$string.c$287$2_1$32	= .
 	.globl	C$string.c$287$2_1$32
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:287: *dest++ = *ptr;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:287: *dest++ = *ptr;
 00232$:
 	ld	a, -2 (ix)
 	ld	4 (ix), a
@@ -1265,18 +1265,18 @@ _String_Format::
 	ld	5 (ix), a
 	C$string.c$293$2_1$32	= .
 	.globl	C$string.c$293$2_1$32
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:293: va_end(args);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:293: va_end(args);
 	jp	00165$
 	C$string.c$287$2_1$32	= .
 	.globl	C$string.c$287$2_1$32
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:287: *dest++ = *ptr;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:287: *dest++ = *ptr;
 00234$:
 	ld	4 (ix), c
 	ld	5 (ix), b
 00165$:
 	C$string.c$289$2_1$35	= .
 	.globl	C$string.c$289$2_1$35
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:289: ptr++;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:289: ptr++;
 	inc	-7 (ix)
 	jp	NZ,00166$
 	inc	-6 (ix)
@@ -1284,17 +1284,17 @@ _String_Format::
 00168$:
 	C$string.c$291$1_1$34	= .
 	.globl	C$string.c$291$1_1$34
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:291: *dest = 0;
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:291: *dest = 0;
 	ld	c, 4 (ix)
 	ld	b, 5 (ix)
 	xor	a, a
 	ld	(bc), a
 	C$string.c$293$2_1$32	= .
 	.globl	C$string.c$293$2_1$32
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:293: va_end(args);
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:293: va_end(args);
 	C$string.c$294$2_1$32	= .
 	.globl	C$string.c$294$2_1$32
-;C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:294: }
+;C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\engine/src/string.c:294: }
 	ld	sp, ix
 	pop	ix
 	C$string.c$294$2_1$32	= .
