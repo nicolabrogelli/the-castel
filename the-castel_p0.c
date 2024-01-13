@@ -1,12 +1,7 @@
-#include "data/level/level001.h"
-#include "data/level/level002.h"
-#include "data/level/level003.h"
-#include "data/level/level004.h"
-#include "data/level/level006.h"
-#include "data/level/level007.h"
-#include "data/level/level008.h"
-#include "data/level/level010.h"
-#include "data/level/level011.h"
-#include "data/level/level013.h"
-#include "data/level/level014.h"
+
+#include "level_defs.h"
+#include "data/sprites.h"
+#include "data/tiles.h"
+
+
 

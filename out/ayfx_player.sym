@@ -7,6 +7,167 @@ Symbol Table
     .__.ABS.                                                    =  000000 G
     .__.CPU.                                                    =  000000 L
     .__.H$L.                                                    =  000000 L
+  0 A$ayfx_player$140                                              000000 GR
+  0 A$ayfx_player$148                                              000003 GR
+  0 A$ayfx_player$161                                              000004 GR
+  0 A$ayfx_player$162                                              000005 GR
+  0 A$ayfx_player$163                                              000006 GR
+  0 A$ayfx_player$164                                              000009 GR
+  0 A$ayfx_player$165                                              00000A GR
+  0 A$ayfx_player$166                                              00000B GR
+  0 A$ayfx_player$168                                              00000D GR
+  0 A$ayfx_player$169                                              00000E GR
+  0 A$ayfx_player$170                                              00000F GR
+  0 A$ayfx_player$171                                              000011 GR
+  0 A$ayfx_player$173                                              000013 GR
+  0 A$ayfx_player$174                                              000014 GR
+  0 A$ayfx_player$175                                              000017 GR
+  0 A$ayfx_player$176                                              000018 GR
+  0 A$ayfx_player$177                                              00001A GR
+  0 A$ayfx_player$178                                              00001C GR
+  0 A$ayfx_player$179                                              00001D GR
+  0 A$ayfx_player$180                                              00001F GR
+  0 A$ayfx_player$181                                              000022 GR
+  0 A$ayfx_player$182                                              000026 GR
+  0 A$ayfx_player$183                                              000027 GR
+  0 A$ayfx_player$184                                              000028 GR
+  0 A$ayfx_player$185                                              00002A GR
+  0 A$ayfx_player$186                                              00002B GR
+  0 A$ayfx_player$187                                              00002C GR
+  0 A$ayfx_player$188                                              00002D GR
+  0 A$ayfx_player$189                                              00002E GR
+  0 A$ayfx_player$190                                              00002F GR
+  0 A$ayfx_player$191                                              000030 GR
+  0 A$ayfx_player$192                                              000033 GR
+  0 A$ayfx_player$194                                              000034 GR
+  0 A$ayfx_player$210                                              000035 GR
+  0 A$ayfx_player$211                                              000038 GR
+  0 A$ayfx_player$212                                              000039 GR
+  0 A$ayfx_player$220                                              00003C GR
+  0 A$ayfx_player$233                                              00003D GR
+  0 A$ayfx_player$234                                              000040 GR
+  0 A$ayfx_player$235                                              000041 GR
+  0 A$ayfx_player$236                                              000042 GR
+  0 A$ayfx_player$237                                              000045 GR
+  0 A$ayfx_player$238                                              000047 GR
+  0 A$ayfx_player$240                                              000049 GR
+  0 A$ayfx_player$241                                              00004C GR
+  0 A$ayfx_player$242                                              00004D GR
+  0 A$ayfx_player$243                                              00004F GR
+  0 A$ayfx_player$245                                              000051 GR
+  0 A$ayfx_player$246                                              000054 GR
+  0 A$ayfx_player$247                                              000055 GR
+  0 A$ayfx_player$248                                              000056 GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 2.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  0 A$ayfx_player$249                                              000058 GR
+  0 A$ayfx_player$250                                              00005A GR
+  0 A$ayfx_player$251                                              00005B GR
+  0 A$ayfx_player$252                                              00005C GR
+  0 A$ayfx_player$253                                              00005D GR
+  0 A$ayfx_player$254                                              00005E GR
+  0 A$ayfx_player$256                                              000062 GR
+  0 A$ayfx_player$257                                              000064 GR
+  0 A$ayfx_player$258                                              000066 GR
+  0 A$ayfx_player$259                                              000067 GR
+  0 A$ayfx_player$260                                              000068 GR
+  0 A$ayfx_player$261                                              00006A GR
+  0 A$ayfx_player$262                                              00006C GR
+  0 A$ayfx_player$263                                              00006F GR
+  0 A$ayfx_player$265                                              000070 GR
+  0 A$ayfx_player$267                                              000073 GR
+  0 A$ayfx_player$268                                              000076 GR
+  0 A$ayfx_player$269                                              000077 GR
+  0 A$ayfx_player$270                                              000079 GR
+  0 A$ayfx_player$271                                              00007C GR
+  0 A$ayfx_player$272                                              00007D GR
+  0 A$ayfx_player$273                                              00007F GR
+  0 A$ayfx_player$274                                              000081 GR
+  0 A$ayfx_player$275                                              000084 GR
+  0 A$ayfx_player$277                                              000087 GR
+  0 A$ayfx_player$278                                              000088 GR
+  0 A$ayfx_player$279                                              00008A GR
+  0 A$ayfx_player$280                                              00008C GR
+  0 A$ayfx_player$281                                              00008D GR
+  0 A$ayfx_player$282                                              00008E GR
+  0 A$ayfx_player$283                                              00008F GR
+  0 A$ayfx_player$284                                              000091 GR
+  0 A$ayfx_player$285                                              000094 GR
+  0 A$ayfx_player$287                                              000095 GR
+  0 A$ayfx_player$289                                              000097 GR
+  0 A$ayfx_player$290                                              00009A GR
+  0 A$ayfx_player$291                                              00009D GR
+  0 A$ayfx_player$292                                              00009F GR
+  0 A$ayfx_player$293                                              0000A0 GR
+  0 A$ayfx_player$294                                              0000A3 GR
+  0 A$ayfx_player$296                                              0000A4 GR
+  0 A$ayfx_player$297                                              0000A6 GR
+  0 A$ayfx_player$298                                              0000A7 GR
+  0 A$ayfx_player$300                                              0000A9 GR
+  0 A$ayfx_player$301                                              0000AC GR
+  0 A$ayfx_player$302                                              0000AF GR
+  0 A$ayfx_player$303                                              0000B1 GR
+  0 A$ayfx_player$304                                              0000B2 GR
+  0 A$ayfx_player$305                                              0000B5 GR
+  0 A$ayfx_player$307                                              0000B6 GR
+  0 A$ayfx_player$308                                              0000B8 GR
+  0 A$ayfx_player$310                                              0000B9 GR
+  0 A$ayfx_player$311                                              0000BC GR
+  0 A$ayfx_player$312                                              0000BF GR
+  0 A$ayfx_player$313                                              0000C1 GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 3.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  0 A$ayfx_player$314                                              0000C2 GR
+  0 A$ayfx_player$315                                              0000C5 GR
+  0 A$ayfx_player$317                                              0000C6 GR
+  0 A$ayfx_player$318                                              0000C7 GR
+  0 A$ayfx_player$319                                              0000CA GR
+  0 A$ayfx_player$320                                              0000CB GR
+  0 A$ayfx_player$321                                              0000CC GR
+  0 A$ayfx_player$322                                              0000CF GR
+  0 A$ayfx_player$323                                              0000D2 GR
+  0 A$ayfx_player$324                                              0000D5 GR
+  0 A$ayfx_player$332                                              0000D6 GR
+  0 A$ayfx_player$345                                              0000D7 GR
+  0 A$ayfx_player$346                                              0000D9 GR
+  0 A$ayfx_player$347                                              0000DC GR
+  0 A$ayfx_player$348                                              0000DF GR
+  0 A$ayfx_player$349                                              0000E0 GR
+  0 A$ayfx_player$351                                              0000E1 GR
+  0 A$ayfx_player$352                                              0000E3 GR
+  0 A$ayfx_player$353                                              0000E6 GR
+  0 A$ayfx_player$355                                              0000E7 GR
+  0 A$ayfx_player$356                                              0000E9 GR
+  0 A$ayfx_player$357                                              0000EC GR
+  0 A$ayfx_player$359                                              0000ED GR
+  0 A$ayfx_player$367                                              0000F0 GR
+  0 A$ayfx_player$380                                              0000F1 GR
+  0 A$ayfx_player$381                                              0000F3 GR
+  0 A$ayfx_player$389                                              0000F6 GR
+  0 C$ayfx_player.c$172$1_0$27                                  =  000004 GR
+  0 C$ayfx_player.c$173$1_0$27                                  =  000035 GR
+  0 C$ayfx_player.c$178$1_0$29                                  =  000035 GR
+  0 C$ayfx_player.c$185$1_0$29                                  =  000035 GR
+  0 C$ayfx_player.c$186$1_0$29                                  =  00003C GR
+  0 C$ayfx_player.c$190$1_0$30                                  =  00003D GR
+  0 C$ayfx_player.c$322$1_0$30                                  =  00003D GR
+  0 C$ayfx_player.c$323$1_0$30                                  =  0000D6 GR
+  0 C$ayfx_player.c$327$1_0$31                                  =  0000D7 GR
+  0 C$ayfx_player.c$352$1_0$31                                  =  0000D7 GR
+  0 C$ayfx_player.c$353$1_0$31                                  =  0000F0 GR
+  0 C$ayfx_player.c$357$1_0$32                                  =  0000F1 GR
+  0 C$ayfx_player.c$363$1_0$32                                  =  0000F1 GR
+  0 C$ayfx_player.c$364$1_0$32                                  =  0000F6 GR
+  0 C$ayfx_player.c$71$0_0$25                                   =  000000 GR
+  0 C$ayfx_player.c$84$1_0$25                                   =  000000 GR
+  0 C$ayfx_player.c$85$1_0$25                                   =  000003 GR
+  0 C$ayfx_player.c$92$1_0$27                                   =  000004 GR
   0 CHANNEL_SWITCH                                                 000049 R
   0 CHECK_INDEX                                                    00000D R
   0 CHECK_NN                                                       000062 R
@@ -15,6 +176,52 @@ Symbol Table
   0 CHK2                                                           0000A4 R
   0 CHK3                                                           0000B6 R
   0 CONTINUE                                                       000070 R
+  7 Fayfx_player$__xinit_ayFX_Channel$0_0$0                     =  000002 GR
+  7 Fayfx_player$__xinit_ayFX_Finish$0_0$0                      =  000003 GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 4.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+  7 Fayfx_player$__xinit_ayFX_Mode$0_0$0                        =  000000 GR
+  7 Fayfx_player$__xinit_ayFX_Priority$0_0$0                    =  000001 GR
+  1 G$ayFX_Bank$0_0$0                                           =  000000 GR
+  2 G$ayFX_Channel$0_0$0                                        =  000002 GR
+  2 G$ayFX_Finish$0_0$0                                         =  000003 GR
+  0 G$ayFX_InitBank$0$0                                         =  000000 GR
+  2 G$ayFX_Mode$0_0$0                                           =  000000 GR
+  0 G$ayFX_Mute$0$0                                             =  0000D7 GR
+  1 G$ayFX_Noise$0_0$0                                          =  000006 GR
+  0 G$ayFX_Play$0$0                                             =  000035 GR
+  0 G$ayFX_PlayBank$0$0                                         =  000004 GR
+  1 G$ayFX_Pointer$0_0$0                                        =  000002 GR
+  2 G$ayFX_Priority$0_0$0                                       =  000001 GR
+  0 G$ayFX_Stop$0$0                                             =  0000F1 GR
+  1 G$ayFX_Tone$0_0$0                                           =  000004 GR
+  0 G$ayFX_Update$0$0                                           =  00003D GR
+  1 G$ayFX_Volume$0_0$0                                         =  000007 GR
+    G$g_MSXAudio_DataPort$0_0$0                                 =  0000C1 G
+    G$g_MSXAudio_DataPort2$0_0$0                                =  0000C3 G
+    G$g_MSXAudio_IndexPort$0_0$0                                =  0000C0 G
+    G$g_MSXAudio_IndexPort2$0_0$0                               =  0000C2 G
+    G$g_MSXMusic_DataPort$0_0$0                                 =  00007D G
+    G$g_MSXMusic_IndexPort$0_0$0                                =  00007C G
+    G$g_PSG_DataPort$0_0$0                                      =  0000A1 G
+    G$g_PSG_Ext_DataPort$0_0$0                                  =  000011 G
+    G$g_PSG_Ext_RegPort$0_0$0                                   =  000010 G
+    G$g_PSG_Ext_StatPort$0_0$0                                  =  000012 G
+    G$g_PSG_RegPort$0_0$0                                       =  0000A0 G
+    G$g_PSG_StatPort$0_0$0                                      =  0000A2 G
+    G$g_PortAccessKeyboard$0_0$0                                =  0000AA G
+    G$g_PortControl$0_0$0                                       =  0000AB G
+    G$g_PortPrimarySlot$0_0$0                                   =  0000A8 G
+    G$g_PortReadKeyboard$0_0$0                                  =  0000A9 G
+    G$g_RTC_AddrPort$0_0$0                                      =  0000B4 G
+    G$g_RTC_DataPort$0_0$0                                      =  0000B5 G
+    G$g_VDP_AddrPort$0_0$0                                      =  000099 G
+    G$g_VDP_DataPort$0_0$0                                      =  000098 G
+    G$g_VDP_RegPort$0_0$0                                       =  000099 G
+    G$g_VDP_StatPort$0_0$0                                      =  000099 G
   0 INIT_END                                                       000034 R
   0 PLAY_A                                                         0000B9 R
   0 PLAY_B                                                         0000A9 R
@@ -26,6 +233,16 @@ Symbol Table
   0 StopCheck2                                                     0000E7 R
   0 StopCheck3                                                     0000ED R
   0 TAKECB                                                         000051 R
+  0 XG$ayFX_InitBank$0$0                                        =  000003 GR
+  0 XG$ayFX_Mute$0$0                                            =  0000F0 GR
+  0 XG$ayFX_Play$0$0                                            =  00003C GR
+  0 XG$ayFX_Stop$0$0                                            =  0000F6 GR
+  0 XG$ayFX_Update$0$0                                          =  0000D6 GR
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 5.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
     _PT3_Regs                                                      ****** GX
   7 __xinit__ayFX_Channel                                          000002 R
   7 __xinit__ayFX_Finish                                           000003 R
@@ -58,11 +275,6 @@ Symbol Table
     _g_PSG_Ext_StatPort                                         =  000012 
     _g_PSG_RegPort                                              =  0000A0 
     _g_PSG_StatPort                                             =  0000A2 
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 2.
-Hexadecimal [24-Bits]
-
-Symbol Table
-
     _g_PortAccessKeyboard                                       =  0000AA 
     _g_PortControl                                              =  0000AB 
     _g_PortPrimarySlot                                          =  0000A8 
@@ -75,7 +287,7 @@ Symbol Table
     _g_VDP_StatPort                                             =  000099 
 
 
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 3.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 6.
 Hexadecimal [24-Bits]
 
 Area Table

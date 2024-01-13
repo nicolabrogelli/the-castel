@@ -1,24 +1,52 @@
+;!FILE C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out\game_pawn.asm
 XL3
-H 9 areas C8 global symbols
+H 9 areas 69A global symbols
 M game_pawn
 O -mz80
+S G$g_TRPTBL$0_0$0 Def00FC4C
+S G$g_QUEUES$0_0$0 Def00F3F3
+S G$g_FNKSTR$0_0$0 Def00F87F
 S _g_SAVVOL Def00FB39
+S G$g_PATWRK$0_0$0 Def00FC40
+S G$g_ENSTOP$0_0$0 Def00FBB0
+S G$g_RSIQLN$0_0$0 Def00FB06
 S _g_NORUSE Def00FAFD
 S _g_VCBA Def00FB41
 S _g_TXTNAM Def00F3B3
 S _g_SpriteAttributeLow Ref000000
+S G$g_SLTATR$0_0$0 Def00FCC9
+S G$g_PLYCNT$0_0$0 Def00FB40
+S G$g_PRSCNT$0_0$0 Def00FB35
+S G$g_OLDSTT$0_0$0 Def00FB0C
+S G$g_TXTCGP$0_0$0 Def00F3B7
 S _g_MEXBIh Def00FB07
 S _g_ERRORS Def00FB1A
 S _g_VCBB Def00FB66
+S G$g_SAVVOL$0_0$0 Def00FB39
 S _g_VCBC Def00FB8B
 S _g_TXTCOL Def00F3B5
 S _g_T32PAT Def00F3C5
+S G$g_VCBA$0_0$0 Def00FB41
+S G$g_NORUSE$0_0$0 Def00FAFD
+S G$g_TXTNAM$0_0$0 Def00F3B3
 S _g_FSTPOS Def00FBCA
+S G$g_VCBB$0_0$0 Def00FB66
+S G$g_ERRORS$0_0$0 Def00FB1A
+S G$g_MEXBIh$0_0$0 Def00FB07
 S _g_HIGH Def00F408
 S _g_T32ATR Def00F3C3
+S G$g_VCBC$0_0$0 Def00FB8B
+S G$g_T32PAT$0_0$0 Def00F3C5
+S G$g_TXTCOL$0_0$0 Def00F3B5
 S _g_WRPRIM Def00F385
 S _g_ACPAGE Def00FAF6
 S _g_CLOC Def00F92A
+S G$g_FSTPOS$0_0$0 Def00FBCA
+S G$g_HIGH$0_0$0 Def00F408
+S G$g_T32ATR$0_0$0 Def00F3C3
+S G$g_ACPAGE$0_0$0 Def00FAF6
+S G$g_WRPRIM$0_0$0 Def00F385
+S G$g_CLOC$0_0$0 Def00F92A
 S _g_RTYCNT Def00FC9A
 S _g_RG10SAV Def00FFE9
 S _Mem_Set Ref000000
@@ -28,61 +56,122 @@ S _g_RG20SAV Def00FFF3
 S _g_TXTPAT Def00F3BB
 S _g_RG12SAV Def00FFEB
 S _g_RG21SAV Def00FFF4
+S G$g_RG10SAV$0_0$0 Def00FFE9
+S G$g_RTYCNT$0_0$0 Def00FC9A
 S _g_SLTWRK Def00FD09
 S _g_RG13SAV Def00FFEC
 S _g_RG22SAV Def00FFF5
 S _g_TXTATR Def00F3B9
+S G$g_RG20SAV$0_0$0 Def00FFF3
+S G$g_RG11SAV$0_0$0 Def00FFEA
+S G$g_MODE$0_0$0 Def00FAFC
+S G$g_TXTPAT$0_0$0 Def00F3BB
 S _g_RG14SAV Def00FFED
 S _g_RG23SAV Def00FFF6
+S G$g_RG21SAV$0_0$0 Def00FFF4
+S G$g_RG12SAV$0_0$0 Def00FFEB
 S _g_CS120 Def00F3FC
 S _g_HEADER Def00F40A
 S _g_RG15SAV Def00FFEE
+S G$g_RG22SAV$0_0$0 Def00FFF5
+S G$g_RG13SAV$0_0$0 Def00FFEC
+S G$g_SLTWRK$0_0$0 Def00FD09
+S G$g_TXTATR$0_0$0 Def00F3B9
 S _g_RG16SAV Def00FFEF
 S _g_RG25SAV Def00FFFA
+S G$g_RG23SAV$0_0$0 Def00FFF6
+S G$g_RG14SAV$0_0$0 Def00FFED
 S _g_PUTPNT Def00F3F8
 S _g_RG08SAV Def00FFE7
 S _g_RG17SAV Def00FFF0
 S _g_RG26SAV Def00FFFB
+S G$g_RG15SAV$0_0$0 Def00FFEE
+S G$g_HEADER$0_0$0 Def00F40A
+S G$g_CS120$0_0$0 Def00F3FC
 S _g_CS240 Def00F401
 S _g_ASPCT1 Def00F40B
 S _g_KANAMD Def00FCAD
 S _g_RG09SAV Def00FFE8
 S _g_RG18SAV Def00FFF1
 S _g_RG27SAV Def00FFFC
+S G$g_RG25SAV$0_0$0 Def00FFFA
+S G$g_RG16SAV$0_0$0 Def00FFEF
 S _g_ASPCT2 Def00F40D
 S _g_FLAGS Def00FB1B
 S _g_PADX Def00FC9D
 S _g_RG19SAV Def00FFF2
+S G$g_RG26SAV$0_0$0 Def00FFFB
+S G$g_RG17SAV$0_0$0 Def00FFF0
+S G$g_RG08SAV$0_0$0 Def00FFE7
+S G$g_PUTPNT$0_0$0 Def00F3F8
 S _g_PADY Def00FC9C
+S G$g_RG27SAV$0_0$0 Def00FFFC
+S G$g_RG18SAV$0_0$0 Def00FFF1
+S G$g_RG09SAV$0_0$0 Def00FFE8
+S G$g_KANAMD$0_0$0 Def00FCAD
+S G$g_ASPCT1$0_0$0 Def00F40B
+S G$g_CS240$0_0$0 Def00F401
 S _g_ROMA Def00FAFA
 S _g_BAKCLR Def00F3EA
 S _g_CMASK Def00F92C
+S G$g_RG19SAV$0_0$0 Def00FFF2
+S G$g_PADX$0_0$0 Def00FC9D
+S G$g_FLAGS$0_0$0 Def00FB1B
+S G$g_ASPCT2$0_0$0 Def00F40D
 S _g_RSFCB Def00FB04
 S _g_HIMEM Def00FC4A
+S G$g_PADY$0_0$0 Def00FC9C
 S _g_RS2IQ Def00FAF5
 S _g_DPPAGE Def00FAF5
+S G$g_ROMA$0_0$0 Def00FAFA
+S G$g_CMASK$0_0$0 Def00F92C
+S G$g_BAKCLR$0_0$0 Def00F3EA
 S _g_LOW Def00F406
+S G$g_HIMEM$0_0$0 Def00FC4A
+S G$g_RSFCB$0_0$0 Def00FB04
 S _g_RG0SAV Def00F3DF
 S _g_FLBMEM Def00FCAE
 S _g_SVFFF8 Def00FFF8
+S G$g_DPPAGE$0_0$0 Def00FAF5
+S G$g_RS2IQ$0_0$0 Def00FAF5
 S _g_RG1SAV Def00F3E0
+S G$g_LOW$0_0$0 Def00F406
 S _g_CNSDFG Def00F3DE
 S _g_RG2SAV Def00F3E1
 S _g_CLIKFL Def00FBD9
+S G$g_SVFFF8$0_0$0 Def00FFF8
+S G$g_FLBMEM$0_0$0 Def00FCAE
+S G$g_RG0SAV$0_0$0 Def00F3DF
 S _g_RG3SAV Def00F3E2
 S _VDP_SetSpriteColorSM1 Ref000000
+S G$g_RG1SAV$0_0$0 Def00F3E0
 S _g_RG4SAV Def00F3E3
+S G$g_CLIKFL$0_0$0 Def00FBD9
+S G$g_RG2SAV$0_0$0 Def00F3E1
+S G$g_CNSDFG$0_0$0 Def00F3DE
 S _g_RG5SAV Def00F3E4
 S _g_FNKFLG Def00FBCE
 S _g_JIFFY Def00FC9E
+S G$g_RG3SAV$0_0$0 Def00F3E2
 S _g_RG6SAV Def00F3E5
 S _g_QUEBAK Def00F971
 S _g_BDRCLR Def00F3EB
 S .__.ABS. Def000000
+S G$g_RG4SAV$0_0$0 Def00F3E3
 S _g_RG7SAV Def00F3E6
 S _g_GRPHED Def00FCA6
+S G$g_JIFFY$0_0$0 Def00FC9E
+S G$g_FNKFLG$0_0$0 Def00FBCE
+S G$g_RG5SAV$0_0$0 Def00F3E4
 S _g_MCLLEN Def00FB3B
 S _g_CAPST Def00FCAB
+S G$g_QUEBAK$0_0$0 Def00F971
+S G$g_RG6SAV$0_0$0 Def00F3E5
+S G$g_BDRCLR$0_0$0 Def00F3EB
+S G$g_GRPHED$0_0$0 Def00FCA6
+S G$g_RG7SAV$0_0$0 Def00F3E6
+S G$g_CAPST$0_0$0 Def00FCAB
+S G$g_MCLLEN$0_0$0 Def00FB3B
 S _g_DATCNT Def00FB17
 S _g_ONGSBF Def00FBD8
 S _g_BRDATR Def00FCB2
@@ -90,58 +179,106 @@ S _g_SVFFFD Def00FFFD
 S _g_CODSAV Def00FBCC
 S _g_ESCCNT Def00FCA7
 S _g_CSRX Def00F3DD
+S G$g_DATCNT$0_0$0 Def00FB17
 S _g_CSRY Def00F3DC
+S G$g_SVFFFD$0_0$0 Def00FFFD
+S G$g_BRDATR$0_0$0 Def00FCB2
+S G$g_ONGSBF$0_0$0 Def00FBD8
 S _g_QUETAB Def00F959
 S _g_CHRCNT Def00FAF9
 S _g_KANAST Def00FCAC
 S _g_LINLEN Def00F3B0
 S ___sdcc_call_hl Ref000000
+S G$g_ESCCNT$0_0$0 Def00FCA7
+S G$g_CODSAV$0_0$0 Def00FBCC
+S G$g_CSRX$0_0$0 Def00F3DD
 S _g_VOICAQ Def00F975
 S _g_INSFLG Def00FCA8
 S _g_DRWANG Def00FCBD
 S _g_GRPCGP Def00F3CB
+S G$g_CSRY$0_0$0 Def00F3DC
 S _g_VOICBQ Def00F9F5
 S _g_AVCSAV Def00FAF7
 S _g_VOICEN Def00FB38
 S _g_BASROM Def00FBB1
 S _g_INTFLG Def00FC9B
+S G$g_KANAST$0_0$0 Def00FCAC
+S G$g_CHRCNT$0_0$0 Def00FAF9
+S G$g_QUETAB$0_0$0 Def00F959
+S G$g_LINLEN$0_0$0 Def00F3B0
 S _g_FRCNEW Def00F3F5
 S _g_VOICCQ Def00FA75
 S _g_EXBRSA Def00FAF8
 S _g_GRPNAM Def00F3C7
 S _g_GRPACX Def00FCB7
+S G$g_DRWANG$0_0$0 Def00FCBD
+S G$g_INSFLG$0_0$0 Def00FCA8
+S G$g_VOICAQ$0_0$0 Def00F975
+S G$g_GRPCGP$0_0$0 Def00F3CB
 S _g_TRGFLG Def00F3E8
 S _g_KEYBUF Def00FBF0
 S _g_DRWFLG Def00FCBB
 S _g_GRPACY Def00FCB9
+S G$g_INTFLG$0_0$0 Def00FC9B
+S G$g_BASROM$0_0$0 Def00FBB1
+S G$g_VOICEN$0_0$0 Def00FB38
+S G$g_AVCSAV$0_0$0 Def00FAF7
+S G$g_VOICBQ$0_0$0 Def00F9F5
 S _g_CLPRIM Def00F38C
 S _g_XSAVE Def00FAFE
 S _g_MUSICF Def00FB3F
 S _g_OLDSCR Def00FCB0
 S _g_GRPCOL Def00F3C9
 S _g_MLTCGP Def00F3D5
+S G$g_EXBRSA$0_0$0 Def00FAF8
+S G$g_VOICCQ$0_0$0 Def00FA75
+S G$g_FRCNEW$0_0$0 Def00F3F5
+S G$g_GRPACX$0_0$0 Def00FCB7
+S G$g_GRPNAM$0_0$0 Def00F3C7
 S _g_YSAVE Def00FB00
 S _g_TOCNT Def00FB03
 S _g_OLDKEY Def00FBDA
 S _g_SCRMOD Def00FCAF
 S _g_FORCLR Def00F3E9
+S G$g_DRWFLG$0_0$0 Def00FCBB
+S G$g_KEYBUF$0_0$0 Def00FBF0
+S G$g_TRGFLG$0_0$0 Def00F3E8
+S G$g_GRPACY$0_0$0 Def00FCB9
 S _g_SCNCNT Def00F3F6
 S _g_MNROM Def00FCC1
 S _g_MLTNAM Def00F3D1
+S G$g_OLDSCR$0_0$0 Def00FCB0
+S G$g_MUSICF$0_0$0 Def00FB3F
+S G$g_XSAVE$0_0$0 Def00FAFE
+S G$g_CLPRIM$0_0$0 Def00F38C
+S G$g_MLTCGP$0_0$0 Def00F3D5
+S G$g_GRPCOL$0_0$0 Def00F3C9
 S _g_OLDINT Def00FB0C
 S _g_COMMSK Def00FB1D
+S G$g_SCRMOD$0_0$0 Def00FCAF
+S G$g_OLDKEY$0_0$0 Def00FBDA
+S G$g_TOCNT$0_0$0 Def00FB03
+S G$g_YSAVE$0_0$0 Def00FB00
+S G$g_FORCLR$0_0$0 Def00F3E9
 S _g_MLTCOL Def00F3D3
+S G$g_MNROM$0_0$0 Def00FCC1
+S G$g_SCNCNT$0_0$0 Def00F3F6
+S G$g_MLTNAM$0_0$0 Def00F3D1
 S _g_REPCNT Def00F3F7
+S G$g_COMMSK$0_0$0 Def00FB1D
+S G$g_OLDINT$0_0$0 Def00FB0C
 S _g_MINUPD Def00F3EF
 S _g_ESTBLS Def00FB1C
 S _g_SAVSP Def00FB36
 S _g_LINTTB Def00FBB2
 S _g_CLIKSW Def00F3DB
+S G$g_MLTCOL$0_0$0 Def00F3D3
 S _g_RDPRIM Def00F380
 S _g_STATFL Def00F3E7
 S _g_INTVAL Def00FCA0
 S _g_CRTCNT Def00F3B1
 S _g_GRPPAT Def00F3CF
+S G$g_REPCNT$0_0$0 Def00F3F7
 S _g_MAXUPD Def00F3EC
 S _g_DEVNUM Def00FB16
 S _g_CASPRV Def00FCB1
@@ -150,11 +287,28 @@ S _g_EXPTBL Def00FCC1
 S _g_PROCNM Def00FD89
 S _g_CLMLST Def00F3B2
 S _g_ScreenLayoutLow Ref000000
+S G$g_LINTTB$0_0$0 Def00FBB2
+S G$g_SAVSP$0_0$0 Def00FB36
+S G$g_ESTBLS$0_0$0 Def00FB1C
+S G$g_MINUPD$0_0$0 Def00F3EF
+S G$g_CLIKSW$0_0$0 Def00F3DB
 S _g_INTCNT Def00FCA2
 S _g_GRPATR Def00F3CD
 S ___sdcc_call_iy Ref000000
+S G$g_INTVAL$0_0$0 Def00FCA0
+S G$g_STATFL$0_0$0 Def00F3E7
+S G$g_RDPRIM$0_0$0 Def00F380
+S G$g_GRPPAT$0_0$0 Def00F3CF
+S G$g_CRTCNT$0_0$0 Def00F3B1
 S _g_USRTAB Def00F39A
 S _g_GXPOS Def00FCB3
+S G$g_PROCNM$0_0$0 Def00FD89
+S G$g_EXPTBL$0_0$0 Def00FCC1
+S G$g_DRWSCL$0_0$0 Def00FCBC
+S G$g_CASPRV$0_0$0 Def00FCB1
+S G$g_DEVNUM$0_0$0 Def00FB16
+S G$g_MAXUPD$0_0$0 Def00F3EC
+S G$g_CLMLST$0_0$0 Def00F3B2
 S _g_GETPNT Def00F3FA
 S _g_LSTCOM Def00FB1E
 S _g_MCLPTR Def00FB3C
@@ -165,45 +319,1382 @@ S _g_GYPOS Def00FCB5
 S _g_MINROM Def00FFF7
 S _g_MLTPAT Def00F3D9
 S _g_SLTSL Def00FFFF
+S G$g_INTCNT$0_0$0 Def00FCA2
+S G$g_GRPATR$0_0$0 Def00F3CD
 S _g_LSTMOD Def00FB1F
 S _g_QUEUEN Def00FB3E
 S _g_NEWKEY Def00FBE5
 S _g_LINL40 Def00F3AE
 S _g_T32CGP Def00F3C1
 S _g_LOGOPR Def00FB02
+S G$g_GXPOS$0_0$0 Def00FCB3
+S G$g_USRTAB$0_0$0 Def00F39A
 S _g_LOWLIM Def00FCA4
 S _g_CSTYLE Def00FCAA
 S _g_LINL32 Def00F3AF
 S _g_MLTATR Def00F3D7
+S G$g_MINROM$0_0$0 Def00FFF7
+S G$g_GYPOS$0_0$0 Def00FCB5
+S G$g_CSRSW$0_0$0 Def00FCA9
+S G$g_WINWID$0_0$0 Def00FCA5
+S G$g_FNKSWI$0_0$0 Def00FBCD
+S G$g_MCLPTR$0_0$0 Def00FB3C
+S G$g_LSTCOM$0_0$0 Def00FB1E
+S G$g_GETPNT$0_0$0 Def00F3FA
+S G$g_SLTSL$0_0$0 Def00FFFF
+S G$g_MLTPAT$0_0$0 Def00F3D9
 S _g_BOTTOM Def00FC48
 S _g_SLTTBL Def00FCC5
 S _g_T32NAM Def00F3BD
 S _VDP_WriteVRAM_16K Ref000000
+S G$g_NEWKEY$0_0$0 Def00FBE5
+S G$g_QUEUEN$0_0$0 Def00FB3E
+S G$g_LSTMOD$0_0$0 Def00FB1F
+S G$g_LOGOPR$0_0$0 Def00FB02
+S G$g_T32CGP$0_0$0 Def00F3C1
+S G$g_LINL40$0_0$0 Def00F3AE
 S _g_RSTMP Def00FB03
 S _g_ATRBYT Def00F3F2
+S G$g_CSTYLE$0_0$0 Def00FCAA
+S G$g_LOWLIM$0_0$0 Def00FCA4
+S G$g_MLTATR$0_0$0 Def00F3D7
+S G$g_LINL32$0_0$0 Def00F3AF
 S _g_LINWRK Def00FC18
 S _g_T32COL Def00F3BF
+S G$g_SLTTBL$0_0$0 Def00FCC5
+S G$g_BOTTOM$0_0$0 Def00FC48
+S G$g_T32NAM$0_0$0 Def00F3BD
 S _g_QUEUES Def00F3F3
 S _g_TRPTBL Def00FC4C
 S _g_FNKSTR Def00F87F
+S G$g_RSTMP$0_0$0 Def00FB03
+S G$g_ATRBYT$0_0$0 Def00F3F2
 S _g_RSIQLN Def00FB06
 S _g_ENSTOP Def00FBB0
 S _g_PATWRK Def00FC40
 S _VDP_Peek_16K Ref000000
+S G$g_LINWRK$0_0$0 Def00FC18
+S G$g_T32COL$0_0$0 Def00F3BF
 S _g_OLDSTT Def00FB0C
 S _g_PRSCNT Def00FB35
 S _g_PLYCNT Def00FB40
 S _g_SLTATR Def00FCC9
 S _g_TXTCGP Def00F3B7
 A _CODE size 8EF flags 0 addr 0
+S A$game_pawn$2420 Def0008B2
+S A$game_pawn$2330 Def000868
+S A$game_pawn$2321 Def00085B
+S A$game_pawn$2312 Def000853
+S A$game_pawn$2231 Def000813
+S A$game_pawn$2222 Def000809
+S A$game_pawn$2213 Def0007FF
+S A$game_pawn$2204 Def0007F1
+S A$game_pawn$2141 Def0007BB
+S A$game_pawn$2105 Def0007A0
+S A$game_pawn$2060 Def000768
+S A$game_pawn$2051 Def00075D
+S A$game_pawn$2042 Def00074C
+S A$game_pawn$2033 Def000746
+S A$game_pawn$2024 Def000736
+S A$game_pawn$2015 Def00072D
+S A$game_pawn$2006 Def00071F
+S A$game_pawn$1700 Def000556
+S A$game_pawn$1520 Def00044C
+S A$game_pawn$1511 Def000441
+S A$game_pawn$1502 Def000434
+S A$game_pawn$1403 Def0003BA
+S A$game_pawn$1340 Def000368
+S A$game_pawn$1313 Def00034D
+S A$game_pawn$1304 Def000342
+S A$game_pawn$1250 Def0002FD
+S A$game_pawn$1241 Def0002EE
+S A$game_pawn$1223 Def0002D0
+S A$game_pawn$1214 Def0002C1
+S A$game_pawn$1205 Def0002B7
+S A$game_pawn$1160 Def000273
+S A$game_pawn$1151 Def000260
+S A$game_pawn$1142 Def000249
+S A$game_pawn$1133 Def000237
+S A$game_pawn$1124 Def000220
+S A$game_pawn$1115 Def000209
+S A$game_pawn$1106 Def0001FA
+S A$game_pawn$1070 Def0001CF
+S A$game_pawn$1061 Def0001C8
+S A$game_pawn$1025 Def0001A1
+S A$game_pawn$1016 Def000199
+S C$game_pawn.c$150$1_2$113 Def000246
+S C$game_pawn.c$107$1_0$113 Def0000DC
+S A$game_pawn$2430 Def0008C1
+S A$game_pawn$2421 Def0008B4
+S A$game_pawn$2403 Def0008A8
+S A$game_pawn$2340 Def00086E
+S A$game_pawn$2322 Def00085D
+S A$game_pawn$2250 Def000821
+S A$game_pawn$2223 Def00080A
+S A$game_pawn$2214 Def000800
+S A$game_pawn$2205 Def0007F4
+S A$game_pawn$2160 Def0007C8
+S A$game_pawn$2142 Def0007BD
+S A$game_pawn$2124 Def0007AE
+S A$game_pawn$2115 Def0007A8
+S A$game_pawn$2106 Def0007A1
+S A$game_pawn$2070 Def000774
+S A$game_pawn$2061 Def000769
+S A$game_pawn$2043 Def00074D
+S A$game_pawn$2025 Def000738
+S A$game_pawn$2016 Def00072F
+S A$game_pawn$2007 Def000721
+S A$game_pawn$1800 Def000605
+S A$game_pawn$1710 Def000571
+S A$game_pawn$1701 Def000558
+S A$game_pawn$1611 Def0004CA
+S A$game_pawn$1602 Def0004BE
+S A$game_pawn$1530 Def000459
+S A$game_pawn$1521 Def00044D
+S A$game_pawn$1512 Def000442
+S A$game_pawn$1503 Def000436
+S A$game_pawn$1422 Def0003CD
+S A$game_pawn$1413 Def0003C2
+S A$game_pawn$1350 Def000377
+S A$game_pawn$1341 Def000369
+S A$game_pawn$1314 Def00034E
+S A$game_pawn$1260 Def00030C
+S A$game_pawn$1251 Def000300
+S A$game_pawn$1242 Def0002F0
+S A$game_pawn$1224 Def0002D2
+S A$game_pawn$1215 Def0002C3
+S A$game_pawn$1206 Def0002B9
+S A$game_pawn$1170 Def000286
+S A$game_pawn$1161 Def000276
+S A$game_pawn$1152 Def000263
+S A$game_pawn$1143 Def00024C
+S A$game_pawn$1134 Def00023A
+S A$game_pawn$1125 Def000223
+S A$game_pawn$1116 Def00020C
+S A$game_pawn$1107 Def0001FD
+S A$game_pawn$1080 Def0001DC
+S A$game_pawn$1071 Def0001D0
+S A$game_pawn$1062 Def0001C9
+S A$game_pawn$1044 Def0001BB
+S A$game_pawn$1026 Def0001A2
+S A$game_pawn$1017 Def00019B
+S A$game_pawn$2440 Def0008C8
+S A$game_pawn$2422 Def0008B7
+S A$game_pawn$2413 Def0008A9
+S A$game_pawn$2350 Def000876
+S A$game_pawn$2341 Def00086F
+S A$game_pawn$2323 Def000861
+S A$game_pawn$2305 Def00084F
+S A$game_pawn$2251 Def000824
+S A$game_pawn$2224 Def00080B
+S A$game_pawn$2215 Def000802
+S A$game_pawn$2206 Def0007F5
+S A$game_pawn$2161 Def0007C9
+S A$game_pawn$2134 Def0007B7
+S A$game_pawn$2116 Def0007AB
+S A$game_pawn$2107 Def0007A4
+S A$game_pawn$2080 Def00077F
+S A$game_pawn$2071 Def000777
+S A$game_pawn$2062 Def00076A
+S A$game_pawn$2044 Def00074E
+S A$game_pawn$2026 Def00073B
+S A$game_pawn$2017 Def000732
+S A$game_pawn$2008 Def000723
+S A$game_pawn$1810 Def000611
+S A$game_pawn$1720 Def000590
+S A$game_pawn$1711 Def000574
+S A$game_pawn$1702 Def00055B
+S A$game_pawn$1630 Def0004D9
+S A$game_pawn$1621 Def0004D1
+S A$game_pawn$1612 Def0004CB
+S A$game_pawn$1603 Def0004C0
+S A$game_pawn$1531 Def00045A
+S A$game_pawn$1513 Def000443
+S A$game_pawn$1504 Def000437
+S A$game_pawn$1450 Def0003F1
+S A$game_pawn$1432 Def0003D7
+S A$game_pawn$1414 Def0003C5
+S A$game_pawn$1351 Def000379
+S A$game_pawn$1342 Def00036A
+S A$game_pawn$1333 Def000361
+S A$game_pawn$1324 Def000356
+S A$game_pawn$1270 Def000313
+S A$game_pawn$1261 Def00030D
+S A$game_pawn$1252 Def000302
+S A$game_pawn$1243 Def0002F3
+S A$game_pawn$1234 Def0002DD
+S A$game_pawn$1225 Def0002D4
+S A$game_pawn$1216 Def0002C5
+S A$game_pawn$1207 Def0002BC
+S A$game_pawn$1180 Def000296
+S A$game_pawn$1171 Def000289
+S A$game_pawn$1162 Def000279
+S A$game_pawn$1153 Def000266
+S A$game_pawn$1144 Def00024F
+S A$game_pawn$1135 Def00023D
+S A$game_pawn$1126 Def000226
+S A$game_pawn$1117 Def00020F
+S A$game_pawn$1108 Def000200
+S A$game_pawn$1090 Def0001EB
+S A$game_pawn$1081 Def0001DF
+S A$game_pawn$1063 Def0001CA
+S A$game_pawn$1036 Def0001AB
+S A$game_pawn$1027 Def0001A5
+S A$game_pawn$1018 Def00019C
+S A$game_pawn$1009 Def000193
+S C$game_pawn.c$341$1_2$113 Def00060E
+S A$game_pawn$2441 Def0008C9
+S A$game_pawn$2360 Def000880
+S A$game_pawn$2351 Def000877
+S A$game_pawn$2333 Def000869
+S A$game_pawn$2252 Def000825
+S A$game_pawn$2243 Def00081B
+S A$game_pawn$2225 Def00080C
+S A$game_pawn$2180 Def0007DD
+S A$game_pawn$2135 Def0007B8
+S A$game_pawn$2090 Def00078C
+S A$game_pawn$2081 Def000781
+S A$game_pawn$2072 Def000778
+S A$game_pawn$2063 Def00076D
+S A$game_pawn$2045 Def00074F
+S A$game_pawn$2009 Def000725
+S A$game_pawn$1910 Def0006A1
+S A$game_pawn$1901 Def000692
+S A$game_pawn$1811 Def000612
+S A$game_pawn$1721 Def000593
+S A$game_pawn$1712 Def000577
+S A$game_pawn$1703 Def00055C
+S A$game_pawn$1631 Def0004DA
+S A$game_pawn$1613 Def0004CC
+S A$game_pawn$1604 Def0004C2
+S A$game_pawn$1532 Def00045B
+S A$game_pawn$1514 Def000444
+S A$game_pawn$1505 Def00043A
+S A$game_pawn$1460 Def000402
+S A$game_pawn$1451 Def0003F3
+S A$game_pawn$1433 Def0003DA
+S A$game_pawn$1415 Def0003C6
+S A$game_pawn$1406 Def0003BB
+S A$game_pawn$1370 Def00038C
+S A$game_pawn$1352 Def00037B
+S A$game_pawn$1343 Def00036C
+S A$game_pawn$1325 Def000359
+S A$game_pawn$1280 Def000323
+S A$game_pawn$1271 Def000316
+S A$game_pawn$1262 Def00030E
+S A$game_pawn$1253 Def000304
+S A$game_pawn$1244 Def0002F4
+S A$game_pawn$1235 Def0002E0
+S A$game_pawn$1226 Def0002D6
+S A$game_pawn$1217 Def0002C8
+S A$game_pawn$1181 Def000299
+S A$game_pawn$1172 Def00028C
+S A$game_pawn$1163 Def00027C
+S A$game_pawn$1154 Def000269
+S A$game_pawn$1145 Def000252
+S A$game_pawn$1136 Def000240
+S A$game_pawn$1127 Def000229
+S A$game_pawn$1118 Def000212
+S A$game_pawn$1109 Def000201
+S A$game_pawn$1082 Def0001E2
+S A$game_pawn$1064 Def0001CB
+S A$game_pawn$1055 Def0001C0
+S A$game_pawn$1037 Def0001AE
+S C$game_pawn.c$421$4_0$150 Def000814
+S C$game_pawn.c$251$3_2$130 Def0003D7
+S C$game_pawn.c$154$2_2$120 Def000285
+S C$game_pawn.c$123$2_1$116 Def00016C
+S C$game_pawn.c$117$1_2$113 Def0007B2
+S C$game_pawn.c$115$2_1$115 Def00013B
+S G$GamePawn_SetPosition$0$0 Def000073
 S _GamePawn_InitializePhysics Def0008CB
+S A$game_pawn$2460 Def0008D5
+S A$game_pawn$2442 Def0008CA
+S A$game_pawn$2361 Def000881
+S A$game_pawn$2316 Def000856
+S A$game_pawn$2253 Def000826
+S A$game_pawn$2244 Def00081D
+S A$game_pawn$2235 Def000814
+S A$game_pawn$2181 Def0007DE
+S A$game_pawn$2136 Def0007BA
+S A$game_pawn$2073 Def000779
+S A$game_pawn$2064 Def00076E
+S A$game_pawn$2055 Def00075E
+S A$game_pawn$2046 Def000753
+S A$game_pawn$2037 Def000748
+S A$game_pawn$2028 Def00073C
+S A$game_pawn$1911 Def0006A2
+S A$game_pawn$1902 Def000693
+S A$game_pawn$1830 Def000633
+S A$game_pawn$1812 Def000613
+S A$game_pawn$1740 Def0005B7
+S A$game_pawn$1722 Def000596
+S A$game_pawn$1713 Def00057A
+S A$game_pawn$1704 Def00055F
+S A$game_pawn$1641 Def0004E9
+S A$game_pawn$1632 Def0004DB
+S A$game_pawn$1605 Def0004C4
+S A$game_pawn$1560 Def00047A
+S A$game_pawn$1515 Def000445
+S A$game_pawn$1461 Def000404
+S A$game_pawn$1452 Def0003F5
+S A$game_pawn$1434 Def0003DD
+S A$game_pawn$1416 Def0003C7
+S A$game_pawn$1407 Def0003BC
+S A$game_pawn$1371 Def00038D
+S A$game_pawn$1353 Def00037D
+S A$game_pawn$1344 Def00036E
+S A$game_pawn$1326 Def00035A
+S A$game_pawn$1317 Def00034F
+S A$game_pawn$1308 Def000344
+S A$game_pawn$1281 Def000325
+S A$game_pawn$1272 Def000318
+S A$game_pawn$1254 Def000306
+S A$game_pawn$1245 Def0002F7
+S A$game_pawn$1236 Def0002E2
+S A$game_pawn$1218 Def0002C9
+S A$game_pawn$1182 Def00029A
+S A$game_pawn$1164 Def00027F
+S A$game_pawn$1155 Def00026C
+S A$game_pawn$1146 Def000255
+S A$game_pawn$1137 Def000243
+S A$game_pawn$1128 Def00022C
+S A$game_pawn$1119 Def000215
+S A$game_pawn$1083 Def0001E3
+S A$game_pawn$1065 Def0001CC
+S A$game_pawn$1056 Def0001C3
+S A$game_pawn$1047 Def0001BD
+S A$game_pawn$1038 Def0001B1
+S C$game_pawn.c$410$1_0$147 Def0007DA
+S C$game_pawn.c$245$2_2$120 Def0003D0
+S C$game_pawn.c$160$4_2$122 Def0002A5
+S C$game_pawn.c$116$2_1$115 Def00013D
+S A$game_pawn$2470 Def0008E0
+S A$game_pawn$2461 Def0008D8
+S A$game_pawn$2452 Def0008CB
+S A$game_pawn$2434 Def0008C2
+S A$game_pawn$2380 Def000895
+S A$game_pawn$2308 Def000850
+S A$game_pawn$2290 Def000841
+S A$game_pawn$2272 Def000833
+S A$game_pawn$2263 Def00082D
+S A$game_pawn$2254 Def000827
+S A$game_pawn$2236 Def000815
+S A$game_pawn$2182 Def0007E1
+S A$game_pawn$2173 Def0007D7
+S A$game_pawn$2128 Def0007B2
+S A$game_pawn$2074 Def00077A
+S A$game_pawn$2065 Def00076F
+S A$game_pawn$2056 Def000762
+S A$game_pawn$2047 Def000754
+S A$game_pawn$2029 Def00073E
+S A$game_pawn$1930 Def0006BA
+S A$game_pawn$1921 Def0006B0
+S A$game_pawn$1912 Def0006A5
+S A$game_pawn$1903 Def000694
+S A$game_pawn$1840 Def000641
+S A$game_pawn$1822 Def000622
+S A$game_pawn$1813 Def000616
+S A$game_pawn$1804 Def000608
+S A$game_pawn$1741 Def0005BA
+S A$game_pawn$1732 Def0005A8
+S A$game_pawn$1723 Def000599
+S A$game_pawn$1714 Def00057D
+S A$game_pawn$1705 Def000562
+S A$game_pawn$1642 Def0004EC
+S A$game_pawn$1633 Def0004DF
+S A$game_pawn$1624 Def0004D4
+S A$game_pawn$1606 Def0004C6
+S A$game_pawn$1570 Def000489
+S A$game_pawn$1561 Def00047D
+S A$game_pawn$1543 Def000465
+S A$game_pawn$1525 Def000450
+S A$game_pawn$1516 Def000446
+S A$game_pawn$1480 Def00041A
+S A$game_pawn$1471 Def00040F
+S A$game_pawn$1462 Def000406
+S A$game_pawn$1453 Def0003F8
+S A$game_pawn$1444 Def0003E6
+S A$game_pawn$1417 Def0003C8
+S A$game_pawn$1408 Def0003BD
+S A$game_pawn$1390 Def0003A8
+S A$game_pawn$1372 Def00038E
+S A$game_pawn$1363 Def000386
+S A$game_pawn$1345 Def000371
+S A$game_pawn$1327 Def00035B
+S A$game_pawn$1318 Def000350
+S A$game_pawn$1309 Def000347
+S A$game_pawn$1273 Def000319
+S A$game_pawn$1255 Def000308
+S A$game_pawn$1237 Def0002E5
+S A$game_pawn$1183 Def00029B
+S A$game_pawn$1174 Def00028E
+S A$game_pawn$1165 Def000282
+S A$game_pawn$1156 Def00026D
+S A$game_pawn$1147 Def000258
+S A$game_pawn$1129 Def00022F
+S A$game_pawn$1066 Def0001CD
+S A$game_pawn$1048 Def0001BE
+S A$game_pawn$1039 Def0001B2
+S C$game_pawn.c$214$4_2$123 Def000364
+S C$game_pawn.c$131$3_1$118 Def00019F
 S _GamePawn_SetMovement Def0008A9
+S A$game_pawn$2480 Def0008EC
+S A$game_pawn$2471 Def0008E3
+S A$game_pawn$2462 Def0008D9
+S A$game_pawn$2453 Def0008CD
+S A$game_pawn$2435 Def0008C5
+S A$game_pawn$2426 Def0008B8
+S A$game_pawn$2417 Def0008AA
+S A$game_pawn$2390 Def00089E
+S A$game_pawn$2354 Def000878
+S A$game_pawn$2345 Def000872
+S A$game_pawn$2336 Def00086A
+S A$game_pawn$2327 Def000863
+S A$game_pawn$2309 Def000851
+S A$game_pawn$2282 Def00083D
+S A$game_pawn$2273 Def000834
+S A$game_pawn$2237 Def000817
+S A$game_pawn$2219 Def000804
+S A$game_pawn$2192 Def0007E9
+S A$game_pawn$2183 Def0007E2
+S A$game_pawn$2165 Def0007CC
+S A$game_pawn$2147 Def0007BF
+S A$game_pawn$2129 Def0007B5
+S A$game_pawn$2075 Def00077B
+S A$game_pawn$2048 Def000757
+S A$game_pawn$1940 Def0006C7
+S A$game_pawn$1931 Def0006BD
+S A$game_pawn$1922 Def0006B1
+S A$game_pawn$1904 Def000695
+S A$game_pawn$1841 Def000642
+S A$game_pawn$1823 Def000625
+S A$game_pawn$1814 Def000617
+S A$game_pawn$1805 Def00060B
+S A$game_pawn$1742 Def0005BD
+S A$game_pawn$1733 Def0005AB
+S A$game_pawn$1724 Def00059C
+S A$game_pawn$1715 Def000580
+S A$game_pawn$1706 Def000565
+S A$game_pawn$1670 Def00050E
+S A$game_pawn$1652 Def0004F7
+S A$game_pawn$1643 Def0004EF
+S A$game_pawn$1634 Def0004E0
+S A$game_pawn$1607 Def0004C8
+S A$game_pawn$1580 Def000498
+S A$game_pawn$1571 Def00048B
+S A$game_pawn$1562 Def00047E
+S A$game_pawn$1544 Def000466
+S A$game_pawn$1535 Def00045C
+S A$game_pawn$1526 Def000453
+S A$game_pawn$1517 Def000447
+S A$game_pawn$1481 Def00041C
+S A$game_pawn$1454 Def0003F9
+S A$game_pawn$1445 Def0003E9
+S A$game_pawn$1427 Def0003D0
+S A$game_pawn$1418 Def0003CA
+S A$game_pawn$1409 Def0003BF
+S A$game_pawn$1391 Def0003AB
+S A$game_pawn$1373 Def00038F
+S A$game_pawn$1346 Def000372
+S A$game_pawn$1328 Def00035C
+S A$game_pawn$1319 Def000351
+S A$game_pawn$1292 Def00032F
+S A$game_pawn$1274 Def00031A
+S A$game_pawn$1256 Def00030A
+S A$game_pawn$1247 Def0002FA
+S A$game_pawn$1238 Def0002E6
+S A$game_pawn$1193 Def0002A5
+S A$game_pawn$1184 Def00029D
+S A$game_pawn$1157 Def00026E
+S A$game_pawn$1148 Def00025B
+S A$game_pawn$1094 Def0001EC
+S A$game_pawn$1076 Def0001D3
+S A$game_pawn$1049 Def0001BF
+S C$game_pawn.c$302$4_2$135 Def0004FE
+S C$game_pawn.c$300$5_2$136 Def0004D1
+S C$game_pawn.c$215$4_2$123 Def00037F
+S C$game_pawn.c$170$4_2$123 Def0002D9
+S C$game_pawn.c$132$3_1$118 Def0001A8
+S A$game_pawn$2481 Def0008ED
+S A$game_pawn$2472 Def0008E4
+S A$game_pawn$2463 Def0008DA
+S A$game_pawn$2454 Def0008D1
+S A$game_pawn$2436 Def0008C6
+S A$game_pawn$2427 Def0008BB
+S A$game_pawn$2418 Def0008AD
+S A$game_pawn$2391 Def0008A1
+S A$game_pawn$2337 Def00086B
+S A$game_pawn$2328 Def000866
+S A$game_pawn$2292 Def000842
+S A$game_pawn$2274 Def000836
+S A$game_pawn$2238 Def000818
+S A$game_pawn$2229 Def00080F
+S A$game_pawn$2166 Def0007D0
+S A$game_pawn$2157 Def0007C0
+S A$game_pawn$2085 Def000784
+S A$game_pawn$2058 Def000765
+S A$game_pawn$2049 Def000759
+S A$game_pawn$1950 Def0006D3
+S A$game_pawn$1941 Def0006C8
+S A$game_pawn$1932 Def0006C0
+S A$game_pawn$1923 Def0006B2
+S A$game_pawn$1905 Def000696
+S A$game_pawn$1860 Def00065C
+S A$game_pawn$1824 Def000627
+S A$game_pawn$1815 Def00061A
+S A$game_pawn$1770 Def0005E5
+S A$game_pawn$1752 Def0005CD
+S A$game_pawn$1743 Def0005BE
+S A$game_pawn$1734 Def0005AE
+S A$game_pawn$1725 Def00059F
+S A$game_pawn$1716 Def000584
+S A$game_pawn$1707 Def000568
+S A$game_pawn$1680 Def00052A
+S A$game_pawn$1671 Def000511
+S A$game_pawn$1662 Def0004FE
+S A$game_pawn$1653 Def0004FA
+S A$game_pawn$1644 Def0004F0
+S A$game_pawn$1635 Def0004E2
+S A$game_pawn$1617 Def0004CE
+S A$game_pawn$1590 Def0004AB
+S A$game_pawn$1572 Def00048D
+S A$game_pawn$1563 Def00047F
+S A$game_pawn$1554 Def000471
+S A$game_pawn$1545 Def000467
+S A$game_pawn$1536 Def00045E
+S A$game_pawn$1527 Def000456
+S A$game_pawn$1518 Def000448
+S A$game_pawn$1509 Def00043B
+S A$game_pawn$1491 Def000425
+S A$game_pawn$1482 Def00041E
+S A$game_pawn$1446 Def0003EB
+S A$game_pawn$1428 Def0003D4
+S A$game_pawn$1392 Def0003AC
+S A$game_pawn$1383 Def00039C
+S A$game_pawn$1374 Def000390
+S A$game_pawn$1338 Def000364
+S A$game_pawn$1329 Def00035E
+S A$game_pawn$1293 Def000333
+S A$game_pawn$1284 Def000327
+S A$game_pawn$1275 Def00031B
+S A$game_pawn$1266 Def000310
+S A$game_pawn$1239 Def0002E9
+S A$game_pawn$1194 Def0002A8
+S A$game_pawn$1185 Def00029E
+S A$game_pawn$1158 Def000271
+S A$game_pawn$1149 Def00025C
+S A$game_pawn$1095 Def0001EF
+S A$game_pawn$1077 Def0001D7
+S A$game_pawn$1059 Def0001C6
+S C$game_pawn.c$338$2_2$120 Def000605
+S C$game_pawn.c$301$5_2$136 Def0004E9
+S C$game_pawn.c$149$2_2$120 Def000206
+S C$game_pawn.c$142$1_2$119 Def0001D3
+S C$game_pawn.c$125$3_1$117 Def00017A
+S A$game_pawn$2482 Def0008EE
+S A$game_pawn$2473 Def0008E5
+S A$game_pawn$2464 Def0008DB
+S A$game_pawn$2455 Def0008D3
+S A$game_pawn$2428 Def0008BC
+S A$game_pawn$2419 Def0008AE
+S A$game_pawn$2392 Def0008A2
+S A$game_pawn$2365 Def000882
+S A$game_pawn$2338 Def00086C
+S A$game_pawn$2329 Def000867
+S A$game_pawn$2293 Def000843
+S A$game_pawn$2248 Def00081F
+S A$game_pawn$2167 Def0007D1
+S A$game_pawn$2158 Def0007C2
+S A$game_pawn$2095 Def00078F
+S A$game_pawn$2086 Def000787
+S A$game_pawn$1951 Def0006D5
+S A$game_pawn$1942 Def0006CA
+S A$game_pawn$1933 Def0006C1
+S A$game_pawn$1924 Def0006B5
+S A$game_pawn$1906 Def000697
+S A$game_pawn$1870 Def00066D
+S A$game_pawn$1861 Def00065E
+S A$game_pawn$1834 Def000635
+S A$game_pawn$1825 Def00062A
+S A$game_pawn$1816 Def00061D
+S A$game_pawn$1780 Def0005F4
+S A$game_pawn$1771 Def0005E6
+S A$game_pawn$1744 Def0005BF
+S A$game_pawn$1726 Def0005A2
+S A$game_pawn$1717 Def000587
+S A$game_pawn$1708 Def00056B
+S A$game_pawn$1681 Def00052E
+S A$game_pawn$1672 Def000513
+S A$game_pawn$1663 Def0004FF
+S A$game_pawn$1654 Def0004FB
+S A$game_pawn$1645 Def0004F1
+S A$game_pawn$1636 Def0004E3
+S A$game_pawn$1627 Def0004D6
+S A$game_pawn$1591 Def0004AC
+S A$game_pawn$1573 Def00048F
+S A$game_pawn$1564 Def000480
+S A$game_pawn$1546 Def000468
+S A$game_pawn$1537 Def00045F
+S A$game_pawn$1528 Def000457
+S A$game_pawn$1519 Def00044B
+S A$game_pawn$1483 Def000420
+S A$game_pawn$1474 Def000410
+S A$game_pawn$1456 Def0003FA
+S A$game_pawn$1447 Def0003EE
+S A$game_pawn$1438 Def0003DF
+S A$game_pawn$1393 Def0003AD
+S A$game_pawn$1384 Def0003A0
+S A$game_pawn$1375 Def000394
+S A$game_pawn$1366 Def000389
+S A$game_pawn$1357 Def00037F
+S A$game_pawn$1348 Def000373
+S A$game_pawn$1339 Def000367
+S A$game_pawn$1285 Def000329
+S A$game_pawn$1276 Def00031C
+S A$game_pawn$1195 Def0002AB
+S A$game_pawn$1186 Def00029F
+S A$game_pawn$1159 Def000272
+S A$game_pawn$1096 Def0001F2
+S A$game_pawn$1087 Def0001E4
+S A$game_pawn$1078 Def0001DA
+S C$game_pawn.c$433$4_0$152 Def000856
+S C$game_pawn.c$425$4_0$151 Def00081F
+S C$game_pawn.c$414$1_0$147 Def0007E5
+S C$game_pawn.c$149$1_2$113 Def000608
+S C$game_pawn.c$322$4_2$135 Def0005D9
+S C$game_pawn.c$157$3_2$121 Def000291
+S C$game_pawn.c$143$1_2$119 Def0001E4
+S C$game_pawn.c$126$3_1$117 Def000186
+S A$game_pawn$2474 Def0008E8
+S A$game_pawn$2456 Def0008D4
+S A$game_pawn$2429 Def0008BF
+S A$game_pawn$2384 Def000898
+S A$game_pawn$2366 Def000885
+S A$game_pawn$2357 Def00087A
+S A$game_pawn$2339 Def00086D
+S A$game_pawn$2294 Def000846
+S A$game_pawn$2285 Def00083E
+S A$game_pawn$2258 Def000829
+S A$game_pawn$2249 Def000820
+S A$game_pawn$2177 Def0007DA
+S A$game_pawn$2168 Def0007D3
+S A$game_pawn$2159 Def0007C6
+S A$game_pawn$2096 Def000792
+S A$game_pawn$2087 Def000788
+S A$game_pawn$2078 Def00077C
+S A$game_pawn$2069 Def000771
+S A$game_pawn$1952 Def0006D8
+S A$game_pawn$1934 Def0006C2
+S A$game_pawn$1925 Def0006B6
+S A$game_pawn$1916 Def0006A6
+S A$game_pawn$1907 Def00069B
+S A$game_pawn$1871 Def00066F
+S A$game_pawn$1862 Def000661
+S A$game_pawn$1853 Def00064F
+S A$game_pawn$1844 Def000644
+S A$game_pawn$1835 Def000638
+S A$game_pawn$1826 Def00062D
+S A$game_pawn$1790 Def0005FF
+S A$game_pawn$1781 Def0005F6
+S A$game_pawn$1772 Def0005E7
+S A$game_pawn$1745 Def0005C2
+S A$game_pawn$1718 Def00058A
+S A$game_pawn$1709 Def00056E
+S A$game_pawn$1682 Def000532
+S A$game_pawn$1673 Def000516
+S A$game_pawn$1664 Def000500
+S A$game_pawn$1646 Def0004F2
+S A$game_pawn$1637 Def0004E6
+S A$game_pawn$1628 Def0004D7
+S A$game_pawn$1592 Def0004AD
+S A$game_pawn$1574 Def000491
+S A$game_pawn$1565 Def000482
+S A$game_pawn$1547 Def000469
+S A$game_pawn$1538 Def000461
+S A$game_pawn$1529 Def000458
+S A$game_pawn$1484 Def000422
+S A$game_pawn$1475 Def000412
+S A$game_pawn$1466 Def000409
+S A$game_pawn$1457 Def0003FC
+S A$game_pawn$1448 Def0003EF
+S A$game_pawn$1439 Def0003E3
+S A$game_pawn$1376 Def000395
+S A$game_pawn$1358 Def000382
+S A$game_pawn$1349 Def000375
+S A$game_pawn$1295 Def000336
+S A$game_pawn$1286 Def00032A
+S A$game_pawn$1277 Def00031D
+S A$game_pawn$1196 Def0002AE
+S A$game_pawn$1187 Def0002A0
+S A$game_pawn$1178 Def000291
+S A$game_pawn$1169 Def000285
+S A$game_pawn$1097 Def0001F3
+S A$game_pawn$1088 Def0001E7
+S A$game_pawn$1079 Def0001DB
+S C$game_pawn.c$460$1_0$156 Def0008A9
+S C$game_pawn.c$418$4_0$150 Def000804
+S C$game_pawn.c$404$1_2$147 Def0007C0
+S C$game_pawn.c$394$2_2$120 Def00078F
+S C$game_pawn.c$371$3_2$142 Def0006E2
+S C$game_pawn.c$361$5_2$141 Def0006BA
+S C$game_pawn.c$320$5_2$137 Def000542
+S C$game_pawn.c$270$5_2$133 Def000465
+S C$game_pawn.c$144$1_2$119 Def0001EC
+S C$game_pawn.c$127$3_1$117 Def000198
+S A$game_pawn$2385 Def00089B
+S A$game_pawn$2367 Def000887
+S A$game_pawn$2358 Def00087B
+S A$game_pawn$2295 Def000847
+S A$game_pawn$2268 Def00082F
+S A$game_pawn$2259 Def00082C
+S A$game_pawn$2196 Def0007ED
+S A$game_pawn$2187 Def0007E5
+S A$game_pawn$2178 Def0007DB
+S A$game_pawn$2169 Def0007D6
+S A$game_pawn$2097 Def000795
+S A$game_pawn$2088 Def000789
+S A$game_pawn$2079 Def00077E
+S A$game_pawn$1962 Def0006E2
+S A$game_pawn$1935 Def0006C3
+S A$game_pawn$1926 Def0006B7
+S A$game_pawn$1917 Def0006AA
+S A$game_pawn$1908 Def00069C
+S A$game_pawn$1890 Def000686
+S A$game_pawn$1881 Def00067B
+S A$game_pawn$1863 Def000662
+S A$game_pawn$1854 Def000652
+S A$game_pawn$1845 Def000646
+S A$game_pawn$1836 Def00063B
+S A$game_pawn$1827 Def000630
+S A$game_pawn$1818 Def00061F
+S A$game_pawn$1809 Def00060E
+S A$game_pawn$1791 Def000600
+S A$game_pawn$1782 Def0005F7
+S A$game_pawn$1773 Def0005EA
+S A$game_pawn$1755 Def0005D0
+S A$game_pawn$1746 Def0005C3
+S A$game_pawn$1719 Def00058D
+S A$game_pawn$1683 Def000536
+S A$game_pawn$1674 Def000519
+S A$game_pawn$1665 Def000503
+S A$game_pawn$1629 Def0004D8
+S A$game_pawn$1593 Def0004AE
+S A$game_pawn$1584 Def00049C
+S A$game_pawn$1575 Def000493
+S A$game_pawn$1566 Def000484
+S A$game_pawn$1548 Def00046B
+S A$game_pawn$1539 Def000464
+S A$game_pawn$1494 Def000427
+S A$game_pawn$1476 Def000414
+S A$game_pawn$1467 Def00040C
+S A$game_pawn$1458 Def0003FE
+S A$game_pawn$1449 Def0003F0
+S A$game_pawn$1386 Def0003A3
+S A$game_pawn$1377 Def000397
+S A$game_pawn$1359 Def000383
+S A$game_pawn$1287 Def00032B
+S A$game_pawn$1278 Def00031E
+S A$game_pawn$1197 Def0002AF
+S A$game_pawn$1188 Def0002A1
+S A$game_pawn$1179 Def000294
+S A$game_pawn$1089 Def0001EA
+S C$game_pawn.c$435$3_1$152 Def00085A
+S C$game_pawn.c$416$1_0$147 Def000839
+S C$game_pawn.c$414$2_0$148 Def000898
+S C$game_pawn.c$407$1_0$147 Def00082F
+S C$game_pawn.c$395$2_2$120 Def00079A
+S C$game_pawn.c$368$2_2$120 Def0006DB
+S C$game_pawn.c$362$5_2$141 Def0006CD
+S C$game_pawn.c$321$5_2$137 Def0005B1
+S C$game_pawn.c$264$4_2$132 Def0003E6
+S A$game_pawn$2377 Def00088E
+S A$game_pawn$2368 Def000888
+S A$game_pawn$2359 Def00087C
+S A$game_pawn$2278 Def000839
+S A$game_pawn$2179 Def0007DC
+S A$game_pawn$2098 Def000796
+S A$game_pawn$2089 Def00078A
+S A$game_pawn$1972 Def0006F2
+S A$game_pawn$1963 Def0006E5
+S A$game_pawn$1936 Def0006C4
+S A$game_pawn$1909 Def00069F
+S A$game_pawn$1891 Def000688
+S A$game_pawn$1855 Def000654
+S A$game_pawn$1846 Def000647
+S A$game_pawn$1837 Def00063E
+S A$game_pawn$1828 Def000631
+S A$game_pawn$1792 Def000602
+S A$game_pawn$1774 Def0005EB
+S A$game_pawn$1756 Def0005D3
+S A$game_pawn$1747 Def0005C4
+S A$game_pawn$1738 Def0005B1
+S A$game_pawn$1729 Def0005A5
+S A$game_pawn$1693 Def000542
+S A$game_pawn$1675 Def00051B
+S A$game_pawn$1666 Def000504
+S A$game_pawn$1648 Def0004F3
+S A$game_pawn$1594 Def0004B0
+S A$game_pawn$1585 Def00049F
+S A$game_pawn$1576 Def000495
+S A$game_pawn$1567 Def000487
+S A$game_pawn$1558 Def000475
+S A$game_pawn$1549 Def00046E
+S A$game_pawn$1495 Def000428
+S A$game_pawn$1477 Def000417
+S A$game_pawn$1468 Def00040E
+S A$game_pawn$1459 Def000400
+S A$game_pawn$1378 Def000398
+S A$game_pawn$1369 Def00038B
+S A$game_pawn$1297 Def000339
+S A$game_pawn$1288 Def00032E
+S A$game_pawn$1279 Def00031F
+S A$game_pawn$1198 Def0002B0
+S A$game_pawn$1189 Def0002A3
+S C$game_pawn.c$462$1_0$156 Def0008AA
+S C$game_pawn.c$453$1_0$147 Def00089E
+S C$game_pawn.c$451$3_2$154 Def00088E
+S C$game_pawn.c$442$3_2$154 Def000876
+S C$game_pawn.c$431$3_0$149 Def00083D
+S C$game_pawn.c$428$4_0$151 Def00082D
+S C$game_pawn.c$408$1_0$147 Def0007D7
+S C$game_pawn.c$396$2_2$120 Def0007AC
+S C$game_pawn.c$356$4_2$140 Def00064F
+S C$game_pawn.c$316$4_2$135 Def0004FE
+S C$game_pawn.c$265$4_2$132 Def000409
+S C$game_pawn.c$137$1_2$119 Def0001AB
+S A$game_pawn$2468 Def0008DC
+S A$game_pawn$2378 Def000891
+S A$game_pawn$2369 Def00088B
+S A$game_pawn$2288 Def00083F
+S A$game_pawn$2099 Def000799
+S A$game_pawn$1991 Def00070C
+S A$game_pawn$1982 Def000701
+S A$game_pawn$1973 Def0006F5
+S A$game_pawn$1964 Def0006E8
+S A$game_pawn$1946 Def0006CD
+S A$game_pawn$1919 Def0006AD
+S A$game_pawn$1892 Def00068A
+S A$game_pawn$1865 Def000663
+S A$game_pawn$1856 Def000657
+S A$game_pawn$1847 Def000649
+S A$game_pawn$1838 Def00063F
+S A$game_pawn$1829 Def000632
+S A$game_pawn$1775 Def0005EC
+S A$game_pawn$1766 Def0005D9
+S A$game_pawn$1757 Def0005D6
+S A$game_pawn$1748 Def0005C7
+S A$game_pawn$1739 Def0005B4
+S A$game_pawn$1694 Def000545
+S A$game_pawn$1667 Def000507
+S A$game_pawn$1649 Def0004F6
+S A$game_pawn$1595 Def0004B2
+S A$game_pawn$1586 Def0004A2
+S A$game_pawn$1568 Def000488
+S A$game_pawn$1559 Def000478
+S A$game_pawn$1496 Def000429
+S A$game_pawn$1397 Def0003B0
+S A$game_pawn$1388 Def0003A6
+S A$game_pawn$1379 Def00039B
+S A$game_pawn$1298 Def00033A
+S A$game_pawn$1199 Def0002B1
+S A$game_pawn$400 Def000048
+S C$game_pawn.c$463$1_0$156 Def0008B8
+S C$game_pawn.c$454$1_0$147 Def0008A8
+S C$game_pawn.c$432$3_0$149 Def000848
+S C$game_pawn.c$423$3_0$149 Def00081B
+S C$game_pawn.c$397$2_2$120 Def0007B7
+S C$game_pawn.c$357$4_2$140 Def000672
+S C$game_pawn.c$335$4_2$135 Def0005D9
+S C$game_pawn.c$317$4_2$135 Def000539
+S C$game_pawn.c$266$4_2$132 Def000424
+S C$game_pawn.c$258$4_2$131 Def0003DF
+S C$game_pawn.c$221$6_3$129 Def0003B0
+S C$game_pawn.c$190$5_3$125 Def000313
+S C$game_pawn.c$147$1_2$119 Def0001F7
+S C$game_pawn.c$138$1_2$119 Def0001C0
+S G$GamePawn_SetAction$0$0 Def0000A1
+S A$game_pawn$2478 Def0008E9
+S A$game_pawn$2469 Def0008DF
+S A$game_pawn$2397 Def0008A4
+S A$game_pawn$2379 Def000894
+S A$game_pawn$2289 Def000840
+S A$game_pawn$2199 Def0007EE
+S A$game_pawn$1992 Def00070F
+S A$game_pawn$1983 Def000703
+S A$game_pawn$1974 Def0006F8
+S A$game_pawn$1965 Def0006EB
+S A$game_pawn$1947 Def0006D0
+S A$game_pawn$1893 Def00068C
+S A$game_pawn$1884 Def00067C
+S A$game_pawn$1875 Def000672
+S A$game_pawn$1866 Def000665
+S A$game_pawn$1857 Def000658
+S A$game_pawn$1848 Def00064C
+S A$game_pawn$1839 Def000640
+S A$game_pawn$1785 Def0005FA
+S A$game_pawn$1776 Def0005EF
+S A$game_pawn$1767 Def0005DC
+S A$game_pawn$1758 Def0005D7
+S A$game_pawn$1749 Def0005CA
+S A$game_pawn$1695 Def000548
+S A$game_pawn$1677 Def00051E
+S A$game_pawn$1668 Def00050A
+S A$game_pawn$1596 Def0004B5
+S A$game_pawn$1587 Def0004A6
+S A$game_pawn$1497 Def00042A
+S A$game_pawn$1488 Def000424
+S A$game_pawn$1479 Def000418
+S A$game_pawn$1398 Def0003B3
+S A$game_pawn$1389 Def0003A7
+S A$game_pawn$1299 Def00033B
+S A$game_pawn$410 Def000052
+S A$game_pawn$401 Def000049
+S C$game_pawn.c$464$1_0$156 Def0008C2
+S C$game_pawn.c$444$3_2$154 Def000882
+S C$game_pawn.c$358$4_2$140 Def000690
+S C$game_pawn.c$267$4_2$132 Def00043B
+S C$game_pawn.c$222$6_3$129 Def0003C2
+S C$game_pawn.c$191$5_3$125 Def00032F
+S C$game_pawn.c$186$4_2$123 Def0002DD
+S C$game_pawn.c$139$1_2$119 Def0001CF
+S A$game_pawn$2479 Def0008EB
+S A$game_pawn$2398 Def0008A6
+S A$game_pawn$2299 Def000848
+S A$game_pawn$1993 Def000711
+S A$game_pawn$1984 Def000704
+S A$game_pawn$1975 Def0006FB
+S A$game_pawn$1966 Def0006EC
+S A$game_pawn$1957 Def0006DB
+S A$game_pawn$1948 Def0006D1
+S A$game_pawn$1939 Def0006C5
+S A$game_pawn$1894 Def00068E
+S A$game_pawn$1885 Def00067E
+S A$game_pawn$1876 Def000675
+S A$game_pawn$1867 Def000667
+S A$game_pawn$1858 Def000659
+S A$game_pawn$1786 Def0005FB
+S A$game_pawn$1768 Def0005DF
+S A$game_pawn$1696 Def00054C
+S A$game_pawn$1687 Def000539
+S A$game_pawn$1678 Def000522
+S A$game_pawn$1669 Def00050C
+S A$game_pawn$1597 Def0004B7
+S A$game_pawn$1588 Def0004A7
+S A$game_pawn$1498 Def00042B
+S A$game_pawn$1399 Def0003B6
+S A$game_pawn$420 Def00005A
+S A$game_pawn$402 Def00004A
+S C$game_pawn.c$481$1_0$158 Def0008E9
+S C$game_pawn.c$465$1_0$156 Def0008C8
+S C$game_pawn.c$437$4_1$153 Def000863
+S C$game_pawn.c$374$4_2$143 Def0006F2
+S C$game_pawn.c$359$4_2$140 Def0006A6
+S C$game_pawn.c$344$3_2$138 Def000622
+S C$game_pawn.c$283$4_2$135 Def000475
+S C$game_pawn.c$282$5_2$135 Def000471
+S C$game_pawn.c$223$6_3$129 Def0003CD
+S C$game_pawn.c$187$4_2$123 Def00030C
+S C$game_pawn.c$169$4_2$123 Def0002BF
+S A$game_pawn$1985 Def000706
+S A$game_pawn$1976 Def0006FC
+S A$game_pawn$1967 Def0006ED
+S A$game_pawn$1958 Def0006DF
+S A$game_pawn$1949 Def0006D2
+S A$game_pawn$1886 Def000680
+S A$game_pawn$1877 Def000677
+S A$game_pawn$1868 Def000669
+S A$game_pawn$1859 Def00065A
+S A$game_pawn$1787 Def0005FC
+S A$game_pawn$1769 Def0005E2
+S A$game_pawn$1688 Def00053C
+S A$game_pawn$1679 Def000526
+S A$game_pawn$1598 Def0004B8
+S A$game_pawn$1589 Def0004A8
+S A$game_pawn$1499 Def00042C
+S A$game_pawn$430 Def000067
+S A$game_pawn$421 Def00005D
+S A$game_pawn$403 Def00004B
+S A$game_pawn$340 Def000002
+S C$game_pawn.c$473$1_0$158 Def0008D5
+S C$game_pawn.c$438$4_1$153 Def000872
+S C$game_pawn.c$383$4_2$144 Def00070C
+S C$game_pawn.c$284$4_2$135 Def000498
+S C$game_pawn.c$52$1_0$104 Def000034
+S C$game_pawn.c$43$1_0$104 Def000008
 S _GamePawn_SetPosition Def000073
+S A$game_pawn$1986 Def000709
+S A$game_pawn$1977 Def0006FD
+S A$game_pawn$1968 Def0006F0
+S A$game_pawn$1887 Def000683
+S A$game_pawn$1878 Def00067A
+S A$game_pawn$1869 Def00066B
+S A$game_pawn$1779 Def0005F2
+S A$game_pawn$1698 Def00054E
+S A$game_pawn$1689 Def00053F
+S A$game_pawn$1599 Def0004BB
+S A$game_pawn$431 Def000068
+S A$game_pawn$404 Def00004C
+S A$game_pawn$350 Def000011
+S A$game_pawn$341 Def000006
+S C$game_pawn.c$474$1_0$158 Def0008DC
+S G$GamePawn_Draw$0$0 Def0007C0
+S C$game_pawn.c$384$4_2$144 Def00072A
+S C$game_pawn.c$218$5_3$128 Def000386
+S C$game_pawn.c$44$1_0$104 Def000016
+S A$game_pawn$1996 Def000712
+S A$game_pawn$1978 Def0006FE
+S A$game_pawn$1699 Def000552
+S A$game_pawn$900 Def000115
+S A$game_pawn$810 Def0000B3
+S A$game_pawn$414 Def000053
+S A$game_pawn$405 Def00004D
+S A$game_pawn$351 Def000012
+S C$game_pawn.c$385$4_2$144 Def000748
+S C$game_pawn.c$269$5_2$133 Def000450
+S C$game_pawn.c$219$5_3$128 Def00039C
+S C$game_pawn.c$193$6_3$126 Def000344
+S C$game_pawn.c$62$2_0$104 Def00004F
+S C$game_pawn.c$45$1_0$104 Def00001C
+S A$game_pawn$1979 Def0006FF
+S A$game_pawn$1898 Def000690
+S A$game_pawn$1889 Def000684
+S A$game_pawn$901 Def000118
+S A$game_pawn$820 Def0000C4
+S A$game_pawn$811 Def0000B6
+S A$game_pawn$442 Def00006D
+S A$game_pawn$415 Def000056
+S A$game_pawn$352 Def000015
+S C$game_pawn.c$449$3_2$154 Def00088E
+S C$game_pawn.c$386$4_2$144 Def00075E
+S C$game_pawn.c$296$4_2$135 Def00049C
+S C$game_pawn.c$194$6_3$126 Def000356
+S C$game_pawn.c$189$5_2$124 Def000310
+S C$game_pawn.c$94$1_0$110 Def0000A1
+S C$game_pawn.c$38$0_0$104 Def000000
+S A$game_pawn$920 Def000135
+S A$game_pawn$911 Def000129
+S A$game_pawn$902 Def00011B
+S A$game_pawn$830 Def0000CB
+S A$game_pawn$812 Def0000B9
+S A$game_pawn$803 Def0000A4
+S A$game_pawn$443 Def00006F
+S A$game_pawn$425 Def00005E
+S A$game_pawn$416 Def000057
+S A$game_pawn$371 Def000025
+S C$game_pawn.c$347$4_2$139 Def000635
+S C$game_pawn.c$297$4_2$135 Def0004CA
+S C$game_pawn.c$195$6_3$126 Def000361
+S A$game_pawn$1999 Def000713
+S A$game_pawn$921 Def000138
+S A$game_pawn$903 Def00011C
+S A$game_pawn$831 Def0000CE
+S A$game_pawn$804 Def0000A7
+S A$game_pawn$750 Def000074
+S A$game_pawn$444 Def000070
+S A$game_pawn$426 Def000061
+S A$game_pawn$372 Def000028
+S A$game_pawn$363 Def00001C
+S A$game_pawn$345 Def000008
+S C$game_pawn.c$469$1_0$158 Def0008CB
+S C$game_pawn.c$96$1_0$110 Def0000A4
+S G$GamePawn_Initialize$0$0 Def000000
+S A$game_pawn$931 Def00013D
+S A$game_pawn$922 Def000139
+S A$game_pawn$904 Def00011F
+S A$game_pawn$832 Def0000CF
+S A$game_pawn$805 Def0000A8
+S A$game_pawn$760 Def000085
+S A$game_pawn$751 Def000077
+S A$game_pawn$445 Def000071
+S A$game_pawn$436 Def000069
+S A$game_pawn$427 Def000062
+S A$game_pawn$418 Def000058
+S A$game_pawn$409 Def00004F
+S A$game_pawn$373 Def000029
+S A$game_pawn$364 Def00001F
+S A$game_pawn$346 Def00000B
+S C$game_pawn.c$58$1_0$104 Def00003F
+S C$game_pawn.c$49$1_0$104 Def000025
+S A$game_pawn$932 Def000140
+S A$game_pawn$914 Def00012B
+S A$game_pawn$905 Def000120
+S A$game_pawn$860 Def0000E4
+S A$game_pawn$824 Def0000C5
+S A$game_pawn$806 Def0000A9
+S A$game_pawn$761 Def000086
+S A$game_pawn$752 Def000078
+S A$game_pawn$446 Def000072
+S A$game_pawn$437 Def00006A
+S A$game_pawn$428 Def000064
+S A$game_pawn$419 Def000059
+S A$game_pawn$383 Def000034
+S A$game_pawn$374 Def00002A
+S A$game_pawn$365 Def000020
+S A$game_pawn$356 Def000016
+S A$game_pawn$347 Def00000C
+S C$game_pawn.c$388$5_2$145 Def000771
+S A$game_pawn$960 Def00015F
+S A$game_pawn$942 Def000149
+S A$game_pawn$933 Def000143
+S A$game_pawn$915 Def00012C
+S A$game_pawn$906 Def000121
+S A$game_pawn$861 Def0000E8
+S A$game_pawn$825 Def0000C8
+S A$game_pawn$816 Def0000BB
+S A$game_pawn$807 Def0000AA
+S A$game_pawn$780 Def00009B
+S A$game_pawn$762 Def000089
+S A$game_pawn$753 Def00007C
+S A$game_pawn$429 Def000065
+S A$game_pawn$393 Def00003F
+S A$game_pawn$384 Def000035
+S A$game_pawn$375 Def00002B
+S A$game_pawn$366 Def000021
+S A$game_pawn$357 Def000019
+S A$game_pawn$348 Def00000F
+S A$game_pawn$339 Def000000
+S C$game_pawn.c$389$5_2$145 Def000784
+S C$game_pawn.c$299$5_2$136 Def0004CE
+S C$game_pawn.c$82$2_0$108 Def000073
+S C$game_pawn.c$65$3_0$106 Def000053
+S C$game_pawn.c$59$2_0$104 Def000043
+S A$game_pawn$970 Def000169
+S A$game_pawn$961 Def000160
+S A$game_pawn$952 Def000152
+S A$game_pawn$943 Def00014C
+S A$game_pawn$934 Def000144
+S A$game_pawn$916 Def00012D
+S A$game_pawn$907 Def000124
+S A$game_pawn$880 Def0000FB
+S A$game_pawn$871 Def0000F4
+S A$game_pawn$862 Def0000EA
+S A$game_pawn$844 Def0000D8
+S A$game_pawn$826 Def0000C9
+S A$game_pawn$817 Def0000BE
+S A$game_pawn$808 Def0000AE
+S A$game_pawn$781 Def00009C
+S A$game_pawn$763 Def00008B
+S A$game_pawn$754 Def00007E
+S A$game_pawn$385 Def000036
+S A$game_pawn$376 Def00002E
+S A$game_pawn$367 Def000024
+S A$game_pawn$358 Def00001A
+S A$game_pawn$349 Def000010
+S C$game_pawn.c$98$2_0$111 Def0000BB
+S C$game_pawn.c$84$1_0$108 Def000074
+S C$game_pawn.c$78$2_0$104 Def00006D
+S C$game_pawn.c$59$2_0$105 Def000069
+S C$game_pawn.c$75$3_0$106 Def00005E
 S _GamePawn_SetAction Def0000A1
+S A$game_pawn$971 Def00016A
+S A$game_pawn$944 Def00014D
+S A$game_pawn$926 Def00013B
+S A$game_pawn$917 Def000130
+S A$game_pawn$908 Def000127
+S A$game_pawn$890 Def000106
+S A$game_pawn$881 Def0000FC
+S A$game_pawn$863 Def0000EC
+S A$game_pawn$845 Def0000D9
+S A$game_pawn$836 Def0000D1
+S A$game_pawn$818 Def0000C0
+S A$game_pawn$809 Def0000B0
+S A$game_pawn$773 Def000092
+S A$game_pawn$755 Def000081
+S A$game_pawn$746 Def000073
+S A$game_pawn$386 Def000037
+S A$game_pawn$377 Def00002F
+S A$game_pawn$359 Def00001B
+S C$game_pawn.c$99$2_0$111 Def0000C5
+S C$game_pawn.c$85$1_0$108 Def000082
+S A$game_pawn$990 Def00017A
+S A$game_pawn$981 Def000172
+S A$game_pawn$945 Def00014E
+S A$game_pawn$927 Def00013C
+S A$game_pawn$918 Def000133
+S A$game_pawn$909 Def000128
+S A$game_pawn$891 Def000109
+S A$game_pawn$882 Def0000FE
+S A$game_pawn$846 Def0000DA
+S A$game_pawn$837 Def0000D4
+S A$game_pawn$819 Def0000C2
+S A$game_pawn$774 Def000095
+S A$game_pawn$387 Def000038
+S A$game_pawn$378 Def000030
+S C$game_pawn.c$86$1_0$108 Def00008C
+S A$game_pawn$991 Def00017D
+S A$game_pawn$982 Def000173
+S A$game_pawn$964 Def000163
+S A$game_pawn$946 Def00014F
+S A$game_pawn$919 Def000134
+S A$game_pawn$874 Def0000F5
+S A$game_pawn$847 Def0000DB
+S A$game_pawn$838 Def0000D5
+S A$game_pawn$775 Def000096
+S A$game_pawn$397 Def000043
+S A$game_pawn$388 Def00003B
+S A$game_pawn$379 Def000033
+S C$game_pawn.c$87$1_0$108 Def000092
+S A$game_pawn$992 Def000180
+S A$game_pawn$983 Def000174
+S A$game_pawn$956 Def000155
+S A$game_pawn$947 Def000151
+S A$game_pawn$938 Def000145
+S A$game_pawn$884 Def000101
+S A$game_pawn$875 Def0000F6
+S A$game_pawn$857 Def0000DC
+S A$game_pawn$839 Def0000D7
+S A$game_pawn$785 Def00009E
+S A$game_pawn$767 Def00008C
+S A$game_pawn$389 Def00003E
+S C$game_pawn.c$88$1_0$108 Def000098
 S _GamePawn_Draw Def0007C0
+S A$game_pawn$993 Def000183
+S A$game_pawn$984 Def000175
+S A$game_pawn$975 Def00016C
+S A$game_pawn$957 Def000158
+S A$game_pawn$876 Def0000F7
+S A$game_pawn$867 Def0000EF
+S A$game_pawn$858 Def0000DE
+S A$game_pawn$786 Def00009F
+S A$game_pawn$768 Def00008F
+S A$game_pawn$759 Def000082
+S A$game_pawn$399 Def000045
+S C$game_pawn.c$89$1_0$108 Def00009E
+S A$game_pawn$994 Def000184
+S A$game_pawn$985 Def000176
+S A$game_pawn$967 Def000166
+S A$game_pawn$958 Def00015B
+S A$game_pawn$895 Def00010C
+S A$game_pawn$877 Def0000F8
+S A$game_pawn$868 Def0000F3
+S A$game_pawn$859 Def0000E2
+S A$game_pawn$787 Def0000A0
+S A$game_pawn$769 Def000090
+S A$game_pawn$986 Def000178
+S A$game_pawn$968 Def000167
+S A$game_pawn$959 Def00015E
+S A$game_pawn$896 Def00010F
+S A$game_pawn$887 Def000103
+S A$game_pawn$878 Def0000F9
+S A$game_pawn$797 Def0000A1
+S A$game_pawn$779 Def000098
+S A$game_pawn$978 Def00016F
+S A$game_pawn$969 Def000168
+S A$game_pawn$897 Def000110
+S A$game_pawn$888 Def000104
+S A$game_pawn$879 Def0000FA
+S A$game_pawn$798 Def0000A2
 S _GamePawn_Initialize Def000000
+S A$game_pawn$898 Def000111
+S A$game_pawn$889 Def000105
+S A$game_pawn$799 Def0000A3
+S A$game_pawn$998 Def000186
+S A$game_pawn$899 Def000112
+S A$game_pawn$999 Def000189
+S G$GamePawn_Update$0$0 Def0000DC
+S XG$GamePawn_Draw$0$0 Def0008A8
 S _GamePawn_Update Def0000DC
+S G$GamePawn_InitializePhysics$0$0 Def0008CB
+S C$game_pawn.c$100$2_0$111 Def0000CB
+S A$game_pawn$1000 Def00018C
+S G$GamePawn_SetMovement$0$0 Def0008A9
+S C$game_pawn.c$103$1_0$110 Def0000D8
+S C$game_pawn.c$101$2_0$111 Def0000D1
+S A$game_pawn$2000 Def000715
+S A$game_pawn$1010 Def000196
+S A$game_pawn$1001 Def00018D
+S A$game_pawn$2010 Def000727
+S A$game_pawn$2001 Def000717
+S A$game_pawn$1200 Def0002B2
+S A$game_pawn$1110 Def000203
+S A$game_pawn$1101 Def0001F4
+S A$game_pawn$1011 Def000197
+S A$game_pawn$2020 Def000733
+S A$game_pawn$2002 Def00071A
+S A$game_pawn$1300 Def00033C
+S A$game_pawn$1120 Def000218
+S C$game_pawn.c$110$1_2$113 Def0007AE
+S A$game_pawn$2300 Def000849
+S A$game_pawn$2210 Def0007F8
+S A$game_pawn$2120 Def0007AC
+S A$game_pawn$2111 Def0007A5
+S A$game_pawn$2030 Def000740
+S A$game_pawn$1400 Def0003B7
+S A$game_pawn$1310 Def00034A
+S A$game_pawn$1301 Def00033F
+S A$game_pawn$1220 Def0002CA
+S A$game_pawn$1130 Def000232
+S A$game_pawn$1121 Def00021B
+S A$game_pawn$1040 Def0001B3
+S A$game_pawn$1031 Def0001A8
+S XG$GamePawn_Update$0$0 Def0007BF
+S A$game_pawn$2301 Def00084B
+S A$game_pawn$2220 Def000805
+S A$game_pawn$2211 Def0007FB
+S A$game_pawn$2202 Def0007EF
+S A$game_pawn$2130 Def0007B6
+S A$game_pawn$2103 Def00079A
+S A$game_pawn$2040 Def00074A
+S A$game_pawn$2031 Def000742
+S A$game_pawn$2004 Def00071B
+S A$game_pawn$1500 Def000430
+S A$game_pawn$1401 Def0003B8
+S A$game_pawn$1320 Def000353
+S A$game_pawn$1311 Def00034B
+S A$game_pawn$1302 Def000340
+S A$game_pawn$1230 Def0002D9
+S A$game_pawn$1221 Def0002CC
+S A$game_pawn$1212 Def0002BF
+S A$game_pawn$1203 Def0002B4
+S A$game_pawn$1131 Def000235
+S A$game_pawn$1122 Def00021C
+S A$game_pawn$1041 Def0001B4
+S A$game_pawn$1023 Def00019F
+S A$game_pawn$1005 Def00018F
+S C$game_pawn.c$400$1_2$113 Def0007BF
+S C$game_pawn.c$121$1_1$114 Def000155
+S A$game_pawn$2320 Def00085A
+S A$game_pawn$2311 Def000852
+S A$game_pawn$2302 Def00084E
+S A$game_pawn$2230 Def000812
+S A$game_pawn$2221 Def000806
+S A$game_pawn$2212 Def0007FE
+S A$game_pawn$2203 Def0007F0
+S A$game_pawn$2104 Def00079D
+S A$game_pawn$2050 Def00075A
+S A$game_pawn$2041 Def00074B
+S A$game_pawn$2032 Def000744
+S A$game_pawn$2023 Def000734
+S A$game_pawn$2014 Def00072A
+S A$game_pawn$2005 Def00071D
+S A$game_pawn$1600 Def0004BD
+S A$game_pawn$1510 Def00043E
+S A$game_pawn$1501 Def000431
+S A$game_pawn$1402 Def0003B9
+S A$game_pawn$1312 Def00034C
+S A$game_pawn$1303 Def000341
+S A$game_pawn$1240 Def0002EC
+S A$game_pawn$1222 Def0002CE
+S A$game_pawn$1213 Def0002C0
+S A$game_pawn$1204 Def0002B6
+S A$game_pawn$1150 Def00025D
+S A$game_pawn$1141 Def000246
+S A$game_pawn$1132 Def000236
+S A$game_pawn$1123 Def00021D
+S A$game_pawn$1114 Def000206
+S A$game_pawn$1105 Def0001F7
+S A$game_pawn$1060 Def0001C7
+S A$game_pawn$1042 Def0001B8
+S A$game_pawn$1024 Def0001A0
+S A$game_pawn$1015 Def000198
+S C$game_pawn.c$113$1_2$113 Def00010C
 A _DATA size 7 flags 0 addr 0
+S Fgame_pawn$g_Sprite$0_0$0 Def000005
+S Fgame_pawn$g_Game_DrawX$0_0$0 Def000001
+S Fgame_pawn$g_Game_DrawY$0_0$0 Def000000
+S Fgame_pawn$g_Game_DrawPattern$0_0$0 Def000002
+S Fgame_pawn$g_Pawn$0_0$0 Def000003
 A _INITIALIZED size 0 flags 0 addr 0
 A _DABS size 0 flags 8 addr 0
 A _HOME size 0 flags 0 addr 0
@@ -236,7 +1727,7 @@ R 00 00 00 00
 T 00 00 00 DD E5 DD 21 00 00 DD 39 22 03 00 D5 01
 R 00 00 00 00 00 0C 01 00
 T 0D 00 00 14 00 C5 EB AF CD 00 00 D1 2A 03 00 73
-R 00 00 00 00 02 09 13 00 00 0D 01 00
+R 00 00 00 00 02 09 2E 00 00 0D 01 00
 T 1A 00 00 23 72 2A 03 00 23 23 DD 7E 04 77 2A
 R 00 00 00 00 00 06 01 00
 T 26 00 00 03 00 23 23 23 DD 7E 06 77 23 DD 7E 07
@@ -250,7 +1741,7 @@ R 00 00 00 00
 T 45 00 00 2A 03 00 23 23 46 79 90 30 1E 2A 05 00
 R 00 00 00 00 00 04 01 00 00 0E 01 00
 T 52 00 00 46 11 04 00 19 6E C5 78 CD 00 00 C1 21
-R 00 00 00 00 02 0C 44 00
+R 00 00 00 00 02 0C 8C 00
 T 5F 00 00 05 00 7E C6 06 77 30 02 23 34
 R 00 00 00 00 00 03 01 00
 T 69 00 00
@@ -336,7 +1827,7 @@ R 00 00 00 00
 T C5 01 00 FF 23 23 5E 23 56 7A B3 28 04 EB CD
 R 00 00 00 00
 T D1 01 00 00 00
-R 00 00 00 00 02 03 5D 00
+R 00 00 00 00 02 03 B9 00
 T D3 01 00
 R 00 00 00 00
 T D3 01 00 ED 4B 03 00 21 08 00 09 EB DD 6E FE DD
@@ -378,7 +1869,7 @@ R 00 00 00 00
 T A8 02 00 DD 46 FC 21 10 00 09 4E 23 46 2E 00 3E
 R 00 00 00 00
 T B5 02 00 05 C5 FD E1 CD 00 00 C3 05 06
-R 00 00 00 00 02 08 96 00 00 0B 00 00
+R 00 00 00 00 02 08 23 01 00 0B 00 00
 T BF 02 00
 R 00 00 00 00
 T BF 02 00 5D 54 CB 7C 28 05 21 17 00 09 EB
@@ -402,15 +1893,15 @@ R 00 00 00 00
 T 14 03 00 5E FC 16 00 EB 29 29 29 29 29 EB FD 2A
 R 00 00 00 00
 T 21 03 00 00 00 FD 19 26 00 FD E5 D1 19 CD 00 00
-R 00 00 00 00 02 03 93 00 02 0E BB 00
+R 00 00 00 00 02 03 1B 01 02 0E 71 01
 T 2E 03 00 5F FD 2A 03 00 FD 6E 12 FD 66 13 C5 D5
 R 00 00 00 00 00 06 01 00
 T 3B 03 00 7B CD 00 00 D1 C1 B7 28 20 2A 03 00 01
-R 00 00 00 00 02 05 5D 00 00 0D 01 00
+R 00 00 00 00 02 05 B9 00 00 0D 01 00
 T 48 03 00 10 00 09 4E 23 46 6B AF C5 FD E1 CD
 R 00 00 00 00
 T 54 03 00 00 00 DD 7E FC 87 87 87 C6 F0 DD 77 FA
-R 00 00 00 00 02 03 96 00
+R 00 00 00 00 02 03 23 01
 T 61 03 00 C3 05 06
 R 00 00 00 00 00 04 00 00
 T 64 03 00
@@ -426,15 +1917,15 @@ R 00 00 00 00
 T 80 03 00 7E FD 93 CA 05 06 DD 6E FC 26 00 29 29
 R 00 00 00 00 00 07 00 00
 T 8D 03 00 29 29 29 ED 4B 00 00 09 16 00 19 CD
-R 00 00 00 00 02 08 93 00
+R 00 00 00 00 02 08 1B 01
 T 99 03 00 00 00 5F FD 2A 03 00 FD 6E 12 FD 66 13
-R 00 00 00 00 02 03 BB 00 00 08 01 00
+R 00 00 00 00 02 03 71 01 00 08 01 00
 T A6 03 00 D5 7B CD 00 00 D1 B7 CA 05 06 2A 03 00
-R 00 00 00 00 02 06 5D 00 00 0B 00 00 00 0E 01 00
+R 00 00 00 00 02 06 B9 00 00 0B 00 00 00 0E 01 00
 T B3 03 00 01 10 00 09 4E 23 46 6B AF C5 FD E1 CD
 R 00 00 00 00
 T C0 03 00 00 00 DD 7E FC 87 87 87 C6 F0 DD 77 FA
-R 00 00 00 00 02 03 96 00
+R 00 00 00 00 02 03 23 01
 T CD 03 00 C3 05 06
 R 00 00 00 00 00 04 00 00
 T D0 03 00
@@ -462,15 +1953,15 @@ R 00 00 00 00
 T 18 04 00 CB 2C CB 1D CB 2C CB 1D CB 2C CB 1D 4D
 R 00 00 00 00
 T 25 04 00 26 00 29 29 29 29 29 ED 5B 00 00 19 DD
-R 00 00 00 00 02 0C 93 00
+R 00 00 00 00 02 0C 1B 01
 T 32 04 00 5E FF 16 00 19 CD 00 00 47 2A 03 00 11
-R 00 00 00 00 02 09 BB 00 00 0D 01 00
+R 00 00 00 00 02 09 71 01 00 0D 01 00
 T 3F 04 00 12 00 19 5E 23 56 C5 78 EB CD 00 00 C1
-R 00 00 00 00 02 0D 5D 00
+R 00 00 00 00 02 0D B9 00
 T 4C 04 00 B7 CA 05 06 2A 03 00 11 10 00 19 5E 23
 R 00 00 00 00 00 05 00 00 00 08 01 00
 T 59 04 00 56 C5 68 3E 01 D5 FD E1 CD 00 00 C1 79
-R 00 00 00 00 02 0C 96 00
+R 00 00 00 00 02 0C 23 01
 T 66 04 00 87 87 87 C6 08 DD 77 FA C3 05 06
 R 00 00 00 00 00 0C 00 00
 T 71 04 00
@@ -498,11 +1989,11 @@ R 00 00 00 00
 T CB 04 00 3C 28 30 DD 71 FD DD 6E FC 26 00 29 29
 R 00 00 00 00
 T D8 04 00 29 29 29 ED 5B 00 00 19 06 00 09 CD
-R 00 00 00 00 02 08 93 00
+R 00 00 00 00 02 08 1B 01
 T E4 04 00 00 00 DD 77 FB 2A 03 00 11 12 00 19 4E
-R 00 00 00 00 02 03 BB 00 00 09 01 00
+R 00 00 00 00 02 03 71 01 00 09 01 00
 T F1 04 00 23 66 DD 7E FB 69 CD 00 00 B7 C2 05 06
-R 00 00 00 00 02 0A 5D 00 00 0E 00 00
+R 00 00 00 00 02 0A B9 00 00 0E 00 00
 T FE 04 00
 R 00 00 00 00
 T FE 04 00 E1 E5 11 0C 00 19 DD 75 FE DD 74 FF CB
@@ -524,7 +2015,7 @@ R 00 00 00 00
 T 4E 05 00
 R 00 00 00 00
 T 4E 05 00 DD CB FD 26 DD CB FE 16 10 F6 2A 00 00
-R 00 00 00 00 02 0E 93 00
+R 00 00 00 00 02 0E 1B 01
 T 5B 05 00 E3 DD 7E FD DD 77 FB DD 7E FE DD 77 FC
 R 00 00 00 00
 T 68 05 00 DD 7E FB DD 86 F7 DD 77 FD DD 7E FC DD
@@ -538,13 +2029,13 @@ R 00 00 00 00
 T 9C 05 00 DD 7E F8 DD 77 FF DD 6E FE DD 66 FF CD
 R 00 00 00 00
 T A9 05 00 00 00 DD 77 FF DD 77 FB 2A 03 00 DD 75
-R 00 00 00 00 02 03 BB 00 00 0C 01 00
+R 00 00 00 00 02 03 71 01 00 0C 01 00
 T B6 05 00 FE DD 74 FF 11 12 00 19 7E DD 77 FE 23
 R 00 00 00 00
 T C3 05 00 7E DD 77 FF DD 7E FB DD 6E FE DD 66 FF
 R 00 00 00 00
 T D0 05 00 CD 00 00 DD 77 FF B7 20 2C
-R 00 00 00 00 02 04 5D 00
+R 00 00 00 00 02 04 B9 00
 T D9 05 00
 R 00 00 00 00
 T D9 05 00 2A 03 00 DD 75 FE DD 74 FF 11 10 00 19
@@ -554,7 +2045,7 @@ R 00 00 00 00
 T F3 05 00 04 FD E5 E3 DD 6E FE E3 E3 DD 66 FF E3
 R 00 00 00 00
 T 00 06 00 FD E1 CD 00 00
-R 00 00 00 00 02 06 96 00
+R 00 00 00 00 02 06 23 01
 T 05 06 00
 R 00 00 00 00
 T 05 06 00 2A 03 00 DD 75 FD DD 74 FE 01 0D 00 09
@@ -570,7 +2061,7 @@ R 00 00 00 00
 T 39 06 00 46 FE 21 10 00 09 4E 23 46 2E 00 3E 07
 R 00 00 00 00
 T 46 06 00 C5 FD E1 CD 00 00 C3 8F 07
-R 00 00 00 00 02 07 96 00 00 0A 00 00
+R 00 00 00 00 02 07 23 01 00 0A 00 00
 T 4F 06 00
 R 00 00 00 00
 T 4F 06 00 DD 4E F9 06 00 21 10 00 09 5D 54 CB 7C
@@ -590,15 +2081,15 @@ R 00 00 00 00
 T 84 06 00 CB 2C CB 1D CB 2C CB 1D CB 2C CB 1D 26
 R 00 00 00 00
 T 91 06 00 00 29 29 29 29 29 ED 4B 00 00 09 DD 4E
-R 00 00 00 00 02 0B 93 00
+R 00 00 00 00 02 0B 1B 01
 T 9E 06 00 FF 06 00 09 CD 00 00 5F FD 2A 03 00 FD
-R 00 00 00 00 02 08 BB 00 00 0D 01 00
+R 00 00 00 00 02 08 71 01 00 0D 01 00
 T AB 06 00 6E 12 FD 66 13 D5 7B CD 00 00 D1 B7 CA
-R 00 00 00 00 02 0B 5D 00
+R 00 00 00 00 02 0B B9 00
 T B8 06 00 8F 07 2A 03 00 01 10 00 09 4E 23 46 6B
 R 00 00 00 00 00 03 00 00 00 06 01 00
 T C5 06 00 3E 02 C5 FD E1 CD 00 00 DD 7E FF 87 87
-R 00 00 00 00 02 09 96 00
+R 00 00 00 00 02 09 23 01
 T D2 06 00 87 C6 F0 DD 77 F9 C3 8F 07
 R 00 00 00 00 00 0A 00 00
 T DB 06 00
@@ -610,7 +2101,7 @@ R 00 00 00 00
 T F5 06 00 DD 46 FE 21 10 00 09 4E 23 46 2E 00 3E
 R 00 00 00 00
 T 02 07 00 08 C5 FD E1 CD 00 00 C3 8F 07
-R 00 00 00 00 02 08 96 00 00 0B 00 00
+R 00 00 00 00 02 08 23 01 00 0B 00 00
 T 0C 07 00
 R 00 00 00 00
 T 0C 07 00 DD 4E F9 06 00 69 60 CB 78 28 04 21
@@ -630,27 +2121,27 @@ R 00 00 00 00
 T 3C 07 00 CB 2C CB 1D CB 2C CB 1D CB 2C CB 1D 26
 R 00 00 00 00
 T 49 07 00 00 29 29 29 29 29 ED 4B 00 00 09 DD 4E
-R 00 00 00 00 02 0B 93 00
+R 00 00 00 00 02 0B 1B 01
 T 56 07 00 FF 06 00 09 CD 00 00 5F FD 2A 03 00 FD
-R 00 00 00 00 02 08 BB 00 00 0D 01 00
+R 00 00 00 00 02 08 71 01 00 0D 01 00
 T 63 07 00 6E 12 FD 66 13 D5 7B CD 00 00 D1 B7 28
-R 00 00 00 00 02 0B 5D 00
+R 00 00 00 00 02 0B B9 00
 T 70 07 00 1E 2A 03 00 01 10 00 09 4E 23 46 6B 3E
 R 00 00 00 00 00 05 01 00
 T 7D 07 00 03 C5 FD E1 CD 00 00 DD 7E FF 87 87 87
-R 00 00 00 00 02 08 96 00
+R 00 00 00 00 02 08 23 01
 T 8A 07 00 C6 08 DD 77 F9
 R 00 00 00 00
 T 8F 07 00
 R 00 00 00 00
 T 8F 07 00 2A 03 00 01 05 00 09 DD 7E F9 77 2A
 R 00 00 00 00 00 04 01 00
-T 9B 07 00 03 00 01 06 00 09 DD 7E FA 77 ED 4B
-R 00 00 00 00 00 03 01 00
-T A7 07 00 03 00 21 0B 00 09 EB 1A CB C7 12 2A
-R 00 00 00 00 00 03 01 00
-T B3 07 00 03 00 01 0B 00 09 CB A6
-R 00 00 00 00 00 03 01 00
+T 9B 07 00 03 00 01 06 00 09 DD 7E FA 77 2A 03 00
+R 00 00 00 00 00 03 01 00 00 0E 01 00
+T A8 07 00 01 0B 00 09 CB C6 ED 4B 03 00 21 0B 00
+R 00 00 00 00 00 0B 01 00
+T B5 07 00 09 EB 1A CB A7 12
+R 00 00 00 00
 T BB 07 00
 R 00 00 00 00
 T BB 07 00 DD F9 DD E1 C9
@@ -671,15 +2162,15 @@ T E9 07 00 ED 4B 03 00 69 60 23 23 DD 7E FF 96 D2
 R 00 00 00 00 00 05 01 00
 T F6 07 00 9E 08 2A 05 00 11 05 00 19 5E CB 43 28
 R 00 00 00 00 00 03 00 00 00 06 01 00
-T 03 08 00 14 59 50 21 0C 00 19 7E 0F DA 8E 08 21
+T 03 08 00 17 59 50 21 0C 00 19 7E 0F DA 8E 08 21
 R 00 00 00 00 00 0D 00 00
-T 10 08 00 0B 00 09 CB CE C3 2F 08
-R 00 00 00 00 00 09 00 00
-T 18 08 00
+T 10 08 00 0B 00 09 EB 1A CB CF 12 C3 2F 08
+R 00 00 00 00 00 0C 00 00
+T 1B 08 00
 R 00 00 00 00
-T 18 08 00 CB 4B 28 13 59 50 21 0C 00 19 7E 0F 30
+T 1B 08 00 CB 4B 28 10 59 50 21 0C 00 19 7E 0F 30
 R 00 00 00 00
-T 25 08 00 68 21 0B 00 09 EB 1A CB CF 12
+T 28 08 00 65 21 0B 00 09 CB CE
 R 00 00 00 00
 T 2F 08 00
 R 00 00 00 00
@@ -698,9 +2189,9 @@ R 00 00 00 00 00 05 01 00
 T 76 08 00
 R 00 00 00 00
 T 76 08 00 0A 6F 26 00 29 29 ED 4B 00 00 09 EB DD
-R 00 00 00 00 02 0B 04 00
+R 00 00 00 00 02 0B 0A 00
 T 83 08 00 4E FE 06 00 C5 21 00 00 CD 00 00
-R 00 00 00 00 00 09 01 00 02 0C B0 00
+R 00 00 00 00 00 09 01 00 02 0C 57 01
 T 8E 08 00
 R 00 00 00 00
 T 8E 08 00 2A 05 00 01 06 00 09 22 05 00 DD 34 FF

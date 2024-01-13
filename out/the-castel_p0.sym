@@ -7,28 +7,12 @@ Symbol Table
     .__.ABS.                                                    =  000000 G
     .__.CPU.                                                    =  000000 L
     .__.H$L.                                                    =  000000 L
-  8 __xinit__g_Level001                                            000000 R
-  8 __xinit__g_Level002                                            000300 R
-  8 __xinit__g_Level003                                            000600 R
-  8 __xinit__g_Level004                                            000900 R
-  8 __xinit__g_Level006                                            000C00 R
-  8 __xinit__g_Level007                                            000F00 R
-  8 __xinit__g_Level008                                            001200 R
-  8 __xinit__g_Level010                                            001500 R
-  8 __xinit__g_Level011                                            001800 R
-  8 __xinit__g_Level013                                            001B00 R
-  8 __xinit__g_Level014                                            001E00 R
-  2 _g_Level001                                                    000000 GR
-  2 _g_Level002                                                    000300 GR
-  2 _g_Level003                                                    000600 GR
-  2 _g_Level004                                                    000900 GR
-  2 _g_Level006                                                    000C00 GR
-  2 _g_Level007                                                    000F00 GR
-  2 _g_Level008                                                    001200 GR
-  2 _g_Level010                                                    001500 GR
-  2 _g_Level011                                                    001800 GR
-  2 _g_Level013                                                    001B00 GR
-  2 _g_Level014                                                    001E00 GR
+  7 G$g_DataBackground_Colors$0_0$0                             =  000369 GR
+  7 G$g_DataBackground_Patterns$0_0$0                           =  000137 GR
+  7 G$g_DataSprtLayer$0_0$0                                     =  000000 GR
+  7 _g_DataBackground_Colors                                       000369 GR
+  7 _g_DataBackground_Patterns                                     000137 GR
+  7 _g_DataSprtLayer                                               000000 GR
 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 2.
@@ -38,12 +22,12 @@ Area Table
 
    0 _CODE                                      size      0   flags    0
    1 _DATA                                      size      0   flags    0
-   2 _INITIALIZED                               size   2100   flags    0
+   2 _INITIALIZED                               size      0   flags    0
    3 _DABS                                      size      0   flags    8
    4 _HOME                                      size      0   flags    0
    5 _GSINIT                                    size      0   flags    0
    6 _GSFINAL                                   size      0   flags    0
-   7 _PAGE0                                     size      0   flags    0
-   8 _INITIALIZER                               size   2100   flags    0
+   7 _PAGE0                                     size    389   flags    0
+   8 _INITIALIZER                               size      0   flags    0
    9 _CABS                                      size      0   flags    8
 
