@@ -53,6 +53,7 @@ struct LevelDefinition
 //	u8 PrevLvIdx;			/** Livello precedente */
 	EnemyType MyEnemyType;	/** Rappresenta il numero di nemici per livello */
 	ObjectItem MyItems[10]; /** Rappresenta gli oggetti utilizzati nel livello */
+	u8 ColorLevel;			/** Colore delle tiles */
 };
 
 extern struct LevelDefinition g_Levels[];

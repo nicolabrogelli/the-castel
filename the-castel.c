@@ -179,6 +179,7 @@ bool isCatch = FALSE;
 u8 g_Fire = 1;
 bool g_RefreshInventary = FALSE;
 u8 g_TimetoDeath = TIME_TO_DEATH;
+u8 g_LevelPrev = 0;
 
 unsigned char g_Lives[MAX_LIVES] = {0, 0, 0};
 
@@ -372,7 +373,7 @@ void physicsEventPlayer(u8 event, u8 tile)
  */
 bool physicsCollision(u8 tile)
 {
-	return (tile > 110 && tile < 184);
+	return (tile > 112 && tile < 184); // 100
 }
 
 /**
@@ -560,7 +561,7 @@ void foo(u8 x, u8 y, u8 tile, u8 visible)
 bool interact(u8 x, u8 y)
 {
 	u8 tile = getTile(x, y);
-	if(tile < 68 )
+	if (tile < 60)
 		return FALSE;
 	// DEBUG_LOGNUM("Intercat", tile);
 
@@ -581,6 +582,7 @@ bool interact(u8 x, u8 y)
 	case TILE_MASK_DOOR1:
 	case TILE_MASK_DOOR2:
 	case TILE_MASK_DOOR3:
+		g_LevelPrev = 0;
 		VDP_HideAllSprites();
 		drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.NextDoorLevel);
 		return TRUE;
@@ -628,10 +630,12 @@ bool interact(u8 x, u8 y)
 		return TRUE;
 	case TILE_DOOR_PREV:
 		VDP_HideAllSprites();
+		g_LevelPrev = 1;
 		drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.PrevDoorLevel);
 		return false;
 	case TILE_DOOR_NEXT:
 		VDP_HideAllSprites();
+		g_LevelPrev = 0;
 		drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.NextDoorLevel);
 		return false;
 
@@ -669,9 +673,11 @@ bool interact(u8 x, u8 y)
 	case TILE_CRUCIFIX:
 		// Modifico al volo il livello di gioco, cosi non sono costretto
 		// a creare una cache dei livelli.
-		replaceAndRemoveItem(x, y, tile, TILE_EMPTY);
-		PlayBankSFX(5, 0);
-
+		if (!hasItemInInventory(TILE_CRUCIFIX))
+		{
+			replaceAndRemoveItem(x, y, tile, TILE_EMPTY);
+			PlayBankSFX(5, 0);
+		}
 		return TRUE;
 		/*
 	case TILE_BLOCK_TEST:
@@ -744,6 +750,7 @@ void changeLevel(u8 x, u8 y, u8 key, u8 door)
 	foo(x, y, door, 1);
 	g_CountItem++;
 
+	g_LevelPrev = 0;
 	VDP_HideAllSprites();
 	drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.NextDoorLevel);
 }
@@ -754,7 +761,7 @@ void changeLevel(u8 x, u8 y, u8 key, u8 door)
  * @param u8 y Coordinata Y
  * @return TRUE se è stata raccolta una moneta
  */
-bool getMoney(u8 x, u8 y)
+bool getItem(u8 x, u8 y)
 {
 	switch (getTile(x, y))
 	{
@@ -762,6 +769,23 @@ bool getMoney(u8 x, u8 y)
 		setTile(x, y, EMPTY_ITEM);
 		foo(x, y, TILE_MASK_MONEY, 1); // Per il momento non posso spostare questa funzione, in quanto dovrei duplicare la chiamata the tile
 
+		return TRUE;
+	case TILE_TIME_UP:
+		setTile(x, y, EMPTY_ITEM);
+		if (g_TimetoDeath < 60)
+		{
+			u8 offset = 60 - g_TimetoDeath;
+			if (offset > 10)
+			{
+				g_TimetoDeath += 10;
+			}
+			else
+			{
+				u8 res = 10 - offset;
+				g_TimetoDeath += res;
+			}
+		}
+		// TODO: Aggiungere 10s al tempo totale, ma non superare i 59s
 		return TRUE;
 	}
 	return FALSE;
@@ -779,11 +803,13 @@ bool isPassage(u8 x, u8 y)
 	{
 	case TILE_UP_DOOR:
 		VDP_HideAllSprites();
+		g_LevelPrev = 0;
 		drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.UpDoorLevel);
 		return TRUE;
 
 	case TILE_DOWN_DOOR:
 		VDP_HideAllSprites();
+		g_LevelPrev = 0;
 		drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.DownDoorLevel);
 		return TRUE;
 	}
@@ -869,6 +895,8 @@ void drawLevel(u8 levelIdx)
 	pausePT3Music();
 	VDP_EnableDisplay(FALSE);
 
+	VDP_FillVRAM_16K(g_Levels[levelIdx].ColorLevel, g_ScreenColorLow + 18, 2);
+
 	g_CurrRoomIdx = levelIdx;
 	g_PawnCount = 0;
 	g_GhostCount = 0;
@@ -881,6 +909,7 @@ void drawLevel(u8 levelIdx)
 	g_SlideCountV = 0;
 	g_TimetoDeath = TIME_TO_DEATH;
 
+/*
 	DEBUG_LOGNUM("----- Livello", g_CurrRoomIdx);
 	DEBUG_LOGNUM("----- CONFIGURATO Skeletor Number", g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber);
 	DEBUG_LOGNUM("----- CONFIGURATO Ghost Number", g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber);
@@ -888,6 +917,7 @@ void drawLevel(u8 levelIdx)
 	DEBUG_LOGNUM("----- CONFIGURATO Bat Number", g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber);
 	DEBUG_LOGNUM("----- CONFIGURATO Slide Number H", g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH);
 	DEBUG_LOGNUM("----- CONFIGURATO Slide Number V", g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV);
+*/
 
 	// Ad ogni cambio di livello rimuove l'amphora dall'inventario, in modo da ridurlo ad un aiuto momntaneo
 	if (hasItemInInventory(TILE_AMPHORA))
@@ -946,7 +976,10 @@ void drawLevel(u8 levelIdx)
 			// Recupera la tile nella poszione indicata
 			u8 tile = g_CacheLevel[0].Layout[g_CacheLevel[0].Width * riga + colonna];
 
-			if (tile == TILE_START_POS) // Rilevamento della posizione iniziale del giocatore
+
+
+			//if (tile == TILE_START_POS) // Rilevamento della posizione iniziale del giocatore
+			if (((tile == TILE_START_POS) && (g_LevelPrev == 0)) || ((tile == TILE_BACK_POS_PLYER) && (g_LevelPrev == 1)) ) // Rilevamento della posizione iniziale del giocatore
 			{
 				u8 x = g_CacheLevel[0].X + colonna;
 				u8 y = g_CacheLevel[0].Y + riga;
@@ -963,27 +996,27 @@ void drawLevel(u8 levelIdx)
 			}
 			else if ((tile == TILE_STAR_POS_ENEMY) && (g_PawnCount < g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber)) // Rilevamento della posizione iniziale del nemico
 			{
-				g_PawnCount = positionGenericEnemy(TILE_STAR_POS_ENEMY, g_PawnCount, &g_Enemy[0], 196, FIRST_ID_SKELETOR, riga, colonna, 0, "Scheletor", 0);
+				g_PawnCount = positionGenericEnemy(TILE_STAR_POS_ENEMY, g_PawnCount, &g_Enemy[0], ADDRESS_SHELETOR, FIRST_ID_SKELETOR, riga, colonna, 0, "Scheletor", 0);
 			}
 			else if ((tile == TILE_POS_GHOST) && (g_GhostCount < g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber)) // Rilevamento della posizione iniziale del nemico
 			{
-				g_GhostCount = positionGenericEnemy(TILE_POS_GHOST, g_GhostCount, &g_Ghost[0], 200, FIRST_ID_GHOST, riga, colonna, 0, "Ghost", 0);
+				g_GhostCount = positionGenericEnemy(TILE_POS_GHOST, g_GhostCount, &g_Ghost[0], ADDRESS_GHOST, FIRST_ID_GHOST, riga, colonna, 0, "Ghost", 0);
 			}
 			else if ((tile == TILE_POS_SPIDER) && (g_SpiderCount < g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber)) // Rilevamento della posizione iniziale del nemico
 			{
-				g_SpiderCount = positionGenericEnemy(TILE_POS_SPIDER, g_SpiderCount, &g_Spider[0], 192, FIRST_ID_SPIDER, riga, colonna, 0, "Spider", 0);
+				g_SpiderCount = positionGenericEnemy(TILE_POS_SPIDER, g_SpiderCount, &g_Spider[0], ADDRESS_SPIDER, FIRST_ID_SPIDER, riga, colonna, 0, "Spider", 0);
 			}
 			else if ((tile == TILE_POS_BAT) && (g_BatCount < g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber)) // Rilevamento della posizione iniziale del nemico
 			{
-				g_BatCount = positionGenericEnemy(TILE_POS_BAT, g_BatCount, &g_Bat[0], 204, FIRST_ID_BAT, riga, colonna, 0, "Bat", 0);
+				g_BatCount = positionGenericEnemy(TILE_POS_BAT, g_BatCount, &g_Bat[0], ADDRESS_BAT, FIRST_ID_BAT, riga, colonna, 0, "Bat", 0);
 			}
 			else if ((tile == TILE_POS_PLATFORM_O) && (g_SlideCountH < g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH)) // Rilevamento piattaforma mobile
 			{
-				g_SlideCountH = positionGenericEnemy(TILE_POS_PLATFORM_O, g_SlideCountH, &g_platformH[0], 208, FIRST_ID_SLIDE_H, riga, colonna, 0, "platform H", 0);
+				g_SlideCountH = positionGenericEnemy(TILE_POS_PLATFORM_O, g_SlideCountH, &g_platformH[0], ADDRESS_PLATFORM, FIRST_ID_SLIDE_H, riga, colonna, 0, "platform H", 0);
 			}
 			else if ((tile == TILE_POS_PLATFORM_V) && (g_SlideCountV < g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV)) // Rilevamento piattaforma mobile
 			{
-				g_SlideCountV = positionGenericEnemy(TILE_POS_PLATFORM_V, g_SlideCountV, &g_platformV[0], 208, FIRST_ID_SLIDE_V, riga, colonna, 0, "platform V", 1);
+				g_SlideCountV = positionGenericEnemy(TILE_POS_PLATFORM_V, g_SlideCountV, &g_platformV[0], ADDRESS_PLATFORM, FIRST_ID_SLIDE_V, riga, colonna, 0, "platform V", 1);
 			}
 		}
 	}
@@ -1018,6 +1051,28 @@ void drawLevel(u8 levelIdx)
 			setTile(g_Levels[g_CurrRoomIdx].MyItems[i].x, g_Levels[g_CurrRoomIdx].MyItems[i].y, g_Levels[g_CurrRoomIdx].MyItems[i].tile);
 		}
 	}
+
+	// TODO: Brutto!!! sto ciclando nuovamente il livello per non rendere visible la tile
+	//		 di poszionamento del Player non utilzzata!!!!!!
+	for (u8 riga = 0; riga < g_CacheLevel[0].Height; ++riga)
+	{
+		for (u8 colonna = 0; colonna < g_CacheLevel[0].Width; ++colonna)
+		{
+			// Recupera la tile nella poszione indicata
+			u8 tile = g_CacheLevel[0].Layout[g_CacheLevel[0].Width * riga + colonna];
+
+			
+
+			//if (tile == TILE_START_POS) // Rilevamento della posizione iniziale del giocatore
+			if ((tile == TILE_START_POS) || (tile == TILE_BACK_POS_PLYER)) // Rilevamento della posizione iniziale del giocatore
+			{
+				u8 x = g_CacheLevel[0].X + colonna;
+				u8 y = g_CacheLevel[0].Y + riga;
+				setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
+			}
+		}
+	}
+
 
 	VDP_EnableDisplay(TRUE);
 
@@ -1391,8 +1446,8 @@ void genericControl()
 	// Attenzione l'aggiunta dell'iterazione crea dei rallentamenti al gioco
 	// 1) La prima parte si utilizza per inteagire com gli elementi che is trovano una tile sopra il piano di gioco
 	// 2) La seconda parte si utilizza nteagire com gli elementi che is trovano sul piano di gioco
-	if (getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) ||
-		getMoney(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4))
+	if (getItem(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) ||
+		getItem(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4))
 	{
 		// Modifico al volo il livello di gioco, cosi non sono costretto
 		// a creare una cache dei livelli.

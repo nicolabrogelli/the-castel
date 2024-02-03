@@ -134,7 +134,7 @@ AppID = "TC";
 BuildLibrary = true;
 
 //-- Prepare program for debug (boolean)
-Debug = true;
+Debug = false;
 
 //-- Move debug symbols to deployement folder (boolean)
 DebugSymbols = true;
