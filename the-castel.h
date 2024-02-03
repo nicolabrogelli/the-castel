@@ -128,7 +128,7 @@ void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape);
 void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 baseSprite, u8 enemyCount, char *type, u8 moveHV);
 void VDP_LoadPattern_GM1_Pletter(const u8 *src, u8 offset);
 u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, u8 idxSprite, u8 bo, u8 riga, u8 colonna, u8 levelIdx, c8 *Name, u8 movHV);
-bool isDanger(u8 x, u8 y, u8 t);
+bool isDanger(u8 x, u8 y);
 u8 isUnderDunger(u8 x, u8 y);
 void messageInGame(char *message);
 void VDP_ReplacementPartialArea(u8 riga);

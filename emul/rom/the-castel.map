@@ -39,18 +39,18 @@ Area                                    Addr        Size        Decimal Bytes (A
      00000034  _g_CHAR_16                         bios
      00000100  s__PAGE0                        
      00000221  l__HOME                         
-     00000413  l__PAGE0                        
+     00000419  l__PAGE0                        
      000005D7  l__DATA                         
      00000648  l__CABS0                        
      000006B6  l__INITIALIZED                  
      000006B6  l__INITIALIZER                  
      00004000  s__CODE                         
-     000068C0  l__CODE                         
-     0000A8C0  s__HOME                         
-     0000AAE1  s__INITIALIZER                  
-     0000AAE1  s__RODATA                       
-     0000B197  s__GSFINAL                      
-     0000B197  s__GSINIT                       
+     000068C8  l__CODE                         
+     0000A8C8  s__HOME                         
+     0000AAE9  s__INITIALIZER                  
+     0000AAE9  s__RODATA                       
+     0000B19F  s__GSFINAL                      
+     0000B19F  s__GSINIT                       
      0000C000  s__DATA                         
      0000C5D7  s__INITIALIZED                  
      0000CC8D  s__BSEG                         
@@ -291,7 +291,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_CODE                               00004000    000068C0 =       26816. bytes (REL,CON)
+_CODE                               00004000    000068C8 =       26824. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -326,256 +326,257 @@ _CODE                               00004000    000068C0 =       26816. bytes (R
      0000495B  _getItem                           the_castel
      000049B1  _isPassage                         the_castel
      00004A33  _isDanger                          the_castel
-     00004A88  _updateScore                       the_castel
-     00004B6C  _drawLevel                         the_castel
-     000050D0  _positionGenericEnemy              the_castel
-     000051BB  _spritePosition                    the_castel
-     00005230  _hideSprite                        the_castel
-     0000524C  _managementSprite                  the_castel
-     0000526E  _initCharacter                     the_castel
-     000052BC  _isOnPlatformH                     the_castel
-     00005374  _isOnPlatformV                     the_castel
-     0000542C  _updateCharacter                   the_castel
-     00005663  _updateGenericEnemy                the_castel
-     000057B5  _genericControl                    the_castel
-     000058B7  _State_Initialize                  the_castel
-     00005949  _State_Game                        the_castel
-     00005BC6  _State_Preset                      the_castel
-     00005BF8  _State_Pause                       the_castel
-     00005BFB  _State_GameOver                    the_castel
-     00005C26  _VDP_ReplacementPartialArea        the_castel
-     00005C81  _VDP_LoadPattern_GM1_Pletter       the_castel
+     00004A84  _updateScore                       the_castel
+     00004B68  _drawLevel                         the_castel
+     000050CC  _positionGenericEnemy              the_castel
+     000051B7  _spritePosition                    the_castel
+     0000522C  _hideSprite                        the_castel
+     00005248  _managementSprite                  the_castel
+     0000526A  _initCharacter                     the_castel
+     000052B8  _isOnPlatformH                     the_castel
+     00005370  _isOnPlatformV                     the_castel
+     00005428  _updateCharacter                   the_castel
+     0000565F  _updateGenericEnemy                the_castel
+     000057B1  _genericControl                    the_castel
+     000058AB  _State_Initialize                  the_castel
+     0000593D  _State_Game                        the_castel
+     00005BBA  _State_Preset                      the_castel
+     00005BEC  _State_Pause                       the_castel
+     00005BEF  _State_GameOver                    the_castel
+     00005C1A  _VDP_ReplacementPartialArea        the_castel
+     00005C75  _VDP_LoadPattern_GM1_Pletter       the_castel
 ASxxxx Linker V03.00 + NoICE + sdld,  page 7.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_CODE                               00004000    000068C0 =       26816. bytes (REL,CON)
+_CODE                               00004000    000068C8 =       26824. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     00005CA3  _VSyncCallback                     the_castel
-     00005CAC  _main                              the_castel
-     00005D14  _getTile                           tiles
-     00005D55  _setTile                           tiles
-     00005DA7  _getTileByTileCoord                tiles
-     00005DBA  _setTileByTileCoord                tiles
-     00005DDE  _initInventory                     inventory
-     00005DEA  _hasItemInInventory                inventory
-     00005E06  _addItemToInventory                inventory
-     00005EB8  _removeItemFromInventory           inventory
-     00005F5C  _displayItemToInventory            inventory
-     00005FB2  _isMoveRight                       control
-     00005FD6  _isMoveLeft                        control
-     00005FFB  _isMoveJump                        control
-     0000601A  _isInteractObject                  control
-     00006039  _PlayBankSFX                       music
-     0000603D  _PT3_NT2                           music
-     000060FD  _g_ayfx_bank                       music
-     000064F1  _ChannelSFX                        music
-     000064FF  _inizializePT3                     music
-     00006513  _inizializeAYFX                    music
-     00006524  _pausePT3Music                     music
-     0000652A  _restorePT3Music                   music
-     00006530  _stopMusicPlayback                 music
-     00006544  _setChannel                        music
-     0000654D  _restoreLevel                      level_defs
-     000065A7  _g_Level001                        level_defs
-     00006683  _g_Level002                        level_defs
-     00006773  _g_Level003                        level_defs
-     00006859  _g_Level004                        level_defs
-     0000693E  _g_Level005                        level_defs
-     000069FC  _g_Level006                        level_defs
-     00006A9C  _g_Level007                        level_defs
-     00006B61  _g_Level008                        level_defs
-     00006C0A  _g_Level009                        level_defs
-     00006CBA  _g_Level010                        level_defs
-     00006D6D  _g_Level011                        level_defs
-     00006E30  _g_Level012                        level_defs
-     00006EE2  _g_Level013                        level_defs
-     00006F97  _g_Level014                        level_defs
-     0000706C  _g_Level015                        level_defs
-     00007140  _g_Level016                        level_defs
-     00007213  _g_Level018                        level_defs
-     000072EC  _g_Level019                        level_defs
-     00007389  _g_Level020                        level_defs
-     00007436  _g_Level021                        level_defs
-     00007496  _g_Level022                        level_defs
-     000074FD  _g_Level023                        level_defs
-     00007566  _g_Level024                        level_defs
-     000075B3  _g_Level025                        level_defs
-     00007657  _g_Level026                        level_defs
+     00005C97  _VSyncCallback                     the_castel
+     00005CA0  _main                              the_castel
+     00005D08  _getTile                           tiles
+     00005D49  _setTile                           tiles
+     00005D9B  _getTileByTileCoord                tiles
+     00005DAE  _setTileByTileCoord                tiles
+     00005DD2  _initInventory                     inventory
+     00005DDE  _hasItemInInventory                inventory
+     00005DFA  _addItemToInventory                inventory
+     00005EAC  _removeItemFromInventory           inventory
+     00005F50  _displayItemToInventory            inventory
+     00005FA6  _isMoveRight                       control
+     00005FCA  _isMoveLeft                        control
+     00005FEF  _isMoveJump                        control
+     0000600E  _isInteractObject                  control
+     0000602D  _PlayBankSFX                       music
+     00006031  _PT3_NT2                           music
+     000060F1  _g_ayfx_bank                       music
+     000064E5  _ChannelSFX                        music
+     000064F3  _inizializePT3                     music
+     00006507  _inizializeAYFX                    music
+     00006518  _pausePT3Music                     music
+     0000651E  _restorePT3Music                   music
+     00006524  _stopMusicPlayback                 music
+     00006538  _setChannel                        music
+     00006541  _restoreLevel                      level_defs
+     0000659B  _g_Level001                        level_defs
+     00006677  _g_Level002                        level_defs
+     00006767  _g_Level003                        level_defs
+     0000684D  _g_Level004                        level_defs
+     00006932  _g_Level005                        level_defs
+     000069F0  _g_Level006                        level_defs
+     00006A90  _g_Level007                        level_defs
+     00006B55  _g_Level008                        level_defs
+     00006BFE  _g_Level009                        level_defs
+     00006CAE  _g_Level010                        level_defs
+     00006D61  _g_Level011                        level_defs
+     00006E24  _g_Level012                        level_defs
+     00006ED6  _g_Level013                        level_defs
+     00006F8B  _g_Level014                        level_defs
+     00007060  _g_Level015                        level_defs
+     00007134  _g_Level016                        level_defs
+     00007207  _g_Level018                        level_defs
+     000072E0  _g_Level019                        level_defs
+     0000737D  _g_Level020                        level_defs
+     0000742A  _g_Level021                        level_defs
+     0000748A  _g_Level022                        level_defs
+     000074F1  _g_Level023                        level_defs
+     0000755A  _g_Level024                        level_defs
+     000075A7  _g_Level025                        level_defs
+     0000764B  _g_Level026                        level_defs
 ASxxxx Linker V03.00 + NoICE + sdld,  page 8.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_CODE                               00004000    000068C0 =       26816. bytes (REL,CON)
+_CODE                               00004000    000068C8 =       26824. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     00007728  _g_Level027                        level_defs
-     000077E0  _g_Level028                        level_defs
-     0000780F  _g_Level029                        level_defs
-     00007873  _g_Level030                        level_defs
-     000079EE  _EmptyCB                           pt3_player
-     000079EF  _PT3_Init                          pt3_player
-     00007A2A  _PT3_InitSong                      pt3_player
-     00007AA7  _PT3_Pause                         pt3_player
-     00007AAF  _PT3_Resume                        pt3_player
-     00007AB5  _PT3_SetLoop                       pt3_player
-     00007AC1  _PT3_Silence                       pt3_player
-     00007ACE  _PT3_UpdatePSG                     pt3_player
-     00007B4B  _PT3_Decode                        pt3_player
-     00007F85  _GamePawn_Initialize               game_pawn
-     00007FF8  _GamePawn_SetPosition              game_pawn
-     00008026  _GamePawn_SetAction                game_pawn
-     00008061  _GamePawn_Update                   game_pawn
-     00008745  _GamePawn_Draw                     game_pawn
-     0000882E  _GamePawn_SetMovement              game_pawn
-     00008850  _GamePawn_InitializePhysics        game_pawn
-     00008874  _VDP_SetModeFlag                   vdp
-     0000889D  _VDP_SetModeGraphic1               vdp
-     000088BF  _VDP_ClearVRAM                     vdp
-     000088CB  _VDP_WriteVRAM_16K                 vdp
-     000088F4  _VDP_FillVRAM_16K                  vdp
-     00008913  _VDP_ReadVRAM_16K                  vdp
-     0000893B  _VDP_Peek_16K                      vdp
-     00008949  _VDP_Poke_16K                      vdp
-     0000895B  _VDP_Initialize                    vdp
-     0000896C  _VDP_SetMode                       vdp
-     0000899B  _VDP_GetVersion                    vdp
-     000089EA  _VDP_RegWrite                      vdp
-     000089F6  _VDP_RegWriteBak                   vdp
-     00008A09  _VDP_RegWriteBakMask               vdp
-     00008A28  _VDP_ReadDefaultStatus             vdp
-     00008A2B  _VDP_SetLayoutTable                vdp
-     00008A3B  _VDP_SetColorTable                 vdp
-     00008A68  _VDP_SetPatternTable               vdp
-     00008A85  _VDP_SetSpriteAttributeTable       vdp
-     00008AB6  _VDP_SetSpritePatternTable         vdp
-     00008AC7  _VDP_LoadSpritePattern             vdp
-     00008AF2  _VDP_SetSpriteSM1                  vdp
-     00008B30  _VDP_SetSprite                     vdp
-     00008B66  _VDP_SetSpritePosition             vdp
-     00008B95  _VDP_SetSpritePositionX            vdp
-     00008BA7  _VDP_SetSpritePositionY            vdp
-     00008BB8  _VDP_SetSpritePattern              vdp
-     00008BCB  _VDP_SetSpriteColorSM1             vdp
-     00008BDF  _VDP_DisableSpritesFrom            vdp
-     00008BE6  _ayFX_InitBank                     ayfx_player
-     00008BEA  _ayFX_PlayBank                     ayfx_player
+     0000771C  _g_Level027                        level_defs
+     000077D4  _g_Level028                        level_defs
+     00007803  _g_Level029                        level_defs
+     00007867  _g_Level030                        level_defs
+     000079E2  _EmptyCB                           pt3_player
+     000079E3  _PT3_Init                          pt3_player
+     00007A1E  _PT3_InitSong                      pt3_player
+     00007A9B  _PT3_Pause                         pt3_player
+     00007AA3  _PT3_Resume                        pt3_player
+     00007AA9  _PT3_SetLoop                       pt3_player
+     00007AB5  _PT3_Silence                       pt3_player
+     00007AC2  _PT3_UpdatePSG                     pt3_player
+     00007B3F  _PT3_Decode                        pt3_player
+     00007F79  _GamePawn_Initialize               game_pawn
+     00007FEC  _GamePawn_SetPosition              game_pawn
+     0000801A  _GamePawn_SetAction                game_pawn
+     00008055  _GamePawn_Update                   game_pawn
+     00008739  _GamePawn_Draw                     game_pawn
+     00008822  _GamePawn_SetMovement              game_pawn
+     00008844  _GamePawn_InitializePhysics        game_pawn
+     00008868  _VDP_SetModeFlag                   vdp
+     00008891  _VDP_SetModeGraphic1               vdp
+     000088B3  _VDP_ClearVRAM                     vdp
+     000088BF  _VDP_WriteVRAM_16K                 vdp
+     000088E8  _VDP_FillVRAM_16K                  vdp
+     00008907  _VDP_ReadVRAM_16K                  vdp
+     0000892F  _VDP_Peek_16K                      vdp
+     0000893D  _VDP_Poke_16K                      vdp
+     0000894F  _VDP_Initialize                    vdp
+     00008960  _VDP_SetMode                       vdp
+     0000898F  _VDP_GetVersion                    vdp
+     000089DE  _VDP_RegWrite                      vdp
+     000089EA  _VDP_RegWriteBak                   vdp
+     000089FD  _VDP_RegWriteBakMask               vdp
+     00008A1C  _VDP_ReadDefaultStatus             vdp
+     00008A1F  _VDP_SetLayoutTable                vdp
+     00008A2F  _VDP_SetColorTable                 vdp
+     00008A5C  _VDP_SetPatternTable               vdp
+     00008A79  _VDP_SetSpriteAttributeTable       vdp
+     00008AAA  _VDP_SetSpritePatternTable         vdp
+     00008ABB  _VDP_LoadSpritePattern             vdp
+     00008AE6  _VDP_SetSpriteSM1                  vdp
+     00008B24  _VDP_SetSprite                     vdp
+     00008B5A  _VDP_SetSpritePosition             vdp
+     00008B89  _VDP_SetSpritePositionX            vdp
+     00008B9B  _VDP_SetSpritePositionY            vdp
+     00008BAC  _VDP_SetSpritePattern              vdp
+     00008BBF  _VDP_SetSpriteColorSM1             vdp
+     00008BD3  _VDP_DisableSpritesFrom            vdp
+     00008BDA  _ayFX_InitBank                     ayfx_player
+     00008BDE  _ayFX_PlayBank                     ayfx_player
 ASxxxx Linker V03.00 + NoICE + sdld,  page 9.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_CODE                               00004000    000068C0 =       26816. bytes (REL,CON)
+_CODE                               00004000    000068C8 =       26824. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     00008C1B  _ayFX_Play                         ayfx_player
-     00008C23  _ayFX_Update                       ayfx_player
-     00008CBD  _ayFX_Mute                         ayfx_player
-     00008CD7  _ayFX_Stop                         ayfx_player
-     00008CDD  _Mem_HeapAlloc                     memory
-     00008CEE  _Mem_HeapFree                      memory
-     00008CFA  _Mem_Copy                          memory
-     00008D01  _Mem_Set                           memory
-     00008D0D  _Mem_Set_16b                       memory
-     00008D21  _Mem_DynamicInitialize             memory
-     00008D3B  _Mem_DynamicAlloc                  memory
-     00008E04  _Mem_DynamicMerge                  memory
-     00008E6A  _Mem_DynamicFree                   memory
-     00008E7E  _Joystick_Read                     input
-     00008E93  _Keyboard_Read                     input
-     00008E9E  _Keyboard_IsKeyPressed             input
-     00008EC9  _Game_Initialize                   game
-     00008ECD  _Game_Update                       game
-     00008ED3  _Game_Release                      game
-     00008ED4  _Game_MainLoop                     game
-     00008EE4  _Game_Exit                         game
-     00008EEA  _Game_SetState                     game
-     00008EF6  _Game_RestoreState                 game
-     00008F05  _Game_UpdateState                  game
-     00008F1C  _Game_DefaultVSyncCB               game
-     00008F1D  _VDP_InterruptHandler              game
-     00008F2D  _Game_WaitVSync                    game
-     00008F39  __mulint                           
-     00008F3B  __mul16                            
-     00008F50  _Print_Initialize                  print
-     00008F7B  _g_HexChar                         print
-     00008F8B  _Print_SetMode                     print
-     00008FA1  _Print_SetFont                     print
-     0000907B  _Print_SetColor                    print
-     00009094  _Print_SetColorShade               print
-     00009095  _Print_ValidateChar                print
-     000090E1  _Print_ValidatePattern             print
-     000091B0  _CopyNo8HeightFontData             print
-     0000920B  _Print_SetTextFont                 print
-     0000933E  _DrawChar_Layout                   print
-     00009382  _Print_Clear                       print
-     00009396  _Print_Backspace                   print
-     000093DA  _Print_DrawChar                    print
-     00009410  _Print_DrawCharX                   print
-     00009422  _Print_DrawText                    print
-     00009461  _Print_DrawBin8                    print
-     00009484  _Print_DrawHex8                    print
-     000094AA  _Print_DrawHex16                   print
-     000094B5  _Print_DrawHex32                   print
-     000094C0  _Print_DrawInt                     print
-     00009590  _Print_DrawFormat                  print
+     00008C0F  _ayFX_Play                         ayfx_player
+     00008C17  _ayFX_Update                       ayfx_player
+     00008CB1  _ayFX_Mute                         ayfx_player
+     00008CCB  _ayFX_Stop                         ayfx_player
+     00008CD1  _Mem_GetStackAddress               memory
+     00008CDA  _Mem_HeapAlloc                     memory
+     00008CEB  _Mem_HeapFree                      memory
+     00008CF7  _Mem_Copy                          memory
+     00008CFE  _Mem_Set                           memory
+     00008D0A  _Mem_Set_16b                       memory
+     00008D1E  _Mem_DynamicInitialize             memory
+     00008D38  _Mem_DynamicAlloc                  memory
+     00008E01  _Mem_DynamicMerge                  memory
+     00008E67  _Mem_DynamicFree                   memory
+     00008E7B  _Joystick_Read                     input
+     00008E90  _Keyboard_Read                     input
+     00008E9B  _Keyboard_IsKeyPressed             input
+     00008EC6  _Game_Initialize                   game
+     00008ECA  _Game_Update                       game
+     00008ED0  _Game_Release                      game
+     00008ED1  _Game_MainLoop                     game
+     00008EE1  _Game_Exit                         game
+     00008EE7  _Game_SetState                     game
+     00008EF3  _Game_RestoreState                 game
+     00008F02  _Game_UpdateState                  game
+     00008F19  _Game_DefaultVSyncCB               game
+     00008F1A  _VDP_InterruptHandler              game
+     00008F2A  _Game_WaitVSync                    game
+     00008F36  __mulint                           
+     00008F38  __mul16                            
+     00008F4D  _Print_Initialize                  print
+     00008F78  _g_HexChar                         print
+     00008F88  _Print_SetMode                     print
+     00008F9E  _Print_SetFont                     print
+     00009078  _Print_SetColor                    print
+     00009091  _Print_SetColorShade               print
+     00009092  _Print_ValidateChar                print
+     000090DE  _Print_ValidatePattern             print
+     000091AD  _CopyNo8HeightFontData             print
+     00009208  _Print_SetTextFont                 print
+     0000933B  _DrawChar_Layout                   print
+     0000937F  _Print_Clear                       print
+     00009393  _Print_Backspace                   print
+     000093D7  _Print_DrawChar                    print
+     0000940D  _Print_DrawCharX                   print
+     0000941F  _Print_DrawText                    print
+     0000945E  _Print_DrawBin8                    print
+     00009481  _Print_DrawHex8                    print
+     000094A7  _Print_DrawHex16                   print
+     000094B2  _Print_DrawHex32                   print
+     000094BD  _Print_DrawInt                     print
 ASxxxx Linker V03.00 + NoICE + sdld,  page 10.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_CODE                               00004000    000068C0 =       26816. bytes (REL,CON)
+_CODE                               00004000    000068C8 =       26824. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     00009C22  _Print_DrawLineH                   print
-     00009C41  _Print_DrawLineV                   print
-     00009C74  _Print_DrawBox                     print
-     00009D11  __muluschar                        
-     00009D17  __mulsuchar                        
-     00009D1D  __mulschar                         
-     00009D29  _String_FromUInt8ZT                string
-     00009D3F  _String_FromUInt8                  string
-     00009D59  _String_FromUInt16ZT               string
-     00009D5F  _String_FromUInt16                 string
-     00009D83  _String_Format                     string
-     0000A41E  _Pletter_UnpackToRAM               pletter
-     0000A4D0  _Pletter_UnpackToVRAM              pletter
-     0000A5AC  _Bios_Exit                         bios
-     0000A5B4  _Bios_SetHookCallback              bios
-     0000A5D3  _Bios_InterSlotRead                bios
-     0000A5D9  _Bios_InterSlotWrite               bios
-     0000A5EE  _Bios_InterSlotCall                bios
-     0000A600  _Bios_SwitchSlot                   bios
-     0000A60B  _Bios_WriteVDP                     bios
-     0000A611  _Bios_WriteVRAM                    bios
-     0000A620  _Bios_FillVRAM                     bios
-     0000A631  _Bios_TransfertVRAMtoRAM           bios
-     0000A643  _Bios_TransfertRAMtoVRAM           bios
-     0000A655  _Bios_ChangeColor                  bios
-     0000A66E  _Bios_InitScreen0Ex                bios
-     0000A69E  _Bios_InitScreen1Ex                bios
-     0000A6E9  _Bios_InitScreen2Ex                bios
-     0000A734  _Bios_InitScreen3Ex                bios
-     0000A77F  _Bios_GetPatternTableAddress       bios
-     0000A784  _Bios_GetAttributeTableAddress     bios
-     0000A789  _Bios_GraphPrintCharEx             bios
-     0000A7B0  _Bios_WritePSG                     bios
-     0000A7B5  _Bios_ClearScreen                  bios
-     0000A7BA  _Bios_SetCursorPosition            bios
-     0000A7BF  ___sdcc_call_hl                    
-     0000A7C0  ___sdcc_call_iy                    
-     0000A7C2  _Sys_GetPageSlot                   system
-     0000A815  _Sys_SetPageSlot                   system
-     0000A816  _Sys_SetPage0Slot                  system
-     0000A85C  _Sys_CheckSlot                     system
-
+     0000958D  _Print_DrawFormat                  print
+     00009C1F  _Print_DrawLineH                   print
+     00009C3E  _Print_DrawLineV                   print
+     00009C71  _Print_DrawBox                     print
+     00009D0E  __muluschar                        
+     00009D14  __mulsuchar                        
+     00009D1A  __mulschar                         
+     00009D26  _String_FromUInt8ZT                string
+     00009D3C  _String_FromUInt8                  string
+     00009D56  _String_FromUInt16ZT               string
+     00009D5C  _String_FromUInt16                 string
+     00009D80  _String_Format                     string
+     0000A41B  _Pletter_UnpackToRAM               pletter
+     0000A4CD  _Pletter_UnpackToVRAM              pletter
+     0000A5A9  _Bios_Exit                         bios
+     0000A5B1  _Bios_SetHookCallback              bios
+     0000A5D0  _Bios_InterSlotRead                bios
+     0000A5D6  _Bios_InterSlotWrite               bios
+     0000A5EB  _Bios_InterSlotCall                bios
+     0000A5FD  _Bios_SwitchSlot                   bios
+     0000A608  _Bios_WriteVDP                     bios
+     0000A60E  _Bios_WriteVRAM                    bios
+     0000A61D  _Bios_FillVRAM                     bios
+     0000A62E  _Bios_TransfertVRAMtoRAM           bios
+     0000A640  _Bios_TransfertRAMtoVRAM           bios
+     0000A652  _Bios_ChangeColor                  bios
+     0000A66B  _Bios_InitScreen0Ex                bios
+     0000A69B  _Bios_InitScreen1Ex                bios
+     0000A6E6  _Bios_InitScreen2Ex                bios
+     0000A731  _Bios_InitScreen3Ex                bios
+     0000A77C  _Bios_GetPatternTableAddress       bios
+     0000A781  _Bios_GetAttributeTableAddress     bios
+     0000A786  _Bios_GraphPrintCharEx             bios
+     0000A7AD  _Bios_WritePSG                     bios
+     0000A7B2  _Bios_HasCharacter                 bios
+     0000A7BD  _Bios_ClearScreen                  bios
+     0000A7C2  _Bios_SetCursorPosition            bios
+     0000A7C7  ___sdcc_call_hl                    
+     0000A7C8  ___sdcc_call_iy                    
+     0000A7CA  _Sys_GetPageSlot                   system
+     0000A81D  _Sys_SetPageSlot                   system
+     0000A81E  _Sys_SetPage0Slot                  system
+     0000A864  _Sys_CheckSlot                     system
 ASxxxx Linker V03.00 + NoICE + sdld,  page 11.
 Hexadecimal  [32-Bits]
 
@@ -603,21 +604,21 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_HOME                               0000A8C0    00000221 =         545. bytes (REL,CON)
+_HOME                               0000A8C8    00000221 =         545. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     0000A8C0  __modslong                         _modslong
-     0000A948  __modulong                         _modulong
-     0000A9D7  __divslong                         _divslong
-     0000AA67  __divulong                         _divulong
+     0000A8C8  __modslong                         _modslong
+     0000A950  __modulong                         _modulong
+     0000A9DF  __divslong                         _divslong
+     0000AA6F  __divulong                         _divulong
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 14.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_INITIALIZER                        0000AAE1    000006B6 =        1718. bytes (REL,CON)
+_INITIALIZER                        0000AAE9    000006B6 =        1718. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -626,11 +627,11 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_GSFINAL                            0000B197    00000000 =           0. bytes (REL,CON)
+_GSFINAL                            0000B19F    00000000 =           0. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     0000B197  _g_LastAddr                        crt0
+     0000B19F  _g_LastAddr                        crt0
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 16.
 Hexadecimal  [32-Bits]
@@ -779,76 +780,76 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_PAGE0                              00000100    00000413 =        1043. bytes (REL,CON)
+_PAGE0                              00000100    00000419 =        1049. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
      00000100  _g_DataSprtLayer                   the_castel_p0
      00000278  _g_DataBackground_Patterns         the_castel_p0
-     000004F3  _g_DataBackground_Colors           the_castel_p0
+     000004F9  _g_DataBackground_Colors           the_castel_p0
 ASxxxx Linker V03.00 + NoICE + sdld,  page 21.
 
 Files Linked                              [ module(s) ]
 
-C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/crt0_rom48_isr.rel
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/crt0_rom48_isr.rel
                                           [ crt0 ]
-C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/the-castel.rel
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/the-castel.rel
                                           [ the_castel ]
-C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/tiles.rel
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/tiles.rel
                                           [ tiles ]
-C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/inventory.rel
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/inventory.rel
                                           [ inventory ]
-C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/control.rel
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/control.rel
                                           [ control ]
-C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/music.rel
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/music.rel
                                           [ music ]
-C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/level_defs.rel
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/level_defs.rel
                                           [ level_defs ]
-C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/the-castel_p0.rel
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/the-castel_p0.rel
                                           [ the_castel_p0 ]
 
 
 Libraries Linked                          [ object file ]
 
-C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
                                           [ pt3_player.rel ]
-C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
                                           [ game_pawn.rel ]
-C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
                                           [ vdp.rel ]
-C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
                                           [ ayfx_player.rel ]
-C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
                                           [ memory.rel ]
-C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
                                           [ input.rel ]
-C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
                                           [ game.rel ]
-C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\tools/sdcc/lib/z80/z80.lib
+C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\tools/sdcc/lib/z80/z80.lib
                                           [ mul.rel ]
-C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
                                           [ print.rel ]
-C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\tools/sdcc/lib/z80/z80.lib
+C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\tools/sdcc/lib/z80/z80.lib
                                           [ mulchar.rel ]
-C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
                                           [ string.rel ]
-C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\tools/sdcc/lib/z80/z80.lib
+C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\tools/sdcc/lib/z80/z80.lib
                                           [ _modslong.rel ]
-C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\tools/sdcc/lib/z80/z80.lib
+C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\tools/sdcc/lib/z80/z80.lib
                                           [ _modulong.rel ]
-C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
                                           [ pletter.rel ]
-C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\tools/sdcc/lib/z80/z80.lib
+C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\tools/sdcc/lib/z80/z80.lib
                                           [ _divslong.rel ]
-C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
                                           [ bios.rel ]
-C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\tools/sdcc/lib/z80/z80.lib
+C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\tools/sdcc/lib/z80/z80.lib
                                           [ _divulong.rel ]
-C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\tools/sdcc/lib/z80/z80.lib
+C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\tools/sdcc/lib/z80/z80.lib
                                           [ __sdcc_call_hl.rel ]
-C:\Users\87003101\msxgl-workspace\the-castel\MSXgl\tools/sdcc/lib/z80/z80.lib
+C:\Users\nicol\msxgl-workspace\the-castel\MSXgl\tools/sdcc/lib/z80/z80.lib
                                           [ __sdcc_call_iy.rel ]
-C:\Users\87003101\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
+C:\Users\nicol\msxgl-workspace\the-castel\the-castel/out/msxgl.lib
                                           [ system.rel ]
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 22.

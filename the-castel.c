@@ -823,7 +823,7 @@ bool isPassage(u8 x, u8 y)
  * @param u8 t Durata immunita
  * @return TRUE se siamo in pericolo
  */
-bool isDanger(u8 x, u8 y, u8 t)
+bool isDanger(u8 x, u8 y)
 {
 	switch (getTile(x, y))
 	{
@@ -1199,7 +1199,7 @@ void initCharacter(struct Character *ply, u8 id)
 	if (id == 0)
 	{
 		GamePawn_Initialize(pawn, g_PlayerSpriteLayers, numberof(g_PlayerSpriteLayers), 0, g_PlayerAnimActions);
-		GamePawn_SetPosition(pawn, 255 - 16 - 16, 128);
+		GamePawn_SetPosition(pawn, 223, 128);
 		GamePawn_InitializePhysics(pawn, physicsEventPlayer, physicsCollision, 16, 16);
 	}
 }
@@ -1461,8 +1461,8 @@ void genericControl()
 	}
 
 	// Controllo se il player è in una situazione di pericola
-	if (isDanger(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12, 1) ||
-		isDanger(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4, 1))
+	if (isDanger(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) ||
+		isDanger(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4))
 	{
 		// TODO: non faccio nulla!
 	}
