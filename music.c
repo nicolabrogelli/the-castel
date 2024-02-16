@@ -31,7 +31,7 @@ void ChannelSFX(u8 chan)
 
 /**
  * @brief Inizializzaione del Player PT3 e impostazione della tabella delle note
- * @parm void
+ * @param void
  * @return void
  */
 void inizializePT3()

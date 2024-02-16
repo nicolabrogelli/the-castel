@@ -1,0 +1,15 @@
+#define BLACK_LEVEL         0x10
+#define GREEN_LEVEL         0x20
+#define LIGHT_GREEN_LEVEL   0x30
+#define DARK_BLUE_LEVEL     0x40
+#define BLUE_LEVEL          0x50
+#define BROWN_LEVEL         0x60
+#define LIGHT_BLUE_LEVEL    0x70
+#define RED_LEVEL           0x80
+#define PINK_LEVEL          0x90
+#define DARK_YELLOW_LEVEL   0xA0
+#define LIGHT_YELLOW_LEVEL  0xB0
+#define DARK_GREEN_LEVEL    0xC0
+#define VIOLET_LEVEL        0xD0
+#define GREY_LEVEL          0xE0
+#define WHITE_LEVEL         0xF0

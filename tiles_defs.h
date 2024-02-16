@@ -1,5 +1,25 @@
 #pragma once
 
+// TILES TRASPARENTI
+#define TILE_0                0
+#define TILE_1                1
+#define TILE_2                2
+#define TILE_3                3
+#define TILE_4                4
+#define TILE_5                5
+#define TILE_6                6
+#define TILE_7                7
+
+#define TILE_56               56 
+#define TILE_57               57
+#define TILE_58               58
+#define TILE_59               59
+#define TILE_60               60
+#define TILE_61               61
+#define TILE_62               62
+#define TILE_63               63
+
+
 // TILES ROSSE
 #define TILE_LAVA            64
 #define TILE_MASK_DOOR1      65
@@ -12,6 +32,8 @@
 #define TILE_DOOR_ELEMENT_1  72  
 #define TILE_DOOR_ELEMENT_2  73
 #define TILE_DOOR3           74
+#define TILE_75              75
+#define TILE_76              76
 #define TILE_DOOR_NEXT       78
 #define TILE_HEART           79 
 
@@ -19,7 +41,7 @@
 #define TILE_WATER           80
 #define TILE_UP_DOOR         81
 #define TILE_DOWN_DOOR       82
-#define TILE_83              83
+#define TILE_TIME_UP         83
 #define TILE_84              84
 #define TILE_85              85
 #define TILE_86              86
@@ -51,10 +73,10 @@
 #define TILE_DANGE2         106
 #define TILE_DANGE3         107
 #define TILE_DANGE4         108
-#define TILE_109            109
-#define TILE_110            110
-#define TILE_111            111
-#define TILE_112            112
+#define TILE_CALENDESTICK_1 109
+#define TILE_CALENDESTICK_2 110
+#define TILE_CALENDESTICK_3 111
+#define TILE_CALENDESTICK_4 112
 #define TILE_113            113
 #define TILE_114            114
 #define TILE_115            115
@@ -74,8 +96,8 @@
 #define TILE_POS_131        131
 #define TILE_POS_PLATFORM_O 132
 #define TILE_POS_PLATFORM_V 133
-#define TILE_134            134
-#define TILE_135            135
+#define TILE_BACK_POS_PLYER 134
+#define TILE_BACK_POS_PLY_PLATFOTM  135
 #define TILE_136            136
 #define TILE_137            137
 #define TILE_138            138
@@ -103,7 +125,31 @@
 #define TILE_158            158
 #define TILE_159            159
 
+//
+#define TILE_160            160
+#define TILE_161            161
+#define TILE_162            162
+#define TILE_163            163
+#define TILE_164            164
+#define TILE_165            165
+#define TILE_166            166
+#define TILE_167            167
+
+#define TILE_168            168
+#define TILE_169            169
+#define TILE_170            170
+#define TILE_171            171
+#define TILE_172            172
+#define TILE_173            173
+#define TILE_174            174
+#define TILE_175            175
+
+
 // TILES BIANCHE
+#define TILE_176            176
+#define TILE_177            177
+#define TILE_178            178
+#define TILE_179            179
 #define TILE_180_NOT_CHANGE 180
 #define TILE_181_NOT_CHANGE 181
 #define TILE_182_NOT_CHANGE 182

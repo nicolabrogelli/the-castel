@@ -7,7 +7,7 @@
 #define BASE_X_LIFE            190
 #define OFFSET_X_LIFE            8 // Solo multipli di 8
 #define TILE_EMPTY 		  	     0
-#define TIME_TO_DEATH           40
+#define TIME_TO_DEATH           60
 
 #define MAX_ENEMY                3
 #define MAX_GHOST                3
@@ -16,6 +16,15 @@
 #define MAX_SLIDING_PLATFORM     3
 #define MAX_NUMBRER_SPRITE_HIDE 25
 #define FIRST_ID_SPRITE          6
+
+#define ADDRESS_SPIDER          192
+#define ADDRESS_SHELETOR        196
+#define ADDRESS_GHOST           200
+#define ADDRESS_BAT             204
+#define ADDRESS_PLATFORM        208
+#define ADDRESS_SNAKE           212
+#define ADDRESS_MAGICIAN        216
+#define ADDRESS_FIRE            220
 
 #define FIRST_ID_SKELETOR        6
 #define FIRST_ID_GHOST           9 //10
@@ -26,7 +35,7 @@
 
 #define MAX_LIVES                3
 #define IMMUNITY                 3
-#define LAST_LEVEL              19  // Ultimo livello di gioco
+#define LAST_LEVEL              26  // Ultimo livello di gioco
 #define START_GAME               0  // Livello di inizio gico
 #define GAME_OVER               LAST_LEVEL + 1  // Livello di game over
 #define OFFSET_TILE_COLLISION   50
@@ -100,7 +109,7 @@ void updateCharacter(struct Character *ply);
 void readInputControl();
 bool physicsCollisionEnemy(u8 x, u8 y);
 
-bool getMoney(u8 x, u8 y);
+bool getItem(u8 x, u8 y);
 void updateScore();
 void initLife();
 bool addLife();
@@ -119,7 +128,7 @@ void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape);
 void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 baseSprite, u8 enemyCount, char *type, u8 moveHV);
 void VDP_LoadPattern_GM1_Pletter(const u8 *src, u8 offset);
 u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, u8 idxSprite, u8 bo, u8 riga, u8 colonna, u8 levelIdx, c8 *Name, u8 movHV);
-bool isDanger(u8 x, u8 y, u8 t);
+bool isDanger(u8 x, u8 y);
 u8 isUnderDunger(u8 x, u8 y);
 void messageInGame(char *message);
 void VDP_ReplacementPartialArea(u8 riga);
@@ -149,7 +158,8 @@ extern unsigned char g_Level013[];
 extern unsigned char g_Level014[];
 extern unsigned char g_Level015[];
 extern unsigned char g_Level016[];
-extern unsigned char g_Level017[];
+//extern unsigned char g_Level017[];
+
 extern unsigned char g_Level018[];
 extern unsigned char g_Level019[];
 extern unsigned char g_Level020[];
@@ -164,5 +174,14 @@ extern unsigned char g_Level028[];
 extern unsigned char g_Level029[];
 extern unsigned char g_Level030[];
 
+
+
+// PAGE 0
+#if (TARGET_TYPE == TYPE_DOS)
+
+#else
 extern const unsigned char g_DataSprtLayer[];
 extern const unsigned char g_DataBackground_Patterns[];
+#endif
+
+
