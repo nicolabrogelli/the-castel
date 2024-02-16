@@ -97,7 +97,7 @@
 #define TILE_POS_PLATFORM_O 132
 #define TILE_POS_PLATFORM_V 133
 #define TILE_BACK_POS_PLYER 134
-#define TILE_135            135
+#define TILE_BACK_POS_PLY_PLATFOTM  135
 #define TILE_136            136
 #define TILE_137            137
 #define TILE_138            138

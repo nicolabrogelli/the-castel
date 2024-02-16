@@ -174,5 +174,14 @@ extern unsigned char g_Level028[];
 extern unsigned char g_Level029[];
 extern unsigned char g_Level030[];
 
+
+
+// PAGE 0
+#if (TARGET_TYPE == TYPE_DOS)
+
+#else
 extern const unsigned char g_DataSprtLayer[];
 extern const unsigned char g_DataBackground_Patterns[];
+#endif
+
+

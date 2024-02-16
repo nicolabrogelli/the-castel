@@ -33,12 +33,13 @@ void setTile(u8 x, u8 y, u8 tile)
  * @param u8 x Posizione x della tile
  * @param u8 y Posizione y della tile
  * @return tile
-*/
+
 u8 getTileByTileCoord(u8 x, u8 y)
 {
 	u8 tile = VDP_Peek_16K(g_ScreenLayoutLow + y * 32 + x);
 	return tile;
 } 
+*/
 
 /**
  * @brief Sostituisce la tile nella posizione indicata con una tile vuota con le coordinate della tile stessa.
