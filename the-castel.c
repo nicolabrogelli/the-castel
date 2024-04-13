@@ -1888,5 +1888,6 @@ void main()
 
 	// DEBUG_LOG("End debug session!");
 
+	// Bios_ClearHook(H_TIMI); // Needed only if you want to allow
 	Bios_Exit(0);
 }
