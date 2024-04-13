@@ -203,7 +203,7 @@
 
 // Game state setting
 #define GAME_USE_STATE				TRUE	// Add state machine features
-#define GAME_USE_VSYNC				TRUE	// Add vertical synchronization features
+#define GAME_USE_VSYNC				FALSE	// Add vertical synchronization features
 #define GAME_USE_LOOP				TRUE	// Add game main loop with call to v-synch and state
 
 //-----------------------------------------------------------------------------

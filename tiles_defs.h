@@ -77,9 +77,9 @@
 #define TILE_CALENDESTICK_2 110
 #define TILE_CALENDESTICK_3 111
 #define TILE_CALENDESTICK_4 112
-#define TILE_113            113
-#define TILE_114            114
-#define TILE_115            115
+#define TILE_GOLD_CUP       113
+#define TILE_SKULL          114
+#define TILE_BONE           115
 #define TILE_116            116
 #define TILE_117            117
 #define TILE_118            118
@@ -97,7 +97,7 @@
 #define TILE_POS_PLATFORM_O 132
 #define TILE_POS_PLATFORM_V 133
 #define TILE_BACK_POS_PLYER 134
-#define TILE_135            135
+#define TILE_BACK_POS_PLY_PLATFOTM  135
 #define TILE_136            136
 #define TILE_137            137
 #define TILE_138            138
