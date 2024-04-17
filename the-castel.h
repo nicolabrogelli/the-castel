@@ -2,12 +2,12 @@
 // DEFINES
 //=============================================================================
 
-#define COMPRESSO             1
+#define COMPRESSO                1
 
 #define BASE_X_LIFE            190
 #define OFFSET_X_LIFE            8 // Solo multipli di 8
 #define TILE_EMPTY 		  	     0
-#define TIME_TO_DEATH           60
+#define TIME_TO_DEATH           60 // Tempo iniziale 
 
 #define MAX_ENEMY                3
 #define MAX_GHOST                3

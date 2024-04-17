@@ -416,6 +416,9 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
 						VDP_HideSprite(enemy->SpriteId);
 						enemy->State = 0;
 						removeItemFromInventory(TILE_CRUCIFIX, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+
+						g_Player.Score += 500;
+						updateScore();
 					}
 					else
 					{
@@ -768,7 +771,17 @@ bool getItem(u8 x, u8 y)
 		}
 		// TODO: Aggiungere 10s al tempo totale, ma non superare i 59s
 		return TRUE;
+
+/*
+	case TILE_GOLD_CUP:	// Raccoglie la coppa 
+		setTile(x, y, EMPTY_ITEM);
+
+		g_Player.Score += 200;
+		updateScore();
+		return TRUE;
+*/		
 	}
+
 	return FALSE;
 }
 
@@ -1788,11 +1801,8 @@ void VDP_ReplacementPartialArea(u8 riga)
 	// viene copiata solamente la proma riga. Nelle iterazioni successive, il valore di riga incrementa e di conseguenza viene scartata la porzione del layout
 	// precedente (di dimesnione g_Levels[levelIdx].Width), e quindi viene copiata la parte che ci interessa. Tutto questo fino a che non si è completata
 	// la copia.
-	// for (u8 riga = 22; riga < g_CacheLevel[0].Height; ++riga)
-	//{
 	VDP_WriteVRAM_16K(g_CacheLevel[0].Layout + g_CacheLevel[0].Width * riga,
 					  g_ScreenLayoutLow + (32 * (riga + g_CacheLevel[0].Y)) + (g_CacheLevel[0].X), g_CacheLevel[0].Width);
-	//}
 }
 
 //=============================================================================

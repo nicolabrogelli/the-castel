@@ -77,9 +77,9 @@
 #define TILE_CALENDESTICK_2 110
 #define TILE_CALENDESTICK_3 111
 #define TILE_CALENDESTICK_4 112
-#define TILE_113            113
-#define TILE_114            114
-#define TILE_115            115
+#define TILE_GOLD_CUP       113
+#define TILE_SKULL          114
+#define TILE_BONE           115
 #define TILE_116            116
 #define TILE_117            117
 #define TILE_118            118

@@ -49,8 +49,6 @@ struct LevelDefinition
 	u8 *Layout;				/** Layout della stanza */
 	const c8 *Name;			/** Nome della stanza */
 	DoorLevel DoorLevel;
-// 	u8 NextLvlIdx;			/** Livello successivo */
-//	u8 PrevLvIdx;			/** Livello precedente */
 	EnemyType MyEnemyType;	/** Rappresenta il numero di nemici per livello */
 	ObjectItem MyItems[10]; /** Rappresenta gli oggetti utilizzati nel livello */
 	u8 ColorLevel;			/** Colore delle tiles */
