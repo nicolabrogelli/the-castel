@@ -134,8 +134,12 @@ void messageInGame(char *message);
 void VDP_ReplacementPartialArea(u8 riga);
 
 void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask);
-void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 enemyNumber);
+//void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 enemyNumber);
 
+void adjustXYEnemy(struct CharacterEnemy *genericEnemy, u8 idFirstSprite, u8 nEnemy);
+void takeActionWithCheck(u8 x, u8 y, u8 tile, u8 checkTile, u8 newTile);
+
+bool isOnPlatform(u8 *X, u8 *Y, u8 slideCount, struct CharacterEnemy *platform);
 
 
 
@@ -173,15 +177,3 @@ extern unsigned char g_Level027[];
 extern unsigned char g_Level028[];
 extern unsigned char g_Level029[];
 extern unsigned char g_Level030[];
-
-
-
-// PAGE 0
-#if (TARGET_TYPE == TYPE_DOS)
-
-#else
-extern const unsigned char g_DataSprtLayer[];
-extern const unsigned char g_DataBackground_Patterns[];
-#endif
-
-

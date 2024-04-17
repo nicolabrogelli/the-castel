@@ -24,10 +24,8 @@
 #include "control.h"
 #include "music.h"
 #include "level_defs.h"
-
-#if (TARGET_TYPE == TYPE_DOS)
-#include "the-castel_p0.c"
-#endif
+#include "data/sprites.h"
+#include "data/tiles.h"
 
 // Gameplay character stricture
 struct Character
@@ -52,7 +50,7 @@ struct CharacterEnemy
 	int Direction;		 /** Direzione di spostamento 1 = destra, -1 = sinistra */
 	const c8 *TypeEnemy; /** Descrizione del tipo di nemico */
 	u8 SpriteId;		 /** Numero dello sprite del nemico */
-	u8 MoveHV;			 /**	Definisce il tipo di movimento  0 = orizzontale, 1 = verticale */
+	u8 MoveHV;			 /** Definisce il tipo di movimento  0 = orizzontale, 1 = verticale */
 };
 
 unsigned char g_LevelUncompress[768];
@@ -173,9 +171,13 @@ u8 g_Frame = 0;
 u8 g_DelayRemoveLife = 0;
 bool IsUnderWater = FALSE;
 // bool g_IsDanger = FALSE;
-// u8 g_CatchEnemy = 0;
-// u8 g_DelayCatchEnemy = 0;
-// bool isCatch = FALSE;
+
+/*
+ u8 g_CatchEnemy = 0;
+ u8 g_DelayCatchEnemy = 0;
+ bool isCatch = FALSE;
+*/
+
 bool g_RefreshInventary = FALSE;
 u8 g_TimetoDeath = TIME_TO_DEATH;
 u8 g_LevelPrev = 0; // 0 = livello successivo da porta , 1 = livello precedente da porta, 2 = licello scucceivo da scensore, 3 = livello precedente da ascensore
@@ -481,37 +483,15 @@ void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 enemyNumber)
 
 		if (dy == 0 && (((dx * dx) > MIN_DISTANCE_MAGNENT) && ((dx * dx) < MAX_DISTANCE_MAGNENT)))
 		{
-			if (isCatch)
-			{
-				if (g_CatchEnemy - g_DelayCatchEnemy > DELAY_CATCH_ENEMY)
-				{
-					if (pawn->PositionX > enemy->X)
-						enemy->Direction = 1;
-					else
-						enemy->Direction = -1;
-
-					isCatch = FALSE;
-				}
-				else
-				{
-					g_DelayCatchEnemy--;
-				}
-			}
+			if (pawn->PositionX > enemy->X)
+				enemy->Direction = 1;
 			else
-			{
-				isCatch = TRUE;
-			}
+				enemy->Direction = -1;
 
 			break;
 		}
-		else
-		{
-			g_DelayCatchEnemy = g_CatchEnemy;
-			isCatch = FALSE;
-		}
 	}
-}
-*/
+}*/
 
 /**
  * @brief Controlla che il player non sia sommerso dall'acqua
@@ -537,8 +517,9 @@ void setColorTiles()
 	VDP_FillVRAM_16K(0xE0, g_ScreenColorLow + 18, 2); // GRIGIO
 }
 
-void foo(u8 x, u8 y, u8 tile, u8 visibility);
+void ItemsTakenForLevel(u8 x, u8 y, u8 tile, u8 visibility);
 u8 g_CountItem = 0;
+
 /**
  * @brief aggiunge un oggetto all'array degli oggetti presi.
  * C'è da capire su che base incrementare il contatore degli oggetti.
@@ -549,7 +530,7 @@ u8 g_CountItem = 0;
  * @param u8 visibile Criterio di visualizzazione.
  * @return void
  */
-void foo(u8 x, u8 y, u8 tile, u8 visible)
+void ItemsTakenForLevel(u8 x, u8 y, u8 tile, u8 visible)
 {
 	g_Levels[g_CurrRoomIdx].MyItems[g_CountItem].x = x;
 	g_Levels[g_CurrRoomIdx].MyItems[g_CountItem].y = y;
@@ -576,7 +557,7 @@ bool interact(u8 x, u8 y)
 	case TILE_HEART:
 		if (addLife())
 		{
-			foo(x, y, TILE_MASK_HEART, 1);
+			ItemsTakenForLevel(x, y, TILE_MASK_HEART, 1);
 			g_CountItem++;
 
 			setTile(x, y, EMPTY_ITEM);
@@ -665,27 +646,29 @@ bool interact(u8 x, u8 y)
 	case TILE_AMPHORA:
 		// Modifico al volo il livello di gioco, cosi non sono costretto
 		// a creare una cache dei livelli.
-		if (!hasItemInInventory(TILE_AMPHORA))
-		{
-			replaceAndRemoveItem(x, y, tile, TILE_MASK_AMPHORA);
-			PlayBankSFX(5, 0);
-		}
+		takeActionWithCheck(x, y, tile, TILE_AMPHORA, TILE_MASK_AMPHORA);
 
 		return TRUE;
 	case TILE_CRUCIFIX:
 		// Modifico al volo il livello di gioco, cosi non sono costretto
 		// a creare una cache dei livelli.
-		if (!hasItemInInventory(TILE_CRUCIFIX))
-		{
-			replaceAndRemoveItem(x, y, tile, TILE_EMPTY);
-			PlayBankSFX(5, 0);
-		}
+		takeActionWithCheck(x, y, tile, TILE_CRUCIFIX, TILE_EMPTY);
+
 		return TRUE;
 	}
 
 	updateScore();
 
 	return FALSE;
+}
+
+void takeActionWithCheck(u8 x, u8 y, u8 tile, u8 checkTile, u8 newTile)
+{
+	if (!hasItemInInventory(checkTile))
+	{
+		replaceAndRemoveItem(x, y, tile, newTile);
+		PlayBankSFX(5, 0);
+	}
 }
 
 /**
@@ -714,7 +697,7 @@ void messageInGame(char *message)
  */
 void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask)
 {
-	foo(x, y, tileMask, 1);
+	ItemsTakenForLevel(x, y, tileMask, 1);
 	g_CountItem++;
 
 	setTile(x, y, EMPTY_ITEM);
@@ -732,7 +715,7 @@ void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask)
 void changeLevel(u8 x, u8 y, u8 key, u8 door)
 {
 	removeItemFromInventory(key, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
-	foo(x, y, door, 1);
+	ItemsTakenForLevel(x, y, door, 1);
 	g_CountItem++;
 
 	g_LevelPrev = 0;
@@ -750,8 +733,9 @@ bool getItem(u8 x, u8 y)
 	switch (getTile(x, y))
 	{
 	case TILE_MONEY:
+	case TILE_GOLD_CUP:
 		setTile(x, y, EMPTY_ITEM);
-		foo(x, y, TILE_MASK_MONEY, 1); // Per il momento non posso spostare questa funzione, in quanto dovrei duplicare la chiamata the tile
+		ItemsTakenForLevel(x, y, TILE_MASK_MONEY, 1); // Per il momento non posso spostare questa funzione, in quanto dovrei duplicare la chiamata the tile
 
 		return TRUE;
 	case TILE_TIME_UP:
@@ -771,15 +755,6 @@ bool getItem(u8 x, u8 y)
 		}
 		// TODO: Aggiungere 10s al tempo totale, ma non superare i 59s
 		return TRUE;
-
-/*
-	case TILE_GOLD_CUP:	// Raccoglie la coppa 
-		setTile(x, y, EMPTY_ITEM);
-
-		g_Player.Score += 200;
-		updateScore();
-		return TRUE;
-*/		
 	}
 
 	return FALSE;
@@ -819,10 +794,12 @@ bool isDanger(u8 x, u8 y)
 {
 	switch (getTile(x, y))
 	{
-	case TILE_DANGE1:
-	case TILE_DANGE2:
-	case TILE_DANGE3:
-	case TILE_DANGE4:
+	case TILE_SKULL:
+	case TILE_BONE:
+	case TILE_DANGER1:
+	case TILE_DANGER2:
+	case TILE_DANGER3:
+	case TILE_DANGER4:
 	case TILE_LAVA:
 		if (removeLife() == TRUE)
 		{
@@ -1195,42 +1172,19 @@ void initCharacter(struct Character *ply, u8 id)
 /**
  * @brief Verifica che il player sia posizionato sulla piattaforma
  */
-bool isOnPlatformH(u8 *X, u8 *Y)
+bool isOnPlatform(u8 *X, u8 *Y, u8 slideCount, struct CharacterEnemy *platform)
 {
-	for (u8 i = 0; i < g_SlideCountH; i++)
+	for (u8 i = 0; i < slideCount; i++)
 	{
-		if ((*X < g_platformH[i].X - 16) || (*X > g_platformH[i].X + 16))
+		if ((*X < platform[i].X - 10) || (*X > platform[i].X + 10))
 		{
 			// TODO: Non facio nulla
 		}
 		else
 		{
-			if ((*Y + 17 > g_platformH[i].Y) && (*Y + 17 < g_platformH[i].Y + 8))
+			if ((*Y + 17 > platform[i].Y) && (*Y + 17 < platform[i].Y + 8))
 			{
-				*Y = g_platformH[i].Y - 16;
-				return TRUE;
-			}
-		}
-	}
-	return FALSE;
-}
-
-/**
- * @brief Verifica che il player sia posizionato sulla piattaforma
- */
-bool isOnPlatformV(u8 *X, u8 *Y)
-{
-	for (u8 i = 0; i < g_SlideCountV; i++)
-	{
-		if ((*X < g_platformV[i].X - 16) || (*X > g_platformV[i].X + 16))
-		{
-			// TODO: Non facio nulla
-		}
-		else
-		{
-			if ((*Y + 17 > g_platformV[i].Y) && (*Y + 17 < g_platformV[i].Y + 8))
-			{
-				*Y = g_platformV[i].Y - 16;
+				*Y = platform[i].Y - 16;
 				return TRUE;
 			}
 		}
@@ -1295,7 +1249,8 @@ void updateCharacter(struct Character *ply)
 	}
 	else if (ply->bInAir)
 	{
-		if (((g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH) || (g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV)) > 0 && (isOnPlatformH(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY) || isOnPlatformV(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY)))
+		// if (((g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH) || (g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV)) > 0 && (isOnPlatformH(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY) || isOnPlatformV(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY)))
+		if (((g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH) || (g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV)) > 0 && (isOnPlatform(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY, g_SlideCountV, &g_platformV[0]) || isOnPlatform(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY, g_SlideCountH, &g_platformH[0])))
 		{
 			act = ACTION_IDLE;
 			ply->DY += 2;
@@ -1336,54 +1291,44 @@ void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 
 		struct CharacterEnemy *enemy = &genericEnemy[nEnemy];
 		if (enemy->State == 1)
 		{
-			if (!physicsCollisionEnemy(enemy->X + 7, enemy->Y) == 1) // 7
-			{
-				if (enemy->Direction < 0)
-				{
-					if (enemy->MoveHV == 0)
-						enemy->X--;
-					else
-						enemy->Y--;
-				}
-				else
-				{
-					if (enemy->MoveHV == 0)
-						enemy->X++;
-					else
-						enemy->Y++;
-				}
-			}
-			else
-			{
+			if (physicsCollisionEnemy(enemy->X + 7, enemy->Y) == 1)
 				enemy->Direction *= -1;
-				if (enemy->Direction < 0)
-				{
-					if (enemy->MoveHV == 0)
-						enemy->X--;
-					else
-						enemy->Y--;
-				}
-				else
-				{
-					if (enemy->MoveHV == 0)
-						enemy->X++;
-					else
-						enemy->Y++;
-				}
-			}
-
-			// Funzione: VDP_SetSpritePosition
-			// Aggiorna la posizione dello sprite. [MSX1/2/2+/TR]
-			//
-			// Parametri:
-			//   index - Indice dello sprite nella tabella degli attributi.
-			//   x     - Coordinata X iniziale dello schermo.
-			//   y     - Coordinata Y iniziale dello schermo.
-			VDP_SetSpritePosition(idFirstSprite + nEnemy, enemy->X, enemy->Y);
+			
+			adjustXYEnemy(&genericEnemy[nEnemy], idFirstSprite, nEnemy);
 		}
 
 		enemy = null;
 	}
+}
+
+/**
+ *
+ */
+void adjustXYEnemy(struct CharacterEnemy *genericEnemy, u8 idFirstSprite, u8 nEnemy)
+{
+	if (genericEnemy->Direction < 0)
+	{
+		if (genericEnemy->MoveHV == 0)
+			genericEnemy->X--;
+		else
+			genericEnemy->Y--;
+	}
+	else
+	{
+		if (genericEnemy->MoveHV == 0)
+			genericEnemy->X++;
+		else
+			genericEnemy->Y++;
+	}
+
+	// Funzione: VDP_SetSpritePosition
+	// Aggiorna la posizione dello sprite. [MSX1/2/2+/TR]
+	//
+	// Parametri:
+	//   index - Indice dello sprite nella tabella degli attributi.
+	//   x     - Coordinata X iniziale dello schermo.
+	//   y     - Coordinata Y iniziale dello schermo.
+	VDP_SetSpritePosition(idFirstSprite + nEnemy, genericEnemy->X, genericEnemy->Y);
 }
 
 /**
@@ -1639,7 +1584,7 @@ bool State_Game()
 	{
 		g_DangerCounter++;
 
-		// pursuitCheck(&g_Enemy[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber);
+		//pursuitCheck(&g_Enemy[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber);
 
 		// Funzione: updateSkeleton
 		// Aggiorna il rendering dei nemici.
@@ -1859,14 +1804,8 @@ void main()
 	// DEBUG_INIT();
 	// DEBUG_LOG("Start debug session!");
 
-#if (TARGET_TYPE == TYPE_DOS)
 	VDP_EnableVBlank(TRUE);
 	Bios_SetHookCallback(H_TIMI, VSyncCallback /*VDP_InterruptHandler*/);
-	// 	VDP_SetColor(COLOR_LIGHT_GREEN); //
-#else
-	Game_SetVSyncCallback(VSyncCallback);
-	// VDP_SetColor(COLOR_LIGHT_YELLOW);
-#endif
 
 	// Funzione: Game_SetState
 	// Impostare lo stato successivo (la modifica sarà effettiva al prossimo aggiornamento dello stato)

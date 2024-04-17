@@ -45,7 +45,7 @@ ProjModules = [ ProjName, "tiles", "inventory", "control", "music", "level_defs"
 // ProjSegments = "";
 
 //-- List of library modules to build (array)
-LibModules = [ "compress/pletter", "system", "bios",  "vdp", "print", "input", "memory", "game", "game_pawn", "string", "game_pawn",  "pt3/pt3_player", "ayfx/ayfx_player"];
+LibModules = [ "compress/pletter", "system", "bios",  "vdp", "print", "input", "memory", "game", "game_pawn", "string",  "pt3/pt3_player", "ayfx/ayfx_player"];
 
 //-- Additional sources to be compiled and linked with the project (array)
 // AddSources = [];
