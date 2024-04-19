@@ -142,7 +142,7 @@ void takeActionWithCheck(u8 x, u8 y, u8 tile, u8 checkTile, u8 newTile);
 bool isOnPlatform(u8 *X, u8 *Y, u8 slideCount, struct CharacterEnemy *platform);
 
 
-
+int my_strcmp(const c8 *a, const c8 *b);
 //=============================================================================
 // MEMORY DATA EXTERN
 //=============================================================================

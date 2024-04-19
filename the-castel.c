@@ -399,50 +399,52 @@ bool physicsCollisionEnemy(u8 x, u8 y)
  */
 void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct CharacterEnemy *genericEnemy, u8 enemyNumber)
 {
-	if (g_ReverseCount > 0)
-		g_ReverseCount--;
-	else
+	// if (g_ReverseCount > 0)
+	//	g_ReverseCount--;
+	// else
+	//{
+	Game_Pawn *pawn = &ply->Pawn;
+
+	for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
 	{
-		Game_Pawn *pawn = &ply->Pawn;
-
-		for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
+		struct CharacterEnemy *enemy = &genericEnemy[nEnemy];
+		if (enemy->State == 1)
 		{
-			struct CharacterEnemy *enemy = &genericEnemy[nEnemy];
-			if (enemy->State == 1)
+			if (collisionCheck(enemy->X - pawn->PositionX, enemy->Y - pawn->PositionY))
 			{
-				if (collisionCheck(enemy->X - pawn->PositionX, enemy->Y - pawn->PositionY))
+				if (hasItemInInventory(TILE_CRUCIFIX))
 				{
-					if (hasItemInInventory(TILE_CRUCIFIX))
-					{
-						// TODO: elimina il nemico
-						VDP_HideSprite(enemy->SpriteId);
-						enemy->State = 0;
-						removeItemFromInventory(TILE_CRUCIFIX, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+					// TODO: elimina il nemico
+					VDP_HideSprite(enemy->SpriteId);
+					enemy->State = 0;
+					removeItemFromInventory(TILE_CRUCIFIX, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
 
-						g_Player.Score += 500;
-						updateScore();
+					g_Player.Score += 500;
+					updateScore();
+				}
+				else
+				{
+					// g_ReverseCount = 60;
+					if (removeLife() == TRUE)
+					{
+						displayLife();
+						PlayBankSFX(9, 0);
+						// TODO: Messo per verificare l'effettivo funzionamento della gestione delle vite 2024.04.18
+						drawLevel(g_CurrRoomIdx);
 					}
 					else
 					{
-						g_ReverseCount = 60;
-						if (removeLife() == TRUE)
+						if (!hasLives())
 						{
-							displayLife();
-							PlayBankSFX(9, 0);
-						}
-						else
-						{
-							if (!hasLives())
-							{
-								stopMusicPlayback();
-								Game_SetState(State_GameOver);
-							}
+							stopMusicPlayback();
+							Game_SetState(State_GameOver);
 						}
 					}
 				}
 			}
 		}
 	}
+	//}
 }
 
 /**
@@ -470,28 +472,23 @@ bool collisionCheck(i8 dx, i8 dy)
  * @param struct CharacterEnemy *genericEnemy Puntatore all'array dei nemici
  * @param u8 enemyNumber Numero dei nemici nel livello
  * @return TRUE se il nemico può ineguirti
-
-void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 enemyNumber)
+ */
+void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 nEnemy)
 {
 	Game_Pawn *pawn = &g_Player.Pawn;
 
-	for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
+	struct CharacterEnemy *enemy = &genericEnemy[nEnemy];
+	i8 dx = enemy->X - pawn->PositionX;
+	i8 dy = enemy->Y - pawn->PositionY;
+
+	if (dy == 0 && (((dx * dx) > MIN_DISTANCE_MAGNENT) && ((dx * dx) < MAX_DISTANCE_MAGNENT)))
 	{
-		struct CharacterEnemy *enemy = &genericEnemy[nEnemy];
-		i8 dx = enemy->X - pawn->PositionX;
-		i8 dy = enemy->Y - pawn->PositionY;
-
-		if (dy == 0 && (((dx * dx) > MIN_DISTANCE_MAGNENT) && ((dx * dx) < MAX_DISTANCE_MAGNENT)))
-		{
-			if (pawn->PositionX > enemy->X)
-				enemy->Direction = 1;
-			else
-				enemy->Direction = -1;
-
-			break;
-		}
+		if (pawn->PositionX > enemy->X)
+			enemy->Direction = 1;
+		else
+			enemy->Direction = -1;
 	}
-}*/
+}
 
 /**
  * @brief Controlla che il player non sia sommerso dall'acqua
@@ -1292,13 +1289,34 @@ void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 
 		if (enemy->State == 1)
 		{
 			if (physicsCollisionEnemy(enemy->X + 7, enemy->Y) == 1)
+			{
 				enemy->Direction *= -1;
-			
+			}
+			else
+			{
+				// TODO: attenzione potremmo avere un comportamento inaspettato degli ascensoir
+				//	     devo capire compe filtrare
+				if (my_strcmp(genericEnemy[nEnemy].TypeEnemy, "Scheletor") == 0)
+					pursuitCheck(&genericEnemy[0], nEnemy);
+			}
+
 			adjustXYEnemy(&genericEnemy[nEnemy], idFirstSprite, nEnemy);
 		}
 
 		enemy = null;
 	}
+}
+
+
+
+int my_strcmp(const c8 *a, const c8 *b)
+{
+	while (*a && *a == *b)
+	{
+		++a;
+		++b;
+	}
+	return (int)(unsigned char)(*a) - (int)(unsigned char)(*b);
 }
 
 /**
@@ -1584,8 +1602,6 @@ bool State_Game()
 	{
 		g_DangerCounter++;
 
-		//pursuitCheck(&g_Enemy[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber);
-
 		// Funzione: updateSkeleton
 		// Aggiorna il rendering dei nemici.
 		updateGenericEnemy(&g_Enemy[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber, FIRST_ID_SKELETOR);
@@ -1597,8 +1613,6 @@ bool State_Game()
 		// Parametri:
 		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 		physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Enemy[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber);
-
-		// pursuitCheck(&g_Ghost[0], g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber);
 
 		// Funzione: updateGhost
 		// Aggiorna il rendering dei nemici.
@@ -1612,8 +1626,6 @@ bool State_Game()
 		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 		physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Ghost[0], g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber);
 
-		// pursuitCheck(&g_Spider[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber);
-
 		// Funzione: updateGhost
 		// Aggiorna il rendering dei nemici.
 		updateGenericEnemy(&g_Spider[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber, FIRST_ID_SPIDER);
@@ -1625,8 +1637,6 @@ bool State_Game()
 		// Parametri:
 		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 		physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Spider[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber);
-
-		// pursuitCheck(&g_Bat[0], g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber);
 
 		// Funzione: updateGhost
 		// Aggiorna il rendering dei nemici.
