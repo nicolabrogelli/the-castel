@@ -69,10 +69,10 @@
 
 // TILES BIANCHE
 #define TILE_CRUCIFIX       104
-#define TILE_DANGE1         105
-#define TILE_DANGE2         106
-#define TILE_DANGE3         107
-#define TILE_DANGE4         108
+#define TILE_DANGER1        105
+#define TILE_DANGER2        106
+#define TILE_DANGER3        107
+#define TILE_DANGER4        108
 #define TILE_CALENDESTICK_1 109
 #define TILE_CALENDESTICK_2 110
 #define TILE_CALENDESTICK_3 111
