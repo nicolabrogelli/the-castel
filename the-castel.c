@@ -281,7 +281,7 @@ bool addLife()
  */
 bool removeLife()
 {
-	// Controlla se nell'inventario è presente la pozione per l'immunità
+	/* Controlla se nell'inventario è presente la pozione per l'immunità
 	if (hasItemInInventory(TILE_AMPHORA))
 	{
 		if (g_ImmunityCount < IMMUNITY)
@@ -293,7 +293,7 @@ bool removeLife()
 			removeItemFromInventory(TILE_AMPHORA, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
 		}
 		return TRUE;
-	}
+	}*/
 
 	for (i8 i = MAX_LIVES - 1; i >= 0; i--)
 	{
@@ -424,20 +424,35 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
 				}
 				else
 				{
-					// g_ReverseCount = 60;
-					if (removeLife() == TRUE)
+					if (hasItemInInventory(TILE_AMPHORA))
 					{
-						displayLife();
-						PlayBankSFX(9, 0);
-						// TODO: Messo per verificare l'effettivo funzionamento della gestione delle vite 2024.04.18
-						drawLevel(g_CurrRoomIdx);
+						if (g_ImmunityCount < IMMUNITY)
+						{
+							g_ImmunityCount++;
+						}
+						else
+						{
+							removeItemFromInventory(TILE_AMPHORA, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+							g_ImmunityCount = 0;
+						}
 					}
 					else
 					{
-						if (!hasLives())
+						// g_ReverseCount = 60;
+						if (removeLife() == TRUE)
 						{
-							stopMusicPlayback();
-							Game_SetState(State_GameOver);
+							displayLife();
+							PlayBankSFX(9, 0);
+							// TODO: Messo per verificare l'effettivo funzionamento della gestione delle vite 2024.04.18
+							drawLevel(g_CurrRoomIdx);
+						}
+						else
+						{
+							if (!hasLives())
+							{
+								stopMusicPlayback();
+								Game_SetState(State_GameOver);
+							}
 						}
 					}
 				}
@@ -1306,8 +1321,6 @@ void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 
 		enemy = null;
 	}
 }
-
-
 
 int my_strcmp(const c8 *a, const c8 *b)
 {
