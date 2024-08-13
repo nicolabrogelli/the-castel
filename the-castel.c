@@ -412,6 +412,7 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
 		{
 			if (collisionCheck(enemy->X - pawn->PositionX, enemy->Y - pawn->PositionY))
 			{
+				/*
 				if (hasItemInInventory(TILE_CRUCIFIX))
 				{
 					// TODO: elimina il nemico
@@ -422,8 +423,22 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
 					g_Player.Score += 500;
 					updateScore();
 				}
+				*/
+				if (hasItemInInventory(TILE_AMPHORA))
+				{
+					if (g_ImmunityCount < IMMUNITY)
+					{
+						g_ImmunityCount++;
+					}
+					else
+					{
+						removeItemFromInventory(TILE_AMPHORA, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+						g_ImmunityCount = 0;
+					}
+				}
 				else
 				{
+					/*
 					if (hasItemInInventory(TILE_AMPHORA))
 					{
 						if (g_ImmunityCount < IMMUNITY)
@@ -435,6 +450,17 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
 							removeItemFromInventory(TILE_AMPHORA, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
 							g_ImmunityCount = 0;
 						}
+					}
+					*/
+					if (hasItemInInventory(TILE_CRUCIFIX))
+					{
+						// TODO: elimina il nemico
+						VDP_HideSprite(enemy->SpriteId);
+						enemy->State = 0;
+						removeItemFromInventory(TILE_CRUCIFIX, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+
+						g_Player.Score += 500;
+						updateScore();
 					}
 					else
 					{
@@ -1309,10 +1335,9 @@ void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 
 			}
 			else
 			{
-				// TODO: attenzione potremmo avere un comportamento inaspettato degli ascensoir
-				//	     devo capire compe filtrare
-				if (my_strcmp(genericEnemy[nEnemy].TypeEnemy, "Scheletor") == 0)
-					pursuitCheck(&genericEnemy[0], nEnemy);
+				// TODO: Línseguimento e'dedicato solo agli scheletri
+				//if (my_strcmp(genericEnemy[nEnemy].TypeEnemy, "Scheletor") == 0)
+				//	pursuitCheck(&genericEnemy[0], nEnemy);
 			}
 
 			adjustXYEnemy(&genericEnemy[nEnemy], idFirstSprite, nEnemy);

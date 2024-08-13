@@ -1,0 +1,536 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 4.2.0 #13081 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module game
+                                      6 	.optsdcc -mz80
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _VDP_SetMode
+                                     12 	.globl _g_GamePrevState
+                                     13 	.globl _g_GameState
+                                     14 	.globl _g_GameExit
+                                     15 	.globl _g_SLTSL
+                                     16 	.globl _g_GRPACY
+                                     17 	.globl _g_GRPACX
+                                     18 	.globl _g_LOGOPR
+                                     19 	.globl _g_CMASK
+                                     20 	.globl _g_CLOC
+                                     21 	.globl _g_FNKSTR
+                                     22 	.globl _g_ATRBYT
+                                     23 	.globl _g_BDRCLR
+                                     24 	.globl _g_BAKCLR
+                                     25 	.globl _g_FORCLR
+                                     26 	.globl _g_CSRX
+                                     27 	.globl _g_CSRY
+                                     28 	.globl _g_CLIKSW
+                                     29 	.globl _g_MLTPAT
+                                     30 	.globl _g_MLTATR
+                                     31 	.globl _g_MLTCGP
+                                     32 	.globl _g_MLTCOL
+                                     33 	.globl _g_MLTNAM
+                                     34 	.globl _g_GRPPAT
+                                     35 	.globl _g_GRPATR
+                                     36 	.globl _g_GRPCGP
+                                     37 	.globl _g_GRPCOL
+                                     38 	.globl _g_GRPNAM
+                                     39 	.globl _g_T32PAT
+                                     40 	.globl _g_T32ATR
+                                     41 	.globl _g_T32CGP
+                                     42 	.globl _g_T32COL
+                                     43 	.globl _g_T32NAM
+                                     44 	.globl _g_TXTPAT
+                                     45 	.globl _g_TXTATR
+                                     46 	.globl _g_TXTCGP
+                                     47 	.globl _g_TXTCOL
+                                     48 	.globl _g_TXTNAM
+                                     49 	.globl _g_CLMLST
+                                     50 	.globl _g_CRTCNT
+                                     51 	.globl _g_LINLEN
+                                     52 	.globl _g_LINL32
+                                     53 	.globl _g_LINL40
+                                     54 	.globl _g_SVFFFD
+                                     55 	.globl _g_RG27SAV
+                                     56 	.globl _g_RG26SAV
+                                     57 	.globl _g_RG25SAV
+                                     58 	.globl _g_SVFFF8
+                                     59 	.globl _g_MINROM
+                                     60 	.globl _g_RG23SAV
+                                     61 	.globl _g_RG22SAV
+                                     62 	.globl _g_RG21SAV
+                                     63 	.globl _g_RG20SAV
+                                     64 	.globl _g_RG19SAV
+                                     65 	.globl _g_RG18SAV
+                                     66 	.globl _g_RG17SAV
+                                     67 	.globl _g_RG16SAV
+                                     68 	.globl _g_RG15SAV
+                                     69 	.globl _g_RG14SAV
+                                     70 	.globl _g_RG13SAV
+                                     71 	.globl _g_RG12SAV
+                                     72 	.globl _g_RG11SAV
+                                     73 	.globl _g_RG10SAV
+                                     74 	.globl _g_RG09SAV
+                                     75 	.globl _g_RG08SAV
+                                     76 	.globl _g_PROCNM
+                                     77 	.globl _g_SLTWRK
+                                     78 	.globl _g_SLTATR
+                                     79 	.globl _g_SLTTBL
+                                     80 	.globl _g_EXPTBL
+                                     81 	.globl _g_MNROM
+                                     82 	.globl _g_DRWANG
+                                     83 	.globl _g_DRWSCL
+                                     84 	.globl _g_DRWFLG
+                                     85 	.globl _g_GYPOS
+                                     86 	.globl _g_GXPOS
+                                     87 	.globl _g_BRDATR
+                                     88 	.globl _g_CASPRV
+                                     89 	.globl _g_OLDSCR
+                                     90 	.globl _g_SCRMOD
+                                     91 	.globl _g_FLBMEM
+                                     92 	.globl _g_KANAMD
+                                     93 	.globl _g_KANAST
+                                     94 	.globl _g_CAPST
+                                     95 	.globl _g_CSTYLE
+                                     96 	.globl _g_CSRSW
+                                     97 	.globl _g_INSFLG
+                                     98 	.globl _g_ESCCNT
+                                     99 	.globl _g_GRPHED
+                                    100 	.globl _g_WINWID
+                                    101 	.globl _g_LOWLIM
+                                    102 	.globl _g_INTCNT
+                                    103 	.globl _g_INTVAL
+                                    104 	.globl _g_JIFFY
+                                    105 	.globl _g_PADX
+                                    106 	.globl _g_PADY
+                                    107 	.globl _g_INTFLG
+                                    108 	.globl _g_RTYCNT
+                                    109 	.globl _g_TRPTBL
+                                    110 	.globl _g_HIMEM
+                                    111 	.globl _g_BOTTOM
+                                    112 	.globl _g_PATWRK
+                                    113 	.globl _g_LINWRK
+                                    114 	.globl _g_KEYBUF
+                                    115 	.globl _g_NEWKEY
+                                    116 	.globl _g_OLDKEY
+                                    117 	.globl _g_CLIKFL
+                                    118 	.globl _g_ONGSBF
+                                    119 	.globl _g_FNKFLG
+                                    120 	.globl _g_FNKSWI
+                                    121 	.globl _g_CODSAV
+                                    122 	.globl _g_FSTPOS
+                                    123 	.globl _g_LINTTB
+                                    124 	.globl _g_BASROM
+                                    125 	.globl _g_ENSTOP
+                                    126 	.globl _g_VCBC
+                                    127 	.globl _g_VCBB
+                                    128 	.globl _g_VCBA
+                                    129 	.globl _g_PLYCNT
+                                    130 	.globl _g_MUSICF
+                                    131 	.globl _g_QUEUEN
+                                    132 	.globl _g_MCLPTR
+                                    133 	.globl _g_MCLLEN
+                                    134 	.globl _g_SAVVOL
+                                    135 	.globl _g_VOICEN
+                                    136 	.globl _g_SAVSP
+                                    137 	.globl _g_PRSCNT
+                                    138 	.globl _g_LSTMOD
+                                    139 	.globl _g_LSTCOM
+                                    140 	.globl _g_COMMSK
+                                    141 	.globl _g_ESTBLS
+                                    142 	.globl _g_FLAGS
+                                    143 	.globl _g_ERRORS
+                                    144 	.globl _g_DATCNT
+                                    145 	.globl _g_DEVNUM
+                                    146 	.globl _g_OLDINT
+                                    147 	.globl _g_OLDSTT
+                                    148 	.globl _g_MEXBIh
+                                    149 	.globl _g_RSIQLN
+                                    150 	.globl _g_RSFCB
+                                    151 	.globl _g_TOCNT
+                                    152 	.globl _g_RSTMP
+                                    153 	.globl _g_YSAVE
+                                    154 	.globl _g_XSAVE
+                                    155 	.globl _g_NORUSE
+                                    156 	.globl _g_MODE
+                                    157 	.globl _g_ROMA
+                                    158 	.globl _g_CHRCNT
+                                    159 	.globl _g_EXBRSA
+                                    160 	.globl _g_AVCSAV
+                                    161 	.globl _g_ACPAGE
+                                    162 	.globl _g_DPPAGE
+                                    163 	.globl _g_RS2IQ
+                                    164 	.globl _g_VOICCQ
+                                    165 	.globl _g_VOICBQ
+                                    166 	.globl _g_VOICAQ
+                                    167 	.globl _g_QUEBAK
+                                    168 	.globl _g_QUETAB
+                                    169 	.globl _g_ASPCT2
+                                    170 	.globl _g_ASPCT1
+                                    171 	.globl _g_HEADER
+                                    172 	.globl _g_HIGH
+                                    173 	.globl _g_LOW
+                                    174 	.globl _g_CS240
+                                    175 	.globl _g_CS120
+                                    176 	.globl _g_GETPNT
+                                    177 	.globl _g_PUTPNT
+                                    178 	.globl _g_REPCNT
+                                    179 	.globl _g_SCNCNT
+                                    180 	.globl _g_FRCNEW
+                                    181 	.globl _g_QUEUES
+                                    182 	.globl _g_MINUPD
+                                    183 	.globl _g_MAXUPD
+                                    184 	.globl _g_TRGFLG
+                                    185 	.globl _g_STATFL
+                                    186 	.globl _g_RG7SAV
+                                    187 	.globl _g_RG6SAV
+                                    188 	.globl _g_RG5SAV
+                                    189 	.globl _g_RG4SAV
+                                    190 	.globl _g_RG3SAV
+                                    191 	.globl _g_RG2SAV
+                                    192 	.globl _g_RG1SAV
+                                    193 	.globl _g_RG0SAV
+                                    194 	.globl _g_CNSDFG
+                                    195 	.globl _g_USRTAB
+                                    196 	.globl _g_CLPRIM
+                                    197 	.globl _g_WRPRIM
+                                    198 	.globl _g_RDPRIM
+                                    199 	.globl _Game_Initialize
+                                    200 	.globl _Game_Update
+                                    201 	.globl _Game_Release
+                                    202 	.globl _Game_MainLoop
+                                    203 	.globl _Game_Exit
+                                    204 	.globl _Game_SetState
+                                    205 	.globl _Game_RestoreState
+                                    206 	.globl _Game_UpdateState
+                                    207 ;--------------------------------------------------------
+                                    208 ; special function registers
+                                    209 ;--------------------------------------------------------
+                                    210 ;--------------------------------------------------------
+                                    211 ; ram data
+                                    212 ;--------------------------------------------------------
+                                    213 	.area _DATA
+                           00F3AE   214 _g_LINL40	=	0xf3ae
+                           00F3AF   215 _g_LINL32	=	0xf3af
+                           00F3B0   216 _g_LINLEN	=	0xf3b0
+                           00F3B1   217 _g_CRTCNT	=	0xf3b1
+                           00F3B2   218 _g_CLMLST	=	0xf3b2
+                           00F3B3   219 _g_TXTNAM	=	0xf3b3
+                           00F3B5   220 _g_TXTCOL	=	0xf3b5
+                           00F3B7   221 _g_TXTCGP	=	0xf3b7
+                           00F3B9   222 _g_TXTATR	=	0xf3b9
+                           00F3BB   223 _g_TXTPAT	=	0xf3bb
+                           00F3BD   224 _g_T32NAM	=	0xf3bd
+                           00F3BF   225 _g_T32COL	=	0xf3bf
+                           00F3C1   226 _g_T32CGP	=	0xf3c1
+                           00F3C3   227 _g_T32ATR	=	0xf3c3
+                           00F3C5   228 _g_T32PAT	=	0xf3c5
+                           00F3C7   229 _g_GRPNAM	=	0xf3c7
+                           00F3C9   230 _g_GRPCOL	=	0xf3c9
+                           00F3CB   231 _g_GRPCGP	=	0xf3cb
+                           00F3CD   232 _g_GRPATR	=	0xf3cd
+                           00F3CF   233 _g_GRPPAT	=	0xf3cf
+                           00F3D1   234 _g_MLTNAM	=	0xf3d1
+                           00F3D3   235 _g_MLTCOL	=	0xf3d3
+                           00F3D5   236 _g_MLTCGP	=	0xf3d5
+                           00F3D7   237 _g_MLTATR	=	0xf3d7
+                           00F3D9   238 _g_MLTPAT	=	0xf3d9
+                           00F3DB   239 _g_CLIKSW	=	0xf3db
+                           00F3DC   240 _g_CSRY	=	0xf3dc
+                           00F3DD   241 _g_CSRX	=	0xf3dd
+                           00F3E9   242 _g_FORCLR	=	0xf3e9
+                           00F3EA   243 _g_BAKCLR	=	0xf3ea
+                           00F3EB   244 _g_BDRCLR	=	0xf3eb
+                           00F3F2   245 _g_ATRBYT	=	0xf3f2
+                           00F87F   246 _g_FNKSTR	=	0xf87f
+                           00F92A   247 _g_CLOC	=	0xf92a
+                           00F92C   248 _g_CMASK	=	0xf92c
+                           00FB02   249 _g_LOGOPR	=	0xfb02
+                           00FCB7   250 _g_GRPACX	=	0xfcb7
+                           00FCB9   251 _g_GRPACY	=	0xfcb9
+                           00FFFF   252 _g_SLTSL	=	0xffff
+                                    253 ;--------------------------------------------------------
+                                    254 ; ram data
+                                    255 ;--------------------------------------------------------
+                                    256 	.area _INITIALIZED
+      000000                        257 _g_GameExit::
+      000000                        258 	.ds 1
+      000001                        259 _g_GameState::
+      000001                        260 	.ds 2
+      000003                        261 _g_GamePrevState::
+      000003                        262 	.ds 2
+                                    263 ;--------------------------------------------------------
+                                    264 ; absolute external ram data
+                                    265 ;--------------------------------------------------------
+                                    266 	.area _DABS (ABS)
+                                    267 ;--------------------------------------------------------
+                                    268 ; global & static initialisations
+                                    269 ;--------------------------------------------------------
+                                    270 	.area _HOME
+                                    271 	.area _GSINIT
+                                    272 	.area _GSFINAL
+                                    273 	.area _GSINIT
+                                    274 ;--------------------------------------------------------
+                                    275 ; Home
+                                    276 ;--------------------------------------------------------
+                                    277 	.area _HOME
+                                    278 	.area _HOME
+                                    279 ;--------------------------------------------------------
+                                    280 ; code
+                                    281 ;--------------------------------------------------------
+                                    282 	.area _CODE
+                                    283 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:22: void Game_Initialize(u8 screenMode)
+                                    284 ;	---------------------------------
+                                    285 ; Function Game_Initialize
+                                    286 ; ---------------------------------
+      000000                        287 _Game_Initialize::
+                                    288 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:24: VDP_SetMode(screenMode);
+      000000 4F               [ 4]  289 	ld	c, a
+                                    290 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:29: }
+      000001 C3r00r00         [10]  291 	jp	_VDP_SetMode
+                           00F380   292 _g_RDPRIM	=	0xf380
+                           00F385   293 _g_WRPRIM	=	0xf385
+                           00F38C   294 _g_CLPRIM	=	0xf38c
+                           00F39A   295 _g_USRTAB	=	0xf39a
+                           00F3DE   296 _g_CNSDFG	=	0xf3de
+                           00F3DF   297 _g_RG0SAV	=	0xf3df
+                           00F3E0   298 _g_RG1SAV	=	0xf3e0
+                           00F3E1   299 _g_RG2SAV	=	0xf3e1
+                           00F3E2   300 _g_RG3SAV	=	0xf3e2
+                           00F3E3   301 _g_RG4SAV	=	0xf3e3
+                           00F3E4   302 _g_RG5SAV	=	0xf3e4
+                           00F3E5   303 _g_RG6SAV	=	0xf3e5
+                           00F3E6   304 _g_RG7SAV	=	0xf3e6
+                           00F3E7   305 _g_STATFL	=	0xf3e7
+                           00F3E8   306 _g_TRGFLG	=	0xf3e8
+                           00F3EC   307 _g_MAXUPD	=	0xf3ec
+                           00F3EF   308 _g_MINUPD	=	0xf3ef
+                           00F3F3   309 _g_QUEUES	=	0xf3f3
+                           00F3F5   310 _g_FRCNEW	=	0xf3f5
+                           00F3F6   311 _g_SCNCNT	=	0xf3f6
+                           00F3F7   312 _g_REPCNT	=	0xf3f7
+                           00F3F8   313 _g_PUTPNT	=	0xf3f8
+                           00F3FA   314 _g_GETPNT	=	0xf3fa
+                           00F3FC   315 _g_CS120	=	0xf3fc
+                           00F401   316 _g_CS240	=	0xf401
+                           00F406   317 _g_LOW	=	0xf406
+                           00F408   318 _g_HIGH	=	0xf408
+                           00F40A   319 _g_HEADER	=	0xf40a
+                           00F40B   320 _g_ASPCT1	=	0xf40b
+                           00F40D   321 _g_ASPCT2	=	0xf40d
+                           00F959   322 _g_QUETAB	=	0xf959
+                           00F971   323 _g_QUEBAK	=	0xf971
+                           00F975   324 _g_VOICAQ	=	0xf975
+                           00F9F5   325 _g_VOICBQ	=	0xf9f5
+                           00FA75   326 _g_VOICCQ	=	0xfa75
+                           00FAF5   327 _g_RS2IQ	=	0xfaf5
+                           00FAF5   328 _g_DPPAGE	=	0xfaf5
+                           00FAF6   329 _g_ACPAGE	=	0xfaf6
+                           00FAF7   330 _g_AVCSAV	=	0xfaf7
+                           00FAF8   331 _g_EXBRSA	=	0xfaf8
+                           00FAF9   332 _g_CHRCNT	=	0xfaf9
+                           00FAFA   333 _g_ROMA	=	0xfafa
+                           00FAFC   334 _g_MODE	=	0xfafc
+                           00FAFD   335 _g_NORUSE	=	0xfafd
+                           00FAFE   336 _g_XSAVE	=	0xfafe
+                           00FB00   337 _g_YSAVE	=	0xfb00
+                           00FB03   338 _g_RSTMP	=	0xfb03
+                           00FB03   339 _g_TOCNT	=	0xfb03
+                           00FB04   340 _g_RSFCB	=	0xfb04
+                           00FB06   341 _g_RSIQLN	=	0xfb06
+                           00FB07   342 _g_MEXBIh	=	0xfb07
+                           00FB0C   343 _g_OLDSTT	=	0xfb0c
+                           00FB0C   344 _g_OLDINT	=	0xfb0c
+                           00FB16   345 _g_DEVNUM	=	0xfb16
+                           00FB17   346 _g_DATCNT	=	0xfb17
+                           00FB1A   347 _g_ERRORS	=	0xfb1a
+                           00FB1B   348 _g_FLAGS	=	0xfb1b
+                           00FB1C   349 _g_ESTBLS	=	0xfb1c
+                           00FB1D   350 _g_COMMSK	=	0xfb1d
+                           00FB1E   351 _g_LSTCOM	=	0xfb1e
+                           00FB1F   352 _g_LSTMOD	=	0xfb1f
+                           00FB35   353 _g_PRSCNT	=	0xfb35
+                           00FB36   354 _g_SAVSP	=	0xfb36
+                           00FB38   355 _g_VOICEN	=	0xfb38
+                           00FB39   356 _g_SAVVOL	=	0xfb39
+                           00FB3B   357 _g_MCLLEN	=	0xfb3b
+                           00FB3C   358 _g_MCLPTR	=	0xfb3c
+                           00FB3E   359 _g_QUEUEN	=	0xfb3e
+                           00FB3F   360 _g_MUSICF	=	0xfb3f
+                           00FB40   361 _g_PLYCNT	=	0xfb40
+                           00FB41   362 _g_VCBA	=	0xfb41
+                           00FB66   363 _g_VCBB	=	0xfb66
+                           00FB8B   364 _g_VCBC	=	0xfb8b
+                           00FBB0   365 _g_ENSTOP	=	0xfbb0
+                           00FBB1   366 _g_BASROM	=	0xfbb1
+                           00FBB2   367 _g_LINTTB	=	0xfbb2
+                           00FBCA   368 _g_FSTPOS	=	0xfbca
+                           00FBCC   369 _g_CODSAV	=	0xfbcc
+                           00FBCD   370 _g_FNKSWI	=	0xfbcd
+                           00FBCE   371 _g_FNKFLG	=	0xfbce
+                           00FBD8   372 _g_ONGSBF	=	0xfbd8
+                           00FBD9   373 _g_CLIKFL	=	0xfbd9
+                           00FBDA   374 _g_OLDKEY	=	0xfbda
+                           00FBE5   375 _g_NEWKEY	=	0xfbe5
+                           00FBF0   376 _g_KEYBUF	=	0xfbf0
+                           00FC18   377 _g_LINWRK	=	0xfc18
+                           00FC40   378 _g_PATWRK	=	0xfc40
+                           00FC48   379 _g_BOTTOM	=	0xfc48
+                           00FC4A   380 _g_HIMEM	=	0xfc4a
+                           00FC4C   381 _g_TRPTBL	=	0xfc4c
+                           00FC9A   382 _g_RTYCNT	=	0xfc9a
+                           00FC9B   383 _g_INTFLG	=	0xfc9b
+                           00FC9C   384 _g_PADY	=	0xfc9c
+                           00FC9D   385 _g_PADX	=	0xfc9d
+                           00FC9E   386 _g_JIFFY	=	0xfc9e
+                           00FCA0   387 _g_INTVAL	=	0xfca0
+                           00FCA2   388 _g_INTCNT	=	0xfca2
+                           00FCA4   389 _g_LOWLIM	=	0xfca4
+                           00FCA5   390 _g_WINWID	=	0xfca5
+                           00FCA6   391 _g_GRPHED	=	0xfca6
+                           00FCA7   392 _g_ESCCNT	=	0xfca7
+                           00FCA8   393 _g_INSFLG	=	0xfca8
+                           00FCA9   394 _g_CSRSW	=	0xfca9
+                           00FCAA   395 _g_CSTYLE	=	0xfcaa
+                           00FCAB   396 _g_CAPST	=	0xfcab
+                           00FCAC   397 _g_KANAST	=	0xfcac
+                           00FCAD   398 _g_KANAMD	=	0xfcad
+                           00FCAE   399 _g_FLBMEM	=	0xfcae
+                           00FCAF   400 _g_SCRMOD	=	0xfcaf
+                           00FCB0   401 _g_OLDSCR	=	0xfcb0
+                           00FCB1   402 _g_CASPRV	=	0xfcb1
+                           00FCB2   403 _g_BRDATR	=	0xfcb2
+                           00FCB3   404 _g_GXPOS	=	0xfcb3
+                           00FCB5   405 _g_GYPOS	=	0xfcb5
+                           00FCBB   406 _g_DRWFLG	=	0xfcbb
+                           00FCBC   407 _g_DRWSCL	=	0xfcbc
+                           00FCBD   408 _g_DRWANG	=	0xfcbd
+                           00FCC1   409 _g_MNROM	=	0xfcc1
+                           00FCC1   410 _g_EXPTBL	=	0xfcc1
+                           00FCC5   411 _g_SLTTBL	=	0xfcc5
+                           00FCC9   412 _g_SLTATR	=	0xfcc9
+                           00FD09   413 _g_SLTWRK	=	0xfd09
+                           00FD89   414 _g_PROCNM	=	0xfd89
+                           00FFE7   415 _g_RG08SAV	=	0xffe7
+                           00FFE8   416 _g_RG09SAV	=	0xffe8
+                           00FFE9   417 _g_RG10SAV	=	0xffe9
+                           00FFEA   418 _g_RG11SAV	=	0xffea
+                           00FFEB   419 _g_RG12SAV	=	0xffeb
+                           00FFEC   420 _g_RG13SAV	=	0xffec
+                           00FFED   421 _g_RG14SAV	=	0xffed
+                           00FFEE   422 _g_RG15SAV	=	0xffee
+                           00FFEF   423 _g_RG16SAV	=	0xffef
+                           00FFF0   424 _g_RG17SAV	=	0xfff0
+                           00FFF1   425 _g_RG18SAV	=	0xfff1
+                           00FFF2   426 _g_RG19SAV	=	0xfff2
+                           00FFF3   427 _g_RG20SAV	=	0xfff3
+                           00FFF4   428 _g_RG21SAV	=	0xfff4
+                           00FFF5   429 _g_RG22SAV	=	0xfff5
+                           00FFF6   430 _g_RG23SAV	=	0xfff6
+                           00FFF7   431 _g_MINROM	=	0xfff7
+                           00FFF8   432 _g_SVFFF8	=	0xfff8
+                           00FFFA   433 _g_RG25SAV	=	0xfffa
+                           00FFFB   434 _g_RG26SAV	=	0xfffb
+                           00FFFC   435 _g_RG27SAV	=	0xfffc
+                           00FFFD   436 _g_SVFFFD	=	0xfffd
+                                    437 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:33: void Game_Update()
+                                    438 ;	---------------------------------
+                                    439 ; Function Game_Update
+                                    440 ; ---------------------------------
+      000004                        441 _Game_Update::
+                                    442 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:39: Game_UpdateState();
+                                    443 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:41: }
+      000004 C3r39r00         [10]  444 	jp	_Game_UpdateState
+                                    445 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:45: void Game_Release()
+                                    446 ;	---------------------------------
+                                    447 ; Function Game_Release
+                                    448 ; ---------------------------------
+      000007                        449 _Game_Release::
+                                    450 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:50: }
+      000007 C9               [10]  451 	ret
+                                    452 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:70: void Game_MainLoop(u8 screenMode)
+                                    453 ;	---------------------------------
+                                    454 ; Function Game_MainLoop
+                                    455 ; ---------------------------------
+      000008                        456 _Game_MainLoop::
+                                    457 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:72: Game_Initialize(screenMode);
+      000008 CDr00r00         [17]  458 	call	_Game_Initialize
+                                    459 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:73: while(!g_GameExit)
+      00000B                        460 00101$:
+      00000B 3Ar00r00         [13]  461 	ld	a, (_g_GameExit+0)
+      00000E B7               [ 4]  462 	or	a, a
+      00000F C2r07r00         [10]  463 	jp	NZ,_Game_Release
+                                    464 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:74: Game_Update();
+      000012 CDr04r00         [17]  465 	call	_Game_Update
+                                    466 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:75: Game_Release();
+                                    467 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:76: }
+      000015 C3r0Br00         [10]  468 	jp	00101$
+                                    469 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:80: void Game_Exit()
+                                    470 ;	---------------------------------
+                                    471 ; Function Game_Exit
+                                    472 ; ---------------------------------
+      000018                        473 _Game_Exit::
+                                    474 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:82: g_GameExit = TRUE;
+      000018 21r00r00         [10]  475 	ld	hl, #_g_GameExit
+      00001B 36 01            [10]  476 	ld	(hl), #0x01
+                                    477 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:83: }
+      00001D C9               [10]  478 	ret
+                                    479 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:106: void Game_SetState(State newState)
+                                    480 ;	---------------------------------
+                                    481 ; Function Game_SetState
+                                    482 ; ---------------------------------
+      00001E                        483 _Game_SetState::
+      00001E EB               [ 4]  484 	ex	de, hl
+                                    485 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:108: g_GamePrevState = g_GameState;
+      00001F 2Ar01r00         [16]  486 	ld	hl, (_g_GameState)
+      000022 22r03r00         [16]  487 	ld	(_g_GamePrevState), hl
+                                    488 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:109: g_GameState = newState;
+      000025 ED 53r01r00      [20]  489 	ld	(_g_GameState), de
+                                    490 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:110: }
+      000029 C9               [10]  491 	ret
+                                    492 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:114: void Game_RestoreState()
+                                    493 ;	---------------------------------
+                                    494 ; Function Game_RestoreState
+                                    495 ; ---------------------------------
+      00002A                        496 _Game_RestoreState::
+                                    497 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:116: State prev = g_GamePrevState;
+      00002A ED 4Br03r00      [20]  498 	ld	bc, (_g_GamePrevState)
+                                    499 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:117: g_GamePrevState = g_GameState;
+      00002E 2Ar01r00         [16]  500 	ld	hl, (_g_GameState)
+      000031 22r03r00         [16]  501 	ld	(_g_GamePrevState), hl
+                                    502 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:118: g_GameState = prev;
+      000034 ED 43r01r00      [20]  503 	ld	(_g_GameState), bc
+                                    504 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:119: }
+      000038 C9               [10]  505 	ret
+                                    506 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:123: void Game_UpdateState()
+                                    507 ;	---------------------------------
+                                    508 ; Function Game_UpdateState
+                                    509 ; ---------------------------------
+      000039                        510 _Game_UpdateState::
+                                    511 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:125: bool bFrameFinish = FALSE;
+      000039 0E 00            [ 7]  512 	ld	c, #0x00
+                                    513 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:126: while((g_GameState != NULL) && !bFrameFinish)
+      00003B                        514 00102$:
+      00003B 3Ar02r00         [13]  515 	ld	a, (_g_GameState+1)
+      00003E 21r01r00         [10]  516 	ld	hl, #_g_GameState
+      000041 B6               [ 7]  517 	or	a, (hl)
+      000042 C8               [11]  518 	ret	Z
+      000043 79               [ 4]  519 	ld	a, c
+      000044 B7               [ 4]  520 	or	a, a
+      000045 C0               [11]  521 	ret	NZ
+                                    522 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:128: bFrameFinish = g_GameState();
+      000046 2Ar01r00         [16]  523 	ld	hl, (_g_GameState)
+      000049 CDr00r00         [17]  524 	call	___sdcc_call_hl
+      00004C 4F               [ 4]  525 	ld	c, a
+                                    526 ;D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\engine/src/game.c:130: }
+      00004D C3r3Br00         [10]  527 	jp	00102$
+                                    528 	.area _CODE
+                                    529 	.area _INITIALIZER
+      000000                        530 __xinit__g_GameExit:
+      000000 00                     531 	.db #0x00	; 0
+      000001                        532 __xinit__g_GameState:
+      000001 00 00                  533 	.dw #0x0000
+      000003                        534 __xinit__g_GamePrevState:
+      000003 00 00                  535 	.dw #0x0000
+                                    536 	.area _CABS (ABS)
