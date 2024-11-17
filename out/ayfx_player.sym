@@ -1,0 +1,92 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 1.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  002710 L
+    .__.ABS.                                                    =  000000 G
+    .__.CPU.                                                    =  000000 L
+    .__.H$L.                                                    =  000000 L
+  0 CHANNEL_SWITCH                                                 000049 R
+  0 CHECK_INDEX                                                    00000D R
+  0 CHECK_NN                                                       000062 R
+  0 CHECK_PRIO                                                     000013 R
+  0 CHK1                                                           000095 R
+  0 CHK2                                                           0000A4 R
+  0 CHK3                                                           0000B6 R
+  0 CONTINUE                                                       000070 R
+  0 INIT_END                                                       000034 R
+  0 PLAY_A                                                         0000B9 R
+  0 PLAY_B                                                         0000A9 R
+  0 PLAY_C                                                         000097 R
+  0 SETMASKS                                                       000087 R
+  0 SETMIXER                                                       0000C6 R
+  0 SETPOINTER                                                     000073 R
+  0 StopCheck1                                                     0000E1 R
+  0 StopCheck2                                                     0000E7 R
+  0 StopCheck3                                                     0000ED R
+  0 TAKECB                                                         000051 R
+    _PT3_Regs                                                      ****** GX
+  7 __xinit__ayFX_Channel                                          000002 R
+  7 __xinit__ayFX_Finish                                           000003 R
+  7 __xinit__ayFX_Mode                                             000000 R
+  7 __xinit__ayFX_Priority                                         000001 R
+  1 _ayFX_Bank                                                     000000 GR
+  2 _ayFX_Channel                                                  000002 GR
+  2 _ayFX_Finish                                                   000003 GR
+  0 _ayFX_InitBank                                                 000000 GR
+  2 _ayFX_Mode                                                     000000 GR
+  0 _ayFX_Mute                                                     0000D7 GR
+  1 _ayFX_Noise                                                    000006 GR
+  0 _ayFX_Play                                                     000035 GR
+  0 _ayFX_PlayBank                                                 000004 GR
+  1 _ayFX_Pointer                                                  000002 GR
+  2 _ayFX_Priority                                                 000001 GR
+  0 _ayFX_Stop                                                     0000F1 GR
+  1 _ayFX_Tone                                                     000004 GR
+  0 _ayFX_Update                                                   00003D GR
+  1 _ayFX_Volume                                                   000007 GR
+    _g_MSXAudio_DataPort                                        =  0000C1 
+    _g_MSXAudio_DataPort2                                       =  0000C3 
+    _g_MSXAudio_IndexPort                                       =  0000C0 
+    _g_MSXAudio_IndexPort2                                      =  0000C2 
+    _g_MSXMusic_DataPort                                        =  00007D 
+    _g_MSXMusic_IndexPort                                       =  00007C 
+    _g_PSG_DataPort                                             =  0000A1 
+    _g_PSG_Ext_DataPort                                         =  000011 
+    _g_PSG_Ext_RegPort                                          =  000010 
+    _g_PSG_Ext_StatPort                                         =  000012 
+    _g_PSG_RegPort                                              =  0000A0 
+    _g_PSG_StatPort                                             =  0000A2 
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 2.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    _g_PortAccessKeyboard                                       =  0000AA 
+    _g_PortControl                                              =  0000AB 
+    _g_PortPrimarySlot                                          =  0000A8 
+    _g_PortReadKeyboard                                         =  0000A9 
+    _g_RTC_AddrPort                                             =  0000B4 
+    _g_RTC_DataPort                                             =  0000B5 
+    _g_VDP_AddrPort                                             =  000099 
+    _g_VDP_DataPort                                             =  000098 
+    _g_VDP_RegPort                                              =  000099 
+    _g_VDP_StatPort                                             =  000099 
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next / eZ80), page 3.
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE                                      size     F7   flags    0
+   1 _DATA                                      size      8   flags    0
+   2 _INITIALIZED                               size      5   flags    0
+   3 _DABS                                      size      0   flags    8
+   4 _HOME                                      size      0   flags    0
+   5 _GSINIT                                    size      0   flags    0
+   6 _GSFINAL                                   size      0   flags    0
+   7 _INITIALIZER                               size      5   flags    0
+   8 _CABS                                      size      0   flags    8
+

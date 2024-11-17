@@ -281,7 +281,7 @@ bool addLife()
  */
 bool removeLife()
 {
-	// Controlla se nell'inventario è presente la pozione per l'immunità
+	/* Controlla se nell'inventario è presente la pozione per l'immunità
 	if (hasItemInInventory(TILE_AMPHORA))
 	{
 		if (g_ImmunityCount < IMMUNITY)
@@ -293,7 +293,7 @@ bool removeLife()
 			removeItemFromInventory(TILE_AMPHORA, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
 		}
 		return TRUE;
-	}
+	}*/
 
 	for (i8 i = MAX_LIVES - 1; i >= 0; i--)
 	{
@@ -412,6 +412,7 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
 		{
 			if (collisionCheck(enemy->X - pawn->PositionX, enemy->Y - pawn->PositionY))
 			{
+				/*
 				if (hasItemInInventory(TILE_CRUCIFIX))
 				{
 					// TODO: elimina il nemico
@@ -422,22 +423,62 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
 					g_Player.Score += 500;
 					updateScore();
 				}
-				else
+				*/
+				if (hasItemInInventory(TILE_AMPHORA))
 				{
-					// g_ReverseCount = 60;
-					if (removeLife() == TRUE)
+					if (g_ImmunityCount < IMMUNITY)
 					{
-						displayLife();
-						PlayBankSFX(9, 0);
-						// TODO: Messo per verificare l'effettivo funzionamento della gestione delle vite 2024.04.18
-						drawLevel(g_CurrRoomIdx);
+						g_ImmunityCount++;
 					}
 					else
 					{
-						if (!hasLives())
+						removeItemFromInventory(TILE_AMPHORA, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+						g_ImmunityCount = 0;
+					}
+				}
+				else
+				{
+					/*
+					if (hasItemInInventory(TILE_AMPHORA))
+					{
+						if (g_ImmunityCount < IMMUNITY)
 						{
-							stopMusicPlayback();
-							Game_SetState(State_GameOver);
+							g_ImmunityCount++;
+						}
+						else
+						{
+							removeItemFromInventory(TILE_AMPHORA, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+							g_ImmunityCount = 0;
+						}
+					}
+					*/
+					if (hasItemInInventory(TILE_CRUCIFIX))
+					{
+						// TODO: elimina il nemico
+						VDP_HideSprite(enemy->SpriteId);
+						enemy->State = 0;
+						removeItemFromInventory(TILE_CRUCIFIX, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+
+						g_Player.Score += 500;
+						updateScore();
+					}
+					else
+					{
+						// g_ReverseCount = 60;
+						if (removeLife() == TRUE)
+						{
+							displayLife();
+							PlayBankSFX(9, 0);
+							// TODO: Messo per verificare l'effettivo funzionamento della gestione delle vite 2024.04.18
+							drawLevel(g_CurrRoomIdx);
+						}
+						else
+						{
+							if (!hasLives())
+							{
+								stopMusicPlayback();
+								Game_SetState(State_GameOver);
+							}
 						}
 					}
 				}
@@ -1294,10 +1335,9 @@ void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 
 			}
 			else
 			{
-				// TODO: attenzione potremmo avere un comportamento inaspettato degli ascensoir
-				//	     devo capire compe filtrare
-				if (my_strcmp(genericEnemy[nEnemy].TypeEnemy, "Scheletor") == 0)
-					pursuitCheck(&genericEnemy[0], nEnemy);
+				// TODO: Línseguimento e'dedicato solo agli scheletri
+				//if (my_strcmp(genericEnemy[nEnemy].TypeEnemy, "Scheletor") == 0)
+				//	pursuitCheck(&genericEnemy[0], nEnemy);
 			}
 
 			adjustXYEnemy(&genericEnemy[nEnemy], idFirstSprite, nEnemy);
@@ -1306,8 +1346,6 @@ void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 
 		enemy = null;
 	}
 }
-
-
 
 int my_strcmp(const c8 *a, const c8 *b)
 {

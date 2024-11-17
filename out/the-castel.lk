@@ -1,0 +1,17 @@
+-mjwx
+-i D:\RETROGAME\MSXGL-WORKSPACE\the-castel\the-castel/out/the-castel.ihx
+-b _CODE = 0x0100
+-b _DATA = 0x0000
+-k D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\tools/sdcc/lib/z80
+-k D:\RETROGAME\MSXGL-WORKSPACE\the-castel\MSXgl\tools/sdcc/bin\..\lib\z80
+-l D:\RETROGAME\MSXGL-WORKSPACE\the-castel\the-castel/out/msxgl.lib
+-l z80
+D:\RETROGAME\MSXGL-WORKSPACE\the-castel\the-castel/out/crt0_dos.rel
+D:\RETROGAME\MSXGL-WORKSPACE\the-castel\the-castel/out/the-castel.rel
+D:\RETROGAME\MSXGL-WORKSPACE\the-castel\the-castel/out/tiles.rel
+D:\RETROGAME\MSXGL-WORKSPACE\the-castel\the-castel/out/inventory.rel
+D:\RETROGAME\MSXGL-WORKSPACE\the-castel\the-castel/out/control.rel
+D:\RETROGAME\MSXGL-WORKSPACE\the-castel\the-castel/out/music.rel
+D:\RETROGAME\MSXGL-WORKSPACE\the-castel\the-castel/out/level_defs.rel
+
+-e

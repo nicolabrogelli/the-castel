@@ -17,14 +17,14 @@
 #define MAX_NUMBRER_SPRITE_HIDE 25
 #define FIRST_ID_SPRITE          6
 
-#define ADDRESS_SPIDER          192
-#define ADDRESS_SHELETOR        196
-#define ADDRESS_GHOST           200
-#define ADDRESS_BAT             204
-#define ADDRESS_PLATFORM        208
-#define ADDRESS_SNAKE           212
-#define ADDRESS_MAGICIAN        216
-#define ADDRESS_FIRE            220
+#define ADDRESS_SPIDER          192 // Sprite[192] (offset:1536)
+#define ADDRESS_SHELETOR        196 // Sprite[196] (offset:1568)
+#define ADDRESS_GHOST           200 // Sprite[200] (offset:1600)
+#define ADDRESS_BAT             204 // Sprite[204] (offset:1632)
+#define ADDRESS_PLATFORM        208 // Sprite[208] (offset:1664)
+#define ADDRESS_SNAKE           212 // Sprite[212] (offset:1696)
+#define ADDRESS_MAGICIAN        216 // Sprite[216] (offset:1728)
+#define ADDRESS_FIRE            220 // Sprite[220] (offset:1760)
 
 #define FIRST_ID_SKELETOR        6
 #define FIRST_ID_GHOST           9 //10
@@ -34,7 +34,7 @@
 #define FIRST_ID_SLIDE_V        21 //30
 
 #define MAX_LIVES                3
-#define IMMUNITY                 3
+#define IMMUNITY                50
 #define LAST_LEVEL              26  // Ultimo livello di gioco
 #define START_GAME               0  // Livello di inizio gico
 #define GAME_OVER               LAST_LEVEL + 1  // Livello di game over
@@ -68,7 +68,7 @@
 // DEFINIZIONE DEI FRAME PER FALL DEL PLAYER
 #define FALL_PLAYER_FRAME_6 6*16
 
-// DEFINIZIONE DI FRAME PE JUMP DEL PLAYER
+// DEFINIZIONE DEI FRAME PER JUMP DEL PLAYER
 #define JUMP_PLAYER_FRAME_5 5*16
 
 // DEFINIZIONE DEI FRAME PER IDLE DEL PLAYER
