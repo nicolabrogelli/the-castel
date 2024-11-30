@@ -120,6 +120,27 @@
 #define VDP_INIT_50HZ				VDP_INIT_ON
 
 //-----------------------------------------------------------------------------
+// V9990  MODULE
+//-----------------------------------------------------------------------------
+
+// V9990 screen modes support
+#define V9_USE_MODE_P1				TRUE	// Tile mode 0 256x212
+#define V9_USE_MODE_P2				TRUE	// Tile mode 1 512x212
+#define V9_USE_MODE_B0				TRUE	// Bitmap mode 1 192x240 (Undocumented v9990 mode)
+#define V9_USE_MODE_B1				TRUE	// Bitmap mode 1 256x212
+#define V9_USE_MODE_B2				TRUE	// Bitmap mode 2 384x240
+#define V9_USE_MODE_B3				TRUE	// Bitmap mode 3 512x212
+#define V9_USE_MODE_B4				TRUE	// Bitmap mode 4 768x240
+#define V9_USE_MODE_B5				TRUE	// Bitmap mode 5 640x400 (VGA)
+#define V9_USE_MODE_B6				TRUE	// Bitmap mode 6 640x480 (VGA)
+#define V9_USE_MODE_B7				TRUE	// Bitmap mode 7 1024x212 (Undocumented v9990 mode)
+
+#define V9_INT_PROTECT				TRUE	// VRAM access protection mode against interruption
+// Palette input data format
+// - V9_PALETTE_YSGBR_16 .......... 16 bits RGB + Ys [Ys|G|G|G|G|G|R|R] [R|R|R|B|B|B|B|B]
+// - V9_PALETTE_GBR_16 ............ 16 bits RGB      [0|G|G|G|G|G|R|R] [R|R|R|B|B|B|B|B]
+// - V9_PALETTE_RGB_24 ............ 24 bits RGB      [0|0|0|R|R|R|R|R] [0|0|0|G|G|G|G|G] [0|0|0|B|B|B|B|B]
+#define V9_PALETTE_MODE				V9_PALETTE_RGB_24				
 // INPUT MODULE
 //-----------------------------------------------------------------------------
 
@@ -136,13 +157,22 @@
 #define INPUT_KB_UPDATE_MAX			8		// Last row to update (10 for numerical-pad, 8 otherwise)
 
 //-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+// PADDLE MODULE
+//-----------------------------------------------------------------------------
+
+// Paddle module setting
+#define PADDLE_USE_CALIB			TRUE	// Add functions paddle calibration feature
+
+//-----------------------------------------------------------------------------											   
 // MEMORY MODULE
 //-----------------------------------------------------------------------------
 
 #define MEM_USE_VALIDATOR			FALSE	// Activate validator to handle invalide input value
 #define MEM_USE_FASTCOPY			FALSE	// Add support for fast-copy function (using unrolled-LDI loop)
 #define MEM_USE_FASTSET				FALSE	// Add support for fast-set function (using unrolled-LDI loop)
-#define MEM_USE_DYNAMIC				TRUE	// Add support for malloc style dynamic allocator
+#define MEM_USE_DYNAMIC				FALSE	// Add support for malloc style dynamic allocator
+#define MEM_USE_BUILTIN				TRUE	// Use SDCC built-in memcpy and memset function instead of MSXgl ones																									 
 
 //-----------------------------------------------------------------------------
 // MSX-DOS MODULE
@@ -198,6 +228,20 @@
 #define PRINT_HEIGHT				PRINT_HEIGHT_1
 
 //-----------------------------------------------------------------------------
+// SPRITE FX MODULE
+//-----------------------------------------------------------------------------
+
+// Supported sprite size
+#define SPRITEFX_USE_8x8			TRUE	// Use 8x8 pixels effects
+#define SPRITEFX_USE_16x16			TRUE	// Use 16x16 pixels effects
+
+// Supported effect
+#define SPRITEFX_USE_CROP			TRUE	// Use cropping effect
+#define SPRITEFX_USE_FLIP			TRUE	// Use flipping effect
+#define SPRITEFX_USE_MASK			TRUE	// Use masking effect
+#define SPRITEFX_USE_ROTATE			TRUE	// Use rotating effect
+
+//-----------------------------------------------------------------------------				   
 // GAME MODULE
 //-----------------------------------------------------------------------------
 
@@ -241,11 +285,27 @@
 // Top/bottom border position (in pixel)
 #define GAMEPAWN_BORDER_MIN_Y		0
 #define GAMEPAWN_BORDER_MAX_Y		184
-#define GAMEPAWN_FORCE_SM1			FALSE	// Force the use sprite mode 1 
+//#define GAMEPAWN_FORCE_SM1			FALSE	// Force the use sprite mode 1  (Nicola)
 
-#define GAMEPAWN_USE_VRAM_COL		TRUE	// Use VRAM to chech tile collision (use RAM buffer instead)
+//#define GAMEPAWN_USE_VRAM_COL		TRUE	// Use VRAM to chech tile collision (use RAM buffer instead) (Nicola)
 #define GAMEPAWN_TILEMAP_WIDTH		32		// Width of the tiles map
 #define GAMEPAWN_TILEMAP_HEIGHT		24		// Height of the tiles map
+
+#define GAMEPAWN_USE_V9990			FALSE	// Use V9990 sprites
+#define GAMEPAWN_TILEMAP_HEIGHT		24		// Height of the tiles map
+// Collision tilemap source
+// - GAMEPAWN_TILEMAP_SRC_AUTO .... Backward compatibility option
+// - GAMEPAWN_TILEMAP_SRC_RAM ..... Tilemap located in a buffer in RAM (best for performance)
+// - GAMEPAWN_TILEMAP_SRC_VRAM .... Tilemap located in VRAM (slow but don't need additionnal data)
+// - GAMEPAWN_TILEMAP_SRC_V9 ...... Tilemap located in V9990's VRAM
+#define GAMEPAWN_TILEMAP_SRC		GAMEPAWN_TILEMAP_SRC_VRAM
+// Pawn's sprite mode
+// - GAMEPAWN_SPT_MODE_AUTO ....... Backward compatibility option
+// - GAMEPAWN_SPT_MODE_MSX1 ....... Sprite Mode 1 (MSX1 screens)
+// - GAMEPAWN_SPT_MODE_MSX2 ....... Sprite Mode 2 (MSX2 screens)
+// - GAMEPAWN_SPT_MODE_V9_P1 ...... V9990 sprite in P1 mode
+// - GAMEPAWN_SPT_MODE_V9_P2 ...... V9990 sprite in P2 mode
+#define GAMEPAWN_SPT_MODE			GAMEPAWN_SPT_MODE_MSX1					 
 
 //-----------------------------------------------------------------------------
 // GAME MENU MODULE
@@ -394,6 +454,23 @@
 #define TRILO_USE_TREMOLO			TRUE	// Add support for tremolo effect (little bit expensive)
 #define TRILO_USE_TAIL				FALSE	// Add tail to prevent volume to fall to zero
 
+// LVGM replayer options
+#define LVGM_USE_PSG				TRUE	// Add parser for PSG data
+#define LVGM_USE_MSXMUSIC			TRUE	// Add parser for MSX-Music data
+#define LVGM_USE_MSXAUDIO			TRUE	// Add parser for MSX-Audio data
+#define LVGM_USE_SCC				TRUE	// Add parser for Konami SCC data
+#define LVGM_USE_SCCI				FALSE	// Add parser for Konami SCC+ data
+#define LVGM_USE_PSG2				FALSE	// Add parser for secondary PSG data
+#define LVGM_USE_OPL4				FALSE	// Add parser for OPL4 data
+#define LVGM_USE_NOTIFY				TRUE	// Add parser for PSG data
+
+// WYZ Tracker replayer options
+// Channels number
+// - WYZ_3CH
+// - WYZ_6CH
+#define WYZ_CHANNELS				WYZ_3CH	// Number of supported channels (can be 3 for 1 PSG or 6 for 2 PSG)
+#define WYZ_USE_DIRECT_ACCESS		FALSE	// Send data directly to PSG registers (otherwise, write in a RAM buffer)
+#define WYZ_CHAN_BUFFER_SIZE		0x20	// Size of the channel buffer
 //-----------------------------------------------------------------------------
 // MATH MODULE
 //-----------------------------------------------------------------------------

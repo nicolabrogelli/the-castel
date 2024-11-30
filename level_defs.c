@@ -1,45 +1,56 @@
+//=============================================================================
+// INCLUDES
+//=============================================================================
 #include "level_defs.h"
 #include "colors.h"
 
-#include "data/level/level001.h"
-#include "data/level/level002.h"
-#include "data/level/level003.h"
-#include "data/level/level004.h"
-#include "data/level/level005.h"
-#include "data/level/level006.h"
-#include "data/level/level007.h"
-#include "data/level/level008.h"
-#include "data/level/level009.h"
-#include "data/level/level010.h"
-#include "data/level/level011.h"
-#include "data/level/level012.h"
-#include "data/level/level013.h"
-#include "data/level/level014.h"
-#include "data/level/level015.h"
-#include "data/level/level016.h"
-// #include "data/level/level017.h"
+//=============================================================================
+// DEFINES EXTERN SEGMENT 21, BANK 1
+//=============================================================================
+extern unsigned char g_Level001[];
+extern unsigned char g_Level002[];
+extern unsigned char g_Level003[];
+extern unsigned char g_Level004[];
+extern unsigned char g_Level005[];
+extern unsigned char g_Level006[];
+extern unsigned char g_Level007[];
+extern unsigned char g_Level008[];
+extern unsigned char g_Level009[];
+extern unsigned char g_Level010[];
+extern unsigned char g_Level011[];
+extern unsigned char g_Level012[];
+extern unsigned char g_Level013[];
+extern unsigned char g_Level014[];
+extern unsigned char g_Level015[];
+extern unsigned char g_Level016[];
+extern unsigned char g_Level018[];
+extern unsigned char g_Level019[];
+extern unsigned char g_Level020[];
+extern unsigned char g_Level021[];
+extern unsigned char g_Level022[];
+extern unsigned char g_Level023[];
+extern unsigned char g_Level024[];
+extern unsigned char g_Level025[];
+extern unsigned char g_Level026[];
+extern unsigned char g_Level027[];
+extern unsigned char g_Level028[];
+extern unsigned char g_Level029[];
+extern unsigned char g_Level030[];
 
-#include "data/level/level018.h"
-#include "data/level/level019.h"
-#include "data/level/level020.h"
-#include "data/level/level021.h"
-#include "data/level/level022.h"
-#include "data/level/level023.h"
-#include "data/level/level024.h"
-#include "data/level/level025.h"
-#include "data/level/level026.h"
-#include "data/level/level027.h"
-#include "data/level/level028.h"
-#include "data/level/level029.h"
-#include "data/level/level030.h"
-
-// DEFINIZIONE DIMENSIONI LIVELLI DI GIOCO
+//=============================================================================
+// DEFINE
+//=============================================================================
 #define LEVEL_WIDTH 32
 #define LEVEL_HEIGHT 24
+
+//=============================================================================
+// MEMORY DATA 
+//=============================================================================
 
 // Elenco delle stanze e delle loro caratteristiche
 // Non modificare l'ordinamento dell'array pena la non corretta navigazione nelle stanze di gioco
 struct LevelDefinition g_Levels[] = {
+
 	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level030, "STRAT GAME", {1, 0, 0, 0}, {0, 0, 0, 2, 0, 0}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}, GREY_LEVEL},
 
 	// PRIMO PIANO OK
@@ -61,7 +72,7 @@ struct LevelDefinition g_Levels[] = {
 	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level010, "LVL:10", /* 10 */ {0, 9, 0, 11}, {2, 0, 0, 1, 0, 1}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}, GREY_LEVEL},
 
 	// PIANO - DA FARE
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level011, "LVL:11", /* 11 */ {12, 0, 10, 0}, {1, 0, 1, 2, 0, 3}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}, BROWN_LEVEL},
+	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level011, "LVL:11", /* 11 */ {13, 0, 10, 0}, {1, 0, 1, 2, 0, 3}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}, BROWN_LEVEL},
 	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level012, "LVL:12", /* 12 */ {0, 11, 0, 13}, {2, 0, 0, 1, 0, 0}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}, GREY_LEVEL},
 
 	// PIANO DELLA LAVA
@@ -89,6 +100,11 @@ struct LevelDefinition g_Levels[] = {
 	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level029, "GAME OVER", {0, 9, 0, 0}, {0, 0, 0, 0, 0, 0}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}, 0xE0},
 
 };
+
+
+//=============================================================================
+// FUNCTION
+//=============================================================================
 
 /**
  * @brief Effettua il restore dei livelli di gioco

@@ -13,19 +13,70 @@
 #include "msxgl.h"
 #include "game.h"
 #include "game_pawn.h"
-// #include "debug.h"
 #include "string.h"
 #include "input.h"
 #include "compress/pletter.h"
 #include "version.h"
 #include "tiles.h"
 #include "tiles_defs.h"
-#include "inventory.h"
-#include "control.h"
-#include "music.h"
 #include "level_defs.h"
-#include "data/sprites.h"
-#include "data/tiles.h"
+
+
+//=============================================================================
+// SEGMENT 16, BANK 1
+//=============================================================================
+extern void inizializePT3();
+extern void inizializeAYFX();
+extern void PlayBankSFX(u8 id, u8 prio);
+extern void ChannelSFX(u8 chan);
+extern void restorePT3Music();
+extern void pausePT3Music();
+extern void stopMusicPlayback();
+extern void setChannel();
+
+//=============================================================================
+// SEGMENT 17, BANK 1
+//=============================================================================
+extern void initInventory();
+extern bool addItemToInventory(u8 item, u8 levelX, u8 levelY, u8 levelHeight);
+extern bool removeItemFromInventory(u8 item, u8 levelX, u8 levelY, u8 levelHeight);
+extern void displayItemToInventory(u8 levelX, u8 levelY, u8 levelHeight);
+extern bool hasItemInInventory(u8 item);
+
+
+//=============================================================================
+// SEGMENT 18, BANK 1
+//=============================================================================
+extern void initLife();
+extern bool removeLife();
+extern void displayLife();
+extern bool addLife();
+extern bool hasLives();
+
+
+//=============================================================================
+// SEGMENT 19, BANK 1
+//=============================================================================
+extern bool isMoveRight(u8 row8, u8 input);
+extern bool isMoveLeft(u8 row8, u8 input);
+extern bool isMoveJump(u8 row8, u8 input);
+extern bool isInteractObject(u8 row8, u8 input);
+
+
+//=============================================================================
+// SEGMENT 20, BANK 1
+//=============================================================================
+extern char g_DataBackground_Patterns[];
+extern const char g_DataSprtLayer[];
+
+
+enum INPUT_ACTION
+{
+	INPUT_RIGHT = 0b00000001,
+	INPUT_LEFT = 0b00000010,
+	INPUT_JUMP = 0b00000100,
+	INPUT_GET = 0b00001000,
+};
 
 // Gameplay character stricture
 struct Character
@@ -183,6 +234,7 @@ u8 g_TimetoDeath = TIME_TO_DEATH;
 u8 g_LevelPrev = 0; // 0 = livello successivo da porta , 1 = livello precedente da porta, 2 = licello scucceivo da scensore, 3 = livello precedente da ascensore
 
 u8 g_GameFrame = 0;
+u8 g_PreviousSegment = 0;
 
 unsigned char g_Lives[MAX_LIVES] = {0, 0, 0};
 
@@ -207,6 +259,24 @@ struct CacheLevel g_CacheLevel[] = {
 	{0, 0, 32, 24, g_LevelUncompress},
 };
 
+
+
+/**
+ * @brief Switch dei segmenti nel banco 1
+ *
+ * @param u8 segment, imposta il numero del segmento da assegnare. Se il valore è0, viene ripristinato il segmento precedente
+ */
+void SetActiveSegment(u8 segment) {
+	if(segment == 0) {
+		SET_BANK_SEGMENT(1,g_PreviousSegment);
+	} else {
+		g_PreviousSegment = GET_BANK_SEGMENT(1);
+		SET_BANK_SEGMENT(1,segment);
+	}
+}
+
+
+
 /**
  * @brief Si effettua la lettura della tastiera
  * @param void
@@ -217,6 +287,8 @@ void readInputControl()
 	u8 row8 = Keyboard_Read(8);
 
 	g_Player.Input = 0;
+
+	SetActiveSegment(19);
 	if (isMoveRight(row8, g_Player.Input))
 	{
 		g_Player.Input |= INPUT_RIGHT;
@@ -233,112 +305,12 @@ void readInputControl()
 	{
 		g_Player.Input |= INPUT_GET;
 	}
+	SetActiveSegment(0);
 
 	g_PrevRow8 = row8;
 }
 
-//=============================================================================
-// FUNZIONI PER LA GESTIONE DELLE VITE
-//=============================================================================
-
-/**
- * @brief Inizializza le vite
- * @param void
- * @return void
- */
-void initLife()
-{
-	g_Player.Life = MAX_LIVES;
-
-	Mem_Set(TILE_HEART, g_Lives, (3 * sizeof(g_Lives[0])));
-}
-
-/**
- * @brief Aggiunta di una vita
- * @param void
- * @return bool TRUE se è stata aggiunta una vita
- */
-bool addLife()
-{
-	for (u8 i = 0; i < MAX_LIVES; i++)
-	{
-		if (g_Lives[i] == EMPTY_ITEM)
-		{
-			g_Player.Life++;
-			g_Lives[i] = TILE_HEART;
-
-			setTile(BASE_X_LIFE + i * OFFSET_X_LIFE, (u8)(4), TILE_HEART);
-			return TRUE;
-		}
-	}
-	return FALSE;
-}
-
-/**
- * @brief Rimuove una vita
- * @param void
- * @return bool TRUE se è stata rimossa una vita
- */
-bool removeLife()
-{
-	/* Controlla se nell'inventario è presente la pozione per l'immunità
-	if (hasItemInInventory(TILE_AMPHORA))
-	{
-		if (g_ImmunityCount < IMMUNITY)
-		{
-			g_ImmunityCount++;
-		}
-		else
-		{
-			removeItemFromInventory(TILE_AMPHORA, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
-		}
-		return TRUE;
-	}*/
-
-	for (i8 i = MAX_LIVES - 1; i >= 0; i--)
-	{
-
-		if (g_Lives[i] == TILE_HEART)
-		{
-			g_Lives[i] = EMPTY_ITEM;
-			setTile(BASE_X_LIFE + i * OFFSET_X_LIFE, (u8)(4), 0);
-			g_Player.Life--;
-			return (i > 0);
-		}
-	}
-
-	return FALSE;
-}
-
-/**
- * @brief COntrolla se ci sono ancora vite disponibili
- * @return TRUE se ci sono vite disponibili
- */
-bool hasLives()
-{
-	for (u8 i = 0; i < MAX_LIVES; i++)
-	{
-		if (g_Lives[i] == TILE_HEART)
-		{
-			return TRUE;
-		}
-	}
-	return FALSE;
-}
-
-/**
- * @brief Visualizza tutte le vite disponibili
- * @param void
- * @return void
- */
-void displayLife()
-{
-	for (u8 i = 0; i < MAX_LIVES; i++)
-	{
-		setTile(BASE_X_LIFE + i * OFFSET_X_LIFE, (u8)(4), g_Lives[i]); // 220
-	}
-}
-
+//
 //=============================================================================
 // FUNZIONI DI LIBRERIA PER LA GESTIONE DELLA FISICA
 //=============================================================================
@@ -412,19 +384,11 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
 		{
 			if (collisionCheck(enemy->X - pawn->PositionX, enemy->Y - pawn->PositionY))
 			{
-				/*
-				if (hasItemInInventory(TILE_CRUCIFIX))
-				{
-					// TODO: elimina il nemico
-					VDP_HideSprite(enemy->SpriteId);
-					enemy->State = 0;
-					removeItemFromInventory(TILE_CRUCIFIX, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+				SetActiveSegment(17);
+				bool hasAmphora = hasItemInInventory(TILE_AMPHORA);
+				SetActiveSegment(0);
 
-					g_Player.Score += 500;
-					updateScore();
-				}
-				*/
-				if (hasItemInInventory(TILE_AMPHORA))
+				if (hasAmphora)
 				{
 					if (g_ImmunityCount < IMMUNITY)
 					{
@@ -432,32 +396,25 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
 					}
 					else
 					{
+						SetActiveSegment(17);
 						removeItemFromInventory(TILE_AMPHORA, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+						SetActiveSegment(0);
 						g_ImmunityCount = 0;
 					}
 				}
 				else
 				{
-					/*
-					if (hasItemInInventory(TILE_AMPHORA))
-					{
-						if (g_ImmunityCount < IMMUNITY)
-						{
-							g_ImmunityCount++;
-						}
-						else
-						{
-							removeItemFromInventory(TILE_AMPHORA, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
-							g_ImmunityCount = 0;
-						}
-					}
-					*/
-					if (hasItemInInventory(TILE_CRUCIFIX))
+					SetActiveSegment(17);
+					bool hasCrucifix = hasItemInInventory(TILE_CRUCIFIX);
+					SetActiveSegment(0);
+					if (hasCrucifix)
 					{
 						// TODO: elimina il nemico
 						VDP_HideSprite(enemy->SpriteId);
 						enemy->State = 0;
+						SetActiveSegment(17);
 						removeItemFromInventory(TILE_CRUCIFIX, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+						SetActiveSegment(0);
 
 						g_Player.Score += 500;
 						updateScore();
@@ -465,18 +422,34 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
 					else
 					{
 						// g_ReverseCount = 60;
-						if (removeLife() == TRUE)
+						SetActiveSegment(18);
+						bool isRemove = removeLife();
+						SetActiveSegment(0);
+						if (isRemove == TRUE)
 						{
+							g_Player.Life--;
+
+							SetActiveSegment(18);
 							displayLife();
+							SetActiveSegment(0);
+
+							SetActiveSegment(16);
 							PlayBankSFX(9, 0);
+							SetActiveSegment(0);
+
 							// TODO: Messo per verificare l'effettivo funzionamento della gestione delle vite 2024.04.18
 							drawLevel(g_CurrRoomIdx);
 						}
 						else
 						{
-							if (!hasLives())
+							SetActiveSegment(18);
+							bool hl = hasLives();
+							SetActiveSegment(0);
+							if (!hl)
 							{
+								SetActiveSegment(16);
 								stopMusicPlayback();
+								SetActiveSegment(0);
 								Game_SetState(State_GameOver);
 							}
 						}
@@ -593,13 +566,22 @@ bool interact(u8 x, u8 y)
 	switch (tile)
 	{
 	case TILE_HEART:
-		if (addLife())
+		SetActiveSegment(18);
+		bool life = addLife();
+		SetActiveSegment(0);
+
+		if (life)
 		{
+			g_Player.Life++;
 			ItemsTakenForLevel(x, y, TILE_MASK_HEART, 1);
 			g_CountItem++;
 
 			setTile(x, y, EMPTY_ITEM);
+
+			SetActiveSegment(16);
 			PlayBankSFX(10, 0);
+			SetActiveSegment(0);
+
 		}
 		return TRUE;
 	case TILE_DOOR0:
@@ -610,8 +592,10 @@ bool interact(u8 x, u8 y)
 		drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.NextDoorLevel);
 		return TRUE;
 	case TILE_DOOR1:
-
-		if (hasItemInInventory(TILE_KEY1))
+		SetActiveSegment(17);
+		bool hasKey1 = hasItemInInventory(TILE_KEY1);
+		SetActiveSegment(0);
+		if (hasKey1)
 		{
 			changeLevel(x, y, TILE_KEY1, TILE_MASK_DOOR1);
 		}
@@ -622,8 +606,10 @@ bool interact(u8 x, u8 y)
 
 		return TRUE;
 	case TILE_DOOR2:
-
-		if (hasItemInInventory(TILE_KEY2))
+		SetActiveSegment(17);
+		bool hasKey2 = hasItemInInventory(TILE_KEY2);
+		SetActiveSegment(0);
+		if (hasKey2)
 		{
 			changeLevel(x, y, TILE_KEY2, TILE_MASK_DOOR2);
 		}
@@ -636,12 +622,17 @@ bool interact(u8 x, u8 y)
 	case TILE_DOOR3:
 		if (g_CurrRoomIdx == LAST_LEVEL)
 		{
+			SetActiveSegment(16);
 			stopMusicPlayback();
+			SetActiveSegment(0);
 			Game_SetState(State_GameOver);
 		}
 		else
 		{
-			if (hasItemInInventory(TILE_KEY3))
+			SetActiveSegment(17);
+			bool hasKey3 = hasItemInInventory(TILE_KEY3);
+			SetActiveSegment(0);
+			if (hasKey3)
 			{
 				changeLevel(x, y, TILE_KEY3, TILE_MASK_DOOR3);
 			}
@@ -664,21 +655,32 @@ bool interact(u8 x, u8 y)
 		// Modifico al volo il livello di gioco, cosi non sono costretto
 		// a creare una cache dei livelli.
 		replaceAndRemoveItem(x, y, tile, TILE_MASK_KEY1);
+
+		SetActiveSegment(16);
 		PlayBankSFX(5, 0);
+		SetActiveSegment(0);
+
 
 		return TRUE;
 	case TILE_KEY2:
 		// Modifico al volo il livello di gioco, cosi non sono costretto
 		// a creare una cache dei livelli.
 		replaceAndRemoveItem(x, y, tile, TILE_MASK_KEY2);
+
+		SetActiveSegment(16);
 		PlayBankSFX(5, 0);
+		SetActiveSegment(0);
 
 		return TRUE;
 	case TILE_KEY3:
 		// Modifico al volo il livello di gioco, cosi non sono costretto
 		// a creare una cache dei livelli.
 		replaceAndRemoveItem(x, y, tile, TILE_MASK_KEY3);
+
+		SetActiveSegment(16);
 		PlayBankSFX(5, 0);
+		SetActiveSegment(0);
+
 
 		return TRUE;
 	case TILE_AMPHORA:
@@ -702,10 +704,16 @@ bool interact(u8 x, u8 y)
 
 void takeActionWithCheck(u8 x, u8 y, u8 tile, u8 checkTile, u8 newTile)
 {
-	if (!hasItemInInventory(checkTile))
+	SetActiveSegment(17);
+	bool ckTile = hasItemInInventory(checkTile);
+	SetActiveSegment(0);
+	if (!ckTile)
 	{
 		replaceAndRemoveItem(x, y, tile, newTile);
+
+		SetActiveSegment(16);
 		PlayBankSFX(5, 0);
+		SetActiveSegment(0);
 	}
 }
 
@@ -739,7 +747,11 @@ void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask)
 	g_CountItem++;
 
 	setTile(x, y, EMPTY_ITEM);
+
+	SetActiveSegment(17);
 	addItemToInventory(tile, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+	SetActiveSegment(0);
+
 }
 
 /**
@@ -752,7 +764,9 @@ void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask)
  */
 void changeLevel(u8 x, u8 y, u8 key, u8 door)
 {
+	SetActiveSegment(17);
 	removeItemFromInventory(key, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+	SetActiveSegment(0);
 	ItemsTakenForLevel(x, y, door, 1);
 	g_CountItem++;
 
@@ -839,15 +853,28 @@ bool isDanger(u8 x, u8 y)
 	case TILE_DANGER3:
 	case TILE_DANGER4:
 	case TILE_LAVA:
-		if (removeLife() == TRUE)
+		SetActiveSegment(18);
+		bool isRemove = removeLife();
+		SetActiveSegment(0);
+		if (isRemove == TRUE)
 		{
+			g_Player.Life--;
+
+			SetActiveSegment(18);
 			displayLife();
+			SetActiveSegment(0);
+
+			SetActiveSegment(16);
 			PlayBankSFX(9, 0);
+			SetActiveSegment(0);
+
 			drawLevel(g_CurrRoomIdx); // Inizia nuovamente dalla stanza in cui siamo
 		}
 		else
 		{
+			SetActiveSegment(16);
 			stopMusicPlayback();
+			SetActiveSegment(0);
 			Game_SetState(State_GameOver);
 		}
 		return TRUE;
@@ -898,7 +925,7 @@ void updateScore()
  */
 void drawLevel(u8 levelIdx)
 {
-
+	SetActiveSegment(16);
 	if (levelIdx > 0)
 	{
 		pausePT3Music();
@@ -907,6 +934,7 @@ void drawLevel(u8 levelIdx)
 	{
 		restorePT3Music();
 	}
+	SetActiveSegment(0);
 
 	VDP_HideAllSprites();
 	// pausePT3Music();
@@ -937,8 +965,15 @@ void drawLevel(u8 levelIdx)
 	*/
 
 	// Ad ogni cambio di livello rimuove l'amphora dall'inventario, in modo da ridurlo ad un aiuto momntaneo
-	if (hasItemInInventory(TILE_AMPHORA))
+	SetActiveSegment(17);
+	bool hasAmphora = hasItemInInventory(TILE_AMPHORA);
+
+	if (hasAmphora) {
+
 		removeItemFromInventory(TILE_AMPHORA, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+
+	}
+	SetActiveSegment(0);
 
 	for (u8 i = 0; i < MAX_CACHE_OBJECT; i++)
 	{
@@ -1053,8 +1088,13 @@ void drawLevel(u8 levelIdx)
 
 		if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER)
 		{
+			SetActiveSegment(17);
 			displayItemToInventory(g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+			SetActiveSegment(0);
+
+			SetActiveSegment(18);
 			displayLife();
+			SetActiveSegment(0);
 		}
 	}
 
@@ -1287,7 +1327,6 @@ void updateCharacter(struct Character *ply)
 	}
 	else if (ply->bInAir)
 	{
-		// if (((g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH) || (g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV)) > 0 && (isOnPlatformH(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY) || isOnPlatformV(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY)))
 		if (((g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH) || (g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV)) > 0 && (isOnPlatform(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY, g_SlideCountV, &g_platformV[0]) || isOnPlatform(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY, g_SlideCountH, &g_platformH[0])))
 		{
 			act = ACTION_IDLE;
@@ -1336,7 +1375,7 @@ void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 
 			else
 			{
 				// TODO: Línseguimento e'dedicato solo agli scheletri
-				//if (my_strcmp(genericEnemy[nEnemy].TypeEnemy, "Scheletor") == 0)
+				// if (my_strcmp(genericEnemy[nEnemy].TypeEnemy, "Scheletor") == 0)
 				//	pursuitCheck(&genericEnemy[0], nEnemy);
 			}
 
@@ -1402,17 +1441,28 @@ void genericControl()
 		{
 			if ((g_SecondCounter - g_DelayRemoveLife) > 3)
 			{
-				if (removeLife() == TRUE)
+				SetActiveSegment(18);
+				bool isRemove = removeLife();
+				SetActiveSegment(0);
+				if (isRemove == TRUE)
 				{
-					displayLife();
+					g_Player.Life--;
 
+					SetActiveSegment(18);
+					displayLife();
+					SetActiveSegment(0);
+
+					SetActiveSegment(16);
 					PlayBankSFX(9, 0);
+					SetActiveSegment(0);
 
 					IsUnderWater = FALSE;
 				}
 				else
 				{
+					SetActiveSegment(16);
 					stopMusicPlayback();
+					SetActiveSegment(0);
 					Game_SetState(State_GameOver);
 				}
 			}
@@ -1444,7 +1494,10 @@ void genericControl()
 		g_Player.Score += 100;
 		updateScore();
 
+		SetActiveSegment(16);
 		PlayBankSFX(11, 15);
+		SetActiveSegment(0);
+
 
 		// messageInGame("Get Money!");
 	}
@@ -1473,13 +1526,17 @@ bool State_Initialize()
 {
 	// Funzione: inizializePT3
 	// Inizializzazione del Player PT3 e della tabella delle note
+	SetActiveSegment(16);
 	inizializePT3();
+
 
 	// Funzione: inizializeAYFX
 	// Impostazione del riproduttore ayfx e del canale audio
 	inizializeAYFX();
 
+
 	setChannel();
+	SetActiveSegment(0);
 
 	// Funzione: VDP_EnableDisplay
 	// Abilita/disabilita la visualizzazione dello schermo (registro 1). [MSX1/2/2+/TR]
@@ -1507,11 +1564,15 @@ bool State_Initialize()
 	//
 	// Nota:
 	//    Effettua la copia dei tiles contenuti in g_DataBackground (definiti nel file bg_tileset.h) nella VRAM a partire dall'indirizzo 0x0000
+	//SetActiveSegment(20);
 	VDP_LoadPattern_GM1_Pletter(g_DataBackground_Patterns, 0);
+	//SetActiveSegment(0);
 
 	// Inizializza i caratteri personalizzati
 	Print_SetMode(PRINT_MODE_TEXT);
+	//SetActiveSegment(20);
 	Print_SetFontEx(8, 8, 1, 1, ' ', '_', g_DataBackground_Patterns + 192);
+	//SetActiveSegment(0);
 	Print_Initialize();
 	g_PrintData.PatternOffset = 192;
 
@@ -1549,8 +1610,9 @@ bool State_Initialize()
 	//    dest  - g_ScreenLayoutLow + (32 * (riga + g_Levels[levelIdx].Y)) + (g_Levels[levelIdx].X)
 	//    count - g_Levels[levelIdx].Width il numero di byte da copiare
 	//
-
+	SetActiveSegment(20);
 	Pletter_UnpackToVRAM(g_DataSprtLayer, g_SpritePatternLow);
+	SetActiveSegment(0);
 
 	Game_SetState(State_Preset);
 
@@ -1612,15 +1674,28 @@ bool State_Game()
 
 			if (g_TimetoDeath == 0)
 			{
-				if (removeLife() == TRUE)
+				SetActiveSegment(18);
+				bool isRemove = removeLife();
+				SetActiveSegment(0);
+				if (isRemove == TRUE)
 				{
+					g_Player.Life--;
+
+					SetActiveSegment(18);
 					displayLife();
+					SetActiveSegment(0);
+
+					SetActiveSegment(16);
 					PlayBankSFX(9, 0);
+					SetActiveSegment(0);
+
 					drawLevel(g_CurrRoomIdx); // Inizia nuovamente dalla stanza in cui siamo
 				}
 				else
 				{
+					SetActiveSegment(16);
 					stopMusicPlayback();
+					SetActiveSegment(0);
 					Game_SetState(State_GameOver);
 				}
 			}
@@ -1630,7 +1705,9 @@ bool State_Game()
 			{
 				u8 riga = 22;
 				VDP_ReplacementPartialArea(riga);
+				SetActiveSegment(17);
 				displayItemToInventory(g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+				SetActiveSegment(0);
 				g_RefreshInventary = FALSE;
 			}
 		}
@@ -1717,11 +1794,17 @@ bool State_Preset()
 
 	// Funzione: initInventory
 	// Inizializza l'inventario
+	SetActiveSegment(17);
 	initInventory();
+	SetActiveSegment(0);
 
 	// Funzione: initLife
 	// Inizializza le vite del giocatore
+	g_Player.Life = MAX_LIVES;
+
+	SetActiveSegment(18);
 	initLife();
+	SetActiveSegment(0);
 
 	// Funzione: DrawLevel
 	// Inizzializza il livello di gioco

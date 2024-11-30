@@ -39,7 +39,7 @@ Emulator = 'C:/Users/87003101/msxgl-workspace/openmsx-19.1/openmsx.exe'; //'C:/U
 ProjName = "the-castel";
 
 //-- List of project modules to build (array). If empty, ProjName will be added
-ProjModules = [ ProjName, "tiles", "inventory", "control", "music", "level_defs" ];
+ProjModules = [ ProjName, "tiles", "level_defs" ];
 
 //-- Project segments base name (string). ProjName will be used if not defined
 // ProjSegments = "";
@@ -78,10 +78,10 @@ Machine = "1";
 //   - ROM_KONAMI_SCC   .rom    128KB ROM using Konami SCC mapper (8KB segments)
 //   - DOS1             .com    MSX-DOS 1 program (0100h~) No direct acces to Main-ROM
 //   - DOS2             .com    MSX-DOS 2 program (0100h~) No direct acces to Main-ROM
-Target = "ROM_48K_ISR";
+Target = "ROM_ASCII16";
 
 //-- ROM mapper total size in KB (number). Must be a multiple of 8 or 16 depending on the mapper type (from 64 to 4096)
-// ROMSize = 128;
+ROMSize = 4096;
 
 //-- Postpone the ROM startup to let the other ROMs initialize like Disk controller or Network cartridge (boolean)
 // ROMDelayBoot = false;
@@ -96,7 +96,7 @@ Target = "ROM_48K_ISR";
 CustomISR = "VBLANK";
 
 //-- Use automatic banked call and trampoline functions (boolean). For mapped ROM
-// BankedCall = 0;
+BankedCall = true;
 
 //-- Overwrite RAM starting address (number). For example. 0xE0000 for 8K RAM machine
 // ForceRamAddr = 0;

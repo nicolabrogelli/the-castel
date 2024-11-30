@@ -4,6 +4,8 @@
 
 #define COMPRESSO                1
 
+#define EMPTY_ITEM 		  	     0
+
 #define BASE_X_LIFE            190
 #define OFFSET_X_LIFE            8 // Solo multipli di 8
 #define TILE_EMPTY 		  	     0
@@ -108,14 +110,8 @@ void initCharacter(struct Character *ply, u8 id);
 void updateCharacter(struct Character *ply);
 void readInputControl();
 bool physicsCollisionEnemy(u8 x, u8 y);
-
 bool getItem(u8 x, u8 y);
 void updateScore();
-void initLife();
-bool addLife();
-void displayLife();
-bool removeLife();
-bool hasLives();
 void physicsCollisionPlayerAndEnemy(struct Character *ply);
 void changeLevel(u8 x, u8 y, u8 key, u8 door);
 bool isUnderTheWater(u8 x, u8 y);
@@ -132,48 +128,82 @@ bool isDanger(u8 x, u8 y);
 u8 isUnderDunger(u8 x, u8 y);
 void messageInGame(char *message);
 void VDP_ReplacementPartialArea(u8 riga);
-
 void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask);
 //void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 enemyNumber);
-
 void adjustXYEnemy(struct CharacterEnemy *genericEnemy, u8 idFirstSprite, u8 nEnemy);
 void takeActionWithCheck(u8 x, u8 y, u8 tile, u8 checkTile, u8 newTile);
-
 bool isOnPlatform(u8 *X, u8 *Y, u8 slideCount, struct CharacterEnemy *platform);
-
-
 int my_strcmp(const c8 *a, const c8 *b);
-//=============================================================================
-// MEMORY DATA EXTERN
-//=============================================================================
-extern unsigned char g_Level001[];
-extern unsigned char g_Level002[];
-extern unsigned char g_Level003[];
-extern unsigned char g_Level004[];
-extern unsigned char g_Level005[];
-extern unsigned char g_Level006[];
-extern unsigned char g_Level007[];
-extern unsigned char g_Level008[];
-extern unsigned char g_Level009[];
-extern unsigned char g_Level010[];
-extern unsigned char g_Level011[];
-extern unsigned char g_Level012[];
-extern unsigned char g_Level013[];
-extern unsigned char g_Level014[];
-extern unsigned char g_Level015[];
-extern unsigned char g_Level016[];
-//extern unsigned char g_Level017[];
 
-extern unsigned char g_Level018[];
-extern unsigned char g_Level019[];
-extern unsigned char g_Level020[];
-extern unsigned char g_Level021[];
-extern unsigned char g_Level022[];
-extern unsigned char g_Level023[];
-extern unsigned char g_Level024[];
-extern unsigned char g_Level025[];
-extern unsigned char g_Level026[];
-extern unsigned char g_Level027[];
-extern unsigned char g_Level028[];
-extern unsigned char g_Level029[];
-extern unsigned char g_Level030[];
+
+//=============================================================================
+// SEGMENT 19, BANK 1
+//=============================================================================
+bool isMoveRight(u8 row8, u8 input);
+bool isMoveLeft(u8 row8, u8 input);
+bool isMoveJump(u8 row8, u8 input);
+bool isInteractObject(u8 row8, u8 input);
+
+//=============================================================================
+// SEGMENT 18, BANK 1
+//=============================================================================
+void initLife();
+bool addLife();
+void displayLife();
+bool removeLife();
+bool hasLives();
+
+//=============================================================================
+// SEGMENT 17, BANK 1
+//=============================================================================
+void initInventory();
+bool addItemToInventory(u8 item, u8 levelX, u8 levelY, u8 levelHeight);
+bool removeItemFromInventory(u8 item, u8 levelX, u8 levelY, u8 levelHeight);
+void displayItemToInventory(u8 levelX, u8 levelY, u8 levelHeight);
+bool hasItemInInventory(u8 item);
+
+//=============================================================================
+// SEGMENT 16, BANK 1
+//=============================================================================
+extern void inizializePT3();
+extern void inizializeAYFX();
+extern void PlayBankSFX(u8 id, u8 prio);
+extern void ChannelSFX(u8 chan);
+extern void restorePT3Music();
+extern void pausePT3Music();
+extern void stopMusicPlayback();
+extern void setChannel();
+
+//=============================================================================
+// SEGMENT 21, BANK 1
+//=============================================================================
+//extern unsigned char g_Level001[];
+//extern unsigned char g_Level002[];
+//extern unsigned char g_Level003[];
+//extern unsigned char g_Level004[];
+//extern unsigned char g_Level005[];
+//extern unsigned char g_Level006[];
+//extern unsigned char g_Level007[];
+//extern unsigned char g_Level008[];
+//extern unsigned char g_Level009[];
+//extern unsigned char g_Level010[];
+//extern unsigned char g_Level011[];
+//extern unsigned char g_Level012[];
+//extern unsigned char g_Level013[];
+//extern unsigned char g_Level014[];
+//extern unsigned char g_Level015[];
+//extern unsigned char g_Level016[];
+////extern unsigned char g_Level017[];
+//extern unsigned char g_Level018[];
+//extern unsigned char g_Level019[];
+//extern unsigned char g_Level020[];
+//extern unsigned char g_Level021[];
+//extern unsigned char g_Level022[];
+//extern unsigned char g_Level023[];
+//extern unsigned char g_Level024[];
+//extern unsigned char g_Level025[];
+//extern unsigned char g_Level026[];
+//extern unsigned char g_Level027[];
+//extern unsigned char g_Level028[];
+//extern unsigned char g_Level029[];
+//extern unsigned char g_Level030[];
