@@ -11,3 +11,5 @@ build.sh
 data/build_data.bat
 .vscode/settings.json
 .vscode/c_cpp_properties.json
+/out
+/emul

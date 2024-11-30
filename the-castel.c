@@ -67,7 +67,7 @@ extern bool isInteractObject(u8 row8, u8 input);
 // SEGMENT 20, BANK 1
 //=============================================================================
 extern char g_DataBackground_Patterns[];
-extern const char g_DataSprtLayer[];
+extern char g_DataSprtLayer[];
 
 
 enum INPUT_ACTION
@@ -1610,9 +1610,9 @@ bool State_Initialize()
 	//    dest  - g_ScreenLayoutLow + (32 * (riga + g_Levels[levelIdx].Y)) + (g_Levels[levelIdx].X)
 	//    count - g_Levels[levelIdx].Width il numero di byte da copiare
 	//
-	SetActiveSegment(20);
+	//SetActiveSegment(20);
 	Pletter_UnpackToVRAM(g_DataSprtLayer, g_SpritePatternLow);
-	SetActiveSegment(0);
+	//SetActiveSegment(0);
 
 	Game_SetState(State_Preset);
 

@@ -8,7 +8,7 @@
 ::─────────────────────────────────────────────────────────────────────────────
 
 :: Path
-set Tools= ..\..\MSXgl\tools
+set Tools= ..\..\..\MSXgl-1.2.4\\tools
 set MSXtk=%Tools%\MSXtk\bin
 
 
