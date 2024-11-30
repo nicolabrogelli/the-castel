@@ -20,7 +20,16 @@
 #include "tiles.h"
 #include "tiles_defs.h"
 #include "level_defs.h"
+#include "enemy.h"
 
+//=============================================================================
+// SEGMENT 23, BANK 1
+//=============================================================================
+extern bool isOnPlatform(u8 *X, u8 *Y, u8 slideCount, struct CharacterEnemy *platform);
+extern bool getItem(u8 x, u8 y);
+extern void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 idFirstSprite);
+extern void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 nEnemy);
+extern void setColorTiles();
 
 //=============================================================================
 // SEGMENT 16, BANK 1
@@ -92,17 +101,6 @@ struct Character
 	Game_Pawn Pawn;
 };
 
-struct CharacterEnemy
-{
-	u8 X;				 /** Spostamento su asse X */
-	u8 Y;				 /** Spostamento su asse Y */
-	i8 VelocityY;		 /** Velocità di spostamento */
-	u8 State;			 /** Stato 1 = visibile, 0 = invisibile */
-	int Direction;		 /** Direzione di spostamento 1 = destra, -1 = sinistra */
-	const c8 *TypeEnemy; /** Descrizione del tipo di nemico */
-	u8 SpriteId;		 /** Numero dello sprite del nemico */
-	u8 MoveHV;			 /** Definisce il tipo di movimento  0 = orizzontale, 1 = verticale */
-};
 
 unsigned char g_LevelUncompress[768];
 
@@ -381,8 +379,9 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
 	{
 		struct CharacterEnemy *enemy = &genericEnemy[nEnemy];
 		if (enemy->State == 1)
-		{
-			if (collisionCheck(enemy->X - pawn->PositionX, enemy->Y - pawn->PositionY))
+		{	
+			bool isCollison = collisionCheck(enemy->X - pawn->PositionX, enemy->Y - pawn->PositionY);
+			if (isCollison)
 			{
 				SetActiveSegment(17);
 				bool hasAmphora = hasItemInInventory(TILE_AMPHORA);
@@ -480,29 +479,6 @@ bool collisionCheck(i8 dx, i8 dy)
 	}
 }
 
-/**
- * @brief La funzione verifica se il nemico è in grado di inseguriti
- * @param struct Character *ply Puntatore al player
- * @param struct CharacterEnemy *genericEnemy Puntatore all'array dei nemici
- * @param u8 enemyNumber Numero dei nemici nel livello
- * @return TRUE se il nemico può ineguirti
- */
-void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 nEnemy)
-{
-	Game_Pawn *pawn = &g_Player.Pawn;
-
-	struct CharacterEnemy *enemy = &genericEnemy[nEnemy];
-	i8 dx = enemy->X - pawn->PositionX;
-	i8 dy = enemy->Y - pawn->PositionY;
-
-	if (dy == 0 && (((dx * dx) > MIN_DISTANCE_MAGNENT) && ((dx * dx) < MAX_DISTANCE_MAGNENT)))
-	{
-		if (pawn->PositionX > enemy->X)
-			enemy->Direction = 1;
-		else
-			enemy->Direction = -1;
-	}
-}
 
 /**
  * @brief Controlla che il player non sia sommerso dall'acqua
@@ -515,18 +491,6 @@ bool isUnderTheWater(u8 x, u8 y)
 	return (getTile(x, y) == TILE_WATER);
 }
 
-/**
- * @brief Imposta i colori delle tiles
- * @param void
- * @return void
- */
-void setColorTiles()
-{
-	VDP_FillVRAM_16K(0X80, g_ScreenColorLow + 8, 2); // VERDE 0XC0 - ROSSO CHIARO 0x60
-	VDP_FillVRAM_16K(0x70, g_ScreenColorLow + 10, 1);
-	VDP_FillVRAM_16K(0xA0, g_ScreenColorLow + 12, 1); // GIALLO SCURO
-	VDP_FillVRAM_16K(0xE0, g_ScreenColorLow + 18, 2); // GRIGIO
-}
 
 void ItemsTakenForLevel(u8 x, u8 y, u8 tile, u8 visibility);
 u8 g_CountItem = 0;
@@ -774,43 +738,6 @@ void changeLevel(u8 x, u8 y, u8 key, u8 door)
 	drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.NextDoorLevel);
 }
 
-/**
- * @brief Routine per raccogliere le monete
- * @param u8 x Coordinata X
- * @param u8 y Coordinata Y
- * @return TRUE se è stata raccolta una moneta
- */
-bool getItem(u8 x, u8 y)
-{
-	switch (getTile(x, y))
-	{
-	case TILE_MONEY:
-	case TILE_GOLD_CUP:
-		setTile(x, y, EMPTY_ITEM);
-		ItemsTakenForLevel(x, y, TILE_MASK_MONEY, 1); // Per il momento non posso spostare questa funzione, in quanto dovrei duplicare la chiamata the tile
-
-		return TRUE;
-	case TILE_TIME_UP:
-		setTile(x, y, EMPTY_ITEM);
-		if (g_TimetoDeath < 60)
-		{
-			u8 offset = 60 - g_TimetoDeath;
-			if (offset > 10)
-			{
-				g_TimetoDeath += 10;
-			}
-			else
-			{
-				u8 res = 10 - offset;
-				g_TimetoDeath += res;
-			}
-		}
-		// TODO: Aggiungere 10s al tempo totale, ma non superare i 59s
-		return TRUE;
-	}
-
-	return FALSE;
-}
 
 /**
  * @brief Routine per verificare se è oresente un varco per il passaggio di livello
@@ -1247,28 +1174,6 @@ void initCharacter(struct Character *ply, u8 id)
 	}
 }
 
-/**
- * @brief Verifica che il player sia posizionato sulla piattaforma
- */
-bool isOnPlatform(u8 *X, u8 *Y, u8 slideCount, struct CharacterEnemy *platform)
-{
-	for (u8 i = 0; i < slideCount; i++)
-	{
-		if ((*X < platform[i].X - 10) || (*X > platform[i].X + 10))
-		{
-			// TODO: Non facio nulla
-		}
-		else
-		{
-			if ((*Y + 17 > platform[i].Y) && (*Y + 17 < platform[i].Y + 8))
-			{
-				*Y = platform[i].Y - 16;
-				return TRUE;
-			}
-		}
-	}
-	return FALSE;
-}
 
 /**
  * @brief Aggiorna il pawn
@@ -1327,6 +1232,7 @@ void updateCharacter(struct Character *ply)
 	}
 	else if (ply->bInAir)
 	{
+		SetActiveSegment(23);
 		if (((g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH) || (g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV)) > 0 && (isOnPlatform(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY, g_SlideCountV, &g_platformV[0]) || isOnPlatform(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY, g_SlideCountH, &g_platformH[0])))
 		{
 			act = ACTION_IDLE;
@@ -1336,6 +1242,7 @@ void updateCharacter(struct Character *ply)
 		{
 			act = ACTION_FALL;
 		}
+		SetActiveSegment(0);
 	}
 	else if (ply->bMoving)
 	{
@@ -1353,38 +1260,6 @@ void updateCharacter(struct Character *ply)
 	GamePawn_Update(pawn);
 }
 
-/**
- * @brief Aggiorna la posizione di un generico nemico
- * @param struct CharacterEnemy *genericEnemy Puntatore all'array dei nemici
- * @param u8 enemyNumber Numero dei nemici nel livello
- * @param u8 idFirstSprite Primo sprite
- * @return void
- */
-void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 idFirstSprite)
-{
-
-	for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
-	{
-		struct CharacterEnemy *enemy = &genericEnemy[nEnemy];
-		if (enemy->State == 1)
-		{
-			if (physicsCollisionEnemy(enemy->X + 7, enemy->Y) == 1)
-			{
-				enemy->Direction *= -1;
-			}
-			else
-			{
-				// TODO: Línseguimento e'dedicato solo agli scheletri
-				// if (my_strcmp(genericEnemy[nEnemy].TypeEnemy, "Scheletor") == 0)
-				//	pursuitCheck(&genericEnemy[0], nEnemy);
-			}
-
-			adjustXYEnemy(&genericEnemy[nEnemy], idFirstSprite, nEnemy);
-		}
-
-		enemy = null;
-	}
-}
 
 int my_strcmp(const c8 *a, const c8 *b)
 {
@@ -1396,35 +1271,6 @@ int my_strcmp(const c8 *a, const c8 *b)
 	return (int)(unsigned char)(*a) - (int)(unsigned char)(*b);
 }
 
-/**
- *
- */
-void adjustXYEnemy(struct CharacterEnemy *genericEnemy, u8 idFirstSprite, u8 nEnemy)
-{
-	if (genericEnemy->Direction < 0)
-	{
-		if (genericEnemy->MoveHV == 0)
-			genericEnemy->X--;
-		else
-			genericEnemy->Y--;
-	}
-	else
-	{
-		if (genericEnemy->MoveHV == 0)
-			genericEnemy->X++;
-		else
-			genericEnemy->Y++;
-	}
-
-	// Funzione: VDP_SetSpritePosition
-	// Aggiorna la posizione dello sprite. [MSX1/2/2+/TR]
-	//
-	// Parametri:
-	//   index - Indice dello sprite nella tabella degli attributi.
-	//   x     - Coordinata X iniziale dello schermo.
-	//   y     - Coordinata Y iniziale dello schermo.
-	VDP_SetSpritePosition(idFirstSprite + nEnemy, genericEnemy->X, genericEnemy->Y);
-}
 
 /**
  * @brief Raggruppo una serie di fuznioni
@@ -1485,8 +1331,11 @@ void genericControl()
 	// Attenzione l'aggiunta dell'iterazione crea dei rallentamenti al gioco
 	// 1) La prima parte si utilizza per inteagire com gli elementi che is trovano una tile sopra il piano di gioco
 	// 2) La seconda parte si utilizza nteagire com gli elementi che is trovano sul piano di gioco
-	if (getItem(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) ||
-		getItem(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4))
+
+	SetActiveSegment(23);
+	bool isElement = getItem(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) || 	getItem(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4);
+	SetActiveSegment(0);
+	if (isElement)
 	{
 		// Modifico al volo il livello di gioco, cosi non sono costretto
 		// a creare una cache dei livelli.
@@ -1577,7 +1426,9 @@ bool State_Initialize()
 	g_PrintData.PatternOffset = 192;
 
 	// Initialize color
+	SetActiveSegment(23);
 	setColorTiles();
+	SetActiveSegment(0);
 
 	// Funzione: VDP_SetSpriteFlag
 	// Impostare i parametri di rendering degli sprite. [MSX1/2/2+/TR]
@@ -1719,7 +1570,9 @@ bool State_Game()
 
 		// Funzione: updateSkeleton
 		// Aggiorna il rendering dei nemici.
+		SetActiveSegment(23);
 		updateGenericEnemy(&g_Enemy[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber, FIRST_ID_SKELETOR);
+		SetActiveSegment(0);
 
 		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
 		// Funzione: physicsCollisionPlayerAndEnemy
@@ -1731,7 +1584,9 @@ bool State_Game()
 
 		// Funzione: updateGhost
 		// Aggiorna il rendering dei nemici.
+		SetActiveSegment(23);
 		updateGenericEnemy(&g_Ghost[0], g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber, FIRST_ID_GHOST);
+		SetActiveSegment(0);
 
 		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
 		// Funzione: physicsCollisionPlayerAndGhost
@@ -1743,7 +1598,9 @@ bool State_Game()
 
 		// Funzione: updateGhost
 		// Aggiorna il rendering dei nemici.
+		SetActiveSegment(23);
 		updateGenericEnemy(&g_Spider[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber, FIRST_ID_SPIDER);
+		SetActiveSegment(0);
 
 		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
 		// Funzione: physicsCollisionPlayerAndGhost
@@ -1755,7 +1612,9 @@ bool State_Game()
 
 		// Funzione: updateGhost
 		// Aggiorna il rendering dei nemici.
+		SetActiveSegment(23);
 		updateGenericEnemy(&g_Bat[0], g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber, FIRST_ID_BAT);
+		SetActiveSegment(0);
 
 		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
 		// Funzione: physicsCollisionPlayerAndGhost
@@ -1767,8 +1626,10 @@ bool State_Game()
 
 		// Funzione: updateGenericEnemy
 		// Aggiorna il rendering della piattaforma.
+		SetActiveSegment(23);
 		updateGenericEnemy(&g_platformH[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH, FIRST_ID_SLIDE_H);
 		updateGenericEnemy(&g_platformV[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV, FIRST_ID_SLIDE_V);
+		SetActiveSegment(0);
 	}
 
 	return TRUE;
