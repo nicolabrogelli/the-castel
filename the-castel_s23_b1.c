@@ -132,30 +132,6 @@ void adjustXYEnemy(struct CharacterEnemy *genericEnemy, u8 idFirstSprite, u8 nEn
 	VDP_SetSpritePosition(idFirstSprite + nEnemy, genericEnemy->X, genericEnemy->Y);
 }
 
-
-/**
- * @brief La funzione verifica se il nemico è in grado di inseguriti
- * @param struct Character *ply Puntatore al player
- * @param struct CharacterEnemy *genericEnemy Puntatore all'array dei nemici
- * @param u8 enemyNumber Numero dei nemici nel livello
- * @return TRUE se il nemico può ineguirti
- */
-void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 nEnemy)
-{
-	Game_Pawn *pawn = &g_Player.Pawn;
-
-	struct CharacterEnemy *enemy = &genericEnemy[nEnemy];
-	i8 dx = enemy->X - pawn->PositionX;
-	i8 dy = enemy->Y - pawn->PositionY;
-
-	if (dy == 0 && (((dx * dx) > MIN_DISTANCE_MAGNENT) && ((dx * dx) < MAX_DISTANCE_MAGNENT)))
-	{
-		if (pawn->PositionX > enemy->X)
-			enemy->Direction = 1;
-		else
-			enemy->Direction = -1;
-	}
-}
 //---------------------------------------------------------------------------------------------
 
 /**

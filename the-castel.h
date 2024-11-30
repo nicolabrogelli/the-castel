@@ -41,8 +41,6 @@
 #define START_GAME               0  // Livello di inizio gico
 #define GAME_OVER               LAST_LEVEL + 1  // Livello di game over
 #define OFFSET_TILE_COLLISION   50
-#define MIN_DISTANCE_MAGNENT   100
-#define MAX_DISTANCE_MAGNENT  1000
 #define DELAY_CATCH_ENEMY        1
 #define MAX_CACHE_OBJECT         5
 
