@@ -1077,8 +1077,6 @@ u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct Charact
 		if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * (riga - 1) + colonna] != TILE_POS_GENERIC_ENEMY)
 		{
 			// TODO: Posiziona lo sprite della Slied Platform nell'livello di gioco
-			//		 C'è un bug da risolvere, la slide si presenta anche nei livelli
-			//		 dove non risulta configurata.
 			// 		 Per aggiungerla ad un livello è necessario inserire la tile 128
 			//		 e le tile 100 per dare il range di escursione
 

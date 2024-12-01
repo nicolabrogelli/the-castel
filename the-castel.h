@@ -101,55 +101,41 @@ bool State_Pause();
 bool State_GameOver();
 bool State_Preset();
 bool physicsCollision(u8 tile);
-void setColorTiles();
+bool physicsCollisionEnemy(u8 x, u8 y);
+void physicsCollisionPlayerAndEnemy(struct Character *ply);
+void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct CharacterEnemy *genericEnemy, u8 enemyNumber);
+u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, u8 idxSprite, u8 bo, u8 riga, u8 colonna, u8 levelIdx, c8 *Name, u8 movHV);
 bool interact(u8 x, u8 y);
 void drawLevel(u8 levelIdx);
 void initCharacter(struct Character *ply, u8 id);
 void updateCharacter(struct Character *ply);
 void readInputControl();
-bool physicsCollisionEnemy(u8 x, u8 y);
-bool getItem(u8 x, u8 y);
 void updateScore();
-void physicsCollisionPlayerAndEnemy(struct Character *ply);
 void changeLevel(u8 x, u8 y, u8 key, u8 door);
 bool isUnderTheWater(u8 x, u8 y);
 void genericControl();
-bool collisionCheck(i8 dx, i8 dy);
-void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct CharacterEnemy *genericEnemy, u8 enemyNumber);
-void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 idFirstSprite);
-void hideSprite(u8 count, u8 maxElement, u8 baseSprite);
-void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape);
-void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 baseSprite, u8 enemyCount, char *type, u8 moveHV);
 void VDP_LoadPattern_GM1_Pletter(const u8 *src, u8 offset);
-u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, u8 idxSprite, u8 bo, u8 riga, u8 colonna, u8 levelIdx, c8 *Name, u8 movHV);
 bool isDanger(u8 x, u8 y);
 u8 isUnderDunger(u8 x, u8 y);
 void messageInGame(char *message);
 void VDP_ReplacementPartialArea(u8 riga);
 void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask);
-//void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 enemyNumber);
-void adjustXYEnemy(struct CharacterEnemy *genericEnemy, u8 idFirstSprite, u8 nEnemy);
 void takeActionWithCheck(u8 x, u8 y, u8 tile, u8 checkTile, u8 newTile);
-bool isOnPlatform(u8 *X, u8 *Y, u8 slideCount, struct CharacterEnemy *platform);
 int my_strcmp(const c8 *a, const c8 *b);
 
 
-//=============================================================================
-// SEGMENT 19, BANK 1
-//=============================================================================
-bool isMoveRight(u8 row8, u8 input);
-bool isMoveLeft(u8 row8, u8 input);
-bool isMoveJump(u8 row8, u8 input);
-bool isInteractObject(u8 row8, u8 input);
 
 //=============================================================================
-// SEGMENT 18, BANK 1
+// SEGMENT 16, BANK 1
 //=============================================================================
-void initLife();
-bool addLife();
-void displayLife();
-bool removeLife();
-bool hasLives();
+void inizializePT3();
+void inizializeAYFX();
+void PlayBankSFX(u8 id, u8 prio);
+void ChannelSFX(u8 chan);
+void restorePT3Music();
+void pausePT3Music();
+void stopMusicPlayback();
+void setChannel();
 
 //=============================================================================
 // SEGMENT 17, BANK 1
@@ -161,47 +147,32 @@ void displayItemToInventory(u8 levelX, u8 levelY, u8 levelHeight);
 bool hasItemInInventory(u8 item);
 
 //=============================================================================
-// SEGMENT 16, BANK 1
+// SEGMENT 18, BANK 1
 //=============================================================================
-extern void inizializePT3();
-extern void inizializeAYFX();
-extern void PlayBankSFX(u8 id, u8 prio);
-extern void ChannelSFX(u8 chan);
-extern void restorePT3Music();
-extern void pausePT3Music();
-extern void stopMusicPlayback();
-extern void setChannel();
+void initLife();
+bool removeLife();
+void displayLife();
+bool addLife();
+bool hasLives();
 
 //=============================================================================
-// SEGMENT 21, BANK 1
+// SEGMENT 19, BANK 1
 //=============================================================================
-//extern unsigned char g_Level001[];
-//extern unsigned char g_Level002[];
-//extern unsigned char g_Level003[];
-//extern unsigned char g_Level004[];
-//extern unsigned char g_Level005[];
-//extern unsigned char g_Level006[];
-//extern unsigned char g_Level007[];
-//extern unsigned char g_Level008[];
-//extern unsigned char g_Level009[];
-//extern unsigned char g_Level010[];
-//extern unsigned char g_Level011[];
-//extern unsigned char g_Level012[];
-//extern unsigned char g_Level013[];
-//extern unsigned char g_Level014[];
-//extern unsigned char g_Level015[];
-//extern unsigned char g_Level016[];
-////extern unsigned char g_Level017[];
-//extern unsigned char g_Level018[];
-//extern unsigned char g_Level019[];
-//extern unsigned char g_Level020[];
-//extern unsigned char g_Level021[];
-//extern unsigned char g_Level022[];
-//extern unsigned char g_Level023[];
-//extern unsigned char g_Level024[];
-//extern unsigned char g_Level025[];
-//extern unsigned char g_Level026[];
-//extern unsigned char g_Level027[];
-//extern unsigned char g_Level028[];
-//extern unsigned char g_Level029[];
-//extern unsigned char g_Level030[];
+bool isMoveRight(u8 row8, u8 input);
+bool isMoveLeft(u8 row8, u8 input);
+bool isMoveJump(u8 row8, u8 input);
+bool isInteractObject(u8 row8, u8 input);
+
+//=============================================================================
+// SEGMENT 23, BANK 1
+//=============================================================================
+bool isOnPlatform(u8 *X, u8 *Y, u8 slideCount, struct CharacterEnemy *platform);
+bool getItem(u8 x, u8 y);
+void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 idFirstSprite);
+void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 nEnemy);
+void setColorTiles();
+void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape);
+void hideSprite(u8 count, u8 maxElement, u8 baseSprite);
+void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 baseSprite, u8 enemyCount, char *type, u8 moveHV);
+bool collisionCheck(i8 dx, i8 dy);
+void adjustXYEnemy(struct CharacterEnemy *genericEnemy, u8 idFirstSprite, u8 nEnemy);
