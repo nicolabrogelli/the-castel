@@ -30,6 +30,13 @@ extern bool getItem(u8 x, u8 y);
 extern void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 idFirstSprite);
 extern void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 nEnemy);
 extern void setColorTiles();
+extern void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape);
+extern void hideSprite(u8 count, u8 maxElement, u8 baseSprite);
+extern void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 baseSprite, u8 enemyCount, char *type, u8 moveHV);
+extern bool collisionCheck(i8 dx, i8 dy);
+//extern void messageInGame(char *message);
+
+
 
 //=============================================================================
 // SEGMENT 16, BANK 1
@@ -380,7 +387,9 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
 		struct CharacterEnemy *enemy = &genericEnemy[nEnemy];
 		if (enemy->State == 1)
 		{	
+			SetActiveSegment(23);
 			bool isCollison = collisionCheck(enemy->X - pawn->PositionX, enemy->Y - pawn->PositionY);
+			SetActiveSegment(0);
 			if (isCollison)
 			{
 				SetActiveSegment(17);
@@ -409,7 +418,9 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
 					if (hasCrucifix)
 					{
 						// TODO: elimina il nemico
+						SetActiveSegment(23);
 						VDP_HideSprite(enemy->SpriteId);
+						SetActiveSegment(0);
 						enemy->State = 0;
 						SetActiveSegment(17);
 						removeItemFromInventory(TILE_CRUCIFIX, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
@@ -458,25 +469,6 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
 		}
 	}
 	//}
-}
-
-/**
- * @brief Effettua la verifica sulla collisione
- * @param i8 dx Coordinata X
- * @param i8 dy Coordinara Y
- * @return void
- */
-bool collisionCheck(i8 dx, i8 dy)
-{
-	u16 sqrtDist = (dx * dx) + (dy * dy);
-	if (sqrtDist < 13 * 13)
-	{
-		return TRUE;
-	}
-	else
-	{
-		return FALSE;
-	}
 }
 
 
@@ -565,7 +557,9 @@ bool interact(u8 x, u8 y)
 		}
 		else
 		{
+			//SetActiveSegment(23);
 			messageInGame("is colosed");
+			//SetActiveSegment(0);
 		}
 
 		return TRUE;
@@ -579,7 +573,9 @@ bool interact(u8 x, u8 y)
 		}
 		else
 		{
+			//SetActiveSegment(23);
 			messageInGame("is colosed");
+			//SetActiveSegment(0);
 		}
 
 		return TRUE;
@@ -602,7 +598,9 @@ bool interact(u8 x, u8 y)
 			}
 			else
 			{
-				messageInGame("is colosed");
+			//SetActiveSegment(23);
+			messageInGame("is colosed");
+			//SetActiveSegment(0);
 			}
 		}
 		return TRUE;
@@ -998,12 +996,14 @@ void drawLevel(u8 levelIdx)
 		}
 	}
 
+	SetActiveSegment(23);
 	hideSprite(g_PawnCount, MAX_ENEMY, FIRST_ID_SKELETOR);
 	hideSprite(g_GhostCount, MAX_GHOST, FIRST_ID_GHOST);
 	hideSprite(g_SpiderCount, MAX_SPIDER, FIRST_ID_SPIDER);
 	hideSprite(g_BatCount, MAX_BAT, FIRST_ID_BAT);
 	hideSprite(g_SlideCountH, MAX_SLIDING_PLATFORM, FIRST_ID_SLIDE_H);
 	hideSprite(g_SlideCountV, MAX_SLIDING_PLATFORM, FIRST_ID_SLIDE_V);
+	SetActiveSegment(0);
 
 	if (levelIdx == 0)
 	{
@@ -1085,9 +1085,12 @@ u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct Charact
 			u8 x = g_Levels[levelIdx].X + colonna;
 			u8 y = g_Levels[levelIdx].Y + riga;
 
+			SetActiveSegment(23);
 			managementSprite(x, y, baseSprite, enemyCount, idxSprite);
-
 			spritePosition(x, y, &enemy[0], baseSprite, enemyCount, Name, moveHV);
+			SetActiveSegment(0);
+
+			
 
 			setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
 			enemyCount++;
@@ -1097,62 +1100,6 @@ u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct Charact
 	return enemyCount;
 }
 
-/**
- * @brief Assegna le coordinate e la direzione al nemico
- * @param u8 x Coordinata x
- * @param u8 y Coordinata y
- * @param CharacterEnemy *genericEnemy Puntatore all'array dei nemici
- * @param u8 enemyCount Contatore dei nemici per titpo
- * @param char *type Puntatore alla descrizione del nemico
- *
- */
-void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 baseSprite, u8 enemyCount, char *type, u8 moveHV)
-{
-	struct CharacterEnemy *generic = &genericEnemy[enemyCount];
-	generic->X = x * 8;
-	generic->Y = (y - 1) * 8;
-	generic->Direction = (g_GameFrame % 2) ? 1 : -1;
-	generic->TypeEnemy = type;
-	generic->SpriteId = baseSprite + enemyCount;
-	generic->State = 1;
-	generic->MoveHV = moveHV;
-}
-
-/**
- * @brief Nasconde gli sprites
- * @param u8 count
- * @param u8 maxElement numero massimo di sprite
- * @param u8 baseSprite Indice base nella tabella degli sprite
- */
-void hideSprite(u8 count, u8 maxElement, u8 baseSprite)
-{
-	for (u8 i = count; i < maxElement; ++i)
-	{
-		VDP_HideSprite(baseSprite + i);
-	}
-}
-
-/**
- * @brief Setta lo sprite e lo posiziona
- * @param u8 x Coordinata x
- * @param u8 y Coordinata y
- * @param u8 baseSprite Indice base nella tabella degli sprite
- * @param u6 enemyCount Numero dei nemici
- * @param u8 indexShape indice della figura
- */
-void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape)
-{
-	// Funzione: VDP_SetSpriteSM1
-	// Impostare l'attributo sprite per la modalità Sprite 1. [MSX1/2/2+/TR]
-	//
-	// Parametri:
-	//   index - Indice dello sprite nella tabella degli attributi
-	//   x     - Coordinata iniziale X dello schermo
-	//   y     - Coordinata iniziale Y dello schermo
-	//   shape - Indice del modello di sprite (in modalità 16x16, è possibile utilizzare solo multipli di 4)
-	//   color - Colore dello sprite (LSB 4 bit) + flag EC opzionale (VDP_SPRITE_EC)
-	VDP_SetSpriteSM1(baseSprite + enemyCount, x, y, indexShape, COLOR_WHITE);
-}
 
 /**
  * @brief Inizializza il pawn

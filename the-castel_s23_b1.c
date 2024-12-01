@@ -16,8 +16,9 @@ void adjustXYEnemy(struct CharacterEnemy *genericEnemy, u8 idFirstSprite, u8 nEn
 
 #define EMPTY_ITEM 0
 
-//extern bool g_RefreshInventary;
+extern bool g_RefreshInventary;
 extern u8 g_TimetoDeath;
+extern u8 g_GameFrame;
 
 extern u8 getTile(u8 x, u8 y);
 extern void setTile(u8 x, u8 y, u8 tile);
@@ -132,6 +133,28 @@ void adjustXYEnemy(struct CharacterEnemy *genericEnemy, u8 idFirstSprite, u8 nEn
 	VDP_SetSpritePosition(idFirstSprite + nEnemy, genericEnemy->X, genericEnemy->Y);
 }
 
+/**
+ * @brief Assegna le coordinate e la direzione al nemico
+ * @param u8 x Coordinata x
+ * @param u8 y Coordinata y
+ * @param CharacterEnemy *genericEnemy Puntatore all'array dei nemici
+ * @param u8 enemyCount Contatore dei nemici per titpo
+ * @param char *type Puntatore alla descrizione del nemico
+ *
+ */
+void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 baseSprite, u8 enemyCount, char *type, u8 moveHV)
+{
+	struct CharacterEnemy *generic = &genericEnemy[enemyCount];
+	generic->X = x * 8;
+	generic->Y = (y - 1) * 8;
+	generic->Direction = (g_GameFrame % 2) ? 1 : -1;
+	generic->TypeEnemy = type;
+	generic->SpriteId = baseSprite + enemyCount;
+	generic->State = 1;
+	generic->MoveHV = moveHV;
+}
+
+
 //---------------------------------------------------------------------------------------------
 
 /**
@@ -174,6 +197,46 @@ bool getItem(u8 x, u8 y)
 
 //---------------------------------------------------------------------------------------------
 
+
+/**
+ * @brief Setta lo sprite e lo posiziona
+ * @param u8 x Coordinata x
+ * @param u8 y Coordinata y
+ * @param u8 baseSprite Indice base nella tabella degli sprite
+ * @param u6 enemyCount Numero dei nemici
+ * @param u8 indexShape indice della figura
+ */
+void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape)
+{
+	// Funzione: VDP_SetSpriteSM1
+	// Impostare l'attributo sprite per la modalità Sprite 1. [MSX1/2/2+/TR]
+	//
+	// Parametri:
+	//   index - Indice dello sprite nella tabella degli attributi
+	//   x     - Coordinata iniziale X dello schermo
+	//   y     - Coordinata iniziale Y dello schermo
+	//   shape - Indice del modello di sprite (in modalità 16x16, è possibile utilizzare solo multipli di 4)
+	//   color - Colore dello sprite (LSB 4 bit) + flag EC opzionale (VDP_SPRITE_EC)
+	VDP_SetSpriteSM1(baseSprite + enemyCount, x, y, indexShape, COLOR_WHITE);
+}
+
+
+/**
+ * @brief Nasconde gli sprites
+ * @param u8 count
+ * @param u8 maxElement numero massimo di sprite
+ * @param u8 baseSprite Indice base nella tabella degli sprite
+ */
+void hideSprite(u8 count, u8 maxElement, u8 baseSprite)
+{
+	for (u8 i = count; i < maxElement; ++i)
+	{
+		VDP_HideSprite(baseSprite + i);
+	}
+}
+
+//---------------------------------------------------------------------------------------------
+
 /**
  * @brief Stampa un messaggio a video
  * @param char* message Messaggio da stampare
@@ -189,6 +252,7 @@ bool getItem(u8 x, u8 y)
 //	g_RefreshInventary = TRUE;
 //}
 
+//---------------------------------------------------------------------------------------------
 
 /**
  * @brief Effettua la verifica sulla collisione
@@ -196,15 +260,15 @@ bool getItem(u8 x, u8 y)
  * @param i8 dy Coordinara Y
  * @return void
  */
-//bool collisionCheck(i8 dx, i8 dy)
-//{
-//	u16 sqrtDist = (dx * dx) + (dy * dy);
-//	if (sqrtDist < 13 * 13)
-//	{
-//		return TRUE;
-//	}
-//	else
-//	{
-//		return FALSE;
-//	}
-//}
+bool collisionCheck(i8 dx, i8 dy)
+{
+	u16 sqrtDist = (dx * dx) + (dy * dy);
+	if (sqrtDist < 13 * 13)
+	{
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
+}
