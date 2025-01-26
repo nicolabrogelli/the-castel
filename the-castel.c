@@ -580,12 +580,24 @@ bool interact(u8 x, u8 y)
 
 		return TRUE;
 	case TILE_DOOR3:
-		if (g_CurrRoomIdx == LAST_LEVEL)
+		if (g_CurrRoomIdx == 1)
 		{
-			SetActiveSegment(16);
-			stopMusicPlayback();
+			SetActiveSegment(17);
+			bool hasKey1 = hasItemInInventory(TILE_KEY1);
 			SetActiveSegment(0);
-			Game_SetState(State_GameOver);
+			if (hasKey1)
+			{
+				SetActiveSegment(16);
+				stopMusicPlayback();
+				SetActiveSegment(0);
+				Game_SetState(State_GameOver);
+			}
+			else
+			{
+				//SetActiveSegment(23);
+				messageInGame("is colosed");
+				//SetActiveSegment(0);
+			}
 		}
 		else
 		{
