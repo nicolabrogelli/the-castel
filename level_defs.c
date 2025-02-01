@@ -7,35 +7,35 @@
 //=============================================================================
 // DEFINES EXTERN SEGMENT 21, BANK 1
 //=============================================================================
-extern unsigned char g_Level001[];
-extern unsigned char g_Level002[];
-extern unsigned char g_Level003[];
-extern unsigned char g_Level004[];
-extern unsigned char g_Level005[];
-extern unsigned char g_Level006[];
-extern unsigned char g_Level007[];
-extern unsigned char g_Level008[];
-extern unsigned char g_Level009[];
-extern unsigned char g_Level010[];
-extern unsigned char g_Level011[];
-extern unsigned char g_Level012[];
-extern unsigned char g_Level013[];
-extern unsigned char g_Level014[];
-extern unsigned char g_Level015[];
-extern unsigned char g_Level016[];
-extern unsigned char g_Level018[];
-extern unsigned char g_Level019[];
-extern unsigned char g_Level020[];
-extern unsigned char g_Level021[];
-extern unsigned char g_Level022[];
-extern unsigned char g_Level023[];
-extern unsigned char g_Level024[];
-extern unsigned char g_Level025[];
-extern unsigned char g_Level026[];
-extern unsigned char g_Level027[];
-extern unsigned char g_Level028[];
-extern unsigned char g_Level029[];
-extern unsigned char g_Level030[];
+extern const unsigned char g_Level001[];
+extern const unsigned char g_Level002[];
+extern const unsigned char g_Level003[];
+extern const unsigned char g_Level004[];
+extern const unsigned char g_Level005[];
+extern const unsigned char g_Level006[];
+extern const unsigned char g_Level007[];
+extern const unsigned char g_Level008[];
+extern const unsigned char g_Level009[];
+extern const unsigned char g_Level010[];
+extern const unsigned char g_Level011[];
+extern const unsigned char g_Level012[];
+extern const unsigned char g_Level013[];
+extern const unsigned char g_Level014[];
+extern const unsigned char g_Level015[];
+extern const unsigned char g_Level016[];
+extern const unsigned char g_Level018[];
+extern const unsigned char g_Level019[];
+extern const unsigned char g_Level020[];
+extern const unsigned char g_Level021[];
+extern const unsigned char g_Level022[];
+extern const unsigned char g_Level023[];
+extern const unsigned char g_Level024[];
+extern const unsigned char g_Level025[];
+extern const unsigned char g_Level026[];
+extern const unsigned char g_Level027[];
+extern const unsigned char g_Level028[];
+extern const unsigned char g_Level029[];
+extern const unsigned char g_Level030[];
 
 //=============================================================================
 // DEFINE
@@ -88,7 +88,7 @@ struct LevelDefinition g_Levels[] = {
 
 	// PIANO
 	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level018, "LVL:18", /* 20 */ {21, 0, 19, 0}, {3, 0, 0, 0, 0, 3}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}, GREY_LEVEL},
-	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level019, "LVL:19", /* 21 */ {22, 20, 0, 0}, {2, 2, 0, 2, 0, 1}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}, GREY_LEVEL},
+	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level019, "LVL:19", /* 21 */ {22, 20, 0, 0}, {1, 1, 0, 1, 0, 1}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}, GREY_LEVEL},
 	{(32 - LEVEL_WIDTH) / 2, (24 - LEVEL_HEIGHT) / 2, LEVEL_WIDTH, LEVEL_HEIGHT, g_Level020, "LVL:20", /* 22 */ {23, 21, 0, 0}, {0, 0, 0, 2, 1, 0}, {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}, GREY_LEVEL},
 
 	// DA FARE

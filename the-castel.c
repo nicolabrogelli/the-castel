@@ -21,6 +21,7 @@
 #include "tiles_defs.h"
 #include "level_defs.h"
 #include "enemy.h"
+#include "debug.h"
 
 //=============================================================================
 // SEGMENT 23, BANK 1
@@ -85,6 +86,40 @@ extern bool isInteractObject(u8 row8, u8 input);
 extern char g_DataBackground_Patterns[];
 extern char g_DataSprtLayer[];
 
+//=============================================================================
+// SEGMENT 21, BANK 1
+//=============================================================================
+extern const unsigned char g_Level001[223];
+extern const unsigned char g_Level002[224];
+extern const unsigned char g_Level003[236];
+extern const unsigned char g_Level004[229];
+extern const unsigned char g_Level005[192];
+extern const unsigned char g_Level006[162];
+extern const unsigned char g_Level007[204];
+extern const unsigned char g_Level008[179];
+extern const unsigned char g_Level009[206];
+extern const unsigned char g_Level010[192];
+extern const unsigned char g_Level011[205];
+extern const unsigned char g_Level012[190];
+extern const unsigned char g_Level013[191];
+extern const unsigned char g_Level014[218];
+extern const unsigned char g_Level015[216];
+extern const unsigned char g_Level016[213];
+extern const unsigned char g_Level018[220];
+extern const unsigned char g_Level019[150];
+extern const unsigned char g_Level020[173];
+extern const unsigned char g_Level021[195];
+extern const unsigned char g_Level022[205];
+extern const unsigned char g_Level023[175];
+extern const unsigned char g_Level024[127];
+extern const unsigned char g_Level025[166];
+extern const unsigned char g_Level026[214];
+extern const unsigned char g_Level027[183];
+extern const unsigned char g_Level028[47];
+extern const unsigned char g_Level029[105];
+extern const unsigned char g_Level030[177];
+
+
 
 enum INPUT_ACTION
 {
@@ -110,6 +145,7 @@ struct Character
 
 
 unsigned char g_LevelUncompress[768];
+unsigned char g_TempLevel[300];
 
 //=============================================================================
 // INCLUDES PERSONALIZZATI
@@ -856,12 +892,65 @@ void updateScore()
 }
 
 /**
+ * @brief Effettua una copia temporanea dell'array del livello. Questa funzione non servira piu dopo l'elimiazione di Pletter
+ * @param unsigned char* g_TempLevel Array copia
+ * @param int g_CurrRoomIdx Numero della stanza
+ * @param int size Dimensione della stanza
+ */
+void updateLevel(unsigned char* g_TempLevel, int g_CurrRoomIdx, int size) {
+    SetActiveSegment(21);
+
+    unsigned char* source = NULL;
+
+    switch (g_CurrRoomIdx) {
+        case 0:  source = g_Level030; break;
+        case 1:  source = g_Level001; break;
+        case 2:  source = g_Level002; break;
+        case 3:  source = g_Level003; break;
+        case 4:  source = g_Level004; break;
+        case 5:  source = g_Level006; break;
+        case 6:  source = g_Level007; break;
+        case 7:  source = g_Level005; break;
+        case 8:  source = g_Level008; break;
+        case 9:  source = g_Level009; break;
+        case 10: source = g_Level010; break;
+        case 11: source = g_Level011; break;
+        case 12: source = g_Level012; break;
+        case 13: source = g_Level013; break;
+        case 14: source = g_Level014; break;
+        case 15: source = g_Level015; break;
+        case 16: source = g_Level016; break;
+        case 17: source = g_Level027; break;
+        case 18: source = g_Level025; break;
+        case 19: source = g_Level026; break;
+        case 20: source = g_Level018; break;
+        case 21: source = g_Level019; break;
+        case 22: source = g_Level020; break;
+        case 23: source = g_Level021; break;
+        case 24: source = g_Level022; break;
+        case 25: source = g_Level023; break;
+        case 26: source = g_Level029; break;
+        default: source = NULL; break;
+    }
+
+    if (source != NULL) {
+        for (int i = 0; i < size; i++) {
+            g_TempLevel[i] = source[i];
+        }
+    }
+
+    SetActiveSegment(0);
+}
+
+/**
  * @brief Si disegna il livello di gioco
  * @param u8 levelIdx Indice del livello da visualizzare
  * @return void
  */
 void drawLevel(u8 levelIdx)
 {
+	//levelIdx =1;
+
 	SetActiveSegment(16);
 	if (levelIdx > 0)
 	{
@@ -929,13 +1018,20 @@ void drawLevel(u8 levelIdx)
 	//   Puliza dello schermo
 	VDP_FillVRAM_16K(0, g_ScreenLayoutLow, 32 * 24);
 
+	updateLevel(g_TempLevel, g_CurrRoomIdx, 300);
+
 	// Scompatta il livello di gioco da mostrare sullo schermo nella cache
 	// Altrimenti non sarebbe possibile mnipolare gli oggetti del livello
-	Pletter_UnpackToRAM(g_Levels[levelIdx].Layout, g_CacheLevel[0].Layout);
+	//Pletter_UnpackToRAM(g_Levels[levelIdx].Layout, g_CacheLevel[0].Layout);
+	
+	
+	Pletter_UnpackToRAM(g_TempLevel, g_CacheLevel[0].Layout);
 
+	//DEBUG_LOG("PRIMA DEL DISEGNO DEL LIVELLO");
+	
 	// Disegnare il livello riga per riga
 	for (u8 riga = 0; riga < g_CacheLevel[0].Height; ++riga)
-	{
+	{		
 		// Funzione: VDP_WriteVRAM_16K
 		// Scrivere dati dalla RAM alla VRAM. [MSX1/2/2+/TR]
 		//
@@ -1436,6 +1532,7 @@ bool State_Game()
 {
 	WaitVBlank();
 
+
 	// Funzione: GamePawn_Draw
 	// Aggiorna il rendering del pedone. Deve essere richiamato una volta per fotogramma.
 	//
@@ -1750,8 +1847,8 @@ wait_loop:
 
 void main()
 {
-	// DEBUG_INIT();
-	// DEBUG_LOG("Start debug session!");
+	DEBUG_INIT();
+	DEBUG_LOG("Start debug session!");
 
 	VDP_EnableVBlank(TRUE);
 	Bios_SetHookCallback(H_TIMI, VSyncCallback /*VDP_InterruptHandler*/);
@@ -1762,6 +1859,7 @@ void main()
 	// Parametri:
 	//   state - Il uovo stato del gioco
 	Game_SetState(State_Initialize);
+
 
 	// Funzione: Game_MainLoop
 	// Loop del gioco

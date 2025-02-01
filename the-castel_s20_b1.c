@@ -9,6 +9,7 @@
 //=============================================================================
 #include "msxgl.h"
 
+
 // Sprites table
 char g_DataSprtLayer[] =
 {
@@ -87,3 +88,4 @@ char g_DataBackground_Patterns[] =
 	0xFF, 0xC0, 
 };
 // Patterns size: 658 Bytes
+

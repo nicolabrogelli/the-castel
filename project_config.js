@@ -9,18 +9,19 @@
 //*******************************************************************************
 // BUILD STEPS
 //*******************************************************************************
-/*
+
  DoClean   = false;	//-- Clear all intermediate files and exit (boolean)
  DoCompile = true;	//-- Compile all the project and engine source code (boolean). Generate all REL files
  DoMake    = true;	//-- Link all the project and engine source code (boolean). Merge all REL into one IHX file
  DoPackage = true;	//-- Generate final binary file (boolean). Binarize the IHX file
  DoDeploy  = true;	//-- Gathering of all files necessary for the program to work (boolean). Depends on the type of target
  DoRun     = true;	//-- Start the program automatically at the end of the build (boolean)
-*/
+
 //*****************************************************************************
 // TOOLS SETTINGS
 //*****************************************************************************
 
+Emulator = 'D:/RETROGAME/MSXGL-WORKSPACE/openmsx-20.0-windows-vc-x64-bin/openmsx.exe';																																		
 
 
 //Emulator = `${ToolsDir}openMSX/openmsx`;
@@ -45,7 +46,7 @@ ProjModules = [ ProjName, "tiles", "level_defs" ];
 // ProjSegments = "";
 
 //-- List of library modules to build (array)
-LibModules = [ "compress/pletter", "system", "bios",  "vdp", "print", "input", "memory", "game", "game_pawn", "string",  "pt3/pt3_player", "ayfx/ayfx_player"];
+LibModules = [ "compress/pletter", "system", "bios",  "vdp", "print", "input", "memory", "game", "game_pawn", "string",  "pt3/pt3_player", "ayfx/ayfx_player", "debug"];
 
 //-- Additional sources to be compiled and linked with the project (array)
 // AddSources = [];
@@ -82,7 +83,7 @@ Machine = "1";
 Target = "ROM_ASCII16";
 
 //-- ROM mapper total size in KB (number). Must be a multiple of 8 or 16 depending on the mapper type (from 64 to 4096)
-ROMSize = 4096;
+ROMSize = 512;
 
 //-- Postpone the ROM startup to let the other ROMs initialize like Disk controller or Network cartridge (boolean)
 // ROMDelayBoot = false;
