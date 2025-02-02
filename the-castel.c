@@ -111,13 +111,13 @@ extern const unsigned char g_Level020[173];
 extern const unsigned char g_Level021[195];
 extern const unsigned char g_Level022[205];
 extern const unsigned char g_Level023[175];
-extern const unsigned char g_Level024[127];
+extern const unsigned char g_Level024[130];
 extern const unsigned char g_Level025[166];
 extern const unsigned char g_Level026[214];
 extern const unsigned char g_Level027[183];
 extern const unsigned char g_Level028[47];
 extern const unsigned char g_Level029[105];
-extern const unsigned char g_Level030[177];
+extern const unsigned char g_Level030[768]; //177
 
 
 
@@ -412,10 +412,6 @@ bool physicsCollisionEnemy(u8 x, u8 y)
  */
 void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct CharacterEnemy *genericEnemy, u8 enemyNumber)
 {
-	// if (g_ReverseCount > 0)
-	//	g_ReverseCount--;
-	// else
-	//{
 	Game_Pawn *pawn = &ply->Pawn;
 
 	for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
@@ -504,9 +500,7 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
 			}
 		}
 	}
-	//}
 }
-
 
 /**
  * @brief Controlla che il player non sia sommerso dall'acqua
@@ -623,15 +617,16 @@ bool interact(u8 x, u8 y)
 			SetActiveSegment(0);
 			if (hasKey1)
 			{
+				DEBUG_LOG("Partita vinta!!!");
 				SetActiveSegment(16);
 				stopMusicPlayback();
 				SetActiveSegment(0);
-				Game_SetState(State_GameOver);
+				Game_SetState(State_GameWinner);
 			}
 			else
 			{
 				//SetActiveSegment(23);
-				messageInGame("is colosed");
+				messageInGame("Oops!"); // You still can't get out
 				//SetActiveSegment(0);
 			}
 		}
@@ -734,7 +729,7 @@ void takeActionWithCheck(u8 x, u8 y, u8 tile, u8 checkTile, u8 newTile)
  */
 void messageInGame(char *message)
 {
-	c8 StrFormat[20];
+	c8 StrFormat[30];
 	String_Format(StrFormat, "%s", message);
 	Print_SetPosition(12, 22);
 	Print_DrawText(StrFormat);
@@ -863,7 +858,7 @@ bool isDanger(u8 x, u8 y)
  */
 void updateScore()
 {
-	if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER)
+	if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER && g_CurrRoomIdx != GAME_WINNER) 
 	{
 
 		c8 StrFormat[5];
@@ -900,8 +895,9 @@ void updateScore()
 void updateLevel(unsigned char* g_TempLevel, int g_CurrRoomIdx, int size) {
     SetActiveSegment(21);
 
-    unsigned char* source = NULL;
-
+    const unsigned char* source = NULL;
+	
+	DEBUG_LOGNUM("----- Livello", g_CurrRoomIdx);
     switch (g_CurrRoomIdx) {
         case 0:  source = g_Level030; break;
         case 1:  source = g_Level001; break;
@@ -930,6 +926,7 @@ void updateLevel(unsigned char* g_TempLevel, int g_CurrRoomIdx, int size) {
         case 24: source = g_Level022; break;
         case 25: source = g_Level023; break;
         case 26: source = g_Level029; break;
+		case 27: source = g_Level024; break;
         default: source = NULL; break;
     }
 
@@ -949,8 +946,6 @@ void updateLevel(unsigned char* g_TempLevel, int g_CurrRoomIdx, int size) {
  */
 void drawLevel(u8 levelIdx)
 {
-	//levelIdx =1;
-
 	SetActiveSegment(16);
 	if (levelIdx > 0)
 	{
@@ -1022,10 +1017,9 @@ void drawLevel(u8 levelIdx)
 
 	// Scompatta il livello di gioco da mostrare sullo schermo nella cache
 	// Altrimenti non sarebbe possibile mnipolare gli oggetti del livello
-	//Pletter_UnpackToRAM(g_Levels[levelIdx].Layout, g_CacheLevel[0].Layout);
-	
-	
 	Pletter_UnpackToRAM(g_TempLevel, g_CacheLevel[0].Layout);
+
+
 
 	//DEBUG_LOG("PRIMA DEL DISEGNO DEL LIVELLO");
 	
@@ -1121,7 +1115,7 @@ void drawLevel(u8 levelIdx)
 	{
 		updateScore();
 
-		if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER)
+		if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER && g_CurrRoomIdx != GAME_WINNER)
 		{
 			SetActiveSegment(17);
 			displayItemToInventory(g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
@@ -1566,7 +1560,7 @@ bool State_Game()
 		g_Frame = 0;
 
 		// TODO: Serve per aggiorare il tempo rimanente per terminare il livello senza perdere una vita
-		if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER)
+		if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER && g_CurrRoomIdx != GAME_WINNER)
 		{
 			g_TimetoDeath--;
 
@@ -1763,6 +1757,24 @@ bool State_GameOver()
 
 	return TRUE;
 }
+
+
+bool State_GameWinner()
+{
+
+	drawLevel(27); // -1
+
+	// Attende la pressione di un tasto
+	while (Keyboard_Read(8) != 254)
+	{
+	}
+
+	Game_SetState(State_Preset);
+
+	return TRUE;
+
+}
+
 
 /**
  * @brief Ripristina la riga dello schermo specificata

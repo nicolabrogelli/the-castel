@@ -40,6 +40,7 @@
 #define LAST_LEVEL              25  // Ultimo livello di gioco
 #define START_GAME               0  // Livello di inizio gico
 #define GAME_OVER               LAST_LEVEL + 1  // Livello di game over
+#define GAME_WINNER             27
 #define OFFSET_TILE_COLLISION   50
 #define DELAY_CATCH_ENEMY        1
 #define MAX_CACHE_OBJECT         5
@@ -122,7 +123,8 @@ void VDP_ReplacementPartialArea(u8 riga);
 void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask);
 void takeActionWithCheck(u8 x, u8 y, u8 tile, u8 checkTile, u8 newTile);
 int my_strcmp(const c8 *a, const c8 *b);
-
+void WaitVBlank();
+bool State_GameWinner();
 
 
 //=============================================================================
