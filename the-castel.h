@@ -90,6 +90,8 @@
 #define FALL_ENEMY_FRAME_11  4*16+7*16
 #define JUMP_ENEMY_FRAME_11 4*16+7*16
 
+#define FALL_DEAD  40
+#define LEVEL_SIZE 32*24  //300
 
 
 

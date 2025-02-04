@@ -9,4 +9,5 @@
 
 cls
 
-..\..\MSXgl-1.2.4\tools\build\Node\node.exe ..\..\MSXgl-1.2.4\engine\script\js\build.js %1
+::..\..\MSXgl-1.2.4\tools\build\Node\node.exe ..\..\MSXgl-1.2.4\engine\script\js\build.js %1
+..\..\MSXgl-main\tools\build\Node\node.exe ..\..\MSXgl-main\engine\script\js\build.js %1

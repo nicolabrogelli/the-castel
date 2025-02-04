@@ -15,7 +15,6 @@
 #include "game_pawn.h"
 #include "string.h"
 #include "input.h"
-#include "compress/pletter.h"
 #include "version.h"
 #include "tiles.h"
 #include "tiles_defs.h"
@@ -23,21 +22,26 @@
 #include "enemy.h"
 #include "debug.h"
 
-//=============================================================================
-// SEGMENT 23, BANK 1
-//=============================================================================
-extern bool isOnPlatform(u8 *X, u8 *Y, u8 slideCount, struct CharacterEnemy *platform);
-extern bool getItem(u8 x, u8 y);
-extern void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 idFirstSprite);
-extern void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 nEnemy);
-extern void setColorTiles();
-extern void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape);
-extern void hideSprite(u8 count, u8 maxElement, u8 baseSprite);
-extern void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 baseSprite, u8 enemyCount, char *type, u8 moveHV);
-extern bool collisionCheck(i8 dx, i8 dy);
-//extern void messageInGame(char *message);
 
-
+//=============================================================================
+// SEGMENT 15, BANK 1
+//=============================================================================
+extern const unsigned char g_Level014[32*24];
+extern const unsigned char g_Level015[32*24];
+extern const unsigned char g_Level016[32*24];
+extern const unsigned char g_Level018[32*24];
+extern const unsigned char g_Level019[32*24];
+extern const unsigned char g_Level020[32*24];
+extern const unsigned char g_Level021[32*24];
+extern const unsigned char g_Level022[32*24];
+extern const unsigned char g_Level023[32*24];
+extern const unsigned char g_Level024[32*24];
+extern const unsigned char g_Level025[32*24];
+extern const unsigned char g_Level026[32*24];
+extern const unsigned char g_Level027[32*24];
+//extern const unsigned char g_Level028[47];
+extern const unsigned char g_Level029[32*24];
+extern const unsigned char g_Level030[32*24]; //177
 
 //=============================================================================
 // SEGMENT 16, BANK 1
@@ -83,41 +87,41 @@ extern bool isInteractObject(u8 row8, u8 input);
 //=============================================================================
 // SEGMENT 20, BANK 1
 //=============================================================================
-extern char g_DataBackground_Patterns[];
-extern char g_DataSprtLayer[];
+extern const char g_DataBackground_Patterns[];
+extern const char g_DataSprtLayer[];
 
 //=============================================================================
 // SEGMENT 21, BANK 1
 //=============================================================================
-extern const unsigned char g_Level001[223];
-extern const unsigned char g_Level002[224];
-extern const unsigned char g_Level003[236];
-extern const unsigned char g_Level004[229];
-extern const unsigned char g_Level005[192];
-extern const unsigned char g_Level006[162];
-extern const unsigned char g_Level007[204];
-extern const unsigned char g_Level008[179];
-extern const unsigned char g_Level009[206];
-extern const unsigned char g_Level010[192];
-extern const unsigned char g_Level011[205];
-extern const unsigned char g_Level012[190];
-extern const unsigned char g_Level013[191];
-extern const unsigned char g_Level014[218];
-extern const unsigned char g_Level015[216];
-extern const unsigned char g_Level016[213];
-extern const unsigned char g_Level018[220];
-extern const unsigned char g_Level019[150];
-extern const unsigned char g_Level020[173];
-extern const unsigned char g_Level021[195];
-extern const unsigned char g_Level022[205];
-extern const unsigned char g_Level023[175];
-extern const unsigned char g_Level024[130];
-extern const unsigned char g_Level025[166];
-extern const unsigned char g_Level026[214];
-extern const unsigned char g_Level027[183];
-extern const unsigned char g_Level028[47];
-extern const unsigned char g_Level029[105];
-extern const unsigned char g_Level030[768]; //177
+extern const unsigned char g_Level001[32*24];
+extern const unsigned char g_Level002[32*24];
+extern const unsigned char g_Level003[32*24];
+extern const unsigned char g_Level004[32*24];
+extern const unsigned char g_Level005[32*24];
+extern const unsigned char g_Level006[32*24];
+extern const unsigned char g_Level007[32*24];
+extern const unsigned char g_Level008[32*24];
+extern const unsigned char g_Level009[32*24];
+extern const unsigned char g_Level010[32*24];
+extern const unsigned char g_Level011[32*24];
+extern const unsigned char g_Level012[32*24];
+extern const unsigned char g_Level013[32*24];
+
+//=============================================================================
+// SEGMENT 23, BANK 1
+//=============================================================================
+extern bool isOnPlatform(u8 *X, u8 *Y, u8 slideCount, struct CharacterEnemy *platform);
+extern bool getItem(u8 x, u8 y);
+extern void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 idFirstSprite);
+extern void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 nEnemy);
+extern void setColorTiles();
+extern void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape);
+extern void hideSprite(u8 count, u8 maxElement, u8 baseSprite);
+extern void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 baseSprite, u8 enemyCount, char *type, u8 moveHV);
+extern bool collisionCheck(i8 dx, i8 dy);
+//extern void messageInGame(char *message);
+
+
 
 
 
@@ -141,16 +145,19 @@ struct Character
 	u16 Score;
 	u8 Life;
 	Game_Pawn Pawn;
+	i16 FallStartY; // Coordinata Y dove è iniziata la caduta
+    u8 FallDamageThreshold; // Soglia di altezza per i danni da caduta
 };
 
-
-unsigned char g_LevelUncompress[768];
-unsigned char g_TempLevel[300];
 
 //=============================================================================
 // INCLUDES PERSONALIZZATI
 //=============================================================================
 #include "the-castel.h"
+
+
+unsigned char g_LevelUncompress[LEVEL_SIZE];
+unsigned char g_TempLevel[LEVEL_SIZE];
 
 //.............................................................................
 // Player 1 data
@@ -370,6 +377,43 @@ void physicsEventPlayer(u8 event, u8 tile)
 	case PAWN_PHYSICS_BORDER_DOWN: // Handle downward collisions
 	case PAWN_PHYSICS_COL_DOWN:
 		g_Player.bInAir = FALSE;
+
+
+        // // Check for fall damage
+        //if (g_Player.FallStartY > 0 && g_Player.Pawn.PositionY - g_Player.FallStartY > g_Player.FallDamageThreshold) {
+		//	DEBUG_LOG("Caduta mortale!");
+		//	DEBUG_LOGNUM("FallStartY", g_Player.FallStartY );
+		//	DEBUG_LOGNUM("g_Player.Pawn.PositionY",  g_Player.Pawn.PositionY);
+		//	DEBUG_LOGNUM("g_Player.FallDamageThreshold",  g_Player.FallDamageThreshold);
+		//
+        //    SetActiveSegment(18);
+        //    bool isRemove = removeLife();
+        //    SetActiveSegment(0);
+        //    if(isRemove == TRUE)
+        //    {
+        //        g_Player.Life--;
+		//
+        //        SetActiveSegment(18);
+        //        displayLife();
+        //        SetActiveSegment(0);
+		//
+        //        SetActiveSegment(16);
+        //        PlayBankSFX(9, 0); // Play damage sound
+        //        SetActiveSegment(0);
+		//
+        //        // Resetta le variabili di caduta qui, prima di drawLevel()
+        //        g_Player.FallStartY = 0;
+        //        g_Player.FallDamageThreshold = FALL_DEAD;
+		//
+        //        drawLevel(g_CurrRoomIdx); // Restart the level or handle death
+        //    } else {
+        //        SetActiveSegment(16);
+        //        stopMusicPlayback();
+        //        SetActiveSegment(0);
+        //        Game_SetState(State_GameOver);
+        //    }
+        //}
+
 		break;
 
 	case PAWN_PHYSICS_FALL: // Handle falling
@@ -377,6 +421,13 @@ void physicsEventPlayer(u8 event, u8 tile)
 		{
 			g_Player.bInAir = TRUE;
 			g_Player.VelocityY = 0;
+
+			//g_Player.FallStartY = g_Player.Pawn.PositionY; // Record the start of the fall
+            //g_Player.FallDamageThreshold = FALL_DEAD; // Example: 8 tiles high fall causes damage. Adjust as needed
+			//
+			//DEBUG_LOGNUM("FallStartY", g_Player.FallStartY );
+			//DEBUG_LOGNUM(" g_Player.Pawn.PositionY",  g_Player.Pawn.PositionY);
+
 		}
 		break;
 	};
@@ -893,7 +944,15 @@ void updateScore()
  * @param int size Dimensione della stanza
  */
 void updateLevel(unsigned char* g_TempLevel, int g_CurrRoomIdx, int size) {
-    SetActiveSegment(21);
+
+	int seg = 0;
+	
+	if(g_CurrRoomIdx < 14) 
+		seg = 21;
+	else
+		seg = 15;
+
+    SetActiveSegment(seg);
 
     const unsigned char* source = NULL;
 	
@@ -932,7 +991,8 @@ void updateLevel(unsigned char* g_TempLevel, int g_CurrRoomIdx, int size) {
 
     if (source != NULL) {
         for (int i = 0; i < size; i++) {
-            g_TempLevel[i] = source[i];
+            //g_TempLevel[i] = source[i];
+			g_CacheLevel[0].Layout[i] = source[i];
         }
     }
 
@@ -1013,11 +1073,11 @@ void drawLevel(u8 levelIdx)
 	//   Puliza dello schermo
 	VDP_FillVRAM_16K(0, g_ScreenLayoutLow, 32 * 24);
 
-	updateLevel(g_TempLevel, g_CurrRoomIdx, 300);
+	updateLevel(g_TempLevel, g_CurrRoomIdx, LEVEL_SIZE);
 
 	// Scompatta il livello di gioco da mostrare sullo schermo nella cache
 	// Altrimenti non sarebbe possibile mnipolare gli oggetti del livello
-	Pletter_UnpackToRAM(g_TempLevel, g_CacheLevel[0].Layout);
+	//Pletter_UnpackToRAM(g_TempLevel, g_CacheLevel[0].Layout);
 
 
 
@@ -1054,14 +1114,12 @@ void drawLevel(u8 levelIdx)
 		{
 			// Recupera la tile nella poszione indicata
 			u8 tile = g_CacheLevel[0].Layout[g_CacheLevel[0].Width * riga + colonna];
-
-			// if (tile == TILE_START_POS) // Rilevamento della posizione iniziale del giocatore
+ 			// if (tile == TILE_START_POS) // Rilevamento della posizione iniziale del giocatore
 			if (((tile == TILE_START_POS) && (g_LevelPrev == 0)) || ((tile == TILE_BACK_POS_PLYER) && (g_LevelPrev == 1)) || ((tile == TILE_BACK_POS_PLY_PLATFOTM) && (g_LevelPrev == 3))) // Rilevamento della posizione iniziale del giocatore
 			{
 				u8 x = g_CacheLevel[0].X + colonna;
 				u8 y = g_CacheLevel[0].Y + riga;
-
-				// Funzione: GamePawn_SetPosition
+			// Funzione: GamePawn_SetPosition
 				// Imposta la posizione del pedone. Forza il movimento anche se è attivata la collisione.
 				//
 				// Parametri:
@@ -1097,6 +1155,8 @@ void drawLevel(u8 levelIdx)
 			}
 		}
 	}
+
+
 
 	SetActiveSegment(23);
 	hideSprite(g_PawnCount, MAX_ENEMY, FIRST_ID_SKELETOR);
@@ -1155,10 +1215,15 @@ void drawLevel(u8 levelIdx)
 		}
 	}
 
+
+
 	VDP_EnableDisplay(TRUE);
 
 	// restorePT3Music();
+
+
 }
+
 
 /**
  * @brief Posiziona nel livello di gioco un nemico generico
@@ -1460,15 +1525,15 @@ bool State_Initialize()
 	//
 	// Nota:
 	//    Effettua la copia dei tiles contenuti in g_DataBackground (definiti nel file bg_tileset.h) nella VRAM a partire dall'indirizzo 0x0000
-	//SetActiveSegment(20);
-	VDP_LoadPattern_GM1_Pletter(g_DataBackground_Patterns, 0);
-	//SetActiveSegment(0);
-
+	SetActiveSegment(20);
+	VDP_WriteVRAM_16K(g_DataBackground_Patterns, g_ScreenPatternLow + (0 * 8), 2048);
+	
 	// Inizializza i caratteri personalizzati
 	Print_SetMode(PRINT_MODE_TEXT);
-	//SetActiveSegment(20);
+	
 	Print_SetFontEx(8, 8, 1, 1, ' ', '_', g_DataBackground_Patterns + 192);
-	//SetActiveSegment(0);
+	SetActiveSegment(0);
+
 	Print_Initialize();
 	g_PrintData.PatternOffset = 192;
 
@@ -1498,19 +1563,9 @@ bool State_Initialize()
 	//   src   - Indirizzo dei dati sorgente nella RAM
 	//   dest  - Indirizzo di destianzione nella VRAM (indirizzo a 14 bit per 16KB VRAM)
 	//   count - Numero di byte da copiare nella VRAM. Nota: Un valore 0 significa 65536
-	//
-	// Nota:
-	//    Ad ogni iterazione copia una riga del livello di gioco per, per chiarezza riporto i vari parametri utilizzati dalla funzione
-	//	  perchè g_Levels[levelIdx].Layout + g_Levels[levelIdx].Width * riga scarta la parte già copiata in precedentza e lascia tutto
-	//    il resto del livello.
-	//
-	//    src   - g_Levels[levelIdx].Layout + g_Levels[levelIdx].Width * riga
-	//    dest  - g_ScreenLayoutLow + (32 * (riga + g_Levels[levelIdx].Y)) + (g_Levels[levelIdx].X)
-	//    count - g_Levels[levelIdx].Width il numero di byte da copiare
-	//
-	//SetActiveSegment(20);
-	Pletter_UnpackToVRAM(g_DataSprtLayer, g_SpritePatternLow);
-	//SetActiveSegment(0);
+	SetActiveSegment(20);
+	VDP_WriteVRAM_16K(g_DataSprtLayer, g_SpritePatternLow,1792);
+	SetActiveSegment(0);
 
 	Game_SetState(State_Preset);
 
@@ -1806,14 +1861,6 @@ void VDP_ReplacementPartialArea(u8 riga)
 	// la copia.
 	VDP_WriteVRAM_16K(g_CacheLevel[0].Layout + g_CacheLevel[0].Width * riga,
 					  g_ScreenLayoutLow + (32 * (riga + g_CacheLevel[0].Y)) + (g_CacheLevel[0].X), g_CacheLevel[0].Width);
-}
-
-//=============================================================================
-// PLETTER
-//=============================================================================
-void VDP_LoadPattern_GM1_Pletter(const u8 *src, u8 offset)
-{
-	Pletter_UnpackToVRAM(src, g_ScreenPatternLow + (offset * 8));
 }
 
 //=============================================================================

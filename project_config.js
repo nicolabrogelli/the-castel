@@ -21,8 +21,8 @@
 // TOOLS SETTINGS
 //*****************************************************************************
 
-Emulator = 'D:/RETROGAME/MSXGL-WORKSPACE/openmsx-20.0-windows-vc-x64-bin/openmsx.exe';																																		
-
+//Emulator = 'D:/RETROGAME/MSXGL-WORKSPACE/openmsx-20.0-windows-vc-x64-bin/openmsx.exe';	
+Emulator = 'C:/Users/87003101/msxgl-workspace/openmsx-20.0/openmsx.exe';
 
 //Emulator = `${ToolsDir}openMSX/openmsx`;
 // Emulator = `${ToolsDir}Emulicious/Emulicious`;
@@ -46,7 +46,7 @@ ProjModules = [ ProjName, "tiles", "level_defs" ];
 // ProjSegments = "";
 
 //-- List of library modules to build (array)
-LibModules = [ "compress/pletter", "system", "bios",  "vdp", "print", "input", "memory", "game", "game_pawn", "string",  "pt3/pt3_player", "ayfx/ayfx_player", "debug"];
+LibModules = [  "system", "bios",  "vdp", "print", "input", "memory", "game", "game_pawn", "string",  "pt3/pt3_player", "ayfx/ayfx_player", "debug"];
 
 //-- Additional sources to be compiled and linked with the project (array)
 // AddSources = [];
