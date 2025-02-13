@@ -9,6 +9,15 @@
 //=============================================================================
 #include "msxgl.h"
 
+//=============================================================================
+// PROTOTYPE
+//=============================================================================
+void InizializeFont();
+
+//=============================================================================
+// MEMORY 
+//=============================================================================
+
 // Sprites table
 const unsigned char g_DataSprtLayer[] =
 {
@@ -4933,3 +4942,27 @@ const unsigned char g_DataBackground_Patterns[] =
 	0x00, /* ........ */ 
 };
 // Patterns size: 2048 Bytes
+
+//=============================================================================
+// FUNCTIONS
+//=============================================================================
+void InizializeFont() {
+	// Funzione: VDP_WriteVRAM_16K
+	// Scrivere dati dalla RAM alla VRAM. [MSX1/2/2+/TR]
+	//
+	// Parametri:
+	//   src   - Indirizzo dei dati sorgente nella RAM
+	//   dest  - Indirizzo di destianzione nella VRAM (indirizzo a 14 bit per 16KB VRAM)
+	//   count - Numero di byte da copiare nella VRAM. Nota: Un valore 0 significa 65536
+	//
+	// Nota:
+	//    Effettua la copia dei tiles contenuti in g_DataBackground (definiti nel file bg_tileset.h) nella VRAM a partire dall'indirizzo 0x0000
+	VDP_WriteVRAM_16K(g_DataBackground_Patterns, g_ScreenPatternLow + (0 * 8), 2048);	
+	// Inizializza i caratteri personalizzati
+	Print_SetMode(PRINT_MODE_TEXT);
+	Print_SetFontEx(8, 8, 1, 1, ' ', '_', g_DataBackground_Patterns + 192);
+	Print_Initialize();
+	
+	g_PrintData.PatternOffset = 192;
+
+}

@@ -14,17 +14,55 @@
 #include "game.h"
 #include "game_pawn.h"
 #include "string.h"
-#include "input.h"
 #include "version.h"
 #include "tiles.h"
 #include "tiles_defs.h"
 #include "level_defs.h"
 #include "enemy.h"
-#include "debug.h"
+//#include "debug.h"
 
 
 //=============================================================================
-// SEGMENT 15, BANK 1
+// SEGMENT 3, BANK 1
+//=============================================================================
+extern void initInventory();
+extern bool addItemToInventory(u8 item, u8 levelX, u8 levelY, u8 levelHeight);
+extern bool removeItemFromInventory(u8 item, u8 levelX, u8 levelY, u8 levelHeight);
+extern void displayItemToInventory(u8 levelX, u8 levelY, u8 levelHeight);
+extern bool hasItemInInventory(u8 item);
+extern void takeActionWithCheck(u8 x, u8 y, u8 tile, u8 checkTile, u8 newTile);
+extern void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask);
+extern void initLife();
+extern bool removeLife();
+extern void displayLife();
+extern bool addLife();
+extern bool hasLives();
+extern bool isDanger(u8 x, u8 y);
+
+//=============================================================================
+// SEGMENT 4, BANK 1
+//=============================================================================
+extern void drawMessageWithTimer(u8 x1, u8 y1, u8 x2, u8 y2,const char* messaggio, const char* format,	int value);   
+extern void updateScore(u16 score);
+extern void messageInGame(char *message);
+extern bool isOnPlatform(u8 *X, u8 *Y, u8 slideCount, struct CharacterEnemy *platform);
+extern bool getItem(u8 x, u8 y);
+extern void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 idFirstSprite);
+extern void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 nEnemy);
+extern void setColorTiles();
+extern void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape);
+extern void hideSprite(u8 count, u8 maxElement, u8 baseSprite);
+extern void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 baseSprite, u8 enemyCount, char *type, u8 moveHV);
+extern bool collisionCheck(i8 dx, i8 dy);
+extern bool isMoveRight(u8 row8, u8 input);
+extern bool isMoveLeft(u8 row8, u8 input);
+extern bool isMoveJump(u8 row8, u8 input);
+extern bool isInteractObject(u8 row8, u8 input);
+extern void WaitVBlank();
+extern void VSyncCallbackBanck();
+
+//=============================================================================
+// SEGMENT 5, BANK 1
 //=============================================================================
 extern const unsigned char g_Level014[32*24];
 extern const unsigned char g_Level015[32*24];
@@ -39,59 +77,11 @@ extern const unsigned char g_Level024[32*24];
 extern const unsigned char g_Level025[32*24];
 extern const unsigned char g_Level026[32*24];
 extern const unsigned char g_Level027[32*24];
-//extern const unsigned char g_Level028[47];
 extern const unsigned char g_Level029[32*24];
-extern const unsigned char g_Level030[32*24]; //177
+extern const unsigned char g_Level030[32*24]; 
 
 //=============================================================================
-// SEGMENT 16, BANK 1
-//=============================================================================
-extern void inizializePT3();
-extern void inizializeAYFX();
-extern void PlayBankSFX(u8 id, u8 prio);
-extern void ChannelSFX(u8 chan);
-extern void restorePT3Music();
-extern void pausePT3Music();
-extern void stopMusicPlayback();
-extern void setChannel();
-
-//=============================================================================
-// SEGMENT 17, BANK 1
-//=============================================================================
-extern void initInventory();
-extern bool addItemToInventory(u8 item, u8 levelX, u8 levelY, u8 levelHeight);
-extern bool removeItemFromInventory(u8 item, u8 levelX, u8 levelY, u8 levelHeight);
-extern void displayItemToInventory(u8 levelX, u8 levelY, u8 levelHeight);
-extern bool hasItemInInventory(u8 item);
-
-
-//=============================================================================
-// SEGMENT 18, BANK 1
-//=============================================================================
-extern void initLife();
-extern bool removeLife();
-extern void displayLife();
-extern bool addLife();
-extern bool hasLives();
-
-
-//=============================================================================
-// SEGMENT 19, BANK 1
-//=============================================================================
-extern bool isMoveRight(u8 row8, u8 input);
-extern bool isMoveLeft(u8 row8, u8 input);
-extern bool isMoveJump(u8 row8, u8 input);
-extern bool isInteractObject(u8 row8, u8 input);
-
-
-//=============================================================================
-// SEGMENT 20, BANK 1
-//=============================================================================
-extern const char g_DataBackground_Patterns[];
-extern const char g_DataSprtLayer[];
-
-//=============================================================================
-// SEGMENT 21, BANK 1
+// SEGMENT 6, BANK 1
 //=============================================================================
 extern const unsigned char g_Level001[32*24];
 extern const unsigned char g_Level002[32*24];
@@ -108,21 +98,11 @@ extern const unsigned char g_Level012[32*24];
 extern const unsigned char g_Level013[32*24];
 
 //=============================================================================
-// SEGMENT 23, BANK 1
+// SEGMENT 7, BANK 1
 //=============================================================================
-extern bool isOnPlatform(u8 *X, u8 *Y, u8 slideCount, struct CharacterEnemy *platform);
-extern bool getItem(u8 x, u8 y);
-extern void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 idFirstSprite);
-extern void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 nEnemy);
-extern void setColorTiles();
-extern void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape);
-extern void hideSprite(u8 count, u8 maxElement, u8 baseSprite);
-extern void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 baseSprite, u8 enemyCount, char *type, u8 moveHV);
-extern bool collisionCheck(i8 dx, i8 dy);
-//extern void messageInGame(char *message);
-
-
-
+extern const char g_DataBackground_Patterns[];
+extern const char g_DataSprtLayer[];
+extern void InizializeFont();
 
 
 enum INPUT_ACTION
@@ -155,9 +135,7 @@ struct Character
 //=============================================================================
 #include "the-castel.h"
 
-
 unsigned char g_LevelUncompress[LEVEL_SIZE];
-unsigned char g_TempLevel[LEVEL_SIZE];
 
 //.............................................................................
 // Player 1 data
@@ -246,7 +224,7 @@ const Game_Action g_PlayerAnimActions[] =
 //=============================================================================
 
 struct Character g_Player;
-struct CharacterEnemy g_Enemy[MAX_ENEMY];
+struct CharacterEnemy g_Skeletor[MAX_ENEMY];
 struct CharacterEnemy g_Ghost[MAX_GHOST];
 struct CharacterEnemy g_Spider[MAX_SPIDER];
 struct CharacterEnemy g_Bat[MAX_BAT];
@@ -268,7 +246,7 @@ u8 g_SecondCounter = 0;
 u8 g_DangerCounter = 0;
 u8 g_Frame = 0;
 u8 g_DelayRemoveLife = 0;
-bool IsUnderWater = FALSE;
+bool g_IsUnderWater = FALSE;
 // bool g_IsDanger = FALSE;
 
 /*
@@ -284,7 +262,7 @@ u8 g_LevelPrev = 0; // 0 = livello successivo da porta , 1 = livello precedente 
 u8 g_GameFrame = 0;
 u8 g_PreviousSegment = 0;
 
-unsigned char g_Lives[MAX_LIVES] = {0, 0, 0};
+//unsigned char g_Lives[MAX_LIVES] = {0, 0, 0};
 
 /**
  * \struct
@@ -307,8 +285,6 @@ struct CacheLevel g_CacheLevel[] = {
 	{0, 0, 32, 24, g_LevelUncompress},
 };
 
-
-
 /**
  * @brief Switch dei segmenti nel banco 1
  *
@@ -324,9 +300,8 @@ void SetActiveSegment(u8 segment) {
 }
 
 
-
 /**
- * @brief Si effettua la lettura della tastiera
+ * @brief Si effettua la lettura della tastiera (OTTIMIZZATA)
  * @param void
  * @return void
  */
@@ -336,7 +311,7 @@ void readInputControl()
 
 	g_Player.Input = 0;
 
-	SetActiveSegment(19);
+	SetActiveSegment(4);
 	if (isMoveRight(row8, g_Player.Input))
 	{
 		g_Player.Input |= INPUT_RIGHT;
@@ -358,7 +333,6 @@ void readInputControl()
 	g_PrevRow8 = row8;
 }
 
-//
 //=============================================================================
 // FUNZIONI DI LIBRERIA PER LA GESTIONE DELLA FISICA
 //=============================================================================
@@ -386,18 +360,18 @@ void physicsEventPlayer(u8 event, u8 tile)
 		//	DEBUG_LOGNUM("g_Player.Pawn.PositionY",  g_Player.Pawn.PositionY);
 		//	DEBUG_LOGNUM("g_Player.FallDamageThreshold",  g_Player.FallDamageThreshold);
 		//
-        //    SetActiveSegment(18);
+        //    SetActiveSegment(3);
         //    bool isRemove = removeLife();
         //    SetActiveSegment(0);
         //    if(isRemove == TRUE)
         //    {
         //        g_Player.Life--;
 		//
-        //        SetActiveSegment(18);
+        //        SetActiveSegment(3);
         //        displayLife();
         //        SetActiveSegment(0);
 		//
-        //        SetActiveSegment(16);
+        //        SetActiveSegment(4);
         //        PlayBankSFX(9, 0); // Play damage sound
         //        SetActiveSegment(0);
 		//
@@ -407,7 +381,7 @@ void physicsEventPlayer(u8 event, u8 tile)
 		//
         //        drawLevel(g_CurrRoomIdx); // Restart the level or handle death
         //    } else {
-        //        SetActiveSegment(16);
+        //        SetActiveSegment(4);
         //        stopMusicPlayback();
         //        SetActiveSegment(0);
         //        Game_SetState(State_GameOver);
@@ -444,18 +418,18 @@ bool physicsCollision(u8 tile)
 }
 
 /**
- * @brief Si intercetta la collisione di un nemico con una tiles
+ * @brief Si intercetta la collisione di un nemico con una tiles (OTTIMIZZATA)
  * @param u8 x asse X
  * @param u8 y asse y
  * @return TRUE se si verifica la collisione
  */
 bool physicsCollisionEnemy(u8 x, u8 y)
 {
-	return ((getTile(x, y) >= 100) /*|| getTile(x, y) == 0 */);
+	return (( getTile(x, y) >= 100) /*|| getTile(x, y) == 0 */);
 }
 
 /**
- * @brief Gestisce una probabile collisione tra il Player e un generico nemico
+ * @brief Gestisce una probabile collisione tra il Player e un generico nemico (OTTIMIZZATA)
  * @param struct Character *ply Puntatore al player
  * @param struct CharacterEnemy *genericEnemy Puntatore all'array dei nemici
  * @param u8 enemyNumber Numero dei nemici nel livello
@@ -463,98 +437,85 @@ bool physicsCollisionEnemy(u8 x, u8 y)
  */
 void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct CharacterEnemy *genericEnemy, u8 enemyNumber)
 {
-	Game_Pawn *pawn = &ply->Pawn;
+    Game_Pawn *pawn = &ply->Pawn;
 
-	for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
-	{
-		struct CharacterEnemy *enemy = &genericEnemy[nEnemy];
-		if (enemy->State == 1)
-		{	
-			SetActiveSegment(23);
-			bool isCollison = collisionCheck(enemy->X - pawn->PositionX, enemy->Y - pawn->PositionY);
+    for (u8 nEnemy = 0; nEnemy < enemyNumber; nEnemy++)
+    {
+        struct CharacterEnemy *enemy = &genericEnemy[nEnemy];
+        if (enemy->State != 1)
+            continue;
+
+        SetActiveSegment(4);
+        bool isCollision = collisionCheck(enemy->X - pawn->PositionX, enemy->Y - pawn->PositionY);
+        SetActiveSegment(0);
+
+        if (!isCollision)
+            continue;
+
+        SetActiveSegment(3);
+        bool hasAmphora = hasItemInInventory(TILE_AMPHORA);
+
+        if (hasAmphora)
+        {
+            if (g_ImmunityCount < IMMUNITY)
+            {
+                g_ImmunityCount++;
+            }
+            else
+            {
+                removeItemFromInventory(TILE_AMPHORA,  LEVEL_X,  LEVEL_Y, LEVEL_HEIGHT);
+                g_ImmunityCount = 0;
+            }
+            continue;
+        }
+        bool hasCrucifix = hasItemInInventory(TILE_CRUCIFIX);
+        SetActiveSegment(0);
+
+        if (hasCrucifix)
+        {
+            SetActiveSegment(4);
+            VDP_HideSprite(enemy->SpriteId);
+            SetActiveSegment(0);
+            enemy->State = 0;
+            
+            SetActiveSegment(3);
+            removeItemFromInventory(TILE_CRUCIFIX,  LEVEL_X,  LEVEL_Y, LEVEL_HEIGHT);
+            SetActiveSegment(0);
+
+            g_Player.Score += 500;
+			SetActiveSegment(4);
+            updateScore(g_Player.Score); // g_Levels[g_CurrRoomIdx].Name
 			SetActiveSegment(0);
-			if (isCollison)
-			{
-				SetActiveSegment(17);
-				bool hasAmphora = hasItemInInventory(TILE_AMPHORA);
-				SetActiveSegment(0);
+            continue;
+        }
 
-				if (hasAmphora)
-				{
-					if (g_ImmunityCount < IMMUNITY)
-					{
-						g_ImmunityCount++;
-					}
-					else
-					{
-						SetActiveSegment(17);
-						removeItemFromInventory(TILE_AMPHORA, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
-						SetActiveSegment(0);
-						g_ImmunityCount = 0;
-					}
-				}
-				else
-				{
-					SetActiveSegment(17);
-					bool hasCrucifix = hasItemInInventory(TILE_CRUCIFIX);
-					SetActiveSegment(0);
-					if (hasCrucifix)
-					{
-						// TODO: elimina il nemico
-						SetActiveSegment(23);
-						VDP_HideSprite(enemy->SpriteId);
-						SetActiveSegment(0);
-						enemy->State = 0;
-						SetActiveSegment(17);
-						removeItemFromInventory(TILE_CRUCIFIX, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
-						SetActiveSegment(0);
+        SetActiveSegment(3);
+        bool isRemove = removeLife();
+        SetActiveSegment(0);
 
-						g_Player.Score += 500;
-						updateScore();
-					}
-					else
-					{
-						// g_ReverseCount = 60;
-						SetActiveSegment(18);
-						bool isRemove = removeLife();
-						SetActiveSegment(0);
-						if (isRemove == TRUE)
-						{
-							g_Player.Life--;
-
-							SetActiveSegment(18);
-							displayLife();
-							SetActiveSegment(0);
-
-							SetActiveSegment(16);
-							PlayBankSFX(9, 0);
-							SetActiveSegment(0);
-
-							// TODO: Messo per verificare l'effettivo funzionamento della gestione delle vite 2024.04.18
-							drawLevel(g_CurrRoomIdx);
-						}
-						else
-						{
-							SetActiveSegment(18);
-							bool hl = hasLives();
-							SetActiveSegment(0);
-							if (!hl)
-							{
-								SetActiveSegment(16);
-								stopMusicPlayback();
-								SetActiveSegment(0);
-								Game_SetState(State_GameOver);
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+        if (isRemove)
+        {
+            g_Player.Life--;
+            SetActiveSegment(3);
+            displayLife();
+            SetActiveSegment(0);
+            drawLevel(g_CurrRoomIdx);
+        }
+        else
+        {
+            SetActiveSegment(3);
+            bool hasLivesLeft = hasLives();
+            SetActiveSegment(0);
+            if (!hasLivesLeft)
+            {
+                Game_SetState(State_GameOver);
+            }
+        }
+    }
 }
 
 /**
- * @brief Controlla che il player non sia sommerso dall'acqua
+ * @brief Controlla che il player non sia sommerso dall'acqua (OTTIMIZZATA)
  * @param u8 x Coordinata x
  * @param u8 y Coordinata y
  * @return TRUE se è sotto l'acqua
@@ -587,227 +548,110 @@ void ItemsTakenForLevel(u8 x, u8 y, u8 tile, u8 visible)
 }
 
 /**
- * @brief Interagisce in una determinata posizione
+ * @brief Interagisce in una determinata posizione (OTTIMIZZATA)
  * @param u8 x Coordinata x
  * @param u8 y Coordinata y
  * @return bool TRUE se si compie una azione
  */
 bool interact(u8 x, u8 y)
 {
-	u8 tile = getTile(x, y);
-	if (tile < 60)
-		return FALSE;
-	// DEBUG_LOGNUM("Intercat", tile);
+    u8 tile = getTile(x, y);
+    if (tile < 60)
+        return FALSE;
 
-	// TODO: Ottimizzare il case!!
-	switch (tile)
-	{
-	case TILE_HEART:
-		SetActiveSegment(18);
-		bool life = addLife();
-		SetActiveSegment(0);
-
-		if (life)
-		{
-			g_Player.Life++;
-			ItemsTakenForLevel(x, y, TILE_MASK_HEART, 1);
-			g_CountItem++;
-
-			setTile(x, y, EMPTY_ITEM);
-
-			SetActiveSegment(16);
-			PlayBankSFX(10, 0);
-			SetActiveSegment(0);
-
-		}
-		return TRUE;
-	case TILE_DOOR0:
-	case TILE_MASK_DOOR1:
-	case TILE_MASK_DOOR2:
-	case TILE_MASK_DOOR3:
-		g_LevelPrev = 0;
-		drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.NextDoorLevel);
-		return TRUE;
-	case TILE_DOOR1:
-		SetActiveSegment(17);
-		bool hasKey1 = hasItemInInventory(TILE_KEY1);
-		SetActiveSegment(0);
-		if (hasKey1)
-		{
-			changeLevel(x, y, TILE_KEY1, TILE_MASK_DOOR1);
-		}
-		else
-		{
-			//SetActiveSegment(23);
-			messageInGame("is colosed");
-			//SetActiveSegment(0);
-		}
-
-		return TRUE;
-	case TILE_DOOR2:
-		SetActiveSegment(17);
-		bool hasKey2 = hasItemInInventory(TILE_KEY2);
-		SetActiveSegment(0);
-		if (hasKey2)
-		{
-			changeLevel(x, y, TILE_KEY2, TILE_MASK_DOOR2);
-		}
-		else
-		{
-			//SetActiveSegment(23);
-			messageInGame("is colosed");
-			//SetActiveSegment(0);
-		}
-
-		return TRUE;
-	case TILE_DOOR3:
-		if (g_CurrRoomIdx == 1)
-		{
-			SetActiveSegment(17);
-			bool hasKey1 = hasItemInInventory(TILE_KEY1);
-			SetActiveSegment(0);
-			if (hasKey1)
-			{
-				DEBUG_LOG("Partita vinta!!!");
-				SetActiveSegment(16);
-				stopMusicPlayback();
+    switch (tile)
+    {
+    case TILE_HEART:
+        SetActiveSegment(3);
+        if (addLife())
+        {
+            SetActiveSegment(0);
+            g_Player.Life++;
+            ItemsTakenForLevel(x, y, TILE_MASK_HEART, 1);
+            g_CountItem++;
+            setTile(x, y, EMPTY_ITEM);
+        }
+        return TRUE;
+    
+    case TILE_DOOR0:
+    case TILE_MASK_DOOR1:
+    case TILE_MASK_DOOR2:
+    case TILE_MASK_DOOR3:
+    case TILE_DOOR_NEXT:
+        g_LevelPrev = 0;
+        drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.NextDoorLevel);
+        return (tile == TILE_DOOR_NEXT) ? FALSE : TRUE;
+    
+    case TILE_DOOR_PREV:
+        g_LevelPrev = 1;
+        drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.PrevDoorLevel);
+        return FALSE;
+    
+    case TILE_DOOR1:
+    case TILE_DOOR2:
+    case TILE_DOOR3:
+    {
+        u8 requiredKey = (tile == TILE_DOOR1) ? TILE_KEY1 : (tile == TILE_DOOR2) ? TILE_KEY2 : TILE_KEY3;
+        u8 doorMask = (tile == TILE_DOOR1) ? TILE_MASK_DOOR1 : (tile == TILE_DOOR2) ? TILE_MASK_DOOR2 : TILE_MASK_DOOR3;
+        
+        if (tile == TILE_DOOR3 && g_CurrRoomIdx == 1)
+        {
+            SetActiveSegment(3);
+            bool hasKey = hasItemInInventory(TILE_KEY1);
+            SetActiveSegment(0);
+            if (hasKey)
+                Game_SetState(State_GameWinner);
+            else {
+				SetActiveSegment(4);
+				messageInGame("Oops!");
 				SetActiveSegment(0);
-				Game_SetState(State_GameWinner);
 			}
-			else
-			{
-				//SetActiveSegment(23);
-				messageInGame("Oops!"); // You still can't get out
-				//SetActiveSegment(0);
+        }
+        else
+        {
+            SetActiveSegment(3);
+            bool hasKey = hasItemInInventory(requiredKey);
+            SetActiveSegment(0);
+            
+            if (hasKey)
+                changeLevel(x, y, requiredKey, doorMask);
+            else {
+				SetActiveSegment(4);
+				messageInGame("Is Closed!");
+				SetActiveSegment(0);
 			}
-		}
-		else
-		{
-			SetActiveSegment(17);
-			bool hasKey3 = hasItemInInventory(TILE_KEY3);
-			SetActiveSegment(0);
-			if (hasKey3)
-			{
-				changeLevel(x, y, TILE_KEY3, TILE_MASK_DOOR3);
-			}
-			else
-			{
-			//SetActiveSegment(23);
-			messageInGame("is colosed");
-			//SetActiveSegment(0);
-			}
-		}
-		return TRUE;
-	case TILE_DOOR_PREV:
-		g_LevelPrev = 1;
-		drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.PrevDoorLevel);
-		return false;
-	case TILE_DOOR_NEXT:
-		g_LevelPrev = 0;
-		drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.NextDoorLevel);
-		return false;
-
-	case TILE_KEY1:
-		// Modifico al volo il livello di gioco, cosi non sono costretto
-		// a creare una cache dei livelli.
-		replaceAndRemoveItem(x, y, tile, TILE_MASK_KEY1);
-
-		SetActiveSegment(16);
-		PlayBankSFX(5, 0);
+        }
+        return TRUE;
+    }
+    
+    case TILE_KEY1:
+    case TILE_KEY2:
+    case TILE_KEY3:
+    {
+        u8 keyMask = (tile == TILE_KEY1) ? TILE_MASK_KEY1 : (tile == TILE_KEY2) ? TILE_MASK_KEY2 : TILE_MASK_KEY3;
+        SetActiveSegment(3);
+		replaceAndRemoveItem(x, y, tile, keyMask);
 		SetActiveSegment(0);
-
-
-		return TRUE;
-	case TILE_KEY2:
-		// Modifico al volo il livello di gioco, cosi non sono costretto
-		// a creare una cache dei livelli.
-		replaceAndRemoveItem(x, y, tile, TILE_MASK_KEY2);
-
-		SetActiveSegment(16);
-		PlayBankSFX(5, 0);
+        return TRUE;
+    }
+    
+    case TILE_AMPHORA:
+		SetActiveSegment(3);
+        takeActionWithCheck(x, y, tile, TILE_AMPHORA, TILE_MASK_AMPHORA);
 		SetActiveSegment(0);
-
+        return TRUE;
+    
+    case TILE_CRUCIFIX:
+		SetActiveSegment(3);
+        takeActionWithCheck(x, y, tile, TILE_CRUCIFIX, TILE_EMPTY);
+        SetActiveSegment(0);
 		return TRUE;
-	case TILE_KEY3:
-		// Modifico al volo il livello di gioco, cosi non sono costretto
-		// a creare una cache dei livelli.
-		replaceAndRemoveItem(x, y, tile, TILE_MASK_KEY3);
+    }
 
-		SetActiveSegment(16);
-		PlayBankSFX(5, 0);
-		SetActiveSegment(0);
-
-
-		return TRUE;
-	case TILE_AMPHORA:
-		// Modifico al volo il livello di gioco, cosi non sono costretto
-		// a creare una cache dei livelli.
-		takeActionWithCheck(x, y, tile, TILE_AMPHORA, TILE_MASK_AMPHORA);
-
-		return TRUE;
-	case TILE_CRUCIFIX:
-		// Modifico al volo il livello di gioco, cosi non sono costretto
-		// a creare una cache dei livelli.
-		takeActionWithCheck(x, y, tile, TILE_CRUCIFIX, TILE_EMPTY);
-
-		return TRUE;
-	}
-
-	updateScore();
-
-	return FALSE;
-}
-
-void takeActionWithCheck(u8 x, u8 y, u8 tile, u8 checkTile, u8 newTile)
-{
-	SetActiveSegment(17);
-	bool ckTile = hasItemInInventory(checkTile);
+	SetActiveSegment(4);
+    updateScore(g_Player.Score);
 	SetActiveSegment(0);
-	if (!ckTile)
-	{
-		replaceAndRemoveItem(x, y, tile, newTile);
-
-		SetActiveSegment(16);
-		PlayBankSFX(5, 0);
-		SetActiveSegment(0);
-	}
-}
-
-/**
- * @brief Stampa un messaggio a video
- * @param char* message Messaggio da stampare
- * @return void
- */
-void messageInGame(char *message)
-{
-	c8 StrFormat[30];
-	String_Format(StrFormat, "%s", message);
-	Print_SetPosition(12, 22);
-	Print_DrawText(StrFormat);
-
-	g_RefreshInventary = TRUE;
-}
-
-/**
- * @brief rimuove la tile, sostituendola con una maschera e mette l'oggetto corrspondente nell'inventario.
- * 		  Questa funzione anche se ridondante mi permette di risparmiare qulache bit :)
- * @param u8 x Coordinata x
- * @param u8 y Coordinata y
- * @param u8 tile Tile da inserire nell'inventario
- * @param u8 tileMask Maschera per sostituire la tile
- * @return void
- */
-void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask)
-{
-	ItemsTakenForLevel(x, y, tileMask, 1);
-	g_CountItem++;
-
-	setTile(x, y, EMPTY_ITEM);
-
-	SetActiveSegment(17);
-	addItemToInventory(tile, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
-	SetActiveSegment(0);
-
+    return FALSE;
 }
 
 /**
@@ -820,8 +664,8 @@ void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask)
  */
 void changeLevel(u8 x, u8 y, u8 key, u8 door)
 {
-	SetActiveSegment(17);
-	removeItemFromInventory(key, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+	SetActiveSegment(3);
+	removeItemFromInventory(key,  LEVEL_X,  LEVEL_Y, LEVEL_HEIGHT);
 	SetActiveSegment(0);
 	ItemsTakenForLevel(x, y, door, 1);
 	g_CountItem++;
@@ -832,110 +676,25 @@ void changeLevel(u8 x, u8 y, u8 key, u8 door)
 
 
 /**
- * @brief Routine per verificare se è oresente un varco per il passaggio di livello
+ * @brief Routine per verificare se è oresente un varco per il passaggio di livello (OTTIMiZZATA)
  * @param u8 x Coordinata X
  * @param u8 y Coordinata Y
  * @return TRUE se è presente
  */
 bool isPassage(u8 x, u8 y)
 {
-	switch (getTile(x, y))
-	{
-	case TILE_UP_DOOR:
-		g_LevelPrev = 3;
-		drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.UpDoorLevel);
-		return TRUE;
+    u8 tile = getTile(x, y);
 
-	case TILE_DOWN_DOOR:
-		g_LevelPrev = 3;
-		drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.DownDoorLevel);
-		return TRUE;
-	}
-	return FALSE;
+    if (tile == TILE_UP_DOOR || tile == TILE_DOWN_DOOR)
+    {
+        g_LevelPrev = 3;
+        drawLevel(tile == TILE_UP_DOOR ? g_Levels[g_CurrRoomIdx].DoorLevel.UpDoorLevel : g_Levels[g_CurrRoomIdx].DoorLevel.DownDoorLevel);
+        return TRUE;
+    }
+    
+    return FALSE;
 }
 
-/**
- * @brief Verifica se siamo in una posizione di pericolo
- * @param u8 x Coordinata X
- * @param u8 y Coordinata Y
- * @param u8 t Durata immunita
- * @return TRUE se siamo in pericolo
- */
-bool isDanger(u8 x, u8 y)
-{
-	switch (getTile(x, y))
-	{
-	case TILE_SKULL:
-	case TILE_BONE:
-	case TILE_DANGER1:
-	case TILE_DANGER2:
-	case TILE_DANGER3:
-	case TILE_DANGER4:
-	case TILE_LAVA:
-		SetActiveSegment(18);
-		bool isRemove = removeLife();
-		SetActiveSegment(0);
-		if (isRemove == TRUE)
-		{
-			g_Player.Life--;
-
-			SetActiveSegment(18);
-			displayLife();
-			SetActiveSegment(0);
-
-			SetActiveSegment(16);
-			PlayBankSFX(9, 0);
-			SetActiveSegment(0);
-
-			drawLevel(g_CurrRoomIdx); // Inizia nuovamente dalla stanza in cui siamo
-		}
-		else
-		{
-			SetActiveSegment(16);
-			stopMusicPlayback();
-			SetActiveSegment(0);
-			Game_SetState(State_GameOver);
-		}
-		return TRUE;
-	default:
-		return FALSE;
-	}
-}
-
-/**
- * @brief Aggiorna il punteggio
- * @param void
- * @return void
- */
-void updateScore()
-{
-	if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER && g_CurrRoomIdx != GAME_WINNER) 
-	{
-
-		c8 StrFormat[5];
-
-		// Stampa il livello di gioco
-		Print_SetPosition(0, 0);
-		Print_DrawText(g_Levels[g_CurrRoomIdx].Name);
-
-		// Stampa il punteggio
-		Print_SetPosition(7, 0);
-		Print_DrawText("SCORE:");
-		String_Format(StrFormat, "%04i", g_Player.Score);
-		Print_SetPosition(13, 0);
-		Print_DrawText(StrFormat);
-
-		// Stampa il punteggio
-		Print_SetPosition(18, 0);
-		Print_DrawText("LIFE:");
-
-		Print_SetPosition(28, 0);
-		Print_DrawText("T:");
-		String_Format(StrFormat, "%02i", g_TimetoDeath);
-		Print_SetPosition(30, 0);
-		Print_DrawText(StrFormat);
-	}
-}
 
 /**
  * @brief Effettua una copia temporanea dell'array del livello. Questa funzione non servira piu dopo l'elimiazione di Pletter
@@ -943,59 +702,20 @@ void updateScore()
  * @param int g_CurrRoomIdx Numero della stanza
  * @param int size Dimensione della stanza
  */
-void updateLevel(unsigned char* g_TempLevel, int g_CurrRoomIdx, int size) {
+void updateLevel(int g_CurrRoomIdx, int size) {
 
 	int seg = 0;
 	
 	if(g_CurrRoomIdx < 14) 
-		seg = 21;
+		seg = 6;
 	else
-		seg = 15;
+		seg = 5;
 
     SetActiveSegment(seg);
 
-    const unsigned char* source = NULL;
+	Mem_Copy(g_Levels[g_CurrRoomIdx].Layout, g_CacheLevel[0].Layout,size); 
 	
-	DEBUG_LOGNUM("----- Livello", g_CurrRoomIdx);
-    switch (g_CurrRoomIdx) {
-        case 0:  source = g_Level030; break;
-        case 1:  source = g_Level001; break;
-        case 2:  source = g_Level002; break;
-        case 3:  source = g_Level003; break;
-        case 4:  source = g_Level004; break;
-        case 5:  source = g_Level006; break;
-        case 6:  source = g_Level007; break;
-        case 7:  source = g_Level005; break;
-        case 8:  source = g_Level008; break;
-        case 9:  source = g_Level009; break;
-        case 10: source = g_Level010; break;
-        case 11: source = g_Level011; break;
-        case 12: source = g_Level012; break;
-        case 13: source = g_Level013; break;
-        case 14: source = g_Level014; break;
-        case 15: source = g_Level015; break;
-        case 16: source = g_Level016; break;
-        case 17: source = g_Level027; break;
-        case 18: source = g_Level025; break;
-        case 19: source = g_Level026; break;
-        case 20: source = g_Level018; break;
-        case 21: source = g_Level019; break;
-        case 22: source = g_Level020; break;
-        case 23: source = g_Level021; break;
-        case 24: source = g_Level022; break;
-        case 25: source = g_Level023; break;
-        case 26: source = g_Level029; break;
-		case 27: source = g_Level024; break;
-        default: source = NULL; break;
-    }
-
-    if (source != NULL) {
-        for (int i = 0; i < size; i++) {
-            //g_TempLevel[i] = source[i];
-			g_CacheLevel[0].Layout[i] = source[i];
-        }
-    }
-
+	
     SetActiveSegment(0);
 }
 
@@ -1006,19 +726,7 @@ void updateLevel(unsigned char* g_TempLevel, int g_CurrRoomIdx, int size) {
  */
 void drawLevel(u8 levelIdx)
 {
-	SetActiveSegment(16);
-	if (levelIdx > 0)
-	{
-		pausePT3Music();
-	}
-	else
-	{
-		restorePT3Music();
-	}
-	SetActiveSegment(0);
-
 	VDP_HideAllSprites();
-	// pausePT3Music();
 	VDP_EnableDisplay(FALSE);
 
 	VDP_FillVRAM_16K(g_Levels[levelIdx].ColorLevel, g_ScreenColorLow + 18, 2);
@@ -1046,12 +754,12 @@ void drawLevel(u8 levelIdx)
 	*/
 
 	// Ad ogni cambio di livello rimuove l'amphora dall'inventario, in modo da ridurlo ad un aiuto momntaneo
-	SetActiveSegment(17);
+	SetActiveSegment(3);
 	bool hasAmphora = hasItemInInventory(TILE_AMPHORA);
 
 	if (hasAmphora) {
 
-		removeItemFromInventory(TILE_AMPHORA, g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+		removeItemFromInventory(TILE_AMPHORA,  LEVEL_X,  LEVEL_Y, LEVEL_HEIGHT);
 
 	}
 	SetActiveSegment(0);
@@ -1073,13 +781,7 @@ void drawLevel(u8 levelIdx)
 	//   Puliza dello schermo
 	VDP_FillVRAM_16K(0, g_ScreenLayoutLow, 32 * 24);
 
-	updateLevel(g_TempLevel, g_CurrRoomIdx, LEVEL_SIZE);
-
-	// Scompatta il livello di gioco da mostrare sullo schermo nella cache
-	// Altrimenti non sarebbe possibile mnipolare gli oggetti del livello
-	//Pletter_UnpackToRAM(g_TempLevel, g_CacheLevel[0].Layout);
-
-
+	updateLevel(g_CurrRoomIdx, LEVEL_SIZE);
 
 	//DEBUG_LOG("PRIMA DEL DISEGNO DEL LIVELLO");
 	
@@ -1114,7 +816,6 @@ void drawLevel(u8 levelIdx)
 		{
 			// Recupera la tile nella poszione indicata
 			u8 tile = g_CacheLevel[0].Layout[g_CacheLevel[0].Width * riga + colonna];
- 			// if (tile == TILE_START_POS) // Rilevamento della posizione iniziale del giocatore
 			if (((tile == TILE_START_POS) && (g_LevelPrev == 0)) || ((tile == TILE_BACK_POS_PLYER) && (g_LevelPrev == 1)) || ((tile == TILE_BACK_POS_PLY_PLATFOTM) && (g_LevelPrev == 3))) // Rilevamento della posizione iniziale del giocatore
 			{
 				u8 x = g_CacheLevel[0].X + colonna;
@@ -1127,11 +828,13 @@ void drawLevel(u8 levelIdx)
 				//   x - Nuova coordinata X in pixel.
 				//   y - Nuova coordinata Y in pixel.
 				GamePawn_SetPosition(&g_Player.Pawn, x * 8, (y - 3) * 8);
+				
 				setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
+				
 			}
 			else if ((tile == TILE_STAR_POS_ENEMY) && (g_PawnCount < g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber)) // Rilevamento della posizione iniziale del nemico
 			{
-				g_PawnCount = positionGenericEnemy(TILE_STAR_POS_ENEMY, g_PawnCount, &g_Enemy[0], ADDRESS_SHELETOR, FIRST_ID_SKELETOR, riga, colonna, 0, "Scheletor", 0);
+				g_PawnCount = positionGenericEnemy(TILE_STAR_POS_ENEMY, g_PawnCount, &g_Skeletor[0], ADDRESS_SHELETOR, FIRST_ID_SKELETOR, riga, colonna, 0, "Scheletor", 0);
 			}
 			else if ((tile == TILE_POS_GHOST) && (g_GhostCount < g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber)) // Rilevamento della posizione iniziale del nemico
 			{
@@ -1158,7 +861,7 @@ void drawLevel(u8 levelIdx)
 
 
 
-	SetActiveSegment(23);
+	SetActiveSegment(4);
 	hideSprite(g_PawnCount, MAX_ENEMY, FIRST_ID_SKELETOR);
 	hideSprite(g_GhostCount, MAX_GHOST, FIRST_ID_GHOST);
 	hideSprite(g_SpiderCount, MAX_SPIDER, FIRST_ID_SPIDER);
@@ -1167,21 +870,19 @@ void drawLevel(u8 levelIdx)
 	hideSprite(g_SlideCountV, MAX_SLIDING_PLATFORM, FIRST_ID_SLIDE_V);
 	SetActiveSegment(0);
 
-	if (levelIdx == 0)
+	if (levelIdx > 0)
 	{
-		// TODO: non visualizzo i dati del risultato della partita
-	}
-	else
-	{
-		updateScore();
+		SetActiveSegment(4);
+		updateScore(g_Player.Score);
+		SetActiveSegment(0);
 
 		if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER && g_CurrRoomIdx != GAME_WINNER)
 		{
-			SetActiveSegment(17);
-			displayItemToInventory(g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+			SetActiveSegment(3);
+			displayItemToInventory( LEVEL_X,  LEVEL_Y, LEVEL_HEIGHT);
 			SetActiveSegment(0);
 
-			SetActiveSegment(18);
+			SetActiveSegment(3);
 			displayLife();
 			SetActiveSegment(0);
 		}
@@ -1191,8 +892,8 @@ void drawLevel(u8 levelIdx)
 	for (u8 i = 0; i < 10; i++)
 	{
 		if (g_Levels[g_CurrRoomIdx].MyItems[i].visible == 1)
-		{
-			setTile(g_Levels[g_CurrRoomIdx].MyItems[i].x, g_Levels[g_CurrRoomIdx].MyItems[i].y, g_Levels[g_CurrRoomIdx].MyItems[i].tile);
+		{			
+			setTile(g_Levels[g_CurrRoomIdx].MyItems[i].x, g_Levels[g_CurrRoomIdx].MyItems[i].y, g_Levels[g_CurrRoomIdx].MyItems[i].tile);			
 		}
 	}
 
@@ -1210,23 +911,18 @@ void drawLevel(u8 levelIdx)
 			{
 				u8 x = g_CacheLevel[0].X + colonna;
 				u8 y = g_CacheLevel[0].Y + riga;
+
 				setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
 			}
 		}
 	}
 
-
-
 	VDP_EnableDisplay(TRUE);
-
-	// restorePT3Music();
-
 
 }
 
-
 /**
- * @brief Posiziona nel livello di gioco un nemico generico
+ * @brief Posiziona nel livello di gioco un nemico generico (OTTIMIZZATA)
  * @param u8 TILE_POS_GENERIC_ENEMY tile segnaposto per il posizionamento del nemico
  * @param u8 enemyCount numero del nemico da posizionare
  * @param struct CharacterEnemy *enemy nemico da posizinare
@@ -1237,29 +933,22 @@ void drawLevel(u8 levelIdx)
  * @param u8 levelIdx numero del livello di gioco
  * @param u8 moveHV movimento orizzontale o verticale
  */
-u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, u8 idxSprite, u8 baseSprite, u8 riga, u8 colonna, u8 levelIdx, c8 *Name, u8 moveHV)
+u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, 
+	u8 idxSprite, u8 baseSprite, u8 riga, u8 colonna, u8 levelIdx, c8 *Name, u8 moveHV) 
 {
-	if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * riga + colonna - 1] != TILE_POS_GENERIC_ENEMY)
+	u8 *layout = g_Levels[levelIdx].Layout;
+	u8 width = LEVEL_WIDTH;
+
+	if (layout[width * riga + colonna - 1] != TILE_POS_GENERIC_ENEMY &&
+	layout[width * (riga - 1) + colonna] != TILE_POS_GENERIC_ENEMY) 
 	{
-		if (g_Levels[levelIdx].Layout[g_Levels[levelIdx].Width * (riga - 1) + colonna] != TILE_POS_GENERIC_ENEMY)
-		{
-			// TODO: Posiziona lo sprite della Slied Platform nell'livello di gioco
-			// 		 Per aggiungerla ad un livello è necessario inserire la tile 128
-			//		 e le tile 100 per dare il range di escursione
+		SetActiveSegment(4);
+		managementSprite(colonna, riga, baseSprite, enemyCount, idxSprite);
+		spritePosition(colonna, riga, enemy, baseSprite, enemyCount, Name, moveHV);
+		SetActiveSegment(0);
 
-			u8 x = g_Levels[levelIdx].X + colonna;
-			u8 y = g_Levels[levelIdx].Y + riga;
-
-			SetActiveSegment(23);
-			managementSprite(x, y, baseSprite, enemyCount, idxSprite);
-			spritePosition(x, y, &enemy[0], baseSprite, enemyCount, Name, moveHV);
-			SetActiveSegment(0);
-
-			
-
-			setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
-			enemyCount++;
-		}
+		setTileByTileCoord(colonna, riga, TILE_EMPTY); // Rimuove la tile iniziale
+		enemyCount++;
 	}
 
 	return enemyCount;
@@ -1267,19 +956,18 @@ u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct Charact
 
 
 /**
- * @brief Inizializza il pawn
+ * @brief Inizializza il pawn (OTTIMIZZATA)
  * @param struct Character *ply
  * @param u8 id Numero del Player
  * @return void
  */
 void initCharacter(struct Character *ply, u8 id)
 {
-	Mem_Set(0, ply, sizeof(struct Character));
-
-	Game_Pawn *pawn = &ply->Pawn;
+	Mem_Set(0, ply, sizeof(*ply));
 
 	if (id == 0)
 	{
+		Game_Pawn *pawn = &ply->Pawn;
 		GamePawn_Initialize(pawn, g_PlayerSpriteLayers, numberof(g_PlayerSpriteLayers), 0, g_PlayerAnimActions);
 		GamePawn_SetPosition(pawn, 223, 128);
 		GamePawn_InitializePhysics(pawn, physicsEventPlayer, physicsCollision, 16, 16);
@@ -1288,195 +976,164 @@ void initCharacter(struct Character *ply, u8 id)
 
 
 /**
- * @brief Aggiorna il pawn
+ * @brief Aggiorna il pawn (OTTIMIZZATA)
  * @param struct Character *ply
  * @return void
  */
-void updateCharacter(struct Character *ply)
+void updateCharacter(struct Character *ply) 
 {
-	// Update movement
-	u8 dir = 0;
-	ply->DX = 0;
-	ply->DY = 0;
+    // Reset movement
+    ply->DX = 0;
+    ply->DY = 0;
+    u8 dir = 0, act = ACTION_IDLE;
+    
+    // Handle horizontal movement
+    if (ply->Input & INPUT_RIGHT)
+    {
+        ply->DX++;
+        ply->bMoving = TRUE;
+        dir = 1;
+    }
+    else if (ply->Input & INPUT_LEFT)
+    {
+        ply->DX--;
+        ply->bMoving = TRUE;
+    }
+    else
+    {
+        ply->bMoving = FALSE;
+    }
 
-	// Print_DrawIntAt(20, 18, ply->Input);
-	if (ply->Input & INPUT_RIGHT)
-	{
-		ply->DX++;
-		ply->bMoving = TRUE;
-		dir = 1;
-	}
-	else if (ply->Input & INPUT_LEFT)
-	{
-		ply->DX--;
-		ply->bMoving = TRUE;
-		dir = 0;
-	}
-	else
-		ply->bMoving = FALSE;
+    // Handle vertical movement
+    if (ply->bInAir) 
+    {
+ 		ply->DY -= ply->VelocityY / 4;
+		//ply->VelocityY = (ply->VelocityY - GRAVITY < -FORCE) ? -FORCE : ply->VelocityY - GRAVITY;
 
-	if (ply->bInAir) // Jump/fall
-	{
-		ply->DY -= ply->VelocityY / 4;
 		ply->VelocityY -= GRAVITY;
-
 		if (ply->VelocityY < -FORCE)
-			ply->VelocityY = -FORCE;
-	}
-	else if (ply->Input & INPUT_JUMP)
-	{
-		ply->bInAir = TRUE;
-		ply->VelocityY = FORCE;
-	}
-	else if (ply->Input & INPUT_GET)
-	{
-		if (interact(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12))
-		{
-			// TODO: non faccio nulla!
-		}
-	}
+			ply->VelocityY = -FORCE;		
+    }
+    else if (ply->Input & INPUT_JUMP)
+    {
+        ply->bInAir = TRUE;
+        ply->VelocityY = FORCE;
+    }
+    else if (ply->Input & INPUT_GET)
+    {
+        interact(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12);
+    }
 
-	// Update player animation & physics
-	u8 act = ACTION_IDLE;
-	if (ply->bInAir && (ply->VelocityY >= 0))
-	{
-		act = ACTION_JUMP;
-	}
-	else if (ply->bInAir)
-	{
-		SetActiveSegment(23);
-		if (((g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH) || (g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV)) > 0 && (isOnPlatform(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY, g_SlideCountV, &g_platformV[0]) || isOnPlatform(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY, g_SlideCountH, &g_platformH[0])))
-		{
-			act = ACTION_IDLE;
-			ply->DY += 2;
-		}
-		else
-		{
-			act = ACTION_FALL;
-		}
-		SetActiveSegment(0);
-	}
-	else if (ply->bMoving)
-	{
-		if (dir == 1)
-		{
-			act = ACTION_MOVE_RIGHT;
-		}
-		else if (dir == 0)
-			act = ACTION_MOVE;
-	}
+    // Determine animation state
+    if (ply->bInAir)
+    {
+        if (ply->VelocityY >= 0)
+        {
+            act = ACTION_JUMP;
+        }
+        else
+        {
+            SetActiveSegment(4);
+            if (((g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH || g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV) > 0) && 
+                (isOnPlatform(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY, g_SlideCountV, g_platformV) || 
+                 isOnPlatform(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY, g_SlideCountH, g_platformH)))
+            {
+                act = ACTION_IDLE;
+                ply->DY += 2;
+            }
+            else
+            {
+                act = ACTION_FALL;
+            }
+            SetActiveSegment(0);
+        }
+    }
+    else if (ply->bMoving)
+    {
+        act = (dir == 1) ? ACTION_MOVE_RIGHT : ACTION_MOVE;
+    }
 
-	Game_Pawn *pawn = &ply->Pawn;
-	GamePawn_SetAction(pawn, act);
-	GamePawn_SetMovement(pawn, ply->DX, ply->DY);
-	GamePawn_Update(pawn);
+    // Update character
+    GamePawn_SetAction(&ply->Pawn, act);
+    GamePawn_SetMovement(&ply->Pawn, ply->DX, ply->DY);
+    GamePawn_Update(&ply->Pawn);
+
 }
-
-
-int my_strcmp(const c8 *a, const c8 *b)
-{
-	while (*a && *a == *b)
-	{
-		++a;
-		++b;
-	}
-	return (int)(unsigned char)(*a) - (int)(unsigned char)(*b);
-}
-
 
 /**
- * @brief Raggruppo una serie di fuznioni
+ * @brief Raggruppo una serie di fuznioni (OTTIMIZZATA)
  * @param void
  * @return void
  */
 void genericControl()
 {
+    u8 x = g_Player.Pawn.PositionX + 8;
+    u8 y1 = g_Player.Pawn.PositionY + 12;
+    u8 y2 = g_Player.Pawn.PositionY + 4;
 
-	// Verifica se in player è sommerso dall'acqua
-	if (isUnderTheWater(g_Player.Pawn.PositionX, g_Player.Pawn.PositionY))
-	{
-		if (IsUnderWater)
-		{
-			if ((g_SecondCounter - g_DelayRemoveLife) > 3)
-			{
-				SetActiveSegment(18);
-				bool isRemove = removeLife();
-				SetActiveSegment(0);
-				if (isRemove == TRUE)
-				{
-					g_Player.Life--;
+    // Verifica se il player è sommerso dall'acqua
+    if (isUnderTheWater(g_Player.Pawn.PositionX, g_Player.Pawn.PositionY))
+    {
+        if (g_IsUnderWater && (g_SecondCounter - g_DelayRemoveLife) > 3)
+        {
+            SetActiveSegment(3);
+            bool isRemove = removeLife();
+            SetActiveSegment(0);
 
-					SetActiveSegment(18);
-					displayLife();
-					SetActiveSegment(0);
+            if (isRemove)
+            {
+                g_Player.Life--;
+                SetActiveSegment(3);
+                displayLife();
+                SetActiveSegment(0);
+                g_IsUnderWater = FALSE;
+            }
+            else
+            {
+                Game_SetState(State_GameOver);
+            }
+        }
+        else if (!g_IsUnderWater)
+        {
+            g_DelayRemoveLife = g_SecondCounter;
+            g_IsUnderWater = TRUE;
+        }
+    }
+    else
+    {
+        g_IsUnderWater = FALSE;
+        g_DelayRemoveLife = 0;
+    }
 
-					SetActiveSegment(16);
-					PlayBankSFX(9, 0);
-					SetActiveSegment(0);
-
-					IsUnderWater = FALSE;
-				}
-				else
-				{
-					SetActiveSegment(16);
-					stopMusicPlayback();
-					SetActiveSegment(0);
-					Game_SetState(State_GameOver);
-				}
-			}
-		}
-		else
-		{
-			g_DelayRemoveLife = g_SecondCounter;
-			IsUnderWater = TRUE;
-		}
-	}
-	else
-	{
-		/* 		VDP_SetColor(COLOR_BLACK); */
-		IsUnderWater = FALSE;  // Non siamo più in collisione
-		g_DelayRemoveLife = 0; // Azzera il tempo dopo il quale si va a rimuovere una vita
-	}
-
-	// Valuta se è presente una manota ed eventualmente la raccoglie
-	// TODO: Da ottimizzare
-	// Attenzione l'aggiunta dell'iterazione crea dei rallentamenti al gioco
-	// 1) La prima parte si utilizza per inteagire com gli elementi che is trovano una tile sopra il piano di gioco
-	// 2) La seconda parte si utilizza nteagire com gli elementi che is trovano sul piano di gioco
-
-	SetActiveSegment(23);
-	bool isElement = getItem(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) || 	getItem(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4);
-	SetActiveSegment(0);
-	if (isElement)
-	{
-		// Modifico al volo il livello di gioco, cosi non sono costretto
-		// a creare una cache dei livelli.
-		g_CountItem++;
-		g_Player.Score += 100;
-		updateScore();
-
-		SetActiveSegment(16);
-		PlayBankSFX(11, 15);
+    // Controllo se il player raccoglie un oggetto
+    SetActiveSegment(4);
+    bool isElement = getItem(x, y1) || getItem(x, y2);
+    SetActiveSegment(0);
+    
+    if (isElement)
+    {
+        g_CountItem++;
+        g_Player.Score += 100;
+		SetActiveSegment(4);
+        updateScore(g_Player.Score);
 		SetActiveSegment(0);
+    }
 
+	SetActiveSegment(3);
+    // Controllo pericolo e passaggi di livello
+    if (isDanger(x, y1) || isDanger(x, y2))
+    {
+		g_Player.Life--;
+        // TODO: non faccio nulla!
+    }
+	SetActiveSegment(0);
 
-		// messageInGame("Get Money!");
-	}
-
-	// Controllo se il player è in una situazione di pericola
-	if (isDanger(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) ||
-		isDanger(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4))
-	{
-		// TODO: non faccio nulla!
-	}
-
-	// Verifica se è presente un varco per passare a un livello successivo
-	if (isPassage(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12) ||
-		isPassage(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 4))
-	{
-		// TODO: non faccio nulla!
-	}
+    if (isPassage(x, y1) || isPassage(x, y2))
+    {
+        // TODO: non faccio nulla!
+    }
 }
+
 
 /**
  * @brief Inizializza lo stato del gioco
@@ -1485,20 +1142,6 @@ void genericControl()
  */
 bool State_Initialize()
 {
-	// Funzione: inizializePT3
-	// Inizializzazione del Player PT3 e della tabella delle note
-	SetActiveSegment(16);
-	inizializePT3();
-
-
-	// Funzione: inizializeAYFX
-	// Impostazione del riproduttore ayfx e del canale audio
-	inizializeAYFX();
-
-
-	setChannel();
-	SetActiveSegment(0);
-
 	// Funzione: VDP_EnableDisplay
 	// Abilita/disabilita la visualizzazione dello schermo (registro 1). [MSX1/2/2+/TR]
 	//
@@ -1515,30 +1158,12 @@ bool State_Initialize()
 
 	VDP_ClearVRAM();
 
-	// Funzione: VDP_WriteVRAM_16K
-	// Scrivere dati dalla RAM alla VRAM. [MSX1/2/2+/TR]
-	//
-	// Parametri:
-	//   src   - Indirizzo dei dati sorgente nella RAM
-	//   dest  - Indirizzo di destianzione nella VRAM (indirizzo a 14 bit per 16KB VRAM)
-	//   count - Numero di byte da copiare nella VRAM. Nota: Un valore 0 significa 65536
-	//
-	// Nota:
-	//    Effettua la copia dei tiles contenuti in g_DataBackground (definiti nel file bg_tileset.h) nella VRAM a partire dall'indirizzo 0x0000
-	SetActiveSegment(20);
-	VDP_WriteVRAM_16K(g_DataBackground_Patterns, g_ScreenPatternLow + (0 * 8), 2048);
-	
-	// Inizializza i caratteri personalizzati
-	Print_SetMode(PRINT_MODE_TEXT);
-	
-	Print_SetFontEx(8, 8, 1, 1, ' ', '_', g_DataBackground_Patterns + 192);
+	SetActiveSegment(7);
+	InizializeFont();
 	SetActiveSegment(0);
 
-	Print_Initialize();
-	g_PrintData.PatternOffset = 192;
-
 	// Initialize color
-	SetActiveSegment(23);
+	SetActiveSegment(4);
 	setColorTiles();
 	SetActiveSegment(0);
 
@@ -1563,7 +1188,7 @@ bool State_Initialize()
 	//   src   - Indirizzo dei dati sorgente nella RAM
 	//   dest  - Indirizzo di destianzione nella VRAM (indirizzo a 14 bit per 16KB VRAM)
 	//   count - Numero di byte da copiare nella VRAM. Nota: Un valore 0 significa 65536
-	SetActiveSegment(20);
+	SetActiveSegment(7);
 	VDP_WriteVRAM_16K(g_DataSprtLayer, g_SpritePatternLow,1792);
 	SetActiveSegment(0);
 
@@ -1573,13 +1198,15 @@ bool State_Initialize()
 }
 
 /**
- * @brief Aggirona lo stato del giocatore e dei nemici
+ * @brief Aggirona lo stato del giocatore e dei nemici (OTTIMIZZATA)
  * @param void
  * @return void
  */
 bool State_Game()
 {
+	SetActiveSegment(4);
 	WaitVBlank();
+	SetActiveSegment(0);
 
 
 	// Funzione: GamePawn_Draw
@@ -1619,37 +1246,27 @@ bool State_Game()
 		{
 			g_TimetoDeath--;
 
-			c8 StrFormat[20];
-			Print_SetPosition(28, 0);
-			Print_DrawText("T:");
-			String_Format(StrFormat, "%02i", g_TimetoDeath);
-			Print_SetPosition(30, 0);
-			Print_DrawText(StrFormat);
+			SetActiveSegment(4);
+			drawMessageWithTimer(28, 0, 30, 0, "T:", "%02i", g_TimetoDeath);
+			SetActiveSegment(0);
 
 			if (g_TimetoDeath == 0)
 			{
-				SetActiveSegment(18);
+				SetActiveSegment(3);
 				bool isRemove = removeLife();
 				SetActiveSegment(0);
 				if (isRemove == TRUE)
 				{
 					g_Player.Life--;
 
-					SetActiveSegment(18);
+					SetActiveSegment(3);
 					displayLife();
-					SetActiveSegment(0);
-
-					SetActiveSegment(16);
-					PlayBankSFX(9, 0);
 					SetActiveSegment(0);
 
 					drawLevel(g_CurrRoomIdx); // Inizia nuovamente dalla stanza in cui siamo
 				}
 				else
 				{
-					SetActiveSegment(16);
-					stopMusicPlayback();
-					SetActiveSegment(0);
 					Game_SetState(State_GameOver);
 				}
 			}
@@ -1657,10 +1274,10 @@ bool State_Game()
 			// TODO: FUnziona ma l'aggiornamento non è constante. Vedere se possiamo migliorare
 			if (g_RefreshInventary)
 			{
-				u8 riga = 22;
-				VDP_ReplacementPartialArea(riga);
-				SetActiveSegment(17);
-				displayItemToInventory(g_Levels[g_CurrRoomIdx].X, g_Levels[g_CurrRoomIdx].Y, g_Levels[g_CurrRoomIdx].Height);
+				//u8 riga = 22;		
+				VDP_ReplacementPartialArea(22);		
+				SetActiveSegment(3);
+				displayItemToInventory( LEVEL_X,  LEVEL_Y, LEVEL_HEIGHT);
 				SetActiveSegment(0);
 				g_RefreshInventary = FALSE;
 			}
@@ -1671,10 +1288,15 @@ bool State_Game()
 	{
 		g_DangerCounter++;
 
-		// Funzione: updateSkeleton
+		// Funzione: update enmy
 		// Aggiorna il rendering dei nemici.
-		SetActiveSegment(23);
-		updateGenericEnemy(&g_Enemy[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber, FIRST_ID_SKELETOR);
+		SetActiveSegment(4);
+		updateGenericEnemy(&g_Skeletor[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber, FIRST_ID_SKELETOR);
+		updateGenericEnemy(&g_Ghost[0], g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber, FIRST_ID_GHOST);
+		updateGenericEnemy(&g_Spider[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber, FIRST_ID_SPIDER);
+		updateGenericEnemy(&g_Bat[0], g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber, FIRST_ID_BAT);
+		updateGenericEnemy(&g_platformH[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH, FIRST_ID_SLIDE_H);
+		updateGenericEnemy(&g_platformV[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV, FIRST_ID_SLIDE_V);
 		SetActiveSegment(0);
 
 		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
@@ -1683,56 +1305,11 @@ bool State_Game()
 		//
 		// Parametri:
 		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
-		physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Enemy[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber);
-
-		// Funzione: updateGhost
-		// Aggiorna il rendering dei nemici.
-		SetActiveSegment(23);
-		updateGenericEnemy(&g_Ghost[0], g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber, FIRST_ID_GHOST);
-		SetActiveSegment(0);
-
-		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
-		// Funzione: physicsCollisionPlayerAndGhost
-		// Gestisce la collisione tra il pedone e i vari nemici
-		//
-		// Parametri:
-		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
+		physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Skeletor[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SkeletonNumber);
 		physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Ghost[0], g_Levels[g_CurrRoomIdx].MyEnemyType.GhostNumber);
-
-		// Funzione: updateGhost
-		// Aggiorna il rendering dei nemici.
-		SetActiveSegment(23);
-		updateGenericEnemy(&g_Spider[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber, FIRST_ID_SPIDER);
-		SetActiveSegment(0);
-
-		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
-		// Funzione: physicsCollisionPlayerAndGhost
-		// Gestisce la collisione tra il pedone e i vari nemici
-		//
-		// Parametri:
-		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 		physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Spider[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SpiderNumber);
-
-		// Funzione: updateGhost
-		// Aggiorna il rendering dei nemici.
-		SetActiveSegment(23);
-		updateGenericEnemy(&g_Bat[0], g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber, FIRST_ID_BAT);
-		SetActiveSegment(0);
-
-		// TODO: Test della collisione tra il Player ed un Enemy, da migliorare!!!
-		// Funzione: physicsCollisionPlayerAndGhost
-		// Gestisce la collisione tra il pedone e i vari nemici
-		//
-		// Parametri:
-		//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
 		physicsCollisionPlayerAndGenericEnemy(&g_Player, &g_Bat[0], g_Levels[g_CurrRoomIdx].MyEnemyType.BatNumber);
 
-		// Funzione: updateGenericEnemy
-		// Aggiorna il rendering della piattaforma.
-		SetActiveSegment(23);
-		updateGenericEnemy(&g_platformH[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH, FIRST_ID_SLIDE_H);
-		updateGenericEnemy(&g_platformV[0], g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV, FIRST_ID_SLIDE_V);
-		SetActiveSegment(0);
 	}
 
 	return TRUE;
@@ -1758,7 +1335,7 @@ bool State_Preset()
 
 	// Funzione: initInventory
 	// Inizializza l'inventario
-	SetActiveSegment(17);
+	SetActiveSegment(3);
 	initInventory();
 	SetActiveSegment(0);
 
@@ -1766,7 +1343,7 @@ bool State_Preset()
 	// Inizializza le vite del giocatore
 	g_Player.Life = MAX_LIVES;
 
-	SetActiveSegment(18);
+	SetActiveSegment(3);
 	initLife();
 	SetActiveSegment(0);
 
@@ -1866,51 +1443,33 @@ void VDP_ReplacementPartialArea(u8 riga)
 //=============================================================================
 // MAIN LOOP
 //=============================================================================
-bool g_VBlank = FALSE;	// Vertical-synchronization flag
-u8 g_6thFrameCount = 0; // Frame counter
+//bool g_VBlank = FALSE;	// Vertical-synchronization flag
+//u8 g_6thFrameCount = 0; // Frame counter
+//
+//void VSyncCallback()
+//{
+//	g_VBlank = TRUE;
+//
+//	g_6thFrameCount++;
+//	if (g_6thFrameCount == 6)
+//		g_6thFrameCount = 0;
+//}
 
-void VSyncCallback()
-{
-	g_VBlank = TRUE;
-
-	g_6thFrameCount++;
-	if (g_6thFrameCount == 6)
-		g_6thFrameCount = 0;
-
-	if (g_6thFrameCount)
-	{
-		PT3_Decode();	 // Update data to write to the PSG regiters from the music
-		ayFX_Update();	 // Overwrite PSG registers data for the SFX
-		PT3_UpdatePSG(); // Update PSG registers
-	}
-}
-
-//-----------------------------------------------------------------------------
-// Wait for V-Blank period
-void WaitVBlank()
-{
-wait_loop:
-
-	while (!g_VBlank)
-	{
-	} // Wait for VDP interruption
-	g_VBlank = FALSE;
-
-	// Skip the 6th frame on 60 Hz VDP
-	if (!g_6thFrameCount)
-		goto wait_loop; // Wait 1 more frame
-
-	g_Frame++;
-	g_GameFrame++;
+void VSyncCallback() {
+	SetActiveSegment(4);
+	VSyncCallbackBanck();
+	SetActiveSegment(0);
 }
 
 void main()
 {
-	DEBUG_INIT();
-	DEBUG_LOG("Start debug session!");
+	//DEBUG_INIT();
+	//DEBUG_LOG("Start debug session!");
 
 	VDP_EnableVBlank(TRUE);
-	Bios_SetHookCallback(H_TIMI, VSyncCallback /*VDP_InterruptHandler*/);
+
+	Bios_SetHookCallback(H_TIMI, VSyncCallback);
+
 
 	// Funzione: Game_SetState
 	// Impostare lo stato successivo (la modifica sarà effettiva al prossimo aggiornamento dello stato)

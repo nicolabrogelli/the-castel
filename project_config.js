@@ -42,11 +42,14 @@ ProjName = "the-castel";
 //-- List of project modules to build (array). If empty, ProjName will be added
 ProjModules = [ ProjName, "tiles", "level_defs" ];
 
+
+
 //-- Project segments base name (string). ProjName will be used if not defined
 // ProjSegments = "";
 
 //-- List of library modules to build (array)
-LibModules = [  "system", "bios",  "vdp", "print", "input", "memory", "game", "game_pawn", "string",  "pt3/pt3_player", "ayfx/ayfx_player", "debug"];
+//LibModules = [  "system", "bios",  "vdp", "print", "input", "memory", "game", "game_pawn", "string",  "pt3/pt3_player", "ayfx/ayfx_player", "debug"];
+LibModules = [  "system", "bios",  "vdp", "print", "input", "memory", "game", "game_pawn", "string"];
 
 //-- Additional sources to be compiled and linked with the project (array)
 // AddSources = [];
@@ -83,7 +86,7 @@ Machine = "1";
 Target = "ROM_ASCII16";
 
 //-- ROM mapper total size in KB (number). Must be a multiple of 8 or 16 depending on the mapper type (from 64 to 4096)
-ROMSize = 512;
+ROMSize = 128;
 
 //-- Postpone the ROM startup to let the other ROMs initialize like Disk controller or Network cartridge (boolean)
 // ROMDelayBoot = false;

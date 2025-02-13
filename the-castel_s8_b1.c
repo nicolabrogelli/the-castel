@@ -1,16 +1,21 @@
 //=============================================================================
-// SEGMENT: 21
+// SEGMENT: 14
 // BANK: 1
-// DESCRIPTION: Data Music
+// DESCRIPTION: 
 //=============================================================================
 
 //=============================================================================
 // INCLUDES
 //=============================================================================
 #include "msxgl.h"
+#include "pt3/pt3_player.h"
+#include "pt3/pt3_notetable2.h"
+#include "ayfx/ayfx_player.h"
 
-
-  unsigned char g_DataMusic[] = {
+//=============================================================================
+// MEMORY
+//=============================================================================
+const unsigned char g_DataMusic[] = {
 	0x05, 0x16, 0x00, 0xE0, 0x00, 0x00, 0x00, 0x4F, 0x05, 0x00, 0x00, 0x00, 0x00, 0x75, 0x05, 0x00, //      0
 	0x00, 0x7B, 0x05, 0x91, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xA7, 0x05, 0x00, 0x00, 0x00, //     16
 	0x00, 0xF1, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //     32
@@ -115,7 +120,7 @@
 };
 // Total bytes: 1608
 
-  unsigned char g_ayfx_bank[] = {
+const unsigned char g_ayfx_bank[] = {
 	0x13, 0x25, 0x00, 0x56, 0x00, 0x8D, 0x00, 0xB6, 0x00, 0xCA, 0x00, 0xDC, 0x00, 0x64, 0x01, 0x99, //      0 | 
 	0x01, 0xC3, 0x01, 0xD4, 0x01, 0x28, 0x02, 0x59, 0x02, 0x89, 0x02, 0xBA, 0x02, 0x02, 0x03, 0x2F, //     16 | 
 	0x03, 0x62, 0x03, 0x75, 0x03, 0xB4, 0x03, 0xEF, 0x6F, 0x01, 0x00, 0xAE, 0x32, 0x01, 0xAD, 0x1A, //     32 | 
@@ -182,3 +187,95 @@
 	0x84, 0x82, 0xD0, 0x20, //   1008 
 };
 // Total bytes: 1012
+
+////=============================================================================
+//// FUNCTION
+////=============================================================================
+///**
+// * @brief Riproduce il suono
+// * @param u8 id
+// * @param u8 prio
+// * @return void
+// */
+//void PlayBankSFX(u8 id, u8 prio)
+//{
+//    ayFX_PlayBank(id, prio); // Riproduzione di un suono ayFX
+//}
+//
+///**
+// * @brief Seleziona una canale dovs SFX riproduce il suono
+// * @param u8 chan Canale
+// * @return void
+// */
+//void ChannelSFX(u8 chan)
+//{
+//    ayFX_Mute();           // Arresta la riproduzione dell'audio e disattiva il canale
+//    ayFX_SetChannel(chan); // Impostare il canale da utilizzare per la riproduzione del suono
+//}
+//
+///**
+// * @brief Inizializzaione del Player PT3 e impostazione della tabella delle note
+// * @param void
+// * @return void
+// */
+//void inizializePT3()
+//{
+//    PT3_Init();                // Inizializza il Player PT3
+//    PT3_SetNoteTable(PT3_NT2); // Setta la tabella delle note
+//    PT3_SetLoop(TRUE);
+//    PT3_InitSong(g_DataMusic);
+//}
+//
+///**
+// * @brief Impostazione del riproduttore ayfx e del canale audio
+// * @param void
+// * @return void
+// */
+//void inizializeAYFX()
+//{
+//    ayFX_InitBank(g_ayfx_bank);     // Impostazione del riproduttore ayFX tramite l'array g_ayfx_bank
+//    ayFX_SetChannel(PSG_CHANNEL_A); // Impostare il canale da utilizzare per la riproduzione del suono
+//    ayFX_SetMode(AYFX_MODE_FIXED);  // Set channel mode
+//}
+//
+///**
+// * @brief Mette in pausa la musica
+// * @param void
+// * @return void
+// */
+//void pausePT3Music()
+//{
+//    PT3_Pause();
+//    PT3_UpdatePSG();
+//}
+//
+///**
+// * @brief Fa ripartire la musica dal punto dove si è interrotta
+// * @param void
+// * @return void
+// */
+//void restorePT3Music()
+//{
+//    PT3_Resume();
+//    PT3_UpdatePSG();
+//}
+//
+///**
+// * @brief Arresta la riproduzione della musica e degli effetti sonori
+// * @param void
+// * @return void
+// */
+//void stopMusicPlayback()
+//{
+//    //ayFX_Mute();
+//    //ayFX_Update();
+//    PT3_Mute(PT3_STATE_MUTE_A, TRUE);
+//    PT3_Pause();
+//    PT3_UpdatePSG();
+//}
+//
+//void setChannel()
+//{
+//    ChannelSFX(PSG_CHANNEL_A);
+//    PlayBankSFX(0, 0);
+//}

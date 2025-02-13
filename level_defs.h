@@ -42,10 +42,6 @@ typedef struct
 */
 struct LevelDefinition
 {
-	u8 X;					/** Coordinata Y della stanza */
-	u8 Y;					/** Coordinata Y della stanza */
-	u8 Width;				/** Larghezza della stanza*/
-	u8 Height;				/** Altezza della stanza */
 	u8 *Layout;				/** Layout della stanza */
 	const c8 *Name;			/** Nome della stanza */
 	DoorLevel DoorLevel;
@@ -53,6 +49,7 @@ struct LevelDefinition
 	ObjectItem MyItems[10]; /** Rappresenta gli oggetti utilizzati nel livello */
 	u8 ColorLevel;			/** Colore delle tiles */
 };
+
 
 extern struct LevelDefinition g_Levels[];
 

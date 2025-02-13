@@ -42,6 +42,8 @@
 #define GAME_OVER               LAST_LEVEL + 1  // Livello di game over
 #define GAME_WINNER             27
 #define OFFSET_TILE_COLLISION   50
+#define MIN_DISTANCE_MAGNENT   100
+#define MAX_DISTANCE_MAGNENT  1000
 #define DELAY_CATCH_ENEMY        1
 #define MAX_CACHE_OBJECT         5
 
@@ -93,6 +95,11 @@
 #define FALL_DEAD  40
 #define LEVEL_SIZE 32*24  //300
 
+#define LEVEL_WIDTH 32
+#define LEVEL_HEIGHT 24
+#define LEVEL_X 0
+#define LEVEL_Y 0
+
 
 
 //=============================================================================
@@ -113,70 +120,9 @@ void drawLevel(u8 levelIdx);
 void initCharacter(struct Character *ply, u8 id);
 void updateCharacter(struct Character *ply);
 void readInputControl();
-void updateScore();
-void changeLevel(u8 x, u8 y, u8 key, u8 door);
 bool isUnderTheWater(u8 x, u8 y);
 void genericControl();
-void VDP_LoadPattern_GM1_Pletter(const u8 *src, u8 offset);
-bool isDanger(u8 x, u8 y);
 u8 isUnderDunger(u8 x, u8 y);
-void messageInGame(char *message);
 void VDP_ReplacementPartialArea(u8 riga);
-void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask);
-void takeActionWithCheck(u8 x, u8 y, u8 tile, u8 checkTile, u8 newTile);
-int my_strcmp(const c8 *a, const c8 *b);
-void WaitVBlank();
 bool State_GameWinner();
-
-
-//=============================================================================
-// SEGMENT 16, BANK 1
-//=============================================================================
-void inizializePT3();
-void inizializeAYFX();
-void PlayBankSFX(u8 id, u8 prio);
-void ChannelSFX(u8 chan);
-void restorePT3Music();
-void pausePT3Music();
-void stopMusicPlayback();
-void setChannel();
-
-//=============================================================================
-// SEGMENT 17, BANK 1
-//=============================================================================
-void initInventory();
-bool addItemToInventory(u8 item, u8 levelX, u8 levelY, u8 levelHeight);
-bool removeItemFromInventory(u8 item, u8 levelX, u8 levelY, u8 levelHeight);
-void displayItemToInventory(u8 levelX, u8 levelY, u8 levelHeight);
-bool hasItemInInventory(u8 item);
-
-//=============================================================================
-// SEGMENT 18, BANK 1
-//=============================================================================
-void initLife();
-bool removeLife();
-void displayLife();
-bool addLife();
-bool hasLives();
-
-//=============================================================================
-// SEGMENT 19, BANK 1
-//=============================================================================
-bool isMoveRight(u8 row8, u8 input);
-bool isMoveLeft(u8 row8, u8 input);
-bool isMoveJump(u8 row8, u8 input);
-bool isInteractObject(u8 row8, u8 input);
-
-//=============================================================================
-// SEGMENT 23, BANK 1
-//=============================================================================
-bool isOnPlatform(u8 *X, u8 *Y, u8 slideCount, struct CharacterEnemy *platform);
-bool getItem(u8 x, u8 y);
-void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 idFirstSprite);
-void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 nEnemy);
-void setColorTiles();
-void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape);
-void hideSprite(u8 count, u8 maxElement, u8 baseSprite);
-void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 baseSprite, u8 enemyCount, char *type, u8 moveHV);
-bool collisionCheck(i8 dx, i8 dy);
-void adjustXYEnemy(struct CharacterEnemy *genericEnemy, u8 idFirstSprite, u8 nEnemy);
+void changeLevel(u8 x, u8 y, u8 key, u8 door);
