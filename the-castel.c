@@ -19,6 +19,7 @@
 #include "tiles_defs.h"
 #include "level_defs.h"
 #include "enemy.h"
+#include "character.h"
 //#include "debug.h"
 
 
@@ -60,6 +61,7 @@ extern bool isMoveJump(u8 row8, u8 input);
 extern bool isInteractObject(u8 row8, u8 input);
 extern void WaitVBlank();
 extern void VSyncCallbackBanck();
+extern void readInputControl(struct Character* player);
 
 //=============================================================================
 // SEGMENT 5, BANK 1
@@ -114,20 +116,20 @@ enum INPUT_ACTION
 };
 
 // Gameplay character stricture
-struct Character
-{
-	bool bMoving;
-	bool bInAir;
-	i8 VelocityY;
-	i8 DX;
-	i8 DY;
-	u8 Input;
-	u16 Score;
-	u8 Life;
-	Game_Pawn Pawn;
-	i16 FallStartY; // Coordinata Y dove è iniziata la caduta
-    u8 FallDamageThreshold; // Soglia di altezza per i danni da caduta
-};
+//struct Character
+//{
+//	bool bMoving;
+//	bool bInAir;
+//	i8 VelocityY;
+//	i8 DX;
+//	i8 DY;
+//	u8 Input;
+//	u16 Score;
+//	u8 Life;
+//	Game_Pawn Pawn;
+//	i16 FallStartY; // Coordinata Y dove è iniziata la caduta
+//    u8 FallDamageThreshold; // Soglia di altezza per i danni da caduta
+//};
 
 
 //=============================================================================
@@ -231,7 +233,7 @@ struct CharacterEnemy g_Bat[MAX_BAT];
 struct CharacterEnemy g_platformV[MAX_SLIDING_PLATFORM];
 struct CharacterEnemy g_platformH[MAX_SLIDING_PLATFORM];
 
-u8 g_PrevRow8 = 0xFF;
+//u8 g_PrevRow8 = 0xFF;
 u8 g_PawnCount = 0;
 // u8 g_PrevDirection = 0;
 u8 g_ReverseCount = 0;
@@ -305,33 +307,33 @@ void SetActiveSegment(u8 segment) {
  * @param void
  * @return void
  */
-void readInputControl()
-{
-	u8 row8 = Keyboard_Read(8);
-
-	g_Player.Input = 0;
-
-	SetActiveSegment(4);
-	if (isMoveRight(row8, g_Player.Input))
-	{
-		g_Player.Input |= INPUT_RIGHT;
-	}
-	if (isMoveLeft(row8, g_Player.Input))
-	{
-		g_Player.Input |= INPUT_LEFT;
-	}
-	if (isMoveJump(row8, g_Player.Input))
-	{
-		g_Player.Input |= INPUT_JUMP;
-	}
-	if (isInteractObject(row8, g_Player.Input))
-	{
-		g_Player.Input |= INPUT_GET;
-	}
-	SetActiveSegment(0);
-
-	g_PrevRow8 = row8;
-}
+//void readInputControl()
+//{
+//	u8 row8 = Keyboard_Read(8);
+//
+//	g_Player.Input = 0;
+//
+//	SetActiveSegment(4);
+//	if (isMoveRight(row8, g_Player.Input))
+//	{
+//		g_Player.Input |= INPUT_RIGHT;
+//	}
+//	if (isMoveLeft(row8, g_Player.Input))
+//	{
+//		g_Player.Input |= INPUT_LEFT;
+//	}
+//	if (isMoveJump(row8, g_Player.Input))
+//	{
+//		g_Player.Input |= INPUT_JUMP;
+//	}
+//	if (isInteractObject(row8, g_Player.Input))
+//	{
+//		g_Player.Input |= INPUT_GET;
+//	}
+//	SetActiveSegment(0);
+//
+//	g_PrevRow8 = row8;
+//}
 
 //=============================================================================
 // FUNZIONI DI LIBRERIA PER LA GESTIONE DELLA FISICA
@@ -880,9 +882,9 @@ void drawLevel(u8 levelIdx)
 		{
 			SetActiveSegment(3);
 			displayItemToInventory( LEVEL_X,  LEVEL_Y, LEVEL_HEIGHT);
-			SetActiveSegment(0);
+//			SetActiveSegment(0);
 
-			SetActiveSegment(3);
+//			SetActiveSegment(3);
 			displayLife();
 			SetActiveSegment(0);
 		}
@@ -1232,7 +1234,9 @@ bool State_Game()
 
 	// Funzione: ReadInputControl
 	// Aggiurnamento input da tastiera
-	readInputControl();
+	SetActiveSegment(4);
+	readInputControl(&g_Player);
+	SetActiveSegment(0);
 
 	// TODO: Aggiornamento della posizione dei nemici, da migliorare!!! g_FrameCounter
 	if (g_Frame == 50)
@@ -1337,15 +1341,12 @@ bool State_Preset()
 	// Inizializza l'inventario
 	SetActiveSegment(3);
 	initInventory();
+	initLife();
 	SetActiveSegment(0);
 
 	// Funzione: initLife
 	// Inizializza le vite del giocatore
 	g_Player.Life = MAX_LIVES;
-
-	SetActiveSegment(3);
-	initLife();
-	SetActiveSegment(0);
 
 	// Funzione: DrawLevel
 	// Inizzializza il livello di gioco

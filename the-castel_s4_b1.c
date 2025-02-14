@@ -13,6 +13,7 @@
 #include "input.h"
 #include "enemy.h"
 #include "tiles_defs.h"
+#include "character.h"
 
 //=============================================================================
 // DEFINES
@@ -44,6 +45,7 @@ bool isMoveJump(u8 row8, u8 input);
 bool isInteractObject(u8 row8, u8 input);
 void VSyncCallbackBanck();
 void WaitVBlank();
+void readInputControl(struct Character* player);
 
 //=============================================================================
 // MEMORY EXTERN
@@ -462,4 +464,33 @@ wait_loop:
 
 	g_Frame++;
 	g_GameFrame++;
+}
+
+/**
+ * @brief Si effettua la lettura della tastiera (OTTIMIZZATA)
+ * @param void
+ * @return void
+ */
+void readInputControl(struct Character* player)
+{
+	u8 row8 = Keyboard_Read(8);
+
+	player->Input = 0;
+
+	if (isMoveRight(row8, player->Input))
+	{
+		player->Input |= INPUT_RIGHT;
+	}
+	if (isMoveLeft(row8, player->Input))
+	{
+		player->Input |= INPUT_LEFT;
+	}
+	if (isMoveJump(row8, player->Input))
+	{
+		player->Input |= INPUT_JUMP;
+	}
+	if (isInteractObject(row8, player->Input))
+	{
+		player->Input |= INPUT_GET;
+	}
 }

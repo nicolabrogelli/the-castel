@@ -21,8 +21,8 @@
 // TOOLS SETTINGS
 //*****************************************************************************
 
-//Emulator = 'D:/RETROGAME/MSXGL-WORKSPACE/openmsx-20.0-windows-vc-x64-bin/openmsx.exe';	
-Emulator = 'C:/Users/87003101/msxgl-workspace/openmsx-20.0/openmsx.exe';
+Emulator = 'D:/RETROGAME/MSXGL-WORKSPACE/openmsx-20.0-windows-vc-x64-bin/openmsx.exe';	
+//Emulator = 'C:/Users/87003101/msxgl-workspace/openmsx-20.0/openmsx.exe';
 
 //Emulator = `${ToolsDir}openMSX/openmsx`;
 // Emulator = `${ToolsDir}Emulicious/Emulicious`;

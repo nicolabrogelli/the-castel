@@ -119,7 +119,6 @@ bool interact(u8 x, u8 y);
 void drawLevel(u8 levelIdx);
 void initCharacter(struct Character *ply, u8 id);
 void updateCharacter(struct Character *ply);
-void readInputControl();
 bool isUnderTheWater(u8 x, u8 y);
 void genericControl();
 u8 isUnderDunger(u8 x, u8 y);
