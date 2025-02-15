@@ -62,6 +62,9 @@ extern bool isInteractObject(u8 row8, u8 input);
 extern void WaitVBlank();
 extern void VSyncCallbackBanck();
 extern void readInputControl(struct Character* player);
+extern u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, 
+	u8 idxSprite, u8 baseSprite, u8 riga, u8 colonna, u8 levelIdx, c8 *Name, u8 moveHV);
+
 
 //=============================================================================
 // SEGMENT 5, BANK 1
@@ -260,9 +263,9 @@ bool g_IsUnderWater = FALSE;
 bool g_RefreshInventary = FALSE;
 u8 g_TimetoDeath = TIME_TO_DEATH;
 u8 g_LevelPrev = 0; // 0 = livello successivo da porta , 1 = livello precedente da porta, 2 = licello scucceivo da scensore, 3 = livello precedente da ascensore
-
 u8 g_GameFrame = 0;
 u8 g_PreviousSegment = 0;
+u8 b_act = ACTION_IDLE;
 
 //unsigned char g_Lives[MAX_LIVES] = {0, 0, 0};
 
@@ -814,6 +817,7 @@ void drawLevel(u8 levelIdx)
 		VDP_WriteVRAM_16K(g_CacheLevel[0].Layout + g_CacheLevel[0].Width * riga,
 						  g_ScreenLayoutLow + (32 * (riga + g_CacheLevel[0].Y)) + (g_CacheLevel[0].X), g_CacheLevel[0].Width);
 
+		SetActiveSegment(4);
 		for (u8 colonna = 0; colonna < g_CacheLevel[0].Width; ++colonna)
 		{
 			// Recupera la tile nella poszione indicata
@@ -859,6 +863,7 @@ void drawLevel(u8 levelIdx)
 				g_SlideCountV = positionGenericEnemy(TILE_POS_PLATFORM_V, g_SlideCountV, &g_platformV[0], ADDRESS_PLATFORM, FIRST_ID_SLIDE_V, riga, colonna, 0, "platform V", 1);
 			}
 		}
+		SetActiveSegment(0);
 	}
 
 
@@ -882,9 +887,6 @@ void drawLevel(u8 levelIdx)
 		{
 			SetActiveSegment(3);
 			displayItemToInventory( LEVEL_X,  LEVEL_Y, LEVEL_HEIGHT);
-//			SetActiveSegment(0);
-
-//			SetActiveSegment(3);
 			displayLife();
 			SetActiveSegment(0);
 		}
@@ -922,40 +924,6 @@ void drawLevel(u8 levelIdx)
 	VDP_EnableDisplay(TRUE);
 
 }
-
-/**
- * @brief Posiziona nel livello di gioco un nemico generico (OTTIMIZZATA)
- * @param u8 TILE_POS_GENERIC_ENEMY tile segnaposto per il posizionamento del nemico
- * @param u8 enemyCount numero del nemico da posizionare
- * @param struct CharacterEnemy *enemy nemico da posizinare
- * @param u8 idxSprite indirizzo delle sprite in memoria
- * @param u8 u8 bo non mi ricordo :)
- * @param u8 u8 riga riga del livello
- * @param u8 colonna colonna del livello
- * @param u8 levelIdx numero del livello di gioco
- * @param u8 moveHV movimento orizzontale o verticale
- */
-u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, 
-	u8 idxSprite, u8 baseSprite, u8 riga, u8 colonna, u8 levelIdx, c8 *Name, u8 moveHV) 
-{
-	u8 *layout = g_Levels[levelIdx].Layout;
-	u8 width = LEVEL_WIDTH;
-
-	if (layout[width * riga + colonna - 1] != TILE_POS_GENERIC_ENEMY &&
-	layout[width * (riga - 1) + colonna] != TILE_POS_GENERIC_ENEMY) 
-	{
-		SetActiveSegment(4);
-		managementSprite(colonna, riga, baseSprite, enemyCount, idxSprite);
-		spritePosition(colonna, riga, enemy, baseSprite, enemyCount, Name, moveHV);
-		SetActiveSegment(0);
-
-		setTileByTileCoord(colonna, riga, TILE_EMPTY); // Rimuove la tile iniziale
-		enemyCount++;
-	}
-
-	return enemyCount;
-}
-
 
 /**
  * @brief Inizializza il pawn (OTTIMIZZATA)
@@ -1023,7 +991,8 @@ void updateCharacter(struct Character *ply)
     }
     else if (ply->Input & INPUT_GET)
     {
-        interact(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12);
+        //interact(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12);
+		interact(ply->Pawn.PositionX + 8, ply->Pawn.PositionY + 12);
     }
 
     // Determine animation state
@@ -1037,8 +1006,8 @@ void updateCharacter(struct Character *ply)
         {
             SetActiveSegment(4);
             if (((g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH || g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV) > 0) && 
-                (isOnPlatform(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY, g_SlideCountV, g_platformV) || 
-                 isOnPlatform(&g_Player.Pawn.PositionX, &g_Player.Pawn.PositionY, g_SlideCountH, g_platformH)))
+                (isOnPlatform(&ply->Pawn.PositionX, &ply->Pawn.PositionY, g_SlideCountV, g_platformV) || 
+                 isOnPlatform(&ply->Pawn.PositionX, &ply->Pawn.PositionY, g_SlideCountH, g_platformH)))
             {
                 act = ACTION_IDLE;
                 ply->DY += 2;
@@ -1061,6 +1030,23 @@ void updateCharacter(struct Character *ply)
     GamePawn_Update(&ply->Pawn);
 
 }
+
+//void checkPlatform(struct Character *ply);
+//
+//void checkPlatform(struct Character *ply) {
+//	if (((g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH || g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV) > 0) && 
+//	    (isOnPlatform(&ply->Pawn.PositionX, &ply->Pawn.PositionY, g_SlideCountV, g_platformV) || 
+//	     isOnPlatform(&ply->Pawn.PositionX, &ply->Pawn.PositionY, g_SlideCountH, g_platformH)))
+//	{
+//	    b_act = ACTION_IDLE;
+//	    ply->DY += 2;
+//	}
+//	else
+//	{
+//	    b_act = ACTION_FALL;
+//	}
+//}
+
 
 /**
  * @brief Raggruppo una serie di fuznioni (OTTIMIZZATA)
@@ -1223,7 +1209,7 @@ bool State_Game()
 	//
 	// Parametri:
 	//   charatter - Indirizzo della struttura Pawn del pedone da aggiornare
-
+	
 	updateCharacter(&g_Player);
 
 	// Funzione geericControl()
@@ -1444,17 +1430,6 @@ void VDP_ReplacementPartialArea(u8 riga)
 //=============================================================================
 // MAIN LOOP
 //=============================================================================
-//bool g_VBlank = FALSE;	// Vertical-synchronization flag
-//u8 g_6thFrameCount = 0; // Frame counter
-//
-//void VSyncCallback()
-//{
-//	g_VBlank = TRUE;
-//
-//	g_6thFrameCount++;
-//	if (g_6thFrameCount == 6)
-//		g_6thFrameCount = 0;
-//}
 
 void VSyncCallback() {
 	SetActiveSegment(4);

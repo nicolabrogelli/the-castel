@@ -14,6 +14,7 @@
 #include "enemy.h"
 #include "tiles_defs.h"
 #include "character.h"
+#include "level_defs.h"
 
 //=============================================================================
 // DEFINES
@@ -23,6 +24,9 @@
 #define GAME_OVER               LAST_LEVEL + 1  // Livello di game over
 #define GAME_WINNER             27
 #define EMPTY_ITEM	0
+#define TILE_EMPTY 		  	     0
+#define LEVEL_WIDTH 			32
+
 
 //=============================================================================
 // PROTOTYPE
@@ -46,6 +50,16 @@ bool isInteractObject(u8 row8, u8 input);
 void VSyncCallbackBanck();
 void WaitVBlank();
 void readInputControl(struct Character* player);
+u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, 	u8 idxSprite, u8 baseSprite, u8 riga, u8 colonna, u8 levelIdx, c8 *Name, u8 moveHV);
+
+//=============================================================================
+// PROTOTYPE EXTERN
+//=============================================================================
+extern  void setTileByTileCoord(u8 x, u8 y, u8 tile);
+extern u8 getTile(u8 x, u8 y);
+extern void setTile(u8 x, u8 y, u8 tile);
+extern void ItemsTakenForLevel(u8 x, u8 y, u8 tile, u8 visibility);
+extern bool physicsCollisionEnemy(u8 x, u8 y);
 
 //=============================================================================
 // MEMORY EXTERN
@@ -56,10 +70,7 @@ extern bool g_RefreshInventary;
 extern bool g_RefreshInventary;
 extern u8 g_TimetoDeath;
 extern u8 g_GameFrame;
-extern u8 getTile(u8 x, u8 y);
-extern void setTile(u8 x, u8 y, u8 tile);
-extern void ItemsTakenForLevel(u8 x, u8 y, u8 tile, u8 visibility);
-extern bool physicsCollisionEnemy(u8 x, u8 y);
+
 extern u8 g_Frame;
 extern u8 g_GameFrame;
 
@@ -493,4 +504,143 @@ void readInputControl(struct Character* player)
 	{
 		player->Input |= INPUT_GET;
 	}
+}
+
+
+//#include "level_defs.h"
+//
+//#define FORCE 15
+//#define GRAVITY 1
+//#define MAX_SLIDING_PLATFORM     3
+//#define MAX_NUMBRER_SPRITE_HIDE 25
+//
+//enum ANIM_ACTION_ID
+//{
+//	ACTION_IDLE = 0,
+//	ACTION_MOVE,
+//	ACTION_JUMP,
+//	ACTION_FALL,
+//	ACTION_MOVE_RIGHT
+//};
+//extern u8 g_SlideCountH;
+//extern u8 g_SlideCountV;
+//extern u8 b_act;
+//extern struct CharacterEnemy g_platformV[MAX_SLIDING_PLATFORM];
+//extern struct CharacterEnemy g_platformH[MAX_SLIDING_PLATFORM];
+//
+//extern bool interact(u8 x, u8 y);
+////extern void checkPlatform(struct Character *ply);
+//
+///**
+// * @brief Aggiorna il pawn (OTTIMIZZATA)
+// * @param struct Character *ply
+// * @return void
+// */
+//void updateCharacter1(struct Character *ply) 
+//{
+//    // Reset movement
+//    ply->DX = 0;
+//    ply->DY = 0;
+//    u8 dir = 0;
+//	b_act = ACTION_IDLE;
+//    
+//    // Handle horizontal movement
+//    if (ply->Input & INPUT_RIGHT)
+//    {
+//        ply->DX++;
+//        ply->bMoving = TRUE;
+//        dir = 1;
+//    }
+//    else if (ply->Input & INPUT_LEFT)
+//    {
+//        ply->DX--;
+//        ply->bMoving = TRUE;
+//    }
+//    else
+//    {
+//        ply->bMoving = FALSE;
+//    }
+//
+//    // Handle vertical movement
+//    if (ply->bInAir) 
+//    {
+// 		ply->DY -= ply->VelocityY / 4;
+//		ply->VelocityY -= GRAVITY;
+//		if (ply->VelocityY < -FORCE)
+//			ply->VelocityY = -FORCE;		
+//    }
+//    else if (ply->Input & INPUT_JUMP)
+//    {
+//        ply->bInAir = TRUE;
+//        ply->VelocityY = FORCE;
+//    }
+//    else if (ply->Input & INPUT_GET)
+//    {
+//		interact(ply->Pawn.PositionX + 8, ply->Pawn.PositionY + 12);
+//    }
+//
+//    // Determine animation state
+//    if (ply->bInAir)
+//    {
+//        if (ply->VelocityY >= 0)
+//        {
+//            b_act = ACTION_JUMP;
+//        }
+//        else
+//        {
+//			if (((g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH || g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV) > 0) && 
+//			(isOnPlatform(&ply->Pawn.PositionX, &ply->Pawn.PositionY, g_SlideCountV, g_platformV) || 
+//			isOnPlatform(&ply->Pawn.PositionX, &ply->Pawn.PositionY, g_SlideCountH, g_platformH)))
+//			{
+//				b_act = ACTION_IDLE;
+//				ply->DY += 2;
+//			}
+//			else
+//			{
+//				b_act = ACTION_FALL;
+//			}
+//        }
+//    }
+//    else if (ply->bMoving)
+//    {
+//        b_act = (dir == 1) ? ACTION_MOVE_RIGHT : ACTION_MOVE;
+//    }
+//
+//    // Update character
+//    GamePawn_SetAction(&ply->Pawn, b_act);
+//    GamePawn_SetMovement(&ply->Pawn, ply->DX, ply->DY);
+//    GamePawn_Update(&ply->Pawn);
+//
+//}
+
+
+/**
+ * @brief Posiziona nel livello di gioco un nemico generico (OTTIMIZZATA)
+ * @param u8 TILE_POS_GENERIC_ENEMY tile segnaposto per il posizionamento del nemico
+ * @param u8 enemyCount numero del nemico da posizionare
+ * @param struct CharacterEnemy *enemy nemico da posizinare
+ * @param u8 idxSprite indirizzo delle sprite in memoria
+ * @param u8 u8 bo non mi ricordo :)
+ * @param u8 u8 riga riga del livello
+ * @param u8 colonna colonna del livello
+ * @param u8 levelIdx numero del livello di gioco
+ * @param u8 moveHV movimento orizzontale o verticale
+ */
+u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, 
+	u8 idxSprite, u8 baseSprite, u8 riga, u8 colonna, u8 levelIdx, c8 *Name, u8 moveHV) 
+{
+	u8 *layout = g_Levels[levelIdx].Layout;
+	u8 width = LEVEL_WIDTH;
+
+	if (layout[width * riga + colonna - 1] != TILE_POS_GENERIC_ENEMY &&
+	layout[width * (riga - 1) + colonna] != TILE_POS_GENERIC_ENEMY) 
+	{
+		managementSprite(colonna, riga, baseSprite, enemyCount, idxSprite);
+		spritePosition(colonna, riga, enemy, baseSprite, enemyCount, Name, moveHV);
+
+		setTileByTileCoord(colonna, riga, TILE_EMPTY); // Rimuove la tile iniziale
+		enemyCount++;
+	}
+
+	return enemyCount;
 }

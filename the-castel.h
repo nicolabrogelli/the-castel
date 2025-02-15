@@ -114,7 +114,6 @@ bool physicsCollision(u8 tile);
 bool physicsCollisionEnemy(u8 x, u8 y);
 void physicsCollisionPlayerAndEnemy(struct Character *ply);
 void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct CharacterEnemy *genericEnemy, u8 enemyNumber);
-u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, u8 idxSprite, u8 bo, u8 riga, u8 colonna, u8 levelIdx, c8 *Name, u8 movHV);
 bool interact(u8 x, u8 y);
 void drawLevel(u8 levelIdx);
 void initCharacter(struct Character *ply, u8 id);
