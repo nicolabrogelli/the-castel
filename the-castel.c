@@ -39,6 +39,7 @@ extern void displayLife();
 extern bool addLife();
 extern bool hasLives();
 extern bool isDanger(u8 x, u8 y);
+extern bool handleUnderwater(u8 PositionX, u8 PositionY);
 
 //=============================================================================
 // SEGMENT 4, BANK 1
@@ -65,6 +66,7 @@ extern void readInputControl(struct Character* player);
 extern u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, 
 	u8 idxSprite, u8 baseSprite, u8 riga, u8 colonna, u8 levelIdx, c8 *Name, u8 moveHV);
 
+extern bool handleItemCollection(u8 x, u8 y1, u8 y2);
 
 //=============================================================================
 // SEGMENT 5, BANK 1
@@ -117,23 +119,6 @@ enum INPUT_ACTION
 	INPUT_JUMP = 0b00000100,
 	INPUT_GET = 0b00001000,
 };
-
-// Gameplay character stricture
-//struct Character
-//{
-//	bool bMoving;
-//	bool bInAir;
-//	i8 VelocityY;
-//	i8 DX;
-//	i8 DY;
-//	u8 Input;
-//	u16 Score;
-//	u8 Life;
-//	Game_Pawn Pawn;
-//	i16 FallStartY; // Coordinata Y dove è iniziata la caduta
-//    u8 FallDamageThreshold; // Soglia di altezza per i danni da caduta
-//};
-
 
 //=============================================================================
 // INCLUDES PERSONALIZZATI
@@ -262,7 +247,7 @@ bool g_IsUnderWater = FALSE;
 
 bool g_RefreshInventary = FALSE;
 u8 g_TimetoDeath = TIME_TO_DEATH;
-u8 g_LevelPrev = 0; // 0 = livello successivo da porta , 1 = livello precedente da porta, 2 = licello scucceivo da scensore, 3 = livello precedente da ascensore
+u8 g_LevelPrev = 0; // 0 = livello successivo da porta , 1 = livello precedente da porta, 2 = livello scucceivo da scensore, 3 = livello precedente da ascensore
 u8 g_GameFrame = 0;
 u8 g_PreviousSegment = 0;
 u8 b_act = ACTION_IDLE;
@@ -304,39 +289,6 @@ void SetActiveSegment(u8 segment) {
 	}
 }
 
-
-/**
- * @brief Si effettua la lettura della tastiera (OTTIMIZZATA)
- * @param void
- * @return void
- */
-//void readInputControl()
-//{
-//	u8 row8 = Keyboard_Read(8);
-//
-//	g_Player.Input = 0;
-//
-//	SetActiveSegment(4);
-//	if (isMoveRight(row8, g_Player.Input))
-//	{
-//		g_Player.Input |= INPUT_RIGHT;
-//	}
-//	if (isMoveLeft(row8, g_Player.Input))
-//	{
-//		g_Player.Input |= INPUT_LEFT;
-//	}
-//	if (isMoveJump(row8, g_Player.Input))
-//	{
-//		g_Player.Input |= INPUT_JUMP;
-//	}
-//	if (isInteractObject(row8, g_Player.Input))
-//	{
-//		g_Player.Input |= INPUT_GET;
-//	}
-//	SetActiveSegment(0);
-//
-//	g_PrevRow8 = row8;
-//}
 
 //=============================================================================
 // FUNZIONI DI LIBRERIA PER LA GESTIONE DELLA FISICA
@@ -1059,63 +1011,29 @@ void genericControl()
     u8 y1 = g_Player.Pawn.PositionY + 12;
     u8 y2 = g_Player.Pawn.PositionY + 4;
 
-    // Verifica se il player è sommerso dall'acqua
-    if (isUnderTheWater(g_Player.Pawn.PositionX, g_Player.Pawn.PositionY))
-    {
-        if (g_IsUnderWater && (g_SecondCounter - g_DelayRemoveLife) > 3)
-        {
-            SetActiveSegment(3);
-            bool isRemove = removeLife();
-            SetActiveSegment(0);
+	SetActiveSegment(3);
+	if(handleUnderwater(g_Player.Pawn.PositionX, g_Player.Pawn.PositionY)) {
+		g_Player.Life--;
+	}
 
-            if (isRemove)
-            {
-                g_Player.Life--;
-                SetActiveSegment(3);
-                displayLife();
-                SetActiveSegment(0);
-                g_IsUnderWater = FALSE;
-            }
-            else
-            {
-                Game_SetState(State_GameOver);
-            }
-        }
-        else if (!g_IsUnderWater)
-        {
-            g_DelayRemoveLife = g_SecondCounter;
-            g_IsUnderWater = TRUE;
-        }
-    }
-    else
-    {
-        g_IsUnderWater = FALSE;
-        g_DelayRemoveLife = 0;
-    }
+	// Controllo pericolo e passaggi di livello
+	if (isDanger(x, y1) || isDanger(x, y2))
+	{
+		g_Player.Life--;
+	}
+
+	SetActiveSegment(0);
 
     // Controllo se il player raccoglie un oggetto
     SetActiveSegment(4);
-    bool isElement = getItem(x, y1) || getItem(x, y2);
+
+	if(handleItemCollection(x, y1, y2)) {
+		g_Player.Score += 100;
+		updateScore(g_Player.Score);
+	}
+
     SetActiveSegment(0);
     
-    if (isElement)
-    {
-        g_CountItem++;
-        g_Player.Score += 100;
-		SetActiveSegment(4);
-        updateScore(g_Player.Score);
-		SetActiveSegment(0);
-    }
-
-	SetActiveSegment(3);
-    // Controllo pericolo e passaggi di livello
-    if (isDanger(x, y1) || isDanger(x, y2))
-    {
-		g_Player.Life--;
-        // TODO: non faccio nulla!
-    }
-	SetActiveSegment(0);
-
     if (isPassage(x, y1) || isPassage(x, y2))
     {
         // TODO: non faccio nulla!

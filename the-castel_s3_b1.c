@@ -39,11 +39,10 @@
 //=============================================================================
 extern void setTile(u8 x, u8 y, u8 tile);
 extern void ItemsTakenForLevel(u8 x, u8 y, u8 tile, u8 visibility);
-
-
 extern u8 getTile(u8 x, u8 y);
 extern void drawLevel(u8 levelIdx);
 extern bool State_GameOver();
+extern bool isUnderTheWater(u8 x, u8 y);
 
 //=============================================================================
 // PROTOTYPE
@@ -55,7 +54,6 @@ void displayItemToInventory(u8 levelX, u8 levelY, u8 levelHeight);
 bool hasItemInInventory(u8 item);
 void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask);
 void takeActionWithCheck(u8 x, u8 y, u8 tile, u8 checkTile, u8 newTile);
-
 void initLife();
 bool removeLife();
 void displayLife();
@@ -67,9 +65,10 @@ bool hasLives();
 // MEMORY EXTERN
 //=============================================================================
 extern u8 g_CountItem;
-
-//extern unsigned char g_Lives[MAX_LIVES];
 extern u8 g_CurrRoomIdx;
+extern bool g_IsUnderWater;
+extern u8 g_DelayRemoveLife;
+extern u8 g_SecondCounter;
 
 //=============================================================================
 // MEMORY
@@ -328,4 +327,31 @@ bool isDanger(u8 x, u8 y)
 	default:
 		return FALSE;
 	}
+}
+
+
+
+
+bool handleUnderwater(u8 PositionX, u8 PositionY) {
+    if (isUnderTheWater(PositionX, PositionY)) {
+        if (g_IsUnderWater && (g_SecondCounter - g_DelayRemoveLife) > 3) {
+            bool isRemove = removeLife();
+            if (isRemove) {
+                displayLife();
+                g_IsUnderWater = FALSE;
+                return true;  // Restituisce true se isRemove è true
+            } else {
+                Game_SetState(State_GameOver);
+                return false; // Restituisce false se isRemove è false
+            }
+        } else if (!g_IsUnderWater) {
+            g_DelayRemoveLife = g_SecondCounter;
+            g_IsUnderWater = TRUE;
+        }
+    } else {
+        g_IsUnderWater = FALSE;
+        g_DelayRemoveLife = 0;
+    }
+
+    return false; // Restituisce false se nessuna delle condizioni precedenti è soddisfatta
 }

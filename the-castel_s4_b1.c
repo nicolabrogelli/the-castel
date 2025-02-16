@@ -70,9 +70,9 @@ extern bool g_RefreshInventary;
 extern bool g_RefreshInventary;
 extern u8 g_TimetoDeath;
 extern u8 g_GameFrame;
-
 extern u8 g_Frame;
 extern u8 g_GameFrame;
+extern u8 g_CountItem;
 
 //=============================================================================
 // MEMORY
@@ -643,4 +643,18 @@ u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct Charact
 	}
 
 	return enemyCount;
+}
+
+
+
+
+bool handleItemCollection(u8 x, u8 y1, u8 y2) {
+    bool isElement = getItem(x, y1) || getItem(x, y2);
+    if (isElement) {
+        g_CountItem++;
+       
+		return TRUE;
+    }
+	
+	return FALSE;
 }
