@@ -165,14 +165,14 @@
 #define PADDLE_USE_CALIB			TRUE	// Add functions paddle calibration feature
 
 //-----------------------------------------------------------------------------											   
-// MEMORY MODULE
+// MEMORY MODULE (UTILIZZATO)
 //-----------------------------------------------------------------------------
 
 #define MEM_USE_VALIDATOR			FALSE	// Activate validator to handle invalide input value
 #define MEM_USE_FASTCOPY			FALSE	// Add support for fast-copy function (using unrolled-LDI loop)
 #define MEM_USE_FASTSET				FALSE	// Add support for fast-set function (using unrolled-LDI loop)
 #define MEM_USE_DYNAMIC				FALSE	// Add support for malloc style dynamic allocator
-#define MEM_USE_BUILTIN				TRUE	// Use SDCC built-in memcpy and memset function instead of MSXgl ones																									 
+#define MEM_USE_BUILTIN				TRUE	// TRUE Use SDCC built-in memcpy and memset function instead of MSXgl ones																									 
 
 //-----------------------------------------------------------------------------
 // MSX-DOS MODULE
@@ -197,7 +197,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// PRINT MODULE
+// PRINT MODULE (UTILIZZATO)
 //-----------------------------------------------------------------------------
 
 // Print module setting
@@ -208,11 +208,11 @@
 #define PRINT_USE_FX_SHADOW			FALSE	// [Bitmap] Allow use of text shadow
 #define PRINT_USE_FX_OUTLINE		FALSE	// [Bitmap] Allow use of text outline
 #define PRINT_USE_2_PASS_FX			FALSE	// [Bitmap] Allow use 2-pass FX render to prevent character overlap
-#define PRINT_USE_GRAPH				TRUE	// Allow use of character lines and boxes
+#define PRINT_USE_GRAPH				FALSE	// Allow use of character lines and boxes
 #define PRINT_USE_VALIDATOR			TRUE	// Add validator character code
 #define PRINT_USE_UNIT				FALSE	// Display integer type (h: hexadecimal, b: binary)
 #define PRINT_USE_FORMAT			TRUE	// Add printf type function
-#define PRINT_USE_32B				TRUE	// Allow to print 32-bits integers
+#define PRINT_USE_32B				FALSE	// Allow to print 32-bits integers
 #define PRINT_SKIP_SPACE			FALSE	// Skill space character
 #define PRINT_COLOR_NUM				12		// 1 color per line
 // Character width
@@ -242,7 +242,7 @@
 #define SPRITEFX_USE_ROTATE			TRUE	// Use rotating effect
 
 //-----------------------------------------------------------------------------				   
-// GAME MODULE
+// GAME MODULE (UTILIZZATO)
 //-----------------------------------------------------------------------------
 
 // Game state setting
@@ -251,7 +251,7 @@
 #define GAME_USE_LOOP				TRUE	// Add game main loop with call to v-synch and state
 
 //-----------------------------------------------------------------------------
-// GAME PAWN MODULE
+// GAME PAWN MODULE (UTILIZZATO)
 //-----------------------------------------------------------------------------
 
 // GamePawn setting
@@ -350,12 +350,12 @@
 // Support for integer to ASCII string converter functions
 #define STRING_USE_FROM_INT8		TRUE	// Signed 8-bits integer to string
 #define STRING_USE_FROM_UINT8		TRUE	// Unsigned 8-bits integer to string
-#define STRING_USE_FROM_INT16		TRUE	// Signed 16-bits integer to string
-#define STRING_USE_FROM_UINT16		TRUE	// Unsigned 16-bits integer to string
+#define STRING_USE_FROM_INT16		FALSE	// Signed 16-bits integer to string
+#define STRING_USE_FROM_UINT16		FALSE	// Unsigned 16-bits integer to string
 
 // Support for sprintf style formating function
 #define STRING_USE_FORMAT			TRUE
-#define STRING_USE_INT32			TRUE	// Add support for 32-bits integer
+#define STRING_USE_INT32			FALSE	// Add support for 32-bits integer
 
 //-----------------------------------------------------------------------------
 // SCROLL MODULE 
@@ -387,7 +387,7 @@
 #define SCROLL_MASK_PATTERN			0		// Sprite pattern to use
 
 //-----------------------------------------------------------------------------
-// TILE 
+// TILE (UTILIZZATO)
 //-----------------------------------------------------------------------------
 
 #define TILE_WIDTH					8		// Tile width
@@ -451,7 +451,7 @@
 
 // TriloTracker options
 #define TRILO_USE_SFXPLAY			TRUE	// Add SFX playback through Trilo SCC player (ayFX + SCC format)
-#define TRILO_USE_TREMOLO			TRUE	// Add support for tremolo effect (little bit expensive)
+#define TRILO_USE_TREMOLO			FASLE	// Add support for tremolo effect (little bit expensive)
 #define TRILO_USE_TAIL				FALSE	// Add tail to prevent volume to fall to zero
 
 // LVGM replayer options

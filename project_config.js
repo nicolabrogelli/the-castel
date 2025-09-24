@@ -49,7 +49,7 @@ ProjModules = [ ProjName, "tiles", "level_defs" ];
 
 //-- List of library modules to build (array)
 //LibModules = [  "system", "bios",  "vdp", "print", "input", "memory", "game", "game_pawn", "string",  "pt3/pt3_player", "ayfx/ayfx_player", "debug"];
-LibModules = [  "system", "bios",  "vdp", "print", "input", "memory", "game", "game_pawn", "string"];
+LibModules = [  "system", "bios",  "vdp", "print", "input",  "game", "game_pawn", "string",  "pt3/pt3_player", "ayfx/ayfx_player"];
 
 //-- Additional sources to be compiled and linked with the project (array)
 // AddSources = [];
@@ -86,7 +86,7 @@ Machine = "1";
 Target = "ROM_ASCII16";
 
 //-- ROM mapper total size in KB (number). Must be a multiple of 8 or 16 depending on the mapper type (from 64 to 4096)
-ROMSize = 128;
+ROMSize = 256;
 
 //-- Postpone the ROM startup to let the other ROMs initialize like Disk controller or Network cartridge (boolean)
 // ROMDelayBoot = false;
@@ -166,7 +166,7 @@ DebugSymbols = true;
 // LinkOpt = "";
 
 //-- Automatic increment of build version in a header file (boolean)
-BuildVersion = true;
+BuildVersion = false;
 
 //*****************************************************************************
 // BUILD TOOL OPTION

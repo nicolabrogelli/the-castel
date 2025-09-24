@@ -13,8 +13,8 @@
 #include "msxgl.h"
 #include "game.h"
 #include "game_pawn.h"
-#include "string.h"
-#include "version.h"
+//#include "string.h"
+//#include "version.h"
 #include "tiles.h"
 #include "tiles_defs.h"
 #include "level_defs.h"
@@ -110,6 +110,18 @@ extern const unsigned char g_Level013[32*24];
 extern const char g_DataBackground_Patterns[];
 extern const char g_DataSprtLayer[];
 extern void InizializeFont();
+
+//=============================================================================
+// SEGMENT 8, BANK 1
+//=============================================================================
+extern void inizializePT3();
+extern void restorePT3Music();
+extern void updatePT3();
+extern void stopMusicPlayback();
+extern void PlayBankSFX(u8 id, u8 prio);
+extern void inizializeAYFX();
+extern void setChannel();
+extern void updateAYFX();
 
 
 enum INPUT_ACTION
@@ -432,6 +444,7 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
         {
             SetActiveSegment(4);
             VDP_HideSprite(enemy->SpriteId);
+			updateScore(g_Player.Score); // g_Levels[g_CurrRoomIdx].Name
             SetActiveSegment(0);
             enemy->State = 0;
             
@@ -440,34 +453,35 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
             SetActiveSegment(0);
 
             g_Player.Score += 500;
-			SetActiveSegment(4);
-            updateScore(g_Player.Score); // g_Levels[g_CurrRoomIdx].Name
-			SetActiveSegment(0);
+			
             continue;
         }
 
         SetActiveSegment(3);
         bool isRemove = removeLife();
-        SetActiveSegment(0);
-
         if (isRemove)
         {
             g_Player.Life--;
-            SetActiveSegment(3);
             displayLife();
-            SetActiveSegment(0);
             drawLevel(g_CurrRoomIdx);
         }
         else
         {
-            SetActiveSegment(3);
             bool hasLivesLeft = hasLives();
-            SetActiveSegment(0);
             if (!hasLivesLeft)
             {
                 Game_SetState(State_GameOver);
             }
         }
+
+		// Qui funziona ma il suono è ritardato rispetto all'azione
+		if (isRemove) {
+			SetActiveSegment(8);
+			PlayBankSFX(9,0);
+			SetActiveSegment(0);
+		}
+
+		SetActiveSegment(0);
     }
 }
 
@@ -589,6 +603,10 @@ bool interact(u8 x, u8 y)
         SetActiveSegment(3);
 		replaceAndRemoveItem(x, y, tile, keyMask);
 		SetActiveSegment(0);
+
+		SetActiveSegment(8);
+		PlayBankSFX(5,0);
+		SetActiveSegment(0);
         return TRUE;
     }
     
@@ -683,6 +701,15 @@ void updateLevel(int g_CurrRoomIdx, int size) {
  */
 void drawLevel(u8 levelIdx)
 {
+	SetActiveSegment(8);
+	if(levelIdx > 0)
+		stopMusicPlayback();	
+	else
+		restorePT3Music();	
+	
+	SetActiveSegment(0);
+
+
 	VDP_HideAllSprites();
 	VDP_EnableDisplay(FALSE);
 
@@ -815,12 +842,10 @@ void drawLevel(u8 levelIdx)
 				g_SlideCountV = positionGenericEnemy(TILE_POS_PLATFORM_V, g_SlideCountV, &g_platformV[0], ADDRESS_PLATFORM, FIRST_ID_SLIDE_V, riga, colonna, 0, "platform V", 1);
 			}
 		}
-		SetActiveSegment(0);
+
 	}
 
 
-
-	SetActiveSegment(4);
 	hideSprite(g_PawnCount, MAX_ENEMY, FIRST_ID_SKELETOR);
 	hideSprite(g_GhostCount, MAX_GHOST, FIRST_ID_GHOST);
 	hideSprite(g_SpiderCount, MAX_SPIDER, FIRST_ID_SPIDER);
@@ -1010,16 +1035,19 @@ void genericControl()
     u8 x = g_Player.Pawn.PositionX + 8;
     u8 y1 = g_Player.Pawn.PositionY + 12;
     u8 y2 = g_Player.Pawn.PositionY + 4;
+	bool isSound = false;
 
 	SetActiveSegment(3);
 	if(handleUnderwater(g_Player.Pawn.PositionX, g_Player.Pawn.PositionY)) {
 		g_Player.Life--;
+		isSound = true;
 	}
 
 	// Controllo pericolo e passaggi di livello
 	if (isDanger(x, y1) || isDanger(x, y2))
 	{
 		g_Player.Life--;
+		isSound = true;
 	}
 
 	SetActiveSegment(0);
@@ -1038,6 +1066,13 @@ void genericControl()
     {
         // TODO: non faccio nulla!
     }
+
+	// TODO: Mettere qui il suono
+	if(isSound) {
+		isSound = false;
+		SetActiveSegment(8);
+		PlayBankSFX(9,0);
+	}
 }
 
 
@@ -1066,6 +1101,17 @@ bool State_Initialize()
 
 	SetActiveSegment(7);
 	InizializeFont();
+
+	// Funzione: VDP_WriteVRAM_16K
+	// Scrivere dati dalla RAM alla VRAM. [MSX1/2/2+/TR]
+	//
+	// Parametri:
+	//   src   - Indirizzo dei dati sorgente nella RAM
+	//   dest  - Indirizzo di destianzione nella VRAM (indirizzo a 14 bit per 16KB VRAM)
+	//   count - Numero di byte da copiare nella VRAM. Nota: Un valore 0 significa 65536
+	VDP_WriteVRAM_16K(g_DataSprtLayer, g_SpritePatternLow,1792);
+	
+
 	SetActiveSegment(0);
 
 	// Initialize color
@@ -1086,17 +1132,6 @@ bool State_Initialize()
 	// NOTE:
 	//	Dimensione dello sprite 16x16
 	VDP_SetSpriteFlag(VDP_SPRITE_SIZE_16);
-
-	// Funzione: VDP_WriteVRAM_16K
-	// Scrivere dati dalla RAM alla VRAM. [MSX1/2/2+/TR]
-	//
-	// Parametri:
-	//   src   - Indirizzo dei dati sorgente nella RAM
-	//   dest  - Indirizzo di destianzione nella VRAM (indirizzo a 14 bit per 16KB VRAM)
-	//   count - Numero di byte da copiare nella VRAM. Nota: Un valore 0 significa 65536
-	SetActiveSegment(7);
-	VDP_WriteVRAM_16K(g_DataSprtLayer, g_SpritePatternLow,1792);
-	SetActiveSegment(0);
 
 	Game_SetState(State_Preset);
 
@@ -1158,19 +1193,15 @@ bool State_Game()
 			drawMessageWithTimer(28, 0, 30, 0, "T:", "%02i", g_TimetoDeath);
 			SetActiveSegment(0);
 
+			SetActiveSegment(3);
 			if (g_TimetoDeath == 0)
 			{
-				SetActiveSegment(3);
 				bool isRemove = removeLife();
-				SetActiveSegment(0);
+			
 				if (isRemove == TRUE)
 				{
 					g_Player.Life--;
-
-					SetActiveSegment(3);
 					displayLife();
-					SetActiveSegment(0);
-
 					drawLevel(g_CurrRoomIdx); // Inizia nuovamente dalla stanza in cui siamo
 				}
 				else
@@ -1182,13 +1213,12 @@ bool State_Game()
 			// TODO: FUnziona ma l'aggiornamento non è constante. Vedere se possiamo migliorare
 			if (g_RefreshInventary)
 			{
-				//u8 riga = 22;		
 				VDP_ReplacementPartialArea(22);		
-				SetActiveSegment(3);
 				displayItemToInventory( LEVEL_X,  LEVEL_Y, LEVEL_HEIGHT);
-				SetActiveSegment(0);
 				g_RefreshInventary = FALSE;
 			}
+
+			SetActiveSegment(0);
 		}
 	}
 
@@ -1353,12 +1383,23 @@ void VSyncCallback() {
 	SetActiveSegment(4);
 	VSyncCallbackBanck();
 	SetActiveSegment(0);
+
+	// Vediamo se lasciaro qui
+	SetActiveSegment(8);
+	updatePT3();
+	updateAYFX();
+	SetActiveSegment(0);
 }
 
 void main()
 {
 	//DEBUG_INIT();
 	//DEBUG_LOG("Start debug session!");
+	SetActiveSegment(8);
+	inizializePT3();
+	inizializeAYFX();
+	restorePT3Music();
+	SetActiveSegment(0);
 
 	VDP_EnableVBlank(TRUE);
 
