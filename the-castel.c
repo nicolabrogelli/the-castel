@@ -122,6 +122,7 @@ extern void PlayBankSFX(u8 id, u8 prio);
 extern void inizializeAYFX();
 extern void setChannel();
 extern void updateAYFX();
+extern void SetSong(u8 songId);
 
 
 enum INPUT_ACTION
@@ -701,8 +702,9 @@ void updateLevel(int g_CurrRoomIdx, int size) {
  */
 void drawLevel(u8 levelIdx)
 {
+
 	SetActiveSegment(8);
-	if(levelIdx > 0)
+	if(levelIdx > START_GAME && levelIdx < LAST_LEVEL)
 		stopMusicPlayback();	
 	else
 		restorePT3Music();	
@@ -1261,6 +1263,10 @@ bool State_Game()
 bool State_Preset()
 {
 
+	SetActiveSegment(8);
+	SetSong(0);
+	SetActiveSegment(0);
+
 	restoreLevel();
 
 	// Funzione: InitCharacter
@@ -1315,12 +1321,18 @@ bool State_GameOver()
 
 	drawLevel(GAME_OVER); // -1
 
+	SetActiveSegment(8);
+	SetSong(1);
+	SetActiveSegment(0);
+
 	// Attende la pressione di un tasto
 	while (Keyboard_Read(8) != 254)
 	{
 	}
 
 	Game_SetState(State_Preset);
+
+	//TODO: vediamo se posso mettere qui il cambio musica
 
 	return TRUE;
 }
@@ -1397,6 +1409,7 @@ void main()
 	//DEBUG_LOG("Start debug session!");
 	SetActiveSegment(8);
 	inizializePT3();
+    SetSong(0);
 	inizializeAYFX();
 	restorePT3Music();
 	SetActiveSegment(0);
