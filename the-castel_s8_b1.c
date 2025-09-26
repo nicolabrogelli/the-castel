@@ -346,7 +346,7 @@ void setChannel()
 }
 
 /**
- * @brief
+ * @brief Decodifica un Frame da una musica in PT3, inoltre Invia dati ai registri PSG. QUesta funzione deve essere eseguito ad ogni interruzione V-Blank
  * @param void
  * @return void
  */
@@ -356,7 +356,7 @@ void updatePT3() {
 }
 
 /**
- * @brief
+ * @brief Suona un Frame di uno stream ayFX
  * @param void
  * @return void
  */

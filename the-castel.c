@@ -520,6 +520,17 @@ void ItemsTakenForLevel(u8 x, u8 y, u8 tile, u8 visible)
 }
 
 /**
+ * @brief Suona l'effetto impostato
+ * @param u8 Effetto da suonare
+ * @return void
+ */
+void playEffect(u8 idEffect) {
+	SetActiveSegment(8);
+	PlayBankSFX(idEffect,0);
+	SetActiveSegment(0);
+}
+
+/**
  * @brief Interagisce in una determinata posizione (OTTIMIZZATA)
  * @param u8 x Coordinata x
  * @param u8 y Coordinata y
@@ -552,7 +563,7 @@ bool interact(u8 x, u8 y)
     case TILE_DOOR_NEXT:
         g_LevelPrev = 0;
         drawLevel(g_Levels[g_CurrRoomIdx].DoorLevel.NextDoorLevel);
-        return (tile == TILE_DOOR_NEXT) ? FALSE : TRUE;
+        return FALSE; //(tile == TILE_DOOR_NEXT) ? FALSE : TRUE;
     
     case TILE_DOOR_PREV:
         g_LevelPrev = 1;
@@ -593,7 +604,7 @@ bool interact(u8 x, u8 y)
 				SetActiveSegment(0);
 			}
         }
-        return TRUE;
+        return FALSE; //TRUE;
     }
     
     case TILE_KEY1:
@@ -605,9 +616,7 @@ bool interact(u8 x, u8 y)
 		replaceAndRemoveItem(x, y, tile, keyMask);
 		SetActiveSegment(0);
 
-		SetActiveSegment(8);
-		PlayBankSFX(5,0);
-		SetActiveSegment(0);
+		playEffect(5);
         return TRUE;
     }
     
@@ -615,12 +624,16 @@ bool interact(u8 x, u8 y)
 		SetActiveSegment(3);
         takeActionWithCheck(x, y, tile, TILE_AMPHORA, TILE_MASK_AMPHORA);
 		SetActiveSegment(0);
+
+		playEffect(17);
         return TRUE;
     
     case TILE_CRUCIFIX:
 		SetActiveSegment(3);
         takeActionWithCheck(x, y, tile, TILE_CRUCIFIX, TILE_EMPTY);
         SetActiveSegment(0);
+
+		playEffect(10);
 		return TRUE;
     }
 
@@ -970,8 +983,12 @@ void updateCharacter(struct Character *ply)
     }
     else if (ply->Input & INPUT_GET)
     {
-        //interact(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12);
-		interact(ply->Pawn.PositionX + 8, ply->Pawn.PositionY + 12);
+        //interactayFX_Update(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12);
+		if(interact(ply->Pawn.PositionX + 8, ply->Pawn.PositionY + 12)) {
+			//SetActiveSegment(8);
+			//PlayBankSFX(5,0);
+			//SetActiveSegment(0);
+		}
     }
 
     // Determine animation state
@@ -1060,6 +1077,8 @@ void genericControl()
 	if(handleItemCollection(x, y1, y2)) {
 		g_Player.Score += 100;
 		updateScore(g_Player.Score);
+
+		playEffect(10);
 	}
 
     SetActiveSegment(0);
@@ -1072,8 +1091,7 @@ void genericControl()
 	// TODO: Mettere qui il suono
 	if(isSound) {
 		isSound = false;
-		SetActiveSegment(8);
-		PlayBankSFX(9,0);
+		playEffect(9);
 	}
 }
 
