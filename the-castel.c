@@ -13,14 +13,13 @@
 #include "msxgl.h"
 #include "game.h"
 #include "game_pawn.h"
-//#include "string.h"
-//#include "version.h"
+
 #include "tiles.h"
 #include "tiles_defs.h"
 #include "level_defs.h"
 #include "enemy.h"
 #include "character.h"
-//#include "debug.h"
+
 
 
 //=============================================================================
@@ -252,6 +251,20 @@ u8 g_DelayRemoveLife = 0;
 bool g_IsUnderWater = FALSE;
 // bool g_IsDanger = FALSE;
 
+u8 testCountPosition = 0;
+bool g_PlayerDiedFromFall = FALSE;
+bool g_WasOnPlatform = FALSE;
+u8 g_LastSafeY = 0;
+
+// Oppure un sistema unificato
+typedef enum {
+	DIFFICULTY_EASY = 0,    // Nessun danno da caduta
+	DIFFICULTY_NORMAL = 1,  // Solo danno da altezza
+	DIFFICULTY_HARD = 2     // Tutti i danni
+} DifficultyLevel;
+
+DifficultyLevel g_GameDifficulty = DIFFICULTY_EASY;
+
 /*
  u8 g_CatchEnemy = 0;
  u8 g_DelayCatchEnemy = 0;
@@ -323,41 +336,28 @@ void physicsEventPlayer(u8 event, u8 tile)
 		g_Player.bInAir = FALSE;
 
 
-        // // Check for fall damage
-        //if (g_Player.FallStartY > 0 && g_Player.Pawn.PositionY - g_Player.FallStartY > g_Player.FallDamageThreshold) {
-		//	DEBUG_LOG("Caduta mortale!");
-		//	DEBUG_LOGNUM("FallStartY", g_Player.FallStartY );
-		//	DEBUG_LOGNUM("g_Player.Pawn.PositionY",  g_Player.Pawn.PositionY);
-		//	DEBUG_LOGNUM("g_Player.FallDamageThreshold",  g_Player.FallDamageThreshold);
-		//
-        //    SetActiveSegment(3);
-        //    bool isRemove = removeLife();
-        //    SetActiveSegment(0);
-        //    if(isRemove == TRUE)
-        //    {
-        //        g_Player.Life--;
-		//
-        //        SetActiveSegment(3);
-        //        displayLife();
-        //        SetActiveSegment(0);
-		//
-        //        SetActiveSegment(4);
-        //        PlayBankSFX(9, 0); // Play damage sound
-        //        SetActiveSegment(0);
-		//
-        //        // Resetta le variabili di caduta qui, prima di drawLevel()
-        //        g_Player.FallStartY = 0;
-        //        g_Player.FallDamageThreshold = FALL_DEAD;
-		//
-        //        drawLevel(g_CurrRoomIdx); // Restart the level or handle death
-        //    } else {
-        //        SetActiveSegment(4);
-        //        stopMusicPlayback();
-        //        SetActiveSegment(0);
-        //        Game_SetState(State_GameOver);
-        //    }
-        //}
+        // TODO: Check for fall damage
+	    // Non mi piace tenerla qui, vediamo se la posso spostare nel loop pronciapale
+        if ((g_GameDifficulty >= DIFFICULTY_HARD) && g_Player.FallStartY > 0 && (g_Player.Pawn.PositionY - g_Player.FallStartY) > g_Player.FallDamageThreshold) {
+            SetActiveSegment(3);
+            bool isRemove = removeLife();
+            if(isRemove)
+            {
+                g_Player.Life--;
+				g_PlayerDiedFromFall = TRUE;
+                g_Player.FallStartY = 0;
+                g_Player.FallDamageThreshold = FALL_DEAD;
 
+
+            } else {
+            	bool hasLivesLeft = hasLives();
+            	if (!hasLivesLeft)
+            	{
+            		Game_SetState(State_GameOver);
+            	}
+            }
+        	SetActiveSegment(0);
+        }
 		break;
 
 	case PAWN_PHYSICS_FALL: // Handle falling
@@ -366,12 +366,10 @@ void physicsEventPlayer(u8 event, u8 tile)
 			g_Player.bInAir = TRUE;
 			g_Player.VelocityY = 0;
 
-			//g_Player.FallStartY = g_Player.Pawn.PositionY; // Record the start of the fall
-            //g_Player.FallDamageThreshold = FALL_DEAD; // Example: 8 tiles high fall causes damage. Adjust as needed
-			//
-			//DEBUG_LOGNUM("FallStartY", g_Player.FallStartY );
-			//DEBUG_LOGNUM(" g_Player.Pawn.PositionY",  g_Player.Pawn.PositionY);
-
+			// TODO: Check for fall damage
+			g_Player.FallStartY = g_Player.Pawn.PositionY; // Registra l'inizio della caduta
+            g_Player.FallDamageThreshold = FALL_DEAD; // Example: 8 tiles high fall causes damage. Adjust as needed
+`
 		}
 		break;
 	};
@@ -717,7 +715,7 @@ void drawLevel(u8 levelIdx)
 {
 
 	SetActiveSegment(8);
-	if(levelIdx > START_GAME && levelIdx < LAST_LEVEL)
+	if(levelIdx > START_GAME && levelIdx < LAST_LEVEL + 1)
 		stopMusicPlayback();	
 	else
 		restorePT3Music();	
@@ -820,7 +818,7 @@ void drawLevel(u8 levelIdx)
 			{
 				u8 x = g_CacheLevel[0].X + colonna;
 				u8 y = g_CacheLevel[0].Y + riga;
-			// Funzione: GamePawn_SetPosition
+			    // Funzione: GamePawn_SetPosition
 				// Imposta la posizione del pedone. Forza il movimento anche se è attivata la collisione.
 				//
 				// Parametri:
@@ -828,7 +826,10 @@ void drawLevel(u8 levelIdx)
 				//   x - Nuova coordinata X in pixel.
 				//   y - Nuova coordinata Y in pixel.
 				GamePawn_SetPosition(&g_Player.Pawn, x * 8, (y - 3) * 8);
-				
+				//Print_DrawIntAt(20,20,x*8);
+				//Print_DrawIntAt(23,20,(y - 3) * 8);
+				//Print_DrawIntAt(20,20,testCountPosition++);
+
 				setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
 				
 			}
@@ -908,6 +909,7 @@ void drawLevel(u8 levelIdx)
 				u8 x = g_CacheLevel[0].X + colonna;
 				u8 y = g_CacheLevel[0].Y + riga;
 
+				//GamePawn_SetPosition(&g_Player.Pawn, x * 8, (y - 3) * 8);
 				setTileByTileCoord(x, y, TILE_EMPTY); //  Eliminazione della tile iniziale
 			}
 		}
@@ -1007,17 +1009,37 @@ void updateCharacter(struct Character *ply)
             {
                 act = ACTION_IDLE;
                 ply->DY += 2;
+
+            	// AGGIORNA la posizione Y sicura quando sei su una piattaforma
+				g_LastSafeY = ply->Pawn.PositionY;
+            	if (!g_WasOnPlatform) {
+                	g_Player.FallStartY = 0; // Reset solo se non stava già cadendo
+            	}
+            	g_WasOnPlatform = TRUE;
             }
             else
             {
                 act = ACTION_FALL;
+    			g_WasOnPlatform = FALSE;
+
+            	// SE non c'era FallStartY impostato E la caduta è significativa
+            	if ((g_GameDifficulty == DIFFICULTY_HARD) && g_Player.FallStartY == 0 && g_LastSafeY > 0) {
+            		g_Player.FallStartY = g_LastSafeY; // Usa l'ultima posizione sicura
+            		g_Player.FallDamageThreshold = FALL_DEAD;
+            	}
             }
             SetActiveSegment(0);
         }
     }
-    else if (ply->bMoving)
+    else //if (ply->bMoving)
     {
-        act = (dir == 1) ? ACTION_MOVE_RIGHT : ACTION_MOVE;
+   		// IMPORTANTE: Reset quando non è in aria
+        g_WasOnPlatform = FALSE;
+
+        if (ply->bMoving)
+        {
+            act = (dir == 1) ? ACTION_MOVE_RIGHT : ACTION_MOVE;
+        }
     }
 
     // Update character
@@ -1026,23 +1048,6 @@ void updateCharacter(struct Character *ply)
     GamePawn_Update(&ply->Pawn);
 
 }
-
-//void checkPlatform(struct Character *ply);
-//
-//void checkPlatform(struct Character *ply) {
-//	if (((g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH || g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV) > 0) && 
-//	    (isOnPlatform(&ply->Pawn.PositionX, &ply->Pawn.PositionY, g_SlideCountV, g_platformV) || 
-//	     isOnPlatform(&ply->Pawn.PositionX, &ply->Pawn.PositionY, g_SlideCountH, g_platformH)))
-//	{
-//	    b_act = ACTION_IDLE;
-//	    ply->DY += 2;
-//	}
-//	else
-//	{
-//	    b_act = ACTION_FALL;
-//	}
-//}
-
 
 /**
  * @brief Raggruppo una serie di fuznioni (OTTIMIZZATA)
@@ -1165,10 +1170,21 @@ bool State_Initialize()
  */
 bool State_Game()
 {
+
+    // All'inizio della funzione, controlla se il player è morto per caduta
+    if (g_PlayerDiedFromFall) {
+		SetActiveSegment(3);
+        g_PlayerDiedFromFall = FALSE;
+        g_LevelPrev = 0;
+        displayLife();
+        SetActiveSegment(0);
+		drawLevel(g_CurrRoomIdx);
+        return TRUE;
+    }
+
 	SetActiveSegment(4);
 	WaitVBlank();
 	SetActiveSegment(0);
-
 
 	// Funzione: GamePawn_Draw
 	// Aggiorna il rendering del pedone. Deve essere richiamato una volta per fotogramma.
