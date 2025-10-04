@@ -13,6 +13,7 @@
 #include "msxgl.h"
 #include "game.h"
 #include "game_pawn.h"
+//#include "debug.h"
 
 #include "tiles.h"
 #include "tiles_defs.h"
@@ -109,6 +110,7 @@ extern const unsigned char g_Level013[32*24];
 extern const char g_DataBackground_Patterns[];
 extern const char g_DataSprtLayer[];
 extern void InizializeFont();
+extern void SetColorFont(u8 text, u8 bg);
 
 //=============================================================================
 // SEGMENT 8, BANK 1
@@ -237,6 +239,7 @@ struct CharacterEnemy g_platformH[MAX_SLIDING_PLATFORM];
 u8 g_PawnCount = 0;
 // u8 g_PrevDirection = 0;
 u8 g_ReverseCount = 0;
+u8 g_PrevRoomIdx = 0;
 u8 g_CurrRoomIdx = 0;
 u8 g_GhostCount = 0;
 u8 g_SpiderCount = 0;
@@ -255,12 +258,14 @@ u8 testCountPosition = 0;
 bool g_PlayerDiedFromFall = FALSE;
 bool g_WasOnPlatform = FALSE;
 u8 g_LastSafeY = 0;
+u8 g_DifficultyMenuDrawn = 0;
 
 // Oppure un sistema unificato
 typedef enum {
 	DIFFICULTY_EASY = 0,    // Nessun danno da caduta
 	DIFFICULTY_NORMAL = 1,  // Solo danno da altezza
-	DIFFICULTY_HARD = 2     // Tutti i danni
+	DIFFICULTY_HARD = 2,     // Tutti i danni
+	DIFFICULTY_EXTREME = 3
 } DifficultyLevel;
 
 DifficultyLevel g_GameDifficulty = DIFFICULTY_EASY;
@@ -335,6 +340,9 @@ void physicsEventPlayer(u8 event, u8 tile)
 	case PAWN_PHYSICS_COL_DOWN:
 		g_Player.bInAir = FALSE;
 
+		// Reset anche g_LastSafeY quando tocchi terra
+		g_LastSafeY = 0;
+		
 
         // TODO: Check for fall damage
 	    // Non mi piace tenerla qui, vediamo se la posso spostare nel loop pronciapale
@@ -358,6 +366,10 @@ void physicsEventPlayer(u8 event, u8 tile)
             }
         	SetActiveSegment(0);
         }
+	    else if (g_Player.FallStartY > 0) {
+        	// Caduta sicura (non letale), resetta comunque le variabili
+        	g_Player.FallStartY = 0;
+    	}
 		break;
 
 	case PAWN_PHYSICS_FALL: // Handle falling
@@ -728,6 +740,7 @@ void drawLevel(u8 levelIdx)
 
 	VDP_FillVRAM_16K(g_Levels[levelIdx].ColorLevel, g_ScreenColorLow + 18, 2);
 
+	g_PrevRoomIdx = g_CurrRoomIdx;
 	g_CurrRoomIdx = levelIdx;
 	g_PawnCount = 0;
 	g_GhostCount = 0;
@@ -739,6 +752,11 @@ void drawLevel(u8 levelIdx)
 	g_SlideCountH = 0;
 	g_SlideCountV = 0;
 	g_TimetoDeath = TIME_TO_DEATH;
+
+	g_LastSafeY = 0;              // Reset posizione sicura
+	g_WasOnPlatform = FALSE;      // Reset stato piattaforma
+	g_Player.FallStartY = 0;      // Reset tracking caduta
+	g_Player.FallDamageThreshold = FALL_DEAD;  // Reset soglia danno
 
 	/*
 		DEBUG_LOGNUM("----- Livello", g_CurrRoomIdx);
@@ -982,6 +1000,7 @@ void updateCharacter(struct Character *ply)
     {
         ply->bInAir = TRUE;
         ply->VelocityY = FORCE;
+
     }
     else if (ply->Input & INPUT_GET)
     {
@@ -1012,9 +1031,9 @@ void updateCharacter(struct Character *ply)
 
             	// AGGIORNA la posizione Y sicura quando sei su una piattaforma
 				g_LastSafeY = ply->Pawn.PositionY;
-            	if (!g_WasOnPlatform) {
+            	//if (!g_WasOnPlatform) {
                 	g_Player.FallStartY = 0; // Reset solo se non stava già cadendo
-            	}
+            	//}
             	g_WasOnPlatform = TRUE;
             }
             else
@@ -1023,7 +1042,7 @@ void updateCharacter(struct Character *ply)
     			g_WasOnPlatform = FALSE;
 
             	// SE non c'era FallStartY impostato E la caduta è significativa
-            	if ((g_GameDifficulty == DIFFICULTY_HARD) && g_Player.FallStartY == 0 && g_LastSafeY > 0) {
+            	if ((g_GameDifficulty >= DIFFICULTY_HARD) && g_Player.FallStartY == 0 && g_LastSafeY > 0) {
             		g_Player.FallStartY = g_LastSafeY; // Usa l'ultima posizione sicura
             		g_Player.FallDamageThreshold = FALL_DEAD;
             	}
@@ -1158,9 +1177,71 @@ bool State_Initialize()
 	//	Dimensione dello sprite 16x16
 	VDP_SetSpriteFlag(VDP_SPRITE_SIZE_16);
 
-	Game_SetState(State_Preset);
+	//Game_SetState(State_Preset);
+	Game_SetState(State_SelectDifficulty); 
 
 	return FALSE; // Frame finished
+}
+
+bool State_SelectDifficulty()
+{
+    // Disegna il menu solo la prima volta
+    if (!g_DifficultyMenuDrawn)  // ← Usa variabile globale invece di static
+    {
+
+		SetActiveSegment(8);
+		SetSong(0);
+		SetActiveSegment(0);
+
+        VDP_EnableDisplay(FALSE);
+        VDP_FillVRAM_16K(0, g_ScreenLayoutLow, 32 * 24);
+
+		//SetColorFont(0xf,0x0);
+		Print_SetPosition(10, 1);
+        Print_DrawText("The castle");
+        Print_SetPosition(1, 23);
+        Print_DrawText("developed by Nicola Brogelli.");
+
+		SetActiveSegment(7);
+        Print_SetPosition(8, 8);
+        Print_DrawText("SELECT DIFFICULTY:");
+        
+		Print_SetPosition(8, 11);
+        Print_DrawText("0 - EASY");
+        
+		Print_SetPosition(8, 14);
+        Print_DrawText("1 - NORMAL");
+        
+		Print_SetPosition(8, 17);
+        Print_DrawText("2 - HARD");
+        
+
+        SetActiveSegment(0);
+        VDP_EnableDisplay(TRUE);
+        
+        g_DifficultyMenuDrawn = 1;  // ← Imposta a 1
+    }
+    
+    u8 row0 = Keyboard_Read(0);
+    
+    if (!(row0 & 0x01))
+    {
+        g_GameDifficulty = DIFFICULTY_EASY;
+        Game_SetState(State_Preset);
+    }
+    else if (!(row0 & 0x02))
+    {
+        g_GameDifficulty = DIFFICULTY_NORMAL;
+        Game_SetState(State_Preset);
+    }
+    else if (!(row0 & 0x04))
+    {
+        g_GameDifficulty = DIFFICULTY_HARD;
+        Game_SetState(State_Preset);
+    }
+    
+    return TRUE;  
+
 }
 
 /**
@@ -1170,16 +1251,17 @@ bool State_Initialize()
  */
 bool State_Game()
 {
-
     // All'inizio della funzione, controlla se il player è morto per caduta
     if (g_PlayerDiedFromFall) {
+		
 		SetActiveSegment(3);
-        g_PlayerDiedFromFall = FALSE;
-        g_LevelPrev = 0;
-        displayLife();
-        SetActiveSegment(0);
+		g_PlayerDiedFromFall = FALSE;
+		g_LevelPrev = 0;
+		displayLife();
+		SetActiveSegment(0);
 		drawLevel(g_CurrRoomIdx);
-        return TRUE;
+		return TRUE;
+		
     }
 
 	SetActiveSegment(4);
@@ -1223,26 +1305,28 @@ bool State_Game()
 		// TODO: Serve per aggiorare il tempo rimanente per terminare il livello senza perdere una vita
 		if (g_CurrRoomIdx != START_GAME && g_CurrRoomIdx != GAME_OVER && g_CurrRoomIdx != GAME_WINNER)
 		{
-			g_TimetoDeath--;
+			if(g_GameDifficulty > DIFFICULTY_EASY) {
+				g_TimetoDeath--;
 
-			SetActiveSegment(4);
-			drawMessageWithTimer(28, 0, 30, 0, "T:", "%02i", g_TimetoDeath);
-			SetActiveSegment(0);
+				SetActiveSegment(4);
+				drawMessageWithTimer(28, 0, 30, 0, "T:", "%02i", g_TimetoDeath);
+				SetActiveSegment(0);
 
-			SetActiveSegment(3);
-			if (g_TimetoDeath == 0)
-			{
-				bool isRemove = removeLife();
-			
-				if (isRemove == TRUE)
+				SetActiveSegment(3);
+				if (g_TimetoDeath == 0)
 				{
-					g_Player.Life--;
-					displayLife();
-					drawLevel(g_CurrRoomIdx); // Inizia nuovamente dalla stanza in cui siamo
-				}
-				else
-				{
-					Game_SetState(State_GameOver);
+					bool isRemove = removeLife();
+				
+					if (isRemove == TRUE)
+					{
+						g_Player.Life--;
+						displayLife();
+						drawLevel(g_CurrRoomIdx); // Inizia nuovamente dalla stanza in cui siamo
+					}
+					else
+					{
+						Game_SetState(State_GameOver);
+					}
 				}
 			}
 
@@ -1297,10 +1381,6 @@ bool State_Game()
 bool State_Preset()
 {
 
-	SetActiveSegment(8);
-	SetSong(0);
-	SetActiveSegment(0);
-
 	restoreLevel();
 
 	// Funzione: InitCharacter
@@ -1328,7 +1408,7 @@ bool State_Preset()
 	// Parametri:
 	//  u8 levelIdx - rappresenta l'id del livello
 	// VDP_EnableDisplay(FALSE);
-	drawLevel(0);
+	drawLevel(1); //0
 
 	Game_SetState(State_Game);
 
@@ -1364,10 +1444,10 @@ bool State_GameOver()
 	{
 	}
 
-	Game_SetState(State_Preset);
-
-	//TODO: vediamo se posso mettere qui il cambio musica
-
+	//Game_SetState(State_Preset);
+   	g_DifficultyMenuDrawn = 0;  // ← Reset per far ricomparire il menu
+    Game_SetState(State_SelectDifficulty);  // ← Torna al menu difficoltà
+	
 	return TRUE;
 }
 
@@ -1382,7 +1462,9 @@ bool State_GameWinner()
 	{
 	}
 
-	Game_SetState(State_Preset);
+	//Game_SetState(State_Preset);
+	g_DifficultyMenuDrawn = 0;  // ← Reset per far ricomparire il menu
+    Game_SetState(State_SelectDifficulty);  // ← Torna al menu difficoltà
 
 	return TRUE;
 

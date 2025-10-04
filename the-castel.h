@@ -110,6 +110,7 @@ bool State_Game();
 bool State_Pause();
 bool State_GameOver();
 bool State_Preset();
+bool State_SelectDifficulty();
 bool physicsCollision(u8 tile);
 bool physicsCollisionEnemy(u8 x, u8 y);
 void physicsCollisionPlayerAndEnemy(struct Character *ply);

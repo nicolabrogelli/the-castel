@@ -21,7 +21,7 @@
 // TOOLS SETTINGS
 //*****************************************************************************
 
-Emulator = 'D:/RETROGAME/MSXGL-WORKSPACE/openmsx-20.0-windows-vc-x64-bin/openmsx.exe';	
+Emulator = 'C:/Users/87003101/msxgl-workspace/openmsx-20.0/openmsx.exe';	
 //Emulator = 'C:/Users/87003101/msxgl-workspace/openmsx-20.0/openmsx.exe';
 
 //Emulator = `${ToolsDir}openMSX/openmsx`;
@@ -139,7 +139,7 @@ AppID = "TC";
 BuildLibrary = true;
 
 //-- Prepare program for debug (boolean)
-Debug = false;
+Debug = true;
 
 //-- Move debug symbols to deployement folder (boolean)
 DebugSymbols = true;

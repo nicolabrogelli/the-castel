@@ -4962,7 +4962,11 @@ void InizializeFont() {
 	Print_SetMode(PRINT_MODE_TEXT);
 	Print_SetFontEx(8, 8, 1, 1, ' ', '_', g_DataBackground_Patterns + 192);
 	Print_Initialize();
-	
+
 	g_PrintData.PatternOffset = 192;
 
+}
+
+void SetColorFont(u8 text, u8 bg) {
+	Print_SetColor(text, bg);
 }
