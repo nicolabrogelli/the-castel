@@ -1408,7 +1408,7 @@ bool State_Preset()
 	// Parametri:
 	//  u8 levelIdx - rappresenta l'id del livello
 	// VDP_EnableDisplay(FALSE);
-	drawLevel(1); //0
+	drawLevel(0); //0
 
 	Game_SetState(State_Game);
 
