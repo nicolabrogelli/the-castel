@@ -595,9 +595,9 @@ bool interact(u8 x, u8 y)
             if (hasKey)
                 Game_SetState(State_GameWinner);
             else {
-				//SetActiveSegment(4);
-				//messageInGame("Oops!");
-				//SetActiveSegment(0);
+				SetActiveSegment(4);
+				messageInGame("Oops!");
+				SetActiveSegment(0);
 			}
         }
         else
@@ -609,14 +609,16 @@ bool interact(u8 x, u8 y)
             if (hasKey)
                 changeLevel(x, y, requiredKey, doorMask);
             else {
-					c8 StrFormat[30];
+				/*
+				   c8 StrFormat[30];
 					String_Format(StrFormat, "%s", "Is Closed!");
 					Print_SetPosition(12, 22);
 					Print_DrawText(StrFormat);
 					g_RefreshInventary = TRUE;
-				//SetActiveSegment(4);
-				//messageInGame("Is Closed!");
-				//SetActiveSegment(0);
+				*/
+				SetActiveSegment(4);
+				messageInGame("Is Closed!");
+				SetActiveSegment(0);
 			}
         }
         return FALSE; //TRUE;
