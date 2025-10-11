@@ -596,7 +596,7 @@ bool interact(u8 x, u8 y)
                 Game_SetState(State_GameWinner);
             else {
 				SetActiveSegment(4);
-				messageInGame("Oops!");
+				messageInGame("No way out");
 				SetActiveSegment(0);
 			}
         }
