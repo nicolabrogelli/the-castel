@@ -609,13 +609,6 @@ bool interact(u8 x, u8 y)
             if (hasKey)
                 changeLevel(x, y, requiredKey, doorMask);
             else {
-				/*
-				   c8 StrFormat[30];
-					String_Format(StrFormat, "%s", "Is Closed!");
-					Print_SetPosition(12, 22);
-					Print_DrawText(StrFormat);
-					g_RefreshInventary = TRUE;
-				*/
 				SetActiveSegment(4);
 				messageInGame("Is Closed!");
 				SetActiveSegment(0);
@@ -1012,7 +1005,8 @@ void updateCharacter(struct Character *ply)
     else if (ply->Input & INPUT_GET)
     {
         //interactayFX_Update(g_Player.Pawn.PositionX + 8, g_Player.Pawn.PositionY + 12);
-		if(interact(ply->Pawn.PositionX + 8, ply->Pawn.PositionY + 12)) {
+		//if(interact(ply->Pawn.PositionX + 8, ply->Pawn.PositionY + 12)) {
+		if(interact(ply->Pawn.PositionX + 8, ply->Pawn.PositionY + 12) || interact(ply->Pawn.PositionX , ply->Pawn.PositionY + 12)) {
 			//SetActiveSegment(8);
 			//PlayBankSFX(5,0);
 			//SetActiveSegment(0);
