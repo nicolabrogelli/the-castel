@@ -21,16 +21,16 @@
 // TOOLS SETTINGS
 //*****************************************************************************
 
-Emulator = 'C:/Users/87003101/msxgl-workspace/openmsx-20.0/openmsx.exe';	
-//Emulator = 'C:/Users/87003101/msxgl-workspace/openmsx-20.0/openmsx.exe';
+//Emulator = 'C:/Users/87003101/msxgl-workspace/openmsx-20.0/openmsx.exe';	
+Emulator = '//opt/openMSX/bin/openmsx';
 
-//Emulator = `${ToolsDir}openMSX/openmsx`;
+// Emulator = `${ToolsDir}openMSX/openmsx`;
 // Emulator = `${ToolsDir}Emulicious/Emulicious`;
 // Emulator = `${ToolsDir}BlueMSX/blueMSX`;
 // Emulator = `${ToolsDir}MEISEI/meisei`;
 // Emulator = `${ToolsDir}fMSX/fMSX`;
 // Emulator = `${ToolsDir}RuMSX/MSX`;
-//Debugger = `${ToolsDir}openMSX/Debugger/openmsx-debugger`;
+// Debugger = `${ToolsDir}openMSX/Debugger/openmsx-debugger`;
 
 //*****************************************************************************
 // PROJECT SETTINGS
@@ -195,10 +195,10 @@ EmulMachine    = false;				//-- Force the MSX version of the emulated machine (b
 // Emul60Hz       = false;				//-- Force the emulated machine to be at 60 Hz (boolean)
 // EmulFullScreen = false;				//-- Force the emulator to start in fullscreen mode (boolean)
 // EmulMute       = false;				//-- Disable emulator sound (boolean)
- EmulDebug      = true;				//-- Start emulator debugger with program launch (boolean)
+EmulDebug      = true;				//-- Start emulator debugger with program launch (boolean)
 
 //-- Emulator extra parameters to be add to command-line (string). Emulator sotfware specific
-// EmulExtraParam = "";
+EmulExtraParam = "//opt/openMSX/share/scripts/debugger_pvm.tcl";
 
 //-------------------------------------------------------------------------------
 // Extension options

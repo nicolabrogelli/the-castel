@@ -557,5 +557,5 @@
 // - DEBUG_OPENMSX_S .............. Salutte profile script for openMSX
 // - DEBUG_OPENMSX_P .............. PVM debug script for openMSX (no profiler)
 // - DEBUG_EMULICIOUS ............. Profile script for Emulicious
-#define DEBUG_TOOL					DEBUG_OPENMSX //DEBUG_DISABLE
+#define DEBUG_TOOL					DEBUG_OPENMSX_P //DEBUG_DISABLE
 #define PROFILE_LEVEL				10 

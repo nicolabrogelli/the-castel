@@ -1524,7 +1524,7 @@ void VSyncCallback() {
 void main()
 {
 	//DEBUG_INIT();
-	//DEBUG_LOG("Start debug session!");
+	//DEBUG_PRINT("Start debug session!");
 	SetActiveSegment(8);
 	inizializePT3();
     SetSong(0);
