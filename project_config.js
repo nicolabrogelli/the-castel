@@ -22,7 +22,7 @@
 //*****************************************************************************
 
 //Emulator = 'C:/Users/87003101/msxgl-workspace/openmsx-20.0/openmsx.exe';	
-Emulator = '//opt/openMSX/bin/openmsx';
+Emulator  = 'C:/Program Files/openMSX/openmsx.exe';
 
 // Emulator = `${ToolsDir}openMSX/openmsx`;
 // Emulator = `${ToolsDir}Emulicious/Emulicious`;
@@ -198,7 +198,7 @@ EmulMachine    = false;				//-- Force the MSX version of the emulated machine (b
 EmulDebug      = true;				//-- Start emulator debugger with program launch (boolean)
 
 //-- Emulator extra parameters to be add to command-line (string). Emulator sotfware specific
-EmulExtraParam = "//opt/openMSX/share/scripts/debugger_pvm.tcl";
+EmulExtraParam = "-script C:/Users/nicol/Documents/Progetti/C/MSXgl/tools/script/openMSX/debugger_pvm.tcl"
 
 //-------------------------------------------------------------------------------
 // Extension options
