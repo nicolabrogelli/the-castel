@@ -200,7 +200,8 @@ bool isOnPlatform(u8 *X, u8 *Y, u8 slideCount, struct CharacterEnemy *platform)
 		}
 		else
 		{
-			if ((*Y + 17 > platform[i].Y) && (*Y + 17 < platform[i].Y + 8))
+			// Tolleranza di 2px sopra la piattaforma: quella verticale in discesa si allontana dai piedi
+			if ((*Y + 18 > platform[i].Y) && (*Y + 17 < platform[i].Y + 8))
 			{
 				*Y = platform[i].Y - 16;
 				return TRUE;

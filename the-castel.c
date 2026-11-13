@@ -1120,7 +1120,10 @@ void updateCharacter(struct Character *ply)
                  isOnPlatform(&ply->Pawn.PositionX, &ply->Pawn.PositionY, g_SlideCountH, g_platformH)))
             {
                 act = ACTION_IDLE;
-                ply->DY += 2;
+                // isOnPlatform ha gia' appoggiato il player sopra la piattaforma:
+                // annulla la caduta, altrimenti GamePawn_Update lo spinge dentro di qualche pixel
+                ply->DY = 0;
+                ply->VelocityY = 0;
 
             	// AGGIORNA la posizione Y sicura quando sei su una piattaforma
 				g_LastSafeY = ply->Pawn.PositionY;
