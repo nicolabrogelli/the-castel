@@ -1,5 +1,6 @@
 #include "tiles.h"
 #include "msxgl.h"
+#include "v9_api.h"
 
 //=============================================================================
 // FUNZIONI DI LIBRERIA PER LA GESTIONE DELLE TILES
@@ -26,6 +27,7 @@ u8 getTile(u8 x, u8 y)
 void setTile(u8 x, u8 y, u8 tile)
 {
 	VDP_Poke_16K(tile, g_ScreenLayoutLow + (y / 8) * 32 + (x / 8));
+	v9Call(V9OP_CELL, x / 8, y / 8, tile);
 }
 
 /**
@@ -51,4 +53,5 @@ u8 getTileByTileCoord(u8 x, u8 y)
 void setTileByTileCoord(u8 x, u8 y, u8 tile)
 {
 	VDP_Poke_16K(tile, g_ScreenLayoutLow + y * 32 + x);
+	v9Call(V9OP_CELL, x, y, tile);
 }

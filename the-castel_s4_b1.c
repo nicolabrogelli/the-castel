@@ -15,6 +15,7 @@
 #include "tiles_defs.h"
 #include "character.h"
 #include "level_defs.h"
+#include "v9_api.h"
 
 //=============================================================================
 // DEFINES
@@ -26,6 +27,7 @@
 #define EMPTY_ITEM	0
 #define TILE_EMPTY 		  	     0
 #define LEVEL_WIDTH 			32
+#define DEATH_PAUSE             20  // Frame di attesa a schermo vuoto dopo l'animazione della morte
 
 
 //=============================================================================
@@ -41,6 +43,7 @@ void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 
 void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 baseSprite, u8 enemyCount, char *type, u8 moveHV);
 bool getItem(u8 x, u8 y);
 void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape);
+u8 spriteColor(u8 indexShape);
 void hideSprite(u8 count, u8 maxElement, u8 baseSprite);
 bool collisionCheck(i8 dx, i8 dy);
 bool isMoveRight(u8 row8, u8 input);
@@ -49,6 +52,7 @@ bool isMoveJump(u8 row8, u8 input);
 bool isInteractObject(u8 row8, u8 input);
 void VSyncCallbackBanck();
 void WaitVBlank();
+void deathAnimationLoop();
 void readInputControl(struct Character* player);
 u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, 	u8 idxSprite, u8 baseSprite, u8 riga, u8 colonna, u8 levelIdx, c8 *Name, u8 moveHV);
 
@@ -60,6 +64,7 @@ extern u8 getTile(u8 x, u8 y);
 extern void setTile(u8 x, u8 y, u8 tile);
 extern void ItemsTakenForLevel(u8 x, u8 y, u8 tile, u8 visibility);
 extern bool physicsCollisionEnemy(u8 x, u8 y);
+extern void playEffect(u8 idEffect);
 
 //=============================================================================
 // MEMORY EXTERN
@@ -73,6 +78,7 @@ extern u8 g_GameFrame;
 extern u8 g_Frame;
 extern u8 g_GameFrame;
 extern u8 g_CountItem;
+extern struct Character g_Player;
 
 //=============================================================================
 // MEMORY
@@ -140,6 +146,7 @@ void drawMessageWithTimer(u8 x1, u8 y1, u8 x2, u8 y2,
     String_Format(buffer, format, value);
     Print_SetPosition(x2, y2);
     Print_DrawText(buffer);
+    v9Call(V9OP_SYNC_ROW, y1, 0, 0);
 }
 
 /**
@@ -153,6 +160,7 @@ void messageInGame(char *message)
 	String_Format(StrFormat, "%s", message);
 	Print_SetPosition(12, 22);
 	Print_DrawText(StrFormat);
+	v9Call(V9OP_SYNC_ROW, 22, 0, 0);
 
 	g_RefreshInventary = TRUE;
 }
@@ -168,10 +176,14 @@ void messageInGame(char *message)
  */
 void setColorTiles()
 {
-	VDP_FillVRAM_16K(0X80, g_ScreenColorLow + 8, 2); // VERDE 0XC0 - ROSSO CHIARO 0x60
-	VDP_FillVRAM_16K(0x70, g_ScreenColorLow + 10, 1);
-	VDP_FillVRAM_16K(0xA0, g_ScreenColorLow + 12, 1); // GIALLO SCURO
-	VDP_FillVRAM_16K(0xE0, g_ScreenColorLow + 18, 2); // GRIGIO
+	// In GRAPHIC1 ogni byte della color table colora un gruppo di 8 tile (formato [FG:4|BG:4])
+	VDP_FillVRAM_16K(0X80, g_ScreenColorLow + 8, 2);  // 64-79   Lava, porte, cuore: ROSSO
+	VDP_FillVRAM_16K(0x70, g_ScreenColorLow + 10, 1); // 80-87   Acqua, passaggi, bonus tempo: CIANO
+	VDP_FillVRAM_16K(0x50, g_ScreenColorLow + 11, 1); // 88-95   Finestre, anfora: BLU CHIARO (luce lunare)
+	VDP_FillVRAM_16K(0xA0, g_ScreenColorLow + 12, 1); // 96-103  Chiavi, monete: GIALLO SCURO
+	VDP_FillVRAM_16K(0xB0, g_ScreenColorLow + 13, 2); // 104-119 Crocifisso, trappole, candelabri, coppa, teschio, ossa: AVORIO
+	VDP_FillVRAM_16K(0xE0, g_ScreenColorLow + 18, 2); // 144-159 Mattoni: GRIGIO (poi impostato per livello)
+	VDP_FillVRAM_16K(0xB0, g_ScreenColorLow + 26, 2); // 208-223 Cifre del font: GIALLO CHIARO (HUD più leggibile)
 }
 
 
@@ -259,6 +271,7 @@ void adjustXYEnemy(struct CharacterEnemy *genericEnemy, u8 idFirstSprite, u8 nEn
 	//   x     - Coordinata X iniziale dello schermo.
 	//   y     - Coordinata Y iniziale dello schermo.
 	VDP_SetSpritePosition(idFirstSprite + nEnemy, genericEnemy->X, genericEnemy->Y);
+	v9Call(V9OP_SPR_POS, idFirstSprite + nEnemy, genericEnemy->X, genericEnemy->Y);
 }
 
 /**
@@ -339,7 +352,25 @@ void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape)
 	//   y     - Coordinata iniziale Y dello schermo
 	//   shape - Indice del modello di sprite (in modalità 16x16, è possibile utilizzare solo multipli di 4)
 	//   color - Colore dello sprite (LSB 4 bit) + flag EC opzionale (VDP_SPRITE_EC)
-	VDP_SetSpriteSM1(baseSprite + enemyCount, x, y, indexShape, COLOR_WHITE);
+	VDP_SetSpriteSM1(baseSprite + enemyCount, x, y, indexShape, spriteColor(indexShape));
+	v9Call(V9OP_SPR_SHOW, baseSprite + enemyCount, indexShape, 0);
+}
+
+/**
+ * @brief Restituisce il colore dello sprite in base al tipo di nemico
+ * @param u8 indexShape indice della figura
+ * @return u8 colore MSX
+ */
+u8 spriteColor(u8 indexShape)
+{
+	switch (indexShape)
+	{
+	case 192: return COLOR_LIGHT_RED;   // Ragno
+	case 200: return COLOR_CYAN;        // Fantasma
+	case 204: return COLOR_MAGENTA;     // Pipistrello
+	case 208: return COLOR_DARK_YELLOW; // Piattaforma (legno)
+	default:  return COLOR_WHITE;       // Scheletro e altri
+	}
 }
 
 /**
@@ -353,6 +384,7 @@ void hideSprite(u8 count, u8 maxElement, u8 baseSprite)
 	for (u8 i = count; i < maxElement; ++i)
 	{
 		VDP_HideSprite(baseSprite + i);
+		v9Call(V9OP_SPR_HIDE, baseSprite + i, 0, 0);
 	}
 }
 
@@ -477,6 +509,44 @@ wait_loop:
 
 	g_Frame++;
 	g_GameFrame++;
+}
+
+/**
+ * @brief Ciclo dell'animazione della morte del giocatore (bloccante, circa 2 secondi).
+ *        Il giocatore lampeggia, fa un balzo e cade fuori dallo schermo; i nemici restano fermi.
+ *        Va chiamata tramite playerDeathAnimation() (the-castel.c), che gestisce il segmento.
+ * @param void
+ * @return void
+ */
+void deathAnimationLoop()
+{
+	u8 oldFrame = g_Frame;
+	u8 x = g_Player.Pawn.PositionX;
+	u8 y = g_Player.Pawn.PositionY;
+	u8 step = 0;
+	u8 pause = DEATH_PAUSE;
+
+	playEffect(9);
+
+	while (pause)
+	{
+		WaitVBlank();
+		v9Call(V9OP_TICK, g_GameFrame, 0, 0); // Acqua e lava continuano ad animarsi
+
+		if (step != 0xFF)
+		{
+			if (v9Call(V9OP_DEATH, step, x, y))
+				step++;
+			else
+				step = 0xFF; // Animazione finita: breve pausa
+		}
+		else
+		{
+			pause--;
+		}
+	}
+
+	g_Frame = oldFrame; // Non alterare il conteggio dei secondi del livello
 }
 
 /**

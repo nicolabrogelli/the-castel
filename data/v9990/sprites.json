@@ -1,0 +1,117 @@
+{
+ "anim_speed": 6,
+ "player": {
+  "idle": {
+   "right": [
+    0
+   ],
+   "left": [
+    1
+   ]
+  },
+  "walk": {
+   "right": [
+    2,
+    3,
+    2,
+    3
+   ],
+   "left": [
+    4,
+    5,
+    4,
+    5
+   ]
+  },
+  "jump": {
+   "right": [
+    6
+   ],
+   "left": [
+    7
+   ]
+  },
+  "fall": {
+   "right": [
+    8
+   ],
+   "left": [
+    9
+   ]
+  }
+ },
+ "enemies": {
+  "spider": {
+   "right": [
+    10,
+    11
+   ],
+   "left": [
+    10,
+    11
+   ]
+  },
+  "skeleton": {
+   "right": [
+    12,
+    13
+   ],
+   "left": [
+    14,
+    15
+   ]
+  },
+  "ghost": {
+   "right": [
+    16,
+    17
+   ],
+   "left": [
+    18,
+    19
+   ]
+  },
+  "bat": {
+   "right": [
+    20,
+    21
+   ],
+   "left": [
+    20,
+    21
+   ]
+  },
+  "platform": {
+   "right": [
+    22
+   ],
+   "left": [
+    22
+   ]
+  },
+  "snake": {
+   "right": [
+    23
+   ],
+   "left": [
+    24
+   ]
+  },
+  "magician": {
+   "right": [
+    25
+   ],
+   "left": [
+    26
+   ]
+  },
+  "fire": {
+   "right": [
+    27
+   ],
+   "left": [
+    27
+   ]
+  }
+ }
+}

@@ -43,6 +43,8 @@ extern u8 getTile(u8 x, u8 y);
 extern void drawLevel(u8 levelIdx);
 extern bool State_GameOver();
 extern bool isUnderTheWater(u8 x, u8 y);
+extern void playerDeathAnimation();
+extern void playerDeathGameOver();
 
 //=============================================================================
 // PROTOTYPE
@@ -317,11 +319,12 @@ bool isDanger(u8 x, u8 y)
 		if (isRemove == TRUE)
 		{
 			displayLife();
+			playerDeathAnimation();
 			drawLevel(g_CurrRoomIdx); // Inizia nuovamente dalla stanza in cui siamo
 		}
 		else
 		{
-			Game_SetState(State_GameOver);
+			playerDeathGameOver();
 		}
 		return TRUE;
 	default:

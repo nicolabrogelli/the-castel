@@ -8,11 +8,17 @@
 // INCLUDES
 //=============================================================================
 #include "msxgl.h"
+#include "v9_api.h"
+#include "data/v9990/v9_logo.h"
 
 //=============================================================================
 // PROTOTYPE
 //=============================================================================
 void InizializeFont();
+void enhanceTiles();
+void animateTiles(u8 frame);
+void drawMenuFrame();
+void drawMenu();
 
 //=============================================================================
 // MEMORY 
@@ -4965,8 +4971,156 @@ void InizializeFont() {
 
 	g_PrintData.PatternOffset = 192;
 
+	enhanceTiles();
 }
 
 void SetColorFont(u8 text, u8 bg) {
 	Print_SetColor(text, bg);
+}
+
+//=============================================================================
+// MIGLIORAMENTI GRAFICI
+//=============================================================================
+#define GFX_TILE_LAVA         64
+#define GFX_TILE_WATER        80
+#define GFX_TILE_BRICK_FIRST 145
+#define GFX_TILE_BRICK_LAST  154
+
+// Texture di base dell'acqua: due file di increspature che scorrono in direzioni opposte
+const u8 g_WaterBase[8] = { 0xFF, 0xFF, 0xE7, 0xFF, 0xFF, 0xFF, 0x7E, 0xFF };
+
+// Texture di base della lava: bolle scure che salgono verso l'alto
+const u8 g_LavaBase[8]  = { 0xFF, 0xFF, 0xDF, 0xFF, 0xFF, 0xFB, 0xFF, 0x7F };
+
+// Riga di mattoni usata per la cornice del menu (identica a quella delle schermate di testo)
+const u8 g_MenuBrickRow[32] = {
+	154, 149, 148, 149, 146, 147, 149, 151, 149, 145, 149, 152, 149, 153, 149, 154,
+	149, 148, 149, 146, 147, 149, 151, 149, 145, 149, 152, 149, 153, 149, 154, 149 };
+
+/**
+ * @brief Ruota un byte a destra di n bit (0-7)
+ */
+u8 rotateRight(u8 b, u8 n)
+{
+	n &= 7;
+	return (u8)((b >> n) | (b << (8 - n)));
+}
+
+/**
+ * @brief Ritocca i pattern caricati in VRAM: ombreggiatura retinata sul lato inferiore
+ *        dei mattoni (effetto rilievo) e texture iniziale per acqua e lava.
+ *        I dati originali in ROM non vengono modificati.
+ */
+void enhanceTiles()
+{
+	u8 buf[8];
+
+	for (u8 t = GFX_TILE_BRICK_FIRST; t <= GFX_TILE_BRICK_LAST; t++)
+	{
+		const u8 *src = g_DataBackground_Patterns + (u16)t * 8;
+		for (u8 r = 0; r < 8; r++)
+			buf[r] = src[r];
+		buf[6] &= 0xAA; // Ultima riga del mattone retinata = ombra
+		VDP_WriteVRAM_16K(buf, g_ScreenPatternLow + (u16)t * 8, 8);
+	}
+
+	animateTiles(0);
+}
+
+/**
+ * @brief Anima acqua e lava riscrivendo i loro pattern (16 byte in VRAM).
+ *        Da chiamare subito dopo l'attesa del V-Blank.
+ * @param u8 frame Contatore dei frame di gioco
+ */
+void animateTiles(u8 frame)
+{
+	if (frame & 7)
+		return;
+
+	u8 step = (frame >> 3) & 7;
+	u8 buf[8];
+
+	// Acqua: le increspature scorrono orizzontalmente
+	for (u8 r = 0; r < 8; r++)
+		buf[r] = g_WaterBase[r];
+	buf[2] = rotateRight(g_WaterBase[2], step);
+	buf[6] = rotateRight(g_WaterBase[6], 8 - step);
+	VDP_WriteVRAM_16K(buf, g_ScreenPatternLow + GFX_TILE_WATER * 8, 8);
+
+	// Lava: le bolle salgono di una riga ad ogni passo
+	for (u8 r = 0; r < 8; r++)
+		buf[r] = g_LavaBase[(r + step) & 7];
+	VDP_WriteVRAM_16K(buf, g_ScreenPatternLow + GFX_TILE_LAVA * 8, 8);
+}
+
+/**
+ * @brief Disegna una decorazione composta da 2x2 tile
+ */
+void drawDecor2x2(u8 x, u8 y, u8 tl, u8 tr, u8 bl, u8 br)
+{
+	u16 addr = g_ScreenLayoutLow + (u16)y * 32 + x;
+	VDP_Poke_16K(tl, addr);
+	VDP_Poke_16K(tr, addr + 1);
+	VDP_Poke_16K(bl, addr + 32);
+	VDP_Poke_16K(br, addr + 33);
+}
+
+/**
+ * @brief Disegna la cornice del castello per il menu di selezione della difficoltà
+ */
+void drawMenuFrame()
+{
+	VDP_FillVRAM_16K(0xE0, g_ScreenColorLow + 18, 2); // Mattoni grigi
+
+	// Pavimento e soffitto
+	VDP_WriteVRAM_16K(g_MenuBrickRow, g_ScreenLayoutLow + 2 * 32, 32);
+	VDP_WriteVRAM_16K(g_MenuBrickRow, g_ScreenLayoutLow + 21 * 32, 32);
+
+	// Pareti laterali
+	for (u8 r = 3; r < 21; r++)
+	{
+		u8 t = ((r >> 1) & 1) ? 145 : 154;
+		VDP_Poke_16K(t, g_ScreenLayoutLow + (u16)r * 32);
+		VDP_Poke_16K(t, g_ScreenLayoutLow + (u16)r * 32 + 31);
+	}
+
+	// Candelabri
+	drawDecor2x2(3, 4, 109, 110, 111, 112);
+	drawDecor2x2(27, 4, 109, 110, 111, 112);
+
+	// Finestre
+	drawDecor2x2(4, 11, 91, 92, 93, 94);
+	drawDecor2x2(26, 11, 91, 92, 93, 94);
+
+	// Porta d'uscita appoggiata sul pavimento
+	drawDecor2x2(15, 18, 72, 73, 76, 75);
+	VDP_Poke_16K(78, g_ScreenLayoutLow + 20 * 32 + 15);
+	VDP_Poke_16K(77, g_ScreenLayoutLow + 20 * 32 + 16);
+}
+
+/**
+ * @brief Disegna l'intero menu di selezione della difficolta'
+ */
+void drawMenu()
+{
+	v9Call(V9OP_BEGIN_DRAW, 0, 0, 0);
+	VDP_FillVRAM_16K(0, g_ScreenLayoutLow, 32 * 24);
+
+	drawMenuFrame();
+
+	// Logo del titolo (2 righe di tile, grafica V9990)
+	VDP_WriteVRAM_16K(g_V9Logo, g_ScreenLayoutLow + 4 * 32 + 6, V9_LOGO_WIDTH);
+	VDP_WriteVRAM_16K(g_V9Logo + V9_LOGO_WIDTH, g_ScreenLayoutLow + 5 * 32 + 6, V9_LOGO_WIDTH);
+	Print_SetPosition(1, 23);
+	Print_DrawText("developed by Nicola Brogelli.");
+	Print_SetPosition(7, 8);
+	Print_DrawText("SELECT DIFFICULTY:");
+	Print_SetPosition(11, 11);
+	Print_DrawText("0 - EASY");
+	Print_SetPosition(11, 13);
+	Print_DrawText("1 - NORMAL");
+	Print_SetPosition(11, 15);
+	Print_DrawText("2 - HARD");
+
+	v9Call(V9OP_END_DRAW, 0, 0, 0);
 }

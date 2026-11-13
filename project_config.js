@@ -207,7 +207,7 @@ EmulExtraParam = "-script C:/Users/nicol/Documents/Progetti/C/MSXgl/tools/script
 // EmulMSXMusic = false;				//-- Add MSX-Music extension (boolean)
 // EmulMSXAudio = false;				//-- Add MSX-Audio extension (boolean)
 // EmulPSG2     = false;				//-- Add second PSG extension (boolean)
-// EmulV9990    = false;				//-- Add V9990 video-chip extension (boolean)
+EmulV9990    = true;				//-- Add V9990 video-chip extension (boolean)
 
 //-------------------------------------------------------------------------------
 // Input options

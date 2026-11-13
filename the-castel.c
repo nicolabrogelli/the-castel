@@ -111,6 +111,8 @@ extern const char g_DataBackground_Patterns[];
 extern const char g_DataSprtLayer[];
 extern void InizializeFont();
 extern void SetColorFont(u8 text, u8 bg);
+extern void animateTiles(u8 frame);
+extern void drawMenu();
 
 //=============================================================================
 // SEGMENT 8, BANK 1
@@ -138,6 +140,7 @@ enum INPUT_ACTION
 // INCLUDES PERSONALIZZATI
 //=============================================================================
 #include "the-castel.h"
+#include "v9_api.h"
 
 unsigned char g_LevelUncompress[LEVEL_SIZE];
 
@@ -306,6 +309,41 @@ struct CacheLevel g_CacheLevel[] = {
 	{0, 0, 32, 24, g_LevelUncompress},
 };
 
+//=============================================================================
+// PONTE VERSO IL DRIVER V9990 (segmento 10)
+//=============================================================================
+extern u8 v9Dispatch(u8 op, u8 a, u8 b, u8 c);
+
+/**
+ * @brief Chiama il driver V9990 salvando e ripristinando il segmento del banco 1
+ *        (sicura anche se chiamata da codice che gira in un segmento banked)
+ */
+u8 v9Call(u8 op, u8 a, u8 b, u8 c)
+{
+	u8 old = GET_BANK_SEGMENT(1);
+	SET_BANK_SEGMENT(1, 10);
+	u8 ret = v9Dispatch(op, a, b, c);
+	SET_BANK_SEGMENT(1, old);
+	return ret;
+}
+
+__sfr __at(0x60) g_V9PortVRAM;
+
+/**
+ * @brief Copia dati da un segmento ROM alla VRAM V9990 (indirizzo gia' impostato).
+ *        Deve stare nel main perche' il driver (seg 10) non puo' vedere i dati
+ *        dei segmenti 11/12 nello stesso banco.
+ */
+void v9Blit(u8 seg, const u8 *src, u16 count)
+{
+	u8 old = GET_BANK_SEGMENT(1);
+	SET_BANK_SEGMENT(1, seg);
+	while (count--)
+		g_V9PortVRAM = *src++;
+	SET_BANK_SEGMENT(1, old);
+	__asm__("ei");
+}
+
 /**
  * @brief Switch dei segmenti nel banco 1
  *
@@ -320,6 +358,45 @@ void SetActiveSegment(u8 segment) {
 	}
 }
 
+
+//=============================================================================
+// ANIMAZIONE DELLA MORTE DEL GIOCATORE
+//=============================================================================
+extern void deathAnimationLoop(); // Segmento 4
+
+bool g_GameOverPending = FALSE; // TRUE quando la morte ha gia' portato al Game Over
+
+/**
+ * @brief Animazione della morte del giocatore (bloccante, circa 2 secondi).
+ *        Il giocatore lampeggia, fa un balzo e cade fuori dallo schermo; i nemici restano fermi.
+ *        Puo' essere chiamata anche da codice che gira in un segmento banked.
+ * @param void
+ * @return void
+ */
+void playerDeathAnimation()
+{
+	if (g_GameOverPending)
+		return; // Animazione gia' mostrata in questo frame: si sta andando al Game Over
+
+	u8 oldSeg = GET_BANK_SEGMENT(1);
+	u8 oldPrev = g_PreviousSegment;
+	SET_BANK_SEGMENT(1, 4);
+	deathAnimationLoop(); // Segmento 4: il segmento fisso e' quasi pieno
+	g_PreviousSegment = oldPrev;
+	SET_BANK_SEGMENT(1, oldSeg);
+}
+
+/**
+ * @brief Morte senza vite rimaste: animazione e passaggio al Game Over
+ * @param void
+ * @return void
+ */
+void playerDeathGameOver()
+{
+	playerDeathAnimation();
+	g_GameOverPending = TRUE;
+	Game_SetState(State_GameOver);
+}
 
 //=============================================================================
 // FUNZIONI DI LIBRERIA PER LA GESTIONE DELLA FISICA
@@ -361,7 +438,7 @@ void physicsEventPlayer(u8 event, u8 tile)
             	bool hasLivesLeft = hasLives();
             	if (!hasLivesLeft)
             	{
-            		Game_SetState(State_GameOver);
+            		playerDeathGameOver();
             	}
             }
         	SetActiveSegment(0);
@@ -455,6 +532,7 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
         {
             SetActiveSegment(4);
             VDP_HideSprite(enemy->SpriteId);
+            v9Call(V9OP_SPR_HIDE, enemy->SpriteId, 0, 0);
 			updateScore(g_Player.Score); // g_Levels[g_CurrRoomIdx].Name
             SetActiveSegment(0);
             enemy->State = 0;
@@ -474,25 +552,21 @@ void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct Charact
         {
             g_Player.Life--;
             displayLife();
+            SetActiveSegment(0);
+            playerDeathAnimation(); // Suona anche l'effetto della morte
             drawLevel(g_CurrRoomIdx);
         }
         else
         {
             bool hasLivesLeft = hasLives();
+            SetActiveSegment(0);
             if (!hasLivesLeft)
             {
-                Game_SetState(State_GameOver);
+                playerDeathGameOver();
             }
         }
 
-		// Qui funziona ma il suono è ritardato rispetto all'azione
-		if (isRemove) {
-			SetActiveSegment(8);
-			PlayBankSFX(9,0);
-			SetActiveSegment(0);
-		}
-
-		SetActiveSegment(0);
+        return; // Il giocatore e' morto: inutile controllare gli altri nemici
     }
 }
 
@@ -735,10 +809,10 @@ void drawLevel(u8 levelIdx)
 	SetActiveSegment(0);
 
 
-	VDP_HideAllSprites();
-	VDP_EnableDisplay(FALSE);
+	v9Call(V9OP_BEGIN_DRAW, 0, 0, 0); // Nasconde gli sprite e spegne i display
 
 	VDP_FillVRAM_16K(g_Levels[levelIdx].ColorLevel, g_ScreenColorLow + 18, 2);
+	v9Call(V9OP_LEVEL_COLOR, g_Levels[levelIdx].ColorLevel, 0, 0);
 
 	g_PrevRoomIdx = g_CurrRoomIdx;
 	g_CurrRoomIdx = levelIdx;
@@ -933,7 +1007,7 @@ void drawLevel(u8 levelIdx)
 		}
 	}
 
-	VDP_EnableDisplay(TRUE);
+	v9Call(V9OP_END_DRAW, 0, 0, 0); // Copia la mappa sulla V9990 e riaccende i display
 
 }
 
@@ -1090,8 +1164,7 @@ void genericControl()
 	// Controllo pericolo e passaggi di livello
 	if (isDanger(x, y1) || isDanger(x, y2))
 	{
-		g_Player.Life--;
-		isSound = true;
+		g_Player.Life--; // Il suono e' gia' stato emesso dall'animazione della morte
 	}
 
 	SetActiveSegment(0);
@@ -1155,9 +1228,12 @@ bool State_Initialize()
 	//   dest  - Indirizzo di destianzione nella VRAM (indirizzo a 14 bit per 16KB VRAM)
 	//   count - Numero di byte da copiare nella VRAM. Nota: Un valore 0 significa 65536
 	VDP_WriteVRAM_16K(g_DataSprtLayer, g_SpritePatternLow,1792);
-	
+
 
 	SetActiveSegment(0);
+
+	// Il gioco richiede la scheda V9990 (GFX9000)
+	v9Call(V9OP_INIT, 0, 0, 0); // Si ferma con un messaggio se manca la GFX9000
 
 	// Initialize color
 	SetActiveSegment(4);
@@ -1194,32 +1270,10 @@ bool State_SelectDifficulty()
 		SetSong(0);
 		SetActiveSegment(0);
 
-        VDP_EnableDisplay(FALSE);
-        VDP_FillVRAM_16K(0, g_ScreenLayoutLow, 32 * 24);
-
-		//SetColorFont(0xf,0x0);
-		Print_SetPosition(10, 1);
-        Print_DrawText("The castle");
-        Print_SetPosition(1, 23);
-        Print_DrawText("developed by Nicola Brogelli.");
-
-		SetActiveSegment(7);
-        Print_SetPosition(8, 8);
-        Print_DrawText("SELECT DIFFICULTY:");
-        
-		Print_SetPosition(8, 11);
-        Print_DrawText("0 - EASY");
-        
-		Print_SetPosition(8, 14);
-        Print_DrawText("1 - NORMAL");
-        
-		Print_SetPosition(8, 17);
-        Print_DrawText("2 - HARD");
-        
-
+        SetActiveSegment(7);
+        drawMenu();
         SetActiveSegment(0);
-        VDP_EnableDisplay(TRUE);
-        
+
         g_DifficultyMenuDrawn = 1;  // ← Imposta a 1
     }
     
@@ -1254,7 +1308,9 @@ bool State_Game()
 {
     // All'inizio della funzione, controlla se il player è morto per caduta
     if (g_PlayerDiedFromFall) {
-		
+
+		playerDeathAnimation();
+
 		SetActiveSegment(3);
 		g_PlayerDiedFromFall = FALSE;
 		g_LevelPrev = 0;
@@ -1269,12 +1325,16 @@ bool State_Game()
 	WaitVBlank();
 	SetActiveSegment(0);
 
+	// Animazioni V9990: palette di acqua/lava e frame dei nemici
+	v9Call(V9OP_TICK, g_GameFrame, 0, 0);
+
 	// Funzione: GamePawn_Draw
 	// Aggiorna il rendering del pedone. Deve essere richiamato una volta per fotogramma.
 	//
 	// Parametri:
 	//   pawn - Indirizzo della struttura Pawn del pedone da aggiornare (spostamento, collisione, ecc.).
 	GamePawn_Draw(&g_Player.Pawn);
+	v9Call(V9OP_PLAYER, g_Player.Pawn.PositionX, g_Player.Pawn.PositionY, g_Player.Pawn.AnimFrame / 16);
 
 	// Funzione: UpdateCharacter(&g_Player);
 	// Aggiorna il rendering del pedone. Deve essere richiamato una volta per fotogramma.
@@ -1322,11 +1382,12 @@ bool State_Game()
 					{
 						g_Player.Life--;
 						displayLife();
+						playerDeathAnimation();
 						drawLevel(g_CurrRoomIdx); // Inizia nuovamente dalla stanza in cui siamo
 					}
 					else
 					{
-						Game_SetState(State_GameOver);
+						playerDeathGameOver();
 					}
 				}
 			}
@@ -1392,6 +1453,7 @@ bool State_Preset()
 	//  Character - indirizzo della truruttura che rappresenta il giocatore
 	//  id del giorcatore
 	initCharacter(&g_Player, 0);
+	g_GameOverPending = FALSE;
 
 	// Funzione: initInventory
 	// Inizializza l'inventario
@@ -1503,6 +1565,7 @@ void VDP_ReplacementPartialArea(u8 riga)
 	// la copia.
 	VDP_WriteVRAM_16K(g_CacheLevel[0].Layout + g_CacheLevel[0].Width * riga,
 					  g_ScreenLayoutLow + (32 * (riga + g_CacheLevel[0].Y)) + (g_CacheLevel[0].X), g_CacheLevel[0].Width);
+	v9Call(V9OP_SYNC_ROW, riga, 0, 0);
 }
 
 //=============================================================================
@@ -1510,15 +1573,19 @@ void VDP_ReplacementPartialArea(u8 riga)
 //=============================================================================
 
 void VSyncCallback() {
-	SetActiveSegment(4);
-	VSyncCallbackBanck();
-	SetActiveSegment(0);
+	// Salva il segmento in una variabile locale: SetActiveSegment() usa una
+	// sola variabile globale e, chiamata da un interrupt, corromperebbe il
+	// segmento del codice interrotto (o di un interrupt annidato).
+	u8 old = GET_BANK_SEGMENT(1);
 
-	// Vediamo se lasciaro qui
-	SetActiveSegment(8);
+	SET_BANK_SEGMENT(1, 4);
+	VSyncCallbackBanck();
+
+	SET_BANK_SEGMENT(1, 8);
 	updatePT3();
 	updateAYFX();
-	SetActiveSegment(0);
+
+	SET_BANK_SEGMENT(1, old);
 }
 
 void main()

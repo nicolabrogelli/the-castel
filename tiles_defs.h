@@ -10,8 +10,8 @@
 #define TILE_6                6
 #define TILE_7                7
 
-#define TILE_56               56 
-#define TILE_57               57
+#define TILE_TORCH_TOP        56 // Torcia a muro: fiamma (decorativa, non solida)
+#define TILE_TORCH_BOTTOM     57 // Torcia a muro: supporto
 #define TILE_58               58
 #define TILE_59               59
 #define TILE_60               60
