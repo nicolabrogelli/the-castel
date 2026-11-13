@@ -7,8 +7,9 @@ Impostazioni del progetto. Prima di scaricare il gioco creare una cartella dove 
 clonare il progetto. Una volta completata l'operazione sarà possibile effettuare la build. Se riscontrate problemi in fase di compilazioni, effettuate una
 segbalazione e provvedeò a dare assistenza.
 
+
+Grazie a tutti e buon divertimento
+
+
 Nicola Brogelli
 
-
-
-Aggiornamento

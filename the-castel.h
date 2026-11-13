@@ -4,6 +4,8 @@
 
 #define COMPRESSO                1
 
+#define EMPTY_ITEM 		  	     0
+
 #define BASE_X_LIFE            190
 #define OFFSET_X_LIFE            8 // Solo multipli di 8
 #define TILE_EMPTY 		  	     0
@@ -35,9 +37,10 @@
 
 #define MAX_LIVES                3
 #define IMMUNITY                50
-#define LAST_LEVEL              26  // Ultimo livello di gioco
+#define LAST_LEVEL              25  // Ultimo livello di gioco
 #define START_GAME               0  // Livello di inizio gico
 #define GAME_OVER               LAST_LEVEL + 1  // Livello di game over
+#define GAME_WINNER             27
 #define OFFSET_TILE_COLLISION   50
 #define MIN_DISTANCE_MAGNENT   100
 #define MAX_DISTANCE_MAGNENT  1000
@@ -89,6 +92,13 @@
 #define FALL_ENEMY_FRAME_11  4*16+7*16
 #define JUMP_ENEMY_FRAME_11 4*16+7*16
 
+#define FALL_DEAD  40
+#define LEVEL_SIZE 32*24  //300
+
+#define LEVEL_WIDTH 32
+#define LEVEL_HEIGHT 24
+#define LEVEL_X 0
+#define LEVEL_Y 0
 
 
 
@@ -100,80 +110,18 @@ bool State_Game();
 bool State_Pause();
 bool State_GameOver();
 bool State_Preset();
+bool State_SelectDifficulty();
 bool physicsCollision(u8 tile);
-void setColorTiles();
+bool physicsCollisionEnemy(u8 x, u8 y);
+void physicsCollisionPlayerAndEnemy(struct Character *ply);
+void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct CharacterEnemy *genericEnemy, u8 enemyNumber);
 bool interact(u8 x, u8 y);
 void drawLevel(u8 levelIdx);
 void initCharacter(struct Character *ply, u8 id);
 void updateCharacter(struct Character *ply);
-void readInputControl();
-bool physicsCollisionEnemy(u8 x, u8 y);
-
-bool getItem(u8 x, u8 y);
-void updateScore();
-void initLife();
-bool addLife();
-void displayLife();
-bool removeLife();
-bool hasLives();
-void physicsCollisionPlayerAndEnemy(struct Character *ply);
-void changeLevel(u8 x, u8 y, u8 key, u8 door);
 bool isUnderTheWater(u8 x, u8 y);
 void genericControl();
-bool collisionCheck(i8 dx, i8 dy);
-void physicsCollisionPlayerAndGenericEnemy(struct Character *ply, struct CharacterEnemy *genericEnemy, u8 enemyNumber);
-void updateGenericEnemy(struct CharacterEnemy *genericEnemy, u8 enemyNumber, u8 idFirstSprite);
-void hideSprite(u8 count, u8 maxElement, u8 baseSprite);
-void managementSprite(u8 x, u8 y, u8 baseSprite, u8 enemyCount, u8 indexShape);
-void spritePosition(u8 x, u8 y, struct CharacterEnemy *genericEnemy, u8 baseSprite, u8 enemyCount, char *type, u8 moveHV);
-void VDP_LoadPattern_GM1_Pletter(const u8 *src, u8 offset);
-u8 positionGenericEnemy(u8 TILE_POS_GENERIC_ENEMY, u8 enemyCount, struct CharacterEnemy *enemy, u8 idxSprite, u8 bo, u8 riga, u8 colonna, u8 levelIdx, c8 *Name, u8 movHV);
-bool isDanger(u8 x, u8 y);
 u8 isUnderDunger(u8 x, u8 y);
-void messageInGame(char *message);
 void VDP_ReplacementPartialArea(u8 riga);
-
-void replaceAndRemoveItem(u8 x, u8 y, u8 tile, u8 tileMask);
-//void pursuitCheck(struct CharacterEnemy *genericEnemy, u8 enemyNumber);
-
-void adjustXYEnemy(struct CharacterEnemy *genericEnemy, u8 idFirstSprite, u8 nEnemy);
-void takeActionWithCheck(u8 x, u8 y, u8 tile, u8 checkTile, u8 newTile);
-
-bool isOnPlatform(u8 *X, u8 *Y, u8 slideCount, struct CharacterEnemy *platform);
-
-
-int my_strcmp(const c8 *a, const c8 *b);
-//=============================================================================
-// MEMORY DATA EXTERN
-//=============================================================================
-extern unsigned char g_Level001[];
-extern unsigned char g_Level002[];
-extern unsigned char g_Level003[];
-extern unsigned char g_Level004[];
-extern unsigned char g_Level005[];
-extern unsigned char g_Level006[];
-extern unsigned char g_Level007[];
-extern unsigned char g_Level008[];
-extern unsigned char g_Level009[];
-extern unsigned char g_Level010[];
-extern unsigned char g_Level011[];
-extern unsigned char g_Level012[];
-extern unsigned char g_Level013[];
-extern unsigned char g_Level014[];
-extern unsigned char g_Level015[];
-extern unsigned char g_Level016[];
-//extern unsigned char g_Level017[];
-
-extern unsigned char g_Level018[];
-extern unsigned char g_Level019[];
-extern unsigned char g_Level020[];
-extern unsigned char g_Level021[];
-extern unsigned char g_Level022[];
-extern unsigned char g_Level023[];
-extern unsigned char g_Level024[];
-extern unsigned char g_Level025[];
-extern unsigned char g_Level026[];
-extern unsigned char g_Level027[];
-extern unsigned char g_Level028[];
-extern unsigned char g_Level029[];
-extern unsigned char g_Level030[];
+bool State_GameWinner();
+void changeLevel(u8 x, u8 y, u8 key, u8 door);

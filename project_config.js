@@ -9,27 +9,28 @@
 //*******************************************************************************
 // BUILD STEPS
 //*******************************************************************************
-/*
+
  DoClean   = false;	//-- Clear all intermediate files and exit (boolean)
  DoCompile = true;	//-- Compile all the project and engine source code (boolean). Generate all REL files
  DoMake    = true;	//-- Link all the project and engine source code (boolean). Merge all REL into one IHX file
  DoPackage = true;	//-- Generate final binary file (boolean). Binarize the IHX file
  DoDeploy  = true;	//-- Gathering of all files necessary for the program to work (boolean). Depends on the type of target
  DoRun     = true;	//-- Start the program automatically at the end of the build (boolean)
-*/
+
 //*****************************************************************************
 // TOOLS SETTINGS
 //*****************************************************************************
 
+//Emulator = 'C:/Users/87003101/msxgl-workspace/openmsx-20.0/openmsx.exe';	
+Emulator  = 'C:/Users/nicol/Documents/BACKUP/DOC - RETROCOMPUTER/COMPUTER/MSX/EMULATORI/OPENMSX 22.0/openmsx.exe';
 
-
-//Emulator = `${ToolsDir}openMSX/openmsx`;
+// Emulator = `${ToolsDir}openMSX/openmsx`;
 // Emulator = `${ToolsDir}Emulicious/Emulicious`;
 // Emulator = `${ToolsDir}BlueMSX/blueMSX`;
 // Emulator = `${ToolsDir}MEISEI/meisei`;
 // Emulator = `${ToolsDir}fMSX/fMSX`;
 // Emulator = `${ToolsDir}RuMSX/MSX`;
-//Debugger = `${ToolsDir}openMSX/Debugger/openmsx-debugger`;
+// Debugger = `${ToolsDir}openMSX/Debugger/openmsx-debugger`;
 
 //*****************************************************************************
 // PROJECT SETTINGS
@@ -39,13 +40,16 @@
 ProjName = "the-castel";
 
 //-- List of project modules to build (array). If empty, ProjName will be added
-ProjModules = [ ProjName, "tiles", "inventory", "control", "music", "level_defs" ];
+ProjModules = [ ProjName, "tiles", "level_defs" ];
+
+
 
 //-- Project segments base name (string). ProjName will be used if not defined
 // ProjSegments = "";
 
 //-- List of library modules to build (array)
-LibModules = [ "compress/pletter", "system", "bios",  "vdp", "print", "input", "memory", "game", "game_pawn", "string",  "pt3/pt3_player", "ayfx/ayfx_player"];
+//LibModules = [  "system", "bios",  "vdp", "print", "input", "memory", "game", "game_pawn", "string",  "pt3/pt3_player", "ayfx/ayfx_player", "debug"];
+LibModules = [  "system", "bios",  "vdp", "print", "input",  "game", "game_pawn", "string",  "pt3/pt3_player", "ayfx/ayfx_player"];
 
 //-- Additional sources to be compiled and linked with the project (array)
 // AddSources = [];
@@ -79,10 +83,10 @@ Machine = "1";
 //   - DOS1             .com    MSX-DOS 1 program (0100h~) No direct acces to Main-ROM
 //   - DOS2             .com    MSX-DOS 2 program (0100h~) No direct acces to Main-ROM
 //Target = "ROM_48K_ISR";
-Target = "DOS1";
+Target = "ROM_ASCII16";
 
 //-- ROM mapper total size in KB (number). Must be a multiple of 8 or 16 depending on the mapper type (from 64 to 4096)
-// ROMSize = 128;
+ROMSize = 256;
 
 //-- Postpone the ROM startup to let the other ROMs initialize like Disk controller or Network cartridge (boolean)
 // ROMDelayBoot = false;
@@ -97,7 +101,7 @@ Target = "DOS1";
 CustomISR = "VBLANK";
 
 //-- Use automatic banked call and trampoline functions (boolean). For mapped ROM
-// BankedCall = 0;
+BankedCall = true;
 
 //-- Overwrite RAM starting address (number). For example. 0xE0000 for 8K RAM machine
 // ForceRamAddr = 0;
@@ -135,7 +139,7 @@ AppID = "TC";
 BuildLibrary = true;
 
 //-- Prepare program for debug (boolean)
-Debug = false;
+Debug = true;
 
 //-- Move debug symbols to deployement folder (boolean)
 DebugSymbols = true;
@@ -162,7 +166,7 @@ DebugSymbols = true;
 // LinkOpt = "";
 
 //-- Automatic increment of build version in a header file (boolean)
-BuildVersion = true;
+BuildVersion = false;
 
 //*****************************************************************************
 // BUILD TOOL OPTION
@@ -175,10 +179,10 @@ Verbose = true;
 LogStdout = true;
 
 //-- Output build information to a log file (boolean)
-// LogFile = false;
+LogFile = true;
 
 //-- Name of the log file (string)
-// LogFileName = "";
+LogFileName = "buildlog.txt";
 
 //*******************************************************************************
 // EMULATOR SETINGS
@@ -191,10 +195,10 @@ EmulMachine    = false;				//-- Force the MSX version of the emulated machine (b
 // Emul60Hz       = false;				//-- Force the emulated machine to be at 60 Hz (boolean)
 // EmulFullScreen = false;				//-- Force the emulator to start in fullscreen mode (boolean)
 // EmulMute       = false;				//-- Disable emulator sound (boolean)
- EmulDebug      = true;				//-- Start emulator debugger with program launch (boolean)
+EmulDebug      = true;				//-- Start emulator debugger with program launch (boolean)
 
 //-- Emulator extra parameters to be add to command-line (string). Emulator sotfware specific
-// EmulExtraParam = "";
+EmulExtraParam = "-script C:/Users/nicol/Documents/Progetti/C/MSXgl/tools/script/openMSX/debugger_pvm.tcl"
 
 //-------------------------------------------------------------------------------
 // Extension options
