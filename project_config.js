@@ -22,7 +22,7 @@
 //*****************************************************************************
 
 //Emulator = 'C:/Users/87003101/msxgl-workspace/openmsx-20.0/openmsx.exe';	
-Emulator  = 'C:/Program Files/openMSX/openmsx.exe';
+Emulator  = 'C:/Users/nicol/Documents/BACKUP/DOC - RETROCOMPUTER/COMPUTER/MSX/EMULATORI/OPENMSX 22.0/openmsx.exe';
 
 // Emulator = `${ToolsDir}openMSX/openmsx`;
 // Emulator = `${ToolsDir}Emulicious/Emulicious`;
