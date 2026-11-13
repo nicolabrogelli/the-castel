@@ -49,7 +49,7 @@ ProjModules = [ ProjName, "tiles", "level_defs" ];
 
 //-- List of library modules to build (array)
 //LibModules = [  "system", "bios",  "vdp", "print", "input", "memory", "game", "game_pawn", "string",  "pt3/pt3_player", "ayfx/ayfx_player", "debug"];
-LibModules = [  "system", "bios",  "vdp", "print", "input",  "game", "game_pawn", "string",  "pt3/pt3_player", "ayfx/ayfx_player"];
+LibModules = [  "system", "bios",  "vdp", "print", "input",  "game", "game_pawn", "string"]; // Audio: player PSG nel segmento 8 (the-castel_s8_b1.c)
 
 //-- Additional sources to be compiled and linked with the project (array)
 // AddSources = [];

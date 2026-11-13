@@ -117,15 +117,8 @@ extern void drawMenu();
 //=============================================================================
 // SEGMENT 8, BANK 1
 //=============================================================================
-extern void inizializePT3();
-extern void restorePT3Music();
-extern void updatePT3();
-extern void stopMusicPlayback();
-extern void PlayBankSFX(u8 id, u8 prio);
-extern void inizializeAYFX();
-extern void setChannel();
-extern void updateAYFX();
-extern void SetSong(u8 songId);
+// Player audio PSG: vedi audio_api.h
+#include "audio_api.h"
 
 
 enum INPUT_ACTION
@@ -621,7 +614,7 @@ void ItemsTakenForLevel(u8 x, u8 y, u8 tile, u8 visible)
  */
 void playEffect(u8 idEffect) {
 	SetActiveSegment(8);
-	PlayBankSFX(idEffect,0);
+	Audio_PlaySFX(idEffect);
 	SetActiveSegment(0);
 }
 
@@ -711,7 +704,7 @@ bool interact(u8 x, u8 y)
 		replaceAndRemoveItem(x, y, tile, keyMask);
 		SetActiveSegment(0);
 
-		playEffect(5);
+		playEffect(SFX_KEY);
         return TRUE;
     }
     
@@ -720,7 +713,7 @@ bool interact(u8 x, u8 y)
         takeActionWithCheck(x, y, tile, TILE_AMPHORA, TILE_MASK_AMPHORA);
 		SetActiveSegment(0);
 
-		playEffect(17);
+		playEffect(SFX_AMPHORA);
         return TRUE;
     
     case TILE_CRUCIFIX:
@@ -728,7 +721,7 @@ bool interact(u8 x, u8 y)
         takeActionWithCheck(x, y, tile, TILE_CRUCIFIX, TILE_EMPTY);
         SetActiveSegment(0);
 
-		playEffect(10);
+		playEffect(SFX_ITEM);
 		return TRUE;
     }
 
@@ -816,11 +809,7 @@ void drawLevel(u8 levelIdx)
 	u8 oldPrev = g_PreviousSegment;
 
 	SetActiveSegment(8);
-	if(levelIdx > START_GAME && levelIdx < LAST_LEVEL + 1)
-		stopMusicPlayback();	
-	else
-		restorePT3Music();	
-	
+	Audio_OnRoom(levelIdx); // Silenzio nei livelli, musica nel menu, game over e vittoria
 	SetActiveSegment(0);
 
 
@@ -1092,6 +1081,7 @@ void updateCharacter(struct Character *ply)
     {
         ply->bInAir = TRUE;
         ply->VelocityY = FORCE;
+        playEffect(SFX_JUMP);
 
     }
     else if (ply->Input & INPUT_GET)
@@ -1197,7 +1187,7 @@ void genericControl()
 		g_Player.Score += 100;
 		updateScore(g_Player.Score);
 
-		playEffect(10);
+		playEffect(SFX_ITEM);
 	}
 
     SetActiveSegment(0);
@@ -1210,7 +1200,7 @@ void genericControl()
 	// TODO: Mettere qui il suono
 	if(isSound) {
 		isSound = false;
-		playEffect(9);
+		playEffect(SFX_HURT);
 	}
 }
 
@@ -1288,7 +1278,7 @@ bool State_SelectDifficulty()
     {
 
 		SetActiveSegment(8);
-		SetSong(0);
+		Audio_PlaySong(MUS_TITLE);
 		SetActiveSegment(0);
 
         SetActiveSegment(7);
@@ -1299,20 +1289,19 @@ bool State_SelectDifficulty()
     }
     
     u8 row0 = Keyboard_Read(0);
+    u8 difficulty = 0xFF;
     
     if (!(row0 & 0x01))
-    {
-        g_GameDifficulty = DIFFICULTY_EASY;
-        Game_SetState(State_Preset);
-    }
+        difficulty = DIFFICULTY_EASY;
     else if (!(row0 & 0x02))
-    {
-        g_GameDifficulty = DIFFICULTY_NORMAL;
-        Game_SetState(State_Preset);
-    }
+        difficulty = DIFFICULTY_NORMAL;
     else if (!(row0 & 0x04))
+        difficulty = DIFFICULTY_HARD;
+
+    if (difficulty != 0xFF)
     {
-        g_GameDifficulty = DIFFICULTY_HARD;
+        g_GameDifficulty = difficulty;
+        playEffect(SFX_SELECT);
         Game_SetState(State_Preset);
     }
     
@@ -1541,11 +1530,7 @@ bool State_Pause()
 bool State_GameOver()
 {
 
-	drawLevel(GAME_OVER); // -1
-
-	SetActiveSegment(8);
-	SetSong(1);
-	SetActiveSegment(0);
+	drawLevel(GAME_OVER); // -1 (drawLevel fa partire anche la musica del game over)
 
 	// Attende la pressione di un tasto
 	while (Keyboard_Read(8) != 254)
@@ -1626,8 +1611,7 @@ void VSyncCallback() {
 	VSyncCallbackBanck();
 
 	SET_BANK_SEGMENT(1, 8);
-	updatePT3();
-	updateAYFX();
+	Audio_Update();
 
 	SET_BANK_SEGMENT(1, old);
 }
@@ -1637,10 +1621,8 @@ void main()
 	//DEBUG_INIT();
 	//DEBUG_PRINT("Start debug session!");
 	SetActiveSegment(8);
-	inizializePT3();
-    SetSong(0);
-	inizializeAYFX();
-	restorePT3Music();
+	Audio_Init();
+	Audio_PlaySong(MUS_TITLE);
 	SetActiveSegment(0);
 
 	VDP_EnableVBlank(TRUE);

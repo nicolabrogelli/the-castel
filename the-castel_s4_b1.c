@@ -65,6 +65,7 @@ extern void setTile(u8 x, u8 y, u8 tile);
 extern void ItemsTakenForLevel(u8 x, u8 y, u8 tile, u8 visibility);
 extern bool physicsCollisionEnemy(u8 x, u8 y);
 extern void playEffect(u8 idEffect);
+#include "audio_ids.h"
 
 //=============================================================================
 // MEMORY EXTERN
@@ -527,7 +528,7 @@ void deathAnimationLoop()
 	u8 step = 0;
 	u8 pause = DEATH_PAUSE;
 
-	playEffect(9);
+	playEffect(SFX_DEATH);
 
 	while (pause)
 	{
