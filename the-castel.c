@@ -244,6 +244,17 @@ u8 g_PawnCount = 0;
 u8 g_ReverseCount = 0;
 u8 g_PrevRoomIdx = 0;
 u8 g_CurrRoomIdx = 0;
+
+// DEBUG: scorrimento stanze con i tasti Q (avanti) e A (indietro)
+// Impostare a 0 per disabilitare nella versione finale
+#define DEBUG_ROOM_NAV          1
+#if DEBUG_ROOM_NAV
+#define DBG_KEY_Q_ROW           4      // Riga matrice tastiera MSX del tasto Q
+#define DBG_KEY_Q_MASK          0x40   // Bit 6
+#define DBG_KEY_A_ROW           2      // Riga matrice tastiera MSX del tasto A
+#define DBG_KEY_A_MASK          0x40   // Bit 6
+u8 g_DbgRoomKeyPrev = 0;               // Stato precedente dei tasti (rilevamento fronte)
+#endif
 u8 g_GhostCount = 0;
 u8 g_SpiderCount = 0;
 u8 g_BatCount = 0;
@@ -799,6 +810,10 @@ void updateLevel(int g_CurrRoomIdx, int size) {
  */
 void drawLevel(u8 levelIdx)
 {
+	// Salva il segmento del banco 1: drawLevel puo' essere chiamata da codice
+	// banked (es. isDanger nel segmento 3) e al ritorno il segmento deve essere lo stesso
+	u8 oldSeg = GET_BANK_SEGMENT(1);
+	u8 oldPrev = g_PreviousSegment;
 
 	SetActiveSegment(8);
 	if(levelIdx > START_GAME && levelIdx < LAST_LEVEL + 1)
@@ -1008,6 +1023,9 @@ void drawLevel(u8 levelIdx)
 	}
 
 	v9Call(V9OP_END_DRAW, 0, 0, 0); // Copia la mappa sulla V9990 e riaccende i display
+
+	g_PreviousSegment = oldPrev;
+	SET_BANK_SEGMENT(1, oldSeg);
 
 }
 
@@ -1355,6 +1373,29 @@ bool State_Game()
 	SetActiveSegment(4);
 	readInputControl(&g_Player);
 	SetActiveSegment(0);
+
+#if DEBUG_ROOM_NAV
+	// DEBUG: Q = stanza successiva, A = stanza precedente (una stanza per pressione)
+	{
+		u8 keys = 0;
+		u8 pressed;
+		if (!(Keyboard_Read(DBG_KEY_Q_ROW) & DBG_KEY_Q_MASK)) keys |= 0x01;
+		if (!(Keyboard_Read(DBG_KEY_A_ROW) & DBG_KEY_A_MASK)) keys |= 0x02;
+		pressed = keys & ~g_DbgRoomKeyPrev;
+		g_DbgRoomKeyPrev = keys;
+
+		if ((pressed & 0x01) && g_CurrRoomIdx < LAST_LEVEL)
+		{
+			drawLevel(g_CurrRoomIdx + 1);
+			return TRUE;
+		}
+		if ((pressed & 0x02) && g_CurrRoomIdx > START_GAME + 1)
+		{
+			drawLevel(g_CurrRoomIdx - 1);
+			return TRUE;
+		}
+	}
+#endif
 
 	// TODO: Aggiornamento della posizione dei nemici, da migliorare!!! g_FrameCounter
 	if (g_Frame == 50)
