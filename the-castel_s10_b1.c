@@ -107,7 +107,8 @@ u8 v9AnimInfo(u8 anim)
 void v9DrawEnemy(u8 id)
 {
 	u8 anim = V9_ANIM_ENEMY + g_V9Kind[id] * 2 + g_V9Left[id];
-	v9WriteSprite(id, g_V9Y[id] + V9_OFFSET_Y, v9AnimCell(anim), g_V9X[id], v9AnimInfo(anim));
+	// -1 come per il giocatore: la V9990 visualizza lo sprite una riga sotto la Y indicata
+	v9WriteSprite(id, g_V9Y[id] - 1 + V9_OFFSET_Y, v9AnimCell(anim), g_V9X[id], v9AnimInfo(anim));
 }
 
 /** Imposta una voce della palette (RGB 5 bit) */
