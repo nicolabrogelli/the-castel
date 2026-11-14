@@ -63,8 +63,25 @@ ENEMY_PAL = {
     "e": (12, (80, 216, 80)), "E": (13, (24, 104, 40)), "b": (14, (176, 112, 48)), "B": (15, (96, 56, 24)),
 }
 # Fondale (layer B, palette 3): pietre scure
-BG_PAL = [(0, 0, 0), (0, 0, 0), (12, 8, 26), (20, 14, 40), (30, 22, 58), (54, 50, 98),
-          (12, 26, 22), (18, 36, 28)] + [(0, 0, 0)] * 8
+# Colori volutamente scuri: il fondale non deve competere con livello e sprite.
+BG_PAL = [
+    (0, 0, 0),        # 0  trasparente
+    (0, 0, 0),        # 1  malta
+    (10, 8, 22),      # 2  pietra in ombra
+    (18, 14, 38),     # 3  pietra
+    (28, 22, 54),     # 4  pietra illuminata
+    (46, 40, 84),     # 5  spigolo di luce
+    (12, 30, 22),     # 6  muschio scuro
+    (24, 50, 32),     # 7  muschio chiaro
+    (0, 0, 0),        # 8  libero
+    (0, 0, 0),        # 9  libero
+    (0, 0, 0),        # 10 libero
+    (0, 0, 0),        # 11 libero
+    (0, 0, 0),        # 12 libero
+    (0, 0, 0),        # 13 libero
+    (0, 0, 0),        # 14 libero
+    (58, 56, 76),     # 15 ferro, ragnatele
+]
 
 
 def grid(rows, w, h, name):
@@ -224,28 +241,49 @@ def rot_ccw(rows):
     return ["".join(rows[c][n - 1 - r] for c in range(n)) for r in range(n)]
 
 
+CRACKED_BRICKS = (147, 152)   # mattoni con una crepa
+
+
 def brick(seam, seed):
-    """Mattone 8x8 a 4 toni: luce in alto, ombra in basso, malta nera."""
+    """Mattone 8x8 a 4 toni: luce in alto, ombra in basso, malta nera,
+    piccole ammaccature (pixel scuro con riflesso chiaro) e qualche crepa."""
     rnd = random.Random(seed)
-    rows = []
+    g = [["m"] * 8 for _ in range(8)]
     for y in range(8):
-        row = ""
         for x in range(8):
             if y == 7 or x == seam:
-                c = "k"
+                g[y][x] = "k"
             elif y == 0 or (seam is not None and x == seam + 1):
-                c = "l"
+                g[y][x] = "l"
             elif y == 6 or (seam is not None and x == seam - 1):
-                c = "d"
-            else:
-                c = "m"
-            row += c
-        rows.append(row)
-    for _ in range(2):  # puntini di usura
-        x, y = rnd.randint(1, 6), rnd.randint(2, 5)
-        if rows[y][x] == "m":
-            rows[y] = rows[y][:x] + "d" + rows[y][x + 1:]
-    return rows
+                g[y][x] = "d"
+    # spigolo smussato: l'angolo in alto a destra del mattone prima della fuga e' in ombra
+    if seam is not None and seam >= 1:
+        g[0][seam - 1] = "m"
+    # ombra sotto la riga di luce: da' spessore al bordo superiore
+    for x in range(8):
+        if g[1][x] == "m" and rnd.random() < 0.35:
+            g[1][x] = "l" if rnd.random() < 0.3 else "m"
+
+    def free(x, y):
+        return 1 <= x <= 6 and 2 <= y <= 5 and g[y][x] == "m" and g[y + 1][x + 1] in "md"
+
+    placed = 0
+    for _ in range(12):  # ammaccature
+        if placed == 2:
+            break
+        x, y = rnd.randint(1, 6), rnd.randint(2, 4)
+        if free(x, y):
+            g[y][x] = "d"
+            if g[y + 1][x + 1] == "m":
+                g[y + 1][x + 1] = "l"
+            placed += 1
+    if seed in CRACKED_BRICKS:  # crepa diagonale che parte dalla malta
+        x = 2 if seam is None or seam > 4 else seam + 2
+        for y, dx in ((5, 0), (4, 1), (3, 1), (2, 2)):
+            if 0 <= x + dx < 8 and g[y][x + dx] in "ml":
+                g[y][x + dx] = "k" if y > 3 else "d"
+    return ["".join(r) for r in g]
 
 
 def arch_shape(w, h, x0, inset):
@@ -525,6 +563,16 @@ KNIGHT_LEGS = {
         "....ksssskk..kk.",
         "....kddddk......",
         "....kkkkkk......"],
+    "wide": [   # passo lungo (gamba avanti chiara, dietro scura)
+        "..kkkrrRrrkkkkyk",
+        "..kddk..kssk.kk.",
+        ".kddk....kssk...",
+        ".kkkk....kkkkk.."],
+    "lift": [   # gamba posteriore sollevata
+        "..kkkrrRrrkkkkyk",
+        "....kssskdk..kk.",
+        "...kdddkddk.....",
+        "...kkkkkkk......"],
     "tuck": [
         "..kkkrrRrrkkkkyk",
         "..kssssssssk.kk.",
@@ -682,23 +730,6 @@ SPIDER = [
      "................",
      "................"],
 ]
-PLATFORM = [[
-    "kkkkkkkkkkkkkkkk",
-    "kgoooooooooooogk",
-    "kbbbbkbbbbkbbbbk",
-    "kBBBBkBBBBkBBBBk",
-    "kkkkkkkkkkkkkkkk",
-    ".kGk........kGk.",
-    "..k..........k..",
-    "................",
-    "................",
-    "................",
-    "................",
-    "................",
-    "................",
-    "................",
-    "................",
-    "................"]]
 SNAKE = [[
     "................", "................", "................", "................",
     "................", "................", "........kkkk....", ".......keeeeek..",
@@ -714,6 +745,98 @@ FIRE = [[
     "................", "................", ".......k........", "......kyk.......",
     ".....kyyk.......", "....kyyoyk......", "....kyoooyk.....", "...kryoooyrk....",
     "...krryyyrrk....", "....krrrrrk.....", ".....kkkkk......", "................"]]
+
+
+def patch(frame, rows):
+    """Copia di un fotogramma con alcune righe sostituite: {indice: riga}."""
+    out = list(frame)
+    for i, r in rows.items():
+        out[i] = r
+    return out
+
+
+# --- Fotogrammi aggiuntivi delle animazioni ---------------------------------
+# Scheletro: passo lungo con le braccia che oscillano in avanti
+SKELETON_STRIDE = patch(SKELETON[0], {
+    7: "....kkkokkk.....",
+    8: "...kogkogkgokk..",
+    9: "..kokkkogk.kok..",
+    10: "..kk..kogk..kk..",
+    12: ".....kokkok.....",
+    13: "....kok..kok....",
+    14: "...kok....kok...",
+    15: "...kkk....kkk..."})
+SKELETON = [SKELETON[0], SKELETON[1], SKELETON_STRIDE, SKELETON[1]]
+
+# Fantasma: la coda ondeggia mentre fluttua su e giu'
+GHOST = [GHOST[0], GHOST[1], patch(GHOST[0], {
+    12: ".kgoooooooooGk..",
+    13: "..kgoGooooGGk...",
+    14: "..kGk.kGGGk.....",
+    15: "...k...kkk......"}), GHOST[1]]
+
+# Pipistrello: ali alzate, orizzontali, abbassate, orizzontali
+BAT_MID = [
+    "................",
+    "................",
+    "................",
+    "......k.k.......",
+    "..kk..kkk..kk...",
+    ".kPpkkpppkkpPk..",
+    "kPpppkyppkyppPk.",
+    "kk.kPPpppPPk.kk.",
+    ".....kkokk......",
+    "......k..k......",
+    "................",
+    "................",
+    "................",
+    "................",
+    "................",
+    "................"]
+BAT = [BAT[0], BAT_MID, BAT[1], BAT_MID]
+
+# Serpente: lingua biforcuta e coda che serpeggia
+SNAKE = [SNAKE[0],
+         patch(SNAKE[0], {8: ".......kekkeykr.", 9: "........keeeek.r"}),
+         SNAKE[0],
+         patch(SNAKE[0], {11: "..keek..keek....", 12: ".keEEekkeek.....", 14: "kk...kkEEk......"})]
+
+# Mago: la sfera del bastone pulsa
+MAGICIAN = [MAGICIAN[0], patch(MAGICIAN[0], {
+    6: "....kooook..c...",
+    7: "...kPpppPPkcoc..",
+    8: "..kPpppppPPkck.."})]
+
+# Fuoco: tre fiamme diverse (normale, alta verso destra, bassa verso sinistra)
+FIRE = [FIRE[0], [
+    "................", "................", "................", "................",
+    "................", "........k.......", ".......kyk......", "......kyyk......",
+    ".....kyyyk......", "....kyyoyyk.....", "....kyooyyk.....", "...kryoooyrk....",
+    "...krryyyrrk....", "....krrrrrk.....", ".....kkkkk......", "................"], [
+    "................", "................", "................", "................",
+    "................", "................", "................", "......k.........",
+    ".....kyk........", "....kyyyk.......", "....kyooyk......", "...kryoooyrk....",
+    "...krryyyrrk....", "....krrrrrk.....", ".....kkkkk......", "................"]]
+
+# Piattaforma mobile: assi di legno in una cornice di ferro rivettata.
+# La riga 0 deve restare il piano d'appoggio (isOnPlatform usa la Y dello sprite).
+PLATFORM = [[
+    "kkkkkkkkkkkkkkkk",
+    "kooggggggggggogk",
+    "kGkkkkkkkkkkkkGk",
+    "kGkbbbbbkbbbbkGk",
+    "kokBbbbbkbbbBkok",
+    "kGkBBBBBkBBBBkGk",
+    "kkkkkkkkkkkkkkkk",
+    ".kGk..kGGk..kGk.",
+    "..k....kk....k..",
+    "................",
+    "................",
+    "................",
+    "................",
+    "................",
+    "................",
+    "................"]]
 
 
 def knight(legs, arms_up=False):
@@ -735,7 +858,7 @@ def build_sprites():
     P, E = PLAYER_PAL, ENEMY_PAL
     player = {
         "idle": add_lr([knight("stand")], P, "idle"),
-        "walk": add_lr([knight("stride"), knight("pass"), knight("stride"), knight("pass")], P, "walk"),
+        "walk": add_lr([knight("stride"), knight("pass"), knight("wide"), knight("lift")], P, "walk"),
         "jump": add_lr([knight("tuck", True)], P, "jump"),
         "fall": add_lr([knight("stand", True)], P, "fall"),
     }
@@ -786,46 +909,130 @@ def build_sprites():
 # -----------------------------------------------------------------------------
 # FONDALE 256x192 (layer B): muro di grandi pietre scure
 # -----------------------------------------------------------------------------
+# Il fondale finisce nel segmento 11 (16 KB) insieme alle tile (8 KB) e alla
+# mappa (1,5 KB). v9990_gfx.py salva le tile a righe da 32 (1 KB per riga):
+# al massimo 6 righe, cioe' 192 tile 8x8 diverse.
+BG_MAX_TILES = 192
+
+BG_TOP, BG_BOTTOM = 8, 176             # lascia libere HUD e inventario
+
+
+def bg_stone(kind, x, y, SW, SH, rnd_bits):
+    """Colore di un pixel di una pietra SWxSH. kind: 0 liscia, 1 crepa, 2 muschio,
+    3 scheggiata, 4 scura."""
+    if y == SH - 1 or x == SW - 1:
+        return 1
+    if kind == 3 and x + y < 4:                         # angolo scheggiato
+        return 1 if x + y < 3 else 2
+    dark = kind == 4
+    if y == 0 or x == 0:
+        c = 4 if dark else 5
+        if y == 0 and x > SW - 6:
+            c = 3 if dark else 4                        # la luce sfuma verso destra
+        return c
+    if y == SH - 2 or x == SW - 2:
+        return 2
+    c = 2 if dark else 3
+    if y == 1 and not dark:
+        c = 4
+    # grana della pietra: retino rado piu' fitto in basso a destra (ombra)
+    if (x * 5 + y * 3 + rnd_bits) % 11 == 0 or ((x + y) % 2 == 0 and x + 2 * y > SW + 10 and (x * y) % 3 == 0):
+        c = 2
+    if kind == 1 and 1 <= y <= SH - 4:                  # crepa diagonale irregolare
+        cx = 8 + rnd_bits * 3 + (y * 3) // 4 + (1 if y in (4, 5, 9) else 0)
+        if x == cx:
+            c = 1
+        elif x == cx + 1:
+            c = 4
+    if kind == 2 and y <= 4:                            # muschio colato dall'alto
+        drip = (x * 7 + rnd_bits) % 5
+        if y <= drip % 4 + (1 if x % 3 == 0 else 0):
+            c = 7 if (x + y) % 3 == 0 else 6
+    return c
+
+
+def chain(length):
+    """Catena verticale larga 4 px: anelli alternati di fronte e di profilo."""
+    def col(x, y):
+        if y >= length:
+            return None
+        ring = y % 6
+        if ring < 4:                                    # anello di fronte
+            if x in (0, 3) and ring in (1, 2):
+                return 15
+            if x in (1, 2) and ring in (0, 3):
+                return 15
+            return None
+        return 15 if x in (1, 2) else None              # anello di profilo
+    return col
+
+
+def cobweb(size, flip):
+    """Ragnatela d'angolo: raggi dal vertice e fili concentrici."""
+    def col(x, y):
+        if flip:
+            x = size - 1 - x
+        r = math.hypot(x, y)
+        if r > size - 0.5:
+            return None
+        a = math.atan2(y, x)
+        for k in range(5):                              # raggi
+            if abs(a - k * math.pi / 8) * r < 0.55:
+                return 15
+        for ring in (5, 10, 15, 20):                    # fili, leggermente cadenti
+            if abs(r - ring - math.sin(a * 2) * 1.2) < 0.5 and r < size - 1:
+                return 15
+        return None
+    return col
+
+
+# Decorazioni del fondale: (x, y, larghezza, altezza, funzione colore)
+BG_DECOR = [
+    (88, 8, 4, 46, chain(46)),
+    (164, 8, 4, 34, chain(34)),
+    (0, 8, 24, 24, cobweb(24, False)),
+    (232, 8, 24, 24, cobweb(24, True)),
+]
+
+
 def build_background():
     rnd = random.Random(1984)
     img = Image.new("P", (256, 192), 0)
     img.putpalette([v for c in BG_PAL for v in c] + [0] * (768 - 48))
     px = img.load()
     SW, SH = 32, 16                    # pietra 32x16 (ripetuta = poche tile diverse)
-    stones = {}
-    for row in range(1, 11):           # righe 8..175 (lascia libere HUD e inventario)
+    for row in range(1, 11):           # righe 8..175
         for col in range(-1, 9):
             ox = col * SW + (SW // 2 if row % 2 else 0)
-            kind = rnd.choice([0, 0, 0, 1, 2])
-            stones[(row, col)] = (ox, kind)
-    for (row, col), (ox, kind) in stones.items():
-        oy = row * SH - 8
-        for y in range(SH):
-            for x in range(SW):
-                X, Y = ox + x, oy + y
-                if not (0 <= X < 256 and 8 <= Y < 176):
-                    continue
-                if y == SH - 1 or x == SW - 1:
-                    c = 1
-                elif y == 0 or x == 0:
-                    c = 4
-                elif y == SH - 2 or x == SW - 2:
-                    c = 2
-                else:
-                    c = 3
-                if kind == 1 and c == 3 and (x + 2 * y) % 13 == 0:      # crepa
-                    c = 2
-                if kind == 2 and c in (3, 4) and y < 4 and (x * 7 + y) % 5 == 0:  # muschio
-                    c = 6 + (x % 2)
-                px[X, Y] = c
+            oy = row * SH - 8
+            kind = rnd.choice([0, 0, 0, 0, 1, 2, 3, 4])
+            bits = rnd.randint(0, 3)
+            for y in range(SH):
+                for x in range(SW):
+                    X, Y = ox + x, oy + y
+                    if 0 <= X < 256 and BG_TOP <= Y < BG_BOTTOM:
+                        px[X, Y] = bg_stone(kind, x, y, SW, SH, bits)
+    for x0, y0, w, h, fn in BG_DECOR:
+        for y in range(h):
+            for x in range(w):
+                c = fn(x, y)
+                if c is not None and BG_TOP <= y0 + y < BG_BOTTOM:
+                    px[x0 + x, y0 + y] = c
+    # conta le tile 8x8 diverse (vincolo di memoria del segmento 11)
+    uniq = {tuple(px[tx * 8 + x, ty * 8 + y] for y in range(8) for x in range(8))
+            for ty in range(24) for tx in range(32)}
+    uniq.add((0,) * 64)
+    if len(uniq) > BG_MAX_TILES:
+        sys.exit(f"Fondale: {len(uniq)} tile diverse (massimo {BG_MAX_TILES}): semplifica le decorazioni")
     img.save(os.path.join(DATA, "background.png"))
+    return len(uniq)
 
 
 if __name__ == "__main__":
     os.makedirs(DATA, exist_ok=True)
     build_tiles()
     n = build_sprites()
-    build_background()
+    nbg = build_background()
     with open(os.path.join(DATA, "palette.json"), "w", encoding="utf-8") as f:
         json.dump({"brick_ramps": BRICK_RAMPS}, f, indent=1)
-    print(f"Grafica arcade generata in data/v9990/ ({n} celle sprite)")
+    print(f"Grafica arcade generata in data/v9990/ ({n} celle sprite, {nbg} tile di fondale)")

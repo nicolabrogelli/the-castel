@@ -116,8 +116,10 @@ def convert_background():
                 uniq[t] = len(order)
                 order.append(t)
             cells.append(uniq[t])
-    if len(order) > 256:
-        fail(f"background.png usa {len(order)} tile diverse (massimo 256)")
+    # Segmento 11 (16 KB) = tile layer A (8 KB) + mappa (1,5 KB) + tile del fondale
+    # salvate a righe da 32 (1 KB l'una): al massimo 6 righe = 192 tile
+    if len(order) > 192:
+        fail(f"background.png usa {len(order)} tile diverse (massimo 192: il segmento 11 e' di 16 KB)")
     rows = (len(order) + 31) // 32
     sheet = Image.new("P", (256, rows * 8), 0)
     sp = sheet.load()
