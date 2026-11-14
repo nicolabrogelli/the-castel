@@ -280,7 +280,9 @@
 //#define GAMEPAWN_BORDER_BLOCK		(GAMEPAWN_BORDER_UP|GAMEPAWN_BORDER_DOWN|GAMEPAWN_BORDER_LEFT|GAMEPAWN_BORDER_RIGHT)
 
 #define GAMEPAWN_BORDER_EVENT		(GAMEPAWN_BORDER_DOWN|GAMEPAWN_BORDER_RIGHT|GAMEPAWN_BORDER_LEFT)
-#define GAMEPAWN_BORDER_BLOCK		(GAMEPAWN_BORDER_UP)
+// DOWN bloccante: senza, il player che atterra su un pavimento posto sull'ultima riga
+// (es. stanza iniziale) affonda di qualche pixel, perche' al bordo la collisione con le tile e' saltata
+#define GAMEPAWN_BORDER_BLOCK		(GAMEPAWN_BORDER_UP|GAMEPAWN_BORDER_DOWN)
 
 // Top/bottom border position (in pixel)
 #define GAMEPAWN_BORDER_MIN_Y		0
