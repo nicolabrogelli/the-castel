@@ -1106,7 +1106,7 @@ void updateCharacter(struct Character *ply)
         else
         {
             SetActiveSegment(4);
-            bool onV = FALSE, onH = FALSE;
+            bool onV = FALSE, onH = FALSE, jumpFromPlatform = FALSE;
             if ((g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH || g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV) > 0)
             {
                 onV = isOnPlatform(&ply->Pawn.PositionX, &ply->Pawn.PositionY, g_SlideCountV, g_platformV);
@@ -1153,6 +1153,15 @@ void updateCharacter(struct Character *ply)
                 	g_Player.FallStartY = 0; // Reset solo se non stava già cadendo
             	//}
             	g_WasOnPlatform = TRUE;
+
+                // Salto dalla piattaforma (orizzontale o verticale)
+                if (ply->Input & INPUT_JUMP)
+                {
+                    ply->VelocityY = FORCE;
+                    act = ACTION_JUMP;
+                    g_WasOnPlatform = FALSE; // Al prossimo atterraggio il player torna al centro
+                    jumpFromPlatform = TRUE;
+                }
             }
             else
             {
@@ -1166,6 +1175,9 @@ void updateCharacter(struct Character *ply)
             	}
             }
             SetActiveSegment(0);
+
+            if (jumpFromPlatform)
+                playEffect(SFX_JUMP);
         }
     }
     else //if (ply->bMoving)
