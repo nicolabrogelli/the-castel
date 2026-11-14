@@ -264,6 +264,7 @@ bool g_IsUnderWater = FALSE;
 u8 testCountPosition = 0;
 bool g_PlayerDiedFromFall = FALSE;
 bool g_WasOnPlatform = FALSE;
+i8 g_PlatformOffsetX = 0;       // Posizione X del player relativa alla piattaforma orizzontale (0 = centro)
 u8 g_LastSafeY = 0;
 u8 g_DifficultyMenuDrawn = 0;
 
@@ -1105,15 +1106,46 @@ void updateCharacter(struct Character *ply)
         else
         {
             SetActiveSegment(4);
-            if (((g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH || g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV) > 0) && 
-                (isOnPlatform(&ply->Pawn.PositionX, &ply->Pawn.PositionY, g_SlideCountV, g_platformV) || 
-                 isOnPlatform(&ply->Pawn.PositionX, &ply->Pawn.PositionY, g_SlideCountH, g_platformH)))
+            bool onV = FALSE, onH = FALSE;
+            if ((g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberH || g_Levels[g_CurrRoomIdx].MyEnemyType.SliderNumberV) > 0)
             {
-                act = ACTION_IDLE;
+                onV = isOnPlatform(&ply->Pawn.PositionX, &ply->Pawn.PositionY, g_SlideCountV, g_platformV);
+                if (!onV)
+                    onH = isOnPlatform(&ply->Pawn.PositionX, &ply->Pawn.PositionY, g_SlideCountH, g_platformH);
+            }
+            if (onV || onH)
+            {
+                act = ply->bMoving ? ((dir == 1) ? ACTION_MOVE_RIGHT : ACTION_MOVE) : ACTION_IDLE;
+
+                // Piattaforma orizzontale: il player segue il suo spostamento.
+                // Si tiene la posizione relativa alla piattaforma (0 = centro), cosi' non si accumula deriva;
+                // l'input la modifica, quindi resta possibile muoversi sopra di essa
+                if (onH)
+                {
+                    for (u8 i = 0; i < g_SlideCountH; i++)
+                    {
+                        struct CharacterEnemy *p = &g_platformH[i];
+                        if ((ply->Pawn.PositionX + 10 >= p->X) && (ply->Pawn.PositionX <= p->X + 10) &&
+                            (ply->Pawn.PositionY + 16 == p->Y))
+                        {
+                            if (!g_WasOnPlatform)
+                                g_PlatformOffsetX = 0; // Atterraggio: il player si posiziona al centro
+                            else
+                                g_PlatformOffsetX += ply->DX;
+
+                            // La piattaforma si muove dopo il player: si anticipa il suo passo
+                            i16 target = (i16)p->X + g_PlatformOffsetX + ((p->Direction < 0) ? -1 : 1);
+                            ply->DX = (i8)(target - (i16)ply->Pawn.PositionX);
+                            break;
+                        }
+                    }
+                }
                 // isOnPlatform ha gia' appoggiato il player sopra la piattaforma:
                 // annulla la caduta, altrimenti GamePawn_Update lo spinge dentro di qualche pixel
                 ply->DY = 0;
-                ply->VelocityY = 0;
+                // Velocita' leggermente negativa (DY = -1/4 = 0): il frame successivo resta nel ramo
+                // "caduta" e ricontrolla la piattaforma, invece di passare al salto (animazione alternata)
+                ply->VelocityY = -1;
 
             	// AGGIORNA la posizione Y sicura quando sei su una piattaforma
 				g_LastSafeY = ply->Pawn.PositionY;
