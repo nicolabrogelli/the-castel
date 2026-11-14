@@ -73,6 +73,7 @@ __sfr __at(0xA1) g_PsgPortData;
 AudioChannel g_AudioChan[3];
 u8 g_AudioSong = 0xFF;      // Musica corrente
 bool g_AudioMusicOn = FALSE; // FALSE = musica in pausa (gli effetti suonano comunque)
+bool g_AudioIngameMusic = AUDIO_INGAME_MUSIC; // Musica soft nei livelli di gioco
 
 const u8* g_AudioSfx = NULL; // Frame corrente dell'effetto (NULL = nessuno)
 u8 g_AudioSfxPrio = 0;
@@ -265,12 +266,20 @@ void Audio_PlaySFX(u8 id)
 
 /**
  * @brief Sceglie la musica in base alla stanza che si sta disegnando:
- *        silenzio nei livelli di gioco, musica dedicata per game over e vittoria
+ *        musica soft nei livelli di gioco (o silenzio se g_AudioIngameMusic e' FALSE),
+ *        musica dedicata per game over e vittoria
  */
 void Audio_OnRoom(u8 levelIdx)
 {
 	if (levelIdx > AUDIO_START_GAME && levelIdx <= AUDIO_LAST_LEVEL)
-		Audio_PauseMusic();
+	{
+		if (!g_AudioIngameMusic)
+			Audio_PauseMusic();
+		else if (g_AudioSong != MUS_INGAME)
+			Audio_PlaySong(MUS_INGAME);  // Entrando nel primo livello
+		else
+			Audio_ResumeMusic();         // Cambio stanza o morte: continua senza ripartire
+	}
 	else if (levelIdx == AUDIO_GAME_OVER)
 		Audio_PlaySong(MUS_GAMEOVER);
 	else if (levelIdx == AUDIO_GAME_WINNER)

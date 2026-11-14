@@ -167,7 +167,16 @@ bool v9Init()
 	for (u8 i = 0; i < 125; i++)
 		v9HideSprite(i);
 	for (u8 i = 0; i < V9_MAX_SPRITE; i++)
+	{
 		g_V9Kind[i] = V9_NO_KIND;
+		g_V9Left[i] = 0;
+	}
+
+	// La RAM non viene azzerata all'avvio: senza questa riga la direzione del
+	// giocatore e' casuale e, finche' non si muove, lo sprite usa un'animazione
+	// (e una palette) sbagliata
+	g_V9PlayerLeft = 0;
+	g_V9Tick = 0;
 
 	V9_SetSpriteEnable(TRUE);
 	return TRUE;

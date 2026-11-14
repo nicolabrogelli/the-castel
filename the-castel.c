@@ -809,7 +809,7 @@ void drawLevel(u8 levelIdx)
 	u8 oldPrev = g_PreviousSegment;
 
 	SetActiveSegment(8);
-	Audio_OnRoom(levelIdx); // Silenzio nei livelli, musica nel menu, game over e vittoria
+	Audio_OnRoom(levelIdx); // Musica della stanza: soft nei livelli (AUDIO_INGAME_MUSIC), menu, game over, vittoria
 	SetActiveSegment(0);
 
 

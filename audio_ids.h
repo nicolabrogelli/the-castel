@@ -4,6 +4,7 @@
 #define MUS_TITLE      0
 #define MUS_GAMEOVER   1
 #define MUS_WINNER     2
+#define MUS_INGAME     3
 
 #define SFX_ITEM       0
 #define SFX_KEY        1

@@ -8,6 +8,12 @@
 
 #include "audio_ids.h"   // MUS_* e SFX_* (generato da tools/psg_audio.py)
 
+// Musica soft durante il gioco: 1 = attiva, 0 = solo effetti nei livelli.
+// E' il valore iniziale di g_AudioIngameMusic, che si puo' cambiare anche
+// durante il gioco (vale dalla prossima stanza disegnata).
+#define AUDIO_INGAME_MUSIC  1
+extern bool g_AudioIngameMusic;
+
 void Audio_Init();
 void Audio_PlaySong(u8 id);
 void Audio_PauseMusic();

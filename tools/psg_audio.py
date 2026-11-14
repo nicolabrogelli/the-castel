@@ -45,6 +45,10 @@ INSTRUMENTS = {
     "pad":   (ramp(3, 9, 10) + ramp(9, 6, 70), 20, 8),
     "brass": ([12, 13] + ramp(13, 10, 10), 8, 7),
     "bell":  (ramp(11, 2, 24) + [0], 0, 0),
+    # Strumenti morbidi per la musica durante il gioco (volumi bassi: gli effetti restano in primo piano)
+    "flute": (ramp(2, 6, 6) + ramp(6, 4, 30), 16, 8),
+    "sbass": (ramp(7, 3, 30), 0, 0),
+    "spad":  (ramp(1, 4, 20) + ramp(4, 3, 60), 0, 0),
 }
 
 # BATTERIA: inviluppo, periodo rumore (0 = no), periodo tono iniziale (0 = no), variazione per frame
@@ -95,11 +99,29 @@ WINNER_DRUM = (
     + " ".join(["S:1"] * 16) + " | K:12 r:4 | % r:16 | r:16"
 )
 
+# Durante il gioco: atmosfera tranquilla in la minore, 16 battute in loop.
+INGAME_LEAD = (
+    "@flute "
+    "E5:6 D5:2 C5:4 B4:4 | A4:8 r:4 C5:4 | G4:6 A4:2 C5:4 E5:4 | D5:12 r:4 | "
+    "E5:4 A5:4 G5:4 E5:4 | F5:6 E5:2 D5:8 | B4:4 C5:4 D5:4 G#4:4 | B4:12 r:4 | "
+    "A4:4 C5:4 F5:8 | G5:4 F5:2 E5:2 D5:8 | E5:6 G5:2 B4:8 | C5:4 B4:4 A4:8 | "
+    "D5:4 F5:4 A5:6 G5:2 | E5:8 C5:8 | B4:4 G#4:4 B4:4 D5:4 | A4:12 r:4"
+)
+INGAME_CHORDS = [  # (basso fondamentale, basso quinta, nota tenuta del pad)
+    ("A2", "E3", "C4"), ("F2", "C3", "A3"), ("C3", "G3", "E4"), ("G2", "D3", "B3"),
+    ("A2", "E3", "C4"), ("D3", "A2", "F4"), ("E2", "B2", "G#3"), ("E2", "B2", "G#3"),
+    ("F2", "C3", "A3"), ("G2", "D3", "B3"), ("E2", "B2", "G3"), ("A2", "E3", "C4"),
+    ("D3", "A2", "F4"), ("A2", "E3", "C4"), ("E2", "B2", "G#3"), ("A2", "E3", "C4"),
+]
+INGAME_BASS = "@sbass " + " | ".join(f"{r}:8 {f}:8" for r, f, _ in INGAME_CHORDS)
+INGAME_PAD = "@spad " + " | ".join(f"{p}:16" for _, _, p in INGAME_CHORDS)
+
 SONGS = [
     # (nome C, frame per tick, loop, [canale A, canale B, canale C])
     ("MUS_TITLE",    6, True,  [TITLE_LEAD, TITLE_BASS, TITLE_DRUM]),
     ("MUS_GAMEOVER", 9, False, [GAMEOVER_LEAD, GAMEOVER_BASS, GAMEOVER_HARM]),
     ("MUS_WINNER",   5, True,  [WINNER_LEAD, WINNER_BASS, WINNER_DRUM]),
+    ("MUS_INGAME",   8, True,  [INGAME_LEAD, INGAME_BASS, INGAME_PAD]),
 ]
 
 # -----------------------------------------------------------------------------
