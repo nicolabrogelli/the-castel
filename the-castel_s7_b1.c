@@ -19,6 +19,7 @@ void enhanceTiles();
 void animateTiles(u8 frame);
 void drawMenuFrame();
 void drawMenu();
+void drawGameOverOptions();
 
 //=============================================================================
 // MEMORY 
@@ -5123,4 +5124,20 @@ void drawMenu()
 	Print_DrawText("2 - HARD");
 
 	v9Call(V9OP_END_DRAW, 0, 0, 0);
+}
+
+/**
+ * @brief Scrive le opzioni della schermata di Game Over (al posto di "PRESS SPACE TO CONTINUE")
+ */
+void drawGameOverOptions()
+{
+	VDP_FillVRAM_16K(0, g_ScreenLayoutLow + 17 * 32 + 1, 30);
+
+	Print_SetPosition(8, 15);
+	Print_DrawText("SPACE - CONTINUE");
+	Print_SetPosition(8, 17);
+	Print_DrawText("ESC   - MAIN MENU");
+
+	v9Call(V9OP_SYNC_ROW, 15, 0, 0);
+	v9Call(V9OP_SYNC_ROW, 17, 0, 0);
 }

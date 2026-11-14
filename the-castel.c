@@ -113,6 +113,7 @@ extern void InizializeFont();
 extern void SetColorFont(u8 text, u8 bg);
 extern void animateTiles(u8 frame);
 extern void drawMenu();
+extern void drawGameOverOptions();
 
 //=============================================================================
 // SEGMENT 8, BANK 1
@@ -1573,18 +1574,46 @@ bool State_Pause()
  */
 bool State_GameOver()
 {
+	u8 room = g_CurrRoomIdx; // Stanza in cui il giocatore e' morto (per il continue)
 
 	drawLevel(GAME_OVER); // -1 (drawLevel fa partire anche la musica del game over)
 
-	// Attende la pressione di un tasto
-	while (Keyboard_Read(8) != 254)
+	SetActiveSegment(7);
+	drawGameOverOptions();
+	SetActiveSegment(0);
+
+	// Attende il rilascio dello SPAZIO (puo' essere ancora premuto per un salto)
+	while (!(Keyboard_Read(8) & 0x01))
 	{
+	}
+
+	// SPAZIO = continua, ESC = menu principale
+	while (1)
+	{
+		if (!(Keyboard_Read(8) & 0x01))
+		{
+			// Continue: si riparte dalla stanza della morte con tutte le vite;
+			// inventario e oggetti gia' raccolti restano, il punteggio si azzera
+			playEffect(SFX_SELECT);
+			SetActiveSegment(3);
+			initLife();
+			SetActiveSegment(0);
+			g_Player.Life = MAX_LIVES;
+			g_Player.Score = 0;
+			g_GameOverPending = FALSE;
+			g_PlayerDiedFromFall = FALSE;
+			drawLevel(room);
+			Game_SetState(State_Game);
+			return TRUE;
+		}
+		if (!(Keyboard_Read(7) & 0x04))
+			break;
 	}
 
 	//Game_SetState(State_Preset);
    	g_DifficultyMenuDrawn = 0;  // ← Reset per far ricomparire il menu
     Game_SetState(State_SelectDifficulty);  // ← Torna al menu difficoltà
-	
+
 	return TRUE;
 }
 
