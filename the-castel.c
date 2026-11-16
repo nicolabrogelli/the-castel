@@ -386,36 +386,16 @@ extern void deathAnimationLoop(); // Segmento 4
 
 bool g_GameOverPending = FALSE; // TRUE quando la morte ha gia' portato al Game Over
 
-/**
- * @brief Animazione della morte del giocatore (bloccante, circa 2 secondi).
- *        Il giocatore lampeggia, fa un balzo e cade fuori dallo schermo; i nemici restano fermi.
- *        Puo' essere chiamata anche da codice che gira in un segmento banked.
- * @param void
- * @return void
- */
-void playerDeathAnimation()
-{
-	if (g_GameOverPending)
-		return; // Animazione gia' mostrata in questo frame: si sta andando al Game Over
-
-	u8 oldSeg = GET_BANK_SEGMENT(1);
-	u8 oldPrev = g_PreviousSegment;
-	SET_BANK_SEGMENT(1, 4);
-	deathAnimationLoop(); // Segmento 4: il segmento fisso e' quasi pieno
-	g_PreviousSegment = oldPrev;
-	SET_BANK_SEGMENT(1, oldSeg);
-
-	if (g_PlayerCount == 2)
-		g_TurnSwitchPending = TRUE; // Vita persa: il turno passa all'altro giocatore
-}
+bool g_DeathIsGameOver = FALSE; // TRUE durante l'animazione della morte che porta al Game Over
 
 /**
- * @brief Passa il turno all'altro giocatore (modalita' 2 giocatori): scambia gli stati,
- *        mostra la schermata "PLAYER n" e ridisegna la stanza in cui si trovava il nuovo giocatore
- * @param void
+ * @brief Passa il turno all'altro giocatore (modalita' 2 giocatori): scambia gli stati
+ *        e mostra la schermata "PLAYER n"
+ * @param bool redraw TRUE per ridisegnare subito la stanza del nuovo giocatore;
+ *        FALSE se la ridisegna il chiamante (es. dopo l'animazione della morte)
  * @return void
  */
-void switchPlayerTurn()
+void switchPlayerTurn(bool redraw)
 {
 	g_TurnSwitchPending = FALSE;
 	g_PlayerDiedFromFall = FALSE;
@@ -436,7 +416,39 @@ void switchPlayerTurn()
 		WaitVBlank();
 	SetActiveSegment(0);
 
-	drawLevel(g_CurrRoomIdx);
+	if (redraw)
+		drawLevel(g_CurrRoomIdx);
+}
+
+/**
+ * @brief Animazione della morte del giocatore (bloccante, circa 2 secondi).
+ *        Il giocatore lampeggia, fa un balzo e cade fuori dallo schermo; i nemici restano fermi.
+ *        In modalita' 2 giocatori, se l'altro giocatore ha ancora vite, passa subito il turno:
+ *        il chiamante, ridisegnando g_CurrRoomIdx, mostra direttamente la stanza del nuovo giocatore
+ *        (cosi' non si vede la stanza del giocatore morto prima della schermata "PLAYER n").
+ *        Puo' essere chiamata anche da codice che gira in un segmento banked.
+ * @param void
+ * @return void
+ */
+void playerDeathAnimation()
+{
+	if (g_GameOverPending)
+		return; // Animazione gia' mostrata in questo frame: si sta andando al Game Over
+
+	u8 oldSeg = GET_BANK_SEGMENT(1);
+	u8 oldPrev = g_PreviousSegment;
+	SET_BANK_SEGMENT(1, 4);
+	deathAnimationLoop(); // Segmento 4: il segmento fisso e' quasi pieno
+
+	if ((g_PlayerCount == 2) && !g_DeathIsGameOver)
+	{
+		SET_BANK_SEGMENT(1, 3);
+		if (otherPlayerAlive())
+			switchPlayerTurn(FALSE); // Vita persa: il turno passa all'altro giocatore
+	}
+
+	g_PreviousSegment = oldPrev;
+	SET_BANK_SEGMENT(1, oldSeg);
 }
 
 /**
@@ -446,7 +458,9 @@ void switchPlayerTurn()
  */
 void playerDeathGameOver()
 {
+	g_DeathIsGameOver = TRUE; // Nessun cambio di turno: decide la schermata di Game Over
 	playerDeathAnimation();
+	g_DeathIsGameOver = FALSE;
 	g_GameOverPending = TRUE;
 	Game_SetState(State_GameOver);
 }
@@ -1430,7 +1444,7 @@ bool State_Game()
 		SetActiveSegment(0);
 		if (otherAlive)
 		{
-			switchPlayerTurn();
+			switchPlayerTurn(TRUE);
 			return TRUE;
 		}
 	}
@@ -1438,14 +1452,12 @@ bool State_Game()
     // All'inizio della funzione, controlla se il player è morto per caduta
     if (g_PlayerDiedFromFall) {
 
-		playerDeathAnimation();
-
-		SetActiveSegment(3);
 		g_PlayerDiedFromFall = FALSE;
-		g_LevelPrev = 0;
-		displayLife();
-		SetActiveSegment(0);
-		drawLevel(g_CurrRoomIdx);
+		g_LevelPrev = 0; // Prima dell'animazione: un eventuale cambio turno salva questo valore
+
+		playerDeathAnimation(); // In 2 giocatori puo' passare il turno (cambia g_CurrRoomIdx)
+
+		drawLevel(g_CurrRoomIdx); // Ridisegna anche le vite
 		return TRUE;
 		
     }
