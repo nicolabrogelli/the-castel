@@ -24,7 +24,7 @@ void initHiScores();
 u8 runTitleScreen(u8 players, u8 difficulty);
 bool recordScore(u8 player, u16 score);
 void drawPlayerTurn(u8 player);
-void drawGameOverOptions(u8 player, bool canPass);
+void drawGameOverOptions(u8 player, bool canPass, bool canContinue);
 
 //=============================================================================
 // MEMORY 
@@ -5574,7 +5574,7 @@ void drawPlayerTurn(u8 player)
 /**
  * @brief Scrive le opzioni della schermata di Game Over (al posto di "PRESS SPACE TO CONTINUE")
  */
-void drawGameOverOptions(u8 player, bool canPass)
+void drawGameOverOptions(u8 player, bool canPass, bool canContinue)
 {
 	VDP_FillVRAM_16K(0, g_ScreenLayoutLow + 17 * 32 + 1, 30);
 
@@ -5586,10 +5586,19 @@ void drawGameOverOptions(u8 player, bool canPass)
 		v9Call(V9OP_SYNC_ROW, 13, 0, 0);
 	}
 
-	Print_SetPosition(8, 15);
-	Print_DrawText("SPACE - CONTINUE");
-	Print_SetPosition(8, 17);
-	Print_DrawText(canPass ? "ESC   - PASS TURN" : "ESC   - MAIN MENU");
+	if (canContinue)
+	{
+		Print_SetPosition(8, 15);
+		Print_DrawText("SPACE - CONTINUE");
+		Print_SetPosition(8, 17);
+		Print_DrawText(canPass ? "ESC   - PASS TURN" : "ESC   - MAIN MENU");
+	}
+	else
+	{
+		// Versione finale: niente continue, SPAZIO o ESC proseguono
+		Print_SetPosition(8, 17);
+		Print_DrawText(canPass ? "SPACE - PASS TURN" : "SPACE - MAIN MENU");
+	}
 
 	v9Call(V9OP_SYNC_ROW, 15, 0, 0);
 	v9Call(V9OP_SYNC_ROW, 17, 0, 0);

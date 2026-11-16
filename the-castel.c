@@ -121,7 +121,7 @@ extern void initHiScores();
 extern u8 runTitleScreen(u8 players, u8 difficulty);
 extern bool recordScore(u8 player, u16 score);
 extern void drawPlayerTurn(u8 player);
-extern void drawGameOverOptions(u8 player, bool canPass);
+extern void drawGameOverOptions(u8 player, bool canPass, bool canContinue);
 
 //=============================================================================
 // SEGMENT 8, BANK 1
@@ -250,6 +250,10 @@ u8 g_CurrRoomIdx = 0;
 // DEBUG: scorrimento stanze con i tasti Q (avanti) e A (indietro)
 // Impostare a 0 per disabilitare nella versione finale
 #define DEBUG_ROOM_NAV          1
+
+// DEBUG: possibilita' di continuare la partita al Game Over (SPAZIO - CONTINUE)
+// Impostare a 0 per disabilitarla nella versione finale
+#define ENABLE_CONTINUE         0
 #if DEBUG_ROOM_NAV
 #define DBG_KEY_Q_ROW           4      // Riga matrice tastiera MSX del tasto Q
 #define DBG_KEY_Q_MASK          0x40   // Bit 6
@@ -1667,7 +1671,7 @@ bool State_GameOver()
 	// Il punteggio va registrato ora: con il continue si azzera
 	if (recordScore(playerNum, g_Player.Score))
 		drawLevel(GAME_OVER); // Nuovo record: si torna alla schermata di Game Over
-	drawGameOverOptions(playerNum, canPass);
+	drawGameOverOptions(playerNum, canPass, ENABLE_CONTINUE);
 	SetActiveSegment(0);
 
 	// Attende il rilascio dello SPAZIO (puo' essere ancora premuto per un salto)
@@ -1675,10 +1679,13 @@ bool State_GameOver()
 	{
 	}
 
-	// SPAZIO = continua, ESC = menu principale
+	// SPAZIO = continua (solo con ENABLE_CONTINUE), ESC = passa il turno / menu principale
 	while (1)
 	{
-		if (!(Keyboard_Read(8) & 0x01))
+		bool space = !(Keyboard_Read(8) & 0x01);
+		bool esc = !(Keyboard_Read(7) & 0x04);
+#if ENABLE_CONTINUE
+		if (space)
 		{
 			// Continue: si riparte dalla stanza della morte con tutte le vite;
 			// inventario e oggetti gia' raccolti restano, il punteggio si azzera
@@ -1703,7 +1710,10 @@ bool State_GameOver()
 			}
 			return TRUE;
 		}
-		if (!(Keyboard_Read(7) & 0x04))
+#else
+		esc |= space; // Senza continue SPAZIO ed ESC fanno la stessa cosa
+#endif
+		if (esc)
 		{
 			if (canPass)
 			{
