@@ -9,6 +9,9 @@
 //=============================================================================
 #include "msxgl.h"
 #include "game.h"
+#include "game_pawn.h"
+#include "character.h"
+#include "level_defs.h"
 
 //=============================================================================
 // DEFINE
@@ -33,6 +36,8 @@
 #define TILE_DANGER3        107
 #define TILE_DANGER4        108
 #define TILE_LAVA            64
+
+#define NUM_LEVELS           28 // Numero di stanze in g_Levels (0..27)
 
 //=============================================================================
 // PROTOTYPE EXTERN
@@ -61,6 +66,9 @@ bool removeLife();
 void displayLife();
 bool addLife();
 bool hasLives();
+void initPlayers();
+bool otherPlayerAlive();
+void swapPlayers();
 
 
 //=============================================================================
@@ -71,12 +79,34 @@ extern u8 g_CurrRoomIdx;
 extern bool g_IsUnderWater;
 extern u8 g_DelayRemoveLife;
 extern u8 g_SecondCounter;
+extern u8 g_LevelPrev;
+extern u8 g_PlayerCount;
+extern bool g_TurnSwitchPending;
+extern struct Character g_Player;
 
 //=============================================================================
 // MEMORY
 //=============================================================================
 unsigned char g_Inventory[MAX_ITEM_INVENTORY] = {0, 0, 0, 0, 0};
 unsigned char g_Lives[MAX_LIVES] = {0, 0, 0};
+
+/**
+ * \struct
+ * struttura: stato salvato del giocatore che non sta giocando (modalita' 2 giocatori)
+ */
+struct PlayerSlot
+{
+	u16 Score;
+	u8 Life;
+	u8 Room;
+	u8 LevelPrev;
+	u8 Inventory[MAX_ITEM_INVENTORY];
+	u8 Lives[MAX_LIVES];
+	ObjectItem Items[NUM_LEVELS][10]; // Oggetti gia' raccolti / porte aperte in ogni stanza
+};
+
+struct PlayerSlot g_OtherPlayer;
+u8 g_CurrentPlayer = 0; // 0 = giocatore 1, 1 = giocatore 2
 
 
 //=============================================================================
@@ -342,6 +372,8 @@ bool handleUnderwater(u8 PositionX, u8 PositionY) {
             if (isRemove) {
                 displayLife();
                 g_IsUnderWater = FALSE;
+                if (g_PlayerCount == 2)
+                    g_TurnSwitchPending = TRUE; // Vita persa: il turno passa all'altro giocatore
                 return true;  // Restituisce true se isRemove è true
             } else {
                 Game_SetState(State_GameOver);
@@ -357,4 +389,88 @@ bool handleUnderwater(u8 PositionX, u8 PositionY) {
     }
 
     return false; // Restituisce false se nessuna delle condizioni precedenti è soddisfatta
+}
+
+//------------------------------------------------------------------------------------------------
+// MODALITA' 2 GIOCATORI (turni alternati)
+//------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Inizializza lo stato salvato del secondo giocatore (inizio partita)
+ * @param void
+ * @return void
+ */
+void initPlayers()
+{
+	Mem_Set(0, &g_OtherPlayer, sizeof(g_OtherPlayer));
+	g_OtherPlayer.Life = MAX_LIVES;
+	Mem_Set(TILE_HEART, g_OtherPlayer.Lives, MAX_LIVES);
+	g_CurrentPlayer = 0;
+}
+
+/**
+ * @brief Verifica se il giocatore in attesa ha ancora delle vite
+ * @param void
+ * @return bool TRUE se il giocatore in attesa puo' ancora giocare
+ */
+bool otherPlayerAlive()
+{
+	for (u8 i = 0; i < MAX_LIVES; i++)
+	{
+		if (g_OtherPlayer.Lives[i] == TILE_HEART)
+			return TRUE;
+	}
+	return FALSE;
+}
+
+/**
+ * @brief Scambia due aree di memoria
+ */
+void swapBytes(u8 *a, u8 *b, u16 size)
+{
+	while (size--)
+	{
+		u8 t = *a;
+		*a++ = *b;
+		*b++ = t;
+	}
+}
+
+/**
+ * @brief Passa il turno: salva lo stato del giocatore corrente e carica quello dell'altro.
+ *        Il chiamante deve poi ridisegnare la stanza g_CurrRoomIdx.
+ * @param void
+ * @return void
+ */
+void swapPlayers()
+{
+	u16 score = g_Player.Score;
+	u8 life = g_Player.Life;
+	u8 room = g_CurrRoomIdx;
+	u8 levelPrev = g_LevelPrev;
+
+	g_Player.Score = g_OtherPlayer.Score;
+	g_Player.Life = g_OtherPlayer.Life;
+	g_CurrRoomIdx = g_OtherPlayer.Room;
+	g_LevelPrev = g_OtherPlayer.LevelPrev;
+
+	g_OtherPlayer.Score = score;
+	g_OtherPlayer.Life = life;
+	g_OtherPlayer.Room = room;
+	g_OtherPlayer.LevelPrev = levelPrev;
+
+	swapBytes(g_Inventory, g_OtherPlayer.Inventory, MAX_ITEM_INVENTORY);
+	swapBytes(g_Lives, g_OtherPlayer.Lives, MAX_LIVES);
+
+	for (u8 level = 0; level < NUM_LEVELS; level++)
+		swapBytes((u8 *)g_Levels[level].MyItems, (u8 *)g_OtherPlayer.Items[level], sizeof(g_OtherPlayer.Items[0]));
+
+	// Il nuovo giocatore parte da fermo
+	g_Player.bInAir = FALSE;
+	g_Player.VelocityY = 0;
+	g_Player.FallStartY = 0;
+	g_IsUnderWater = FALSE;
+	g_DelayRemoveLife = 0;
+
+	g_CurrentPlayer ^= 1;
 }

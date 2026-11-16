@@ -40,6 +40,10 @@ extern bool addLife();
 extern bool hasLives();
 extern bool isDanger(u8 x, u8 y);
 extern bool handleUnderwater(u8 PositionX, u8 PositionY);
+extern void initPlayers();
+extern bool otherPlayerAlive();
+extern void swapPlayers();
+extern u8 g_CurrentPlayer;
 
 //=============================================================================
 // SEGMENT 4, BANK 1
@@ -112,8 +116,10 @@ extern const char g_DataSprtLayer[];
 extern void InizializeFont();
 extern void SetColorFont(u8 text, u8 bg);
 extern void animateTiles(u8 frame);
-extern void drawMenu();
-extern void drawGameOverOptions();
+extern void drawMenu(u8 players);
+extern void drawPlayersOption(u8 players);
+extern void drawPlayerTurn(u8 player);
+extern void drawGameOverOptions(u8 player, bool canPass);
 
 //=============================================================================
 // SEGMENT 8, BANK 1
@@ -269,6 +275,14 @@ i8 g_PlatformOffsetX = 0;       // Posizione X del player relativa alla piattafo
 u8 g_LastSafeY = 0;
 u8 g_DifficultyMenuDrawn = 0;
 
+// Modalita' 2 giocatori (turni alternati: a ogni vita persa il turno passa all'altro giocatore)
+#define KEY_P_ROW               4      // Riga matrice tastiera MSX del tasto P
+#define KEY_P_MASK              0x20   // Bit 5
+#define PLAYER_TURN_FRAMES      100    // Durata della schermata "PLAYER n" (circa 2 secondi)
+u8 g_PlayerCount = 1;                  // Numero di giocatori selezionato nel menu (1 o 2)
+bool g_TurnSwitchPending = FALSE;      // TRUE dopo una morte: al frame successivo si passa il turno
+u8 g_MenuKeyPrev = 0;                  // Stato precedente del tasto P (rilevamento fronte)
+
 // Oppure un sistema unificato
 typedef enum {
 	DIFFICULTY_EASY = 0,    // Nessun danno da caduta
@@ -390,6 +404,39 @@ void playerDeathAnimation()
 	deathAnimationLoop(); // Segmento 4: il segmento fisso e' quasi pieno
 	g_PreviousSegment = oldPrev;
 	SET_BANK_SEGMENT(1, oldSeg);
+
+	if (g_PlayerCount == 2)
+		g_TurnSwitchPending = TRUE; // Vita persa: il turno passa all'altro giocatore
+}
+
+/**
+ * @brief Passa il turno all'altro giocatore (modalita' 2 giocatori): scambia gli stati,
+ *        mostra la schermata "PLAYER n" e ridisegna la stanza in cui si trovava il nuovo giocatore
+ * @param void
+ * @return void
+ */
+void switchPlayerTurn()
+{
+	g_TurnSwitchPending = FALSE;
+	g_PlayerDiedFromFall = FALSE;
+	g_GameOverPending = FALSE;
+	g_ImmunityCount = 0;
+	g_RefreshInventary = FALSE;
+
+	SetActiveSegment(3);
+	swapPlayers();
+	SetActiveSegment(0);
+
+	SetActiveSegment(7);
+	drawPlayerTurn(g_CurrentPlayer + 1);
+	SetActiveSegment(0);
+
+	SetActiveSegment(4);
+	for (u8 i = 0; i < PLAYER_TURN_FRAMES; i++)
+		WaitVBlank();
+	SetActiveSegment(0);
+
+	drawLevel(g_CurrRoomIdx);
 }
 
 /**
@@ -1327,12 +1374,25 @@ bool State_SelectDifficulty()
 		SetActiveSegment(0);
 
         SetActiveSegment(7);
-        drawMenu();
+        drawMenu(g_PlayerCount);
         SetActiveSegment(0);
 
         g_DifficultyMenuDrawn = 1;  // ← Imposta a 1
+        g_MenuKeyPrev = 1;          // Il tasto P va rilasciato prima di essere riconosciuto
     }
-    
+
+    // Tasto P: alterna tra 1 e 2 giocatori
+    u8 keyP = !(Keyboard_Read(KEY_P_ROW) & KEY_P_MASK);
+    if (keyP && !g_MenuKeyPrev)
+    {
+        g_PlayerCount = (g_PlayerCount == 1) ? 2 : 1;
+        playEffect(SFX_SELECT);
+        SetActiveSegment(7);
+        drawPlayersOption(g_PlayerCount);
+        SetActiveSegment(0);
+    }
+    g_MenuKeyPrev = keyP;
+
     u8 row0 = Keyboard_Read(0);
     u8 difficulty = 0xFF;
     
@@ -1361,6 +1421,20 @@ bool State_SelectDifficulty()
  */
 bool State_Game()
 {
+	// Modalita' 2 giocatori: dopo una vita persa il turno passa all'altro giocatore (se ha ancora vite)
+	if (g_TurnSwitchPending)
+	{
+		g_TurnSwitchPending = FALSE;
+		SetActiveSegment(3);
+		bool otherAlive = otherPlayerAlive();
+		SetActiveSegment(0);
+		if (otherAlive)
+		{
+			switchPlayerTurn();
+			return TRUE;
+		}
+	}
+
     // All'inizio della funzione, controlla se il player è morto per caduta
     if (g_PlayerDiedFromFall) {
 
@@ -1538,11 +1612,14 @@ bool State_Preset()
 	SetActiveSegment(3);
 	initInventory();
 	initLife();
+	initPlayers(); // Stato iniziale del secondo giocatore (usato solo in modalita' 2 giocatori)
 	SetActiveSegment(0);
 
 	// Funzione: initLife
 	// Inizializza le vite del giocatore
 	g_Player.Life = MAX_LIVES;
+	g_TurnSwitchPending = FALSE;
+	g_LevelPrev = 0;
 
 	// Funzione: DrawLevel
 	// Inizzializza il livello di gioco
@@ -1550,6 +1627,19 @@ bool State_Preset()
 	// Parametri:
 	//  u8 levelIdx - rappresenta l'id del livello
 	// VDP_EnableDisplay(FALSE);
+	if (g_PlayerCount == 2)
+	{
+		// Schermata "PLAYER 1" prima di iniziare
+		SetActiveSegment(7);
+		drawPlayerTurn(1);
+		SetActiveSegment(0);
+
+		SetActiveSegment(4);
+		for (u8 i = 0; i < PLAYER_TURN_FRAMES; i++)
+			WaitVBlank();
+		SetActiveSegment(0);
+	}
+
 	drawLevel(0); //0
 
 	Game_SetState(State_Game);
@@ -1576,10 +1666,20 @@ bool State_GameOver()
 {
 	u8 room = g_CurrRoomIdx; // Stanza in cui il giocatore e' morto (per il continue)
 
+	// Modalita' 2 giocatori: se l'altro giocatore ha ancora vite, con ESC gli si passa il turno
+	g_TurnSwitchPending = FALSE;
+	bool canPass = FALSE;
+	if (g_PlayerCount == 2)
+	{
+		SetActiveSegment(3);
+		canPass = otherPlayerAlive();
+		SetActiveSegment(0);
+	}
+
 	drawLevel(GAME_OVER); // -1 (drawLevel fa partire anche la musica del game over)
 
 	SetActiveSegment(7);
-	drawGameOverOptions();
+	drawGameOverOptions((g_PlayerCount == 2) ? g_CurrentPlayer + 1 : 0, canPass);
 	SetActiveSegment(0);
 
 	// Attende il rilascio dello SPAZIO (puo' essere ancora premuto per un salto)
@@ -1602,12 +1702,34 @@ bool State_GameOver()
 			g_Player.Score = 0;
 			g_GameOverPending = FALSE;
 			g_PlayerDiedFromFall = FALSE;
-			drawLevel(room);
 			Game_SetState(State_Game);
+			if (canPass)
+			{
+				// La vita e' stata persa: il turno passa comunque all'altro giocatore
+				g_CurrRoomIdx = room;
+				g_TurnSwitchPending = TRUE;
+			}
+			else
+			{
+				drawLevel(room);
+			}
 			return TRUE;
 		}
 		if (!(Keyboard_Read(7) & 0x04))
+		{
+			if (canPass)
+			{
+				// Il giocatore abbandona (resta senza vite): continua solo l'altro
+				playEffect(SFX_SELECT);
+				g_GameOverPending = FALSE;
+				g_PlayerDiedFromFall = FALSE;
+				g_CurrRoomIdx = room;
+				g_TurnSwitchPending = TRUE;
+				Game_SetState(State_Game);
+				return TRUE;
+			}
 			break;
+		}
 	}
 
 	//Game_SetState(State_Preset);

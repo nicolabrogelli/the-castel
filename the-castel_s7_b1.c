@@ -18,8 +18,10 @@ void InizializeFont();
 void enhanceTiles();
 void animateTiles(u8 frame);
 void drawMenuFrame();
-void drawMenu();
-void drawGameOverOptions();
+void drawMenu(u8 players);
+void drawPlayersOption(u8 players);
+void drawPlayerTurn(u8 player);
+void drawGameOverOptions(u8 player, bool canPass);
 
 //=============================================================================
 // MEMORY 
@@ -5102,7 +5104,7 @@ void drawMenuFrame()
 /**
  * @brief Disegna l'intero menu di selezione della difficolta'
  */
-void drawMenu()
+void drawMenu(u8 players)
 {
 	v9Call(V9OP_BEGIN_DRAW, 0, 0, 0);
 	VDP_FillVRAM_16K(0, g_ScreenLayoutLow, 32 * 24);
@@ -5122,6 +5124,37 @@ void drawMenu()
 	Print_DrawText("1 - NORMAL");
 	Print_SetPosition(11, 15);
 	Print_DrawText("2 - HARD");
+	drawPlayersOption(players);
+
+	v9Call(V9OP_END_DRAW, 0, 0, 0);
+}
+
+/**
+ * @brief Scrive nel menu il numero di giocatori selezionato (tasto P per cambiarlo)
+ * @param u8 players Numero di giocatori (1 o 2)
+ */
+void drawPlayersOption(u8 players)
+{
+	Print_SetPosition(9, 17);
+	Print_DrawText((players == 2) ? "P - 2 PLAYERS" : "P - 1 PLAYER ");
+	v9Call(V9OP_SYNC_ROW, 17, 0, 0);
+}
+
+/**
+ * @brief Schermata di cambio turno nella modalita' a 2 giocatori
+ * @param u8 player Numero del giocatore (1 o 2)
+ */
+void drawPlayerTurn(u8 player)
+{
+	v9Call(V9OP_BEGIN_DRAW, 0, 0, 0);
+	VDP_FillVRAM_16K(0, g_ScreenLayoutLow, 32 * 24);
+
+	drawMenuFrame();
+
+	Print_SetPosition(12, 10);
+	Print_DrawText((player == 2) ? "PLAYER 2" : "PLAYER 1");
+	Print_SetPosition(11, 13);
+	Print_DrawText("GET READY!");
 
 	v9Call(V9OP_END_DRAW, 0, 0, 0);
 }
@@ -5129,14 +5162,22 @@ void drawMenu()
 /**
  * @brief Scrive le opzioni della schermata di Game Over (al posto di "PRESS SPACE TO CONTINUE")
  */
-void drawGameOverOptions()
+void drawGameOverOptions(u8 player, bool canPass)
 {
 	VDP_FillVRAM_16K(0, g_ScreenLayoutLow + 17 * 32 + 1, 30);
+
+	// Modalita' 2 giocatori: indica chi ha perso tutte le vite
+	if (player)
+	{
+		Print_SetPosition(12, 13);
+		Print_DrawText((player == 2) ? "PLAYER 2" : "PLAYER 1");
+		v9Call(V9OP_SYNC_ROW, 13, 0, 0);
+	}
 
 	Print_SetPosition(8, 15);
 	Print_DrawText("SPACE - CONTINUE");
 	Print_SetPosition(8, 17);
-	Print_DrawText("ESC   - MAIN MENU");
+	Print_DrawText(canPass ? "ESC   - PASS TURN" : "ESC   - MAIN MENU");
 
 	v9Call(V9OP_SYNC_ROW, 15, 0, 0);
 	v9Call(V9OP_SYNC_ROW, 17, 0, 0);

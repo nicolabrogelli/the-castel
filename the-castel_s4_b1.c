@@ -80,6 +80,8 @@ extern u8 g_Frame;
 extern u8 g_GameFrame;
 extern u8 g_CountItem;
 extern struct Character g_Player;
+extern u8 g_PlayerCount;    // Numero di giocatori (1 o 2)
+extern u8 g_CurrentPlayer;  // Giocatore di turno (0 o 1)
 
 //=============================================================================
 // MEMORY
@@ -117,7 +119,10 @@ void updateScore(u16 score)
     drawMessageWithTimer(0, 0, 4, 0, "LVL:", "%02i", g_CurrRoomIdx);
 
     // Visualizza lo score del giocatore
-    drawMessageWithTimer(7, 0, 13, 0, "SCORE:", "%04i", score);
+    // In modalita' 2 giocatori si indica il giocatore di turno
+    drawMessageWithTimer(7, 0, 13, 0,
+        (g_PlayerCount == 2) ? ((g_CurrentPlayer == 0) ? "P1 SC:" : "P2 SC:") : "SCORE:",
+        "%04i", score);
 
     // Visualizza la vita del giocatore (senza formattazione, in quanto x2 e y2 sono entrambi 0)
     drawMessageWithTimer(18, 0, 0, 0, "LIFE:", "", 0);
