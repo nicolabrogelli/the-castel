@@ -43,6 +43,7 @@ extern bool handleUnderwater(u8 PositionX, u8 PositionY);
 extern void initPlayers();
 extern bool otherPlayerAlive();
 extern void swapPlayers();
+extern u16 otherPlayerScore();
 extern u8 g_CurrentPlayer;
 
 //=============================================================================
@@ -116,8 +117,9 @@ extern const char g_DataSprtLayer[];
 extern void InizializeFont();
 extern void SetColorFont(u8 text, u8 bg);
 extern void animateTiles(u8 frame);
-extern void drawMenu(u8 players);
-extern void drawPlayersOption(u8 players);
+extern void initHiScores();
+extern u8 runTitleScreen(u8 players, u8 difficulty);
+extern bool recordScore(u8 player, u16 score);
 extern void drawPlayerTurn(u8 player);
 extern void drawGameOverOptions(u8 player, bool canPass);
 
@@ -273,15 +275,11 @@ bool g_PlayerDiedFromFall = FALSE;
 bool g_WasOnPlatform = FALSE;
 i8 g_PlatformOffsetX = 0;       // Posizione X del player relativa alla piattaforma orizzontale (0 = centro)
 u8 g_LastSafeY = 0;
-u8 g_DifficultyMenuDrawn = 0;
 
 // Modalita' 2 giocatori (turni alternati: a ogni vita persa il turno passa all'altro giocatore)
-#define KEY_P_ROW               4      // Riga matrice tastiera MSX del tasto P
-#define KEY_P_MASK              0x20   // Bit 5
 #define PLAYER_TURN_FRAMES      100    // Durata della schermata "PLAYER n" (circa 2 secondi)
 u8 g_PlayerCount = 1;                  // Numero di giocatori selezionato nel menu (1 o 2)
 bool g_TurnSwitchPending = FALSE;      // TRUE dopo una morte: al frame successivo si passa il turno
-u8 g_MenuKeyPrev = 0;                  // Stato precedente del tasto P (rilevamento fronte)
 
 // Oppure un sistema unificato
 typedef enum {
@@ -676,9 +674,10 @@ void ItemsTakenForLevel(u8 x, u8 y, u8 tile, u8 visible)
  * @return void
  */
 void playEffect(u8 idEffect) {
-	SetActiveSegment(8);
+	u8 old = GET_BANK_SEGMENT(1); // Sicura anche da codice banked (es. menu nel segmento 7)
+	SET_BANK_SEGMENT(1, 8);
 	Audio_PlaySFX(idEffect);
-	SetActiveSegment(0);
+	SET_BANK_SEGMENT(1, old);
 }
 
 /**
@@ -1336,6 +1335,7 @@ bool State_Initialize()
 
 	SetActiveSegment(7);
 	InizializeFont();
+	initHiScores(); // Classifica dei 10 migliori punteggi
 
 	// Funzione: VDP_WriteVRAM_16K
 	// Scrivere dati dalla RAM alla VRAM. [MSX1/2/2+/TR]
@@ -1377,55 +1377,27 @@ bool State_Initialize()
 	return FALSE; // Frame finished
 }
 
+/**
+ * @brief Menu iniziale in stile arcade (segmento 7): numero di giocatori, difficolta'
+ *        e, senza input, alternanza con la classifica dei 10 migliori punteggi
+ * @param void
+ * @return bool Sempre TRUE
+ */
 bool State_SelectDifficulty()
 {
-    // Disegna il menu solo la prima volta
-    if (!g_DifficultyMenuDrawn)  // ← Usa variabile globale invece di static
-    {
+	SetActiveSegment(8);
+	Audio_PlaySong(MUS_TITLE);
+	SetActiveSegment(0);
 
-		SetActiveSegment(8);
-		Audio_PlaySong(MUS_TITLE);
-		SetActiveSegment(0);
+	SetActiveSegment(7);
+	u8 choice = runTitleScreen(g_PlayerCount, g_GameDifficulty);
+	SetActiveSegment(0);
 
-        SetActiveSegment(7);
-        drawMenu(g_PlayerCount);
-        SetActiveSegment(0);
+	g_PlayerCount = choice >> 4;
+	g_GameDifficulty = choice & 0x0F;
+	Game_SetState(State_Preset);
 
-        g_DifficultyMenuDrawn = 1;  // ← Imposta a 1
-        g_MenuKeyPrev = 1;          // Il tasto P va rilasciato prima di essere riconosciuto
-    }
-
-    // Tasto P: alterna tra 1 e 2 giocatori
-    u8 keyP = !(Keyboard_Read(KEY_P_ROW) & KEY_P_MASK);
-    if (keyP && !g_MenuKeyPrev)
-    {
-        g_PlayerCount = (g_PlayerCount == 1) ? 2 : 1;
-        playEffect(SFX_SELECT);
-        SetActiveSegment(7);
-        drawPlayersOption(g_PlayerCount);
-        SetActiveSegment(0);
-    }
-    g_MenuKeyPrev = keyP;
-
-    u8 row0 = Keyboard_Read(0);
-    u8 difficulty = 0xFF;
-    
-    if (!(row0 & 0x01))
-        difficulty = DIFFICULTY_EASY;
-    else if (!(row0 & 0x02))
-        difficulty = DIFFICULTY_NORMAL;
-    else if (!(row0 & 0x04))
-        difficulty = DIFFICULTY_HARD;
-
-    if (difficulty != 0xFF)
-    {
-        g_GameDifficulty = difficulty;
-        playEffect(SFX_SELECT);
-        Game_SetState(State_Preset);
-    }
-    
-    return TRUE;  
-
+	return TRUE;
 }
 
 /**
@@ -1690,8 +1662,12 @@ bool State_GameOver()
 
 	drawLevel(GAME_OVER); // -1 (drawLevel fa partire anche la musica del game over)
 
+	u8 playerNum = (g_PlayerCount == 2) ? g_CurrentPlayer + 1 : 0;
 	SetActiveSegment(7);
-	drawGameOverOptions((g_PlayerCount == 2) ? g_CurrentPlayer + 1 : 0, canPass);
+	// Il punteggio va registrato ora: con il continue si azzera
+	if (recordScore(playerNum, g_Player.Score))
+		drawLevel(GAME_OVER); // Nuovo record: si torna alla schermata di Game Over
+	drawGameOverOptions(playerNum, canPass);
 	SetActiveSegment(0);
 
 	// Attende il rilascio dello SPAZIO (puo' essere ancora premuto per un salto)
@@ -1733,6 +1709,7 @@ bool State_GameOver()
 			{
 				// Il giocatore abbandona (resta senza vite): continua solo l'altro
 				playEffect(SFX_SELECT);
+				g_Player.Score = 0; // Gia' registrato in classifica
 				g_GameOverPending = FALSE;
 				g_PlayerDiedFromFall = FALSE;
 				g_CurrRoomIdx = room;
@@ -1744,9 +1721,7 @@ bool State_GameOver()
 		}
 	}
 
-	//Game_SetState(State_Preset);
-   	g_DifficultyMenuDrawn = 0;  // ← Reset per far ricomparire il menu
-    Game_SetState(State_SelectDifficulty);  // ← Torna al menu difficoltà
+    Game_SetState(State_SelectDifficulty);  // ← Torna al menu iniziale
 
 	return TRUE;
 }
@@ -1762,9 +1737,21 @@ bool State_GameWinner()
 	{
 	}
 
-	//Game_SetState(State_Preset);
-	g_DifficultyMenuDrawn = 0;  // ← Reset per far ricomparire il menu
-    Game_SetState(State_SelectDifficulty);  // ← Torna al menu difficoltà
+	// Registrazione dei punteggi (in 2 giocatori anche quello del giocatore in attesa)
+	u16 otherScore = 0;
+	if (g_PlayerCount == 2)
+	{
+		SetActiveSegment(3);
+		otherScore = otherPlayerScore();
+		SetActiveSegment(0);
+	}
+	SetActiveSegment(7);
+	recordScore((g_PlayerCount == 2) ? g_CurrentPlayer + 1 : 0, g_Player.Score);
+	if (g_PlayerCount == 2)
+		recordScore(2 - g_CurrentPlayer, otherScore);
+	SetActiveSegment(0);
+
+    Game_SetState(State_SelectDifficulty);  // ← Torna al menu iniziale
 
 	return TRUE;
 

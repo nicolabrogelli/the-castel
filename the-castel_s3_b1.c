@@ -69,6 +69,7 @@ bool hasLives();
 void initPlayers();
 bool otherPlayerAlive();
 void swapPlayers();
+u16 otherPlayerScore();
 
 
 //=============================================================================
@@ -473,4 +474,14 @@ void swapPlayers()
 	g_DelayRemoveLife = 0;
 
 	g_CurrentPlayer ^= 1;
+}
+
+/**
+ * @brief Punteggio del giocatore in attesa (modalita' 2 giocatori)
+ * @param void
+ * @return u16 Punteggio
+ */
+u16 otherPlayerScore()
+{
+	return g_OtherPlayer.Score;
 }

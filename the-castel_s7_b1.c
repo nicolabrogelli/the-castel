@@ -8,7 +8,9 @@
 // INCLUDES
 //=============================================================================
 #include "msxgl.h"
+#include "input.h"
 #include "v9_api.h"
+#include "audio_ids.h"
 #include "data/v9990/v9_logo.h"
 
 //=============================================================================
@@ -18,8 +20,9 @@ void InizializeFont();
 void enhanceTiles();
 void animateTiles(u8 frame);
 void drawMenuFrame();
-void drawMenu(u8 players);
-void drawPlayersOption(u8 players);
+void initHiScores();
+u8 runTitleScreen(u8 players, u8 difficulty);
+bool recordScore(u8 player, u16 score);
 void drawPlayerTurn(u8 player);
 void drawGameOverOptions(u8 player, bool canPass);
 
@@ -5101,43 +5104,452 @@ void drawMenuFrame()
 	VDP_Poke_16K(77, g_ScreenLayoutLow + 20 * 32 + 16);
 }
 
+//=============================================================================
+// MENU INIZIALE IN STILE ARCADE E CLASSIFICA DEI 10 MIGLIORI PUNTEGGI
+//=============================================================================
+#define HISCORE_COUNT       10
+#define ATTRACT_FRAMES     400 // Frame senza input prima di alternare titolo e classifica (~8 s)
+#define RANKING_FRAMES     250 // Durata della classifica dopo l'inserimento del nome (~5 s)
+
+// Bit restituiti da readMenuInput()
+#define IN_UP     0x01
+#define IN_DOWN   0x02
+#define IN_LEFT   0x04
+#define IN_RIGHT  0x08
+#define IN_FIRE   0x10
+
+extern void playEffect(u8 idEffect);
+extern bool g_VBlank; // Impostato dall'interrupt (segmento 4)
+
 /**
- * @brief Disegna l'intero menu di selezione della difficolta'
+ * \struct
+ * struttura: una riga della classifica
  */
-void drawMenu(u8 players)
+struct HiScore
+{
+	u16 Score;
+	c8 Name[4];
+};
+
+struct HiScore g_HiScores[HISCORE_COUNT];
+u16 g_LastScore[2]; // Ultimo punteggio di 1UP e 2UP (intestazione del menu)
+
+// Classifica iniziale
+const c8 g_DefaultNames[HISCORE_COUNT][4] = {
+	"DRC", "VLD", "BAT", "GHO", "SKL", "SPD", "WTC", "MUM", "WLF", "ZMB"
+};
+
+// Caratteri selezionabili per le iniziali
+const c8 g_NameChars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789. ";
+#define NAME_CHARS_COUNT (sizeof(g_NameChars) - 1)
+
+const c8 *const g_DifficultyNames[3] = { "EASY  ", "NORMAL", "HARD  " };
+
+/**
+ * @brief Inizializza la classifica con i punteggi predefiniti (all'accensione)
+ */
+void initHiScores()
+{
+	for (u8 i = 0; i < HISCORE_COUNT; i++)
+	{
+		g_HiScores[i].Score = 0; // All'avvio tutti i punteggi sono a 0
+		for (u8 c = 0; c < 4; c++)
+			g_HiScores[i].Name[c] = g_DefaultNames[i][c];
+	}
+	g_LastScore[0] = 0;
+	g_LastScore[1] = 0;
+}
+
+/**
+ * @brief Attende il prossimo V-Blank
+ */
+void menuWaitFrame()
+{
+	while (!g_VBlank)
+	{
+	}
+	g_VBlank = FALSE;
+}
+
+/**
+ * @brief Attende un certo numero di frame
+ */
+void menuWait(u8 frames)
+{
+	while (frames--)
+		menuWaitFrame();
+}
+
+/**
+ * @brief Legge tastiera (frecce, SPAZIO, RETURN) e joystick delle due porte
+ * @return u8 Combinazione dei bit IN_xxx
+ */
+u8 readMenuInput()
+{
+	u8 in = 0;
+	u8 row8 = Keyboard_Read(8);
+	if (!(row8 & 0x20)) in |= IN_UP;
+	if (!(row8 & 0x40)) in |= IN_DOWN;
+	if (!(row8 & 0x10)) in |= IN_LEFT;
+	if (!(row8 & 0x80)) in |= IN_RIGHT;
+	if (!(row8 & 0x01)) in |= IN_FIRE;             // SPAZIO
+	if (!(Keyboard_Read(7) & 0x80)) in |= IN_FIRE; // RETURN
+
+	for (u8 p = 0; p < 2; p++)
+	{
+		u8 joy = Joystick_Read(p ? JOY_PORT_2 : JOY_PORT_1);
+		u8 dir = JOY_GET_DIR(joy);
+		if (dir & JOY_INPUT_DIR_UP) in |= IN_UP;
+		if (dir & JOY_INPUT_DIR_DOWN) in |= IN_DOWN;
+		if (dir & JOY_INPUT_DIR_LEFT) in |= IN_LEFT;
+		if (dir & JOY_INPUT_DIR_RIGHT) in |= IN_RIGHT;
+		if (JOY_GET_A(joy)) in |= IN_FIRE;
+	}
+	return in;
+}
+
+/**
+ * @brief Scrive un punteggio a 5 cifre
+ */
+void printScore(u8 x, u8 y, u16 value)
+{
+	c8 buf[6];
+	for (i8 i = 4; i >= 0; i--)
+	{
+		buf[i] = '0' + (value % 10);
+		value /= 10;
+	}
+	buf[5] = 0;
+	Print_SetPosition(x, y);
+	Print_DrawText(buf);
+}
+
+/**
+ * @brief Intestazione arcade: 1UP, HI-SCORE e 2UP con i relativi punteggi (righe 0 e 1)
+ */
+void drawScoreHeader()
+{
+	Print_SetPosition(2, 0);
+	Print_DrawText("1UP");
+	Print_SetPosition(12, 0);
+	Print_DrawText("HI-SCORE");
+	Print_SetPosition(26, 0);
+	Print_DrawText("2UP");
+	printScore(1, 1, g_LastScore[0]);
+	printScore(13, 1, g_HiScores[0].Score);
+	printScore(25, 1, g_LastScore[1]);
+}
+
+/**
+ * @brief Pulisce lo schermo e disegna cornice e intestazione (da chiamare dopo V9OP_BEGIN_DRAW)
+ */
+void drawScreenBase()
+{
+	VDP_FillVRAM_16K(0, g_ScreenLayoutLow, 32 * 24);
+	drawMenuFrame();
+	drawScoreHeader();
+}
+
+/**
+ * @brief Cursore di selezione del numero di giocatori
+ */
+void drawTitleCursor(u8 cursor)
+{
+	Print_SetPosition(10, 10);
+	Print_DrawText((cursor == 0) ? ">" : " ");
+	Print_SetPosition(10, 12);
+	Print_DrawText((cursor == 1) ? ">" : " ");
+	v9Call(V9OP_SYNC_ROW, 10, 0, 0);
+	v9Call(V9OP_SYNC_ROW, 12, 0, 0);
+}
+
+/**
+ * @brief Livello di difficolta' selezionato
+ */
+void drawTitleDifficulty(u8 difficulty)
+{
+	Print_SetPosition(8, 15);
+	Print_DrawText("LEVEL  <        >");
+	Print_SetPosition(17, 15);
+	Print_DrawText(g_DifficultyNames[difficulty]);
+	v9Call(V9OP_SYNC_ROW, 15, 0, 0);
+}
+
+/**
+ * @brief Scritta lampeggiante "PUSH SPACE KEY"
+ */
+void drawPushSpace(bool visible)
+{
+	if (visible)
+	{
+		Print_SetPosition(9, 17);
+		Print_DrawText("PUSH SPACE KEY");
+	}
+	else
+	{
+		VDP_FillVRAM_16K(0, g_ScreenLayoutLow + 17 * 32 + 9, 14);
+	}
+	v9Call(V9OP_SYNC_ROW, 17, 0, 0);
+}
+
+/**
+ * @brief Disegna la schermata del titolo
+ */
+void drawTitle(u8 cursor, u8 difficulty)
 {
 	v9Call(V9OP_BEGIN_DRAW, 0, 0, 0);
-	VDP_FillVRAM_16K(0, g_ScreenLayoutLow, 32 * 24);
-
-	drawMenuFrame();
+	drawScreenBase();
 
 	// Logo del titolo (2 righe di tile, grafica V9990)
 	VDP_WriteVRAM_16K(g_V9Logo, g_ScreenLayoutLow + 4 * 32 + 6, V9_LOGO_WIDTH);
 	VDP_WriteVRAM_16K(g_V9Logo + V9_LOGO_WIDTH, g_ScreenLayoutLow + 5 * 32 + 6, V9_LOGO_WIDTH);
-	Print_SetPosition(1, 23);
-	Print_DrawText("developed by Nicola Brogelli.");
-	Print_SetPosition(7, 8);
-	Print_DrawText("SELECT DIFFICULTY:");
-	Print_SetPosition(11, 11);
-	Print_DrawText("0 - EASY");
-	Print_SetPosition(11, 13);
-	Print_DrawText("1 - NORMAL");
-	Print_SetPosition(11, 15);
-	Print_DrawText("2 - HARD");
-	drawPlayersOption(players);
+
+	Print_SetPosition(12, 10);
+	Print_DrawText("1 PLAYER");
+	Print_SetPosition(12, 12);
+	Print_DrawText("2 PLAYERS");
+	drawTitleCursor(cursor);
+	drawTitleDifficulty(difficulty);
+	drawPushSpace(TRUE);
+
+	Print_SetPosition(2, 23);
+	Print_DrawText("DEVELOPED BY NICOLA BROGELLI");
 
 	v9Call(V9OP_END_DRAW, 0, 0, 0);
 }
 
 /**
- * @brief Scrive nel menu il numero di giocatori selezionato (tasto P per cambiarlo)
- * @param u8 players Numero di giocatori (1 o 2)
+ * @brief Disegna (o cancella) una riga della classifica
+ * @param u8 i Posizione in classifica (0 = primo)
+ * @param bool visible FALSE per cancellarla (lampeggio del nuovo record)
  */
-void drawPlayersOption(u8 players)
+void drawHiScoreRow(u8 i, bool visible)
 {
-	Print_SetPosition(9, 17);
-	Print_DrawText((players == 2) ? "P - 2 PLAYERS" : "P - 1 PLAYER ");
-	v9Call(V9OP_SYNC_ROW, 17, 0, 0);
+	u8 y = 6 + i;
+	if (visible)
+	{
+		u8 rank = i + 1;
+		c8 buf[5];
+		buf[0] = (rank >= 10) ? '1' : ' ';
+		buf[1] = '0' + (rank % 10);
+		buf[2] = (rank == 1) ? 'S' : (rank == 2) ? 'N' : (rank == 3) ? 'R' : 'T';
+		buf[3] = (rank == 1) ? 'T' : ((rank == 2) || (rank == 3)) ? 'D' : 'H';
+		buf[4] = 0;
+		Print_SetPosition(7, y);
+		Print_DrawText(buf);
+		printScore(13, y, g_HiScores[i].Score);
+		Print_SetPosition(20, y);
+		Print_DrawText(g_HiScores[i].Name);
+	}
+	else
+	{
+		VDP_FillVRAM_16K(0, g_ScreenLayoutLow + (u16)y * 32 + 7, 16);
+	}
+	v9Call(V9OP_SYNC_ROW, y, 0, 0);
+}
+
+/**
+ * @brief Schermata della classifica "BEST 10"
+ */
+void drawHiScoreTable()
+{
+	v9Call(V9OP_BEGIN_DRAW, 0, 0, 0);
+	drawScreenBase();
+
+	Print_SetPosition(12, 4);
+	Print_DrawText("BEST 10");
+	for (u8 i = 0; i < HISCORE_COUNT; i++)
+		drawHiScoreRow(i, TRUE);
+
+	v9Call(V9OP_END_DRAW, 0, 0, 0);
+}
+
+/**
+ * @brief Menu iniziale (bloccante). Frecce/joystick su e giu': numero di giocatori;
+ *        sinistra e destra: difficolta'; SPAZIO/RETURN/pulsante: inizia la partita.
+ *        Senza input si alternano schermata del titolo e classifica (attract mode).
+ * @param u8 players Numero di giocatori proposto (1 o 2)
+ * @param u8 difficulty Difficolta' proposta (0..2)
+ * @return u8 (giocatori << 4) | difficolta'
+ */
+u8 runTitleScreen(u8 players, u8 difficulty)
+{
+	u8 cursor = (players == 2) ? 1 : 0;
+	u8 prev = 0xFF; // I tasti gia' premuti vanno rilasciati prima di essere riconosciuti
+	u16 idle = 0;
+	u8 blink = 0;
+	bool showTable = FALSE;
+
+	if (difficulty > 2)
+		difficulty = 0;
+
+	drawTitle(cursor, difficulty);
+
+	while (1)
+	{
+		menuWaitFrame();
+
+		u8 in = readMenuInput();
+		u8 pushed = in & ~prev;
+		prev = in;
+		idle = pushed ? 0 : idle + 1;
+
+		if (showTable)
+		{
+			// Classifica: un tasto qualsiasi o il timeout tornano al titolo
+			if (pushed || (idle > ATTRACT_FRAMES))
+			{
+				showTable = FALSE;
+				idle = 0;
+				drawTitle(cursor, difficulty);
+			}
+			continue;
+		}
+
+		if (idle > ATTRACT_FRAMES)
+		{
+			showTable = TRUE;
+			idle = 0;
+			drawHiScoreTable();
+			continue;
+		}
+
+		if (pushed & IN_FIRE)
+		{
+			playEffect(SFX_SELECT);
+			g_LastScore[0] = 0; // Nuova partita: si azzerano i punteggi dell'intestazione
+			g_LastScore[1] = 0;
+			return (u8)(((cursor + 1) << 4) | difficulty);
+		}
+		if (pushed & (IN_UP | IN_DOWN))
+		{
+			cursor = (pushed & IN_UP) ? 0 : 1;
+			playEffect(SFX_JUMP);
+			drawTitleCursor(cursor);
+		}
+		if (pushed & (IN_LEFT | IN_RIGHT))
+		{
+			if (pushed & IN_LEFT)
+				difficulty = (difficulty == 0) ? 2 : difficulty - 1;
+			else
+				difficulty = (difficulty == 2) ? 0 : difficulty + 1;
+			playEffect(SFX_JUMP);
+			drawTitleDifficulty(difficulty);
+		}
+
+		blink++;
+		if ((blink & 15) == 0)
+			drawPushSpace(blink & 16);
+	}
+}
+
+/**
+ * @brief Disegna le iniziali in inserimento e il cursore sotto la lettera corrente
+ */
+void drawNameEntry(const u8 *chars, u8 pos)
+{
+	for (u8 i = 0; i < 3; i++)
+	{
+		Print_SetPosition(13 + i * 2, 13);
+		Print_DrawChar(g_NameChars[chars[i]]);
+		Print_SetPosition(13 + i * 2, 14);
+		Print_DrawChar((i == pos) ? '^' : ' ');
+	}
+	v9Call(V9OP_SYNC_ROW, 13, 0, 0);
+	v9Call(V9OP_SYNC_ROW, 14, 0, 0);
+}
+
+/**
+ * @brief Registra il punteggio a fine partita. Se entra nella classifica il giocatore
+ *        inserisce le sue iniziali e viene mostrata la classifica con il nuovo record lampeggiante.
+ * @param u8 player 0 in modalita' 1 giocatore, altrimenti numero del giocatore (1 o 2)
+ * @param u16 score Punteggio
+ * @return bool TRUE se lo schermo e' stato ridisegnato (nuovo record)
+ */
+bool recordScore(u8 player, u16 score)
+{
+	if (score > 0)
+		g_LastScore[(player == 2) ? 1 : 0] = score;
+
+	// Posizione in classifica
+	u8 rank = 0;
+	while ((rank < HISCORE_COUNT) && (score <= g_HiScores[rank].Score))
+		rank++;
+	if ((score == 0) || (rank >= HISCORE_COUNT))
+		return FALSE;
+
+	menuWait(100); // Lascia vedere la schermata corrente
+
+	// Schermata di inserimento delle iniziali
+	v9Call(V9OP_BEGIN_DRAW, 0, 0, 0);
+	drawScreenBase();
+	Print_SetPosition(8, 4);
+	Print_DrawText("CONGRATULATIONS!");
+	if (player)
+	{
+		Print_SetPosition(12, 6);
+		Print_DrawText((player == 2) ? "PLAYER 2" : "PLAYER 1");
+	}
+	Print_SetPosition(8, 8);
+	Print_DrawText("YOUR SCORE");
+	printScore(19, 8, score);
+	Print_SetPosition(6, 10);
+	Print_DrawText("ENTER YOUR INITIALS");
+	Print_SetPosition(4, 16);
+	Print_DrawText("UP/DOWN:LETTER  SPACE:OK");
+	v9Call(V9OP_END_DRAW, 0, 0, 0);
+
+	u8 chars[3] = { 0, 0, 0 };
+	u8 pos = 0;
+	u8 prev = 0xFF;
+	drawNameEntry(chars, pos);
+
+	while (pos < 3)
+	{
+		menuWaitFrame();
+		u8 in = readMenuInput();
+		u8 pushed = in & ~prev;
+		prev = in;
+		if (!pushed)
+			continue;
+
+		if (pushed & IN_UP)
+			chars[pos] = (chars[pos] + 1 == NAME_CHARS_COUNT) ? 0 : chars[pos] + 1;
+		else if (pushed & IN_DOWN)
+			chars[pos] = (chars[pos] == 0) ? NAME_CHARS_COUNT - 1 : chars[pos] - 1;
+		else if ((pushed & IN_LEFT) && (pos > 0))
+			pos--;
+		else if (pushed & (IN_FIRE | IN_RIGHT))
+		{
+			pos++;
+			playEffect(SFX_SELECT);
+		}
+		if (pos < 3)
+			drawNameEntry(chars, pos);
+	}
+
+	// Inserimento in classifica
+	for (u8 i = HISCORE_COUNT - 1; i > rank; i--)
+		g_HiScores[i] = g_HiScores[i - 1];
+	g_HiScores[rank].Score = score;
+	for (u8 c = 0; c < 3; c++)
+		g_HiScores[rank].Name[c] = g_NameChars[chars[c]];
+	g_HiScores[rank].Name[3] = 0;
+
+	// Classifica con il nuovo record lampeggiante
+	drawHiScoreTable();
+	prev = 0xFF;
+	for (u8 t = 0; t < RANKING_FRAMES; t++)
+	{
+		menuWaitFrame();
+		if ((t & 15) == 0)
+			drawHiScoreRow(rank, t & 16);
+		u8 in = readMenuInput();
+		if (in & ~prev & IN_FIRE)
+			break;
+		prev = in;
+	}
+	return TRUE;
 }
 
 /**
