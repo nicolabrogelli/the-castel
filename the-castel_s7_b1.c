@@ -5062,6 +5062,18 @@ void animateTiles(u8 frame)
 /**
  * @brief Disegna una decorazione composta da 2x2 tile
  */
+/**
+ * @brief Scrive "PLAYER 1" o "PLAYER 2" alla posizione corrente.
+ *        Non usare stringhe "PLAYER 2" seguite da "PLAYER ...": in ROM i byte
+ *        '2',0,'P' (32 00 50) equivalgono a LD (0x5000),A e openMSX, avviato senza
+ *        -romtype, riconosce la ROM come KonamiSCC invece di ASCII16.
+ */
+void drawPlayerLabel(u8 player)
+{
+	Print_DrawText("PLAYER ");
+	Print_DrawChar((player == 2) ? '2' : '1');
+}
+
 void drawDecor2x2(u8 x, u8 y, u8 tl, u8 tr, u8 bl, u8 br)
 {
 	u16 addr = g_ScreenLayoutLow + (u16)y * 32 + x;
@@ -5488,7 +5500,7 @@ bool recordScore(u8 player, u16 score)
 	if (player)
 	{
 		Print_SetPosition(12, 6);
-		Print_DrawText((player == 2) ? "PLAYER 2" : "PLAYER 1");
+		drawPlayerLabel(player);
 	}
 	Print_SetPosition(8, 8);
 	Print_DrawText("YOUR SCORE");
@@ -5564,7 +5576,7 @@ void drawPlayerTurn(u8 player)
 	drawMenuFrame();
 
 	Print_SetPosition(12, 10);
-	Print_DrawText((player == 2) ? "PLAYER 2" : "PLAYER 1");
+	drawPlayerLabel(player);
 	Print_SetPosition(11, 13);
 	Print_DrawText("GET READY!");
 
@@ -5582,7 +5594,7 @@ void drawGameOverOptions(u8 player, bool canPass, bool canContinue)
 	if (player)
 	{
 		Print_SetPosition(12, 13);
-		Print_DrawText((player == 2) ? "PLAYER 2" : "PLAYER 1");
+		drawPlayerLabel(player);
 		v9Call(V9OP_SYNC_ROW, 13, 0, 0);
 	}
 

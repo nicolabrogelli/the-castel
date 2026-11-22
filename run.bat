@@ -12,8 +12,8 @@ set "OPENMSX=C:\Users\nicol\Documents\BACKUP\DOC - RETROCOMPUTER\COMPUTER\MSX\EM
 :: ROM generata da build.bat (mapper ASCII16, 256 KB)
 set "ROM=%~dp0emul\rom\the-castel.rom"
 
-:: Macchina emulata (vuoto = default di openMSX). Es: set "MACHINE=-machine Philips_NMS_8245"
-set "MACHINE="
+:: Macchina emulata: Philips VG-8020/00 (MSX1). Vuoto = default di openMSX.
+set "MACHINE=-machine Philips_VG_8020"
 
 if /i "%~1"=="build" (
     pushd "%~dp0"

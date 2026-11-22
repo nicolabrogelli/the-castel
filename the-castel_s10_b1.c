@@ -117,6 +117,51 @@ void v9SetColor(u8 index, const u8 *rgb)
 	V9_SetPaletteEntry(index, rgb);
 }
 
+/**
+ * Accende/spegne il display della V9990 scrivendo R#8 per intero (sprite attivi,
+ * VRAM 512 KB). Niente lettura-modifica-scrittura: sull'hardware reale il valore
+ * riletto puo' non coincidere con quello scritto.
+ */
+void v9SetDisplay(bool on)
+{
+	V9_SetRegister(8, (on ? V9_R08_DISP_ON : 0) | 0x02);
+}
+
+// TEST INTERATTIVO per l'hardware reale (1 = attivo, 0 = disattivo).
+// Dopo il caricamento della grafica la V9990 mostra il muro di pietre e il gioco
+// resta in attesa; con i tasti si cambia un'impostazione alla volta:
+//   1 = V9990 a 60 Hz (NTSC)          2 = V9990 a 50 Hz (PAL)
+//   3 = genlock spento (P#15 = 0)     4 = genlock acceso (P#15 = 0x10)
+//   5 = interrupt VBlank TMS spenti   6 = interrupt VBlank TMS accesi
+//   SPAZIO = avvia il gioco
+#define V9_DIAG             0
+
+#if V9_DIAG
+/** Attende che il tasto venga rilasciato */
+void v9DiagRelease(u8 key)
+{
+	while (Keyboard_IsKeyPressed(key)) {}
+}
+
+/** Ciclo del test interattivo (vedi sopra) */
+void v9DiagLoop()
+{
+	v9SetDisplay(TRUE);
+	while (1)
+	{
+		if (Keyboard_IsKeyPressed(KEY_1)) { V9_SetRegister(7, 0x00); v9DiagRelease(KEY_1); }
+		if (Keyboard_IsKeyPressed(KEY_2)) { V9_SetRegister(7, V9_R07_PAL); v9DiagRelease(KEY_2); }
+		if (Keyboard_IsKeyPressed(KEY_3)) { V9_SetPort(V9_P15, 0x00); v9DiagRelease(KEY_3); }
+		if (Keyboard_IsKeyPressed(KEY_4)) { V9_SetPort(V9_P15, V9_P15_GEN); v9DiagRelease(KEY_4); }
+		if (Keyboard_IsKeyPressed(KEY_5)) { VDP_EnableVBlank(FALSE); v9DiagRelease(KEY_5); }
+		if (Keyboard_IsKeyPressed(KEY_6)) { VDP_EnableVBlank(TRUE); v9DiagRelease(KEY_6); }
+		if (Keyboard_IsKeyPressed(KEY_SPACE)) { v9DiagRelease(KEY_SPACE); break; }
+	}
+	VDP_EnableVBlank(TRUE);
+	v9SetDisplay(FALSE);
+}
+#endif
+
 /** Inizializza la V9990. Restituisce FALSE se la scheda non e' presente */
 bool v9Init()
 {
@@ -129,11 +174,21 @@ bool v9Init()
 		while (1) {}
 	}
 
+	// Disattiva il genlock (P#15, porta 0x6F) della GFX9000/Video9000: dopo un
+	// reset dell'MSX e' attivo e aggancia la V9990 alla sincronia video dell'MSX
+	// (PAL 50 Hz sulla VG-8020) mentre il modo P1 genera 60 Hz: sull'hardware
+	// reale l'immagine rotola e non e' stabile. openMSX non emula il genlock.
+	V9_SetPort(V9_P15, 0);
+
+	// Inizializzazione identica al sample s_v9990 di MSXgl, verificato stabile
+	// sull'hardware reale (VG-8020 + GFX9000): niente reset software della V9990.
+
 	V9_SetScreenMode(V9_MODE_P1);
-	V9_SetDisplayEnable(FALSE);
+	v9SetDisplay(FALSE);
 	V9_SetInterrupt(V9_INT_NONE);
 	V9_SetBackgroundColor(0);
 	V9_SelectPaletteP1(0, V9_PAL_BG);
+
 
 	// Palette: 0-15 tile, 16-47 sprite, 48-63 fondale
 	for (u8 i = 0; i < 64; i++)
@@ -172,13 +227,16 @@ bool v9Init()
 		g_V9Left[i] = 0;
 	}
 
+#if V9_DIAG
+	v9DiagLoop();
+#endif
+
 	// La RAM non viene azzerata all'avvio: senza questa riga la direzione del
 	// giocatore e' casuale e, finche' non si muove, lo sprite usa un'animazione
 	// (e una palette) sbagliata
 	g_V9PlayerLeft = 0;
 	g_V9Tick = 0;
 
-	V9_SetSpriteEnable(TRUE);
 	return TRUE;
 }
 
@@ -314,7 +372,7 @@ u8 v9Dispatch(u8 op, u8 a, u8 b, u8 c)
 	case V9OP_BEGIN_DRAW:
 		VDP_HideAllSprites();
 		VDP_EnableDisplay(FALSE);
-		V9_SetDisplayEnable(FALSE);
+		v9SetDisplay(FALSE);
 		for (u8 i = 0; i < V9_MAX_SPRITE; i++)
 		{
 			v9HideSprite(i);
@@ -326,7 +384,7 @@ u8 v9Dispatch(u8 op, u8 a, u8 b, u8 c)
 		for (u8 r = 0; r < 24; r++)
 			v9SyncRow(r);
 		VDP_EnableDisplay(TRUE);
-		V9_SetDisplayEnable(TRUE);
+		v9SetDisplay(TRUE);
 		break;
 
 	case V9OP_LEVEL_COLOR:
