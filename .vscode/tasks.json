@@ -4,9 +4,9 @@
 		{
             "label": "build",
             "type": "shell",
-            "command": "${workspaceFolder}/the-castel/build.bat",
+            "command": "${workspaceFolder}/build.bat",
 			"options": {
-				"cwd": "${workspaceFolder}/the-castel/"
+				"cwd": "${workspaceFolder}/"
 			}
 			
         }
